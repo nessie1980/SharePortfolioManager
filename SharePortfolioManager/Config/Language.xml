@@ -1,0 +1,2090 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Language>
+	<English>
+		<!-- Application name -->
+		<Application>
+			<Name text="Share portfolio management" />
+		</Application>
+		
+		<!-- Units -->
+		<PieceUnit text="pcs." />
+		<PercentageUnit text="%" />
+		
+		<!-- Logger -->
+		<Logger>
+			<!-- States -->
+			<States>
+				<Start text="Start" />
+				<Info text="Info" />
+				<Warning text="Warning" />
+				<Error text="Error" />
+				<FatalError text="FatalError" />
+			</States>
+			
+			<!-- Component names -->
+			<ComponentNames>
+				<Application text="Application" />
+				<WebParser text="WebParser" />
+				<LanguageHandler text="LanguageHandler" />
+				<Logger text="Logger" />
+			</ComponentNames>
+
+			<!-- Logger errors -->
+			<LoggerErrors>
+				<InitializationFailed text="Initalization of the logger failed!" />
+				<LogPathCreationFailed text="Creation of the log directory failed!" />
+				<WriteStartupFailed  text="Writting logger startup message failed!" />
+				<WrongSize  text="The given size to the logger is invalid!" />
+				<ColorsMaxCount text="The amount of colors given to the logger is too big!" />
+				<ComponentNamesMaxCount text="The amount of component names given to the logger is too big!" />
+				<StatesMaxCount text="The amount of state names given to the logger is too big!" />
+				<ComponentLevelInvalid text="The given component log level is invalid!" />
+				<StateLevelInvalid text="The given state log level is invalid!" />
+				<NotInitialized text="Logger is not initialized!" />
+			</LoggerErrors>
+			
+			<!-- Logger state messages -->
+			<LoggerStateMessages>
+				<CleanUpLogFilesFailed text="Clean up of the log files failed!" />
+			</LoggerStateMessages>
+		</Logger>
+		
+		<!-- MainForm -->
+		<MainForm>
+			<!-- Menu -->
+			<Menu>
+				<File>
+					<Header text="File" />
+					<New text="New portfolio" />
+					<SaveAs text="Save as ..." />
+					<Open text="Open portfolio" />
+					<Quit text="Quit"/>
+				</File>
+				<Settings>
+					<Header text="Settings" />
+					<Language text="Language" />
+					<Logger text="Logger" />
+				</Settings>
+				<Help>
+					<Header text="Help" />
+					<About text="About" />
+				</Help>
+			</Menu>
+
+			<!-- Groupbox portfolio -->
+			<GrpBoxPortfolio>
+				<Caption text="Portfolio overview" />
+
+				<!-- DataGridView portfolio -->
+				<DgvPortfolio>
+					<ColHeader_WKN text="WKN" />
+					<ColHeader_Name text="Name"/>
+					<ColHeader_Price text="Price" />
+					<ColHeader_PrevDay text="Pre. day" />
+					<ColHeader_Volume text="Volume"/>
+					<ColHeader_Performance text="Perf." />
+					<ColHeader_CostsDividend text="  Costs /   Dividends" />
+					<ColHeader_DepositSum text="    Deposit /   Sum" />
+				</DgvPortfolio>
+				<DgvPortfolio_Error>
+					<ConfigurationFailed text="Configuration of the datagridview 'portfolio' failed!" />
+				</DgvPortfolio_Error>
+				
+				<!-- DataGridView portfolio footer -->
+				<DgvPortfolioFooter>
+					<RowContent_TotalDeposit text="Deposit (total) " />
+					<RowContent_TotalCostDividend text="Costs / Dividend (total) " />
+					<RowContent_TotalPerformance text="Performance (total) " />
+					<RowContent_TotalSum text="Current value of the depot " />
+				</DgvPortfolioFooter>
+				<DgvPortfolioFooter_Error>
+					<ConfigurationFailed text="Configuration of the datagridview 'portfolio footer' failed!" />
+				</DgvPortfolioFooter_Error>
+
+				<!-- Buttons -->
+				<Buttons>
+					<RefreshAll text="   Update all" />
+					<RefreshAllCancel text="   Cancel" />
+					<Refresh text="   Update" />
+					<RefreshCancel text="   Cancel" />
+					<Add text="   Add" />
+					<Edit text="   Edit" />
+					<Delete text="   Delete" />
+					<ResetLogger text="   Clear Logger" />
+				</Buttons>				
+			</GrpBoxPortfolio>
+			
+			<!-- GroupBox details -->
+			<GrpBoxDetails>
+				<Caption text="Share details" /> <!-- only a place holder -->
+				<ShareWKN text="WKN" />
+				<ShareUpdateNotDone text="-" />
+
+				<!-- TabControl with the details -->
+				<TabCtrlDetails>		
+					<!-- TabPage with dividend and costs -->
+					<TabPgWithDividendCosts>
+						<Caption text="With dividend / costs" />
+						
+						<!-- Labels -->
+						<Labels>
+							<Date text="Share date:" />
+							<Volume text="Volume:"/>
+							<TotalDividend text="Dividend (total):" />		
+							<TotalCosts text="Costs (total):" />
+							<CurrentPrice text="Current share price:" />
+							<DiffSumPrevDay text="Profit / loss (pre. day):" />
+							<PricePrevDay text="Share price (pre. day):" />
+							<Deposit text="Deposit:" />
+							<TotalPerformance text="Performance (total):" />
+							<TotalProfitLoss text="Profit / loss (total):" />
+							<TotalSum text="Sum (total):" />
+						</Labels>
+					</TabPgWithDividendCosts>
+					
+					<!-- Tab without dividend and costs -->
+					<TabPgWithOutDividendCosts>
+						<Caption text="Without dividend / costs" />
+						
+						<!-- Labels -->
+						<Labels>
+							<Date text="Share date:" />
+							<Volume text="Volume:"/>
+							<TotalDividend text="Dividend (total):" />		
+							<TotalCosts text="Costs (total):" />
+							<CurrentPrice text="Current share price:" />
+							<DiffSumPrevDay text="Profit / loss (pre. day):" />
+							<PricePrevDay text="Share price (pre. day):" />
+							<Deposit text="Deposit:" />
+							<TotalProfitLoss text="Profit / loss (total):" />
+							<TotalSum text="Sum (total):" />
+						</Labels>
+					</TabPgWithOutDividendCosts>					
+					<TabPgWithWithOutDividendCostsErrors>
+						<ShowFailed text="An error occurred while the share details should be shown!" />
+					</TabPgWithWithOutDividendCostsErrors>
+
+					<!-- Tab dividend overview -->
+					<TabPgDividend>
+						<Caption text="Dividend" />
+						<Overview text="Overview" />
+
+						<!-- DataGridView dividend -->
+						<DgvDividendOverview>
+							<ColHeader_Date text="Date" />
+							<ColHeader_Year text="Year" />
+							<ColHeader_Payout text="Payout" />
+							<ColHeader_Dividend text="Dividend" />
+							<ColHeader_Yield text="Yield" />
+							<ColHeader_Price text="Price" />
+							<ColHeader_Volume text="Volume" />
+							<ColHeader_Document text="Document" />
+						</DgvDividendOverview>
+					</TabPgDividend>
+					<TabPgDividend_Error>
+						<ShowFailed text="An error occurred while the dividends details should be shown!" />
+						<RenameHeaderFailed text="Renaming of the column headers failed!" />
+					</TabPgDividend_Error>
+					
+					<!-- Tab cost overview -->
+					<TabPgCosts>
+						<Caption text="Costs" />
+						<Overview text="Overview" />
+						
+						<!-- DataGridView costs -->
+						<DgvCostsOverview>
+							<ColHeader_Date text="Date" />
+							<ColHeader_Year text="Year" />
+							<ColHeader_Costs text="Costs" />
+							<ColHeader_Document text="Document" />
+						</DgvCostsOverview>
+					</TabPgCosts>
+					<TabPgCosts_Error>
+						<ShowFailed text="An error occurred while the costs details should be shown!" />
+						<RenameHeaderFailed text="Renaming of the column headers failed!" />
+					</TabPgCosts_Error>
+					
+					<!-- Tab profit or loss overview -->
+					<TabPgProfitLoss>
+						<Caption text="Profit / loss" />
+						<Overview text="Overview" />
+
+						<!-- DataGridView profit or loss -->
+						<DgvProfitLossOverview>
+							<ColHeader_Date text="Date" />
+							<ColHeader_Year text="Year" />
+							<ColHeader_ProfitLoss text="Profit / Loss" />
+							<ColHeader_Document text="Document" />
+						</DgvProfitLossOverview>
+					</TabPgProfitLoss>
+					<TabPgProfitLoss_Error>
+						<ShowFailed text="An error occurred while the profit / loss details should be shown!" />
+						<RenameHeaderFailed text="Renaming of the column headers failed!" />
+					</TabPgProfitLoss_Error>
+				</TabCtrlDetails>
+			</GrpBoxDetails>
+
+			<!-- Groupbox update state -->		
+			<GrpBoxUpdateState>
+				<Caption text="Update status" />
+			</GrpBoxUpdateState>
+	
+			<!-- Update messages -->
+			<UpdateMessages>
+				<Start1 text="Update of the share '"/>
+				<Start2 text="' started." />
+				<ContentLoadStarted text="Website content will be loaded." />
+				<ContentLoaded text="Website content loaded." />
+				<SearchStarted text="Search process has been started." />
+				<SearchRunning text="Search process running." />
+				<SearchFinish text="Search process finished." />
+				<Finish1 text="Update of the share'" />
+				<Finish2 text="' successfully finished." />
+			</UpdateMessages>
+
+			<!-- Update errors -->
+			<UpdateErrors>
+				<StartFailed text="Start of the WebParser failed." />
+				<BusyFailed text="WebParser is already busy." />
+				<InvalidWebSiteGiven text="The website address is invalid." />
+				<NoRegexListGiven text="No regular expression list given." />
+				<ContentLoadedFailed text="Load of the website content failed." />
+				<ParsingFailed1 text="Parsing of the key '" />
+				<ParsingFailed2 text="' failed." />
+				<CancelThread1 text="Update of the share '" />
+				<CancelThread2 text="' has been cancelled." />
+				<UpdateFailed text="Update failed!" />
+				<Failure text="Update has been failed. Error: " />
+			</UpdateErrors>
+			
+			<!-- Status messages -->
+			<StatusMessages>
+				<SelectAShare text="Please select a share." />
+				<AddSaveSuccessful text="Share add was successful." />
+				<EditSaveSuccessful text="Change was successful." />
+				<DeleteSuccessful text="Share delete was successful." />
+				<ChangeLanguageSuccessful text="Language has been changed." />
+				<ChangingPortfolioSuccessful text="Portfolio has been changed." />
+			</StatusMessages>
+			
+			<!-- Error messages -->
+			<Errors>
+				<FileDoesNotExists1 text="File '" />
+				<FileDoesNotExists2 text="' does not exists anymore! Create a new portfolio." />
+				<CouldNotLoadFile1 text="Could not load file '" />
+				<CouldNotLoadFile2 text="'!" />
+				<XMLSyntaxFailure1 text="A XML syntax error exists in the file '" />
+				<XMLSyntaxFailure2 text="'!" />
+				<ChangingPortfolioFailed text="Changing the portfolio failed!" />
+				<CouldNotLoadAllLanguageKeys text="Could not load all language keys!" />
+				<WebSiteConfigurationListEmpty text="No website configuration available!" />
+				<WebSiteConfigurationListLoadFailed text="Configuration incomplete!"/>
+				<WebSiteRegexNotFound1_1 text="No parse configuration for the share with the WKN " />
+				<WebSiteRegexNotFound1_2 text=" available!" />
+				<WebSiteRegexNotFound2_1 text="No parse configuration for the shares with the WKN " />
+				<WebSiteRegexNotFound2_2 text=" available!" />
+				<PortfolioConfigurationListEmpty text="Portfolio is empty!" />
+				<PortfolioConfigurationListLoadFailed text="Configuration incomplete!"/>
+				<AddShowFailed text="An error occurred while show!" />
+				<AddSaveFailed text="Add of the share failed!" />
+				<AddSaveErrorFailed text="An error occurred after the add share save!" />
+				<EditSaveFailed text="Change of the share failed!" />
+				<EditSaveErrorFailed text="An error occurred after the edit share save!" />
+				<DeleteFailed text="Delete of the share failed!" />
+				<DeleteErrorFailed text="An error occurred after the share delete!" />
+				<SaveSettingsFailed text="Settings save failed!" />
+				<SelectionChangeFailed text="The selection change failed!" />
+				<ChangeLanguageFailed text="Changing the language failed!" />
+			</Errors>
+		</MainForm>	
+
+		<!-- Add window -->
+		<AddFormShare>
+			<Caption text="Add share" />
+			
+			<!-- Group box with the general infos of the share -->
+			<GrpBoxGeneral>
+				<Caption text="General" />
+				
+				<!-- Labels -->
+				<Labels>
+					<WKN text="WKN: " />
+					<Date text="Date: " />
+					<Name text="Name: " />
+					<Volume text="Volume: " />
+					<SharePrice text="Market price: " />
+					<MarketValue text="Market value: " />
+					<Costs text="Costs: " />
+					<Reduction text="Reduction:" />
+					<FinalValue text="Final value:" />
+					<WebSite text="Website address: " />
+					<CultureInfo text="Country info: " />
+					<PayoutInterval text="Dividend payout interval: " />
+					<Document text="Document: " />
+				</Labels>
+
+				<!-- Combo box items for the dividend payout intervals -->
+				<ComboBoxItemsPayout>
+					<Item0 text="none" />
+					<Item1 text="annual" />
+					<Item2 text="semiannual" />
+					<Item3 text="quarterly" />
+				</ComboBoxItemsPayout>
+			</GrpBoxGeneral>
+
+			<!-- Group box with the taxes info of the share -->
+			<GrpBoxTaxes>
+				<Caption text="Taxes" />
+				
+				<!-- Labels -->
+				<Labels>
+					<TaxAtSource text="Tax at source: " />
+					<CapitalGainsTax text="Capital gains tax: " />
+					<SolidarityTax text="Solidarity tax: " />
+				</Labels>
+			</GrpBoxTaxes>
+			
+			<!-- Open file dialog -->
+			<OpenFileDialog>
+				<Title text="Choose document" />
+			</OpenFileDialog>
+			
+			<!-- Buttons -->
+			<Buttons>
+				<Save text="   Save" />
+				<Cancel text="   Cancel" />
+			</Buttons>
+			
+			<!-- Errors -->
+			<Errors>
+				<WKNEmpty text="Please insert a WKN number." />
+				<WKNExists text="The WKN number already exists." />
+				<NameEmpty text="Please insert a name." />
+				<NameExists text="The name already exists." />
+				<VolumeEmpty text="Please insert a volume." />
+				<VolumeWrongFormat text="Format for the value 'Volume' is invalid." />
+				<VolumeWrongValue text="The value for 'Volume' must be higher than '0'." />
+				<SharePriceEmpty text="Please insert a market price." />
+				<SharePriceWrongFormat text="Format for the value 'Market price' is invalid." />
+				<SharePriceWrongValue text="The value for 'Market price' must be higher than '0'." />
+				<CostsWrongFormat text="Format for the value 'Costs' is invalid." />
+				<CostsWrongValue text="The value for 'Costs' must be higher than '0'." />
+				<ReductionWrongFormat text="Format for the value 'Reduction' is invalid." />
+				<ReductionWrongValue text="The value for 'Reduction' must be higher than '0'." />
+				<WebSiteEmpty text="Please insert a website address." />
+				<WebSiteExists text="The website already exists." />
+				<WebSiteRegexNotFound text="No parse configuration for the given web address available!" />
+				<AddSaveFailed text="An exception occurred. Add of the share failed!" />
+				<AddShowFailed text="An exception occurred. Showing the dialog failed!" />
+				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
+				<TaxAtSourceEmpty text="Please insert a tax at source." />
+				<TaxAtSourceWrongFormat text="Format for the value 'Tax at source' is invalid." />
+				<TaxAtSourceWrongValue text="The value 'Tax at source' must be higher than '0'." />
+				<CapitalGainsTaxEmpty text="Please insert a capital gains tax." />
+				<CapitalGainsTaxWrongFormat text="Format for the value 'Capital gains tax' is invalid." />
+				<CapitalGainsTaxWrongValue text="The value 'Capital gains tax' must be higher than '0'." />
+				<SolidarityTaxEmpty text="Please insert a solidarity tax." />
+				<SolidarityTaxWrongFormat text="Format for the value 'Solidarity tax' is invalid." />
+				<SolidarityTaxWrongValue text="The value 'Solidarity tax' must be higher than '0'." />
+				<FileDoesNotExist text="The given file does not exist!" />
+			</Errors>
+		</AddFormShare>
+		
+		<!-- Edit window -->
+		<EditFormShare>
+			<Caption text="Edit share" />
+			
+			<!-- Group box with the general infos of the share -->
+			<GrpBoxGeneral>
+				<Caption text="General" />
+				
+				<!-- Labels -->
+				<Labels>
+					<WKN text="WKN: " />
+					<Name text="Name: " />
+					<Date text="Date: " />
+					<Deposit text="Deposit: " />
+					<Volume text="Volume: " />
+					<WebSite text="Website address: " />
+					<CultureInfo text="Country info: " />
+					<PayoutInterval text="Dividend payout interval: " />
+				</Labels>
+				
+				<!-- Combo box items for the dividend payout intervals -->
+				<ComboBoxItemsPayout>
+					<Item0 text="none" />
+					<Item1 text="annual" />
+					<Item2 text="semiannual" />
+					<Item3 text="quarterly" />
+				</ComboBoxItemsPayout>				
+			</GrpBoxGeneral>
+
+			<!-- Group box with the earings and expenditure infos of the share -->
+			<GrpBoxEarningsExpenditure>
+				<Caption text="Earnings / Expenditure" />
+				
+				<!-- Labels -->
+				<Labels>
+					<Buys text="Buys: " />
+					<Sales text="Sales: " />
+					<Profit text="Profit from sales: " />
+					<Loss text="Loss from sales: " />
+					<Dividend text="Dividends: " />
+					<Costs text="Costs: " />
+				</Labels>
+
+				<!-- Buttons -->
+				<Buttons>
+					<Buys text="" />
+					<Sales text="" />
+					<Dividend text="" />
+					<Costs text="" />
+				</Buttons>	
+			</GrpBoxEarningsExpenditure>
+			
+			<!-- Group box with the taxes info of the share -->
+			<GrpBoxTaxes>
+				<Caption text="Taxes" />
+				
+				<!-- Labels -->
+				<Labels>
+					<TaxAtSource text="Tax at source: " />
+					<CapitalGainsTax text="Capital gains tax: " />
+					<SolidarityTax text="Solidarity tax: " />
+				</Labels>
+			</GrpBoxTaxes>
+
+			<!-- Buttons -->
+			<Buttons>
+				<Save text="   Save" />
+				<Cancel text="   Return" />
+			</Buttons>
+		
+			<!-- Errors -->
+			<Errors>
+				<ShowFailed text="An error occurred while the share should be shown!" />
+				<NameEmpty text="Please insert a name." />
+				<NameExists text="The name already exists." />
+				<DepositEmpty text="Please insert a deposit." />
+				<DepositWrongFormat text="Format for the value 'Deposit' is invalid." />
+				<DepositWrongValue text="The value for 'Deposit' must be higher than '0'." />
+				<VolumeEmpty text="Please insert a volume." />
+				<VolumeWrongFormat text="Format for the value 'Volume' is invalid." />
+				<VolumeWrongValue text="The value for 'Volume' must be higher than '0'." />
+				<WebSiteEmpty text="Please insert a website address." />
+				<WebSiteExists text="The website already exists." />
+				<TaxAtSourceEmpty text="Please insert a tax at source." />
+				<TaxAtSourceWrongFormat text="Format for the value 'Tax at source' is invalid.." />
+				<CapitalGainsTaxEmpty text="Please insert a capital gains tax." />
+				<CapitalGainsTaxWrongFormat text="Format for the value 'Capital gains tax' is invalid.." />
+				<SolidarityTaxEmpty text="Please insert a solidarity tax." />
+				<SolidarityTaxWrongFormat text="Format for the value 'Solidarity tax' is invalid.." />
+				<EditSaveFailed text="An error occurred. Edit of the share failed!" />
+			</Errors>
+		</EditFormShare>
+			
+		<!-- Buy add / edit -->
+		<AddEditFormBuy>
+			<Caption text="Add / edit buys of this share" />
+			
+			<!-- GroupBox add / edit buy --> 
+			<GrpBoxAddEdit>
+				<Add_Caption text="Add buy" />
+				<Edit_Caption text="Edit buy" />
+				
+				<!-- Labels -->
+				<Labels>
+					<Date text="Date:" />
+					<Volume text="Volume:" />
+					<Price text="Market price:" />
+					<MarketValue text="Market value:" />
+					<Costs text="Costs:" />
+					<Reduction text="Reduction:" />
+					<FinalValue text="Final value:" />
+					<Document text="Document:" />
+				</Labels>
+				
+				<!-- Open file dialog -->
+				<OpenFileDialog>
+					<Title text="Choose document" />
+				</OpenFileDialog>
+
+				<!-- Buttons -->
+				<Buttons>
+					<Add text="   Add" />
+					<Save text="   Save" />
+					<Delete text="   Delete" />
+					<Reset text="   Reset" />
+					<Cancel text="   Return" />
+				</Buttons>
+			</GrpBoxAddEdit>
+			
+			<!-- GroupBox buy overview -->
+			<GrpBoxBuy>
+				<Caption text="Buy overview" />
+				
+				<!-- TabCtrl buy overview -->
+				<TabCtrl>
+					
+					<!-- TabPage overview -->
+					<TabPgOverview>
+						<Overview text="Overview" />
+					</TabPgOverview>
+					
+					<!-- DataGridView buy -->
+					<DgvBuyOverview>
+						<ColHeader_Date text="Date" />
+						<ColHeader_Volume text="Volume" />
+						<ColHeader_Price text="Price" />
+						<ColHeader_Value text="Market value" />
+						<ColHeader_Document text="Document" />
+					</DgvBuyOverview>
+				</TabCtrl>
+			</GrpBoxBuy>
+			
+			<!-- Buy add / edit state messages -->
+			<StateMessages>
+				<AddSuccess text="Buy has been added." />
+				<EditSuccess text="Buy changes has been saved." />
+				<DeleteSuccess text="Buy entry has been deleted!" />			
+			</StateMessages>
+			
+			<!-- Buy add / edit errors -->
+			<Errors>
+				<ShowFailed text="An error occurred while the buy should be shown!" />
+				<DeselectFailed text="Deselect of the selected rows failed!" />
+				<SearchFailed text="Getting the buy entry for the chosen date failed!" />
+				<RenameColHeaderFailed text="Renaming of the column headers failed!" />
+				<SelectionChangeFailed text="The selection change failed!" />
+				<DateExists text="An entry for this date already exists." />
+				<DateWrongFormat text="Invalid date format. Current date is set." />
+				<VolumeEmpty text="Please insert a volume." />
+				<VolumeWrongFormat text="Format for the value 'Volume' is invalid." />
+				<VolumeWrongValue text="The value for 'Volume' must be higher than '0'." />
+				<SharePriceEmpty text="Please insert a market price." />
+				<SharePriceWrongFormat text="Format for the value 'Market price' is invalid." />
+				<SharePriceWrongValue text="The value for 'Market price' must be higher than '0'." />
+				<CostsWrongFormat text="Format for the value 'Costs' is invalid." />
+				<CostsWrongValue text="The value for 'Costs' must be higher than '0'." />
+				<ReductionWrongFormat text="Format for the value 'Reduction' is invalid." />
+				<ReductionWrongValue text="The value for 'Reduction' must be higher than '0'." />
+				<AddFailed text="Buy add has been failed!" />
+				<EditFailed text="Buy changes save has been failed!" />
+				<DeleteFailed text="Delete of the buy entry has been failed!" />
+                <DeleteFailedUnerasable text="This buy is the last existing buy, which only can be delete via a delete of the complete share!" />
+				<CancelFailure text="An error occurred while the cancel should be done!" />
+				<CheckInputFailure text="An error occurred while the input check should be done!" />
+				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
+				<FileDoesNotExist text="The given file does not exist!" />
+				<DocumentShowFailed text="Show of the document failed!" />
+			</Errors>
+		</AddEditFormBuy>
+		
+		<!-- Sale add / edit -->
+		<AddEditFormSale>
+			<Caption text="Add / edit sales of this share" />
+			
+			<!-- GroupBox add / edit sale --> 
+			<GrpBoxAddEdit>
+				<Add_Caption text="Add sale" />
+				<Edit_Caption text="Edit sale" />
+				
+				<!-- Labels -->
+				<Labels>
+					<Date text="Date of the sale:" />
+					<ForeignCurrencyActivation text="Activate foreign currency input:" />
+					<ForeignCurrencyFactor text="Calculation factor:" />
+					<Volume text="Sale volume:" />
+					<BuyPrice text="Buy price of one share:" />
+					<SalesPrice text="Sale price of one share:" />
+					<SalesLossBalance text="Loss balance:" />
+					<SalesSum text="Sales sum:" />
+					<SalesSumAfterTax text="After tax sales sum:" />
+					<Costs text="Costs" />
+					<Document text="Document:" />
+				</Labels>
+				
+				<!-- Open file dialog -->
+				<OpenFileDialog>
+					<Title text="Choose document" />
+				</OpenFileDialog>
+
+				<!-- Buttons -->
+				<Buttons>
+					<Add text="   Add" />
+					<Save text="   Save" />
+					<Delete text="   Delete" />
+					<Reset text="   Reset" />
+					<Cancel text="   Return" />
+				</Buttons>
+			</GrpBoxAddEdit>
+			
+			<!-- GroupBox sale overview -->
+			<GrpBoxSale>
+				<Caption text="Sale overview" />
+				
+				<!-- TabCtrl sale overview -->
+				<TabCtrl>
+					
+					<!-- TabPage overview -->
+					<TabPgOverview>
+						<Overview text="Overview" />
+					</TabPgOverview>
+					
+					<!-- DataGridView sale -->
+					<DgvSaleOverview>
+						<ColHeader_Date text="Date" />
+						<ColHeader_Volume text="Volume" />
+						<ColHeader_Value text="Value" />
+						<ColHeader_ProfitLoss text="Profit / Loss" />
+						<ColHeader_Price text="Price" />
+						<ColHeader_Document text="Document" />
+					</DgvSaleOverview>
+				</TabCtrl>
+			</GrpBoxSale>
+			
+			<!-- Sale add / edit state messages -->
+			<StateMessages>
+				<AddSuccess text="Sale has been added." />
+				<EditSuccess text="Sale changes has been saved." />
+				<DeleteSuccess text="Sale entry has been deleted!" />			
+			</StateMessages>
+			
+			<!-- Sale add / edit errors -->
+			<Errors>
+				<ShowFailed text="An error occurred while the sales should be shown!" />
+				<DeselectFailed text="Deselect of the selected rows failed!" />
+				<SearchFailed text="Getting the sale entry for the chosen date failed!" />
+				<RenameColHeaderFailed text="Renaming of the column headers failed!" />
+				<SelectionChangeFailed text="The selection change failed!" />
+				<DateExists text="An entry for this date already exists." />
+				<DateWrongFormat text="Invalid date format. Current date is set." />
+				<VolumeEmpty text="Please insert a volume." />
+				<VolumeWrongFormat text="Format for the value 'Volume' is invalid." />
+				<VolumeWrongValue text="The value for 'Volume' must be higher than '0'." />
+				<VolumeMaxValue text="The value for 'Volume' is over the maximum." />
+				<PriceEmpty text="Please insert a price." />
+				<PriceWrongFormat text="Format for the value 'Price' is invalid." />
+				<PriceWrongValue text="The value for 'price' must be higher than '0'." />
+				<ValueEmpty text="Please insert a value." />
+				<ValueWrongFormat text="Format for the value 'Value' is invalid." />
+				<ValueWrongValue text="The value for 'Value' must be higher than '0'." />
+				<ProfitLossEmpty text="Please insert a profit or loss." />
+				<ProfitLossWrongFormat text="Format for the value 'Profit / Loss' is invalid." />
+				<AddFailed text="Sale add has been failed!" />
+				<EditFailed text="Sale changes save has been failed!" />
+				<DeleteFailed text="Delete of the sale entry has been failed!" />
+				<CancelFailure text="An error occurred while the cancel should be done!" />
+				<CheckInputFailure text="An error occurred while the input check should be done!" />
+				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
+				<FileDoesNotExist text="The given file does not exist!" />
+				<DocumentShowFailed text="Show of the document failed!" />
+			</Errors>
+		</AddEditFormSale>
+		
+		<!-- Dividend add / edit -->
+		<AddEditFormDividend>
+			<Caption text="Add / edit dividends of this share" />
+			
+			<!-- GroupBox add / edit dividend --> 
+			<GrpBoxAddEdit>
+				<Add_Caption text="Add dividend" />
+				<Edit_Caption text="Edit dividend" />
+				
+				<!-- Labels -->
+				<Labels>
+					<Date text="Date of the payout:" />
+					<EnableForeignCurrency text="Activate foreign currency input:" />
+					<ExchangeRatio text="Exchange rate:" />
+					<Dividendrate text="Dividend rate:" />
+					<Volume text="Volume at the payout day:" />
+					<LossBalance text="Loss balance:" />
+					<Payout text="Payout:" />
+					<Tax text="Tax:" />
+					<PayoutAfterTax text="After tax payout:" />
+					<Yield text="After tax dividend yield:" />
+					<Price text="Price of the share at the payout day:" />
+					<Document text="Document:" />
+				</Labels>
+				
+				<!-- Open file dialog -->
+				<OpenFileDialog>
+					<Title text="Choose document" />
+				</OpenFileDialog>
+
+				<!-- Buttons -->
+				<Buttons>
+					<Add text="   Add" />
+					<Save text="   Save" />
+					<Delete text="   Delete" />
+					<Reset text="   Reset" />
+					<Cancel text="   Return" />
+				</Buttons>
+			</GrpBoxAddEdit>
+			
+			<!-- GroupBox dividend overview -->
+			<GrpBoxDividend>
+				<Caption text="Dividend overview" />
+				
+				<!-- TabCtrl divivden overview -->
+				<TabCtrl>
+					
+					<!-- TabPage overview -->
+					<TabPgOverview>
+						<Overview text="Overview" />
+					</TabPgOverview>
+					
+					<!-- DataGridView dividend -->
+					<DgvDividendOverview>
+						<ColHeader_Date text="Date" />
+						<ColHeader_Payout text="Pay" />
+						<ColHeader_Dividend text="Div." />
+						<ColHeader_Yield text="Yield" />
+						<ColHeader_YieldUnit text="%" />
+						<ColHeader_Price text="Pr." />
+						<ColHeader_Volume text="Vol." />
+						<ColHeader_Document text="Document" />
+					</DgvDividendOverview>
+				</TabCtrl>
+			</GrpBoxDividend>
+						
+			<!-- Dividen add / edit state messages -->
+			<StateMessages>
+				<AddSuccess text="Dividend has been added." />
+				<EditSuccess text="Dividend changes has been saved." />
+				<DeleteSuccess text="Dividend entry has been deleted!" />			
+			</StateMessages>
+			
+			<!-- Dividend add / edit errors -->
+			<Errors>
+				<ShowFailed text="An error occurred while the dividend should be shown!" />
+				<DeselectFailed text="Deselect of the selected rows failed!" />
+				<SearchFailed text="Getting the dividend entry for the chosen date failed!" />
+				<RenameColHeaderFailed text="Renaming of the column headers failed!" />
+				<SelectionChangeFailed text="The selection change failed!" />
+				<DateExists text="An entry for this date already exists." />
+				<DateWrongFormat text="Invalid date format. Current date is set." />
+				<DividendForeignCurrencyFactorEmpty text="Please insert a factor for the foreign currency." />
+				<DividendForeignCurrencyFactorWrongFormat text="Format for the value 'Factor' for the foreign currency is invalid." />
+				<DividendForeignCurrencyFactorWrongValue text="The value for 'Factor' for the foreign currency must be higher than '0'." />
+				<DividendEmpty text="Please insert a dividend." />
+				<DividendWrongFormat text="Format for the value 'Dividend' is invalid." />
+				<DividendWrongValue text="The value for 'Dividend' must be higher than '0'." />
+				<LossBalanceWrongFormat text="Format for the value 'Loss balance' is invalid." />
+				<LossBalanceWrongValue text="The value for 'Loss balance' must be higher than '0'." />
+				<DividendForeignCurrencyEmpty text="Please insert a dividend in the foreign currency." />
+				<DividendForeignCurrencyWrongFormat text="Format for the value 'Dividend' in the foreign currency is invalid." />
+				<DividendForeignCurrencyWrongValue text="The value for 'Dividend' in the foreign currency must be higher than '0'." />
+				<PriceEmpty text="Please insert a price." />
+				<PriceWrongFormat text="Format for the value 'Price' is invalid." />
+				<PriceWrongValue text="The value for 'Price' must be higher than '0'." />
+				<PriceForeignCurrencyEmpty text="Please insert a price in the foreign currency." />
+				<PriceForeignCurrencyWrongFormat text="Format for the value 'Price' in the foreign currency is invalid." />
+				<PriceForeignCurrencyWrongValue text="The value for 'Price' in the foreign currency must be higher than '0'." />
+				<VolumeEmpty text="Please insert a volume." />
+				<VolumeWrongFormat text="Format for the value 'Volume' is invalid." />
+				<VolumeWrongValue text="The value for 'Volume' must be higher than '0'." />
+				<AddFailed text="Dividend add has been failed!" />
+				<EditFailed text="Dividend changes save has been failed!" />
+				<DeleteFailed text="Delete of the dividend entry has been failed!" />
+				<CancelFailure text="An error occurred while the cancel should be done!" />
+				<CheckInputFailure text="An error occurred while the input check should be done!" />
+				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
+				<FileDoesNotExist text="The given file does not exist!" />
+				<DocumentShowFailed text="Show of the document failed!" />
+			</Errors>
+		</AddEditFormDividend>
+
+		<!-- Taxes edit -->
+		<Taxes>
+			<Caption text="Edit taxes of this share" />
+
+			<!-- Groupbox edit taxes -->
+			<GrpBoxEdit>
+				<Caption text="Edit taxes" />
+					
+				<!-- Labels -->
+				<Labels>
+					<Payout text="Payout without taxes:" />
+					<CapitalGainsValue text="Cap. tax liable on cap. gains tax:" />
+					<LossBalance text="Loss balance:" />
+					<TaxAtSource text="Tax at source:" />
+					<TaxAtSourceValue text="Value:" />
+					<CapitalGainsTax text="Capital gains tax:" />
+					<CapitalGainsTaxValue text="Value:" />
+					<SolidarityTax text="Solidarity tax:" />
+					<SolidarityTaxValue text="Value:" />
+					<PayoutWithTaxes text="Payout with taxes:" />
+				</Labels>
+				
+				<!-- Buttons -->
+				<Buttons>
+					<Ok text="   Ok" />
+					<Reset text="   Reset" />
+					<Cancel text="   Return" />
+				</Buttons>
+			</GrpBoxEdit>
+			
+			<!-- Taxes edit errors -->
+			<Errors>
+				<ShowFailed text="An error occurred while the taxes should be shown!" />
+			</Errors>
+		</Taxes>
+
+		<!-- Costs add / edit -->
+		<AddEditFormCosts>
+			<Caption text="Add / edit costs of this share" />
+			
+			<!-- GroupBox add / edit costs -->
+			<GrpBoxAddEdit>
+				<Add_Caption text="Add costs" />
+				<Edit_Caption text="Edit costs" />
+				
+				<!-- Labels -->
+				<Labels>
+					<Date text="Date:" />
+					<Value text="Costs:" />
+					<Document text="Document:" />
+				</Labels>
+
+				<!-- Open file dialog -->
+				<OpenFileDialog>
+					<Title text="Choose document" />
+				</OpenFileDialog>
+
+				<!-- Buttons -->
+				<Buttons>
+					<Add text="   Add" />
+					<Save text="   Save" />
+					<Delete text="   Delete" />
+					<Reset text="   Reset" />
+					<Cancel text="   Return" />
+				</Buttons>				
+			</GrpBoxAddEdit>
+			
+			<!-- GroupBox costs overview -->
+			<GrpBoxCosts>
+				<Caption text="Costs overview" />
+
+				<!-- TabCtrl costs overview -->
+				<TabCtrl>
+					
+					<!-- TabPage overview -->
+					<TabPgOverview>
+						<Overview text="Overview" />
+					</TabPgOverview>
+					
+					<!-- DataGridView costs -->
+					<DgvCostsOverview>
+						<ColHeader_Date text="Date" />
+						<ColHeader_Costs text="Costs" />
+						<ColHeader_Document text="Document" />
+					</DgvCostsOverview>
+				</TabCtrl>
+			</GrpBoxCosts>
+			
+			<!-- Costs add / edit state messages -->
+			<StateMessages>
+				<AddSuccess text="Costs has been added." />
+				<EditSuccess text="Costs changes has been saved." />
+				<DeleteSuccess text="Costs entry has been deleted." />
+			</StateMessages>
+			
+			<!-- Costs add / edit errors -->
+			<Errors>
+				<ShowFailed text="An error occurred while the costs should be shown!" />
+				<DeselectFailed text="Deselect of the selected rows failed!" />
+				<RenameColHeaderFailed text="Renaming of the column headers failed!" />
+				<SearchFailed text="Getting the costs entry for the chosen date failed!" />
+				<SelectionChangeFailed text="The selection change failed!" />
+				<DateExists text="An entry for this date already exists." />
+				<DateWrongFormat text="Invalid date format. Current date is set." />
+				<CostsEmpty text="Please insert a value for the costs." />
+				<CostsWrongFormat text="Format for the value 'Costs' is invalid." />
+				<CostsWrongValue text="The value for 'Costs' must be higher than '0'." />
+				<AddFailed text="Costs add failed!" />
+				<EditFailed text="Costs changes save has been failed!" />
+				<DeleteFailed text="Delete of the costs entry failed!" />
+				<CancelFailure text="An error occurred while the cancel should be done!" />
+				<CheckInputFailure text="An error occurred while the input check should be done!" />
+				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
+				<FileDoesNotExist text="The given file does not exist!" />
+				<DocumentShowFailed text="Show of the document failed!" />
+			</Errors>
+		</AddEditFormCosts>
+		
+		<!-- Logger settings -->
+		<LoggerSettingsForm>
+			<Caption text="Logger" />
+
+			<!-- GroupBox GUI entries size -->
+			<GrpBoxLogGUIEntriesSize>
+				<Caption text="GUI log entries size" />
+				
+				<!-- Labels -->
+				<Labels>
+					<GUIEntriesSize text="Size:" />
+				</Labels>
+			</GrpBoxLogGUIEntriesSize>
+
+			<!-- GroupBox File logging -->
+			<GrpBoxFileLogging>
+				<Caption text="Write to file" />
+				
+				<!-- Checkboxes -->
+				<States>
+					<EnableFileLogging text="activated" />
+				</States>
+			</GrpBoxFileLogging>
+
+			<!-- GroupBox stored logging files -->
+			<GrpBoxStoredFiles>
+				<Caption text="Stored logging files" />
+				
+				<!-- Labels -->
+				<Labels>
+					<StoredLogFiles text="Size:" />
+				</Labels>
+			</GrpBoxStoredFiles>
+
+			<!-- GroupBox cleanup at startup -->
+			<GrpBoxCleanUpAtStartUp>
+				<Caption text="Cleanup files at startup" />
+				
+				<!-- Checkboxes -->
+				<States>
+					<EnableCleanUpAtStartUp text="activated" />
+				</States>
+			</GrpBoxCleanUpAtStartUp>
+			
+			<!-- GroupBox components -->
+			<GrpBoxLogComponents>
+				<Caption text="Log components" />
+			</GrpBoxLogComponents>
+			
+			<!-- GroupBox log level -->
+			<GrpBoxLogLevels>
+				<Caption text="Log levels" />
+			</GrpBoxLogLevels>
+
+			<!-- GroupBox log level colors -->
+			<GrpBoxLogLevelColors>
+				<Caption text="Log level colors" />
+			</GrpBoxLogLevelColors>
+
+			<!-- Buttons -->
+			<Buttons>
+				<CleanUp text="Clean up" />
+				<Save text="     Save" />
+				<Cancel text="     Cancel" />
+			</Buttons>
+			
+			<!-- Errors -->
+			<Errors>
+				<LoggerSettingsShowFailed text="An exception occurred. Showing the dialog failed!" />
+				<SaveSettingsFailed text="An exception occurred. Save of the settings failed!" />
+				<SaveSettingsSuccessful text="Save of the settings successful." />
+			</Errors>
+		</LoggerSettingsForm>
+		
+		<!-- Message box -->
+		<MessageBoxForm>
+			
+			<!-- Captions -->
+			<Captions>
+				<Info text="Info" />
+				<Warning text="Warning" />
+				<Error text="Error" />
+				<InputPortfolioName text="Input portfolio name" />
+			</Captions>
+			
+			<!-- Buttons -->
+			<Buttons>
+				<Ok text="Ok" />
+				<Cancel text="Cancel" />
+				<Yes text="Yes" />
+				<No text="No" />
+			</Buttons>
+			
+			<!-- Content -->
+			<Content>
+				<BuyDelete text="Do you really want to remove this buy?" />
+				<SaleDelete text="Do you really want to remove this sale?" />
+				<DividendDelete text="Do you realy want to remove this dividend?" />
+				<CostsDelete text="Do you realy want to remove this costs?" />
+				<DocumentDoesNotExistDelete text="The document does not exist. Would you delete the document from the data?"/>
+				<ShareDelete text="Do you really want to delete this share from the portfolio?"/>
+				<LoggerSetttingsReboot text="The changes of the logger settings will be used after a software restarted"/>
+				<InputPortfolioName text="Please input the portfolio name:"/>
+				<PortfolioNameExists text="A portfolio with the given name already exists. Should this portfolio be overwritten?"/>
+			</Content>
+		</MessageBoxForm>
+					
+		<!-- About window -->
+		<AboutForm>
+			<Caption text="About" />
+			
+			<!-- Labels -->
+			<Labels>
+				<Version text="Versions" />
+				<ApplicationVersion text="Application version: " />
+				<WebParserDLLVersion text="Webparser DLL version: " />
+				<LanguageDLLVersion text="Language DLL version: " />
+				<LoggerDLLVersion text="Logger DLL version: " />
+			</Labels>
+			
+			<!-- Buttons -->
+			<Buttons>
+				<Ok text="Ok" />
+			</Buttons>
+			
+			<!-- Errors -->
+			<Errors>
+				<ShowAboutBoxFailed text="Showing the 'About' box failed!" />
+			</Errors>
+		</AboutForm>
+	</English>
+	<German>
+		<!-- Application name -->
+		<Application>
+			<Name text="Aktien- Portfolio- Manager" />
+		</Application>
+		
+		<!-- Units -->
+		<PieceUnit text="stk." />
+		<PercentageUnit text="%" />
+
+		<!-- Logger -->
+		<Logger>
+			<!-- States -->
+			<States>
+				<Start text="Start" />
+				<Info text="Info" />
+				<Warning text="Warnung" />
+				<Error text="Fehler" />
+				<FatalError text="Fataler Fehler" />
+			</States>
+			
+			<!-- Component names -->
+			<ComponentNames>
+				<Application text="Programm" />
+				<WebParser text="WebParser" />
+				<LanguageHandler text="LanguageHandler" />
+				<Logger text="Logger" />
+			</ComponentNames>
+
+			<!-- Logger errors -->
+			<LoggerErrors>
+				<InitializationFailed text="Initialisierung des Loggers fehlgeschlagen!" />
+				<LogPathCreationFailed  text="Erstellen des Log- Verzeichnisses fehlgeschlagen!" />
+				<WriteStartupFailed  text="Schreiben der Startup- Meldung fehlgeschlagen!" />
+				<WrongSize  text="Die übergebene Größe für den Logger ist ungültig!" />
+				<ColorsMaxCount text="Die übergebene Anzahl an Farben für den Logger ist zu groß!" />
+				<ComponentNamesMaxCount text="Die übergebene Anzahl an Komponenten- Namen für den Logger ist zu groß!" />
+				<StatesMaxCount text="Die übergebene Anzahl an Status für den Logger ist zu groß!" />
+				<ComponentLevelInvalid text="Das übergebene Log- Level für die Komponenten ist ungültig!" />
+				<StateLevelInvalid text="Das übergebene Log- Level für die Status ist ungültig!" />
+				<NotInitialized text="Logger ist nicht initialisiert!" />
+			</LoggerErrors>
+
+			<!-- Logger state messages -->
+			<LoggerStateMessages>
+				<CleanUpLogFilesFailed text="Säubern der Log- Dateien ist fehlgeschlagen!" />
+			</LoggerStateMessages>			
+		</Logger>
+
+		<!-- MainForm -->
+		<MainForm>
+			<!-- Menu -->
+			<Menu>
+				<File>
+					<Header text="Datei" />
+					<New text="Neues Portfolio" />
+					<SaveAs text="Speichern unter ..." />
+					<Open text="Portfolio öffnen" />
+					<Quit text="Beenden"/>
+				</File>
+				<Settings>
+					<Header text="Einstellungen" />
+					<Language text="Sprache" />
+					<Logger text="Logger" />
+				</Settings>
+				<Help>
+					<Header text="Hilfe" />
+					<About text="Über" />
+				</Help>
+			</Menu>
+
+			<!-- Groupbox portfolio -->
+			<GrpBoxPortfolio>
+				<Caption text="Portfolio- Übersicht" />
+
+				<!-- DataGridView portfolio -->
+				<DgvPortfolio>
+					<ColHeader_WKN text="WKN" />
+					<ColHeader_Name text="Name"/>
+					<ColHeader_Price text="Preis" />
+					<ColHeader_PrevDay text="Vortag" />
+					<ColHeader_Volume text="Anteile"/>
+					<ColHeader_Performance text="Entw." />
+					<ColHeader_CostsDividend text="Kosten /  Dividenden" />
+					<ColHeader_DepositSum text=" Einzahlung /   Summe" />
+				</DgvPortfolio>
+				<DgvPortfolio_Error>
+					<ConfigurationFailed text="Konfiguration des DataGridView 'Portfolio' fehlgeschlagen!" />
+				</DgvPortfolio_Error>
+				
+				<!-- DataGridView portfolio footer -->
+				<DgvPortfolioFooter>
+					<RowContent_TotalDeposit text="Einzahlung (gesamt) " />
+					<RowContent_TotalCostDividend text="Kosten / Dividenden (ges.) " />
+					<RowContent_TotalPerformance text="Entwicklung (gesamt) " />
+					<RowContent_TotalSum text="Aktueller Depotstand " />
+				</DgvPortfolioFooter>
+				<DgvPortfolioFooter_Error>
+					<ConfigurationFailed text="Konfiguration des DataGridView für den 'Portfolio- Footer' fehlgeschlagen!" />
+				</DgvPortfolioFooter_Error>
+
+				<!-- Buttons -->
+				<Buttons>
+					<RefreshAll text="   Alle aktualisieren" />
+					<RefreshAllCancel text="   Abbrechen" />
+					<Refresh text="   Aktualisieren" />
+					<RefreshCancel text="   Abbrechen" />
+					<Add text="   Hinzufügen" />
+					<Edit text="   Editieren" />
+					<Delete text="   Entfernen" />
+					<ResetLogger text="   Logger leeren" />
+				</Buttons>				
+			</GrpBoxPortfolio>
+			
+			<!-- GroupBox details -->
+			<GrpBoxDetails>
+				<Caption text="Aktien- Details" /> <!-- only a place holder -->
+				<ShareWKN text="WKN" />
+				<ShareUpdateNotDone text="-" />
+
+				<!-- TabControl with the details -->
+				<TabCtrlDetails>		
+					<!-- TabPage with dividend and costs -->
+					<TabPgWithDividendCosts>
+						<Caption text="Mit Dividenden / Kosten" />
+						
+						<!-- Labels -->
+						<Labels>
+							<Date text="Aktien- Datum:" />
+							<Volume text="Anteile:"/>
+							<TotalDividend text="Dividenden (gesamt):" />		
+							<TotalCosts text="Kosten (gesamt):" />
+							<CurrentPrice text="Aktueller Aktien- Preis:" />
+							<DiffSumPrevDay text="Gewinn / Verlust (Vortag):" />
+							<PricePrevDay text="Aktien- Preis (Vortag):" />
+							<Deposit text="Einzahlungen:" />
+							<TotalPerformance text="Entwicklung (gesamt):" />
+							<TotalProfitLoss text="Gewinn / Verlust (gesamt):" />
+							<TotalSum text="Summe (gesamt):" />
+						</Labels>
+					</TabPgWithDividendCosts>
+					
+					<!-- Tab without dividend and costs -->
+					<TabPgWithOutDividendCosts>
+						<Caption text="Ohne Dividenden / Kosten" />
+						
+						<!-- Labels -->
+						<Labels>
+							<Date text="Aktien- Datum:" />
+							<Volume text="Anteile:"/>
+							<TotalDividend text="Dividenden (gesamt):" />		
+							<TotalCosts text="Kosten (gesamt):" />
+							<CurrentPrice text="Aktueller Aktien- Preis:" />
+							<DiffSumPrevDay text="Gewinn / Verlust (Vortag):" />
+							<PricePrevDay text="Aktien- Preis (Vortag):" />
+							<Deposit text="Einzahlungen:" />
+							<TotalProfitLoss text="Gewinn / Verlust (gesamt):" />
+							<TotalSum text="Summe (gesamt):" />
+						</Labels>
+					</TabPgWithOutDividendCosts>
+					<TabPgWithWithOutDividendCostsErrors>
+						<ShowFailed text="Es trat ein Fehler beim Anzeigen der Aktien- Details auf!" />
+					</TabPgWithWithOutDividendCostsErrors>
+					
+					<!-- Tab dividend overview -->
+					<TabPgDividend>
+						<Caption text="Dividenden" />
+						<Overview text="Übersicht" />
+
+						<!-- DataGridView dividend -->
+						<DgvDividendOverview>
+							<ColHeader_Date text="Datum" />
+							<ColHeader_Year text="Jahr" />
+							<ColHeader_Payout text="Auszahlung" />
+							<ColHeader_Dividend text="Dividende" />
+							<ColHeader_Yield text="Rendite" />
+							<ColHeader_Price text="Preis" />
+							<ColHeader_Volume text="Anteile" />
+							<ColHeader_Document text="Dokument" />
+						</DgvDividendOverview>
+					</TabPgDividend>
+					<TabPgDividend_Error>
+						<ShowFailed text="Es trat ein Fehler beim Anzeigen der Dividenden- Details auf!" />
+						<RenameHeaderFailed text="Umbennenen der Spalten- Namen ist fehlgeschlagen!" />
+					</TabPgDividend_Error>
+					
+					<!-- Tab cost overview -->
+					<TabPgCosts>
+						<Caption text="Kosten" />
+						<Overview text="Übersicht" />
+						
+						<!-- DataGridView costs -->
+						<DgvCostsOverview>
+							<ColHeader_Date text="Datum" />
+							<ColHeader_Year text="Jahr" />
+							<ColHeader_Costs text="Kosten" />
+							<ColHeader_Document text="Dokument" />
+						</DgvCostsOverview>
+					</TabPgCosts>
+					<TabPgCosts_Error>
+						<ShowFailed text="Es trat ein Fehler beim Anzeigen der Kosten- Details auf!" />
+						<RenameHeaderFailed text="Umbennenen der Spalten- Namen ist fehlgeschlagen!" />
+					</TabPgCosts_Error>
+					
+					<!-- Tab profit or loss overview -->
+					<TabPgProfitLoss>
+						<Caption text="Gewinne / Verluste" />
+						<Overview text="Übersicht" />
+
+						<!-- DataGridView profit or loss -->
+						<DgvProfitLossOverview>
+							<ColHeader_Date text="Datum" />
+							<ColHeader_Year text="Jahr" />
+							<ColHeader_ProfitLoss text="Gewinn / Verlust" />
+							<ColHeader_Document text="Dokument" />
+						</DgvProfitLossOverview>
+					</TabPgProfitLoss>
+					<TabPgProfitLoss_Error>
+						<ShowFailed text="Es trat ein Fehler beim Anzeigen der Gewinn / Verlust- Details auf!" />
+						<RenameHeaderFailed text="Umbennenen der Spalten- Namen ist fehlgeschlagen!" />
+					</TabPgProfitLoss_Error>
+				</TabCtrlDetails>
+			</GrpBoxDetails>
+
+			<!-- Groupbox update state -->		
+			<GrpBoxUpdateState>
+				<Caption text="Aktualisierungs- Status" />
+			</GrpBoxUpdateState>
+	
+			<!-- Update messages -->
+			<UpdateMessages>
+				<Start1 text="Aktualisierung der Aktie'" />
+				<Start2 text="' gestartet." />
+				<ContentLoadStarted text="Webseiten- Inhalt wird geladen." />
+				<ContentLoaded text="Webseiten- Inhalt geladen." />
+				<SearchStarted text="Such- Vorgang wurde gestartet." />
+				<SearchRunning text="Such- Vorgang läuft." />
+				<SearchFinish text="Such- Vorgang beendet." />
+				<Finish1 text="Aktualisierung der Aktie'" />
+				<Finish2 text="' wurde erfolgreich beendet." />
+			</UpdateMessages>
+
+			<!-- Update errors -->
+			<UpdateErrors>
+				<StartFailed text="Starten des WebParser ist fehlgeschlagen." />
+				<BusyFailed text="WebParser ist bereits in Verwendung." />
+				<InvalidWebSiteGiven text="Die Websiten- Adresse ist ungültig." />
+				<NoRegexListGiven text="Es wurde kein regulärer Ausdruck übergeben." />
+				<ContentLoadedFailed text="Laden des Webseiten- Inhalts ist fehlgeschlagen." />
+				<ParsingFailed1 text="Parsen des Schlüssels '" />
+				<ParsingFailed2 text="' ist fehlgeschlagen." />
+				<CancelThread1 text="Aktualisierung der Aktie'" />
+				<CancelThread2 text="' wurde abgebrochen." />
+				<UpdateFailed text="Aktualisieren ist fehlgeschlagen!" />
+				<Failure text="Aktualisierung ist fehlgeschalgen. Fehler: " />
+			</UpdateErrors>
+			
+			<!-- Status messages -->
+			<StatusMessages>
+				<SelectAShare text="Bitte eine Aktie auswählen." />
+				<AddSaveSuccessful text="Aktie wurde erfoglreich hinzugefügt." />
+				<EditSaveSuccessful text="Änderung war erfolgreich." />
+				<DeleteSuccessful text="Aktie wurde erfolgreich entfernt." />
+				<ChangeLanguageSuccessful text="Sprache wurde geändert." />
+				<ChangingPortfolioSuccessful text="Wechseln des Portfolios erfolgreich." />
+			</StatusMessages>
+			
+			<!-- Error messages -->
+			<Errors>
+				<FileDoesNotExists1 text="Datei '" />
+				<FileDoesNotExists2 text="' existiert nicht mehr! Legen Sie ein neues Portfolio an." />
+				<CouldNotLoadFile1 text="Datei '" />
+				<CouldNotLoadFile2 text="' konnte nicht geladen werden!" />
+				<XMLSyntaxFailure1 text="Es ist ein XML- Syntax- Fehler in der Datei '" />
+				<XMLSyntaxFailure2 text="' vorhanden!" />
+				<ChangingPortfolioFailed text="Wechseln des Portfolios ist fehlgeschlagen!" />
+				<CouldNotLoadAllLanguageKeys text="Es konnten nicht alle Sprach- Elemente geladen werden!" />
+				<WebSiteConfigurationListEmpty text="Keine Webseiten- Konfigurationen verfügbar!" />
+				<WebSiteConfigurationListLoadFailed text="Konfiguration unvollständig!"/>
+				<WebSiteRegexNotFound1_1 text="Keine Parser- Konfiguartion für die Aktie mit der WKN " />
+				<WebSiteRegexNotFound1_2 text=" verfügbar!" />
+				<WebSiteRegexNotFound2_1 text="Kein Parser-Konfiguration für die Aktien mit den WKN " />
+				<WebSiteRegexNotFound2_2 text=" verfügbar!" />
+				<PortfolioConfigurationListEmpty text="Portfolio ist leer!" />
+				<PortfolioConfigurationListLoadFailed text="Konfiguration unvollständig!"/>
+				<AddShowFailed text="Es trat ein Fehler bei der Anzeige auf!" />
+				<AddSaveFailed text="Hinzufügen der Aktie ist fehlgeschlagen!" />
+				<AddSaveErrorFailed text="Es trat ein Fehler nach dem Speichern der Aktie auf!" />
+				<EditSaveFailed text="Ändern der Aktie ist fehlgeschlagen!" />
+				<EditSaveErrorFailed text="Es trat ein Fehler nach dem Editieren der Aktie auf!" />
+				<DeleteFailed text="Entfernen der Aktie ist fehlgeschlagen!" />
+				<DeleteErrorFailed text="Es trat ein Fehler nach dem Entfernen der Aktie auf!" />
+				<SaveSettingsFailed text="Speichern der Einstellungen fehlgeschalgen!" />
+				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
+				<ChangeLanguageFailed text="Ändern der Sprache fehlgeschlagen!" />
+			</Errors>
+		</MainForm>	
+
+		<!-- Add window -->
+		<AddFormShare>
+			<Caption text="Aktie hinzufügen" />
+			
+			<!-- Group box with the general infos of the share -->
+			<GrpBoxGeneral>
+				<Caption text="Allgemein" />
+				
+				<!-- Labels -->
+				<Labels>
+					<WKN text="WKN: " />
+					<Date text="Datum: " />
+					<Name text="Name: " />
+					<Volume text="Anteile: " />
+					<SharePrice text="Kurs: " />
+					<MarketValue text="Kurswert: " />
+					<Costs text="Kosten: " />
+					<Reduction text="Rabatt: " />
+					<FinalValue text="Endbetrag: " />
+					<WebSite text="Webseiten- Adresse: " />
+					<CultureInfo text="Länder- Info: " />
+					<PayoutInterval text="Dividendenauszahlungs- Interval: " />
+					<Document text="Dokument: " />
+				</Labels>
+				
+				<!-- Combo box items for the dividend payout intervals -->
+				<ComboBoxItemsPayout>
+					<Item0 text="keine" />
+					<Item1 text="jährlich" />
+					<Item2 text="halbjährlich" />
+					<Item3 text="vierteljährlich" />
+				</ComboBoxItemsPayout>
+			</GrpBoxGeneral>
+
+			<!-- Group box with the taxes info of the share -->
+			<GrpBoxTaxes>
+				<Caption text="Steuern" />
+				
+				<!-- Labels -->
+				<Labels>
+					<TaxAtSource text="Quellensteuer: " />
+					<CapitalGainsTax text="Kapitalertragssteuer: " />
+					<SolidarityTax text="Solidaritätszuschlag: " />
+				</Labels>
+			</GrpBoxTaxes>
+			
+			<!-- Open file dialog -->
+			<OpenFileDialog>
+				<Title text="Dokument auswählen" />
+			</OpenFileDialog>
+
+			<!-- Buttons -->
+			<Buttons>
+				<Save text="   Speichern" />
+				<Cancel text="   Abbrechen" />
+			</Buttons>
+			
+			<!-- Errors -->
+			<Errors>
+				<WKNEmpty text="Bitte geben Sie eine WKN- Nummer ein." />
+				<WKNExists text="Die WKN- Nummber existiert bereits." />
+				<NameEmpty text="Bitte geben Sie einen Namen ein." />
+				<NameExists text="Der Name existiert bereits." />
+				<VolumeEmpty text="Bitte geben Sie einen Anteile- Wert ein." />
+				<VolumeWrongFormat text="Format für den 'Anteile'- Wert ist ungültig." />
+				<VolumeWrongValue text="Der Wert für 'Anteile' muss größer '0' sein." />
+				<SharePriceEmpty text="Bitte geben Sie einen Kurs ein." />
+				<SharePriceWrongFormat text="Format für den 'Kurs'- Wert ist ungültig." />
+				<SharePriceWrongValue text="Der Wert für 'Kurs' muss größer als '0' sein." />
+				<CostsWrongFormat text="Format für den 'Kosten'- Wert ist ungültig." />
+				<CostsWrongValue text="Der Wert für 'Kosten' muss größer '0' sein." />
+				<ReductionWrongFormat text="Format für den 'Rabatt'- Wert ist ungültig." />
+				<ReductionWrongValue text="Der Wert für 'Rabatt' muss größer '0' sein." />
+				<WebSiteEmpty text="Bitte geben Sie eine Webseiten- Adresse ein." />
+				<WebSiteExists text="Die Webseite existiert bereits." />
+				<WebSiteRegexNotFound text="Kein Parser-Konfiguration für die angegebene Web- Addresse verfügbar!" />
+				<AddSaveFailed text="Es trat ein Fehler auf. Hinzufügen der Aktien ist fehlgeschlagen!" />
+				<AddShowFailed text="Es trat ein Fehler auf. Anzeigen des Dialogs fehlgeschlagen!" />
+				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
+				<TaxAtSourceEmpty text="Bitte geben Sie eine Quellensteuer ein." />
+				<TaxAtSourceWrongFormat text="Format für den 'Quellensteuer'- Wert ist ungültig." />
+				<TaxAtSourceWrongValue text="Der Wert für 'Quellensteuer' muss größer '0' sein." />
+				<CapitalGainsTaxEmpty text="Bitte geben Sie eine Kapitalertragssteuer ein." />
+				<CapitalGainsTaxWrongFormat text="Format für den 'Kapitalertragssteuer'- Wert ist ungültig." />
+				<CapitalGainsTaxWrongValue text="Der Wert für 'Kapitalertragssteuer' muss größer '0' sein." />
+				<SolidarityTaxEmpty text="Bitte geben Sie einen Solidaritätszuschlag ein." />
+				<SolidarityTaxWrongFormat text="Format für den 'Solidaritätszuschlag'- Wert ist ungültig." />
+				<SolidarityTaxWrongValue text="Der Wert für 'Solidaritätszuschlag' muss größer '0' sein." />
+				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
+			</Errors>
+		</AddFormShare>
+		
+		<!-- Edit window -->
+		<EditFormShare>
+			<Caption text="Aktie editieren" />
+			
+			<!-- Group box with the general infos of the share -->
+			<GrpBoxGeneral>
+				<Caption text="Allgemein" />
+
+				<!-- Labels -->
+				<Labels>
+					<WKN text="WKN: " />
+					<Name text="Name: " />
+					<Date text="Datum: " />
+					<Deposit text="Einzahlung: " />
+					<Volume text="Anteile: " />
+					<WebSite text="Webseiten- Adresse: " />
+					<CultureInfo text="Länder- Info: " />
+					<PayoutInterval text="Dividendenauszahlungs- Interval: " />
+				</Labels>
+				
+				<!-- Combo box items for the dividend payout intervals -->
+				<ComboBoxItemsPayout>
+					<Item0 text="keine" />
+					<Item1 text="jährlich" />
+					<Item2 text="halbjährlich" />
+					<Item3 text="vierteljährlich" />
+				</ComboBoxItemsPayout>
+			</GrpBoxGeneral>
+			
+			<!-- Group box with the earings and expenditure infos of the share -->
+			<GrpBoxEarningsExpenditure>
+				<Caption text="Einnahmen / Ausgabe" />
+
+				<!-- Labels -->
+				<Labels>
+					<Buys text="Käufe: " />
+					<Sales text="Verkäufe: " />
+					<Profit text="Gewinn / Verlust aus Verkäufen: " />
+					<Loss text="Verlust aus Verkäufen: " />
+					<Dividend text="Dividenden: " />
+					<Costs text="Kosten: " />
+				</Labels>
+
+				<!-- Buttons -->
+				<Buttons>
+					<Buys text="" />
+					<Sales text="" />
+					<Dividend text="" />
+					<Costs text="" />
+				</Buttons>
+			</GrpBoxEarningsExpenditure>
+
+			<!-- Group box with the taxes info of the share -->
+			<GrpBoxTaxes>
+				<Caption text="Steuern" />
+				
+				<!-- Labels -->
+				<Labels>
+					<TaxAtSource text="Quellensteuer: " />
+					<CapitalGainsTax text="Kapitalertragssteuer: " />
+					<SolidarityTax text="Solidaritätszuschlag: " />
+				</Labels>
+			</GrpBoxTaxes>
+
+			<!-- Buttons -->
+			<Buttons>
+				<Save text="   Speichern" />
+				<Cancel text="   Zurück" />
+			</Buttons>
+		
+			<!-- Errors -->
+			<Errors>
+				<ShowFailed text="Es trat ein Fehler beim Anzeigen der Aktie auf!" />
+				<NameEmpty text="Bitte geben Sie einen Namen ein." />
+				<NameExists text="Der Name existiert bereits." />
+				<DepositEmpty text="Bitte geben Sie eine Einzahlung ein." />
+				<DepositWrongFormat text="Format für den 'Einzahlung'- Wert ist ungültig." />
+				<DepositWrongValue text="Der Wert für 'Einzahlung' muss größer als '0' sein." />
+				<VolumeEmpty text="Bitte geben Sie einen Anteile- Wert ein." />
+				<VolumeWrongFormat text="Format für den 'Anteile'- Wert ist ungültig." />
+				<VolumeWrongValue text="Der Wert für 'Anteile' muss größer '0' sein." />
+				<WebSiteEmpty text="Bitte geben Sie eine Webseiten- Adresse ein." />
+				<WebSiteExists text="Die Webseite existiert bereits." />
+				<TaxAtSourceEmpty text="Bitte geben Sie eine Quellensteuer ein." />
+				<TaxAtSourceWrongFormat text="Format für den 'Quellensteuer'- Wert ist ungültig." />
+				<CapitalGainsTaxEmpty text="Bitte geben Sie eine Kapitalertragssteuer ein." />
+				<CapitalGainsTaxWrongFormat text="Format für den 'Kapitalertragssteuer'- Wert ist ungültig." />
+				<SolidarityTaxEmpty text="Bitte geben Sie einen Solidaritätszuschlag ein." />
+				<SolidarityTaxWrongFormat text="Format für den 'Solidaritätszuschlag'- Wert ist ungültig." />
+				<EditSaveFailed text="Es trat ein Fehler auf. Editieren der Aktien ist fehlgeschlagen!" />
+			</Errors>
+		</EditFormShare>
+		
+		<!-- Buy add / edit -->
+		<AddEditFormBuy>
+			<Caption text="Hinzufügen / editieren der Käufe dieser Aktie" />
+			
+			<!-- GroupBox add / edit buy --> 
+			<GrpBoxAddEdit>
+				<Add_Caption text="Kauf hinzufügen" />
+				<Edit_Caption text="Kauf editieren" />
+				
+				<!-- Labels -->
+				<Labels>
+					<Date text="Datum des Kaufs:" />
+					<Volume text="Gekaufte Anteile:" />
+					<Price text="Kurs:" />
+					<MarketValue text="Kurswert:" />
+					<Costs text="Kosten:" />
+					<Reduction text="Rabatt:" />
+					<FinalValue text="Endbetrag:" />
+					<Document text="Dokument:" />
+				</Labels>
+				
+				<!-- Open file dialog -->
+				<OpenFileDialog>
+					<Title text="Dokument auswählen" />
+				</OpenFileDialog>
+
+				<!-- Buttons -->
+				<Buttons>
+					<Add text="   Hinzufügen" />
+					<Save text="   Speichern" />
+					<Delete text="   Entfernen" />
+					<Reset text="   Reset" />
+					<Cancel text="   Zurück" />
+				</Buttons>
+			</GrpBoxAddEdit>
+			
+			<!-- GroupBox buy overview -->
+			<GrpBoxBuy>
+				<Caption text="Kauf- Übersicht" />
+				
+				<!-- TabCtrl buy overview -->
+				<TabCtrl>
+					
+					<!-- TabPage overview -->
+					<TabPgOverview>
+						<Overview text="Übersicht" />
+					</TabPgOverview>
+					
+					<!-- DataGridView buy -->
+					<DgvBuyOverview>
+						<ColHeader_Date text="Datum" />
+						<ColHeader_Volume text="Anteile" />
+						<ColHeader_Price text="Kurs" />
+						<ColHeader_Value text="Kurswert" />
+						<ColHeader_Document text="Dokument" />
+					</DgvBuyOverview>
+				</TabCtrl>
+			</GrpBoxBuy>
+			
+			<!-- Dividen add / edit state messages -->
+			<StateMessages>
+				<AddSuccess text="Kauf wurde hinzugefügt." />
+				<EditSuccess text="Kauf- Änderung wurde gespeichert." />
+				<DeleteSuccess text="Kauf- Eintrag wurde gelöscht!" />			
+			</StateMessages>
+			
+			<!-- Buy add / edit errors -->
+			<Errors>
+				<ShowFailed text="Es trat ein Fehler beim Anzeigen der Käufe auf!" />
+				<DeselectFailed text="Deselektieren der selektierten Zeile ist fehlgeschlagen!" />
+				<SearchFailed text="Ermitteln des Kauf- Eintrags / der Kauf- Einträge für das ausgewählte Datum ist fehlgeschalgen!" />
+				<RenameColHeaderFailed text="Umbennenen der Spalten- Namen ist fehlgeschlagen!" />
+				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
+				<DateExists text="Es besteht bereits ein Eintrag für das eingegebene Datum." />
+				<DateWrongFormat text="Ungültiges Datumsformat. Aktuelles Datum wurde gesetzt." />
+				<VolumeEmpty text="Bitte geben Sie einen Anteile- Wert ein." />
+				<VolumeWrongFormat text="Format für den 'Anteile'- Wert ist ungültig." />
+				<VolumeWrongValue text="Der Wert für 'Anteile' muss größer als '0' sein." />
+				<SharePriceEmpty text="Bitte geben Sie einen Kurs ein." />
+				<SharePriceWrongFormat text="Format für den 'Kurs'- Wert ist ungültig." />
+				<SharePriceWrongValue text="Der Wert für 'Kurs' muss größer als '0' sein." />
+				<CostsWrongFormat text="Format für den 'Kosten'- Wert ist ungültig." />
+				<CostsWrongValue text="Der Wert für 'Kosten' muss größer als '0' sein." />
+				<ReductionWrongFormat text="Format für den 'Rabatt'- Wert ist ungültig." />
+				<ReductionWrongValue text="Der Wert für 'Rabatt' muss größer als '0' sein." />
+				<AddFailed text="Hinzufügen des Kaufs ist fehlgeschlagen!" />
+				<EditFailed text="Speichern der Kauf- Änderung ist fehlgeschlagen!" />
+				<DeleteFailed text="Entfernen des Kauf- Eintrags ist fehlgeschlagen!" />
+                <DeleteFailedUnerasable text="Dies ist der letzte existierende Kauf, welcher nur mit dem Löschen der Aktie gelöscht werden kann!" />
+				<CancelFailure text="Es ist ein Fehler aufgetreten beim Abbrechen!" />
+				<CheckInputFailure text="Es ist ein Fehler aufgetreten beim der Eingabenprüfung!" />
+				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
+				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
+				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
+			</Errors>
+		</AddEditFormBuy>
+			
+		<!-- Sale add / edit -->
+		<AddEditFormSale>
+			<Caption text="Hinzufügen / editieren der Verkäufe dieser Aktie" />
+			
+			<!-- GroupBox add / edit sale --> 
+			<GrpBoxAddEdit>
+				<Add_Caption text="Verkäufe hinzufügen" />
+				<Edit_Caption text="Verkäufe editieren" />
+				
+				<!-- Labels -->
+				<Labels>
+					<Date text="Datum des Verkaufs:" />
+					<ForeignCurrencyActivation text="Fremdwährungseingabe aktivieren:" />
+					<ForeignCurrencyFactor text="Umrechnungsfaktor:" />
+					<Volume text="Verkaufte Anteile:" />
+					<BuyPrice text="Kauf- Preis einer Aktie:" />
+					<SalesPrice text="Verkaufs- Preis einer Aktie:" />
+					<SalesLossBalance text="Verrechnungstopf:" />
+					<SalesSum text="Verkaufs- Summe:" />
+					<SalesSumAfterTax text="Verkaufs- Summe nach Steuern:" />
+					<Costs text="Kosten:" />
+					<Document text="Dokument:" />
+				</Labels>
+				
+				<!-- Open file dialog -->
+				<OpenFileDialog>
+					<Title text="Dokument auswählen" />
+				</OpenFileDialog>
+
+				<!-- Buttons -->
+				<Buttons>
+					<Add text="   Hinzufügen" />
+					<Save text="   Speichern" />
+					<Delete text="   Entfernen" />
+					<Reset text="   Reset" />
+					<Cancel text="   Zurück" />
+				</Buttons>
+			</GrpBoxAddEdit>
+			
+			<!-- GroupBox sale overview -->
+			<GrpBoxSale>
+				<Caption text="Verkaufs- Übersicht" />
+				
+				<!-- TabCtrl sale overview -->
+				<TabCtrl>
+					
+					<!-- TabPage overview -->
+					<TabPgOverview>
+						<Overview text="Übersicht" />
+					</TabPgOverview>
+					
+					<!-- DataGridView sale -->
+					<DgvSaleOverview>
+						<ColHeader_Date text="Datum" />
+						<ColHeader_Volume text="Anteile" />
+						<ColHeader_Value text="Summe" />
+						<ColHeader_ProfitLoss text="Gewinn / Verlust" />
+						<ColHeader_Price text="Preis" />
+						<ColHeader_Document text="Dokument" />
+					</DgvSaleOverview>
+				</TabCtrl>
+			</GrpBoxSale>
+			
+			<!-- Sale add / edit state messages -->
+			<StateMessages>
+				<AddSuccess text="Verkauf wurde hinzugefügt." />
+				<EditSuccess text="Verkaufs- Änderung wurde gespeichert." />
+				<DeleteSuccess text="Verkaufs- Eintrag wurde gelöscht!" />			
+			</StateMessages>
+			
+			<!-- Sale add / edit errors -->
+			<Errors>
+				<ShowFailed text="Es trat ein Fehler beim Anzeigen der Verkäufe auf!" />
+				<DeselectFailed text="Deselektieren der selektierten Zeile ist fehlgeschlagen!" />
+				<SearchFailed text="Ermitteln des Verkaufs- Eintrags / der Verkaufs- Einträge für das ausgewählte Datum ist fehlgeschalgen!" />
+				<RenameColHeaderFailed text="Umbennenen der Spalten- Namen ist fehlgeschlagen!" />
+				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
+				<DateExists text="Es besteht bereits ein Eintrag für das eingegebene Datum." />
+				<DateWrongFormat text="Ungültiges Datumsformat. Aktuelles Datum wurde gesetzt." />
+				<VolumeEmpty text="Bitte geben Sie einen Anteile- Wert ein." />
+				<VolumeWrongFormat text="Format für den 'Anteile'- Wert ist ungültig." />
+				<VolumeWrongValue text="Der Wert für 'Anteile' muss größer als '0' sein." />
+				<VolumeMaxValue text="Der Wert für 'Anteile' ist über dem Maximum." />
+				<ValueEmpty text="Bitte geben Sie eine Summe ein." />
+				<ValueWrongFormat text="Format für den 'Summe'- Wert ist ungültig." />
+				<ValueWrongValue text="Der Wert für 'Summe' muss größer als '0' sein." />
+				<ProfitLossEmpty text="Bitte geben Sie einen Gewinn oder Verlust ein." />
+				<ProfitLossWrongFormat text="Format für den 'Gewinn / Verlust'- Wert ist ungültig." />
+				<AddFailed text="Hinzufügen des Kaufs ist fehlgeschlagen!" />
+				<EditFailed text="Speichern der Kauf- Änderung ist fehlgeschlagen!" />
+				<DeleteFailed text="Entfernen des Kauf- Eintrags ist fehlgeschlagen!" />
+				<CancelFailure text="Es ist ein Fehler aufgetreten beim Abbrechen!" />
+				<CheckInputFailure text="Es ist ein Fehler aufgetreten beim der Eingabenprüfung!" />
+				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
+				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
+				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
+			</Errors>
+		</AddEditFormSale>
+
+		<!-- Dividend add / edit -->
+		<AddEditFormDividend>
+			<Caption text="Hinzufügen / editieren der Dividende(n) dieser Aktie" />
+			
+			<!-- GroupBox add / edit dividend --> 
+			<GrpBoxAddEdit>
+				<Add_Caption text="Dividende hinzufügen" />
+				<Edit_Caption text="Dividende editieren" />
+				
+				<!-- Labels -->
+				<Labels>
+					<Date text="Datum der Auszahlung:" />
+					<EnableForeignCurrency text="Fremdwährungseingabe aktivieren:" />
+					<ExchangeRatio text="Devisenkurs:" />
+					<Dividendrate text="Dividendensatz:" />
+					<Volume text="Anteile am Auszahlungstag:" />
+					<LossBalance text="Verrechnungstopf:" />
+					<Payout text="Auszahlung:" />
+					<Tax text="Steuern:" />
+					<PayoutAfterTax text="Auszahlung nach Steuern:" />
+					<Yield text="Dividenden- Rendite nach Steuern:" />
+					<Price text="Preis der Aktien am Auszahlungstag:" />
+					<Document text="Dokument:" />
+				</Labels>
+				
+				<!-- Open file dialog -->
+				<OpenFileDialog>
+					<Title text="Dokument auswählen" />
+				</OpenFileDialog>
+
+				<!-- Buttons -->
+				<Buttons>
+					<Add text="   Hinzufügen" />
+					<Save text="   Speichern" />
+					<Delete text="   Entfernen" />
+					<Reset text="   Reset" />
+					<Cancel text="   Zurück" />
+				</Buttons>
+			</GrpBoxAddEdit>
+			
+			<!-- GroupBox dividend overview -->
+			<GrpBoxDividend>
+				<Caption text="Dividenden- Übersicht" />
+				
+				<!-- TabCtrl divivden overview -->
+				<TabCtrl>
+					
+					<!-- TabPage overview -->
+					<TabPgOverview>
+						<Overview text="Übersicht" />
+					</TabPgOverview>
+					
+					<!-- DataGridView dividend -->
+					<DgvDividendOverview>
+						<ColHeader_Date text="Datum" />
+						<ColHeader_Payout text="Ausz." />
+						<ColHeader_Dividend text="Div." />
+						<ColHeader_Yield text="Ren." />
+						<ColHeader_YieldUnit text="%" />
+						<ColHeader_Price text="Pr." />
+						<ColHeader_Volume text="Ant." />
+						<ColHeader_Document text="Dokument" />
+					</DgvDividendOverview>
+				</TabCtrl>
+			</GrpBoxDividend>
+			
+			<!-- Dividen add / edit state messages -->
+			<StateMessages>
+				<AddSuccess text="Dividende wurde hinzugefügt." />
+				<EditSuccess text="Dividenden- Änderung wurde gespeichert." />
+				<DeleteSuccess text="Dividenden- Eintrag wurde gelöscht!" />			
+			</StateMessages>
+			
+			<!-- Dividend add / edit errors -->
+			<Errors>
+				<ShowFailed text="Es trat ein Fehler beim Anzeigen der Dividende(n) auf!" />
+				<DeselectFailed text="Deselektieren der selektierten Zeile ist fehlgeschlagen!" />
+				<SearchFailed text="Ermitteln des Dividenen- Eintrags / der Dividenden- Einträge für das ausgewählte Datum ist fehlgeschalgen!" />
+				<RenameColHeaderFailed text="Umbennenen der Spalten- Namen ist fehlgeschlagen!" />
+				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
+				<DateExists text="Es besteht bereits ein Eintrag für das eingegebene Datum." />
+				<DateWrongFormat text="Ungültiges Datumsformat. Aktuelles Datum wurde gesetzt." />
+				<DividendForeignCurrenyFactorEmpty text="Bitte geben Sie einen Faktor für der Fremdwährung ein." />
+				<DividendForeignCurrenyFactorWrongFormat text="Format für den 'Faktor'- Wert für der Fremdwährung ist ungültig." />
+				<DividendForeignCurrenyFactorWrongValue text="Der Wert für den 'Faktor' für der Fremdwährung muss größer als '0' sein." />
+				<DividendEmpty text="Bitte geben Sie eine Dividende ein." />
+				<DividendWrongFormat text="Format für den 'Dividend'- Wert ist ungültig." />
+				<DividendWrongValue text="Der Wert für 'Dividend' muss größer als '0' sein." />
+				<LossBalanceWrongFormat text="Format für den 'Verrechnungstopf'- Wert ist ungültig." />
+				<LossBalanceWrongValue text="Der Wert für 'Verrechnungstopf' muss größer als '0' sein." />
+				<DividendForeignCurrenyEmpty text="Bitte geben Sie eine Dividende in der Fremdwährung ein." />
+				<DividendForeignCurrenyWrongFormat text="Format für den 'Dividend'- Wert in der Fremdwährung ist ungültig." />
+				<DividendForeignCurrenyWrongValue text="Der Wert für 'Dividend' in der Fremdwährung muss größer als '0' sein." />
+				<PriceEmpty text="Bitte geben Sie einen Preis ein." />
+				<PriceWrongFormat text="Format für den 'Preis'- Wert ist ungültig." />
+				<PriceWrongValue text="Der Wert für 'Preis' muss größer als '0' sein." />
+				<PriceForeignCurrenyEmpty text="Bitte geben Sie einen Preis für die Fremdwährung ein." />
+				<PriceForeignCurrenyWrongFormat text="Format für den 'Preis'- Wert in der Fremdwährung ist ungültig." />
+				<PriceForeignCurrenyWrongValue text="Der Wert für 'Preis' in der Fremdwährung muss größer als '0' sein." />
+				<VolumeEmpty text="Bitte geben Sie einen Anteile- Wert ein." />
+				<VolumeWrongFormat text="Format für den 'Anteile'- Wert ist ungültig." />
+				<VolumeWrongValue text="Der Wert für 'Anteile' muss größer als '0' sein." />
+				<AddFailed text="Hinzufügen der Dividende ist fehlgeschlagen!" />
+				<EditFailed text="Speichern der Dividenden- Änderung ist fehlgeschlagen!" />
+				<DeleteFailed text="Entfernen des Dividenden- Eintrags ist fehlgeschlagen!" />
+				<CancelFailure text="Es ist ein Fehler aufgetreten beim Abbrechen!" />
+				<CheckInputFailure text="Es ist ein Fehler aufgetreten beim der Eingabenprüfung!" />
+				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
+				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
+				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
+			</Errors>
+		</AddEditFormDividend>
+
+		<!-- Taxes edit -->
+		<Taxes>
+			<Caption text="Editiern der Steuern dieser Aktie" />
+
+			<!-- Groupbox edit taxes -->
+			<GrpBoxEdit>
+				<Caption text="Steuern editieren" />
+					
+				<!-- Labels -->
+				<Labels>
+					<Payout text="Auszahlung ohne Steuern:" />
+					<CapitalGainsValue text="KapSt-pflichtiger Kapitalertrag:" />
+					<LossBalance text="Verrechnungstopf:" />
+					<TaxAtSource text="Quellensteuer:" />
+					<TaxAtSourceValue text="Wert:" />
+					<CapitalGainsTax text="Kapitalertragssteuer:" />
+					<CapitalGainsTaxValue text="Wert:" />
+					<SolidarityTax text="Solidaritätszuschlag:" />
+					<SolidarityTaxValue text="Wert:" />
+					<PayoutWithTaxes text="Auszahlung mit Steuern:" />
+				</Labels>
+				
+				<!-- Buttons -->
+				<Buttons>
+					<Ok text="   Ok" />
+					<Reset text="   Reset" />
+					<Cancel text="   Zurück" />
+				</Buttons>
+			</GrpBoxEdit>
+			
+			<!-- Taxes edit errors -->
+			<Errors>
+				<ShowFailed text="Es trat ein Fehler beim Anzeigen der Steuern auf!" />
+			</Errors>
+		</Taxes>
+		
+		<!-- Costs add / edit -->
+		<AddEditFormCosts>
+			<Caption text="Hinzufügen / editieren der Kosten dieser Aktie" />
+			
+			<!-- GroupBox add / edit costs -->
+			<GrpBoxAddEdit>
+				<Add_Caption text="Kosten hinzufügen" />
+				<Edit_Caption text="Kosten editieren" />
+				
+				<!-- Labels -->
+				<Labels>
+					<Date text="Datum:" />
+					<Value text="Kosten:" />
+					<Document text="Dokument:" />
+				</Labels>
+
+				<!-- Open file dialog -->
+				<OpenFileDialog>
+					<Title text="Dokument auswählen" />
+				</OpenFileDialog>
+
+				<!-- Buttons -->
+				<Buttons>
+					<Add text="   Hinzufügen" />
+					<Save text="   Speichern" />
+					<Delete text="   Entfernen" />
+					<Reset text="   Reset" />
+					<Cancel text="   Zurück" />
+				</Buttons>				
+			</GrpBoxAddEdit>
+			
+			<!-- GroupBox costs overview -->
+			<GrpBoxCosts>
+				<Caption text="Kosten- Übersicht" />
+
+				<!-- TabCtrl costs overview -->
+				<TabCtrl>
+					
+					<!-- TabPage overview -->
+					<TabPgOverview>
+						<Overview text="Übersicht" />
+					</TabPgOverview>
+					
+					<!-- DataGridView costs -->
+					<DgvCostsOverview>
+						<ColHeader_Date text="Datum" />
+						<ColHeader_Costs text="Kosten" />
+						<ColHeader_Document text="Dokument" />
+					</DgvCostsOverview>
+				</TabCtrl>
+			</GrpBoxCosts>
+			
+			<!-- Costs add / edit state messages -->
+			<StateMessages>
+				<AddSuccess text="Kosten wurden hinzugefügt." />
+				<EditSuccess text="Kosten- Änderung wurde gespeichert." />
+				<DeleteSuccess text="Kosten- Eintrage wurde entfernt." />
+			</StateMessages>
+			
+			<!-- Costs add / edit errors -->
+			<Errors>
+				<ShowFailed text="Es trat ein Fehler beim Anzeigen der Kosten auf!" />
+				<DeselectFailed text="Deselektieren der selektierten Zeile ist fehlgeschlagen!" />
+				<SearchFailed text="Ermitteln des Dividenen- Eintrags / der Dividenden- Einträge für das ausgewählte Datum ist fehlgeschalgen!" />
+				<RenameColHeaderFailed text="Umbennenen der Spalten- Namen ist fehlgeschlagen!" />
+				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
+				<DateExists text="Es besteht bereits ein Eintrag für das eingegebene Datum." />
+				<DateWrongFormat text="Ungültiges Datumsformat. Aktuelles Datum wurde gesetzt." />
+				<CostsEmpty text="Bitte geben Sie die Kosten ein." />
+				<CostsWrongFormat text="Format für den 'Kosten'- Wert ist ungültig." />
+				<CostsWrongValue text="Der Wert für 'Kosten' muss größer als '0' sein." />
+				<PriceEmpty text="Bitte geben Sie einen Preis ein." />
+				<PriceWrongFormat text="Format für den 'Preis'- Wert ist ungültig." />
+				<AddFailed text="Hinzufügen der Kosten ist fehlgeschlagen!" />
+				<EditFailed text="Speichern der Kosten- Änderung ist fehlgeschlagen!" />
+				<DeleteFailed text="Entfernen des Kosten- Eintrags ist fehlgeschlagen!" />
+				<CancelFailure text="Es ist ein Fehler aufgetreten beim Abbrechen!" />
+				<CheckInputFailure text="Es ist ein Fehler aufgetreten beim der Eingabenprüfung!" />
+				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
+				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
+				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
+			</Errors>
+		</AddEditFormCosts>
+
+		<!-- Logger settings -->
+		<LoggerSettingsForm>
+			<Caption text="Logger" />
+			
+			<!-- GroupBox GUI entries size -->
+			<GrpBoxLogGUIEntriesSize>
+				<Caption text="GUI- Log- Eintragsgröße" />
+				
+				<!-- Labels -->
+				<Labels>
+					<GUIEntriesSize text="Größe:" />
+				</Labels>
+			</GrpBoxLogGUIEntriesSize>
+
+			<!-- GroupBox File logging -->
+			<GrpBoxFileLogging>
+				<Caption text="In Datei schreiben" />
+				
+				<!-- Checkboxes -->
+				<States>
+					<EnableFileLogging text="aktiviert" />
+				</States>
+			</GrpBoxFileLogging>
+
+			<!-- GroupBox stored logging files -->
+			<GrpBoxStoredFiles>
+				<Caption text="Vorgehaltene Log- Dateien" />
+				
+				<!-- Labels -->
+				<Labels>
+					<StoredLogFiles text="Anzahl:" />
+				</Labels>
+			</GrpBoxStoredFiles>
+			
+			<!-- GroupBox cleanup at startup -->
+			<GrpBoxCleanUpAtStartUp>
+				<Caption text="Dateien beim Start löschen" />
+				
+				<!-- Checkboxes -->
+				<States>
+					<EnableCleanUpAtStartUp text="aktiviert" />
+				</States>
+			</GrpBoxCleanUpAtStartUp>
+			
+			<!-- GroupBox components -->
+			<GrpBoxLogComponents>
+				<Caption text="Log- Komponenten" />
+			</GrpBoxLogComponents>
+
+			<!-- GroupBox log level -->
+			<GrpBoxLogLevels>
+				<Caption text="Log- Level" />
+			</GrpBoxLogLevels>
+
+			<!-- GroupBox log level colors -->
+			<GrpBoxLogLevelColors>
+				<Caption text="Log- Level- Farben" />
+			</GrpBoxLogLevelColors>
+			
+			<!-- Buttons -->
+			<Buttons>
+				<CleanUp text="Aufräumen" />
+				<Save text="   Speichern" />
+				<Cancel text="   Abbrechen" />
+			</Buttons>
+			
+			<!-- Errors -->
+			<Errors>
+				<LoggerSettingsShowFailed text="Es trat ein Fehler auf. Anzeigen des Dialogs fehlgeschlagen!" />
+				<SaveSettingsFailed text="Es trat ein Fehler auf. Speichern der Einstellungen fehlgeschlagen!" />
+				<SaveSettingsSuccessful text="Speichern der Einstellung erfolgreich." />
+			</Errors>
+		</LoggerSettingsForm>
+		
+		<!-- Message box -->
+		<MessageBoxForm>
+			
+			<!-- Captions -->
+			<Captions>
+				<Info text="Info" />
+				<Warning text="Warnung" />
+				<Error text="Fehler" />
+				<InputPortfolioName text="Portfolioname eingeben" />
+			</Captions>
+			
+			<!-- Buttons -->
+			<Buttons>
+				<Ok text="Ok" />
+				<Cancel text="Abbrechen" />
+				<Yes text="Ja" />
+				<No text="Nein" />
+			</Buttons>
+			
+			<!-- Content -->
+			<Content>
+				<BuyDelete text="Möchten Sie den Kauf wirklich entfernen"/>
+				<SaleDelete text="Möchten Sie den Verkauf wirklich entfernen"/>
+				<DividendDelete text="Möchten Sie den Dividenden- Eintrag wirklich entfernen?" />
+				<CostsDelete text="Möchten Sie den Kosten- Eintrag wirklich entfernen?" />
+				<DocumentDoesNotExistDelete text="Das Dokument existiert nicht mehr. Möchten Sie das Dokument aus den Daten entfernen?"/>
+				<ShareDelete text="Möchten Sie den Aktien- Eintrag wirklich aus dem Portfolio entfernen?"/>
+				<LoggerSetttingsReboot text="Die Änderungen der Logger- Einstellung werden erst nach meinem Software- Neustart angewendet."/>
+				<InputPortfolioName text="Bitte geben Sie den Portfolioname ein:"/>
+				<PortfolioNameExists text="Es existiert bereits in Portfolio mit dem angegeben Namen. Soll dieses Portfolio überschrieben werden?"/>
+			</Content>
+		</MessageBoxForm>
+					
+		<!-- About window -->
+		<AboutForm>
+			<Caption text="Über" />
+			
+			<!-- Labels -->
+			<Labels>
+				<Version text="Versionen" />
+				<ApplicationVersion text="Programm- Version: " />
+				<WebParserDLLVersion text="Webparser- DLL- Version: " />
+				<LanguageDLLVersion text="Sprach- DLL- Version: " />
+				<LoggerDLLVersion text="Logger- DLL- Version: " />
+			</Labels>
+			
+			<!-- Buttons -->
+			<Buttons>
+				<Ok text="Ok" />
+			</Buttons>
+			
+			<!-- Errors -->
+			<Errors>
+				<ShowAboutBoxFailed text="Anzeigen des 'Über'- Dialogs fehlgeschlagen!" />
+			</Errors>
+		</AboutForm>
+	</German>
+</Language>

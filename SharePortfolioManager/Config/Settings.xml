@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Settings>
+	<Portfolio></Portfolio>
+	<Window>
+		<PosX>0</PosX>
+		<PosY>0</PosY>
+		<Height>0</Height>
+		<Width>0</Width>
+	</Window>
+	<Language>English</Language>
+	<StatusMessageClear>3000</StatusMessageClear>
+	<Logger>
+		<GUIEntries>20</GUIEntries>
+		<LogToFileEnable>true</LogToFileEnable>
+		<StoredLogFiles>25</StoredLogFiles>
+		<LogCleanUpAtStartUpEnable>false</LogCleanUpAtStartUpEnable>
+		<LogComponents>7</LogComponents>
+		<LogLevels>31</LogLevels>
+		<LogColors>
+			<Start>Black</Start>
+			<Info>Black</Info>
+			<Warning>OrangeRed</Warning>
+			<Error>Red</Error>
+			<FatalError>DarkRed</FatalError>
+		</LogColors>
+	</Logger>
+</Settings>
