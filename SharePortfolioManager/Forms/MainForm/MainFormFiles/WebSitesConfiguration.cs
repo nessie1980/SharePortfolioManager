@@ -41,41 +41,41 @@ namespace SharePortfolioManager
         /// </summary>
         private void LoadWebSiteConfigurations()
         {
-            if (_bInitFlag)
+            if (InitFlag)
             {
                 // Load websites file
                 try
                 {
                     //// Create the validating reader and specify DTD validation.
-                    //_xmlReaderSettings = new XmlReaderSettings();
-                    //_xmlReaderSettings.DtdProcessing = DtdProcessing.Parse;
-                    //_xmlReaderSettings.ValidationType = ValidationType.DTD;
-                    //_xmlReaderSettings.ValidationEventHandler += eventHandler;
+                    //ReaderSettings = new XmlReaderSettings();
+                    //ReaderSettings.DtdProcessing = DtdProcessing.Parse;
+                    //ReaderSettings.ValidationType = ValidationType.DTD;
+                    //ReaderSettings.ValidationEventHandler += eventHandler;
 
-                    _xmlReaderWebSites = XmlReader.Create(WebSitesFileName, _xmlReaderSettingsWebSites);
+                    ReaderWebSites = XmlReader.Create(WebSitesFileName, ReaderSettingsWebSites);
 
                     // Pass the validating reader to the XML document.
                     // Validation fails due to an undefined attribute, but the 
                     // data is still loaded into the document.
-                    _xmlWebSites = new XmlDocument();
-                    _xmlWebSites.Load(_xmlReaderWebSites);
+                    WebSites = new XmlDocument();
+                    WebSites.Load(ReaderWebSites);
 
                     // Read the website configurations
-                    var nodeListShares = _xmlWebSites.SelectNodes("/WebSites/WebSite");
+                    var nodeListShares = WebSites.SelectNodes("/WebSites/WebSite");
 
                     // Check if website configurations exists if not cancel 
                     if (nodeListShares == null || nodeListShares.Count == 0)
                     {
                         // Set initialization flag
-                        _bInitFlag = false;
+                        InitFlag = false;
 
                         // Add status message
                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/WebSiteConfigurationListEmpty",
-                                _languageName),
-                            _xmlLanguage,
-                            _languageName,
-                            Color.DarkRed, _logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application);
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/WebSiteConfigurationListEmpty",
+                                LanguageName),
+                            Language,
+                            LanguageName,
+                            Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application);
                     }
                     else
                     {
@@ -144,7 +144,7 @@ namespace SharePortfolioManager
 
                                         // Add website configuration to the global list
                                         if (loadSettings == true)
-                                            _webSiteRegexList.Add(new WebSiteRegex(webSiteName, webSiteEncoding,
+                                            WebSiteRegexList.Add(new WebSiteRegex(webSiteName, webSiteEncoding,
                                                 regexList));
                                     }
                                 }
@@ -155,26 +155,26 @@ namespace SharePortfolioManager
                             if (loadSettings == false)
                             {
                                 // Close website reader
-                                if (_xmlReaderWebSites != null)
-                                    _xmlReaderWebSites.Close();
+                                if (ReaderWebSites != null)
+                                    ReaderWebSites.Close();
 
                                 // Set initialization flag
-                                _bInitFlag = false;
+                                InitFlag = false;
 
                                 // Add status message
                                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile1",
-                                        _languageName)
+                                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile1",
+                                        LanguageName)
                                     + WebSitesFileName
                                     +
-                                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile2",
-                                        _languageName)
+                                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile2",
+                                        LanguageName)
                                     + " " +
-                                    _xmlLanguage.GetLanguageTextByXPath(
-                                        @"/MainForm/Errors/WebSiteConfigurationListLoadFailed", _languageName),
-                                    _xmlLanguage,
-                                    _languageName,
-                                    Color.DarkRed, _logger, (int) EStateLevels.FatalError,
+                                    Language.GetLanguageTextByXPath(
+                                        @"/MainForm/Errors/WebSiteConfigurationListLoadFailed", LanguageName),
+                                    Language,
+                                    LanguageName,
+                                    Color.DarkRed, Logger, (int) EStateLevels.FatalError,
                                     (int) EComponentLevels.Application);
 
                                 // Stop loading more website configurations
@@ -190,23 +190,23 @@ namespace SharePortfolioManager
                         MessageBoxIcon.Error);
 #endif
                     // Close website reader
-                    if (_xmlReaderWebSites != null)
-                        _xmlReaderWebSites.Close();
+                    if (ReaderWebSites != null)
+                        ReaderWebSites.Close();
 
                     // Set initialization flag
-                    _bInitFlag = false;
+                    InitFlag = false;
 
                     // Add status message
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile1", _languageName)
+                        Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile1", LanguageName)
                         + WebSitesFileName
-                        + _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile2", _languageName)
-                        + " " + _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/XMLSyntaxFailure1", _languageName)
+                        + Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile2", LanguageName)
+                        + " " + Language.GetLanguageTextByXPath(@"/MainForm/Errors/XMLSyntaxFailure1", LanguageName)
                         + WebSitesFileName
-                        + _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/XMLSyntaxFailure2", _languageName),
-                        _xmlLanguage,
-                        _languageName,
-                        Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);                    
+                        + Language.GetLanguageTextByXPath(@"/MainForm/Errors/XMLSyntaxFailure2", LanguageName),
+                        Language,
+                        LanguageName,
+                        Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);                    
                 }
                 catch (Exception ex)
                 {
@@ -216,21 +216,21 @@ namespace SharePortfolioManager
 #endif
 
                     // Close website reader
-                    if (_xmlReaderWebSites != null)
-                        _xmlReaderWebSites.Close();
+                    if (ReaderWebSites != null)
+                        ReaderWebSites.Close();
 
                     // Set initialization flag
-                    _bInitFlag = false;
+                    InitFlag = false;
 
                     // Add status message
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile1", _languageName)
+                        Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile1", LanguageName)
                         + WebSitesFileName
-                        + _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile2", _languageName)
-                        + " " + _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/WebSiteConfigurationListLoadFailed", _languageName),
-                        _xmlLanguage,
-                        _languageName,
-                        Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                        + Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile2", LanguageName)
+                        + " " + Language.GetLanguageTextByXPath(@"/MainForm/Errors/WebSiteConfigurationListLoadFailed", LanguageName),
+                        Language,
+                        LanguageName,
+                        Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
                 }
             }
         }

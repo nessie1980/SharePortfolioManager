@@ -38,9 +38,14 @@ namespace SharePortfolioManager
         #region Variables
 
         /// <summary>
-        /// Stores the chosen share object
+        /// Stores the chosen market value share object
         /// </summary>
-        ShareObject _shareObject = null;
+        ShareObjectMarketValue _shareObjectMarketValue = null;
+
+        /// <summary>
+        /// Stores the chosen find value share object
+        /// </summary>
+        ShareObjectFinalValue _shareObjectFinalValue = null;
 
         /// <summary>
         /// Stores the logger
@@ -50,12 +55,12 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores the given language file
         /// </summary>
-        Language _xmlLanguage;
+        Language _language;
 
         /// <summary>
         /// Stores the given language
         /// </summary>
-        String _strLanguage;
+        String _languageName;
 
         /// <summary>
         /// Stores if a cost has been deleted or added
@@ -80,22 +85,82 @@ namespace SharePortfolioManager
 
         #endregion Variables
 
+        #region Properties
+
+        public ShareObjectMarketValue ShareObjectMarketValue
+        {
+            get { return _shareObjectMarketValue; }
+            set { _shareObjectMarketValue = value; }
+        }
+
+        public ShareObjectFinalValue ShareObjectFinalValue
+        {
+            get { return _shareObjectFinalValue; }
+            set { _shareObjectFinalValue = value; }
+        }
+
+        public Logger Logger
+        {
+            get { return _logger; }
+            set { _logger = value; }
+        }
+
+        public Language Language
+        {
+            get { return _language; }
+            set { _language = value; }
+        }
+
+        public string LanguageName
+        {
+            get { return _languageName; }
+            set { _languageName = value; }
+        }
+
+        public bool SaveFlag
+        {
+            get { return _bSave; }
+            set { _bSave = value; }
+        }
+
+        public bool PartOfABuyFlag
+        {
+            get { return _bPartOfABuy; }
+            set { _bPartOfABuy = value; }
+        }
+
+        public bool ShowCostsFlag
+        {
+            get { return _bShowCosts; }
+            set { _bShowCosts = value; }
+        }
+
+        public DataGridView SelectedDataGridView
+        {
+            get { return _selectedDataGridView; }
+            set { _selectedDataGridView = value; }
+        }
+
+        #endregion Properties
+
         #region Methods
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="shareObject">Current chosen share object</param>
+        /// <param name="shareObjectMarketValue">Current chosen market share object</param>
+        /// <param name="shareObjectFinalValue">Current chosen final share object</param>
         /// <param name="xmlLanguage">Language file</param>
         /// <param name="language">Language</param>
-        public FrmShareCostEdit(ShareObject shareObject, Logger logger, Language xmlLanguage, String language)
+        public FrmShareCostEdit(ShareObjectMarketValue shareObjectMarketValue, ShareObjectFinalValue shareObjectFinalValue, Logger logger, Language language, String languageName)
         {
             InitializeComponent();
 
-            _shareObject = shareObject;
-            _logger = logger;
-            _xmlLanguage = xmlLanguage;
-            _strLanguage = language;
+            ShareObjectMarketValue = shareObjectMarketValue;
+            ShareObjectFinalValue = shareObjectFinalValue;
+            Logger = logger;
+            Language = language;
+            LanguageName = languageName;
             _bSave = false;
         }
 
@@ -109,16 +174,16 @@ namespace SharePortfolioManager
         {
             try
             {
-                Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/Caption", _strLanguage);
-                grpBoxAddCost.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Add_Caption", _strLanguage);
-                grpBoxCosts.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxCosts/Caption", _strLanguage);
-                lblDate.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Labels/Date", _strLanguage);
-                lblCostValue.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Labels/Value", _strLanguage);
-                lblCostDoc.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Labels/Document", _strLanguage);
-                btnAddSave.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Buttons/Add", _strLanguage);
-                btnDelete.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Buttons/Delete", _strLanguage);
-                btnReset.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Buttons/Reset", _strLanguage);
-                btnCancel.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Buttons/Cancel", _strLanguage);
+                Text = Language.GetLanguageTextByXPath(@"/AddEditFormCosts/Caption", _languageName);
+                grpBoxAddCost.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Add_Caption", _languageName);
+                grpBoxCosts.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxCosts/Caption", _languageName);
+                lblDate.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Labels/Date", _languageName);
+                lblCostValue.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Labels/Value", _languageName);
+                lblCostDoc.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Labels/Document", _languageName);
+                btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Buttons/Add", _languageName);
+                btnDelete.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Buttons/Delete", _languageName);
+                btnReset.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Buttons/Reset", _languageName);
+                btnCancel.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Buttons/Cancel", _languageName);
 
                 // Load button images
                 btnAddSave.Image = Resources.black_save;
@@ -127,7 +192,7 @@ namespace SharePortfolioManager
                 btnCancel.Image = Resources.black_cancel;
                 
                 // Set share values to the edit boxes
-                lblCostUnit.Text = _shareObject.CurrencyUnit;
+                lblCostUnit.Text = ShareObjectMarketValue.CurrencyUnit;
 
 
                 ShowCosts();
@@ -140,9 +205,9 @@ namespace SharePortfolioManager
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                   _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/ShowFailed", _strLanguage),
-                   _xmlLanguage, _strLanguage,
-                   Color.DarkRed, _logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                   Language.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/ShowFailed", _languageName),
+                   Language, _languageName,
+                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -177,14 +242,14 @@ namespace SharePortfolioManager
                 // Create TabPage for the costs of the years
                 TabPage newTabPageOverviewYears = new TabPage();
                 // Set TabPage name
-                newTabPageOverviewYears.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxCosts/TabCtrl/TabPgOverview/Overview", _strLanguage) +
-                                          " (" + _shareObject.AllCostsEntries.CostValueTotalWithUnitAsString + ")";
+                newTabPageOverviewYears.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxCosts/TabCtrl/TabPgOverview/Overview", _languageName) +
+                                          " (" + ShareObjectFinalValue.AllCostsEntries.CostValueTotalWithUnitAsString + ")";
 
                 // Create Binding source for the costs data
                 BindingSource bindingSourceOverview = new BindingSource();
-                if (_shareObject.AllCostsEntries.GetAllCostsTotalValues().Count > 0)
+                if (ShareObjectFinalValue.AllCostsEntries.GetAllCostsTotalValues().Count > 0)
                     bindingSourceOverview.DataSource =
-                        _shareObject.AllCostsEntries.GetAllCostsTotalValues();
+                        ShareObjectFinalValue.AllCostsEntries.GetAllCostsTotalValues();
 
                 // Create DataGridView
                 DataGridView dataGridViewCostsOverviewOfAYears = new DataGridView();
@@ -227,11 +292,11 @@ namespace SharePortfolioManager
                 newTabPageOverviewYears.Parent = tabCtrlCosts;
 
                 // Check if costs pays exists
-                if (_shareObject.AllCostsEntries.AllCostsOfTheShareDictionary.Count > 0)
+                if (ShareObjectFinalValue.AllCostsEntries.AllCostsOfTheShareDictionary.Count > 0)
                 {
                     // Loop through the years of the costs pays
                     foreach (
-                        var keyName in _shareObject.AllCostsEntries.AllCostsOfTheShareDictionary.Keys.Reverse()
+                        var keyName in ShareObjectFinalValue.AllCostsEntries.AllCostsOfTheShareDictionary.Keys.Reverse()
                         )
                     {
                         // Create TabPage
@@ -239,13 +304,13 @@ namespace SharePortfolioManager
                         // Set TabPage name
                         newTabPage.Name = keyName;
                         newTabPage.Text = keyName + " ("
-                            + _shareObject.AllCostsEntries.AllCostsOfTheShareDictionary[keyName]
+                            + ShareObjectFinalValue.AllCostsEntries.AllCostsOfTheShareDictionary[keyName]
                                                   .CostValueYearWithUnitAsString + ")";
 
                         // Create Binding source for the costs data
                         BindingSource bindingSource = new BindingSource();
                         bindingSource.DataSource =
-                            _shareObject.AllCostsEntries.AllCostsOfTheShareDictionary[keyName].CostListYear;
+                            ShareObjectFinalValue.AllCostsEntries.AllCostsOfTheShareDictionary[keyName].CostListYear;
 
                         // Create DataGridView
                         DataGridView dataGridViewCostsOfAYear = new DataGridView();
@@ -299,9 +364,9 @@ namespace SharePortfolioManager
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                    _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/ShowFailed", _strLanguage),
-                    _xmlLanguage, _strLanguage,
-                    Color.DarkRed, _logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/ShowFailed", _languageName),
+                    Language, _languageName,
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -332,7 +397,7 @@ namespace SharePortfolioManager
                         if (curItem[0].Cells[iColumnCount - 1].Value.ToString() != @"-")
                         {
                             // Get doc from the dividend with the strDateTime
-                            foreach (var temp in _shareObject.AllCostsEntries.GetAllCostsOfTheShare())
+                            foreach (var temp in ShareObjectFinalValue.AllCostsEntries.GetAllCostsOfTheShare())
                             {
                                 // Check if the dividend date and time is the same as the date and time of the clicked buy item
                                 if (temp.CostDate == strDateTime)
@@ -344,26 +409,26 @@ namespace SharePortfolioManager
                                     else
                                     {
                                         string strCaption =
-                                            _xmlLanguage.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Error",
-                                                _strLanguage);
+                                            Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Error",
+                                                _languageName);
                                         string strMessage =
-                                            _xmlLanguage.GetLanguageTextByXPath(
+                                            Language.GetLanguageTextByXPath(
                                                 @"/MessageBoxForm/Content/DocumentDoesNotExistDelete",
-                                                _strLanguage);
+                                                _languageName);
                                         string strOk =
-                                            _xmlLanguage.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Yes",
-                                                _strLanguage);
+                                            Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Yes",
+                                                _languageName);
                                         string strCancel =
-                                            _xmlLanguage.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/No",
-                                                _strLanguage);
+                                            Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/No",
+                                                _languageName);
 
                                         OwnMessageBox messageBox = new OwnMessageBox(strCaption, strMessage, strOk,
                                             strCancel);
                                         if (messageBox.ShowDialog() == DialogResult.OK)
                                         {
                                             // Remove cost object and add it with no document
-                                            if (_shareObject.RemoveCost(temp.CostDate) &&
-                                                _shareObject.AddCost(temp.CostOfABuy, temp.CostDate, temp.CostValue))
+                                            if (ShareObjectFinalValue.RemoveCost(temp.CostDate) &&
+                                                ShareObjectFinalValue.AddCost(temp.CostOfABuy, temp.CostDate, temp.CostValue))
                                             {
                                                 // Set flag to save the share object.
                                                 _bSave = true;
@@ -373,19 +438,19 @@ namespace SharePortfolioManager
 
                                                 // Add status message
                                                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                                                    _xmlLanguage.GetLanguageTextByXPath(
-                                                        @"/AddEditFormCosts/StateMessages/EditSuccess", _strLanguage),
-                                                    _xmlLanguage, _strLanguage,
-                                                    Color.Black, _logger, (int) FrmMain.EStateLevels.Info,
+                                                    Language.GetLanguageTextByXPath(
+                                                        @"/AddEditFormCosts/StateMessages/EditSuccess", _languageName),
+                                                    Language, _languageName,
+                                                    Color.Black, Logger, (int) FrmMain.EStateLevels.Info,
                                                     (int) FrmMain.EComponentLevels.Application);
                                             }
                                             else
                                             {
                                                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                                                    _xmlLanguage.GetLanguageTextByXPath(
-                                                        @"/AddEditFormCosts/Errors/EditFailed", _strLanguage),
-                                                    _xmlLanguage, _strLanguage,
-                                                    Color.Red, _logger, (int) FrmMain.EStateLevels.Error,
+                                                    Language.GetLanguageTextByXPath(
+                                                        @"/AddEditFormCosts/Errors/EditFailed", _languageName),
+                                                    Language, _languageName,
+                                                    Color.Red, Logger, (int) FrmMain.EStateLevels.Error,
                                                     (int) FrmMain.EComponentLevels.Application);
                                             }
                                         }
@@ -406,9 +471,9 @@ namespace SharePortfolioManager
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                    _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/DocumentShowFailed", _strLanguage),
-                    _xmlLanguage, _strLanguage,
-                    Color.DarkRed, _logger, (int)FrmMain.EStateLevels.FatalError,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/DocumentShowFailed", _languageName),
+                    Language, _languageName,
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError,
                     (int)FrmMain.EComponentLevels.Application);
             }
         }
@@ -437,7 +502,7 @@ namespace SharePortfolioManager
                     DataGridViewSelectedRowCollection curItem = ((DataGridView)sender).SelectedRows;
 
                     // Get CostObject of the selected DataGridView row
-                    CostObject selectedCostObject = _shareObject.AllCostsEntries.GetCostObjectByDateTime(curItem[0].Cells[0].Value.ToString());
+                    CostObject selectedCostObject = ShareObjectFinalValue.AllCostsEntries.GetCostObjectByDateTime(curItem[0].Cells[0].Value.ToString());
                     if (selectedCostObject != null)
                     {
                         _bPartOfABuy = selectedCostObject.CostOfABuy;
@@ -471,12 +536,12 @@ namespace SharePortfolioManager
                         txtBoxAddCostDoc.Enabled = true;
                 
                         // Rename add / save button
-                        btnAddSave.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Buttons/Save", _strLanguage);
+                        btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Buttons/Save", _languageName);
                         btnAddSave.Image = Resources.black_save;
 
                         // Rename group box
-                        grpBoxAddCost.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Edit_Caption",
-                            _strLanguage);
+                        grpBoxAddCost.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Edit_Caption",
+                            _languageName);
                     }
                     else
                     {
@@ -502,7 +567,7 @@ namespace SharePortfolioManager
                 else
                 {
                     // Rename add / save button
-                    btnAddSave.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Buttons/Add", _strLanguage);
+                    btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Buttons/Add", _languageName);
                     btnAddSave.Image = Resources.black_add;
 
                     // Disable button(s)
@@ -510,7 +575,7 @@ namespace SharePortfolioManager
                     btnDelete.Enabled = false;
 
                     // Rename group box
-                    grpBoxAddCost.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Add_Caption", _strLanguage);
+                    grpBoxAddCost.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Add_Caption", _languageName);
 
                     // Reset stored DataGridView instance
                     _selectedDataGridView = null;
@@ -528,9 +593,9 @@ namespace SharePortfolioManager
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                    _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/SelectionChangeFailed", _strLanguage),
-                    _xmlLanguage, _strLanguage,
-                    Color.DarkRed, _logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/SelectionChangeFailed", _languageName),
+                    Language, _languageName,
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -572,9 +637,9 @@ namespace SharePortfolioManager
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                    _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/SelectionChangeFailed", _strLanguage),
-                    _xmlLanguage, _strLanguage,
-                    Color.DarkRed, _logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/SelectionChangeFailed", _languageName),
+                    Language, _languageName,
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -598,16 +663,16 @@ namespace SharePortfolioManager
                     {
                         case 0:
                             ((DataGridView)sender).Columns[i].HeaderText =
-                                _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxCosts/TabCtrl/DgvCostsOverview/ColHeader_Date", _strLanguage);
+                                Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxCosts/TabCtrl/DgvCostsOverview/ColHeader_Date", _languageName);
                             break;
                         case 1:
                             ((DataGridView)sender).Columns[i].HeaderText =
-                                _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxCosts/TabCtrl/DgvCostsOverview/ColHeader_Costs",
-                                    _strLanguage) + @" (" + _shareObject.CurrencyUnit + ")";
+                                Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxCosts/TabCtrl/DgvCostsOverview/ColHeader_Costs",
+                                    _languageName) + @" (" + ShareObjectMarketValue.CurrencyUnit + ")";
                             break;
                         case 2:
                             ((DataGridView)sender).Columns[i].HeaderText =
-                                _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxCosts/TabCtrl/DgvCostsOverview/ColHeader_Document", _strLanguage);
+                                Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxCosts/TabCtrl/DgvCostsOverview/ColHeader_Document", _languageName);
                             break;
                     }
                 }
@@ -626,9 +691,9 @@ namespace SharePortfolioManager
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                    _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/RenameColHeaderFailed", _strLanguage),
-                    _xmlLanguage, _strLanguage,
-                    Color.DarkRed, _logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/RenameColHeaderFailed", _languageName),
+                    Language, _languageName,
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -666,9 +731,9 @@ namespace SharePortfolioManager
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                    _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/DeselectFailed", _strLanguage),
-                    _xmlLanguage, _strLanguage,
-                    Color.DarkRed, _logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/DeselectFailed", _languageName),
+                    Language, _languageName,
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -688,7 +753,7 @@ namespace SharePortfolioManager
                 string strDateTime;
                 string strDoc;
 
-                if (btnAddSave.Text == _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Buttons/Add", _strLanguage))
+                if (btnAddSave.Text == Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Buttons/Add", _languageName))
                 {
                     // Check the input values
                     errorFlag = CheckCostInput(true, out strDateTime, out dlbCost, out strDoc);
@@ -696,13 +761,13 @@ namespace SharePortfolioManager
                     // If no error occurred add the new cost to the share
                     if (errorFlag == false)
                     {
-                        if (_shareObject.AddCost(_bPartOfABuy, strDateTime, dlbCost, strDoc))
+                        if (ShareObjectFinalValue.AddCost(_bPartOfABuy, strDateTime, dlbCost, strDoc))
                         {
                             // Add status message
                             Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                                _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/StateMessages/AddSuccess", _strLanguage),
-                                _xmlLanguage, _strLanguage,
-                                Color.Black, _logger, (int)FrmMain.EStateLevels.Info, (int)FrmMain.EComponentLevels.Application);
+                                Language.GetLanguageTextByXPath(@"/AddEditFormCosts/StateMessages/AddSuccess", _languageName),
+                                Language, _languageName,
+                                Color.Black, Logger, (int)FrmMain.EStateLevels.Info, (int)FrmMain.EComponentLevels.Application);
 
                             // Set flag to save the share object.
                             _bSave = true;
@@ -717,9 +782,9 @@ namespace SharePortfolioManager
                         {
                             // Add status message
                             Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                                _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/AddFailed", _strLanguage),
-                                _xmlLanguage, _strLanguage,
-                                Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                                Language.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/AddFailed", _languageName),
+                                Language, _languageName,
+                                Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                         }
                     }
                 }
@@ -731,13 +796,13 @@ namespace SharePortfolioManager
                     // If no error occurred add the new cost to the share
                     if (errorFlag == false)
                     {
-                        if (_shareObject.RemoveCost(_selectedDataGridView.SelectedRows[0].Cells[0].Value.ToString()) && _shareObject.AddCost(_bPartOfABuy, strDateTime, dlbCost, strDoc))
+                        if (ShareObjectFinalValue.RemoveCost(_selectedDataGridView.SelectedRows[0].Cells[0].Value.ToString()) && ShareObjectFinalValue.AddCost(_bPartOfABuy, strDateTime, dlbCost, strDoc))
                         {
                             // Add status message
                             Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                                _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/StateMessages/EditSuccess", _strLanguage),
-                                _xmlLanguage, _strLanguage,
-                                Color.Black, _logger, (int)FrmMain.EStateLevels.Info, (int)FrmMain.EComponentLevels.Application);
+                                Language.GetLanguageTextByXPath(@"/AddEditFormCosts/StateMessages/EditSuccess", _languageName),
+                                Language, _languageName,
+                                Color.Black, Logger, (int)FrmMain.EStateLevels.Info, (int)FrmMain.EComponentLevels.Application);
 
                             // Set flag to save the share object.
                             _bSave = true;
@@ -746,14 +811,14 @@ namespace SharePortfolioManager
                             ResetValues();
 
                             // Rename add / save button
-                            btnAddSave.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Buttons/Add", _strLanguage);
+                            btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Buttons/Add", _languageName);
                             btnAddSave.Image = Resources.black_add;
                             
                             // Disable button(s)
                             btnReset.Enabled = false;
                             btnDelete.Enabled = false;
 
-                            grpBoxAddCost.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Add_Caption", _strLanguage);
+                            grpBoxAddCost.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Add_Caption", _languageName);
 
                             // Refresh the costs list
                             ShowCosts();
@@ -762,9 +827,9 @@ namespace SharePortfolioManager
                         {
                             // Add status message
                             Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                                _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/EditFailed", _strLanguage),
-                                _xmlLanguage, _strLanguage,
-                                Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                                Language.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/EditFailed", _languageName),
+                                Language, _languageName,
+                                Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                         }
                     }
                 }
@@ -775,21 +840,21 @@ namespace SharePortfolioManager
                 MessageBox.Show("btnAddSave_Click()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
-                if (btnAddSave.Text == _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Buttons/Add", _strLanguage))
+                if (btnAddSave.Text == Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Buttons/Add", _languageName))
                 {
                     // Add status message
                     Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/AddFailed", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/AddFailed", _languageName),
+                        Language, _languageName,
+                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                 }
                 else
                 {
                     // Add status message
                     Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/EditFailed", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/EditFailed", _languageName),
+                        Language, _languageName,
+                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                 }
             }
         }
@@ -815,7 +880,7 @@ namespace SharePortfolioManager
 
                 // Enable button(s)
                 btnAddSave.Enabled = true;
-                btnAddSave.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Buttons/Add", _strLanguage);
+                btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Buttons/Add", _languageName);
                 btnAddSave.Image = btnAddSave.Image = Resources.black_save;
                 btnCostDocumentBrowse.Enabled = true;
 
@@ -824,7 +889,7 @@ namespace SharePortfolioManager
                 btnDelete.Enabled = false;
 
                 // Rename group box
-                grpBoxAddCost.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Add_Caption", _strLanguage);
+                grpBoxAddCost.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Add_Caption", _languageName);
 
                 // Deselect rows
                 DeselectRowsOfDataGridViews(null);
@@ -833,8 +898,8 @@ namespace SharePortfolioManager
                 _selectedDataGridView = null;
 
                 // Select overview tab
-                if (tabCtrlCosts.TabPages.ContainsKey(_xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxCosts/TabCtrl/TabPgOverview/Overview", _strLanguage)))
-                    tabCtrlCosts.SelectTab(_xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxCosts/TabCtrl/TabPgOverview/Overview", _strLanguage));
+                if (tabCtrlCosts.TabPages.ContainsKey(Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxCosts/TabCtrl/TabPgOverview/Overview", _languageName)))
+                    tabCtrlCosts.SelectTab(Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxCosts/TabCtrl/TabPgOverview/Overview", _languageName));
 
                 ShowCosts();
             }
@@ -846,9 +911,9 @@ namespace SharePortfolioManager
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                    _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/CancelFailure", _strLanguage),
-                    _xmlLanguage, _strLanguage,
-                    Color.DarkRed, _logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/CancelFailure", _languageName),
+                    Language, _languageName,
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -876,10 +941,10 @@ namespace SharePortfolioManager
             {
                 toolStripStatusLabelMessage.Text = @"";
 
-                string strCaption = _xmlLanguage.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Info", _strLanguage);
-                string strMessage = _xmlLanguage.GetLanguageTextByXPath(@"/MessageBoxForm/Content/CostsDelete", _strLanguage);
-                string strOk = _xmlLanguage.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", _strLanguage);
-                string strCancel = _xmlLanguage.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", _strLanguage);
+                string strCaption = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Info", _languageName);
+                string strMessage = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/CostsDelete", _languageName);
+                string strOk = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", _languageName);
+                string strCancel = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", _languageName);
 
                 OwnMessageBox messageBox = new OwnMessageBox(strCaption, strMessage, strOk, strCancel);
 
@@ -893,21 +958,21 @@ namespace SharePortfolioManager
                     // Check if a row is selected
                     if (_selectedDataGridView != null && _selectedDataGridView.SelectedRows.Count == 1)
                     {
-                        if (!_shareObject.RemoveCost(_selectedDataGridView.SelectedRows[0].Cells[0].Value.ToString()))
+                        if (!ShareObjectFinalValue.RemoveCost(_selectedDataGridView.SelectedRows[0].Cells[0].Value.ToString()))
                         {
                             // Add status message
                             Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                                _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/DeleteFailed", _strLanguage),
-                                _xmlLanguage, _strLanguage,
-                                Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                                Language.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/DeleteFailed", _languageName),
+                                Language, _languageName,
+                                Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                         }
                         else
                         {
                             // Add status message
                             Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                                _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/StateMessages/DeleteSuccess", _strLanguage),
-                                _xmlLanguage, _strLanguage,
-                                Color.Black, _logger, (int)FrmMain.EStateLevels.Info, (int)FrmMain.EComponentLevels.Application);
+                                Language.GetLanguageTextByXPath(@"/AddEditFormCosts/StateMessages/DeleteSuccess", _languageName),
+                                Language, _languageName,
+                                Color.Black, Logger, (int)FrmMain.EStateLevels.Info, (int)FrmMain.EComponentLevels.Application);
                         }
                     }
 
@@ -916,14 +981,14 @@ namespace SharePortfolioManager
 
                     // Enable button(s)
                     btnAddSave.Enabled = true;
-                    btnAddSave.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Buttons/Add", _strLanguage);
+                    btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Buttons/Add", _languageName);
                     btnAddSave.Image = Resources.black_add;
                     
                     // Disable button(s)
                     btnReset.Enabled = false;
                     btnDelete.Enabled = false;
 
-                    grpBoxAddCost.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Add_Caption", _strLanguage);
+                    grpBoxAddCost.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/Add_Caption", _languageName);
 
                     // Refresh the costs list
                     ShowCosts();
@@ -937,9 +1002,9 @@ namespace SharePortfolioManager
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                    _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/DeleteFailed", _strLanguage),
-                    _xmlLanguage, _strLanguage,
-                    Color.DarkRed, _logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/DeleteFailed", _languageName),
+                    Language, _languageName,
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -1010,7 +1075,7 @@ namespace SharePortfolioManager
                 toolStripStatusLabelMessage.Text = "";
 
                 // Check if a cost with the given date already exists
-                foreach (var cost in _shareObject.AllCostsEntries.GetAllCostsOfTheShare())
+                foreach (var cost in ShareObjectFinalValue.AllCostsEntries.GetAllCostsOfTheShare())
                 {
                     if (bFlagAddEdit)
                     {
@@ -1018,9 +1083,9 @@ namespace SharePortfolioManager
                         {
                             // Add status message
                             Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                                _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/DateExists", _strLanguage),
-                                _xmlLanguage, _strLanguage,
-                                Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                                Language.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/DateExists", _languageName),
+                                Language, _languageName,
+                                Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
 
                             errorFlag = true;
                         }
@@ -1035,9 +1100,9 @@ namespace SharePortfolioManager
                         {
                             // Add status message
                             Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                                _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/DateExists", _strLanguage),
-                                _xmlLanguage, _strLanguage,
-                                Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                                Language.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/DateExists", _languageName),
+                                Language, _languageName,
+                                Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
 
                             errorFlag = true;
                         }
@@ -1051,9 +1116,9 @@ namespace SharePortfolioManager
 
                     // Add status message
                     Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/CostsEmpty", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/CostsEmpty", _languageName),
+                        Language, _languageName,
+                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
 
                     errorFlag = true;
                 }
@@ -1063,9 +1128,9 @@ namespace SharePortfolioManager
 
                     // Add status message
                     Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/CostsWrongFormat", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/CostsWrongFormat", _languageName),
+                        Language, _languageName,
+                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
 
                     errorFlag = true;
                 }
@@ -1075,9 +1140,9 @@ namespace SharePortfolioManager
 
                     // Add status message
                     Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/CostsWrongValue", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/CostsWrongValue", _languageName),
+                        Language, _languageName,
+                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
  
                     errorFlag = true;
                 }
@@ -1087,9 +1152,9 @@ namespace SharePortfolioManager
                 {
                     // Add status message
                     Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/FileDoesNotExist", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/FileDoesNotExist", _languageName),
+                        Language, _languageName,
+                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                     errorFlag = true;
                 }
 
@@ -1111,9 +1176,9 @@ namespace SharePortfolioManager
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                    _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/CheckInputFailure", _strLanguage),
-                    _xmlLanguage, _strLanguage,
-                    Color.DarkRed, _logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/CheckInputFailure", _languageName),
+                    Language, _languageName,
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
                 
                 // Reset string values
                 strDateTime = @"";
@@ -1134,7 +1199,7 @@ namespace SharePortfolioManager
             try
             {
                 const string strFilter = "pdf (*.pdf)|*.pdf|txt (*.txt)|.txt|doc (*.doc)|.doc|docx (*.docx)|.docx";
-                txtBoxAddCostDoc.Text = Helper.SetDocument(_xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/OpenFileDialog/Title", _strLanguage), strFilter, txtBoxAddCostDoc.Text);
+                txtBoxAddCostDoc.Text = Helper.SetDocument(Language.GetLanguageTextByXPath(@"/AddEditFormCosts/GrpBoxAddEdit/OpenFileDialog/Title", _languageName), strFilter, txtBoxAddCostDoc.Text);
             }
             catch (Exception ex)
             {
@@ -1144,9 +1209,9 @@ namespace SharePortfolioManager
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                    _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/ChoseDocumentFailed", _strLanguage),
-                    _xmlLanguage, _strLanguage,
-                    Color.DarkRed, _logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/ChoseDocumentFailed", _languageName),
+                    Language, _languageName,
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 

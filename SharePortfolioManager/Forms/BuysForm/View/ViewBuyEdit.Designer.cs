@@ -47,7 +47,6 @@
             this.btnAddSave = new System.Windows.Forms.Button();
             this.lblBuyPrice = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabelMessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblAddFinalValueUnit = new System.Windows.Forms.Label();
             this.txtBoxFinalValue = new System.Windows.Forms.TextBox();
             this.lblFinalValue = new System.Windows.Forms.Label();
@@ -55,12 +54,14 @@
             this.txtBoxDocument = new System.Windows.Forms.TextBox();
             this.lblDocument = new System.Windows.Forms.Label();
             this.lblAddVolumeUnit = new System.Windows.Forms.Label();
+            this.txtBoxVolume = new System.Windows.Forms.TextBox();
             this.lblVolume = new System.Windows.Forms.Label();
             this.datePickerDate = new System.Windows.Forms.DateTimePicker();
             this.lblDate = new System.Windows.Forms.Label();
             this.grpBoxOverview = new System.Windows.Forms.GroupBox();
             this.tabCtrlBuys = new System.Windows.Forms.TabControl();
-            this.txtBoxVolume = new System.Windows.Forms.TextBox();
+            this.lblPurchaseValue = new System.Windows.Forms.Label();
+            this.toolStripStatusLabelMessageBuyEdit = new System.Windows.Forms.ToolStripStatusLabel();
             this.grpBoxAdd.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.grpBoxOverview.SuspendLayout();
@@ -312,20 +313,14 @@
             // 
             // statusStrip1
             // 
+            this.statusStrip1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabelMessage});
+            this.toolStripStatusLabelMessageBuyEdit});
             this.statusStrip1.Location = new System.Drawing.Point(3, 269);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(809, 22);
             this.statusStrip1.TabIndex = 14;
             this.statusStrip1.Text = "statusStrip1";
-            // 
-            // toolStripStatusLabelMessage
-            // 
-            this.toolStripStatusLabelMessage.BackColor = System.Drawing.SystemColors.Control;
-            this.toolStripStatusLabelMessage.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolStripStatusLabelMessage.Name = "toolStripStatusLabelMessage";
-            this.toolStripStatusLabelMessage.Size = new System.Drawing.Size(0, 17);
             // 
             // lblAddFinalValueUnit
             // 
@@ -410,6 +405,19 @@
             this.lblAddVolumeUnit.Text = "_lblVolumeUnit";
             this.lblAddVolumeUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // txtBoxVolume
+            // 
+            this.txtBoxVolume.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtBoxVolume.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtBoxVolume.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxVolume.Location = new System.Drawing.Point(380, 47);
+            this.txtBoxVolume.Name = "txtBoxVolume";
+            this.txtBoxVolume.Size = new System.Drawing.Size(370, 23);
+            this.txtBoxVolume.TabIndex = 2;
+            this.txtBoxVolume.TextChanged += new System.EventHandler(this.OnTxtBoxAddVolume_TextChanged);
+            this.txtBoxVolume.Leave += new System.EventHandler(this.OnTxtBoxVolume_Leave);
+            // 
             // lblVolume
             // 
             this.lblVolume.BackColor = System.Drawing.Color.LightGray;
@@ -468,18 +476,23 @@
             this.tabCtrlBuys.TabIndex = 0;
             this.tabCtrlBuys.TabStop = false;
             // 
-            // txtBoxVolume
+            // lblPurchaseValue
             // 
-            this.txtBoxVolume.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtBoxVolume.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtBoxVolume.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxVolume.Location = new System.Drawing.Point(380, 47);
-            this.txtBoxVolume.Name = "txtBoxVolume";
-            this.txtBoxVolume.Size = new System.Drawing.Size(370, 23);
-            this.txtBoxVolume.TabIndex = 2;
-            this.txtBoxVolume.TextChanged += new System.EventHandler(this.OnTxtBoxAddVolume_TextChanged);
-            this.txtBoxVolume.Leave += new System.EventHandler(this.OnTxtBoxVolume_Leave);
+            this.lblPurchaseValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblPurchaseValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblPurchaseValue.Location = new System.Drawing.Point(10, 177);
+            this.lblPurchaseValue.Name = "lblPurchaseValue";
+            this.lblPurchaseValue.Size = new System.Drawing.Size(365, 23);
+            this.lblPurchaseValue.TabIndex = 15;
+            this.lblPurchaseValue.Text = "_addFinalValue";
+            this.lblPurchaseValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // toolStripStatusLabelMessageBuyEdit
+            // 
+            this.toolStripStatusLabelMessageBuyEdit.BackColor = System.Drawing.SystemColors.Control;
+            this.toolStripStatusLabelMessageBuyEdit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripStatusLabelMessageBuyEdit.Name = "toolStripStatusLabelMessageBuyEdit";
+            this.toolStripStatusLabelMessageBuyEdit.Size = new System.Drawing.Size(118, 17);
             // 
             // ViewBuyEdit
             // 
@@ -529,7 +542,6 @@
         private System.Windows.Forms.Button btnReset;
         private System.Windows.Forms.Button btnAddSave;
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelMessage;
         private System.Windows.Forms.GroupBox grpBoxOverview;
         private System.Windows.Forms.TabControl tabCtrlBuys;
         private System.Windows.Forms.Label lblAddPriceUnit;
@@ -546,5 +558,7 @@
         private System.Windows.Forms.TextBox txtBoxMarketValue;
         private System.Windows.Forms.Label lblMarketValue;
         private System.Windows.Forms.TextBox txtBoxVolume;
+        private System.Windows.Forms.Label lblPurchaseValue;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelMessageBuyEdit;
     }
 }

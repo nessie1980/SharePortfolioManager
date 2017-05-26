@@ -23,7 +23,6 @@
 using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Classes;
-using SharePortfolioManager.Classes.Taxes;
 using SharePortfolioManager.Forms.DividendForm.View;
 using System;
 using System.Collections.Generic;
@@ -41,12 +40,16 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
         DividendErrorCode ErrorCode { get; set; }
         string SelectedDate { get; set; }
 
-        List<ShareObject> ShareObjectList { get; set; }
-        ShareObject ShareObject { get; set; }
+        ShareObjectMarketValue ShareObjectMarketValue { get; set; }
+        List<ShareObjectMarketValue> ShareObjectListMarketValue { get; set; }
+        ShareObjectFinalValue ShareObjectFinalValue { get; set; }
+        List<ShareObjectFinalValue> ShareObjectListFinalValue { get; set; }
 
         Logger Logger { get; set; }
         Language Language { get; set; }
         string LanguageName { get; set; }
+
+        DividendObject DividendObject { get; set; }
 
         string Date { get; set; }
         string Time { get; set; }
@@ -56,33 +59,26 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
         CultureInfo CultureInfoFC { get; set; }
         string Rate { get; set; }
         decimal RateDec { get; set; }
-        string RateFC { get; set; }
-        decimal RateFCDec { get; set; }
         string Volume { get; set; }
         decimal VolumeDec { get; set; }
-        string LossBalance { get; set; }
-        decimal LossBalanceDec { get; set; }
-        string LossBalanceFC { get; set; }
-        decimal LossBalanceFCDec { get; set; }
         string Payout { get; set; }
         decimal PayoutDec { get; set; }
         string PayoutFC { get; set; }
         decimal PayoutFCDec { get; set; }
-        Taxes TaxValuesCurrent { get; set; }
+        string TaxAtSource { get; set; }
+        decimal TaxAtSourceDec { get; set; }
+        string CapitalGainsTax { get; set; }
+        decimal CapitalGainsTaxDec { get; set; }
+        string SolidarityTax { get; set; }
+        decimal SolidarityTaxDec { get; set; }
         string Tax { get; set; }
         decimal TaxDec { get; set; }
-        string TaxFC { get; set; }
-        decimal TaxFCDec { get; set; }
         string PayoutAfterTax { get; set; }
         decimal PayoutAfterTaxDec { get; set; }
-        string PayoutAfterTaxFC { get; set; }
-        decimal PayoutAfterTaxFCDec { get; set; }
         string Yield { get; set; }
         decimal YieldDec { get; set; }
         string Price { get; set; }
         decimal PriceDec { get; set; }
-        string PriceFC { get; set; }
-        decimal PriceFCDec { get; set; }
         string Document { get; set; }
     }
 
@@ -101,13 +97,16 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
         DividendErrorCode _errorCode;
         string _selectedDate;
 
-        List<ShareObject> _shareObjectList;
-        ShareObject _shareObject;
+        ShareObjectMarketValue _shareObjectMarketValue;
+        List<ShareObjectMarketValue> _shareObjectListMarketValue;
+        ShareObjectFinalValue _shareObjectFinalValue;
+        List<ShareObjectFinalValue> _shareObjectListFinalValue;
 
         Logger _logger;
         Language _language;
         string _languageName;
 
+        DividendObject _dividendObject;
         string _date;
         string _time;
         CheckState _enableFC;
@@ -116,33 +115,26 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
         CultureInfo _cultureInfoFC;
         string _rate;
         decimal _rateDec;
-        string _rateFC;
-        decimal _rateFCDec;
         string _volume;
         decimal _volumeDec;
-        string _lossBalance;
-        decimal _lossBalanceDec;
-        string _lossBalanceFC;
-        decimal _lossBalanceFCDec;
         string _payout;
         decimal _payoutDec;
         string _payoutFC;
         decimal _payoutFCDec;
-        Taxes _taxValuesCurrent;
+        string _taxAtSource;
+        decimal _taxAtSourceDec;
+        string _capitalGainsTax;
+        decimal _capitalGainsTaxDec;
+        string _solidarityTax;
+        decimal _solidarityTaxDec;
         string _tax;
         decimal _taxDec;
-        string _taxFC;
-        decimal _taxFCDec;
         string _payoutAfterTax;
         decimal _payoutAfterTaxDec;
-        string _payoutAfterTaxFC;
-        decimal _payoutAfterTaxFCDec;
         string _yield;
         decimal _yieldDec;
         string _price;
         decimal _priceDec;
-        string _priceFC;
-        decimal _priceFCDec;
         string _document;
 
         #endregion Fields
@@ -179,16 +171,28 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
             set { _selectedDate = value; }
         }
 
-        public List<ShareObject> ShareObjectList
+        public ShareObjectMarketValue ShareObjectMarketValue
         {
-            get { return _shareObjectList; }
-            set { _shareObjectList = value; }
+            get { return _shareObjectMarketValue; }
+            set { _shareObjectMarketValue = value; }
         }
 
-        public ShareObject ShareObject
+        public List<ShareObjectMarketValue> ShareObjectListMarketValue
         {
-            get { return _shareObject; }
-            set { _shareObject = value; }
+            get { return _shareObjectListMarketValue; }
+            set { _shareObjectListMarketValue = value; }
+        }
+
+        public ShareObjectFinalValue ShareObjectFinalValue
+        {
+            get { return _shareObjectFinalValue; }
+            set { _shareObjectFinalValue = value; }
+        }
+
+        public List<ShareObjectFinalValue> ShareObjectListFinalValue
+        {
+            get { return _shareObjectListFinalValue; }
+            set { _shareObjectListFinalValue = value; }
         }
 
         public Logger Logger
@@ -207,6 +211,12 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
         {
             get { return _languageName; }
             set { _languageName = value; }
+        }
+
+        public DividendObject DividendObject
+        {
+            get { return _dividendObject; }
+            set { _dividendObject = value; }
         }
 
         public string Date
@@ -247,7 +257,7 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
                 {
                     // Only return the value if the exchange ratio is greater than '0'
                     if (_exchangeRatioDec > 0)
-                        return Helper.FormatDecimal(_exchangeRatioDec, Helper.Currencytwolength, false, Helper.Currencytwofixlength);
+                    return Helper.FormatDecimal(_exchangeRatioDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength);
                     return @"";
                 }
                 else
@@ -264,8 +274,6 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
                 // Try to parse
                 if (!Decimal.TryParse(_exchangeRatio, out _exchangeRatioDec))
                     _exchangeRatioDec = 0;
-                else
-                    TaxValuesCurrent.ExchangeRatio = _exchangeRatioDec;
             }
         }
 
@@ -277,7 +285,10 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
                 if (_exchangeRatioDec == value)
                     return;
                 _exchangeRatioDec = value;
-                TaxValuesCurrent.ExchangeRatio = _exchangeRatioDec;
+
+                ExchangeRatio = _exchangeRatioDec.ToString();
+
+                UpdateView = true;
             }
         }
 
@@ -300,7 +311,7 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
                 {
                     // Only return the value if the rate is greater than '0'
                     if (_rateDec > 0)
-                        return Helper.FormatDecimal(_rateDec, Helper.Currencytwolength, false, Helper.Currencytwofixlength);
+                        return Helper.FormatDecimal(_rateDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength);
                     return @"";
                 }
                 else
@@ -328,47 +339,8 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
                 if (_rateDec == value)
                     return;
                 _rateDec = value;
-            }
-        }
 
-        public string RateFC
-        {
-            get
-            {
-                if (UpdateViewFormatted)
-                {
-                    // Only return the value if the rate foreign currency is greater than '0'
-                    if (_rateFCDec > 0)
-                        return Helper.FormatDecimal(_rateFCDec, Helper.Currencytwolength, false, Helper.Currencytwofixlength);
-                    return @"";
-                }
-                else
-                {
-                    return _rateFC;
-                }
-            }
-            set
-            {
-                if (_rateFC == value)
-                    return;
-                _rateFC = value;
-
-                // Try to parse
-                if (!Decimal.TryParse(_rateFC, out _rateFCDec))
-                    _rateFCDec = 0;
-                else
-                    RateFCDec = _rateFCDec;
-            }
-        }
-
-        public decimal RateFCDec
-        {
-            get { return _rateFCDec; }
-            set
-            {
-                if (_rateFCDec == value)
-                    return;
-                _rateFCDec = value;
+                Rate = _rateDec.ToString();
 
                 UpdateView = true;
             }
@@ -413,92 +385,6 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
             }
         }
 
-        public string LossBalance
-        {
-            get
-            {
-                if (UpdateViewFormatted)
-                {
-                    // Only return the value if the loss balance is greater than '0'
-                    if (_lossBalanceDec > 0)
-                        return Helper.FormatDecimal(_lossBalanceDec, Helper.Currencytwolength, false, Helper.Currencytwofixlength);
-                    return @"";
-                }
-                else
-                {
-                    return _lossBalance;
-                }
-            }
-            set
-            {
-                if (_lossBalance == value)
-                    return;
-                _lossBalance = value;
-
-                // Try to parse
-                if (!Decimal.TryParse(_lossBalance, out _lossBalanceDec))
-                    _lossBalanceDec = 0;
-                else
-                    TaxValuesCurrent.LossBalance = _lossBalanceDec;
-            }
-        }
-
-        public decimal LossBalanceDec
-        {
-            get { return _lossBalanceDec; }
-            set
-            {
-                if (_lossBalanceDec == value)
-                    return;
-                _lossBalanceDec = value;
-
-                LossBalance = _lossBalanceDec.ToString();
-
-                UpdateView = true;
-            }
-        }
-
-        public string LossBalanceFC
-        {
-            get
-            {
-                if (UpdateViewFormatted)
-                {
-                    // Only return the value if the loss balance of the foreign currency is greater than '0'
-                    if (_lossBalanceFCDec > 0)
-                        return Helper.FormatDecimal(_lossBalanceFCDec, Helper.Currencytwolength, false, Helper.Currencytwofixlength);
-                    return @"";
-                }
-                else
-                {
-                    return _lossBalanceFC;
-                }
-            }
-            set
-            {
-                if (_lossBalanceFC == value)
-                    return;
-                _lossBalanceFC = value;
-
-                // Try to parse
-                if (!Decimal.TryParse(_lossBalanceFC, out _lossBalanceFCDec))
-                    _lossBalanceDec = 0;
-            }
-        }
-
-        public decimal LossBalanceFCDec
-        {
-            get { return _lossBalanceFCDec; }
-            set
-            {
-                if (_lossBalanceFCDec == value)
-                    return;
-                _lossBalanceFCDec = value;
-
-                LossBalanceFC = _lossBalanceFCDec.ToString();
-            }
-        }
-
         public string Payout
         {
             get
@@ -517,6 +403,8 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
                 // Try to parse
                 if (!decimal.TryParse(_payout, out _payoutDec))
                     _payoutDec = 0;
+
+                UpdateView = true;
             }
         }
 
@@ -539,17 +427,10 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
         {
             get
             {
-                if (UpdateViewFormatted)
-                {
-                    // Only return the value if the payout of the foreign currency is greater than '0'
-                    if (_payoutFCDec > 0)
-                        return Helper.FormatDecimal(_payoutFCDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
-                    return @"";
-                }
-                else
-                {
-                    return _payoutFC;
-                }
+                // Only return the value if the payout of the foreign currency is greater than '0'
+                if (_payoutFCDec > 0)
+                    return Helper.FormatDecimal(_payoutFCDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
+                return @"";
             }
             set
             {
@@ -572,14 +453,130 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
                     return;
                 _payoutFCDec = value;
 
-                PayoutAfterTaxFC = _payoutFCDec.ToString();
+                PayoutFC = _payoutFCDec.ToString();
+
+                UpdateView = true;
             }
         }
 
-        public Taxes TaxValuesCurrent
+        public string TaxAtSource
         {
-            get { return _taxValuesCurrent; }
-            set { _taxValuesCurrent = value; }
+            get
+            {
+                if (UpdateViewFormatted)
+                {
+                    // Only return the value if the tax is greater than '0'
+                    if (_taxAtSourceDec > 0)
+                        return Helper.FormatDecimal(_taxAtSourceDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
+                    return @"";
+                }
+                else
+                    return _taxAtSource;
+            }
+            set
+            {
+                if (_taxAtSource == value)
+                    return;
+                _taxAtSource = value;
+
+                // Try to parse
+                if (!decimal.TryParse(_taxAtSource, out _taxAtSourceDec))
+                    _taxAtSourceDec = 0;
+            }
+        }
+
+        public decimal TaxAtSourceDec
+        {
+            get { return _taxAtSourceDec; }
+            set
+            {
+                if (_taxAtSourceDec == value)
+                    return;
+
+                TaxAtSource = TaxAtSourceDec.ToString();
+
+                _taxAtSourceDec = value;
+            }
+        }
+
+        public string CapitalGainsTax
+        {
+            get
+            {
+                if (UpdateViewFormatted)
+                {
+                    // Only return the value if the tax is greater than '0'
+                    if (_capitalGainsTaxDec > 0)
+                        return Helper.FormatDecimal(_capitalGainsTaxDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
+                    return @"";
+                }
+                else
+                    return _capitalGainsTax;
+            }
+            set
+            {
+                if (_capitalGainsTax == value)
+                    return;
+                _capitalGainsTax = value;
+
+                // Try to parse
+                if (!decimal.TryParse(_capitalGainsTax, out _capitalGainsTaxDec))
+                    _capitalGainsTaxDec = 0;
+            }
+        }
+
+        public decimal CapitalGainsTaxDec
+        {
+            get { return _capitalGainsTaxDec; }
+            set
+            {
+                if (_capitalGainsTaxDec == value)
+                    return;
+
+                CapitalGainsTax = CapitalGainsTaxDec.ToString();
+
+                _capitalGainsTaxDec = value;
+            }
+        }
+
+        public string SolidarityTax
+        {
+            get
+            {
+                if (UpdateViewFormatted)
+                {
+                    // Only return the value if the tax is greater than '0'
+                    if (_solidarityTaxDec > 0)
+                        return Helper.FormatDecimal(_solidarityTaxDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
+                    return @"";
+                }
+                else
+                    return _solidarityTax;
+            }
+            set
+            {
+                if (_solidarityTax == value)
+                    return;
+                _solidarityTax = value;
+
+                // Try to parse
+                if (!decimal.TryParse(_solidarityTax, out _solidarityTaxDec))
+                    _solidarityTaxDec = 0;
+            }
+        }
+
+        public decimal SolidarityTaxDec
+        {
+            get { return _solidarityTaxDec; }
+            set
+            {
+                if (_solidarityTaxDec == value)
+                    return;
+
+                SolidarityTax = SolidarityTaxDec.ToString();
+
+                _solidarityTaxDec = value;
+            }
         }
 
         public string Tax
@@ -614,45 +611,6 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
                 Tax = TaxDec.ToString();
 
                 _taxDec = value;
-            }
-        }
-
-        public string TaxFC
-        {
-            get
-            {
-                if (UpdateViewFormatted)
-                {
-                    // Only return the value if the tax of the foreign currency is greater than '0'
-                    if (_taxFCDec > 0)
-                        return Helper.FormatDecimal(_taxFCDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
-                    return @"";
-                }
-                else
-                {
-                    return _taxFC;
-                }
-            }
-            set
-            {
-                if (_taxFC == value)
-                    return;
-                _taxFC = value;
-
-                // Try to parse
-                if (!decimal.TryParse(_taxFC, out _taxFCDec))
-                    _taxFCDec = 0;
-            }
-        }
-
-        public decimal TaxFCDec
-        {
-            get { return _taxFCDec; }
-            set
-            {
-                if (_taxFCDec == value)
-                    return;
-                _taxFCDec = value;
             }
         }
 
@@ -692,60 +650,14 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
             }
         }
 
-        public string PayoutAfterTaxFC
-        {
-            get
-            {
-                if (UpdateViewFormatted)
-                {
-                    // Only return the value if the payout after tax of the foreign currency is greater than '0'
-                    if (_payoutAfterTaxFCDec > 0)
-                        return Helper.FormatDecimal(_payoutAfterTaxFCDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
-                    return @"";
-                }
-                else
-                {
-                    return _payoutAfterTaxFC;
-                }
-            }
-            set
-            {
-                if (_payoutAfterTaxFC == value)
-                    return;
-                _payoutAfterTaxFC = value;
-
-                // Try to parse
-                if (!decimal.TryParse(_payoutAfterTaxFC, out _payoutAfterTaxFCDec))
-                    _payoutAfterTaxFCDec = 0;
-            }
-        }
-
-        public decimal PayoutAfterTaxFCDec
-        {
-            get { return _payoutAfterTaxFCDec; }
-            set
-            {
-                if (_payoutAfterTaxFCDec == value)
-                    return;
-                _payoutAfterTaxFCDec = value;
-            }
-        }
-
         public string Yield
         {
             get
             {
-                if (UpdateViewFormatted)
-                {
-                    // Only return the value if the yield is greater than '0'
-                    if (_yieldDec > 0)
-                        return Helper.FormatDecimal(_yieldDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
-                    return @"";
-                }
-                else
-                {
-                    return _yield;
-                }
+                // Only return the value if the yield is greater than '0'
+                if (_yieldDec > 0)
+                    return Helper.FormatDecimal(_yieldDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength);
+                return @"";
             }
             set
             {
@@ -810,45 +722,6 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
                 if (_priceDec == value)
                     return;
                 _priceDec = value;
-            }
-        }
-
-        public string PriceFC
-        {
-            get
-            {
-                if (UpdateViewFormatted)
-                {
-                    // Only return the value if the price of the foreign currency is greater than '0'
-                    if (_priceFCDec > 0)
-                        return Helper.FormatDecimal(_priceFCDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
-                    return @"";
-                }
-                else
-                {
-                    return _priceFC;
-                }
-            }
-            set
-            {
-                if (_priceFC == value)
-                    return;
-                _priceFC = value;
-
-                // Try to parse
-                if (!decimal.TryParse(_priceFC, out _priceFCDec))
-                    _priceFCDec = 0;
-            }
-        }
-
-        public decimal PriceFCDec
-        {
-            get { return _priceFCDec; }
-            set
-            {
-                if (_priceFCDec == value)
-                    return;
-                _priceFCDec = value;
             }
         }
 

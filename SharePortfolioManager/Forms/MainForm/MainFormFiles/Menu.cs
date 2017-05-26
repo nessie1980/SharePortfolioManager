@@ -41,10 +41,10 @@ namespace SharePortfolioManager
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OwnMessageBox dlgPortfolioFileName = new OwnMessageBox(
-                _xmlLanguage.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/InputPortfolioName", _languageName),
-                _xmlLanguage.GetLanguageTextByXPath(@"/MessageBoxForm/Content/InputPortfolioName", _languageName),
-                _xmlLanguage.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", _languageName),
-                _xmlLanguage.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", _languageName),
+                Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/InputPortfolioName", LanguageName),
+                Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/InputPortfolioName", LanguageName),
+                Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", LanguageName),
+                Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", LanguageName),
                 true);
             DialogResult dlgResult = dlgPortfolioFileName.ShowDialog();
 
@@ -56,10 +56,10 @@ namespace SharePortfolioManager
                 if (File.Exists(PortfolioFileName))
                 {
                     OwnMessageBox dlgPortfolioFileExists = new OwnMessageBox(
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Info", _languageName),
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MessageBoxForm/Content/PortfolioNameExists", _languageName),
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", _languageName),
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", _languageName));
+                    Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Info", LanguageName),
+                    Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/PortfolioNameExists", LanguageName),
+                    Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", LanguageName),
+                    Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", LanguageName));
 
                     DialogResult dlgResultFileExists = dlgPortfolioFileExists.ShowDialog();
 
@@ -105,7 +105,7 @@ namespace SharePortfolioManager
             string strOldPortfolioFileName = PortfolioFileName;
 
             const string strFilter = "XML (*.XML)|*.XML";
-            PortfolioFileName = Helper.LoadPortfolio(_xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/OpenFileDialog/Title", _languageName), strFilter, PortfolioFileName);
+            PortfolioFileName = Helper.LoadPortfolio(Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/OpenFileDialog/Title", LanguageName), strFilter, PortfolioFileName);
 
             // Check if the portfolio file name has been changed
             if (strOldPortfolioFileName != PortfolioFileName)
@@ -135,10 +135,10 @@ namespace SharePortfolioManager
             try
             {
                 // Old language
-                string oldLanguage = _languageName;
+                string oldLanguage = LanguageName;
 
                 // Get the language settings node element form Settings.XML
-                var nodeLanguage = _xmlSettings.SelectSingleNode("/Settings/Language");
+                var nodeLanguage = Settings.SelectSingleNode("/Settings/Language");
                 foreach (XmlNode nodeElement in nodeLanguage)
                 {
                     if (nodeElement != null)
@@ -147,17 +147,17 @@ namespace SharePortfolioManager
                         nodeElement.InnerText = (sender).ToString();
 
                         // Set new language to the global language variable
-                        _languageName = (sender).ToString();
+                        LanguageName = (sender).ToString();
                     }
                 }
 
                 // Close reader for saving
-                _xmlReaderSettings.Close();
+                ReaderSettings.Close();
                 // Save settings
-                _xmlSettings.Save(SettingsFileName);
+                Settings.Save(SettingsFileName);
                 // Create a new reader and reload Settings.XML
-                _xmlReaderSettings = XmlReader.Create(SettingsFileName, _xmlReaderSettingsSettings);
-                _xmlSettings.Load(_xmlReaderSettings);
+                ReaderSettings = XmlReader.Create(SettingsFileName, ReaderSettingsSettings);
+                Settings.Load(ReaderSettings);
 
                 // Get settings menu item
                 ToolStripMenuItem tmiSettings = (ToolStripMenuItem)menuStrip1.Items["settingsToolStripMenuItem"];
@@ -174,21 +174,22 @@ namespace SharePortfolioManager
                 }
 
                 // Check if the language really change
-                if (oldLanguage != _languageName)
+                if (oldLanguage != LanguageName)
                 {
                     // Reload language keys of the controls
                     SetLanguage();
 
                     // Select the first item in the DataGridView portfolio
-                    if (dgvPortfolio.SelectedRows.Count > 0)
+                    if (dgvPortfolioFinalValue.SelectedRows.Count > 0)
                     {
-                        if (dgvPortfolio.Rows.Count > 0 && dgvPortfolio.Rows.Count >= dgvPortfolio.SelectedRows[0].Index)
+                        if (dgvPortfolioFinalValue.Rows.Count > 0 && dgvPortfolioFinalValue.Rows.Count >= dgvPortfolioFinalValue.SelectedRows[0].Index)
                         {
-                            dgvPortfolio.Rows[dgvPortfolio.SelectedRows[0].Index].Selected = true;
-                            UpdateShareDetails();
-                            UpdateDividendDetails();
-                            UpdateCostsDetails();
-                            UpdateProfitLossDetails();
+                            dgvPortfolioFinalValue.Rows[dgvPortfolioFinalValue.SelectedRows[0].Index].Selected = true;
+                            // TODO
+                            //UpdateShareDetails();
+                            //UpdateDividendDetails();
+                            //UpdateCostsDetails();
+                            //UpdateProfitLossDetails();
                         }
                     }
 
@@ -199,9 +200,9 @@ namespace SharePortfolioManager
 
                     // Add status message
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/StatusMessages/ChangeLanguageSuccessful", _languageName),
-                        _xmlLanguage, _languageName,
-                        Color.Orange, _logger, (int)EStateLevels.Warning, (int)EComponentLevels.Application);
+                        Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/ChangeLanguageSuccessful", LanguageName),
+                        Language, LanguageName,
+                        Color.Orange, Logger, (int)EStateLevels.Warning, (int)EComponentLevels.Application);
                 }
             }
             catch (Exception ex)
@@ -210,13 +211,13 @@ namespace SharePortfolioManager
                 MessageBox.Show("languageClick()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 #endif
                 // Set initialization flag
-                _bInitFlag = false;
+                InitFlag = false;
 
                 // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/ChangeLanguageFailed", _languageName),
-                    _xmlLanguage, _languageName,
-                    Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/ChangeLanguageFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
             }
         }
 
@@ -229,23 +230,23 @@ namespace SharePortfolioManager
         {
             try
             {
-                FrmLoggerSettings loggerSettings = new FrmLoggerSettings(this, _logger, _xmlLanguage, _languageName);
+                FrmLoggerSettings loggerSettings = new FrmLoggerSettings(this, Logger, Language, LanguageName);
 
                 if (loggerSettings.ShowDialog() == DialogResult.OK)
                 {
                     // Close reader for saving
-                    _xmlReaderSettings.Close();
+                    ReaderSettings.Close();
                     // Save settings
-                    _xmlSettings.Save(SettingsFileName);
+                    Settings.Save(SettingsFileName);
                     // Create a new reader to test if the saved values could be loaded
-                    _xmlReaderSettings = XmlReader.Create(SettingsFileName, _xmlReaderSettingsSettings);
-                    _xmlSettings.Load(_xmlReaderSettings);
+                    ReaderSettings = XmlReader.Create(SettingsFileName, ReaderSettingsSettings);
+                    Settings.Load(ReaderSettings);
 
                     // Add status message
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/SaveSettingsSuccessful", _languageName),
-                        _xmlLanguage, _languageName,
-                        Color.Black, _logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
+                        Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/SaveSettingsSuccessful", LanguageName),
+                        Language, LanguageName,
+                        Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
                 }
             }
             catch (Exception ex)
@@ -256,9 +257,9 @@ namespace SharePortfolioManager
 #endif
                 // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    _xmlLanguage.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/SaveSettingsFailed", _languageName),
-                    _xmlLanguage, _languageName,
-                    Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/SaveSettingsFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
             }
         }
 
@@ -271,7 +272,7 @@ namespace SharePortfolioManager
         {
             try
             {
-                FrmAbout frmAbout = new FrmAbout(this, _xmlLanguage, _languageName);
+                FrmAbout frmAbout = new FrmAbout(this, Language, LanguageName);
                 frmAbout.ShowDialog();
             }
             catch (Exception ex)
@@ -280,13 +281,13 @@ namespace SharePortfolioManager
                 MessageBox.Show("aboutToolStripMenuItem_Click()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 #endif
                 // Set initialization flag
-                _bInitFlag = false;
+                InitFlag = false;
 
                 // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Errors/ShowAboutBoxFailed", _languageName),
-                    _xmlLanguage, _languageName,
-                    Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/AboutForm/Errors/ShowAboutBoxFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
             }
         }
 

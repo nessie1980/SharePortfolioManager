@@ -38,8 +38,10 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Model
         bool UpdateView { get; }
         bool UpdateViewFormatted { get; set; }
 
-        List<ShareObject> ShareObjectList { get; set; }
-        ShareObject ShareObject { get; set; }
+        List<ShareObjectMarketValue> ShareObjectListMarketValue { get; set; }
+        List<ShareObjectFinalValue> ShareObjectListFinalValue { get; set; }
+        ShareObjectMarketValue ShareObjectMarketValue { get; set; }
+        ShareObjectFinalValue ShareObjectFinalValue { get; set; }
 
         List<Image> ImageList { get; set; }
 
@@ -65,16 +67,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Model
         CultureInfo CultureInfo { get; set; }
         int DividendPayoutInterval { get; set; }
         string Document { get; set; }
-
-        CheckState TaxAtSourceFlag { get; set; }
-        string TaxAtSource { get; set; }
-        decimal TaxAtSourcedec { get; set; }
-        CheckState CapitalGainsTaxFlag { get; set; }
-        string CapitalGainsTax { get; set; }
-        decimal CapitalGainsTaxdec { get; set; }
-        CheckState SolidarityTaxFlag { get; set; }
-        string SolidarityTax { get; set; }
-        decimal SolidarityTaxdec { get; set; }
     }
 
     /// <summary>
@@ -89,8 +81,10 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Model
 
         ShareAddErrorCode _errorCode;
 
-        List<ShareObject> _shareObjectList;
-        ShareObject _shareObject;
+        ShareObjectMarketValue _shareObjectMarketValue;
+        List<ShareObjectMarketValue> _shareObjectListMarketValue;
+        ShareObjectFinalValue _shareObjectFinalValue;
+        List<ShareObjectFinalValue> _shareObjectListFinalValue;
 
         List<Image> _imageList;
 
@@ -117,16 +111,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Model
         int _dividendPayoutInterval;
         string _document;
 
-        CheckState _taxAtSourceFlag;
-        string _taxAtSource;
-        decimal _taxAtSourcedec;
-        CheckState _capitalGainsTaxFlag;
-        string _capitalGainsTax;
-        decimal _capitalGainsTaxdec;
-        CheckState _solidarityTaxFlag;
-        string _solidarityTax;
-        decimal _solidarityTaxdec;
-
         #endregion Fields
 
         #region IModel Members
@@ -152,16 +136,28 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Model
             }
         }
 
-        public List<ShareObject> ShareObjectList
+        public ShareObjectMarketValue ShareObjectMarketValue
         {
-            get { return _shareObjectList; }
-            set { _shareObjectList = value; }
+            get { return _shareObjectMarketValue; }
+            set { _shareObjectMarketValue = value; }
         }
 
-        public ShareObject ShareObject
+        public List<ShareObjectMarketValue> ShareObjectListMarketValue
         {
-            get { return _shareObject; }
-            set { _shareObject = value; }
+            get { return _shareObjectListMarketValue; }
+            set { _shareObjectListMarketValue = value; }
+        }
+
+        public ShareObjectFinalValue ShareObjectFinalValue
+        {
+            get { return _shareObjectFinalValue; }
+            set { _shareObjectFinalValue = value; }
+        }
+
+        public List<ShareObjectFinalValue> ShareObjectListFinalValue
+        {
+            get { return _shareObjectListFinalValue; }
+            set { _shareObjectListFinalValue = value; }
         }
 
         public List<Image> ImageList
@@ -269,7 +265,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Model
                 {
                     // Only return the value if the share price is greater than '0'
                     if (_sharePricedec > 0)
-                        return Helper.FormatDecimal(_sharePricedec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
+                        return Helper.FormatDecimal(_sharePricedec, Helper.Currencyfivelength, true, Helper.Currencytwofixlength);
                     return @"";
                 }
                 else
@@ -499,156 +495,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Model
                 if (_document == value)
                     return;
                 _document = value;
-            }
-        }
-
-        public CheckState TaxAtSourceFlag
-        {
-            get { return _taxAtSourceFlag; }
-            set
-            {
-                if (_taxAtSourceFlag == value)
-                    return;
-                _taxAtSourceFlag = value;
-            }
-        }
-
-        public string TaxAtSource
-        {
-            get
-            {
-                if (UpdateViewFormatted)
-                {
-                    // Only return the value if the tax at source value is greater than '0'
-                    if (_taxAtSourcedec > 0)
-                        return Helper.FormatDecimal(_taxAtSourcedec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
-                    return @"";
-                }
-                else
-                {
-                    return _taxAtSource;
-                }
-            }
-            set
-            {
-                if (_taxAtSource == value)
-                    return;
-                _taxAtSource = value;
-
-                // Try to parse
-                if (!decimal.TryParse(_taxAtSource, out _taxAtSourcedec))
-                    _taxAtSourcedec = 0;
-            }
-        }
-
-        public decimal TaxAtSourcedec
-        {
-            get { return _taxAtSourcedec; }
-            set
-            {
-                if (_taxAtSourcedec == value)
-                    return;
-                _taxAtSourcedec = value;
-            }
-        }
-
-        public CheckState CapitalGainsTaxFlag
-        {
-            get { return _capitalGainsTaxFlag; }
-            set
-            {
-                if (_capitalGainsTaxFlag == value)
-                    return;
-                _capitalGainsTaxFlag = value;
-            }
-        }
-
-        public string CapitalGainsTax
-        {
-            get
-            {
-                if (UpdateViewFormatted)
-                {
-                    // Only return the value if the capital gains tax value is greater than '0'
-                    if (_capitalGainsTaxdec > 0)
-                        return Helper.FormatDecimal(_capitalGainsTaxdec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
-                    return @"";
-                }
-                else
-                {
-                    return _capitalGainsTax;
-                }
-            }
-            set
-            {
-                if (_capitalGainsTax == value)
-                    return;
-                _capitalGainsTax = value;
-
-                // Try to parse
-                if (!decimal.TryParse(_capitalGainsTax, out _capitalGainsTaxdec))
-                    _capitalGainsTaxdec = 0;
-            }
-        }
-
-        public decimal CapitalGainsTaxdec
-        {
-            get { return _capitalGainsTaxdec; }
-            set
-            {
-                if (_capitalGainsTaxdec == value)
-                    return;
-                _capitalGainsTaxdec = value;
-            }
-        }
-
-        public CheckState SolidarityTaxFlag
-        {
-            get { return _solidarityTaxFlag; }
-            set
-            {
-                if (_solidarityTaxFlag == value)
-                    return;
-                _solidarityTaxFlag = value;
-            }
-        }
-
-        public string SolidarityTax
-        {
-            get
-            {
-                if (UpdateViewFormatted)
-                {
-                    // Only return the value if the solidarity tax value is greater than '0'
-                    if (_solidarityTaxdec > 0)
-                        return Helper.FormatDecimal(_solidarityTaxdec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
-                    return @"";
-                }
-                else
-                {
-                    return _solidarityTax;
-                }
-            }
-            set
-            {
-                if (_solidarityTax == value)
-                    return;
-                _solidarityTax = value;
-
-                // Try to parse
-                if (!decimal.TryParse(_solidarityTax, out _solidarityTaxdec))
-                    _solidarityTaxdec = 0;
-            }
-        }
-
-        public decimal SolidarityTaxdec
-        {
-            get { return _solidarityTaxdec; }
-            set
-            {
-                if (_solidarityTaxdec == value)
-                    return;
-                _solidarityTaxdec = value;
             }
         }
 

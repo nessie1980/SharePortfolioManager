@@ -47,7 +47,8 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
 
         private void UpdateViewWithModel()
         {
-            _view.ShareObject = _model.ShareObject;
+            _view.ShareObjectMarketValue = _model.ShareObjectMarketValue;
+            _view.ShareObjectFinalValue = _model.ShareObjectFinalValue;
 
             _view.ErrorCode = _model.ErrorCode;
 
@@ -63,13 +64,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             _view.GrandTotal = _model.FinalValue;
             _view.WebSite = _model.WebSite;
             _view.Document = _model.Document;
-
-            _view.TaxAtSourceFlag = _model.TaxAtSourceFlag;
-            _view.TaxAtSource = _model.TaxAtSource;
-            _view.CapitalGainsTaxFlag = _model.CapitalGainsTaxFlag;
-            _view.CapitalGainsTax = _model.CapitalGainsTax;
-            _view.SolidarityTaxFlag = _model.SolidarityTaxFlag;
-            _view.SolidarityTax = _model.SolidarityTax;
         }
 
         private void OnViewFormatInputValues(object sender, EventArgs e)
@@ -88,8 +82,11 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
 
         private void UpdateModelwithView()
         {
-            _model.ShareObjectList = _view.ShareObjectList;
-            _model.ShareObject = _view.ShareObject;
+            _model.ShareObjectMarketValue = _view.ShareObjectMarketValue;
+            _model.ShareObjectListMarketValue = _view.ShareObjectListMarketValue;
+            _model.ShareObjectFinalValue = _view.ShareObjectFinalValue;
+            _model.ShareObjectListFinalValue = _view.ShareObjectListFinalValue;
+
             _model.ImageList = _view.ImageList;
             _model.WebSiteRegexList = _view.WebSiteRegexList;
             _model.ErrorCode = _view.ErrorCode;
@@ -109,13 +106,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             _model.DividendPayoutInterval = _view.DividendPayoutInterval;
             _model.Document = _view.Document;
 
-            _model.TaxAtSourceFlag = _view.TaxAtSourceFlag;
-            _model.TaxAtSource = _view.TaxAtSource;
-            _model.CapitalGainsTaxFlag = _view.CapitalGainsTaxFlag;
-            _model.CapitalGainsTax = _view.CapitalGainsTax;
-            _model.SolidarityTaxFlag = _view.SolidarityTaxFlag;
-            _model.SolidarityTax = _view.SolidarityTax;
-
             CalculateMarketValueAndFinalValue();
 
             if (_model.UpdateView)
@@ -130,8 +120,8 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
         {
             try
             {
-                Helper.CalcMarketValueAndFinalValue(_model.Volumedec, _model.SharePricedec, _model.Costsdec,
-                    _model.Reductiondec, out decimal decMarketValue, out decimal decFinalValue);
+                Helper.CalcBuyValues(_model.Volumedec, _model.SharePricedec, _model.Costsdec,
+                    _model.Reductiondec, out decimal decMarketValue, out decimal decPurchaseValue, out decimal decFinalValue);
 
                 _model.MarketValuedec = decMarketValue;
                 _model.FinalValuedec = decFinalValue;
@@ -154,9 +144,9 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             {
                 string strDateTime = _model.Date + " " + _model.Time;
 
-                // Create a temporary share object with the new values of the new share object
-                List<ShareObject> tempShareObject = new List<ShareObject>();
-                tempShareObject.Add(new ShareObject(
+                // Create a temporary share object with the new values of the new share object market value
+                List<ShareObjectMarketValue> tempShareObjectMarketValue = new List<ShareObjectMarketValue>();
+                tempShareObjectMarketValue.Add(new ShareObjectMarketValue(
                             _model.Wkn,
                             strDateTime,
                             _model.Name,
@@ -173,31 +163,38 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                             null,
                             _model.CultureInfo,
                             0,
-                            _model.Document,
-                            false,
-                            0,
-                            false,
-                            0,
-                            false,
-                            0
+                            _model.Document
                             ));
 
-                // Check if for the given share a website configuration exists
-                if (tempShareObject[0].SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList))
+                // Create a temporary share object with the new values of the new share object final value
+                List<ShareObjectFinalValue> tempShareObjectFinalValue = new List<ShareObjectFinalValue>();
+                tempShareObjectFinalValue.Add(new ShareObjectFinalValue(
+                            _model.Wkn,
+                            strDateTime,
+                            _model.Name,
+                            DateTime.MinValue,
+                            DateTime.MinValue,
+                            DateTime.MinValue,
+                            0,
+                            _model.Volumedec,
+                            _model.Reductiondec,
+                            _model.Costsdec,
+                            _model.MarketValuedec,
+                            _model.WebSite,
+                            _model.ImageList,
+                            null,
+                            _model.CultureInfo,
+                            0,
+                            _model.Document
+                            ));
+
+                // Check if for the given shares a website configuration exists
+                if (tempShareObjectMarketValue[0].SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList) &&
+                    tempShareObjectFinalValue[0].SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList)
+                    )
                 {
-                    bool bTaxAtSourceFlag = false;
-                    if (_model.TaxAtSourceFlag == CheckState.Checked)
-                        bTaxAtSourceFlag = true;
-
-                    bool bCapitalGainsTaxFlag = false;
-                    if (_model.CapitalGainsTaxFlag == CheckState.Checked)
-                        bCapitalGainsTaxFlag = true;
-
-                    bool bSolidarityTaxFlag = false;
-                    if (_model.SolidarityTaxFlag == CheckState.Checked)
-                        bSolidarityTaxFlag = true;
-
-                    _model.ShareObjectList.Add(new ShareObject(
+                    // Add market value share
+                    _model.ShareObjectListMarketValue.Add(new ShareObjectMarketValue(
                             _model.Wkn,
                             strDateTime,
                             _model.Name,
@@ -214,32 +211,56 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                             null,
                             _model.CultureInfo,
                             _model.DividendPayoutInterval,
-                            _model.Document,
-                            bTaxAtSourceFlag,
-                            _model.TaxAtSourcedec,
-                            bCapitalGainsTaxFlag,
-                            _model.CapitalGainsTaxdec,
-                            bSolidarityTaxFlag,
-                            _model.SolidarityTaxdec
+                            _model.Document
                             ));
 
-                    // Set parsing expression to the share list
-                    _model.ShareObjectList[_model.ShareObjectList.Count - 1].SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList);
-                    _model.ShareObject = _model.ShareObjectList[_model.ShareObjectList.Count - 1];
+                    // Add final value share
+                    _model.ShareObjectListFinalValue.Add(new ShareObjectFinalValue(
+                            _model.Wkn,
+                            strDateTime,
+                            _model.Name,
+                            DateTime.MinValue,
+                            DateTime.MinValue,
+                            DateTime.MinValue,
+                            _model.SharePricedec,
+                            _model.Volumedec,
+                            _model.Reductiondec,
+                            _model.Costsdec,
+                            _model.MarketValuedec,
+                            _model.WebSite,
+                            _model.ImageList,
+                            null,
+                            _model.CultureInfo,
+                            _model.DividendPayoutInterval,
+                            _model.Document
+                            ));
 
-                    // Cost entry if the costs value is not 0
-                    if (_model.Costsdec > 0)
-                        _model.ShareObjectList[_model.ShareObjectList.Count - 1].AddCost(true, strDateTime, _model.Costsdec, _model.Document);
+                    // Set parsing expression to the market value share list
+                    _model.ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1].SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList);
+                    _model.ShareObjectMarketValue = _model.ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1];
 
                     // Sort portfolio list in order of the share names
-                    _model.ShareObjectList.Sort(new ShareObjectListComparer());
+                    _model.ShareObjectListMarketValue.Sort(new ShareObjectListComparer());
+
+                    // Set parsing expression to the  final value share list
+                    _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1].SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList);
+                    _model.ShareObjectFinalValue = _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1];
+
+                    // Cost entry if the costs value is not 0 and add it to the final value list
+                    if (_model.Costsdec > 0)
+                        _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1].AddCost(true, strDateTime, _model.Costsdec, _model.Document);
+
+                    // Sort portfolio list in order of the share names
+                    _model.ShareObjectListFinalValue.Sort(new ShareObjectListComparer());
                 }
                 else
                     _model.ErrorCode = ShareAddErrorCode.WebSiteRegexNotFound;
 
-                // Delete temp object
-                if (tempShareObject.Count > 0)
-                    tempShareObject[0].Dispose();
+                // Delete temp objects
+                if (tempShareObjectMarketValue.Count > 0)
+                    tempShareObjectMarketValue[0].Dispose();
+                if (tempShareObjectFinalValue.Count > 0)
+                    tempShareObjectFinalValue[0].Dispose();
             }
 
             UpdateViewWithModel();
@@ -267,12 +288,26 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                 bErrorFlag = true;
             }
 
-            // Check if an share with the given WKN number already exists
+            // Check if a market value share with the given WKN number already exists
             if (!bErrorFlag)
             {
-                foreach (var shareObject in _model.ShareObjectList)
+                foreach (var shareObjectMarketValue in _model.ShareObjectListMarketValue)
                 {
-                    if (shareObject.Wkn == _model.Wkn)
+                    if (shareObjectMarketValue.Wkn == _model.Wkn)
+                    {
+                        _model.ErrorCode = ShareAddErrorCode.WknExists;
+                        bErrorFlag = true;
+                        break;
+                    }
+                }
+            }
+
+            // Check if final value share with the given WKN number already exists
+            if (!bErrorFlag)
+            {
+                foreach (var shareObjectFinalValue in _model.ShareObjectListFinalValue)
+                {
+                    if (shareObjectFinalValue.Wkn == _model.Wkn)
                     {
                         _model.ErrorCode = ShareAddErrorCode.WknExists;
                         bErrorFlag = true;
@@ -290,10 +325,24 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
 
             if (!bErrorFlag)
             {
-                // Check if an share with the given share name already exists
-                foreach (var shareObject in _model.ShareObjectList)
+                // Check if a market value share with the given share name already exists
+                foreach (var shareObjectMarketValue in _model.ShareObjectListMarketValue)
                 {
-                    if (shareObject.Name == _model.Name)
+                    if (shareObjectMarketValue.Name == _model.Name)
+                    {
+                        _model.ErrorCode = ShareAddErrorCode.NameExists;
+                        bErrorFlag = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!bErrorFlag)
+            {
+                // Check if a final value share with the given share name already exists
+                foreach (var shareObjectFinalValue in _model.ShareObjectListFinalValue)
+                {
+                    if (shareObjectFinalValue.Name == _model.Name)
                     {
                         _model.ErrorCode = ShareAddErrorCode.NameExists;
                         bErrorFlag = true;
@@ -392,75 +441,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             {
                 _model.ErrorCode = ShareAddErrorCode.DocumentDoesNotExists;
                 bErrorFlag = true;
-            }
-
-            // Check tax at source input
-            if (_model.TaxAtSourceFlag == CheckState.Checked)
-            {
-                decimal decTaxAtSource = 0;
-                if (_model.TaxAtSource == @"" && bErrorFlag == false)
-                {
-                    _model.ErrorCode = ShareAddErrorCode.TaxAtSourceEmpty;
-                    bErrorFlag = true;
-                }
-                else if (!decimal.TryParse(_model.TaxAtSource, out decTaxAtSource) && bErrorFlag == false)
-                {
-                    _model.ErrorCode = ShareAddErrorCode.TaxAtSourceWrongFormat;
-                    bErrorFlag = true;
-                }
-                else if (decTaxAtSource <= 0 && bErrorFlag == false)
-                {
-                    _model.ErrorCode = ShareAddErrorCode.TaxAtSourceWrongValue;
-                    bErrorFlag = true;
-                }
-                else if (bErrorFlag == false)
-                    _model.TaxAtSourcedec = decTaxAtSource;
-            }
-
-            // Check capital gains tax input
-            if (_model.CapitalGainsTaxFlag == CheckState.Checked)
-            {
-                decimal decCapitalGainsTax = 0;
-                if (_model.CapitalGainsTax == @"" && bErrorFlag == false)
-                {
-                    _model.ErrorCode = ShareAddErrorCode.CapitalGainsTaxEmpty;
-                    bErrorFlag = true;
-                }
-                else if (!decimal.TryParse(_model.CapitalGainsTax, out decCapitalGainsTax) && bErrorFlag == false)
-                {
-                    _model.ErrorCode = ShareAddErrorCode.CapitalGainsTaxWrongFormat;
-                    bErrorFlag = true;
-                }
-                else if (decCapitalGainsTax <= 0)
-                {
-                    _model.ErrorCode = ShareAddErrorCode.CapitalGainsTaxWrongValue;
-                    bErrorFlag = true;
-                }
-                else if (bErrorFlag == false)
-                    _model.CapitalGainsTaxdec = decCapitalGainsTax;
-            }
-
-            // Check solidarity tax input
-            if (_model.SolidarityTaxFlag == CheckState.Checked)
-            {
-                decimal decSolidarityTax = 0;
-                if (_model.SolidarityTax == @"" && bErrorFlag == false)
-                {
-                    _model.ErrorCode = ShareAddErrorCode.SolidarityTaxEmpty;
-                    bErrorFlag = true;
-                }
-                else if (!decimal.TryParse(_model.SolidarityTax, out decSolidarityTax) && bErrorFlag == false)
-                {
-                    _model.ErrorCode = ShareAddErrorCode.SolidarityTaxWrongFormat;
-                    bErrorFlag = true;
-                }
-                else if (decSolidarityTax <= 0)
-                {
-                    _model.ErrorCode = ShareAddErrorCode.SolidarityTaxWrongValue;
-                    bErrorFlag = true;
-                }
-                else if (bErrorFlag == false)
-                    _model.SolidarityTaxdec = decSolidarityTax;
             }
 
             return bErrorFlag;

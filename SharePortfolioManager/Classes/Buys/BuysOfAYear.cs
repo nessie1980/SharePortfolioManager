@@ -42,9 +42,14 @@ namespace SharePortfolioManager
         private decimal _buyMarketValueYear = -1;
 
         /// <summary>
-        /// Stores the bought value in a year with reduction and with costs
+        /// Stores the bought value in a year with reduction (market value - reduction)
         /// </summary>
-        private decimal _buyFinalValueYear = -1;
+        private decimal _buyMarketValueReductionYear = -1;
+
+        /// <summary>
+        /// Stores the bought value in a year with costs (market value - reduction + costs)
+        /// </summary>
+        private decimal _buyMarketValueReductionCostsYear = -1;
 
         /// <summary>
         /// Stores the bought volume in a year
@@ -82,20 +87,36 @@ namespace SharePortfolioManager
             get { return Helper.FormatDecimal(BuyMarketValueYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo); }
         }
 
-        public decimal BuyFinalValueYear
+        public decimal BuyMarketValueReductionYear
         {
-            get { return _buyFinalValueYear; }
-            internal set { _buyFinalValueYear = value; }
+            get { return _buyMarketValueReductionYear; }
+            internal set { _buyMarketValueReductionYear = value; }
         }
 
-        public string BuyFinalValueYearAsStr
+        public string BuyMarketValueReductionYearAsStr
         {
-            get { return Helper.FormatDecimal(BuyFinalValueYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo); }
+            get { return Helper.FormatDecimal(BuyMarketValueReductionYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo); }
         }
 
-        public string BuyFinalValueYearAsStrUnit
+        public string BuyMarketValueReductionYearAsStrUnit
         {
-            get { return Helper.FormatDecimal(BuyFinalValueYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo); }
+            get { return Helper.FormatDecimal(BuyMarketValueReductionYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo); }
+        }
+
+        public decimal BuyMarketValueReductionCostsYear
+        {
+            get { return _buyMarketValueReductionCostsYear; }
+            internal set { _buyMarketValueReductionCostsYear = value; }
+        }
+
+        public string BuyMarketValueReductionCostsYearAsStr
+        {
+            get { return Helper.FormatDecimal(BuyMarketValueReductionCostsYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo); }
+        }
+
+        public string BuyMarketValueReductionCostsYearAsStrUnit
+        {
+            get { return Helper.FormatDecimal(BuyMarketValueReductionCostsYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo); }
         }
 
         public decimal BuyVolumeYear
@@ -164,10 +185,15 @@ namespace SharePortfolioManager
                     BuyMarketValueYear = 0;
                 BuyMarketValueYear += addObject.MarketValue;
 
+                // Calculate buy value with reduction
+                if (BuyMarketValueReductionYear == -1)
+                    BuyMarketValueReductionYear = 0;
+                BuyMarketValueReductionYear += addObject.MarketValueReduction;
+
                 // Calculate buy value with reduction and costs
-                if (BuyFinalValueYear == -1)
-                    BuyFinalValueYear = 0;
-                BuyFinalValueYear += addObject.FinalValue;
+                if (BuyMarketValueReductionCostsYear == -1)
+                    BuyMarketValueReductionCostsYear = 0;
+                BuyMarketValueReductionCostsYear += addObject.MarketValueReductionCosts;
 
 
                 // Calculate buy volume
@@ -177,7 +203,8 @@ namespace SharePortfolioManager
 
 #if DEBUG
                 Console.WriteLine(@"MarketValueYear: {0}", BuyMarketValueYear);
-                Console.WriteLine(@"FinalValueYear: {0}", BuyFinalValueYear);
+                Console.WriteLine(@"PurchaseValueYear: {0}", BuyMarketValueReductionYear);
+                Console.WriteLine(@"FinalValueYear: {0}", BuyMarketValueReductionCostsYear);
                 Console.WriteLine(@"VolumeYear: {0}", BuyVolumeYear);
                 Console.WriteLine(@"");
 #endif
@@ -220,7 +247,9 @@ namespace SharePortfolioManager
                 BuyListYear.Remove(removeObject);
 
                 // Calculate buy value with reduction and costs
-                BuyFinalValueYear -= removeObject.FinalValue;
+                BuyMarketValueReductionCostsYear -= removeObject.MarketValueReductionCosts;
+                // Calculate buy value with reduction
+                BuyMarketValueReductionYear -= removeObject.MarketValueReduction;
                 // Calculate buy value without reduction and costs
                 BuyMarketValueYear -= removeObject.MarketValue;
                 // Calculate buy volume
@@ -228,7 +257,7 @@ namespace SharePortfolioManager
 
 #if DEBUG
                 Console.WriteLine(@"MarketValueYear: {0}", BuyMarketValueYear);
-                Console.WriteLine(@"FinalValueYear: {0}", BuyFinalValueYear);
+                Console.WriteLine(@"FinalValueYear: {0}", BuyMarketValueReductionCostsYear);
                 Console.WriteLine(@"VolumeYear: {0}", BuyVolumeYear);
                 Console.WriteLine(@"");
 #endif

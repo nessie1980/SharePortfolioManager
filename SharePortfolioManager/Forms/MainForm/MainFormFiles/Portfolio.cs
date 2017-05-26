@@ -21,7 +21,6 @@
 //SOFTWARE.
 
 using SharePortfolioManager.Classes;
-using SharePortfolioManager.Classes.Taxes;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -45,13 +44,34 @@ namespace SharePortfolioManager
         {
             try
             {
-                // Reset the DataGridView portfolio
-                dgvPortfolio.Rows.Clear();
-                dgvPortfolio.Refresh();
+                // Set InitFlag to "true" for loading other portfolio
+                InitFlag = true;
 
-                // Reset the DataGridView footer
-                dgvPortfolioFooter.Rows.Clear();
-                dgvPortfolioFooter.Refresh();
+                // Reset market value share object
+                ShareObjectMarketValue = null;
+
+                // Reset the datagridview market value
+                dgvPortfolioMarketValue.Rows.Clear();
+                dgvPortfolioMarketValue.Refresh();
+                dgvPortfolioMarketValue.ColumnHeadersVisible = false;
+
+                // Reset the datagridview market value footer
+                dgvPortfolioFooterMarketValue.Rows.Clear();
+                dgvPortfolioFooterMarketValue.Refresh();
+                dgvPortfolioFooterMarketValue.ColumnHeadersVisible = false;
+
+                // Reset final value share object
+                ShareObjectFinalValue = null;
+
+                // Reset the datagridview final value
+                dgvPortfolioFinalValue.Rows.Clear();
+                dgvPortfolioFinalValue.Refresh();
+                dgvPortfolioFinalValue.ColumnHeadersVisible = false;
+
+                // Reset the datagridview final value footer
+                dgvPortfolioFooterFinalValue.Rows.Clear();
+                dgvPortfolioFooterFinalValue.Refresh();
+                dgvPortfolioFooterFinalValue.ColumnHeadersVisible = false;
 
                 // Reset group box share details
                 ResetShareDetails();
@@ -59,69 +79,74 @@ namespace SharePortfolioManager
                 // Load new portfolio
                 LoadPortfolio();
 
-                // Add shares to the DataGridViews
-                AddSharesToDataGridView();
-                AddShareFooter();
-
-                // Select first item if an item exists
-                if (dgvPortfolio.Rows.Count > 0)
+                if (InitFlag == true)
                 {
-                    dgvPortfolio.Rows[0].Selected = true;
-                }
+                    // Add shares to the DataGridViews
+                    AddSharesToDataGridViews();
+                    AddShareFooters();
 
-                // Enable / disable controls
-                _enableDisableControlNames.Remove(@"menuStrip1");
-                _enableDisableControlNames.Remove(@"btnAdd");
-                _enableDisableControlNames.Add(@"btnRefreshAll");
-                _enableDisableControlNames.Add(@"btnRefresh");
-                _enableDisableControlNames.Add(@"btnEdit");
-                _enableDisableControlNames.Add(@"btnDelete");
-                _enableDisableControlNames.Add(@"btnClearLogger");
-                _enableDisableControlNames.Add(@"dgvPortfolio");
-                _enableDisableControlNames.Add(@"dgvPortfolioFooter");
-                _enableDisableControlNames.Add(@"tabCtrlDetails");
+                    // Select first item if an item exists and show header again
+                    if (dgvPortfolioFinalValue.Rows.Count > 0)
+                    {
+                        dgvPortfolioFinalValue.Rows[0].Selected = true;
+                        dgvPortfolioFooterFinalValue.ColumnHeadersVisible = true;
+                        dgvPortfolioFooterMarketValue.ColumnHeadersVisible = true;
+                    }
 
-                // Set application title with portfolio file name
-                if (PortfolioFileName != "")
-                    Text = _xmlLanguage.GetLanguageTextByXPath(@"/Application/Name", _languageName)
-                        + @" " + Helper.GetApplicationVersion().ToString() + @" (" + Path.GetFileName(PortfolioFileName) + @")";
-                
-                // Enable controls if the initialization was correct and a portfolio is set
-                if (ShareObjectList.Count != 0 && PortfolioFileName != "")
-                {
+                    // Enable / disable controls
+                    EnableDisableControlNames.Remove(@"menuStrip1");
+                    EnableDisableControlNames.Remove(@"btnAdd");
+                    EnableDisableControlNames.Add(@"btnRefreshAll");
+                    EnableDisableControlNames.Add(@"btnRefresh");
+                    EnableDisableControlNames.Add(@"btnEdit");
+                    EnableDisableControlNames.Add(@"btnDelete");
+                    EnableDisableControlNames.Add(@"btnClearLogger");
+                    EnableDisableControlNames.Add(@"dgvPortfolio");
+                    EnableDisableControlNames.Add(@"dgvPortfolioFooter");
+                    EnableDisableControlNames.Add(@"tabCtrlDetails");
+
+                    // Set application title with portfolio file name
+                    if (PortfolioFileName != "")
+                        Text = Language.GetLanguageTextByXPath(@"/Application/Name", LanguageName)
+                            + @" " + Helper.GetApplicationVersion().ToString() + @" (" + Path.GetFileName(PortfolioFileName) + @")";
+
                     // Enable controls
-                    Helper.EnableDisableControls(true, this, _enableDisableControlNames);
+                    Helper.EnableDisableControls(true, this, EnableDisableControlNames);
 
                     // Add status message
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/StatusMessages/ChangingPortfolioSuccessful", _languageName),
-                        _xmlLanguage, _languageName,
-                        Color.Black, _logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
-                }
-                else
-                {
-                    // Disable controls
-                    Helper.EnableDisableControls(false, this, _enableDisableControlNames);
+                        Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/ChangingPortfolioSuccessful", LanguageName),
+                        Language, LanguageName,
+                        Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
 
-                    // Add status message
-                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/ChangingPortfolioFailed", _languageName),
-                        _xmlLanguage, _languageName,
-                        Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
-                }
-
-
-                if (_bPortfolioEmpty)
-                {
-                    if (_bPortfolioEmpty)
+                    if (PortfolioEmptyFlag)
                     {
                         // Add status message
                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/PortfolioConfigurationListEmpty", _languageName),
-                            _xmlLanguage, _languageName,
-                            Color.OrangeRed, _logger, (int)EStateLevels.Warning, (int)EComponentLevels.Application);
-                    }
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/PortfolioConfigurationListEmpty", LanguageName),
+                            Language, LanguageName,
+                            Color.OrangeRed, Logger, (int)EStateLevels.Warning, (int)EComponentLevels.Application);
 
+                        // Update control list
+                        EnableDisableControlNames.Add(@"btnRefreshAll");
+                        EnableDisableControlNames.Add(@"btnRefresh");
+                        EnableDisableControlNames.Add(@"btnEdit");
+                        EnableDisableControlNames.Add(@"btnDelete");
+                        EnableDisableControlNames.Add(@"btnClearLogger");
+                        EnableDisableControlNames.Add(@"dgvPortfolio");
+                        EnableDisableControlNames.Add(@"dgvPortfolioFooter");
+                        EnableDisableControlNames.Add(@"tabCtrlDetails");
+
+                        // Disable controls
+                        Helper.EnableDisableControls(false, this, EnableDisableControlNames);
+
+                        // Update control list
+                        EnableDisableControlNames.Clear();
+                        EnableDisableControlNames.Add(@"btnAdd");
+
+                        // Disable controls
+                        Helper.EnableDisableControls(true, this, EnableDisableControlNames);
+                    }
                 }
             }
             catch (Exception ex)
@@ -131,28 +156,28 @@ namespace SharePortfolioManager
                     MessageBoxIcon.Error);
 #endif
                 // Close portfolio reader
-                if (_xmlReaderPortfolio != null)
-                    _xmlReaderPortfolio.Close();
+                if (ReaderPortfolio != null)
+                    ReaderPortfolio.Close();
 
                 // Update control list
-                _enableDisableControlNames.Add(@"btnRefreshAll");
-                _enableDisableControlNames.Add(@"btnRefresh");
-                _enableDisableControlNames.Add(@"btnAdd");
-                _enableDisableControlNames.Add(@"btnEdit");
-                _enableDisableControlNames.Add(@"btnDelete");
-                _enableDisableControlNames.Add(@"btnClearLogger");
-                _enableDisableControlNames.Add(@"dgvPortfolio");
-                _enableDisableControlNames.Add(@"dgvPortfolioFooter");
-                _enableDisableControlNames.Add(@"tabCtrlDetails");
+                EnableDisableControlNames.Add(@"btnRefreshAll");
+                EnableDisableControlNames.Add(@"btnRefresh");
+                EnableDisableControlNames.Add(@"btnAdd");
+                EnableDisableControlNames.Add(@"btnEdit");
+                EnableDisableControlNames.Add(@"btnDelete");
+                EnableDisableControlNames.Add(@"btnClearLogger");
+                EnableDisableControlNames.Add(@"dgvPortfolio");
+                EnableDisableControlNames.Add(@"dgvPortfolioFooter");
+                EnableDisableControlNames.Add(@"tabCtrlDetails");
 
                 // Disable controls
-                Helper.EnableDisableControls(false, this, _enableDisableControlNames);
+                Helper.EnableDisableControls(false, this, EnableDisableControlNames);
 
                 // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/ChangingPortfolioFailed", _languageName),
-                    _xmlLanguage, _languageName,
-                    Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/ChangingPortfolioFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
             }
         }
 
@@ -165,28 +190,31 @@ namespace SharePortfolioManager
         /// </summary>
         void LoadPortfolio()
         {
-            if (_bInitFlag)
+            if (InitFlag)
             {
                 // Load portfolio file
                 try
                 {
                     // Reset share object list // TODO Reset portfolio values
-                    ShareObjectList.Clear();
-                    ShareObject.PortfolioValuesReset();
+                    ShareObjectListMarketValue.Clear();
+                    ShareObjectListFinalValue.Clear();
+                    ShareObjectFinalValue.PortfolioValuesReset();
+                    ShareObjectMarketValue.PortfolioValuesReset();
+                    PortfolioEmptyFlag = true;
 
                     // Set portfolio to the Settings.XML file
-                    var nodePortfolioName = _xmlSettings.SelectSingleNode("/Settings/Portfolio");
+                    var nodePortfolioName = Settings.SelectSingleNode("/Settings/Portfolio");
 
                     // Check if the portfolio file exists
                     if (!File.Exists(PortfolioFileName))
                     {
                         // Add status message
                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists1", _languageName)
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists1", LanguageName)
                             + PortfolioFileName
-                            + _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists2", _languageName),
-                            _xmlLanguage, _languageName,
-                            Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                            + Language.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists2", LanguageName),
+                            Language, LanguageName,
+                            Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
 
                         PortfolioFileName = "";
                         // Set portfolio name value to the XML
@@ -196,59 +224,67 @@ namespace SharePortfolioManager
                     }
 
                     //// Create the validating reader and specify DTD validation.
-                    //_xmlReaderSettings = new XmlReaderSettings();
-                    //_xmlReaderSettings.DtdProcessing = DtdProcessing.Parse;
-                    //_xmlReaderSettings.ValidationType = ValidationType.DTD;
-                    //_xmlReaderSettings.ValidationEventHandler += eventHandler;
+                    //ReaderSettings = new XmlReaderSettings();
+                    //ReaderSettings.DtdProcessing = DtdProcessing.Parse;
+                    //ReaderSettings.ValidationType = ValidationType.DTD;
+                    //ReaderSettings.ValidationEventHandler += eventHandler;
 
-                    _xmlReaderPortfolio = XmlReader.Create(PortfolioFileName, _xmlReaderSettingsPortfolio);
+                    ReaderPortfolio = XmlReader.Create(PortfolioFileName, ReaderSettingsPortfolio);
 
                     // Pass the validating reader to the XML document.
                     // Validation fails due to an undefined attribute, but the 
                     // data is still loaded into the document.
-                    _xmlPortfolio = new XmlDocument();
-                    _xmlPortfolio.Load(_xmlReaderPortfolio);
+                    Portfolio = new XmlDocument();
+                    Portfolio.Load(ReaderPortfolio);
 
                     // Read the portfolio
-                    var nodeListShares = _xmlPortfolio.SelectNodes("/Portfolio/Share");
-                    if (nodeListShares == null || nodeListShares.Count == 0)
+                    var nodeListShares = Portfolio.SelectNodes("/Portfolio/Share");
+                    if (nodeListShares != null && nodeListShares.Count > 0)
                     {
                         // Set portfolio content flag
-                        _bPortfolioEmpty = true;
-                    }
-                    else
-                    {
-                        // Set portfolio content flag
-                        _bPortfolioEmpty = false;
+                        PortfolioEmptyFlag = false;
 
                         // Flag if the portfolio load was successful
                         bool loadPortfolio = true;
 
                         // Clear list
-                        _regexSearchFailedList.Clear();
+                        RegexSearchFailedList.Clear();
 
                         // Loop through the portfolio configuration
                         foreach (XmlNode nodeElement in nodeListShares)
                         {
                             if (nodeElement != null)
                             {
-                                // Add a new share to the list
-                                ShareObjectList.Add(new ShareObject(
+                                // Add a new share to the market list
+                                ShareObjectListMarketValue.Add(new ShareObjectMarketValue(
                                     _imageList,
-                                    _xmlLanguage.GetLanguageTextByXPath(@"/PercentageUnit", _languageName),
-                                    _xmlLanguage.GetLanguageTextByXPath(@"/PieceUnit", _languageName)
+                                    Language.GetLanguageTextByXPath(@"/PercentageUnit", LanguageName),
+                                    Language.GetLanguageTextByXPath(@"/PieceUnit", LanguageName)
+                                    ));
+
+                                // Add a new share to the final list
+                                ShareObjectListFinalValue.Add(new ShareObjectFinalValue(
+                                    _imageList,
+                                    Language.GetLanguageTextByXPath(@"/PercentageUnit", LanguageName),
+                                    Language.GetLanguageTextByXPath(@"/PieceUnit", LanguageName)
                                     ));
 
                                 // Check if the node has the right tag count and the right attributes
-                                if (!nodeElement.HasChildNodes || nodeElement.ChildNodes.Count != ShareObjectList[ShareObjectList.Count - 1].ShareObjectTagCount
-                                    || nodeElement.Attributes == null || nodeElement.Attributes["WKN"] == null)
+                                if (!nodeElement.HasChildNodes ||
+                                    nodeElement.ChildNodes.Count != ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].ShareObjectTagCount ||
+                                    nodeElement.Attributes == null ||
+                                    nodeElement.Attributes["WKN"] == null)
                                     loadPortfolio = false;
                                 else
                                 {
-                                    ShareObjectList[ShareObjectList.Count - 1].Wkn =
+                                    ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].Wkn =
+                                        nodeElement.Attributes["WKN"].InnerText;
+                                    ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].Wkn =
                                         nodeElement.Attributes["WKN"].InnerText;
 
-                                    ShareObjectList[ShareObjectList.Count - 1].Name =
+                                    ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].Name =
+                                        nodeElement.Attributes["Name"].InnerText;
+                                    ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].Name =
                                         nodeElement.Attributes["Name"].InnerText;
 
                                     // Loop through the tags and set values to the ShareObject
@@ -259,35 +295,45 @@ namespace SharePortfolioManager
                                             #region General
 
                                             case 0:
-                                                ShareObjectList[ShareObjectList.Count - 1].LastUpdateInternet =
+                                                ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].LastUpdateInternet =
+                                                    Convert.ToDateTime(nodeElement.ChildNodes[i].InnerText);
+                                                ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].LastUpdateInternet =
                                                     Convert.ToDateTime(nodeElement.ChildNodes[i].InnerText);
                                                 break;
                                             case 1:
-                                                ShareObjectList[ShareObjectList.Count - 1].LastUpdateDate =
+                                                ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].LastUpdateDate =
+                                                    Convert.ToDateTime(nodeElement.ChildNodes[i].InnerText);
+                                                ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].LastUpdateDate =
                                                     Convert.ToDateTime(nodeElement.ChildNodes[i].InnerText);
                                                 break;
                                             case 2:
-                                                ShareObjectList[ShareObjectList.Count - 1].LastUpdateTime =
+                                                ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].LastUpdateTime =
+                                                    Convert.ToDateTime(nodeElement.ChildNodes[i].InnerText);
+                                                ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].LastUpdateTime =
                                                     Convert.ToDateTime(nodeElement.ChildNodes[i].InnerText);
                                                 break;
                                             case 3:
-                                                ShareObjectList[ShareObjectList.Count - 1].CurPrice =
+                                                ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].CurPrice =
+                                                    Convert.ToDecimal(nodeElement.ChildNodes[i].InnerText);
+                                                ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].CurPrice =
                                                     Convert.ToDecimal(nodeElement.ChildNodes[i].InnerText);
                                                 break;
                                             case 4:
-                                                ShareObjectList[ShareObjectList.Count - 1].PrevDayPrice =
+                                                ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].PrevDayPrice =
+                                                    Convert.ToDecimal(nodeElement.ChildNodes[i].InnerText);
+                                                ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].PrevDayPrice =
                                                     Convert.ToDecimal(nodeElement.ChildNodes[i].InnerText);
                                                 break;
                                             case 5:
-                                                ShareObjectList[ShareObjectList.Count - 1].Deposit =
-                                                    Convert.ToDecimal(nodeElement.ChildNodes[i].InnerText);
-                                                break;
-                                            case 6:
-                                                ShareObjectList[ShareObjectList.Count - 1].WebSite =
+                                                ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].WebSite =
+                                                    nodeElement.ChildNodes[i].InnerText;
+                                                ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].WebSite =
                                                     nodeElement.ChildNodes[i].InnerText;
                                                 break;
-                                            case 7:
-                                                ShareObjectList[ShareObjectList.Count - 1].CultureInfo =
+                                            case 6:
+                                                ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].CultureInfo =
+                                                    new CultureInfo(nodeElement.ChildNodes[i].InnerXml);
+                                                ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].CultureInfo =
                                                     new CultureInfo(nodeElement.ChildNodes[i].InnerXml);
                                                 break;
 
@@ -295,26 +341,37 @@ namespace SharePortfolioManager
 
                                             #region Buys
 
-                                            case 8:
+                                            case 7:
                                                 foreach (XmlElement nodeList in nodeElement.ChildNodes[i].ChildNodes)
                                                 {
                                                     // Check if the node has the right count of attributes
                                                     if (nodeList != null &&
                                                         nodeList.Attributes.Count ==
-                                                        ShareObjectList[ShareObjectList.Count - 1]
+                                                        ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
                                                             .BuyAttrCount)
                                                     {
-                                                        if (!ShareObjectList[ShareObjectList.Count - 1].AddBuy(
-                                                            false,
-                                                            nodeList.Attributes[ShareObjectList[ShareObjectList.Count - 1].BuyDateAttrName].Value,             // Date
+                                                        if (!ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].AddBuy(
+                                                            nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].BuyDateAttrName].Value,            // Date
                                                             Convert.ToDecimal(
-                                                                nodeList.Attributes[ShareObjectList[ShareObjectList.Count - 1].BuyVolumeAttrName].Value),      // Volume
+                                                                nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].BuyVolumeAttrName].Value),     // Volume
                                                             Convert.ToDecimal(
-                                                                nodeList.Attributes[ShareObjectList[ShareObjectList.Count - 1].BuyPriceAttrName].Value),       // Price
+                                                                nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].BuyPriceAttrName].Value),      // Price
                                                             Convert.ToDecimal(
-                                                                nodeList.Attributes[ShareObjectList[ShareObjectList.Count - 1].BuyReductionAttrName].Value),   // Reduction
-                                                            0,                                                                                               // Costs
-                                                            nodeList.Attributes[ShareObjectList[ShareObjectList.Count - 1].BuyDocumentAttrName].Value))        // Document
+                                                                nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].BuyReductionAttrName].Value),  // Reduction
+                                                            0,                                                                                                                      // Costs
+                                                            nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].BuyDocumentAttrName].Value))       // Document
+                                                            loadPortfolio = false;
+
+                                                        if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].AddBuy(
+                                                            nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].BuyDateAttrName].Value,              // Date
+                                                            Convert.ToDecimal(
+                                                                nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].BuyVolumeAttrName].Value),       // Volume
+                                                            Convert.ToDecimal(
+                                                                nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].BuyPriceAttrName].Value),        // Price
+                                                            Convert.ToDecimal(
+                                                                nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].BuyReductionAttrName].Value),    // Reduction
+                                                            0,                                                                                                                      // Costs
+                                                            nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].BuyDocumentAttrName].Value))         // Document
                                                             loadPortfolio = false;
                                                     }
                                                     else
@@ -326,26 +383,39 @@ namespace SharePortfolioManager
 
                                             #region Sales
 
-                                            case 9:
+                                            case 8:
                                                 foreach (XmlElement nodeList in nodeElement.ChildNodes[i].ChildNodes)
                                                 {
                                                     // Check if the node has the right count of attributes
                                                     if (nodeList != null &&
                                                         nodeList.Attributes.Count ==
-                                                        ShareObjectList[ShareObjectList.Count - 1]
+                                                        ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
                                                             .SaleAttrCount)
                                                     {
-                                                        if (!ShareObjectList[ShareObjectList.Count - 1].AddSale(
+                                                        if (!ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].AddSale(
                                                             false,
-                                                            nodeList.Attributes[ShareObjectList[ShareObjectList.Count - 1].SaleDateAttrName].Value,                         // Date
+                                                            nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].SaleDateAttrName].Value,               // Date
                                                             Convert.ToDecimal(
-                                                                nodeList.Attributes[ShareObjectList[ShareObjectList.Count - 1].SaleVolumeAttrName].Value),                  // Volume
+                                                                nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].SaleVolumeAttrName].Value),        // Volume
                                                             Convert.ToDecimal(
-                                                                nodeList.Attributes[ShareObjectList[ShareObjectList.Count - 1].SalePriceAttrName].Value),                   // Value
+                                                                nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].SalePriceAttrName].Value),         // Value
                                                             Convert.ToDecimal(
-                                                                nodeList.Attributes[ShareObjectList[ShareObjectList.Count - 1].SaleProfitLossAttrName].Value),              // ProfitLoss
-                                                            0,//CurrentVolume
-                                                            nodeList.Attributes[ShareObjectList[ShareObjectList.Count - 1].SaleDocumentAttrName].Value))                          // Document
+                                                                nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].SaleProfitLossAttrName].Value),    // ProfitLoss
+                                                            0,                                                                                                                          //CurrentVolume
+                                                            nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].SaleDocumentAttrName].Value))          // Document
+                                                            loadPortfolio = false;
+
+                                                        if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].AddSale(
+                                                            false,
+                                                            nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].SaleDateAttrName].Value,                 // Date
+                                                            Convert.ToDecimal(
+                                                                nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].SaleVolumeAttrName].Value),          // Volume
+                                                            Convert.ToDecimal(
+                                                                nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].SalePriceAttrName].Value),           // Value
+                                                            Convert.ToDecimal(
+                                                                nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].SaleProfitLossAttrName].Value),      // ProfitLoss
+                                                            0,                                                                                                                          //CurrentVolume
+                                                            nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].SaleDocumentAttrName].Value))            // Document
                                                             loadPortfolio = false;
                                                     }
                                                     else
@@ -357,48 +427,47 @@ namespace SharePortfolioManager
 
                                             #region Costs
 
-                                            case 10:
+                                            case 9:
                                                 foreach (XmlElement nodeList in nodeElement.ChildNodes[i].ChildNodes)
                                                 {
                                                     // Check if the node has the right count of attributes
                                                     if (nodeList != null &&
                                                         nodeList.Attributes.Count ==
-                                                        ShareObjectList[ShareObjectList.Count - 1]
+                                                        ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
                                                             .CostsAttrCount)
                                                     {
-                                                        if (!ShareObjectList[ShareObjectList.Count - 1].AddCost(
+                                                        if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].AddCost(
                                                             Convert.ToBoolean(
-                                                                nodeList.Attributes[ShareObjectList[ShareObjectList.Count - 1].CostsBuyPartAttrName].Value // Flag if part of a buy
+                                                                nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].CostsBuyPartAttrName].Value // Flag if part of a buy
                                                                 ),                                                                                                  
-                                                            nodeList.Attributes[ShareObjectList[ShareObjectList.Count - 1].CostsDateAttrName].Value,       // Date
+                                                            nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].CostsDateAttrName].Value,       // Date
                                                             Convert.ToDecimal(
-                                                                nodeList.Attributes[ShareObjectList[ShareObjectList.Count - 1].CostsValueAttrName].Value   // Value
+                                                                nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].CostsValueAttrName].Value   // Value
                                                                 ),                                                                                                  
-                                                            nodeList.Attributes[ShareObjectList[ShareObjectList.Count - 1].CostsDocumentAttrName].Value))  // Document                                                               // Document
+                                                            nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].CostsDocumentAttrName].Value))  // Document                                                               // Document
                                                             loadPortfolio = false;
 
                                                         // Check if the costs is part of a buy
                                                         if (loadPortfolio &&
                                                             Convert.ToBoolean(
-                                                                nodeList.Attributes[ShareObjectList[ShareObjectList.Count - 1].CostsBuyPartAttrName].Value // Flag if part of a buy
+                                                                nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].CostsBuyPartAttrName].Value // Flag if part of a buy
                                                                 )
                                                            )
                                                         {
-                                                            BuyObject tempBuyObject = ShareObjectList[ShareObjectList.Count - 1].AllBuyEntries.GetBuyObjectByDateTime(nodeList.Attributes[ShareObjectList[ShareObjectList.Count - 1].CostsDateAttrName].Value);
+                                                            BuyObject tempBuyObject = ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].AllBuyEntries.GetBuyObjectByDateTime(nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].CostsDateAttrName].Value);
 
                                                             // Check if a buy object has been found
                                                             if (tempBuyObject != null)
                                                             {
-                                                                if (ShareObjectList[ShareObjectList.Count - 1].RemoveBuy(nodeList.Attributes[ShareObjectList[ShareObjectList.Count - 1].CostsDateAttrName].Value))
+                                                                if (ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].RemoveBuy(nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].CostsDateAttrName].Value))
                                                                 {
-                                                                    if (!ShareObjectList[ShareObjectList.Count - 1].AddBuy(
-                                                                        true,
-                                                                        nodeList.Attributes[ShareObjectList[ShareObjectList.Count - 1].CostsDateAttrName].Value,
+                                                                    if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].AddBuy(
+                                                                        nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].CostsDateAttrName].Value,
                                                                         tempBuyObject.Volume,
                                                                         tempBuyObject.SharePrice,
                                                                         tempBuyObject.Reduction,
                                                                         Convert.ToDecimal(
-                                                                            nodeList.Attributes[ShareObjectList[ShareObjectList.Count - 1].CostsValueAttrName].Value   // Value
+                                                                            nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].CostsValueAttrName].Value   // Value
                                                                         ),
                                                                         tempBuyObject.Document))
                                                                         loadPortfolio = false;
@@ -417,163 +486,57 @@ namespace SharePortfolioManager
 
                                             #region Dividends
 
-                                            case 11:
+                                            case 10:
                                                 // Read dividend payout interval
                                                 if (nodeElement.ChildNodes[i].Attributes != null)
                                                 {
-                                                    ShareObjectList[ShareObjectList.Count - 1]
+                                                    ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
                                                         .DividendPayoutInterval =
                                                         Convert.ToInt16(
                                                             nodeElement.ChildNodes[i].Attributes[
-                                                                ShareObjectList[ShareObjectList.Count - 1].DividendPayoutInterval].InnerText);
+                                                                ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].DividendPayoutInterval].InnerText);
                                                 }
                                                 else
                                                     loadPortfolio = false;
 
                                                 foreach (XmlElement nodeList in nodeElement.ChildNodes[i].ChildNodes)
                                                 {
+                                                    // Check if the dividend values are correct
+                                                    // and if the foreign currency value are correct
                                                     if (nodeList != null &&
                                                         nodeList.ChildNodes.Count ==
-                                                        ShareObjectList[ShareObjectList.Count - 1].DividendChildNodeCount)
+                                                        ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].DividendChildNodeCount &&
+                                                        nodeList.ChildNodes[0].Attributes != null &&
+                                                        nodeList.ChildNodes[0].Attributes.Count ==
+                                                        ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].DividendAttrCountForeignCu)
                                                     {
-                                                        // Create tax values object
-                                                        Taxes taxValues = new Taxes();
+                                                        // Convert string of the check state to the windows forms check state
+                                                        CheckState enableFC = CheckState.Unchecked;
+                                                        if (nodeList.ChildNodes[0].Attributes[0].Value == @"Checked")
+                                                            enableFC = CheckState.Checked;
 
-                                                        if (nodeList.ChildNodes[0].Attributes != null &&
-                                                            nodeList.ChildNodes[0].Attributes.Count ==
-                                                            ShareObjectList[ShareObjectList.Count - 1].DividendAttrCountForeignCu)
-                                                        {
-                                                            // ForeignCurrency
-                                                            taxValues.FCFlag = Convert.ToBoolean(
-                                                                nodeList.ChildNodes[0].Attributes[0].Value);
-                                                            // ForeignCurrencyFactor
-                                                            taxValues.ExchangeRatio = Convert.ToDecimal(
-                                                                nodeList.ChildNodes[0].Attributes[1].Value);
-                                                            // ForeignCurrencyName
-                                                            taxValues.CiShareFC =
-                                                                Helper.GetCultureByName(
-                                                                    nodeList.ChildNodes[0].Attributes[2].Value);
-                                                            // ForeignCurrencyName
-                                                            taxValues.CiShareCurrency =
-                                                                ShareObjectList[ShareObjectList.Count - 1]
-                                                                    .CultureInfo;
-                                                        }
-                                                        else
-                                                            loadPortfolio = false;
-
-                                                        // Load the tax values
-                                                        if (nodeList.ChildNodes[1].ChildNodes[0] != null &&
-                                                            nodeList.ChildNodes[1].ChildNodes.Count ==
-                                                            ShareObjectList[ShareObjectList.Count - 1].TaxAttrCount)
-                                                        {
-                                                            if (nodeList.ChildNodes[1].ChildNodes[0].Attributes != null &&
-                                                                nodeList.ChildNodes[1].ChildNodes[0].Attributes.Count ==
-                                                                ShareObjectList[ShareObjectList.Count - 1]
-                                                                    .TaxTaxAtSourceAttrCount &&
-                                                                nodeList.ChildNodes[1].ChildNodes[1].Attributes != null &&
-                                                                nodeList.ChildNodes[1].ChildNodes[1].Attributes.Count ==
-                                                                ShareObjectList[ShareObjectList.Count - 1]
-                                                                    .TaxCapitalGainsAttrCount &&
-                                                                nodeList.ChildNodes[1].ChildNodes[2].Attributes != null &&
-                                                                nodeList.ChildNodes[1].ChildNodes[2].Attributes.Count ==
-                                                                ShareObjectList[ShareObjectList.Count - 1]
-                                                                    .TaxSolidarityAttrCount
-                                                                )
-                                                            {
-                                                                // Tax at source flag
-                                                                taxValues.TaxAtSourceFlag =
-                                                                    Convert.ToBoolean(
-                                                                        nodeList.ChildNodes[1].ChildNodes[0].Attributes[
-                                                                            ShareObjectList[
-                                                                                ShareObjectList.Count - 1]
-                                                                                .TaxTaxAtSourceFlagAttrName].Value);
-                                                                // Tax at source percentage
-                                                                if (nodeList.ChildNodes[1].ChildNodes[0].Attributes[
-                                                                            ShareObjectList[
-                                                                                ShareObjectList.Count - 1]
-                                                                                .TaxTaxAtSourcePercentageAttrName]
-                                                                            .Value == @"-")
-                                                                    taxValues.TaxAtSourcePercentage = 0;
-                                                                else
-                                                                {
-                                                                    taxValues.TaxAtSourcePercentage =
-                                                                    Convert.ToDecimal(
-                                                                        nodeList.ChildNodes[1].ChildNodes[0].Attributes[
-                                                                            ShareObjectList[
-                                                                                ShareObjectList.Count - 1]
-                                                                                .TaxTaxAtSourcePercentageAttrName]
-                                                                            .Value);
-                                                                }
-                                                                // Capital gains tax flag
-                                                                taxValues.CapitalGainsTaxFlag =
-                                                                    Convert.ToBoolean(
-                                                                        nodeList.ChildNodes[1].ChildNodes[1].Attributes[
-                                                                            ShareObjectList[
-                                                                                ShareObjectList.Count - 1]
-                                                                                .TaxCapitalGainsFlagAttrName].Value);
-                                                                // Capital gain tax percentage
-                                                                if (nodeList.ChildNodes[1].ChildNodes[1].Attributes[
-                                                                            ShareObjectList[
-                                                                                ShareObjectList.Count - 1]
-                                                                                .TaxCapitalGainsPercentageAttrName]
-                                                                            .Value == @"-")
-                                                                    taxValues.CapitalGainsTaxPercentage = 0;
-                                                                else
-                                                                {
-                                                                    taxValues.CapitalGainsTaxPercentage =
-                                                                    Convert.ToDecimal(
-                                                                        nodeList.ChildNodes[1].ChildNodes[1].Attributes[
-                                                                            ShareObjectList[
-                                                                                ShareObjectList.Count - 1]
-                                                                                .TaxCapitalGainsPercentageAttrName]
-                                                                            .Value);
-                                                                }
-
-                                                                // Solidarity tax flag
-                                                                taxValues.SolidarityTaxFlag =
-                                                                    Convert.ToBoolean(
-                                                                        nodeList.ChildNodes[1].ChildNodes[2].Attributes[
-                                                                            ShareObjectList[
-                                                                                ShareObjectList.Count - 1]
-                                                                                .TaxSolidarityFlagAttrName].Value);
-                                                                // Solidarity tax percentage
-                                                                if (nodeList.ChildNodes[1].ChildNodes[2].Attributes[
-                                                                            ShareObjectList[
-                                                                                ShareObjectList.Count - 1]
-                                                                                .TaxSolidarityPercentageAttrName]
-                                                                            .Value == @"-")
-                                                                    taxValues.SolidarityTaxPercentage = 0;
-                                                                else
-                                                                {
-                                                                    taxValues.SolidarityTaxPercentage =
-                                                                    Convert.ToDecimal(
-                                                                        nodeList.ChildNodes[1].ChildNodes[2].Attributes[
-                                                                            ShareObjectList[
-                                                                                ShareObjectList.Count - 1]
-                                                                                .TaxSolidarityPercentageAttrName]
-                                                                            .Value);
-                                                                }
-                                                            }
-                                                            else
-                                                                loadPortfolio = false;
-                                                        }
-                                                        else
-                                                            loadPortfolio = false;
-
-                                                        if (!ShareObjectList[ShareObjectList.Count - 1]
+                                                        if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
                                                             .AddDividend(
-                                                                nodeList.Attributes[0].Value,         // Date
-                                                                taxValues,                            // Taxes
+                                                                Helper.GetCultureByName(
+                                                                    nodeList.ChildNodes[0].Attributes[2].Value),        //CultureInfo FC
+                                                                enableFC,                                               // FC enabled
                                                                 Convert.ToDecimal(
-                                                                    nodeList.Attributes[4].Value),    // DividendRate
+                                                                nodeList.ChildNodes[0].Attributes[1].Value),            // Exchange ratio
+                                                                nodeList.Attributes[0].Value,                           // Date
                                                                 Convert.ToDecimal(
-                                                                    nodeList.Attributes[2].Value),    // LossBalance
+                                                                    nodeList.Attributes[1].Value),                      // Rate
                                                                 Convert.ToDecimal(
-                                                                    nodeList.Attributes[3].Value),    // Price
+                                                                    nodeList.Attributes[2].Value),                      // Volume     
                                                                 Convert.ToDecimal(
-                                                                    nodeList.Attributes[1].Value),    // Volume               
-                                                                nodeList.Attributes[5].Value))        // Document
-                                                            loadPortfolio = false;
+                                                                    nodeList.Attributes[3].Value),                      // Tax at source
+                                                                Convert.ToDecimal(
+                                                                    nodeList.Attributes[4].Value),                      // Capital gains tax
+                                                                Convert.ToDecimal(
+                                                                    nodeList.Attributes[5].Value),                      // Solidarity tax
+                                                                Convert.ToDecimal(
+                                                                    nodeList.Attributes[6].Value),                      // Price
+                                                                nodeList.Attributes[7].Value))                          // Document
+                                                            loadPortfolio = false;                                                    
                                                     }
                                                     else
                                                         loadPortfolio = false;
@@ -582,116 +545,17 @@ namespace SharePortfolioManager
 
                                             #endregion Dividends
 
-                                            #region Taxes
-
-                                            case 12:
-                                                    if (nodeElement.ChildNodes[i].ChildNodes.Count ==
-                                                        ShareObjectList[ShareObjectList.Count - 1]
-                                                            .TaxAttrCount)
-                                                    {
-                                                        if (nodeElement.ChildNodes[i].ChildNodes[0].Attributes != null &&
-                                                            nodeElement.ChildNodes[i].ChildNodes[0].Attributes.Count ==
-                                                            ShareObjectList[ShareObjectList.Count - 1]
-                                                                .TaxTaxAtSourceAttrCount &&
-                                                            nodeElement.ChildNodes[i].ChildNodes[1].Attributes != null &&
-                                                            nodeElement.ChildNodes[i].ChildNodes[1].Attributes.Count ==
-                                                            ShareObjectList[ShareObjectList.Count - 1]
-                                                                .TaxCapitalGainsAttrCount &&
-                                                            nodeElement.ChildNodes[i].ChildNodes[2].Attributes != null &&
-                                                            nodeElement.ChildNodes[i].ChildNodes[2].Attributes.Count ==
-                                                            ShareObjectList[ShareObjectList.Count - 1]
-                                                                .TaxSolidarityAttrCount
-                                                            )
-                                                        {
-                                                            // Tax at source flag
-                                                            ShareObjectList[ShareObjectList.Count - 1].TaxTaxAtSourceFlag =
-                                                                Convert.ToBoolean(
-                                                                    nodeElement.ChildNodes[i].ChildNodes[0].Attributes[
-                                                                        ShareObjectList[
-                                                                            ShareObjectList.Count - 1]
-                                                                            .TaxTaxAtSourceFlagAttrName].Value);
-                                                            // Tax at source percentage
-                                                            if (nodeElement.ChildNodes[i].ChildNodes[0].Attributes[
-                                                                    ShareObjectList[
-                                                                        ShareObjectList.Count - 1]
-                                                                        .TaxTaxAtSourcePercentageAttrName]
-                                                                    .Value == @"-")
-                                                                ShareObjectList[ShareObjectList.Count - 1].TaxTaxAtSourcePercentage = 0;
-                                                            else
-                                                            {
-                                                                ShareObjectList[ShareObjectList.Count - 1].TaxTaxAtSourcePercentage =
-                                                            Convert.ToDecimal(
-                                                                    nodeElement.ChildNodes[i].ChildNodes[0].Attributes[
-                                                                        ShareObjectList[
-                                                                            ShareObjectList.Count - 1]
-                                                                            .TaxTaxAtSourcePercentageAttrName]
-                                                                        .Value);
-                                                            }
-                                                            // Capital gains tax flag
-                                                            ShareObjectList[ShareObjectList.Count - 1].TaxCapitalGainsFlag =
-                                                                Convert.ToBoolean(
-                                                                    nodeElement.ChildNodes[i].ChildNodes[1].Attributes[
-                                                                        ShareObjectList[
-                                                                            ShareObjectList.Count - 1]
-                                                                            .TaxCapitalGainsFlagAttrName].Value);
-                                                            // Capital gain tax percentage
-                                                            if (nodeElement.ChildNodes[i].ChildNodes[1].Attributes[
-                                                                        ShareObjectList[
-                                                                            ShareObjectList.Count - 1]
-                                                                            .TaxCapitalGainsPercentageAttrName]
-                                                                        .Value == @"-")
-                                                                ShareObjectList[ShareObjectList.Count - 1].TaxCapitalGainsPercentage = 0;
-                                                            else
-                                                            {
-                                                                ShareObjectList[ShareObjectList.Count - 1].TaxCapitalGainsPercentage =
-                                                                    Convert.ToDecimal(
-                                                                        nodeElement.ChildNodes[i].ChildNodes[1].Attributes[
-                                                                            ShareObjectList[
-                                                                                ShareObjectList.Count - 1]
-                                                                                .TaxCapitalGainsPercentageAttrName]
-                                                                            .Value);
-                                                            }
-                                                            // Solidarity tax flag
-                                                            ShareObjectList[ShareObjectList.Count - 1].TaxSolidarityFlag =
-                                                                Convert.ToBoolean(
-                                                                    nodeElement.ChildNodes[i].ChildNodes[2].Attributes[
-                                                                        ShareObjectList[
-                                                                            ShareObjectList.Count - 1]
-                                                                            .TaxSolidarityFlagAttrName].Value);
-                                                            // Solidarity tax percentage
-                                                            if (nodeElement.ChildNodes[i].ChildNodes[2].Attributes[
-                                                                        ShareObjectList[
-                                                                            ShareObjectList.Count - 1]
-                                                                            .TaxSolidarityPercentageAttrName]
-                                                                        .Value == @"-")
-                                                                ShareObjectList[ShareObjectList.Count - 1].TaxSolidarityPercentage = 0;
-                                                            else
-                                                            {
-                                                                ShareObjectList[ShareObjectList.Count - 1].TaxSolidarityPercentage =
-                                                                    Convert.ToDecimal(
-                                                                        nodeElement.ChildNodes[i].ChildNodes[2].Attributes[
-                                                                            ShareObjectList[
-                                                                                ShareObjectList.Count - 1]
-                                                                                .TaxSolidarityPercentageAttrName]
-                                                                            .Value);
-                                                            }
-                                                        }
-                                                        else
-                                                            loadPortfolio = false;
-                                                    }
-                                                break;
-
                                             default:
                                                 break;
-
-                                            #endregion Taxes
                                         }
                                     }
                                 
                                     // Set website configuration and encoding to the share object.
                                     // The encoding is necessary for the WebParser for encoding the download result.
-                                    if (!ShareObjectList[ShareObjectList.Count - 1].SetWebSiteRegexListAndEncoding(_webSiteRegexList))
-                                        _regexSearchFailedList.Add(ShareObjectList[ShareObjectList.Count - 1].Wkn);
+                                    if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].SetWebSiteRegexListAndEncoding(WebSiteRegexList))
+                                        RegexSearchFailedList.Add(ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].Wkn);
+                                    if (!ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].SetWebSiteRegexListAndEncoding(WebSiteRegexList))
+                                        RegexSearchFailedList.Add(ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].Wkn);
                                 }
                             }
                             else
@@ -701,23 +565,24 @@ namespace SharePortfolioManager
                             if (loadPortfolio == false)
                             {
                                 // Close portfolio reader
-                                if (_xmlReaderPortfolio != null)
-                                    _xmlReaderPortfolio.Close();
+                                if (ReaderPortfolio != null)
+                                    ReaderPortfolio.Close();
 
                                 // Remove added share object
-                                ShareObjectList.RemoveAt(ShareObjectList.Count - 1);
+                                ShareObjectListMarketValue.RemoveAt(ShareObjectListMarketValue.Count - 1);
+                                ShareObjectListFinalValue.RemoveAt(ShareObjectListFinalValue.Count - 1);
 
                                 // Set initialization flag
-                                _bInitFlag = false;
+                                InitFlag = false;
 
                                 // Add status message
                                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile1", _languageName)
+                                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile1", LanguageName)
                                     + PortfolioFileName
-                                    + _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile2", _languageName)
-                                    + " " + _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/PortfolioConfigurationListLoadFailed", _languageName),
-                                    _xmlLanguage, _languageName,
-                                    Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                                    + Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile2", LanguageName)
+                                    + " " + Language.GetLanguageTextByXPath(@"/MainForm/Errors/PortfolioConfigurationListLoadFailed", LanguageName),
+                                    Language, LanguageName,
+                                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
 
                                 // Stop loading more portfolio configurations
                                 break;
@@ -726,27 +591,27 @@ namespace SharePortfolioManager
 
                         // Load was successful
                         // TODO This shares must be disable in the DataGridView!!!
-                        if (_bInitFlag)
+                        if (InitFlag)
                         {
                             // Show the invalid website configurations
-                            ShowInvalidWebSiteConfigurations(_regexSearchFailedList);
+                            ShowInvalidWebSiteConfigurations(RegexSearchFailedList);
                         }
                     }
 
-                    // Enable Add button
-                    _enableDisableControlNames.Clear();
-                    _enableDisableControlNames.Add("menuStrip1");
-                    _enableDisableControlNames.Add("btnAdd");
-                    _enableDisableControlNames.Add("btnClearLogger");
-
+                    // Enable "Add" button, "ClearLogger" button
+                    EnableDisableControlNames.Clear();
+                    EnableDisableControlNames.Add("btnClearLogger");
+                    EnableDisableControlNames.Add("btnAdd");
+ 
                     // Enable controls seen above
-                    Helper.EnableDisableControls(true, this, _enableDisableControlNames);
+                    Helper.EnableDisableControls(true, this, EnableDisableControlNames);
 
                     // Set calculated log components value to the XML
                     nodePortfolioName.InnerXml = PortfolioFileName;
 
                     // Sort portfolio list in order of the share names
-                    ShareObjectList.Sort(new ShareObjectListComparer());
+                    ShareObjectListMarketValue.Sort(new ShareObjectListComparer());
+                    ShareObjectListFinalValue.Sort(new ShareObjectListComparer());
                 }
                 catch (XmlException ex)
                 {
@@ -754,32 +619,35 @@ namespace SharePortfolioManager
                     MessageBox.Show("LoadPortfolio()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
 #endif
-                    // Close portfolio reader
-                    if (_xmlReaderPortfolio != null)
-                        _xmlReaderPortfolio.Close();
-
                     // Update control list
-                    _enableDisableControlNames.Add("btnRefreshAll");
-                    _enableDisableControlNames.Add("btnRefresh");
+                    EnableDisableControlNames.Remove("menuStrip1");
+                    EnableDisableControlNames.Add("btnRefreshAll");
+                    EnableDisableControlNames.Add("btnRefresh");
+                    EnableDisableControlNames.Add("btnAdd");
 
                     // Disable controls
-                    Helper.EnableDisableControls(false, this, _enableDisableControlNames);
+                    Helper.EnableDisableControls(false, this, EnableDisableControlNames);
 
                     // Set initialization flag
-                    _bInitFlag = false;
+                    InitFlag = false;
 
                     // Add status message
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile1", _languageName)
+                        Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile1", LanguageName)
                         + PortfolioFileName
-                        + _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile2", _languageName)
-                        + " " + _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/XMLSyntaxFailure1", _languageName)
+                        + Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile2", LanguageName)
+                        + " " + Language.GetLanguageTextByXPath(@"/MainForm/Errors/XMLSyntaxFailure1", LanguageName)
                         + PortfolioFileName
-                        + _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/XMLSyntaxFailure2", _languageName),
-                        _xmlLanguage, _languageName,
-                        Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                        + Language.GetLanguageTextByXPath(@"/MainForm/Errors/XMLSyntaxFailure2", LanguageName),
+                        Language, LanguageName,
+                        Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
 
-                    _shareObjectsList.Clear();
+                    ShareObjectListMarketValue.Clear();
+                    ShareObjectListFinalValue.Clear();
+
+                    // Close portfolio reader
+                    if (ReaderPortfolio != null)
+                        ReaderPortfolio.Close();
                 }
                 catch (Exception ex)
                 {
@@ -788,29 +656,30 @@ namespace SharePortfolioManager
                         MessageBoxIcon.Error);
 #endif
                     // Close portfolio reader
-                    if (_xmlReaderPortfolio != null)
-                        _xmlReaderPortfolio.Close();
+                    if (ReaderPortfolio != null)
+                        ReaderPortfolio.Close();
 
                     // Update control list
-                    _enableDisableControlNames.Add("btnRefreshAll");
-                    _enableDisableControlNames.Add("btnRefresh");
+                    EnableDisableControlNames.Add("btnRefreshAll");
+                    EnableDisableControlNames.Add("btnRefresh");
 
                     // Disable controls
-                    Helper.EnableDisableControls(false, this, _enableDisableControlNames);
+                    Helper.EnableDisableControls(false, this, EnableDisableControlNames);
 
                     // Set initialization flag
-                    _bInitFlag = false;
+                    InitFlag = false;
 
                     // Add status message
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile1", _languageName)
+                        Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile1", LanguageName)
                         + PortfolioFileName
-                        + _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile2", _languageName)
-                        + " " + _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/WebSiteConfigurationListLoadFailed", _languageName),
-                        _xmlLanguage, _languageName,
-                        Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                        + Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile2", LanguageName)
+                        + " " + Language.GetLanguageTextByXPath(@"/MainForm/Errors/WebSiteConfigurationListLoadFailed", LanguageName),
+                        Language, LanguageName,
+                        Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
 
-                    _shareObjectsList.Clear();
+                    ShareObjectListMarketValue.Clear();
+                    ShareObjectListFinalValue.Clear();
                 }
             }
         }
@@ -829,18 +698,18 @@ namespace SharePortfolioManager
             {
                 // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/WebSiteRegexNotFound1_1", _languageName)
+                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/WebSiteRegexNotFound1_1", LanguageName)
                     + @"'"
                     + regexSearchFailed[0]
                     + @"'"
-                    + _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/WebSiteRegexNotFound1_2", _languageName),
-                    _xmlLanguage, _languageName,
-                    Color.Red, _logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
+                    + Language.GetLanguageTextByXPath(@"/MainForm/Errors/WebSiteRegexNotFound1_2", LanguageName),
+                    Language, LanguageName,
+                    Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
             }
             else if (regexSearchFailed.Count != 0 && regexSearchFailed.Count > 1)
             {
                 // Build the status message string
-                string statusMessage = _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/WebSiteRegexNotFound2_1", _languageName);
+                string statusMessage = Language.GetLanguageTextByXPath(@"/MainForm/Errors/WebSiteRegexNotFound2_1", LanguageName);
                 for (int i = 0; i < regexSearchFailed.Count; i++)
                 {
                     if (i < regexSearchFailed.Count - 1)
@@ -856,12 +725,12 @@ namespace SharePortfolioManager
                         statusMessage += @"' ";
                     }
                 }
-                statusMessage += _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/WebSiteRegexNotFound2_2", _languageName);
+                statusMessage += Language.GetLanguageTextByXPath(@"/MainForm/Errors/WebSiteRegexNotFound2_2", LanguageName);
 
                 // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage, statusMessage,
-                    _xmlLanguage, _languageName,
-                    Color.Red, _logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
+                    Language, LanguageName,
+                    Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
             }
         }
 

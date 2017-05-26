@@ -77,7 +77,8 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
 
         private void UpdateModelwithView()
         {
-            _model.ShareObject = _view.ShareObject;
+            _model.ShareObjectMarketValue = _view.ShareObjectMarketValue;
+            _model.ShareObjectFinalValue = _view.ShareObjectFinalValue;
             _model.ErrorCode = _view.ErrorCode;
             _model.UpdateBuy = _view.UpdateBuy;
             _model.SelectedDate = _view.SelectedDate;
@@ -106,10 +107,10 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
                 string strDateTime = _model.Date + " " + _model.Time;
 
                 // Cost entry if the costs value is not 0
-                if (_model.Costsdec > 0)
-                    bErrorFlag = !_model.ShareObject.AddCost(true, strDateTime, _model.Costsdec, _model.Document);
+                if (_model.CostsDec > 0)
+                    bErrorFlag = !_model.ShareObjectFinalValue.AddCost(true, strDateTime, _model.CostsDec, _model.Document);
 
-                if (_model.ShareObject.AddBuy(true, strDateTime, _model.Volumedec, _model.SharePricedec, _model.Reductiondec, _model.Costsdec, _model.Document)
+                if (_model.ShareObjectFinalValue.AddBuy(strDateTime, _model.VolumeDec, _model.SharePricedec, _model.ReductionDec, _model.CostsDec, _model.Document)
                     && bErrorFlag == false)
                 {
                     _model.ErrorCode = BuyErrorCode.AddSuccessful;
@@ -134,17 +135,17 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
             {
                 string strDateTime = _model.Date + " " + _model.Time;
 
-                if (_model.ShareObject.RemoveBuy(_model.SelectedDate) && _model.ShareObject.AddBuy(true, strDateTime, _model.Volumedec, _model.SharePricedec, _model.Reductiondec, _model.Costsdec, _model.Document))
+                if (_model.ShareObjectFinalValue.RemoveBuy(_model.SelectedDate) && _model.ShareObjectFinalValue.AddBuy(strDateTime, _model.VolumeDec, _model.SharePricedec, _model.ReductionDec, _model.CostsDec, _model.Document))
                 {
                     bool bFlagCostEdit = true;
 
                     // Check if an old cost entry must be deleted
-                    if (_model.ShareObject.AllCostsEntries.GetCostObjectByDateTime(strDateTime) != null)
-                        bFlagCostEdit = _model.ShareObject.RemoveCost(strDateTime);
+                    if (_model.ShareObjectFinalValue.AllCostsEntries.GetCostObjectByDateTime(strDateTime) != null)
+                        bFlagCostEdit = _model.ShareObjectFinalValue.RemoveCost(strDateTime);
 
                     // Check if a new cost entry must be made
-                    if (bFlagCostEdit && _model.Costsdec > 0)
-                        bFlagCostEdit = _model.ShareObject.AddCost(true, strDateTime, _model.Costsdec, _model.Document);
+                    if (bFlagCostEdit && _model.CostsDec > 0)
+                        bFlagCostEdit = _model.ShareObjectFinalValue.AddCost(true, strDateTime, _model.CostsDec, _model.Document);
 
                     if (bFlagCostEdit)
                     {
@@ -170,15 +171,15 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
         private void OnDeleteBuy(object sender, EventArgs e)
         {
             // If this is the first buy of all. This buy can´t be deleted. Only if the whole share will be deleted
-            if (_model.ShareObject.AllBuyEntries.GetAllBuysOfTheShare().Count > 1)
+            if (_model.ShareObjectFinalValue.AllBuyEntries.GetAllBuysOfTheShare().Count > 1)
             {
                 // Delete the buy of the selected date
-                if (_model.ShareObject.RemoveBuy(_model.SelectedDate))
+                if (_model.ShareObjectFinalValue.RemoveBuy(_model.SelectedDate))
                 {
                     // Check if a cost object exists
-                    if (_model.ShareObject.AllCostsEntries.GetCostObjectByDateTime(_model.SelectedDate) != null)
+                    if (_model.ShareObjectFinalValue.AllCostsEntries.GetCostObjectByDateTime(_model.SelectedDate) != null)
                     {
-                        if (_model.ShareObject.RemoveCost(_model.SelectedDate))
+                        if (_model.ShareObjectFinalValue.RemoveCost(_model.SelectedDate))
                         {
                             _model.ErrorCode = BuyErrorCode.DeleteSuccessful;
                         }
@@ -215,13 +216,15 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
             try
             {
                 decimal decMarketValue = 0;
+                decimal decPurchaseValue = 0;
                 decimal decFinalValue = 0;
 
-                Helper.CalcMarketValueAndFinalValue(_model.Volumedec, _model.SharePricedec, _model.Costsdec,
-                    _model.Reductiondec, out decMarketValue, out decFinalValue);
+                Helper.CalcBuyValues(_model.VolumeDec, _model.SharePricedec, _model.CostsDec,
+                    _model.ReductionDec, out decMarketValue, out decPurchaseValue, out decFinalValue);
 
-                _model.MarketValuedec = decMarketValue;
-                _model.FinalValuedec = decFinalValue;
+                _model.MarketValueDec = decMarketValue;
+                _model.PurchaseValueDec = decPurchaseValue;
+                _model.FinalValueDec = decFinalValue;
             }
             catch (Exception ex)
             {
@@ -229,8 +232,8 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
                 MessageBox.Show("CalculateMarketValueAndFinalValue()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
-                _model.MarketValuedec = 0;
-                _model.FinalValuedec = 0;
+                _model.MarketValueDec = 0;
+                _model.FinalValueDec = 0;
             }
         }
 
@@ -255,7 +258,7 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
                 string strDate = _model.Date + " " + _model.Time;
 
                 // Check if a buy with the given date and time already exists
-                foreach (var buyObject in _model.ShareObject.AllBuyEntries.GetAllBuysOfTheShare())
+                foreach (var buyObject in _model.ShareObjectFinalValue.AllBuyEntries.GetAllBuysOfTheShare())
                 {
                     // Check if a buy should be added or a buy should be edit
                     if (!bFlagEdit)
@@ -300,7 +303,7 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
                     bErrorFlag = true;
                 }
                 else if (bErrorFlag == false)
-                    _model.Volumedec = decVolume;
+                    _model.VolumeDec = decVolume;
 
                 // Check if a correct price for the buy is given
                 decimal decPrice = -1;
@@ -337,7 +340,7 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
                         bErrorFlag = true;
                     }
                     else if (bErrorFlag == false)
-                        _model.Costsdec = decCosts;
+                        _model.CostsDec = decCosts;
                 }
 
                 // Reduction input check
@@ -355,7 +358,7 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
                         bErrorFlag = true;
                     }
                     else if (bErrorFlag == false)
-                        _model.Reductiondec = decReduction;
+                        _model.ReductionDec = decReduction;
                 }
 
                 // Check if a given document exists

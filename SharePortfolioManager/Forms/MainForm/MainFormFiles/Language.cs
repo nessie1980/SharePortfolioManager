@@ -45,15 +45,15 @@ namespace SharePortfolioManager
         {
 
             // Check if the initialization was successfully so far
-            if (_bInitFlag)
+            if (InitFlag)
             {
                 try
                 {
                     // Load language XML file
-                    _xmlLanguage = new Language(LanguageFileName);
+                    _language = new Language(LanguageFileName);
 
                     // Check if the language file has been loaded
-                    if (_xmlLanguage.InitFlag)
+                    if (Language.InitFlag)
                     {
                         // ONLY in DEBUG mode
                         // Check if an language key is not defined in the Language.XML file and then create a
@@ -61,18 +61,18 @@ namespace SharePortfolioManager
 #if DEBUG_LANGUAGE
                         string strProjectPath =
                             Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\"));
-                        _xmlLanguage.CheckLanguageKeysOfProject(strProjectPath);
-                        _xmlLanguage.CheckLanguageKeysOfXML(strProjectPath);
+                        Language.CheckLanguageKeysOfProject(strProjectPath);
+                        Language.CheckLanguageKeysOfXML(strProjectPath);
 
-                        if (_xmlLanguage.InvalidLanguageKeysOfProject.Count != 0 || _xmlLanguage.InvalidLanguageKeysOfXml.Count != 0)
+                        if (Language.InvalidLanguageKeysOfProject.Count != 0 || Language.InvalidLanguageKeysOfXml.Count != 0)
                         {
                             string strInvalidKeys = @"";
 
-                            if (_xmlLanguage.InvalidLanguageKeysOfProject.Count != 0)
+                            if (Language.InvalidLanguageKeysOfProject.Count != 0)
                             {
-                                strInvalidKeys = _xmlLanguage.InvalidLanguageKeysOfProject.Count + " invalid language keys in the project files.\n";
+                                strInvalidKeys = Language.InvalidLanguageKeysOfProject.Count + " invalid language keys in the project files.\n";
 
-                                foreach (var invalidkeyProject in _xmlLanguage.InvalidLanguageKeysOfProject)
+                                foreach (var invalidkeyProject in Language.InvalidLanguageKeysOfProject)
                                 {
                                     strInvalidKeys += invalidkeyProject + "\n";
                                 }
@@ -80,10 +80,10 @@ namespace SharePortfolioManager
                                 strInvalidKeys += "\n";
                             }
 
-                            if (_xmlLanguage.InvalidLanguageKeysOfXml.Count != 0)
+                            if (Language.InvalidLanguageKeysOfXml.Count != 0)
                             {
-                                strInvalidKeys += _xmlLanguage.InvalidLanguageKeysOfXml.Count + " unused XML language keys in file \"" + LanguageFileName + "\"\n";
-                                foreach (var invalidKeyXML in _xmlLanguage.InvalidLanguageKeysOfXml)
+                                strInvalidKeys += Language.InvalidLanguageKeysOfXml.Count + " unused XML language keys in file \"" + LanguageFileName + "\"\n";
+                                foreach (var invalidKeyXML in Language.InvalidLanguageKeysOfXml)
                                 {
                                     strInvalidKeys += invalidKeyXML + "\n";
                                     
@@ -98,17 +98,17 @@ namespace SharePortfolioManager
                         #region Load logger language
 
                         // Add state names
-                        _loggerStatelList.Add(_xmlLanguage.GetLanguageTextByXPath(@"/Logger/States/Start", _languageName));
-                        _loggerStatelList.Add(_xmlLanguage.GetLanguageTextByXPath(@"/Logger/States/Info", _languageName));
-                        _loggerStatelList.Add(_xmlLanguage.GetLanguageTextByXPath(@"/Logger/States/Warning", _languageName));
-                        _loggerStatelList.Add(_xmlLanguage.GetLanguageTextByXPath(@"/Logger/States/Error", _languageName));
-                        _loggerStatelList.Add(_xmlLanguage.GetLanguageTextByXPath(@"/Logger/States/FatalError", _languageName));
+                        LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Start", LanguageName));
+                        LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Info", LanguageName));
+                        LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Warning", LanguageName));
+                        LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Error", LanguageName));
+                        LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/FatalError", LanguageName));
 
                         // Add component names
-                        _loggerComponentNamesList.Add(_xmlLanguage.GetLanguageTextByXPath(@"/Logger/ComponentNames/Application", _languageName));
-                        _loggerComponentNamesList.Add(_xmlLanguage.GetLanguageTextByXPath(@"/Logger/ComponentNames/WebParser", _languageName));
-                        _loggerComponentNamesList.Add(_xmlLanguage.GetLanguageTextByXPath(@"/Logger/ComponentNames/LanguageHandler", _languageName));
-                        _loggerComponentNamesList.Add(_xmlLanguage.GetLanguageTextByXPath(@"/Logger/ComponentNames/Logger", _languageName));
+                        LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Application", LanguageName));
+                        LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/WebParser", LanguageName));
+                        LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/LanguageHandler", LanguageName));
+                        LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Logger", LanguageName));
 
                         #endregion Load logger language
 
@@ -121,14 +121,14 @@ namespace SharePortfolioManager
                         ToolStripMenuItem tmiLanguage =
                             (ToolStripMenuItem)tmiSettings.DropDownItems["languageToolStripMenuItem"];
                         // Get possible languages and add them to the menu
-                        List<string> strLanguages = _xmlLanguage.GetAvailableLanguages();
+                        List<string> strLanguages = Language.GetAvailableLanguages();
                         // Add available to the menu
                         foreach (string strLanguage in strLanguages)
                         {
                             ToolStripMenuItem tmiLanguageAdd = new ToolStripMenuItem(strLanguage, null, languageClick,
                                 string.Format("languageToolStripMenuItem{0}", strLanguage));
 
-                            if (strLanguage == _languageName)
+                            if (strLanguage == LanguageName)
                                 tmiLanguageAdd.Checked = true;
 
                             tmiLanguage.DropDownItems.Add(tmiLanguageAdd);
@@ -138,25 +138,25 @@ namespace SharePortfolioManager
 
                         #region Set share object unit and percentage unit
 
-                        ShareObject.PercentageUnit = _xmlLanguage.GetLanguageTextByXPath(@"/PercentageUnit", _languageName);
-                        ShareObject.PieceUnit = _xmlLanguage.GetLanguageTextByXPath(@"/PieceUnit", _languageName);
+                        ShareObject.PercentageUnit = Language.GetLanguageTextByXPath(@"/PercentageUnit", LanguageName);
+                        ShareObject.PieceUnit = Language.GetLanguageTextByXPath(@"/PieceUnit", LanguageName);
 
                         #endregion Set share object unit and percentage unit
                     }
                     else
                     {
 #if DEBUG
-                        MessageBox.Show("LoadLanguage()\n\n" + _xmlLanguage.LastException.Message,
+                        MessageBox.Show("LoadLanguage()\n\n" + Language.LastException.Message,
                             @"Error", MessageBoxButtons.OK,
                             MessageBoxIcon.Error);
 #endif
                         // Set initialization flag
-                        _bInitFlag = false;
+                        InitFlag = false;
 
                         // Add status message
                         Helper.AddStatusMessage(rchTxtBoxStateMessage, @"Could not load '" + LanguageFileName + @"' file!",
-                            _xmlLanguage, _languageName,
-                            Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                            Language, LanguageName,
+                            Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
                     }
                 }
                 catch (Exception ex)
@@ -167,12 +167,12 @@ namespace SharePortfolioManager
                         MessageBoxIcon.Error);
 #endif
                     // Set initialization flag
-                    _bInitFlag = false;
+                    InitFlag = false;
 
                     // Add status message
                     Helper.AddStatusMessage(rchTxtBoxStateMessage, @"Could not load '" + LanguageFileName + @"' file!",
-                        _xmlLanguage, _languageName,
-                        Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                        Language, LanguageName,
+                        Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
                 }
             }
 
@@ -181,6 +181,7 @@ namespace SharePortfolioManager
         #endregion Load language
 
         #region Set language
+
         /// <summary>
         /// This function loads the language key values to the Main form dialog
         /// </summary>
@@ -190,10 +191,10 @@ namespace SharePortfolioManager
             {
                 #region Application name
 
-                Text = _xmlLanguage.GetLanguageTextByXPath(@"/Application/Name", _languageName)
+                Text = Language.GetLanguageTextByXPath(@"/Application/Name", LanguageName)
                     + @" " + Helper.GetApplicationVersion().ToString();
 
-                notifyIcon.Text = _xmlLanguage.GetLanguageTextByXPath(@"/Application/Name", _languageName)
+                notifyIcon.Text = Language.GetLanguageTextByXPath(@"/Application/Name", LanguageName)
                     + @" " + Helper.GetApplicationVersion().ToString();
 
                 if (PortfolioFileName != "")
@@ -205,217 +206,246 @@ namespace SharePortfolioManager
 
                 #region Menu
 
-                fileToolStripMenuItem.Text = _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Menu/File/Header", _languageName);
-                newToolStripMenuItem.Text = _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Menu/File/New", _languageName);
-                saveAsToolStripMenuItem.Text = _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Menu/File/SaveAs", _languageName);
-                openToolStripMenuItem.Text = _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Menu/File/Open", _languageName);
-                exitToolStripMenuItem.Text = _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Menu/File/Quit", _languageName);
+                fileToolStripMenuItem.Text = Language.GetLanguageTextByXPath(@"/MainForm/Menu/File/Header", LanguageName);
+                newToolStripMenuItem.Text = Language.GetLanguageTextByXPath(@"/MainForm/Menu/File/New", LanguageName);
+                saveAsToolStripMenuItem.Text = Language.GetLanguageTextByXPath(@"/MainForm/Menu/File/SaveAs", LanguageName);
+                openToolStripMenuItem.Text = Language.GetLanguageTextByXPath(@"/MainForm/Menu/File/Open", LanguageName);
+                exitToolStripMenuItem.Text = Language.GetLanguageTextByXPath(@"/MainForm/Menu/File/Quit", LanguageName);
 
-                settingsToolStripMenuItem.Text = _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Menu/Settings/Header",
-                    _languageName);
-                languageToolStripMenuItem.Text = _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Menu/Settings/Language",
-                    _languageName);
-                loggerToolStripMenuItem.Text = _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Menu/Settings/Logger",
-                    _languageName);
+                settingsToolStripMenuItem.Text = Language.GetLanguageTextByXPath(@"/MainForm/Menu/Settings/Header",
+                    LanguageName);
+                languageToolStripMenuItem.Text = Language.GetLanguageTextByXPath(@"/MainForm/Menu/Settings/Language",
+                    LanguageName);
+                loggerToolStripMenuItem.Text = Language.GetLanguageTextByXPath(@"/MainForm/Menu/Settings/Logger",
+                    LanguageName);
 
-                helpToolStripMenuItem.Text = _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Menu/Help/Header", _languageName);
-                aboutToolStripMenuItem.Text = _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Menu/Help/About", _languageName);
+                helpToolStripMenuItem.Text = Language.GetLanguageTextByXPath(@"/MainForm/Menu/Help/Header", LanguageName);
+                aboutToolStripMenuItem.Text = Language.GetLanguageTextByXPath(@"/MainForm/Menu/Help/About", LanguageName);
 
                 #endregion Menu
 
-                #region  DataGirdView for the portfolio
+                #region GrpBox overviews
 
-                grpBoxSharePortfolio.Text = _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Caption",
-                    _languageName);
-                if (dgvPortfolio.Columns.Count == (int) ColumnIndicesPortfolio.EShareSumColumnIndex + 1)
+                grpBoxSharePortfolio.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Caption", LanguageName);
+
+                #region TabControl overviews
+
+                tabCtrlShareOverviews.TabPages[0].Text =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/Caption", LanguageName);
+
+                #region  DataGirdView for the complete depot value
+
+                if (dgvPortfolioFinalValue.Columns.Count == (int)ColumnIndicesPortfolioFinalValue.EShareSumColumnIndex + 1)
                 {
-                    dgvPortfolio.Columns[(int) ColumnIndicesPortfolio.EWknNumberColumnIndex].HeaderText =
-                        _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/DgvPortfolio/ColHeader_WKN", _languageName);
-                    dgvPortfolio.Columns[(int) ColumnIndicesPortfolio.EShareNameColumnIndex].HeaderText =
-                        _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/DgvPortfolio/ColHeader_Name", _languageName);
-                    dgvPortfolio.Columns[(int) ColumnIndicesPortfolio.ESharePriceColumnIndex].HeaderText =
-                        _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/DgvPortfolio/ColHeader_Price", _languageName);
-                    dgvPortfolio.Columns[(int) ColumnIndicesPortfolio.EShareVolumeColumnIndex].HeaderText =
-                        _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/DgvPortfolio/ColHeader_Volume", _languageName);
-                    dgvPortfolio.Columns[(int) ColumnIndicesPortfolio.ESharePerformanceDayBeforeColumnIndex].HeaderText =
-                        _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/DgvPortfolio/ColHeader_PrevDay", _languageName);
-                    dgvPortfolio.Columns[(int)ColumnIndicesPortfolio.EShareCostsDividendColumnIndex].HeaderText =
-                        _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/DgvPortfolio/ColHeader_CostsDividend", _languageName);
-                    dgvPortfolio.Columns[(int)ColumnIndicesPortfolio.ESharePerformanceColumnIndex].HeaderText =
-                        _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/DgvPortfolio/ColHeader_Performance", _languageName);
-                    dgvPortfolio.Columns[(int) ColumnIndicesPortfolio.EShareSumColumnIndex].HeaderText =
-                        _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/DgvPortfolio/ColHeader_DepositSum", _languageName);
+                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EWknNumberColumnIndex].HeaderText =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_WKN", LanguageName);
+                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareNameColumnIndex].HeaderText =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Name", LanguageName);
+                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePriceColumnIndex].HeaderText =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Price", LanguageName);
+                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareVolumeColumnIndex].HeaderText =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Volume", LanguageName);
+                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePerformanceDayBeforeColumnIndex].HeaderText =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_PrevDay", LanguageName);
+                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareCostsDividendColumnIndex].HeaderText =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_CostsDividend", LanguageName);
+                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePerformanceColumnIndex].HeaderText =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Performance", LanguageName);
+                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareSumColumnIndex].HeaderText =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_PurchaseMarketValue", LanguageName);
                 }
 
-                #endregion  DataGirdView for the portfolio
+                #endregion  DataGirdView for the complete depot value
 
-                #region DataGirdView footer
+                #region DataGirdView footer complete depot values
 
-                if (dgvPortfolioFooter.RowCount > 0)
+                if (dgvPortfolioFooterFinalValue.RowCount > 0)
                 {
-                    dgvPortfolioFooter.Rows[0].Cells[(int)ColumnIndicesPortfolioFooter.ELabelTotalColumnIndex].Value = string.Format(@"{0}",
-                        _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/DgvPortfolioFooter/RowContent_TotalDeposit", _languageName));
-                    dgvPortfolioFooter.Rows[1].Cells[(int)ColumnIndicesPortfolioFooter.ELabelCostsDividendIndex].Value = string.Format(@"{0}",
-                        _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/DgvPortfolioFooter/RowContent_TotalCostDividend", _languageName));
-                    dgvPortfolioFooter.Rows[1].Cells[(int)ColumnIndicesPortfolioFooter.ELabelTotalColumnIndex].Value = string.Format(@"{0}",
-                        _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/DgvPortfolioFooter/RowContent_TotalPerformance",
-                            _languageName));
-                    dgvPortfolioFooter.Rows[2].Cells[(int)ColumnIndicesPortfolioFooter.ELabelTotalColumnIndex].Value = string.Format(@"{0}",
-                        _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/DgvPortfolioFooter/RowContent_TotalSum", _languageName));
+                    dgvPortfolioFooterFinalValue.Rows[0].Cells[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelTotalColumnIndex].Value = string.Format(@"{0}",
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalPurchaseValue", LanguageName));
+                    dgvPortfolioFooterFinalValue.Rows[1].Cells[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelCostsDividendIndex].Value = string.Format(@"{0}",
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalCostDividend", LanguageName));
+                    dgvPortfolioFooterFinalValue.Rows[1].Cells[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelTotalColumnIndex].Value = string.Format(@"{0}",
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalPerformance",
+                            LanguageName));
+                    dgvPortfolioFooterFinalValue.Rows[2].Cells[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelTotalColumnIndex].Value = string.Format(@"{0}",
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalDepotValue", LanguageName));
                 }
 
-                #endregion DataGirdView footer
+                #endregion DataGirdView footer complete depot values
+
+                tabCtrlShareOverviews.TabPages[1].Text =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/Caption", LanguageName);
+
+                #region  DataGirdView for the market values
+                #endregion DataGridView for the marekt values
+
+                #region  DataGirdView footer market values
+                #endregion DataGridView footer marekt values
+
+                #endregion TabControl overviews
 
                 #region Buttons
 
-                btnRefreshAll.Text = _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAll",
-                    _languageName);
-                btnRefresh.Text = _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Refresh",
-                    _languageName);
-                btnAdd.Text = _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Add", _languageName);
-                btnEdit.Text = _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Edit", _languageName);
-                btnDelete.Text = _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Delete",
-                    _languageName);
-                btnClearLogger.Text = _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/ResetLogger",
-                    _languageName);
+                btnRefreshAll.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAll",
+                    LanguageName);
+                btnRefresh.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Refresh",
+                    LanguageName);
+                btnAdd.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Add", LanguageName);
+                btnEdit.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Edit", LanguageName);
+                btnDelete.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Delete",
+                    LanguageName);
+                btnClearLogger.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/ResetLogger",
+                    LanguageName);
 
                 #endregion Buttons
 
+                #endregion GrpBox overviews
+
                 #region GrpBox for the details
 
-                grpBoxShareDetails.Text = _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/Caption",
-                    _languageName);
+                grpBoxShareDetails.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/Caption",
+                    LanguageName);
 
-                tabCtrlDetails.TabPages["tabPgShareDetailsWithDividendCosts"].Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Caption",
-                        _languageName);
-                lblShareDetailsWithDividendCostShareDate.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Labels/Date",
-                        _languageName);
-                lblShareDetailsWithDividendCostShareVolume.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Labels/Volume",
-                        _languageName);
-                lblShareDetailsWithDividendCostShareDividend.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Labels/TotalDividend",
-                        _languageName);
-                lblShareDetailsWithDividendCostShareCost.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Labels/TotalCosts",
-                        _languageName);
-                lblShareDetailsWithDividendCostSharePriceCurrent.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Labels/CurrentPrice",
-                        _languageName);
-                lblShareDetailsWithDividendCostShareDiffPerformancePrev.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(
-                        @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Labels/DiffPerformancePrevDay", _languageName);
-                lblShareDetailsWithDividendCostShareDiffSumPrev.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Labels/DiffSumPrevDay",
-                        _languageName);
-                lblShareDetailsWithDividendCostSharePricePrev.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Labels/PricePrevDay",
-                        _languageName);
-                lblShareDetailsWithDividendCostShareDeposit.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Labels/Deposit",
-                        _languageName);
-                lblShareDetailsWithDividendCostShareTotalPerformance.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Labels/TotalPerformance",
-                        _languageName);
-                lblShareDetailsWithDividendCostShareTotalProfit.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Labels/TotalProfitLoss",
-                        _languageName);
-                lblShareDetailsWithDividendCostShareTotalSum.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Labels/TotalSum",
-                        _languageName);
+                if (tabCtrlDetails.TabPages[TabPageDetailsFinalValue] != null)
+                {
+                    tabCtrlDetails.TabPages[TabPageDetailsFinalValue].Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Caption",
+                            LanguageName);
+                    lblDetailsFinalValueDate.Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Labels/Date",
+                            LanguageName);
+                    lblDetailsFinalValueVolume.Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Labels/Volume",
+                            LanguageName);
+                    lblDetailsFinalValueDividend.Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Labels/TotalDividend",
+                            LanguageName);
+                    lblDetailsFinalValueCost.Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Labels/TotalCosts",
+                            LanguageName);
+                    lblDetailsFinaValueCurPrice.Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Labels/CurrentPrice",
+                            LanguageName);
+                    lblDetailsFinalValueDiffPerformancePrev.Text =
+                        Language.GetLanguageTextByXPath(
+                            @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Labels/DiffPerformancePrevDay", LanguageName);
+                    lblDetailsFinalValueDiffSumPrev.Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Labels/DiffSumPrevDay",
+                            LanguageName);
+                    lblDetailsFinalValuePrevPrice.Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Labels/PricePrevDay",
+                            LanguageName);
+                    lblDetailsPurchase.Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Labels/Purchase",
+                            LanguageName);
+                    lblDetailsFinalValuePerformance.Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Labels/TotalPerformance",
+                            LanguageName);
+                    lblDetailsFinalVinalTotalProfit.Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Labels/TotalProfitLoss",
+                            LanguageName);
+                    lblDetailsFinalValueTotalSum.Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Labels/TotalSum",
+                            LanguageName);
+                }
 
-                tabCtrlDetails.TabPages["tabPgShareDetailsWithOutDividendCosts"].Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Caption",
-                        _languageName);
-                lblShareDetailsWithOutDividendCostShareDate.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Labels/Date",
-                        _languageName);
-                lblShareDetailsWithOutDividendCostShareVolume.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Labels/Volume",
-                        _languageName);
-                lblShareDetailsWithOutDividendCostShareDividend.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Labels/TotalDividend",
-                        _languageName);
-                lblShareDetailsWithOutDividendCostShareCost.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Labels/TotalCosts",
-                        _languageName);
-                lblShareDetailsWithOutDividendCostSharePriceCurrent.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Labels/CurrentPrice",
-                        _languageName);
-                lblShareDetailsWithOutDividendCostShareDiffPerformancePrev.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(
-                        @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Labels/DiffPerformancePrevDay", _languageName);
-                lblShareDetailsWithOutDividendCostShareDiffSumPrev.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Labels/DiffSumPrevDay",
-                        _languageName);
-                lblShareDetailsWithOutDividendCostSharePricePrev.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Labels/PricePrevDay",
-                        _languageName);
-                lblShareDetailsWithOutDividendCostShareDeposit.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Labels/Deposit",
-                        _languageName);
-                lblShareDetailsWithOutDividendCostShareTotalPerformance.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(
-                        @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Labels/TotalPerformance", _languageName);
-                lblShareDetailsWithOutDividendCostShareTotalProfit.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Labels/TotalProfitLoss",
-                        _languageName);
-                lblShareDetailsWithOutDividendCostShareTotalSum.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Labels/TotalSum",
-                        _languageName);
+                if (tabCtrlDetails.TabPages[TabPageDetailsMarketValue] != null)
+                {
+                    tabCtrlDetails.TabPages[TabPageDetailsMarketValue].Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Caption",
+                            LanguageName);
+                    lblDetailsMarketValueDate.Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Labels/Date",
+                            LanguageName);
+                    lblDetailsMarketValueVolume.Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Labels/Volume",
+                            LanguageName);
+                    lblDetailsMarketValueDividend.Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Labels/TotalDividend",
+                            LanguageName);
+                    lblDetailsMarketValueCost.Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Labels/TotalCosts",
+                            LanguageName);
+                    lblDetailsMarketValueCurPrice.Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Labels/CurrentPrice",
+                            LanguageName);
+                    lblDetailsMarketValueDiffPerformancePrev.Text =
+                        Language.GetLanguageTextByXPath(
+                            @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Labels/DiffPerformancePrevDay", LanguageName);
+                    lblDetailsMarketValueDiffSumPrev.Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Labels/DiffSumPrevDay",
+                            LanguageName);
+                    lblDetailsMarketValuePrevPrice.Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Labels/PricePrevDay",
+                            LanguageName);
+                    lblDetailsMarketValuePurchase.Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Labels/Purchase",
+                            LanguageName);
+                    lblDetailsMarketValueTotalPerformance.Text =
+                        Language.GetLanguageTextByXPath(
+                            @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Labels/TotalPerformance", LanguageName);
+                    lblDetailsMarketValueTotalProfit.Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Labels/TotalProfitLoss",
+                            LanguageName);
+                    lblDetailsMarketValueTotalSum.Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Labels/TotalSum",
+                            LanguageName);
+                }
 
-                tabCtrlDetails.TabPages["tabPgDividend"].Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/Caption", _languageName);
-                tabCtrlDetails.TabPages["tabPgCosts"].Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgCosts/Caption", _languageName);
-                tabCtrlDetails.TabPages["tabPgProfitLoss"].Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Caption", _languageName);
+                if (tabCtrlDetails.TabPages[TabPageDetailsDividendValue] != null)
+                {
+                    tabCtrlDetails.TabPages[TabPageDetailsDividendValue].Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/Caption", LanguageName);
+                    tabCtrlDetails.TabPages[TabPageDetailsCostsValue].Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgCosts/Caption", LanguageName);
+                    tabCtrlDetails.TabPages[TabPageDetailsProfitLossValue].Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Caption", LanguageName);
+                }
 
                 #endregion GrpBox for the details
 
                 #region GrpBox status message
 
-                grpBoxStatusMessage.Text = _xmlLanguage.GetLanguageTextByXPath(
-                    @"/MainForm/GrpBoxStatusMessage/Caption", _languageName);
+                grpBoxStatusMessage.Text = Language.GetLanguageTextByXPath(
+                    @"/MainForm/GrpBoxStatusMessage/Caption", LanguageName);
 
                 #endregion GrpBox status message
 
                 #region GrpBox update state
 
-                grpBoxUpdateState.Text = _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxUpdateState/Caption",
-                    _languageName);
+                grpBoxUpdateState.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxUpdateState/Caption",
+                    LanguageName);
 
                 #endregion GrpBox update state
 
                 #region Logger language
 
                 // Clear state list
-                _loggerStatelList.Clear();
+                LoggerStatelList.Clear();
 
                 // Add state names
-                _loggerStatelList.Add(_xmlLanguage.GetLanguageTextByXPath(@"/Logger/States/Start", _languageName));
-                _loggerStatelList.Add(_xmlLanguage.GetLanguageTextByXPath(@"/Logger/States/Info", _languageName));
-                _loggerStatelList.Add(_xmlLanguage.GetLanguageTextByXPath(@"/Logger/States/Warning", _languageName));
-                _loggerStatelList.Add(_xmlLanguage.GetLanguageTextByXPath(@"/Logger/States/Error", _languageName));
-                _loggerStatelList.Add(_xmlLanguage.GetLanguageTextByXPath(@"/Logger/States/FatalError", _languageName));
+                LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Start", LanguageName));
+                LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Info", LanguageName));
+                LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Warning", LanguageName));
+                LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Error", LanguageName));
+                LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/FatalError", LanguageName));
 
                 // Clear component names
-                _loggerComponentNamesList.Clear();
+                LoggerComponentNamesList.Clear();
 
                 // Add component names
-                _loggerComponentNamesList.Add(_xmlLanguage.GetLanguageTextByXPath(@"/Logger/ComponentNames/Application", _languageName));
-                _loggerComponentNamesList.Add(_xmlLanguage.GetLanguageTextByXPath(@"/Logger/ComponentNames/WebParser", _languageName));
-                _loggerComponentNamesList.Add(_xmlLanguage.GetLanguageTextByXPath(@"/Logger/ComponentNames/LanguageHandler", _languageName));
-                _loggerComponentNamesList.Add(_xmlLanguage.GetLanguageTextByXPath(@"/Logger/ComponentNames/Logger", _languageName));
+                LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Application", LanguageName));
+                LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/WebParser", LanguageName));
+                LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/LanguageHandler", LanguageName));
+                LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Logger", LanguageName));
 
                 #endregion Looger language
 
                 #region Set share object unit and percentage unit
 
-                ShareObject.PercentageUnit = _xmlLanguage.GetLanguageTextByXPath(@"/PercentageUnit", _languageName);
-                ShareObject.PieceUnit = _xmlLanguage.GetLanguageTextByXPath(@"/PieceUnit", _languageName);
+                ShareObject.PercentageUnit = Language.GetLanguageTextByXPath(@"/PercentageUnit", LanguageName);
+                ShareObject.PieceUnit = Language.GetLanguageTextByXPath(@"/PieceUnit", LanguageName);
 
                 #endregion Set share object unit and percentage unit
             }
@@ -424,15 +454,15 @@ namespace SharePortfolioManager
 #if DEBUG
                 MessageBox.Show(ex.Message, @"Error - SetLanguage()", MessageBoxButtons.OK, MessageBoxIcon.Error);
 #endif
-                if (_xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadAllLanguageKeys", _languageName) !=
-                    _xmlLanguage.InvalidLanguageKeyValue)
+                if (Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadAllLanguageKeys", LanguageName) !=
+                    Language.InvalidLanguageKeyValue)
                 {
                     // Set status message
-                    lblWebParserState.Text = _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadAllLanguageKeys", _languageName);
+                    lblWebParserState.Text = Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadAllLanguageKeys", LanguageName);
                     //Helper.AddStatusMessage(richTextBox1, statusMessage, Color.Red);
 
                     // Write log
-                    _logger.AddEntry(_xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadAllLanguageKeys", _languageName), (Logger.ELoggerStateLevels)EStateLevels.Start, (Logger.ELoggerComponentLevels)EComponentLevels.LanguageHandler);
+                    Logger.AddEntry(Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadAllLanguageKeys", LanguageName), (Logger.ELoggerStateLevels)EStateLevels.Start, (Logger.ELoggerComponentLevels)EComponentLevels.LanguageHandler);
                 }
                 else
                 {
@@ -441,19 +471,19 @@ namespace SharePortfolioManager
                     //Helper.AddStatusMessage(richTextBox1, statusMessage, Color.Red);
 
                     // Write log
-                    _logger.AddEntry(@"Could not set all language keys to the controls!", (Logger.ELoggerStateLevels)EStateLevels.Start, (Logger.ELoggerComponentLevels)EComponentLevels.LanguageHandler);
+                    Logger.AddEntry(@"Could not set all language keys to the controls!", (Logger.ELoggerStateLevels)EStateLevels.Start, (Logger.ELoggerComponentLevels)EComponentLevels.LanguageHandler);
                 }
 
                 // Update control list
-                _enableDisableControlNames.Add("btnRefreshAll");
-                _enableDisableControlNames.Add("btnRefresh");
-                _enableDisableControlNames.Add("menuStrip1");
+                EnableDisableControlNames.Add("btnRefreshAll");
+                EnableDisableControlNames.Add("btnRefresh");
+                EnableDisableControlNames.Add("menuStrip1");
 
                 // Disable controls
-                Helper.EnableDisableControls(false, this, _enableDisableControlNames);
+                Helper.EnableDisableControls(false, this, EnableDisableControlNames);
 
                 // Set initialization flag
-                _bInitFlag = false;
+                InitFlag = false;
             }
         }
 

@@ -32,6 +32,8 @@ using System.Xml;
 using System.Reflection;
 using Logging;
 using LanguageHandler;
+using System.Runtime.CompilerServices;
+using System.Diagnostics;
 
 namespace SharePortfolioManager.Classes
 {
@@ -42,7 +44,7 @@ namespace SharePortfolioManager.Classes
         /// <summary>
         /// Stores the max precision for a value
         /// </summary>
-        public const int Maxprecision = 5;
+        public const int Maxprecision = 6;
 
         #region Date
 
@@ -63,12 +65,14 @@ namespace SharePortfolioManager.Classes
         /// <summary>
         /// Stores currency format (price, deposit, costs, buys...)
         /// </summary>
+        public const int Currencysixlength = 6;
         public const int Currencyfivelength = 5;
         public const int Currencyfourlength = 4;
         public const int Currencythreelength = 3;
         public const int Currencytwolength = 2;
         public const int Currencyonelength = 1;
 
+        public const int Currencyfivefixlength = 5;
         public const int Currencyfourfixlength = 4;
         public const int Currencythreefixlength = 3;
         public const int Currencytwofixlength = 2;
@@ -120,17 +124,22 @@ namespace SharePortfolioManager.Classes
         #region Variables
 
         /// <summary>
-        /// Stores the list of the names and the units of the currency's
+        /// Stores the list of the names and the corresponding culture info and currency symbol
         /// </summary>
-        static private IEnumerable<KeyValuePair<string, string>> _listNameUnitCurrency;
+        static private IEnumerable<KeyValuePair<string, CultureInformation>> _listNameCultureInfoCurrencySymbol;
 
         #endregion Variables
 
         #region Properties
 
-        static public IEnumerable<KeyValuePair<string, string>> ListNameUnitCurrency
+        static public IEnumerable<KeyValuePair<string, CultureInformation>> ListNameCultureInfoCurrencySymbol
         {
-            get { return _listNameUnitCurrency; }
+            get { return _listNameCultureInfoCurrencySymbol; }
+        }
+
+        static public Dictionary<string, CultureInformation> DictionaryListNameCultureInfoCurrencySymbol
+        {
+            get { return _listNameCultureInfoCurrencySymbol.ToDictionary(x => x.Key, x => x.Value); }
         }
 
         #endregion Properties
@@ -142,8 +151,7 @@ namespace SharePortfolioManager.Classes
         /// </summary>
         static Helper()
         {
-            // Create the name and currency unit list
-            _listNameUnitCurrency = GetCurrencyList();
+            CreateNameCultureInfoCurrencySymbolList();
         }
 
         /// <summary>
@@ -158,6 +166,17 @@ namespace SharePortfolioManager.Classes
 
             return verApp;
         }
+
+        #region Get name of current method
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static string GetMyMethodName()
+        {
+            var st = new StackTrace(new StackFrame(1));
+            return st.GetFrame(0).GetMethod().Name;
+        }
+
+        #endregion Get name of current method
 
         #region Add status message to the text box and to the logger
 
@@ -839,29 +858,27 @@ namespace SharePortfolioManager.Classes
         /// in three letter ISO name and the ISO currency unit
         /// </summary>
         /// <returns>IEnumberable with a KeyValuePair list</returns>
-        public static IEnumerable<KeyValuePair<string, string>> GetCurrencyList()
+        public static void CreateNameCultureInfoCurrencySymbolList()
         {
-            IEnumerable<KeyValuePair<string, string>> currencyMap;
-            currencyMap = CultureInfo
+            _listNameCultureInfoCurrencySymbol = CultureInfo
             .GetCultures(CultureTypes.AllCultures)
             .Where(c => !c.IsNeutralCulture)
-            .Select(culture => {
+            .Select(culture =>
+            {
                 try
                 {
-                    return new RegionInfo(culture.LCID);
+                    return new KeyValuePair<String, CultureInformation>(culture.Name, new CultureInformation(culture, new RegionInfo(culture.LCID).CurrencySymbol));
                 }
                 catch
                 {
-                    return null;
+                    return new KeyValuePair<String, CultureInformation>(null, null);
                 }
             })
-            .Where(ri => ri != null)
-            .GroupBy(ri => ri.ISOCurrencySymbol)
-            .ToDictionary(x => x.Key, x => x.First().CurrencySymbol);
+            .Where(ci => ci.Key != null)
+            .OrderBy(ci => ci.Key)
+            .ToDictionary(x => x.Key, x => x.Value);
 
-            IEnumerable<KeyValuePair<string, string>> result = currencyMap.OrderBy(ci => ci.Key);
-
-            return result;
+            _listNameCultureInfoCurrencySymbol.OrderBy(ci => ci.Key);
         }
 
         #endregion Get currency list
@@ -871,7 +888,7 @@ namespace SharePortfolioManager.Classes
         public static CultureInfo GetCultureByName(string name)
         {
             CultureInfo[] cultures = CultureInfo.GetCultures(CultureTypes.AllCultures & ~CultureTypes.NeutralCultures);
-            foreach(var temp in cultures)
+            foreach (var temp in cultures)
             {
                 if (temp.Name == name)
                     return temp;
@@ -880,433 +897,80 @@ namespace SharePortfolioManager.Classes
             return null;
         }
 
-        public static CultureInfo GetCultureByISOCurrencySymbol(string ISOCurrencySymbol)
-        {
-            CultureInfo[] cultures = CultureInfo.GetCultures(CultureTypes.AllCultures & ~CultureTypes.NeutralCultures);
-            foreach (var temp in cultures)
-            {
-                RegionInfo ri = null;
-                try
-                {
-                    ri = new RegionInfo(temp.LCID);
-                }
-                catch
-                {
-                    ri = null;
-                }
-
-                if (ri != null)
-                    if (ri.ISOCurrencySymbol == ISOCurrencySymbol)
-                        return temp;
-            }
-
-            return null;
-        }
-
         #endregion Get culture info by name
 
-        #region Calculate market value and purchase price
+        #region Calculate market value, market value minus reduction and market value minus reduction and plus costs
 
-        static public void CalcMarketValueAndFinalValue(decimal decVolume, decimal decSharePrice, decimal decCosts, decimal decReduction, out decimal decMarketValue, out decimal decFinalValue)
+        static public void CalcBuyValues(decimal decVolume, decimal decSharePrice, decimal decCosts, decimal decReduction, out decimal decMarketValue, out decimal decMarketValueReduction, out decimal decMarketValueReductionCosts)
         {
             if (decVolume > 0 && decSharePrice > 0)
             {
                 decMarketValue = Math.Round(decVolume * decSharePrice, 2);
-                decFinalValue = decMarketValue;
-
-                if (decCosts > 0)
-                    decFinalValue += decCosts;
-
+                decMarketValueReduction = decMarketValue;
                 if (decReduction > 0)
-                    decFinalValue -= decReduction;
+                    decMarketValueReduction -= decReduction;
+
+                decMarketValueReductionCosts = decMarketValueReduction;
+                if (decCosts > 0)
+                    decMarketValueReductionCosts += decCosts;
             }
             else
             {
                 decMarketValue = 0;
-                decFinalValue = 0;
+                decMarketValueReduction = 0;
+                decMarketValueReductionCosts = 0;
             }
         }
-        #endregion Calculate makret value and purchase price
-
-        #region Save share object
-
-        /// <summary>
-        /// This function saves a share object to the XML document
-        /// </summary>
-        /// <param name="shareObject">ShareObject</param>
-        /// <param name="xmlPortfolio">XML with the portfolio</param>
-        /// <param name="xmlReaderPortfolio">XML reader for the portfolio</param>
-        /// <param name="xmlReaderSettingsPortfolio">XML reader settings for the portfolio</param>
-        /// <param name="strPortfolioFileName">Name of the portfolio XML</param>
-        /// <param name="exception">Exception which may occur. If no exception occurs the value is null</param>
-        /// <returns>Flag if the save was successful</returns>
-        public static bool SaveShareObject(ShareObject shareObject, ref XmlDocument xmlPortfolio, ref XmlReader xmlReaderPortfolio, ref XmlReaderSettings xmlReaderSettingsPortfolio, string strPortfolioFileName, out Exception exception)
-        {
-            try
-            {
-                // Update existing share
-                var nodeListShares = xmlPortfolio.SelectNodes(string.Format("/Portfolio/Share [@WKN = \"{0}\"]", shareObject.Wkn));
-                foreach (XmlNode nodeElement in nodeListShares)
-                {
-                    if (nodeElement != null)
-                    {
-                        if (nodeElement.HasChildNodes && nodeElement.ChildNodes.Count == shareObject.ShareObjectTagCount)
-                        {
-                            nodeElement.Attributes["WKN"].InnerText = shareObject.Wkn;
-                            nodeElement.Attributes["Name"].InnerText = shareObject.NameAsStr;
-
-                            for (int i = 0; i < nodeElement.ChildNodes.Count; i++)
-                            {
-                                switch (i)
-                                {
-                                    #region General
-                                    case 0:
-                                        nodeElement.ChildNodes[i].InnerText = string.Format(@"{0} {1}", shareObject.LastUpdateInternet.ToShortDateString(), shareObject.LastUpdateInternet.ToShortTimeString());
-                                        break;
-                                    case 1:
-                                        nodeElement.ChildNodes[i].InnerText = string.Format(@"{0} {1}", shareObject.LastUpdateDate.ToShortDateString(), shareObject.LastUpdateDate.ToShortTimeString());
-                                        break;
-                                    case 2:
-                                        nodeElement.ChildNodes[i].InnerText = string.Format(@"{0} {1}", shareObject.LastUpdateTime.ToShortDateString(), shareObject.LastUpdateTime.ToShortTimeString());
-                                        break;
-                                    case 3:
-                                        nodeElement.ChildNodes[i].InnerText = shareObject.CurPriceAsStr;
-                                        break;
-                                    case 4:
-                                        nodeElement.ChildNodes[i].InnerText = shareObject.PrevDayPriceAsStr;
-                                        break;
-                                    case 5:
-                                        nodeElement.ChildNodes[i].InnerText = shareObject.DepositAsStr;
-                                        break;
-                                    case 6:
-                                        nodeElement.ChildNodes[i].InnerText = shareObject.WebSite;
-                                        break;
-                                    case 7:
-                                        nodeElement.ChildNodes[i].InnerXml = shareObject.CultureInfoAsStr;
-                                        break;
-
-                                    #endregion General
-
-                                    #region Buys
-
-                                    case 8:
-                                        // Remove old buys
-                                        nodeElement.ChildNodes[i].RemoveAll();
-                                        foreach (var buyElementYear in shareObject.AllBuyEntries.GetAllBuysOfTheShare())
-                                        {
-                                            XmlElement newBuyElement = xmlPortfolio.CreateElement(shareObject.BuyTagNamePre);
-                                            newBuyElement.SetAttribute(shareObject.BuyDateAttrName, buyElementYear.DateAsStr);
-                                            newBuyElement.SetAttribute(shareObject.BuyVolumeAttrName, buyElementYear.VolumeAsStr);
-                                            newBuyElement.SetAttribute(shareObject.BuyPriceAttrName, buyElementYear.SharePriceAsStr);
-                                            newBuyElement.SetAttribute(shareObject.BuyReductionAttrName, buyElementYear.ReductionAsStr);
-                                            newBuyElement.SetAttribute(shareObject.BuyDocumentAttrName, buyElementYear.Document);
-                                            nodeElement.ChildNodes[i].AppendChild(newBuyElement);
-                                        }
-                                        break;
-
-                                    #endregion Buys
-
-                                    #region Sales
-
-                                    case 9:
-                                        // Remove old sales
-                                        nodeElement.ChildNodes[i].RemoveAll();
-                                        foreach (var saleElementYear in shareObject.AllSaleEntries.GetAllSalesOfTheShare())
-                                        {
-                                            XmlElement newSaleElement = xmlPortfolio.CreateElement(shareObject.SaleTagNamePre);
-                                            newSaleElement.SetAttribute(shareObject.SaleDateAttrName, saleElementYear.SaleDateAsString);
-                                            newSaleElement.SetAttribute(shareObject.SaleVolumeAttrName, saleElementYear.SaleVolumeAsString);
-                                            newSaleElement.SetAttribute(shareObject.SalePriceAttrName, saleElementYear.SaleValueAsString);
-                                            newSaleElement.SetAttribute(shareObject.SaleProfitLossAttrName, saleElementYear.SaleProfitLossAsString);
-                                            newSaleElement.SetAttribute(shareObject.SaleDocumentAttrName, saleElementYear.SaleDocument);
-                                            nodeElement.ChildNodes[i].AppendChild(newSaleElement);
-                                        }
-                                        break;
-
-                                    #endregion Sales
-
-                                    #region Costs
-
-                                    case 10:
-                                        // Remove old costs
-                                        nodeElement.ChildNodes[i].RemoveAll();
-                                        // Remove old costs
-                                        nodeElement.ChildNodes[i].RemoveAll();
-                                        foreach (var costElementYear in shareObject.AllCostsEntries.GetAllCostsOfTheShare())
-                                        {
-                                            XmlElement newCostElement = xmlPortfolio.CreateElement(shareObject.CostsTagNamePre);
-                                            newCostElement.SetAttribute(shareObject.CostsBuyPartAttrName, costElementYear.CostOfABuyAsString);
-                                            newCostElement.SetAttribute(shareObject.CostsDateAttrName, costElementYear.CostDateAsString);
-                                            newCostElement.SetAttribute(shareObject.CostsValueAttrName, costElementYear.CostValueAsString);
-                                            newCostElement.SetAttribute(shareObject.BuyDocumentAttrName, costElementYear.CostDocument);
-                                            nodeElement.ChildNodes[i].AppendChild(newCostElement);
-                                        }
-                                        break;
-
-                                    #endregion Costs
-
-                                    #region Dividends
-
-                                    case 11:
-                                        // Remove old dividends
-                                        nodeElement.ChildNodes[i].RemoveAll();
-                                        ((XmlElement)nodeElement.ChildNodes[i]).SetAttribute(shareObject.DividendPayoutIntervalAttrName, shareObject.DividendPayoutIntervalAsStr);
-
-                                        foreach (var dividendObject in shareObject.AllDividendEntries.GetAllDividendsOfTheShare())
-                                        {
-                                            XmlElement newDividendElement = xmlPortfolio.CreateElement(shareObject.DividendTagName);
-                                            newDividendElement.SetAttribute(shareObject.DividendDateAttrName, dividendObject.DividendDateAsString);
-                                            newDividendElement.SetAttribute(shareObject.DividendVolumeAttrName, dividendObject.ShareVolumeAsString);
-                                            newDividendElement.SetAttribute(shareObject.DividendLossBalanceAttrName, dividendObject.LossBalanceAsString);
-                                            newDividendElement.SetAttribute(shareObject.DividendPriceAttrName, dividendObject.SharePriceAsString);
-                                            newDividendElement.SetAttribute(shareObject.DividendRateAttrName, dividendObject.DividendRateAsString);
-                                            newDividendElement.SetAttribute(shareObject.DividendDocumentAttrName, dividendObject.DividendDocument);
-                                            
-                                            // Foreign currency information
-                                            XmlElement newForeignCurrencyElement = xmlPortfolio.CreateElement(shareObject.DividendTagNameForeignCu);
-
-                                            newForeignCurrencyElement.SetAttribute(shareObject.DividendForeignCuFlagAttrName, dividendObject.DividendTaxes.FCFlag.ToString());
-
-                                            if (dividendObject.DividendTaxes.FCFlag)
-                                            {
-                                                newForeignCurrencyElement.SetAttribute(shareObject.DividendExchangeRatioAttrName, dividendObject.DividendTaxes.ExchangeRatio.ToString());
-                                                newForeignCurrencyElement.SetAttribute(shareObject.DividendNameAttrName, dividendObject.DividendTaxes.CiShareFC.Name);
-                                            }
-                                            else
-                                            {
-                                                newForeignCurrencyElement.SetAttribute(shareObject.DividendExchangeRatioAttrName, 0.ToString());
-                                                newForeignCurrencyElement.SetAttribute(shareObject.DividendNameAttrName, dividendObject.DividendTaxes.CiShareFC.Name);
-
-                                            }
-                                            newDividendElement.AppendChild(newForeignCurrencyElement);
-
-
-                                            // Add child nodes (taxes)
-                                            XmlElement newTaxesElement = xmlPortfolio.CreateElement(shareObject.TaxTagName);
-
-                                            XmlElement newTaxAtSourceElement = xmlPortfolio.CreateElement(shareObject.TaxTagNameTaxAtSource);
-                                            newTaxAtSourceElement.SetAttribute(shareObject.TaxTaxAtSourceFlagAttrName, dividendObject.DividendTaxes.TaxAtSourceFlag.ToString());
-                                            newTaxAtSourceElement.SetAttribute(shareObject.TaxTaxAtSourcePercentageAttrName, dividendObject.DividendTaxes.TaxAtSourcePercentage.ToString());
-                                            newTaxesElement.AppendChild(newTaxAtSourceElement);
-
-                                            XmlElement newCapitalGainsTaxElement = xmlPortfolio.CreateElement(shareObject.TaxTagNameCapitalGains);
-                                            newCapitalGainsTaxElement.SetAttribute(shareObject.TaxCapitalGainsFlagAttrName, dividendObject.DividendTaxes.CapitalGainsTaxFlag.ToString());
-                                            newCapitalGainsTaxElement.SetAttribute(shareObject.TaxCapitalGainsPercentageAttrName, dividendObject.DividendTaxes.CapitalGainsTaxPercentage.ToString());
-                                            newTaxesElement.AppendChild(newCapitalGainsTaxElement);
-
-                                            XmlElement newSolidarityTaxElement = xmlPortfolio.CreateElement(shareObject.TaxTagNameSolidarity);
-                                            newSolidarityTaxElement.SetAttribute(shareObject.TaxSolidarityFlagAttrName, dividendObject.DividendTaxes.SolidarityTaxFlag.ToString());
-                                            newSolidarityTaxElement.SetAttribute(shareObject.TaxSolidarityPercentageAttrName, dividendObject.DividendTaxes.SolidarityTaxPercentage.ToString());
-                                            newTaxesElement.AppendChild(newSolidarityTaxElement);
-
-                                            newDividendElement.AppendChild(newTaxesElement);
-
-                                            nodeElement.ChildNodes[i].AppendChild(newDividendElement);
-                                        }
-                                        break;
-
-                                    #endregion Dividends
-
-                                    #region Taxes
-                                    
-                                    case 12:
-                                        // Remove old taxes
-                                        nodeElement.ChildNodes[i].RemoveAll();
-
-                                        XmlElement newRegularTaxAtSourceElement = xmlPortfolio.CreateElement(shareObject.TaxTagNameTaxAtSource);
-                                        newRegularTaxAtSourceElement.SetAttribute(shareObject.TaxTaxAtSourceFlagAttrName, shareObject.TaxTaxAtSourceFlagAsStr);
-                                        newRegularTaxAtSourceElement.SetAttribute(shareObject.TaxTaxAtSourcePercentageAttrName, shareObject.TaxTaxAtSourcePercentageAsStr);
-                                        nodeElement.ChildNodes[i].AppendChild(newRegularTaxAtSourceElement);
-
-                                        XmlElement newRegularCapitalGainsTaxElement = xmlPortfolio.CreateElement(shareObject.TaxTagNameCapitalGains);
-                                        newRegularCapitalGainsTaxElement.SetAttribute(shareObject.TaxCapitalGainsFlagAttrName, shareObject.CapitalGainsTaxFlagAsStr);
-                                        newRegularCapitalGainsTaxElement.SetAttribute(shareObject.TaxCapitalGainsPercentageAttrName, shareObject.TaxCapitalGainsPercentageAsStr);
-                                        nodeElement.ChildNodes[i].AppendChild(newRegularCapitalGainsTaxElement);
-
-                                        XmlElement newRegularSolidarityTaxElement = xmlPortfolio.CreateElement(shareObject.TaxTagNameSolidarity);
-                                        newRegularSolidarityTaxElement.SetAttribute(shareObject.TaxSolidarityFlagAttrName, shareObject.TaxSolidarityFlagAsStr);
-                                        newRegularSolidarityTaxElement.SetAttribute(shareObject.TaxSolidarityPercentageAttrName, shareObject.TaxSolidarityPercentageAsStr);
-                                        nodeElement.ChildNodes[i].AppendChild(newRegularSolidarityTaxElement);
-
-                                        break;
-
-                                    #endregion Taxes 
-
-                                    default:
-                                        break;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                // Add a new share
-                if (nodeListShares.Count == 0)
-                {
-                    #region General
-
-                    // Get root element
-                    XmlNode rootPortfolio = xmlPortfolio.SelectSingleNode("Portfolio");
-
-                    // Add new share
-                    XmlNode newShareNode = xmlPortfolio.CreateNode(XmlNodeType.Element, "Share", null);
-
-                    // Add attributes (WKN)
-                    XmlAttribute xmlAttributeWKN = xmlPortfolio.CreateAttribute("WKN");
-                    xmlAttributeWKN.Value = shareObject.WknAsStr;
-                    newShareNode.Attributes.Append(xmlAttributeWKN);
-
-                    // Add attributes (ShareName)
-                    XmlAttribute xmlAttributeShareName = xmlPortfolio.CreateAttribute("Name");
-                    xmlAttributeShareName.Value = shareObject.NameAsStr;
-                    newShareNode.Attributes.Append(xmlAttributeShareName);
-
-                    // Add child nodes (last update Internet)
-                    XmlElement newLastUpdateInternet = xmlPortfolio.CreateElement("LastUpdateInternet");
-                    // Add child inner text
-                    XmlText lastUpdateInternetValue = xmlPortfolio.CreateTextNode(shareObject.LastUpdateInternet.ToShortDateString() + " " + shareObject.LastUpdateInternet.ToShortTimeString());
-                    newShareNode.AppendChild(newLastUpdateInternet);
-                    newShareNode.LastChild.AppendChild(lastUpdateInternetValue);
-
-                    // Add child nodes (last update date)
-                    XmlElement newLastUpdateDate = xmlPortfolio.CreateElement("LastUpdateShareDate");
-                    // Add child inner text
-                    XmlText lastUpdateValueDate = xmlPortfolio.CreateTextNode(shareObject.LastUpdateDate.ToShortDateString() + " " + shareObject.LastUpdateDate.ToShortTimeString());
-                    newShareNode.AppendChild(newLastUpdateDate);
-                    newShareNode.LastChild.AppendChild(lastUpdateValueDate);
-
-                    // Add child nodes (last update time)
-                    XmlElement newLastUpdateTime = xmlPortfolio.CreateElement("LastUpdateTime");
-                    // Add child inner text
-                    XmlText lastUpdateValueTime = xmlPortfolio.CreateTextNode(shareObject.LastUpdateTime.ToShortDateString() + " " + shareObject.LastUpdateTime.ToShortTimeString());
-                    newShareNode.AppendChild(newLastUpdateTime);
-                    newShareNode.LastChild.AppendChild(lastUpdateValueTime);
-
-                    // Add child nodes (share price)
-                    XmlElement newSharePrice = xmlPortfolio.CreateElement("SharePrice");
-                    // Add child inner text
-                    XmlText SharePrice = xmlPortfolio.CreateTextNode(shareObject.CurPriceAsStr);
-                    newShareNode.AppendChild(newSharePrice);
-                    newShareNode.LastChild.AppendChild(SharePrice);
-
-                    // Add child nodes (share price before)
-                    XmlElement newSharePriceBefore = xmlPortfolio.CreateElement("SharePriceBefore");
-                    // Add child inner text
-                    XmlText SharePriceBefore = xmlPortfolio.CreateTextNode(shareObject.PrevDayPriceAsStr);
-                    newShareNode.AppendChild(newSharePriceBefore);
-                    newShareNode.LastChild.AppendChild(SharePriceBefore);
-
-                    // Add child nodes (deposit)
-                    XmlElement newDeposit = xmlPortfolio.CreateElement("Deposit");
-                    // Add child inner text
-                    XmlText Deposit = xmlPortfolio.CreateTextNode(shareObject.MarketValueAsStr);
-                    newShareNode.AppendChild(newDeposit);
-                    newShareNode.LastChild.AppendChild(Deposit);
-
-                    // Add child nodes (website)
-                    XmlElement newWebsite = xmlPortfolio.CreateElement("WebSite");
-                    // Add child inner text
-                    XmlText WebSite = xmlPortfolio.CreateTextNode(shareObject.WebSite);
-                    newShareNode.AppendChild(newWebsite);
-                    newShareNode.LastChild.AppendChild(WebSite);
-
-                    // Add child nodes (culture)
-                    XmlElement newCulture = xmlPortfolio.CreateElement("Culture");
-                    // Add child inner text
-                    XmlText Culture = xmlPortfolio.CreateTextNode(shareObject.CultureInfo.Name);
-                    newShareNode.AppendChild(newCulture);
-                    newShareNode.LastChild.AppendChild(Culture);
-
-                    #endregion General
-
-                    #region Buys / Sales / Costs / Dividends
-
-                    // Add child nodes (buys)
-                    XmlElement newBuys = xmlPortfolio.CreateElement("Buys");
-                    newShareNode.AppendChild(newBuys);
-                    foreach (var buyElementYear in shareObject.AllBuyEntries.GetAllBuysOfTheShare())
-                    {
-                        XmlElement newBuyElement = xmlPortfolio.CreateElement(shareObject.BuyTagNamePre);
-                        newBuyElement.SetAttribute(shareObject.BuyDateAttrName, buyElementYear.DateAsStr);
-                        newBuyElement.SetAttribute(shareObject.BuyVolumeAttrName, buyElementYear.VolumeAsStr);
-                        newBuyElement.SetAttribute(shareObject.BuyPriceAttrName, buyElementYear.SharePriceAsStr);
-                        newBuyElement.SetAttribute(shareObject.BuyReductionAttrName, buyElementYear.ReductionAsStr);
-                        newBuyElement.SetAttribute(shareObject.BuyDocumentAttrName, buyElementYear.Document);
-                        newBuys.AppendChild(newBuyElement);
-                    }
-
-                    // Add child nodes (sales)
-                    XmlElement newSales = xmlPortfolio.CreateElement("Sales");
-                    newShareNode.AppendChild(newSales);
-
-                    // Add child nodes (costs)
-                    XmlElement newCosts = xmlPortfolio.CreateElement("Costs");
-                    newShareNode.AppendChild(newCosts);
-                    foreach (var costElementYear in shareObject.AllCostsEntries.GetAllCostsOfTheShare())
-                    {
-                        XmlElement newCostElement = xmlPortfolio.CreateElement(shareObject.CostsTagNamePre);
-                        newCostElement.SetAttribute(shareObject.CostsBuyPartAttrName, costElementYear.CostOfABuyAsString);
-                        newCostElement.SetAttribute(shareObject.CostsDateAttrName, costElementYear.CostDateAsString);
-                        newCostElement.SetAttribute(shareObject.CostsValueAttrName, costElementYear.CostValueAsString);
-                        newCostElement.SetAttribute(shareObject.BuyDocumentAttrName, costElementYear.CostDocument);
-                        newCosts.AppendChild(newCostElement);
-                    }
-
-                    // Add child nodes (dividend)
-                    XmlElement newDividend = xmlPortfolio.CreateElement("Dividends");
-                    newDividend.SetAttribute(shareObject.DividendPayoutIntervalAttrName, shareObject.DividendPayoutIntervalAsStr);
-                    newShareNode.AppendChild(newDividend);
-
-                    #endregion Buys / Sales / Costs / Dividends
-
-                    #region Taxes
-
-                    // Add child nodes (taxes)
-                    XmlElement newRegularTaxesElement = xmlPortfolio.CreateElement(shareObject.TaxTagNameRegularTaxes);
-
-                    XmlElement newRegularTaxAtSourceElement = xmlPortfolio.CreateElement(shareObject.TaxTagNameTaxAtSource);
-                    newRegularTaxAtSourceElement.SetAttribute(shareObject.TaxTaxAtSourceFlagAttrName, shareObject.TaxTaxAtSourceFlagAsStr);
-                    newRegularTaxAtSourceElement.SetAttribute(shareObject.TaxTaxAtSourcePercentageAttrName, shareObject.TaxTaxAtSourcePercentageAsStr);
-                    newRegularTaxesElement.AppendChild(newRegularTaxAtSourceElement);
-
-                    XmlElement newRegularCapitalGainsTaxElement = xmlPortfolio.CreateElement(shareObject.TaxTagNameCapitalGains);
-                    newRegularCapitalGainsTaxElement.SetAttribute(shareObject.TaxCapitalGainsFlagAttrName, shareObject.CapitalGainsTaxFlagAsStr);
-                    newRegularCapitalGainsTaxElement.SetAttribute(shareObject.TaxCapitalGainsPercentageAttrName, shareObject.TaxCapitalGainsPercentageAsStr);
-                    newRegularTaxesElement.AppendChild(newRegularCapitalGainsTaxElement);
-
-                    XmlElement newRegularSolidarityTaxElement = xmlPortfolio.CreateElement(shareObject.TaxTagNameSolidarity);
-                    newRegularSolidarityTaxElement.SetAttribute(shareObject.TaxSolidarityFlagAttrName, shareObject.TaxSolidarityFlagAsStr);
-                    newRegularSolidarityTaxElement.SetAttribute(shareObject.TaxSolidarityPercentageAttrName, shareObject.TaxSolidarityPercentageAsStr);
-                    newRegularTaxesElement.AppendChild(newRegularSolidarityTaxElement);
-
-                    newShareNode.AppendChild(newRegularTaxesElement);
-
-                    #endregion Taxes
-
-                    // Add share name to XML
-                    rootPortfolio.AppendChild(newShareNode);
-                }
-
-                // Close reader for saving
-                xmlReaderPortfolio.Close();
-                // Save settings
-                xmlPortfolio.Save(strPortfolioFileName);
-                // Create a new reader
-                xmlReaderPortfolio = XmlReader.Create(strPortfolioFileName, xmlReaderSettingsPortfolio);
-                xmlPortfolio.Load(strPortfolioFileName);
-            }
-            catch (Exception ex)
-            {
-                exception = ex;
-                return false;
-            }
-
-            exception = null;
-            return true;
-        }
-
-        #endregion Save share object
+        #endregion  Calculate market value, market value minus reduction and market value minus reduction and plus costs
 
         #endregion Methods
     }
+
+    // This class stores the informations of a culture info
+    public class CultureInformation
+    {
+        private string _currencySymbol;
+        private CultureInfo _cultureInfo;
+
+        public string CurrencySymbol
+        {
+            get { return _currencySymbol; }
+            set { _currencySymbol = value; }
+        }
+
+        public CultureInfo CultureInfo
+        {
+            get { return _cultureInfo; }
+            set { _cultureInfo = value; }
+        }
+
+        public CultureInformation(string currencySymbol)
+        {
+            _currencySymbol = currencySymbol;
+        }
+
+        public CultureInformation(CultureInfo cultureInfo)
+        {
+            _cultureInfo = cultureInfo;
+        }
+
+        public CultureInformation(CultureInfo cultureInfo, string currencySymbol)
+        {
+            _currencySymbol = currencySymbol;
+            _cultureInfo = cultureInfo;
+        }
+    }
+
+    //class CultureInformationTest <String, CultureInformation>
+    //{
+    //    public string _cultureISOCurrencySymbol;
+    //    public CultureInformation _cultureInformation;
+
+    //    public CultureInformationTest(string cultureISOCurrencySymbol, CultureInformation cultureInformation)
+    //    {
+    //        _cultureISOCurrencySymbol = cultureISOCurrencySymbol;
+    //        _cultureInformation = cultureInformation;
+    //    }
+
+    //}
 }

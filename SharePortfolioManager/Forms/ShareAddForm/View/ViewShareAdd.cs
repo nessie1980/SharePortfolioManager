@@ -23,6 +23,7 @@
 using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Classes;
+using SharePortfolioManager.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -54,15 +55,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         ReductionWrongValue,
         WebSiteEmpty,
         DocumentDoesNotExists,
-        TaxAtSourceEmpty,
-        TaxAtSourceWrongFormat,
-        TaxAtSourceWrongValue,
-        CapitalGainsTaxEmpty,
-        CapitalGainsTaxWrongFormat,
-        CapitalGainsTaxWrongValue,
-        SolidarityTaxEmpty,
-        SolidarityTaxWrongFormat,
-        SolidarityTaxWrongValue,
         WebSiteRegexNotFound
     };
 
@@ -76,8 +68,10 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
         ShareAddErrorCode ErrorCode { get; set; }
 
-        List<ShareObject> ShareObjectList { get; set; }
-        ShareObject ShareObject { get; set; }
+        ShareObjectMarketValue ShareObjectMarketValue { get; set; }
+        List<ShareObjectMarketValue> ShareObjectListMarketValue { get; set; }
+        ShareObjectFinalValue ShareObjectFinalValue { get; set; }
+        List<ShareObjectFinalValue> ShareObjectListFinalValue { get; set; }
 
         List<Image> ImageList { get; }
 
@@ -97,13 +91,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         CultureInfo CultureInfo { get; }
         int DividendPayoutInterval { get; set; }
         string Document { get; set; }
-
-        CheckState TaxAtSourceFlag { get; set; }
-        string TaxAtSource { get; set; }
-        CheckState CapitalGainsTaxFlag { get; set; }
-        string CapitalGainsTax { get; set; }
-        CheckState SolidarityTaxFlag { get; set; }
-        string SolidarityTax { get; set; }
 
         DialogResult ShowDialog();
         void AddFinish();
@@ -126,12 +113,12 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         /// <summary>
         /// Stores the language file
         /// </summary>
-        private Language _xmlLanguage;
+        private Language _language;
 
         /// <summary>
         /// Stores language
         /// </summary>
-        private String _strLanguage;
+        private String _languageName;
 
         /// <summary>
         /// Stores the RegEx list
@@ -149,6 +136,40 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         private ShareAddErrorCode _errorCode;
 
         #endregion Fields
+
+        #region Properties
+
+        public FrmMain ParentWindow
+        {
+            get { return _parentWindow; }
+            set { _parentWindow = value; }
+        }
+
+        public Logger Logger
+        {
+            get { return _logger; }
+            set { _logger = value; }
+        }
+
+        public Language Language
+        {
+            get { return _language; }
+            set { _language = value; }
+        }
+
+        public string LanguageName
+        {
+            get { return _languageName; }
+            set { _languageName = value; }
+        }
+
+        public bool StopFomClosingFlag
+        {
+            get { return _stopFomClosing; }
+            set { _stopFomClosing = value; }
+        }
+
+        #endregion Properties
 
         #region IViewMember
 
@@ -168,21 +189,33 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
             set { _errorCode = value; }
         }
 
-        public List<ShareObject> ShareObjectList
+        public ShareObjectMarketValue ShareObjectMarketValue
         {
-            get { return _parentWindow.ShareObjectList; }
-            set { _parentWindow.ShareObjectList = value; }
+            get { return ParentWindow.ShareObjectMarketValue; }
+            set { ParentWindow.ShareObjectMarketValue = value; }
         }
 
-        public ShareObject ShareObject
+        public List<ShareObjectMarketValue> ShareObjectListMarketValue
         {
-            get { return _parentWindow.ShareObject; }
-            set { _parentWindow.ShareObject = value; }
+            get { return ParentWindow.ShareObjectListMarketValue; }
+            set { ParentWindow.ShareObjectListMarketValue = value; }
+        }
+
+        public ShareObjectFinalValue ShareObjectFinalValue
+        {
+            get { return ParentWindow.ShareObjectFinalValue; }
+            set { ParentWindow.ShareObjectFinalValue = value; }
+        }
+
+        public List<ShareObjectFinalValue> ShareObjectListFinalValue
+        {
+            get { return ParentWindow.ShareObjectListFinalValue; }
+            set { ParentWindow.ShareObjectListFinalValue = value; }
         }
 
         public List<Image> ImageList
         {
-            get { return _parentWindow.ImageList; }
+            get { return ParentWindow.ImageList; }
         }
 
         public List<WebSiteRegex> WebSiteRegexList
@@ -345,72 +378,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
             }
         }
 
-        public CheckState TaxAtSourceFlag
-        {
-            get { return chkTaxAtSource.CheckState; }
-            set
-            {
-                if (chkTaxAtSource.CheckState == value)
-                    return;
-                chkTaxAtSource.CheckState = value;
-            }
-        }
-
-        public string TaxAtSource
-        {
-            get { return txtBoxTaxAtSource.Text; }
-            set
-            {
-                if (txtBoxTaxAtSource.Text == value)
-                    return;
-                txtBoxTaxAtSource.Text = value;
-            }
-        }
-
-        public CheckState CapitalGainsTaxFlag
-        {
-            get { return chkCapitalGainsTax.CheckState; }
-            set
-            {
-                if (chkCapitalGainsTax.CheckState == value)
-                    return;
-                chkCapitalGainsTax.CheckState = value;
-            }
-        }
-
-        public string CapitalGainsTax
-        {
-            get { return txtBoxCapitalGainsTax.Text; }
-            set
-            {
-                if (txtBoxCapitalGainsTax.Text == value)
-                    return;
-                txtBoxCapitalGainsTax.Text = value;
-            }
-        }
-
-        public CheckState SolidarityTaxFlag
-        {
-            get { return chkSolidarityTax.CheckState; }
-            set
-            {
-                if (chkSolidarityTax.CheckState == value)
-                    return;
-                chkSolidarityTax.CheckState = value;
-            }
-        }
-
-        public string SolidarityTax
-        {
-            get { return txtBoxSolidarityTax.Text; }
-            set
-            {
-                if (txtBoxSolidarityTax.Text == value)
-                    return;
-                txtBoxSolidarityTax.Text = value;
-            }
-        }
-
         #endregion Input values
 
         // TODO
@@ -421,7 +388,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
             Color clrMessage = Color.Black;
             FrmMain.EStateLevels stateLevel = FrmMain.EStateLevels.Info;
 
-            _stopFomClosing = true;
+            StopFomClosingFlag = true;
 
             // Enable controls
             this.Enabled = true;
@@ -431,15 +398,15 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 case ShareAddErrorCode.AddSuccessful:
                     {
                         strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormBuy/StateMessages/AddSuccess", _strLanguage);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/StateMessages/AddSuccess", LanguageName);
 
-                        _stopFomClosing = false;
+                        StopFomClosingFlag = false;
                         break;
                     }
                 case ShareAddErrorCode.AddFailed:
                     {
                         strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/AddFailed", _strLanguage);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/AddFailed", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
                         txtBoxVolume.Focus();
@@ -448,7 +415,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 case ShareAddErrorCode.WknEmpty:
                     {
                         strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/WKNEmpty", _strLanguage);
+                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WKNEmpty", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
                         txtBoxWkn.Focus();
@@ -457,7 +424,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 case ShareAddErrorCode.WknExists:
                     {
                         strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/WKNExists", _strLanguage);
+                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WKNExists", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
                         txtBoxWkn.Focus();
@@ -466,7 +433,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 case ShareAddErrorCode.NameEmpty:
                     {
                         strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/NameEmpty", _strLanguage);
+                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/NameEmpty", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
                         txtBoxName.Focus();
@@ -475,7 +442,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 case ShareAddErrorCode.NameExists:
                     {
                         strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/NameExists", _strLanguage);
+                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/NameExists", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
                         txtBoxName.Focus();
@@ -484,7 +451,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 case ShareAddErrorCode.VolumeEmpty:
                     {
                         strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/VolumeEmpty", _strLanguage);
+                             Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/VolumeEmpty", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
                         txtBoxVolume.Focus();
@@ -493,7 +460,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 case ShareAddErrorCode.VolumeWrongFormat:
                     {
                         strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/VolumeWrongFormat", _strLanguage);
+                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/VolumeWrongFormat", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
                         txtBoxVolume.Focus();
@@ -502,7 +469,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 case ShareAddErrorCode.VolumeWrongValue:
                     {
                         strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/VolumeWrongValue", _strLanguage);
+                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/VolumeWrongValue", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
                         txtBoxVolume.Focus();
@@ -511,7 +478,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 case ShareAddErrorCode.SharePriceEmpty:
                     {
                         strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/SharePriceEmpty", _strLanguage);
+                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/SharePriceEmpty", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
                         txtBoxSharePrice.Focus();
@@ -520,7 +487,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 case ShareAddErrorCode.SharePriceWrongFormat:
                     {
                         strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/SharePriceWrongValue", _strLanguage);
+                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/SharePriceWrongFormat", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
                         txtBoxSharePrice.Focus();
@@ -529,7 +496,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 case ShareAddErrorCode.SharePriceWrongValue:
                     {
                         strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/SharePriceWrongValue", _strLanguage);
+                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/SharePriceWrongValue", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
                         txtBoxSharePrice.Focus();
@@ -538,7 +505,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 case ShareAddErrorCode.CostsWrongFormat:
                     {
                         strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/CostsWrongFormat", _strLanguage);
+                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/CostsWrongFormat", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
                         txtBoxCosts.Focus();
@@ -547,7 +514,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 case ShareAddErrorCode.CostsWrongValue:
                     {
                         strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/CostsWrongValue", _strLanguage);
+                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/CostsWrongValue", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
                         txtBoxCosts.Focus();
@@ -556,7 +523,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 case ShareAddErrorCode.ReductionWrongFormat:
                     {
                         strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/ReductionWrongFormat", _strLanguage);
+                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ReductionWrongFormat", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
                         txtBoxReduction.Focus();
@@ -565,7 +532,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 case ShareAddErrorCode.ReductionWrongValue:
                     {
                         strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/ReductionWrongValue", _strLanguage);
+                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ReductionWrongValue", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
                         txtBoxReduction.Focus();
@@ -574,7 +541,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 case ShareAddErrorCode.WebSiteEmpty:
                     {
                         strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/WebSiteEmpty", _strLanguage);
+                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WebSiteEmpty", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
                         txtBoxWebSite.Focus();
@@ -583,96 +550,15 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 case ShareAddErrorCode.DocumentDoesNotExists:
                     {
                         strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/FileDoesNotExist", _strLanguage);
+                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/FileDoesNotExist", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
-                        break;
-                    }
-                case ShareAddErrorCode.TaxAtSourceEmpty:
-                    {
-                        strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/TaxAtSourceEmpty", _strLanguage);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxTaxAtSource.Focus();
-                        break;
-                    }
-                case ShareAddErrorCode.TaxAtSourceWrongFormat:
-                    {
-                        strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/TaxAtSourceWrongFormat", _strLanguage);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxTaxAtSource.Focus();
-                        break;
-                    }
-                case ShareAddErrorCode.TaxAtSourceWrongValue:
-                    {
-                        strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/TaxAtSourceWrongValue", _strLanguage);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxTaxAtSource.Focus();
-                        break;
-                    }
-                case ShareAddErrorCode.CapitalGainsTaxEmpty:
-                    {
-                        strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/CapitalGainsTaxEmpty", _strLanguage);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxCapitalGainsTax.Focus();
-                        break;
-                    }
-                case ShareAddErrorCode.CapitalGainsTaxWrongFormat:
-                    {
-                        strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/CapitalGainsTaxWrongFormat", _strLanguage);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxCapitalGainsTax.Focus();
-                        break;
-                    }
-                case ShareAddErrorCode.CapitalGainsTaxWrongValue:
-                    {
-                        strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/CapitalGainsTaxWrongValue", _strLanguage);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxCapitalGainsTax.Focus();
-                        break;
-                    }
-                case ShareAddErrorCode.SolidarityTaxEmpty:
-                    {
-                        strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/SolidarityTaxEmpty", _strLanguage);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxSolidarityTax.Focus();
-                        break;
-                    }
-                case ShareAddErrorCode.SolidarityTaxWrongFormat:
-                    {
-                        strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/SolidarityTaxWrongFormat", _strLanguage);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxSolidarityTax.Focus();
-                        break;
-                    }
-                case ShareAddErrorCode.SolidarityTaxWrongValue:
-                    {
-                        strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/SolidarityTaxWrongValue", _strLanguage);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxSolidarityTax.Focus();
                         break;
                     }
                 case ShareAddErrorCode.WebSiteRegexNotFound:
                     {
                         strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/WebSiteRegexNotFound", _strLanguage);
+                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WebSiteRegexNotFound", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
                         break;
@@ -681,10 +567,10 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
             Helper.AddStatusMessage(toolStripStatusLabelMessage,
                strMessage,
-               _xmlLanguage,
-               _strLanguage,
+               Language,
+               LanguageName,
                clrMessage,
-               _logger,
+               Logger,
                (int)stateLevel,
                (int)FrmMain.EComponentLevels.Application);
         }
@@ -704,16 +590,16 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         /// <summary>
         /// Constructor
         /// </summary>
-        public ViewShareAdd(FrmMain parentWindow, Logger logger, Language xmlLanguage, String strLanguage, List<WebSiteRegex> webSiteRegexList)
+        public ViewShareAdd(FrmMain parentWindow, Logger logger, Language language, String strLanguage, List<WebSiteRegex> webSiteRegexList)
         {
             InitializeComponent();
 
-            _parentWindow = parentWindow;
-            _logger = logger;
-            _xmlLanguage = xmlLanguage;
-            _strLanguage = strLanguage;
-            _webSiteRegexList = webSiteRegexList;
-            _stopFomClosing = false;
+            ParentWindow = parentWindow;
+            Logger = logger;
+            Language = language;
+            LanguageName = strLanguage;
+            WebSiteRegexList = webSiteRegexList;
+            StopFomClosingFlag = false;
         }
 
         /// <summary>
@@ -725,14 +611,14 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         private void FrmShareAdd_FormClosing(object sender, FormClosingEventArgs e)
         {
             // Check if the form should be closed
-            if (_stopFomClosing)
+            if (StopFomClosingFlag)
             {
                 // Stop closing the form
                 e.Cancel = true;
             }
 
             // Reset closing flag
-            _stopFomClosing = false;
+            StopFomClosingFlag = false;
         }
 
         /// <summary>
@@ -746,52 +632,44 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
             {
                 #region Language configuration
 
-                Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Caption", _strLanguage);
-                grpBoxGeneral.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Caption", _strLanguage);
-                lblWkn.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/WKN", _strLanguage);
-                lblDate.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Date", _strLanguage);
-                lblName.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Name", _strLanguage);
-                lblVolume.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Volume", _strLanguage);
+                Text = Language.GetLanguageTextByXPath(@"/AddFormShare/Caption", LanguageName);
+                grpBoxGeneral.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Caption", LanguageName);
+                lblWkn.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/WKN", LanguageName);
+                lblDate.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Date", LanguageName);
+                lblName.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Name", LanguageName);
+                lblVolume.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Volume", LanguageName);
                 lblVolumeUnit.Text = ShareObject.PieceUnit;
-                lblSharePrice.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/SharePrice", _strLanguage);
+                lblSharePrice.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/SharePrice", LanguageName);
                 lblSharePriceUnit.Text = new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol;
-                lblMarketValue.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/MarketValue", _strLanguage);
+                lblMarketValue.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/MarketValue", LanguageName);
                 lblMarketValueUnit.Text = new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol;
-                lblCosts.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Costs", _strLanguage);
+                lblCosts.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Costs", LanguageName);
                 lblCostsUnit.Text = new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol;
-                lblReduction.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Reduction", _strLanguage);
+                lblReduction.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Reduction", LanguageName);
                 lblReductionUnit.Text = new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol;
-                lblFinalValue.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/FinalValue", _strLanguage);
+                lblFinalValue.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/FinalValue", LanguageName);
                 lblFinalValueUnit.Text = new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol;
-                lblDividendPayoutInterval.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/PayoutInterval", _strLanguage);
+                lblDividendPayoutInterval.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/PayoutInterval", LanguageName);
                 cbxDividendPayoutInterval.Items.Add(
-                    _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item0",
-                        _strLanguage));
+                    Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item0",
+                        LanguageName));
                 cbxDividendPayoutInterval.Items.Add(
-                    _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item1",
-                        _strLanguage));
+                    Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item1",
+                        LanguageName));
                 cbxDividendPayoutInterval.Items.Add(
-                    _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item2",
-                        _strLanguage));
+                    Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item2",
+                        LanguageName));
                 cbxDividendPayoutInterval.Items.Add(
-                    _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item3",
-                        _strLanguage));
+                    Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item3",
+                        LanguageName));
 
-                lblWebSite.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/WebSite", _strLanguage);
+                lblWebSite.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/WebSite", LanguageName);
                 lblCultureInfo.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/CultureInfo", _strLanguage);
-                lblDocument.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Document", _strLanguage);
+                    Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/CultureInfo", LanguageName);
+                lblDocument.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Document", LanguageName);
 
-                grpBoxTaxes.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxTaxes/Caption", _strLanguage);
-                lblTaxAtSource.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxTaxes/Labels/TaxAtSource", _strLanguage);
-                lblTaxAtSourceUnit.Text = ShareObject.PercentageUnit;
-                lblCapitalGainsTax.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxTaxes/Labels/CapitalGainsTax", _strLanguage);
-                lblCapitalGainsTaxUnit.Text = ShareObject.PercentageUnit;
-                lblSolidarityTax.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxTaxes/Labels/SolidarityTax", _strLanguage);
-                lblSolidarityTaxUnit.Text = ShareObject.PercentageUnit;
-
-                btnSave.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Buttons/Save", _strLanguage);
-                btnCancel.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Buttons/Cancel", _strLanguage);
+                btnSave.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/Buttons/Save", LanguageName);
+                btnCancel.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/Buttons/Cancel", LanguageName);
 
                 #endregion Language configuration
 
@@ -800,14 +678,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 List<string> list = new List<string>();
                 foreach (CultureInfo ci in CultureInfo.GetCultures(CultureTypes.AllCultures))
                 {
-                    //string specName = "(none)";
-                    //try
-                    //{
-                    //    specName = CultureInfo.CreateSpecificCulture(ci.Name).Name;
-                    //}
-                    //catch
-                    //{ }
-
                     list.Add(string.Format("{0}", ci.Name));
                 }
 
@@ -825,6 +695,10 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
                 #endregion Get culture info
 
+                // Load button images
+                btnSave.Image = Resources.black_save;
+                btnCancel.Image = Resources.black_cancel;
+
                 cbxDividendPayoutInterval.SelectedIndex = 0;
 
                 datePickerDate.Value = DateTime.Now;
@@ -838,9 +712,9 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                    _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/AddShowFailed", _strLanguage),
-                    _xmlLanguage, _strLanguage,
-                    Color.DarkRed, _logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/AddShowFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -870,7 +744,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
             try
             {
                 string strFilter = "pdf (*.pdf)|*.pdf|txt (*.txt)|.txt|doc (*.doc)|.doc|docx (*.docx)|.docx";
-                txtBoxDocument.Text = Helper.SetDocument(_xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/OpenFileDialog/Title", _strLanguage), strFilter, txtBoxDocument.Text);
+                txtBoxDocument.Text = Helper.SetDocument(Language.GetLanguageTextByXPath(@"/AddFormShare/OpenFileDialog/Title", LanguageName), strFilter, txtBoxDocument.Text);
             }
             catch (Exception ex)
             {
@@ -880,9 +754,9 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                    _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/ChoseDocumentFailed", _strLanguage),
-                    _xmlLanguage, _strLanguage,
-                    Color.DarkRed, _logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ChoseDocumentFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -907,12 +781,12 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 MessageBox.Show("btnSave_Click()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
-                _stopFomClosing = true;
+                StopFomClosingFlag = true;
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                    _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/AddSaveFailed", _strLanguage),
-                    _xmlLanguage, _strLanguage,
-                    Color.DarkRed, _logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/AddSaveFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
 
                 // Enable controls
                 this.Enabled = true;
@@ -926,7 +800,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         /// <param name="e">EventArgs</param>
         private void OnBtnCancel_Click(object sender, EventArgs e)
         {
-            _stopFomClosing = false;
+            StopFomClosingFlag = false;
             Close();
         }
 
@@ -1039,118 +913,5 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         }
 
         #endregion Comboboxes
-
-        #region CheckBoxes tax
-
-        /// <summary>
-        /// This function enables or disables the text box for the percentage value
-        /// </summary>
-        /// <param name="sender">CheckBox</param>
-        /// <param name="e">EventArgs</param>
-        private void chkTaxAtSource_CheckedChanged(object sender, EventArgs e)
-        {
-            if (chkTaxAtSource.CheckState == CheckState.Checked)
-            {
-                txtBoxTaxAtSource.Enabled = true;
-                txtBoxTaxAtSource.ReadOnly = false;
-                txtBoxTaxAtSource.Focus();
-            }
-            else
-            {
-                txtBoxTaxAtSource.Enabled = false;
-                txtBoxTaxAtSource.ReadOnly = true;
-            }
-
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("TaxAtSourceFlag"));
-        }
-
-        /// <summary>
-        /// This function enables or disables the text box for the percentage value
-        /// </summary>
-        /// <param name="sender">CheckBox</param>
-        /// <param name="e">EventArgs</param>
-        private void chkCapitalGainsTax_CheckedChanged(object sender, EventArgs e)
-        {
-            if (chkCapitalGainsTax.CheckState == CheckState.Checked)
-            {
-                txtBoxCapitalGainsTax.Enabled = true;
-                txtBoxCapitalGainsTax.ReadOnly = false;
-                txtBoxCapitalGainsTax.Focus();
-            }
-            else
-            {
-                txtBoxCapitalGainsTax.Enabled = false;
-                txtBoxCapitalGainsTax.ReadOnly = true;
-            }
-
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("CapitalGainsTaxFlag"));
-        }
-
-        /// <summary>
-        /// This function enables or disables the text box for the percentage value
-        /// </summary>
-        /// <param name="sender">CheckBox</param>
-        /// <param name="e">EventArgs</param>
-        private void chkSolidarityTax_CheckedChanged(object sender, EventArgs e)
-        {
-            if (chkSolidarityTax.CheckState == CheckState.Checked)
-            {
-                txtBoxSolidarityTax.Enabled = true;
-                txtBoxSolidarityTax.ReadOnly = false;
-                txtBoxSolidarityTax.Focus();
-            }
-            else
-            {
-                txtBoxSolidarityTax.Enabled = false;
-                txtBoxSolidarityTax.ReadOnly = true;
-            }
-
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("SolidarityTaxFlag"));
-        }
-
-        #endregion CheckBoxes tax
-
-        #region TextBoxes tax
-
-        private void OnTxtBoxTaxAtSource_TextChanged(object sender, EventArgs e)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("TaxAtSource"));
-        }
-
-        private void OnTxtBoxTaxAtSource_Leave(object sender, EventArgs e)
-        {
-            if (FormatInputValues != null)
-                FormatInputValues(this, new EventArgs());
-        }
-
-        private void OnTxtBoxCapitalGainsTax_TextChanged(object sender, EventArgs e)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("CapitalGainsTax"));
-        }
-
-        private void OnTxtBoxCapitalGainsTax_Leave(object sender, EventArgs e)
-        {
-            if (FormatInputValues != null)
-                FormatInputValues(this, new EventArgs());
-        }
-
-        private void OnTxtBoxSolidarityTax_TextChanged(object sender, EventArgs e)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("SolidarityTax"));
-        }
-
-        private void OnTxtBoxSolidarityTax_Leave(object sender, EventArgs e)
-        {
-            if (FormatInputValues != null)
-                FormatInputValues(this, new EventArgs());
-        }
-
-        #endregion TextBoxes tax
     }
 }

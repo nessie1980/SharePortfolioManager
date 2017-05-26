@@ -39,7 +39,7 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores the language file
         /// </summary>
-        private Language _xmlLanguage;
+        private Language XmlLanguage;
 
         /// <summary>
         /// Stores language
@@ -63,7 +63,7 @@ namespace SharePortfolioManager
             InitializeComponent();
 
             _parentWindow = parentWindow;
-            _xmlLanguage = xmlLanguage;
+            XmlLanguage = xmlLanguage;
             _strLanguage = strLanguage;
             _stopFomClosing = false;
         }
@@ -72,14 +72,14 @@ namespace SharePortfolioManager
         {
             #region Language configuration
 
-            Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Caption", _strLanguage);
-            grpBoxVersions.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/Version", _strLanguage);
-            lblApplicationVersion.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/ApplicationVersion", _strLanguage);
-            lblWebParserDllVersion.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/WebParserDLLVersion", _strLanguage);
-            lblLanguageDllVersion.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/LanguageDLLVersion", _strLanguage);
-            lblLoggerDllVersion.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/LoggerDLLVersion", _strLanguage);
+            Text = XmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Caption", _strLanguage);
+            grpBoxVersions.Text = XmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/Version", _strLanguage);
+            lblApplicationVersion.Text = XmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/ApplicationVersion", _strLanguage);
+            lblWebParserDllVersion.Text = XmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/WebParserDLLVersion", _strLanguage);
+            lblLanguageDllVersion.Text = XmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/LanguageDLLVersion", _strLanguage);
+            lblLoggerDllVersion.Text = XmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/LoggerDLLVersion", _strLanguage);
 
-            btnOk.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Buttons/Ok", _strLanguage);
+            btnOk.Text = XmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Buttons/Ok", _strLanguage);
 
             #endregion Language configuration
 

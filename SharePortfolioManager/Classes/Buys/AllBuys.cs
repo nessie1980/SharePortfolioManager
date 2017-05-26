@@ -43,9 +43,14 @@ namespace SharePortfolioManager
         private decimal _buyMarketValueTotal = 0;
 
         /// <summary>
-        /// Stores the total buy value with the discount and costs
+        /// Stores the total buy value with the reduction
         /// </summary>
-        private decimal _buyFinalValueTotal = 0;
+        private decimal _buyMarketValueReductionTotal = 0;
+
+        /// <summary>
+        /// Stores the total buy value with the reduction and costs
+        /// </summary>
+        private decimal _buyMarketValueReductionCostsTotal = 0;
 
         /// <summary>
         /// Stores the total buy volume of the share
@@ -85,20 +90,36 @@ namespace SharePortfolioManager
             get { return Helper.FormatDecimal(BuyMarketValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo); }
         }
 
-        public decimal BuyFinalValueTotal
+        public decimal BuyMarketValueReductionTotal
         {
-            get { return _buyFinalValueTotal; }
-            internal set { _buyFinalValueTotal = value; }
+            get { return _buyMarketValueReductionTotal; }
+            internal set { _buyMarketValueReductionTotal = value; }
         }
 
-        public string BuyFinalValueTotalAsStr
+        public string BuyMarketValueReductionTotalAsStr
         {
-            get { return Helper.FormatDecimal(BuyFinalValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo); }
+            get { return Helper.FormatDecimal(BuyMarketValueReductionTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo); }
         }
 
-        public string BuyFinalValueTotalAsStrUnit
+        public string BuyMarketValueReductionTotalAsStrUnit
         {
-            get { return Helper.FormatDecimal(BuyFinalValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo); }
+            get { return Helper.FormatDecimal(BuyMarketValueReductionTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo); }
+        }
+
+        public decimal BuyMarketValueReductionCostsTotal
+        {
+            get { return _buyMarketValueReductionCostsTotal; }
+            internal set { _buyMarketValueReductionCostsTotal = value; }
+        }
+
+        public string BuyMarketValueReductionCostsTotalAsStr
+        {
+            get { return Helper.FormatDecimal(BuyMarketValueReductionCostsTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo); }
+        }
+
+        public string BuyMarketValueReductionCostsTotalAsStrUnit
+        {
+            get { return Helper.FormatDecimal(BuyMarketValueReductionCostsTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo); }
         }
 
         public decimal BuyVolumeTotal
@@ -187,20 +208,23 @@ namespace SharePortfolioManager
 
                 // Calculate the total buy value and total buy volume
                 // Reset total buy value and buy volume
-                BuyFinalValueTotal = 0;
                 BuyMarketValueTotal = 0;
+                BuyMarketValueReductionTotal = 0;
+                BuyMarketValueReductionCostsTotal = 0;
                 BuyVolumeTotal = 0;
 
                 // Calculate the new total buy value and buy volume
                 foreach (var calcObject in AllBuysOfTheShareDictionary.Values)
                 {
-                    BuyFinalValueTotal += calcObject.BuyFinalValueYear;
                     BuyMarketValueTotal += calcObject.BuyMarketValueYear;
+                    BuyMarketValueReductionTotal += calcObject.BuyMarketValueReductionYear;
+                    BuyMarketValueReductionCostsTotal += calcObject.BuyMarketValueReductionCostsYear;
                     BuyVolumeTotal += calcObject.BuyVolumeYear;
                 }
 #if DEBUG
                 Console.WriteLine(@"MarketValueTotal:{0}", BuyMarketValueTotal);
-                Console.WriteLine(@"FinalValueTotal:{0}", BuyFinalValueTotal);
+                Console.WriteLine(@"PurchaseValueTotal:{0}", BuyMarketValueReductionTotal);
+                Console.WriteLine(@"FinalValueTotal:{0}", BuyMarketValueReductionCostsTotal);
                 Console.WriteLine(@"VolumeTotal:{0}", BuyVolumeTotal);
 #endif
             }
@@ -251,21 +275,24 @@ namespace SharePortfolioManager
 
                 // Calculate the total buy value and volume
                 // Reset total buy value and volume
-                BuyFinalValueTotal = 0;
+                BuyMarketValueReductionCostsTotal = 0;
+                BuyMarketValueReductionTotal = 0;
                 BuyMarketValueTotal = 0;
                 BuyVolumeTotal = 0;
 
                 // Calculate the new total buy value and volume
                 foreach (var calcObject in AllBuysOfTheShareDictionary.Values)
                 {
-                    BuyFinalValueTotal += calcObject.BuyFinalValueYear;
+                    BuyMarketValueReductionCostsTotal += calcObject.BuyMarketValueReductionCostsYear;
+                    BuyMarketValueReductionTotal += calcObject.BuyMarketValueReductionYear;
                     BuyMarketValueTotal += calcObject.BuyMarketValueYear;
                     BuyVolumeTotal += calcObject.BuyVolumeYear;
                 }
 
 #if DEBUG
                 Console.WriteLine(@"MarketValueTotal:{0}", BuyMarketValueTotal);
-                Console.WriteLine(@"FinalValueTotal:{0}", BuyFinalValueTotal);
+                Console.WriteLine(@"MarketValueWithReduction:{0}", BuyMarketValueReductionTotal);
+                Console.WriteLine(@"FinalValueTotal:{0}", BuyMarketValueReductionCostsTotal);
                 Console.WriteLine(@"VolumeTotal:{0}", BuyVolumeTotal);
 #endif
             }

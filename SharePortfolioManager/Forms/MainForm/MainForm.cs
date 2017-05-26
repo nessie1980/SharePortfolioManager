@@ -41,12 +41,12 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores the position of the application window (start position)
         /// </summary>
-        private Point _windowPosition;
+        private Point _myWindowPosition;
 
         /// <summary>
         /// Stores the size of the application window
         /// </summary>
-        private Size _windowSize;
+        private Size _myWindowSize;
 
         /// <summary>
         /// Stores the loaded language setting
@@ -118,7 +118,7 @@ namespace SharePortfolioManager
         /// Stores the value how much log files should be stored
         /// </summary>
         private int _loggerStoredLogFiles = 10;
-        
+
         /// <summary>
         /// Stores the value if the logger should log to a file
         /// </summary>
@@ -132,7 +132,7 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores the logger file name with the path
         /// </summary>
-        private string _loggerPathFileName = Application.StartupPath + @"\Logs\" + string.Format("{0}_{1:00}_{2:00}_Log.txt", DateTime.Now.Year, DateTime.Now.Month ,DateTime.Now.Day);
+        private string _loggerPathFileName = Application.StartupPath + @"\Logs\" + string.Format("{0}_{1:00}_{2:00}_Log.txt", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
 
         /// <summary>
         /// Stores an instance of the Logger
@@ -143,25 +143,25 @@ namespace SharePortfolioManager
 
         #region XML files settings
 
-        private Language _xmlLanguage;
+        private Language _language;
         private const string LanguageFileName = @"Settings\Language.XML";
 
-        private XmlReaderSettings _xmlReaderSettingsSettings;
-        private XmlDocument _xmlSettings;
-        private XmlReader _xmlReaderSettings;
+        private XmlReaderSettings _readerSettingsSettings;
+        private XmlDocument _settings;
+        private XmlReader _readerSettings;
         private const string SettingsFileName = @"Settings\Settings.XML";
 
 
-        private XmlReaderSettings _xmlReaderSettingsWebSites;
-        private XmlDocument _xmlWebSites;
-        private XmlReader _xmlReaderWebSites;
+        private XmlReaderSettings _readerSettingsWebSites;
+        private XmlDocument _webSites;
+        private XmlReader _readerWebSites;
         private const string WebSitesFileName = @"Settings\WebSites.XML";
 
-        private XmlReaderSettings _xmlReaderSettingsPortfolio;
-        private XmlDocument _xmlPortfolio;
-        private XmlReader _xmlReaderPortfolio;
+        private XmlReaderSettings _readerSettingsPortfolio;
+        private XmlDocument _portfolio;
+        private XmlReader _readerPortfolio;
         private string PortfolioFileName = @"Portfolios\Portfolio.XML";
-        
+
         #endregion XML files settings
 
         #region Flags
@@ -179,22 +179,30 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores if a new share has been added and if the DataGridView portfolio must be refreshed
         /// </summary>
-        private bool _bAddFlag;
+        private bool _bAddFlagMarketValue;
+        private bool _bAddFlagFinalValue;
 
         /// <summary>
         /// Stores if a share has been edit and if the DataGridView portfolio must be refreshed
         /// </summary>
-        private bool _bEditFlag;
+        private bool _bEditFlagMarketValue;
+        private bool _bEditFlagFinalValue;
 
         /// <summary>
         /// Stores if a share has been deleted and if the DataGridView portfolio must be refreshed
         /// </summary>
-        private bool _bDeleteFlag;
+        private bool _bDeleteFlagMarketValue;
+        private bool _bDeleteFlagFinalValue;
 
         /// <summary>
         /// Stores if a portfolio file has no shares listed
         /// </summary>
         private bool _bPortfolioEmpty;
+
+        /// <summary>
+        /// Stores if the market values or the final values are selected (tab control share overview)
+        /// </summary>
+        private bool _bMarketValueOverviewTabSelected;
 
         #endregion Flags
 
@@ -215,27 +223,39 @@ namespace SharePortfolioManager
         #region Share / share list
 
         /// <summary>
-        /// Stores the share objects of the XML
+        /// Stores a single share object with the market value
+        /// for e.g. the selected share in the data grid view or for saving and so on
         /// </summary>
-        private List<ShareObject> _shareObjectsList = new List<ShareObject>();
+        private ShareObjectMarketValue _shareObjectMarketValue = null;
+
+        /// <summary>
+        /// Stores a single share object with the final value
+        /// for e.g. the selected share in the data grid view or for saving and so on
+        /// </summary>
+        private ShareObjectFinalValue _shareObjectFinalValue = null;
+
+        /// <summary>
+        /// Stores the share objects (market value) of the XML
+        /// </summary>
+        private List<ShareObjectMarketValue> _shareObjectsListMarketValue = new List<ShareObjectMarketValue>();
+
+        /// <summary>
+        /// Stores the share objects (final value) of the XML
+        /// </summary>
+        private List<ShareObjectFinalValue> _shareObjectsListFinalValue = new List<ShareObjectFinalValue>();
 
         /// <summary>
         /// Stores the WKN of the shares with an invalid website configuration
         /// </summary>
-        private List<string> _regexSearchFailedList = new List<string>(); 
+        private List<string> _regexSearchFailedList = new List<string>();
 
         /// <summary>
-        /// Stores the share object of the current selected share in the DataGridView portfolio
+        /// Stores the index of the currently updating share object when all shares will be updated.
         /// </summary>
-        private ShareObject _shareObject = null;
+        private int _selectedDataGridViewShareIndex;
 
         /// <summary>
-        /// Stores the index of the currently updating share when all shares will be updated.
-        /// </summary>
-        private int _selectedIndex;
-
-        /// <summary>
-        /// Stores the index of the last displayed row index in the DataGridView portfolio;
+        /// Stores the index of the last displayed row index in the data grid view with the portfolio;
         /// </summary>
         private int _lastFirstDisplayedRowIndex;
 
@@ -255,7 +275,7 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores the names of the controls which should be enabled or disabled
         /// </summary>
-        private readonly List<string> _enableDisableControlNames;
+        private readonly List<string> _enableDisableControlNames = new List<string>();
 
         #endregion Control names list
 
@@ -263,22 +283,58 @@ namespace SharePortfolioManager
 
         #region Properties
 
+        #region Form
+
+        public Point MyWindowPosition
+        {
+            get { return _myWindowPosition; }
+            set { _myWindowPosition = value; }
+        }
+
+        public Size MyWindowSize
+        {
+            get { return _myWindowSize; }
+            set { _myWindowSize = value; }
+        }
+
+        public string LanguageName
+        {
+            get { return _languageName; }
+            set { _languageName = value; }
+        }
+
+        public int StatusMessageClearTimerValue
+        {
+            get { return _statusMessageClearTimerValue; }
+            set { _statusMessageClearTimerValue = value; }
+        }
+
+        #endregion Form
+
+        #region Logger
+
         public int LoggerGUIEntriesSize
         {
             get { return _loggerEntrySize; }
             set { _loggerEntrySize = value; }
         }
 
-        public int LoggerComponentLevel
+        public List<string> LoggerStatelList
         {
-            get { return _loggerComponentLevel; }
-            set
-            {
-                if (value < 8 && value > -1)
-                    _loggerComponentLevel = value;
-                else
-                    _loggerComponentLevel = 0;
-            }
+            get { return _loggerStatelList; }
+            set { _loggerStatelList = value; }
+        }
+
+        public List<string> LoggerComponentNamesList
+        {
+            get { return _loggerComponentNamesList; }
+            set { _loggerComponentNamesList = value; }
+        }
+
+        public List<Color> LoggerConsoleColorList
+        {
+            get { return _loggerConsoleColorList; }
+            set { _loggerConsoleColorList = value; }
         }
 
         public int LoggerStateLevel
@@ -290,6 +346,18 @@ namespace SharePortfolioManager
                     _loggerStateLevel = value;
                 else
                     _loggerStateLevel = 0;
+            }
+        }
+
+        public int LoggerComponentLevel
+        {
+            get { return _loggerComponentLevel; }
+            set
+            {
+                if (value < 8 && value > -1)
+                    _loggerComponentLevel = value;
+                else
+                    _loggerComponentLevel = 0;
             }
         }
 
@@ -318,37 +386,218 @@ namespace SharePortfolioManager
             set { _loggerLogCleanUpAtStartUpEnabled = value; }
         }
 
-        public Language XmlLanguage
+        public string LoggerPathFileName
         {
-            get { return _xmlLanguage; }
+            get { return _loggerPathFileName; }
+            set { _loggerPathFileName = value; }
         }
 
-        public XmlDocument XmlSettings
+        /// <summary>
+        /// Stores an instance of the Logger
+        /// </summary>
+        public Logger Logger
         {
-            get { return _xmlSettings; }    
+            get { return _logger; }
         }
 
-        public List<ShareObject> ShareObjectList
+        #endregion Logger
+
+        #region XML files settings
+
+        public Language Language
         {
-            get { return _shareObjectsList; }
-            internal set { _shareObjectsList = value; }
+            get { return _language; }
+            set { _language = value; }
         }
 
-        public ShareObject ShareObject
+        public XmlReaderSettings ReaderSettingsSettings
         {
-            get { return _shareObject; }           
-            internal  set { _shareObject = value; }
+            get { return _readerSettingsSettings; }
+            set { _readerSettingsSettings = value; }
         }
 
-        public List<Image> ImageList
+        public XmlDocument Settings
         {
-            get { return _imageList; }
+            get { return _settings; }
+            set { _settings = value; }
+        }
+
+        public XmlReader ReaderSettings
+        {
+            get { return _readerSettings; }
+            set { _readerSettings = value; }
+        }
+
+        public XmlReaderSettings ReaderSettingsWebSites
+        {
+            get { return _readerSettingsWebSites; }
+            set { _readerSettingsWebSites = value; }
+        }
+
+        public XmlDocument WebSites
+        {
+            get { return _webSites; }
+            set { _webSites = value; }
+        }
+
+        public XmlReader ReaderWebSites
+        {
+            get { return _readerWebSites; }
+            set { _readerWebSites = value; }
+        }
+
+        public XmlReaderSettings ReaderSettingsPortfolio
+        {
+            get { return _readerSettingsPortfolio; }
+            set { _readerSettingsPortfolio = value; }
+        }
+
+        public XmlDocument Portfolio
+        {
+            get { return _portfolio; }
+            set { _portfolio = value; }
+        }
+
+        public XmlReader ReaderPortfolio
+        {
+            get { return _readerPortfolio; }
+            set { _readerPortfolio = value; }
+        }
+
+        #endregion XML files settings
+
+        #region Flags
+
+        public bool InitFlag
+        {
+            get { return _bInitFlag; }
+            set { _bInitFlag = value; }
+        }
+
+        public bool UpdateAllFlag
+        {
+            get { return _bUpdateAll; }
+            set { _bUpdateAll = value; }
+        }
+
+        public bool AddFlagMarketValue
+        {
+            get { return _bAddFlagMarketValue; }
+            set { _bAddFlagMarketValue = value; }
+        }
+
+        public bool AddFlagFinalValue
+        {
+            get { return _bAddFlagFinalValue; }
+            set { _bAddFlagFinalValue = value; }
+        }
+
+        public bool EditFlagMarketValue
+        {
+            get { return _bEditFlagMarketValue; }
+            set { _bEditFlagMarketValue = value; }
+        }
+
+        public bool EditFlagFinalValue
+        {
+            get { return _bEditFlagFinalValue; }
+            set { _bEditFlagFinalValue = value; }
+        }
+
+        public bool DeleteFlagMarketValue
+        {
+            get { return _bDeleteFlagMarketValue; }
+            set { _bDeleteFlagMarketValue = value; }
+        }
+
+        public bool DeleteFlagFinalValue
+        {
+            get { return _bDeleteFlagFinalValue; }
+            set { _bDeleteFlagFinalValue = value; }
+        }
+
+        public bool PortfolioEmptyFlag
+        {
+            get { return _bPortfolioEmpty; }
+            set { _bPortfolioEmpty = value; }
+        }
+
+        public bool MarketValueOverviewTabSelected
+        {
+            get { return _bMarketValueOverviewTabSelected; }
+            set { _bMarketValueOverviewTabSelected = value; }
+        }
+
+        #endregion Flags
+
+        #region WebParser
+
+        public WebParser.WebParser WebParser
+        {
+            get { return _webParser; }
         }
 
         public List<WebSiteRegex> WebSiteRegexList
         {
             get { return _webSiteRegexList; }
             set { _webSiteRegexList = value; }
+        }
+
+        #endregion WebParser
+
+        #region Share objects
+
+        public ShareObjectMarketValue ShareObjectMarketValue
+        {
+            get { return _shareObjectMarketValue; }
+            internal set { _shareObjectMarketValue = value; }
+        }
+
+        public ShareObjectFinalValue ShareObjectFinalValue
+        {
+            get { return _shareObjectFinalValue; }
+            internal set { _shareObjectFinalValue = value; }
+        }
+
+        public List<ShareObjectMarketValue> ShareObjectListMarketValue
+        {
+            get { return _shareObjectsListMarketValue; }
+            internal set { _shareObjectsListMarketValue = value; }
+        }
+
+        public List<ShareObjectFinalValue> ShareObjectListFinalValue
+        {
+            get { return _shareObjectsListFinalValue; }
+            internal set { _shareObjectsListFinalValue = value; }
+        }
+
+        #endregion Share objects
+
+        public List<string> RegexSearchFailedList
+        {
+            get { return _regexSearchFailedList; }
+            set { _regexSearchFailedList = value; }
+        }
+
+        #region Selected indices's
+
+        public int SelectedDataGridViewShareIndex
+        {
+            get { return _selectedDataGridViewShareIndex; }
+            set { _selectedDataGridViewShareIndex = value; }
+        }
+
+        public int LastFirstDisplayedRowIndex
+        {
+            get { return _lastFirstDisplayedRowIndex; }
+            set { _lastFirstDisplayedRowIndex = value; }
+        }
+
+        #endregion Selected indices's
+
+        public List<string> EnableDisableControlNames
+        {
+            get { return _enableDisableControlNames; }
         }
 
         #endregion Properties
@@ -380,22 +629,19 @@ namespace SharePortfolioManager
             {
                 #region Set controls names for the "enable / disable" list
 
-                _enableDisableControlNames = new List<string>()
-                {
-                    "menuStrip1",
-                    "btnRefreshAll",
-                    "btnRefresh",
-                    "btnAdd",
-                    "btnEdit",
-                    "btnDelete",
-                    "btnClearLogger",
-                    "dataGridViewSharePortfolio",
-                    "dataGridViewSharePortfolioFooter",
-                    "tabCtrlDetails"
-                };
+                EnableDisableControlNames.Add("menuStrip1");
+                EnableDisableControlNames.Add("btnRefreshAll");
+                EnableDisableControlNames.Add("btnRefresh");
+                EnableDisableControlNames.Add("btnAdd");
+                EnableDisableControlNames.Add("btnEdit");
+                EnableDisableControlNames.Add("btnDelete");
+                EnableDisableControlNames.Add("btnClearLogger");
+                EnableDisableControlNames.Add("dataGridViewSharePortfolio");
+                EnableDisableControlNames.Add("dataGridViewSharePortfolioFooter");
+                EnableDisableControlNames.Add("tabCtrlDetails");
 
                 // Disable all controls
-                Helper.EnableDisableControls(false, this, _enableDisableControlNames);
+                Helper.EnableDisableControls(false, this, EnableDisableControlNames);
 
                 #endregion Enable / disable controls names
 
@@ -413,20 +659,20 @@ namespace SharePortfolioManager
 
                 #region Logger
 
-                if (_bInitFlag)
+                if (InitFlag)
                 {
                     // Initialize logger
-                    _logger.LoggerInitialize(_loggerStateLevel, _loggerComponentLevel, _loggerStatelList, _loggerComponentNamesList, _loggerConsoleColorList, _loggerLogToFileEnabled, _loggerEntrySize, _loggerPathFileName, null, true);
+                    Logger.LoggerInitialize(LoggerStateLevel, LoggerComponentLevel, LoggerStatelList, LoggerComponentNamesList, LoggerConsoleColorList, LoggerLogToFileEnabled, LoggerGUIEntriesSize, LoggerPathFileName, null, true);
 
                     // Check if the logger initialization was not successful
-                    if (_logger.InitState != Logger.EInitState.Initialized)
-                        _bInitFlag = false;
+                    if (Logger.InitState != Logger.EInitState.Initialized)
+                        InitFlag = false;
                     else
                     {
                         // Check if the startup cleanup of the log files should be done
                         if (LoggerLogCleanUpAtStartUpEnabled)
                         {
-                            _logger.CleanUpLogFiles(LoggerStoredLogFiles);
+                            Logger.CleanUpLogFiles(LoggerStoredLogFiles);
                         }
                     }
                 }
@@ -465,7 +711,7 @@ namespace SharePortfolioManager
 
                 #region Read shares from XML
 
-                Text = _xmlLanguage.GetLanguageTextByXPath(@"/Application/Name", _languageName)
+                Text = Language.GetLanguageTextByXPath(@"/Application/Name", LanguageName)
                     + @" " + Helper.GetApplicationVersion().ToString();
 
                 // Only load portfolio if a portfolio is set in the settings
@@ -480,30 +726,21 @@ namespace SharePortfolioManager
 
                 #region Add items to DataGridView portfolio and set DataGridView portfolio footer
 
-                AddSharesToDataGridView();
+                AddSharesToDataGridViews();
 
-                AddShareFooter();
+                AddShareFooters();
 
                 #endregion Add items to DataGridView portfolio and set DataGridView portfolio footer
 
-                #region Select first item
-
-                if (dgvPortfolio.Rows.Count > 0)
-                {
-                    dgvPortfolio.Rows[0].Selected = true;
-                }
-
-                #endregion Select first item
-
                 #region Message if portfolio is empty
 
-                if (_bPortfolioEmpty)
+                if (PortfolioEmptyFlag && InitFlag)
                 {
                     // Add status message
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/PortfolioConfigurationListEmpty", _languageName),
-                        _xmlLanguage, _languageName,
-                        Color.OrangeRed, _logger, (int)EStateLevels.Warning, (int)EComponentLevels.Application);
+                        Language.GetLanguageTextByXPath(@"/MainForm/Errors/PortfolioConfigurationListEmpty", LanguageName),
+                        Language, LanguageName,
+                        Color.OrangeRed, Logger, (int)EStateLevels.Warning, (int)EComponentLevels.Application);
                 }
 
                 #endregion Message if portfolio is empty
@@ -511,33 +748,44 @@ namespace SharePortfolioManager
                 #region Enable / disable controls
 
                 // Enable controls if the initialization was correct and a portfolio is set
-                if (ShareObjectList.Count != 0 && PortfolioFileName != "")
+                if (ShareObjectListMarketValue.Count != 0 && ShareObjectListFinalValue.Count != 0 && PortfolioFileName != "")
                 {
                     // Enable controls
-                    _enableDisableControlNames.Add(@"btnRefreshAll");
-                    _enableDisableControlNames.Add(@"btnRefresh");
-                    _enableDisableControlNames.Add(@"btnEdit");
-                    _enableDisableControlNames.Add(@"btnDelete");
-                    _enableDisableControlNames.Add(@"btnClearLogger");
-                    _enableDisableControlNames.Add(@"dgvPortfolio");
-                    _enableDisableControlNames.Add(@"dgvPortfolioFooter");
-                    _enableDisableControlNames.Add(@"tabCtrlDetails");
+                    EnableDisableControlNames.Add(@"btnRefreshAll");
+                    EnableDisableControlNames.Add(@"btnRefresh");
+                    EnableDisableControlNames.Add(@"btnEdit");
+                    EnableDisableControlNames.Add(@"btnDelete");
+                    EnableDisableControlNames.Add(@"btnClearLogger");
+                    EnableDisableControlNames.Add(@"dgvPortfolio");
+                    EnableDisableControlNames.Add(@"dgvPortfolioFooter");
+                    EnableDisableControlNames.Add(@"tabCtrlDetails");
 
                     // Enable controls
-                    Helper.EnableDisableControls(true, this, _enableDisableControlNames);
+                    Helper.EnableDisableControls(true, this, EnableDisableControlNames);
                 }
 
                 // Enable controls if the initialization was correct and a portfolio is set
-                if (_bInitFlag && PortfolioFileName == "")
-                {
+                //if (InitFlag && PortfolioFileName == "")
+                //{
                     // Enable controls
-                    _enableDisableControlNames.Clear();
-                    _enableDisableControlNames.Add(@"menuStrip1");
+                    EnableDisableControlNames.Clear();
+                    EnableDisableControlNames.Add(@"menuStrip1");
 
-                    Helper.EnableDisableControls(true, this, _enableDisableControlNames);
-                }
+                    Helper.EnableDisableControls(true, this, EnableDisableControlNames);
+                //}
 
                 #endregion Enable / disable controls
+
+                #region Select first item
+
+                if (dgvPortfolioFinalValue.Rows.Count > 0)
+                {
+                    dgvPortfolioFinalValue.Rows[0].Selected = true;
+                }
+
+                tabCtrlShareOverviews.Select();
+
+                #endregion Select first item
             }
             catch (LoggerException loggerException)
             {
@@ -546,76 +794,76 @@ namespace SharePortfolioManager
                     MessageBoxIcon.Error);
 #endif
                 // Check the logger initialization state
-                switch (_logger.InitState)
+                switch (Logger.InitState)
                 {
                     case Logger.EInitState.NotInitialized:
                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            _xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerErrors/NotInitialized", _languageName),
-                            _xmlLanguage, _languageName,
-                            Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                            Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/NotInitialized", LanguageName),
+                            Language, LanguageName,
+                            Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
                         break;
                     case Logger.EInitState.WrongSize:
                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            _xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerErrors/WrongSize", _languageName),
-                            _xmlLanguage, _languageName,
-                            Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                            Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/WrongSize", LanguageName),
+                            Language, LanguageName,
+                            Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
                         break;
                     case Logger.EInitState.ComponentLevelInvalid:
                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            _xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerErrors/ComponentLevelInvalid", _languageName),
-                            _xmlLanguage, _languageName,
-                            Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                            Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/ComponentLevelInvalid", LanguageName),
+                            Language, LanguageName,
+                            Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
                         break;
                     case Logger.EInitState.ComponentNamesMaxCount:
                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            _xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerErrors/ComponentNamesMaxCount", _languageName),
-                            _xmlLanguage, _languageName,
-                            Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                            Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/ComponentNamesMaxCount", LanguageName),
+                            Language, LanguageName,
+                            Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
                         break;
                     case Logger.EInitState.StateLevelInvalid:
                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            _xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerErrors/StateLevelInvalid", _languageName),
-                            _xmlLanguage, _languageName,
-                            Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                            Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/StateLevelInvalid", LanguageName),
+                            Language, LanguageName,
+                            Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
                         break;
                     case Logger.EInitState.StatesMaxCount:
                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            _xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerErrors/StatesMaxCount", _languageName),
-                            _xmlLanguage, _languageName,
-                            Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                            Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/StatesMaxCount", LanguageName),
+                            Language, LanguageName,
+                            Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
                         break;
                     case Logger.EInitState.ColorsMaxCount:
                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            _xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerErrors/ColorsMaxCount", _languageName),
-                            _xmlLanguage, _languageName,
-                            Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                            Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/ColorsMaxCount", LanguageName),
+                            Language, LanguageName,
+                            Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
                         break;
                     case Logger.EInitState.WriteStartupFailed:
                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            _xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerErrors/WriteStartupFailed", _languageName),
-                            _xmlLanguage, _languageName,
-                            Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                            Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/WriteStartupFailed", LanguageName),
+                            Language, LanguageName,
+                            Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
                         break;
                     case Logger.EInitState.LogPathCreationFailed:
                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            _xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerErrors/LogPathCreationFailed", _languageName),
-                            _xmlLanguage, _languageName,
-                            Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                            Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/LogPathCreationFailed", LanguageName),
+                            Language, LanguageName,
+                            Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
                         break;
                     case Logger.EInitState.InitializationFailed:
                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            _xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerErrors/InitializationFailed", _languageName),
-                            _xmlLanguage, _languageName,
-                            Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                            Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/InitializationFailed", LanguageName),
+                            Language, LanguageName,
+                            Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
                         break;
                     case Logger.EInitState.Initialized:
-                        switch (_logger.LoggerState)
+                        switch (Logger.LoggerState)
                         {
                             case Logger.ELoggerState.CleanUpLogFilesFailed:
                                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                    _xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerStateMessages/CleanUpLogFilesFailed", _languageName),
-                                    _xmlLanguage, _languageName,
-                                    Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                                    Language.GetLanguageTextByXPath(@"/Logger/LoggerStateMessages/CleanUpLogFilesFailed", LanguageName),
+                                    Language, LanguageName,
+                                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
                                 break;
                         }
                         break;
@@ -642,8 +890,8 @@ namespace SharePortfolioManager
         /// <param name="e">EventArgs</param>
         private void MainForm_Load(object sender, EventArgs e)
         {
-            Location = _windowPosition;
-            Size = _windowSize;
+            Location = MyWindowPosition;
+            Size = MyWindowSize;
         }
 
         #endregion MainForm load
@@ -658,13 +906,13 @@ namespace SharePortfolioManager
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             // Set window start position and window size
-            if (_xmlSettings != null)
+            if (Settings != null)
             {
                 try
                 {
                     // Save current window position
-                    var nodePosX = _xmlSettings.SelectSingleNode("/Settings/Window/PosX");
-                    var nodePosY = _xmlSettings.SelectSingleNode("/Settings/Window/PosY");
+                    var nodePosX = Settings.SelectSingleNode("/Settings/Window/PosX");
+                    var nodePosY = Settings.SelectSingleNode("/Settings/Window/PosY");
                     
                     if (nodePosX != null)
                         nodePosX.InnerXml = Location.X.ToString();
@@ -672,8 +920,8 @@ namespace SharePortfolioManager
                         nodePosY.InnerXml = Location.Y.ToString();
 
                     // Save current window size
-                    var nodeWidth = _xmlSettings.SelectSingleNode("/Settings/Window/Width");
-                    var nodeHeigth = _xmlSettings.SelectSingleNode("/Settings/Window/Height");
+                    var nodeWidth = Settings.SelectSingleNode("/Settings/Window/Width");
+                    var nodeHeigth = Settings.SelectSingleNode("/Settings/Window/Height");
                     
                     if (nodeWidth != null)
                         nodeWidth.InnerXml = Size.Width.ToString();
@@ -681,12 +929,12 @@ namespace SharePortfolioManager
                         nodeHeigth.InnerXml = Size.Height.ToString();
 
                     // Close reader for saving
-                    _xmlReaderSettings.Close();
+                    ReaderSettings.Close();
                     // Save settings
-                    _xmlSettings.Save(SettingsFileName);
+                    Settings.Save(SettingsFileName);
                     // Create a new reader to test if the saved values could be loaded
-                    _xmlReaderSettings = XmlReader.Create(SettingsFileName, _xmlReaderSettingsSettings);
-                    _xmlSettings.Load(_xmlReaderSettings);
+                    ReaderSettings = XmlReader.Create(SettingsFileName, ReaderSettingsSettings);
+                    Settings.Load(ReaderSettings);
                 }
                 catch (Exception ex)
                 {
@@ -694,8 +942,8 @@ namespace SharePortfolioManager
                     MessageBox.Show("MainForm_FormClosing()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
 #endif
-                    _logger.AddEntry(_xmlLanguage.GetLanguageTextByXPath(@"/MainForm/Errors/SaveSettingsFailed",
-                    _languageName), (Logger.ELoggerStateLevels)EStateLevels.FatalError, (Logger.ELoggerComponentLevels)EComponentLevels.Application);
+                    Logger.AddEntry(Language.GetLanguageTextByXPath(@"/MainForm/Errors/SaveSettingsFailed",
+                    LanguageName), (Logger.ELoggerStateLevels)EStateLevels.FatalError, (Logger.ELoggerComponentLevels)EComponentLevels.Application);
                 }
             }
         }
@@ -729,7 +977,7 @@ namespace SharePortfolioManager
         #region NotifyIcon
 
         // TODO When click on notify icon, we bring the form to front
-        private void notifyIcon_Click(object sender, EventArgs e)
+        private void NotifyIcon_Click(object sender, EventArgs e)
         {
             this.ShowInTaskbar = true;
             this.WindowState = FormWindowState.Minimized;

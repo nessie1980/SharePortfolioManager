@@ -31,7 +31,8 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
     /// </summary>
     public interface IModelBuyEdit
     {
-        ShareObject ShareObject { get; set; }
+        ShareObjectMarketValue ShareObjectMarketValue { get; set; }
+        ShareObjectFinalValue ShareObjectFinalValue { get; set; }
         List<WebSiteRegex> WebSiteRegexList { get; set; }
         bool UpdateView { get; set; }
         bool UpdateViewFormatted { get; set; }
@@ -41,17 +42,19 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
         string Date { get; set; }
         string Time { get; set; }
         string Volume { get; set; }
-        decimal Volumedec { get; set; }
+        decimal VolumeDec { get; set; }
+        string MarketValue { get; set; }
+        decimal MarketValueDec { get; set; }
+        string Reduction { get; set; }
+        decimal ReductionDec { get; set; }
+        string PurchaseValue { get; set; }
+        decimal PurchaseValueDec { get; set; }
+        string Costs { get; set; }
+        decimal CostsDec { get; set; }
         string FinalValue { get; set; }
-        decimal FinalValuedec { get; set; }
+        decimal FinalValueDec { get; set; }
         string SharePrice { get; set; }
         decimal SharePricedec { get; set; }
-        string Costs { get; set; }
-        decimal Costsdec { get; set; }
-        string Reduction { get; set; }
-        decimal Reductiondec { get; set; }
-        string MarketValue { get; set; }
-        decimal MarketValuedec { get; set; }
         string Document { get; set; }
     }
 
@@ -66,7 +69,8 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
         bool _updateViewFormatted;
         bool _updateBuy;
 
-        ShareObject _shareObject;
+        ShareObjectMarketValue _shareObjectMarketValue;
+        ShareObjectFinalValue _shareObjectFinalValue;
         List<WebSiteRegex> _webSiteRegexList;
         BuyErrorCode _errorCode;
 
@@ -74,17 +78,19 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
         string _date;
         string _time;
         string _volume;
-        decimal _volumedec;
-        string _finalValue;
-        decimal _finalValuedec;
-        string _costs;
-        decimal _costsdec;
-        string _reduction;
-        decimal _reductiondec;
+        decimal _volumeDec;
         string _marketValue;
-        decimal _marketValuedec;
+        decimal _marketValueDec;
+        string _reduction;
+        decimal _reductionDec;
+        string _purchaseValue;
+        decimal _purchaseValueDec;
+        string _costs;
+        decimal _costsDec;
+        string _finalValue;
+        decimal _finalValueDec;
         string _sharePrice;
-        decimal _sharePricedec;
+        decimal _sharePriceDec;
         string _document;
 
         #endregion Fields
@@ -109,10 +115,16 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
             set { _updateBuy = value; }
         }
 
-        public ShareObject ShareObject
+        public ShareObjectMarketValue ShareObjectMarketValue
         {
-            get { return _shareObject; }
-            set { _shareObject = value; }
+            get { return _shareObjectMarketValue; }
+            set { _shareObjectMarketValue = value; }
+        }
+
+        public ShareObjectFinalValue ShareObjectFinalValue
+        {
+            get { return _shareObjectFinalValue; }
+            set { _shareObjectFinalValue = value; }
         }
 
         public List<WebSiteRegex> WebSiteRegexList
@@ -168,8 +180,8 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
                 if (UpdateViewFormatted)
                 {
                     // Only return the value if the volume is greater than '0'
-                    if (_volumedec > 0)
-                        return Helper.FormatDecimal(_volumedec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength);
+                    if (_volumeDec > 0)
+                        return Helper.FormatDecimal(_volumeDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength);
                     return @"";
                 }
                 else
@@ -184,70 +196,29 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
                 _volume = value;
 
                 // Try to parse
-                if (!decimal.TryParse(_volume, out _volumedec))
-                    _volumedec = 0;
+                if (!decimal.TryParse(_volume, out _volumeDec))
+                    _volumeDec = 0;
             }
         }
 
-        public decimal Volumedec
+        public decimal VolumeDec
         {
-            get { return _volumedec; }
+            get { return _volumeDec; }
             set
             {
-                if (_volumedec == value)
+                if (_volumeDec == value)
                     return;
-                _volumedec = value;
+                _volumeDec = value;
             }
     }
-
-        public string SharePrice
-        {
-            get
-            {
-                if (UpdateViewFormatted)
-                {
-                    // Only return the value if the share price is greater than '0'
-                    if (_sharePricedec > 0)
-                        return Helper.FormatDecimal(_sharePricedec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
-                    return @"";
-                }
-                else
-                {
-                    return _sharePrice;
-                }
-            }
-            set
-            {
-                if (_sharePrice == value)
-                    return;
-                _sharePrice = value;
-
-                // Try to parse
-                if (!decimal.TryParse(_sharePrice, out _sharePricedec))
-                    _sharePricedec = 0;
-            }
-        }
-
-        public decimal SharePricedec
-        {
-            get { return _sharePricedec; }
-            set
-            {
-                if (_sharePricedec == value)
-                    return;
-                _sharePricedec = value;
-
-                SharePrice = _sharePricedec.ToString();
-            }
-        }
 
         public string MarketValue
         {
             get
             {
                 // Only return the value if the value is greater than '0'
-                if (_marketValuedec > 0)
-                    return Helper.FormatDecimal(_marketValuedec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
+                if (_marketValueDec > 0)
+                    return Helper.FormatDecimal(_marketValueDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
                 return @"";
             }
 
@@ -258,64 +229,23 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
                 _marketValue = value;
 
                 // Try to parse
-                if (!decimal.TryParse(_marketValue, out _marketValuedec))
-                    _marketValuedec = 0;
+                if (!decimal.TryParse(_marketValue, out _marketValueDec))
+                    _marketValueDec = 0;
             }
         }
 
-        public decimal MarketValuedec
+        public decimal MarketValueDec
         {
-            get { return _marketValuedec; }
+            get { return _marketValueDec; }
             set
             {
-                if (_marketValuedec == value)
+                if (_marketValueDec == value)
                     return;
-                _marketValuedec = value;
+                _marketValueDec = value;
 
-                MarketValue = _marketValuedec.ToString();
+                MarketValue = _marketValueDec.ToString();
 
                 UpdateView = true;
-            }
-        }
-
-        public string Costs
-        {
-            get
-            {
-                if (UpdateViewFormatted)
-                {
-                    // Only return the value if the costs is greater than '0'
-                    if (_costsdec > 0)
-                        return Helper.FormatDecimal(_costsdec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
-                    return @"";
-                }
-                else
-                {
-                    return _costs;
-                }
-            }
-            set
-            {
-                if (_costs == value)
-                    return;
-                _costs = value;
-
-                // Try to parse
-                if (!decimal.TryParse(_costs, out _costsdec))
-                    _costsdec = 0;
-            }
-        }
-
-        public decimal Costsdec
-        {
-            get { return _costsdec; }
-            set
-            {
-                if (_costsdec == value)
-                    return;
-                _costsdec = value;
-
-                Costs = _costsdec.ToString();
             }
         }
 
@@ -326,8 +256,8 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
                 if (UpdateViewFormatted)
                 {
                     // Only return the value if the reduction is greater than '0'
-                    if (_reductiondec > 0)
-                        return Helper.FormatDecimal(_reductiondec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
+                    if (_reductionDec > 0)
+                        return Helper.FormatDecimal(_reductionDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
                     return @"";
                 }
                 else
@@ -342,22 +272,97 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
                 _reduction = value;
 
                 // Try to parse
-                if (!decimal.TryParse(_reduction, out _reductiondec))
-                    _reductiondec = 0;
+                if (!decimal.TryParse(_reduction, out _reductionDec))
+                    _reductionDec = 0;
             }
         }
 
-        public decimal Reductiondec
+        public decimal ReductionDec
         {
-            get { return _reductiondec; }
+            get { return _reductionDec; }
             set
             {
-
-                if (_reductiondec == value)
+                if (_reductionDec == value)
                     return;
-                _reductiondec = value;
+                _reductionDec = value;
 
-                Reduction = _reductiondec.ToString();
+                Reduction = _reductionDec.ToString();
+            }
+        }
+
+        public string PurchaseValue
+        {
+            get
+            {
+                // Only return the value if the value is greater than '0'
+                if (PurchaseValueDec > 0)
+                    return Helper.FormatDecimal(PurchaseValueDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
+                return @"";
+            }
+
+            set
+            {
+                if (_purchaseValue == value)
+                    return;
+                _purchaseValue = value;
+
+                // Try to parse
+                if (!decimal.TryParse(_purchaseValue, out _purchaseValueDec))
+                    PurchaseValueDec = 0;
+            }
+        }
+
+        public decimal PurchaseValueDec
+        {
+            get { return _purchaseValueDec; }
+            set
+            {
+                if (_purchaseValueDec == value)
+                    return;
+                _purchaseValueDec = value;
+
+                PurchaseValue = _purchaseValueDec.ToString();
+            }
+        }
+
+        public string Costs
+        {
+            get
+            {
+                if (UpdateViewFormatted)
+                {
+                    // Only return the value if the costs is greater than '0'
+                    if (_costsDec > 0)
+                        return Helper.FormatDecimal(_costsDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
+                    return @"";
+                }
+                else
+                {
+                    return _costs;
+                }
+            }
+            set
+            {
+                if (_costs == value)
+                    return;
+                _costs = value;
+
+                // Try to parse
+                if (!decimal.TryParse(_costs, out _costsDec))
+                    _costsDec = 0;
+            }
+        }
+
+        public decimal CostsDec
+        {
+            get { return _costsDec; }
+            set
+            {
+                if (_costsDec == value)
+                    return;
+                _costsDec = value;
+
+                Costs = _costsDec.ToString();
             }
         }
 
@@ -366,8 +371,8 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
             get
             {
                 // Only return the value if the value is greater than '0'
-                if (_finalValuedec > 0)
-                    return Helper.FormatDecimal(_finalValuedec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
+                if (_finalValueDec > 0)
+                    return Helper.FormatDecimal(_finalValueDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
                 return @"";
             }
 
@@ -378,19 +383,60 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
                 _finalValue = value;
 
                 // Try to parse
-                if (!decimal.TryParse(_finalValue, out _finalValuedec))
-                    _finalValuedec = 0;
+                if (!decimal.TryParse(_finalValue, out _finalValueDec))
+                    FinalValueDec = 0;
             }
         }
 
-        public decimal FinalValuedec
+        public decimal FinalValueDec
         {
-            get { return _finalValuedec; }
+            get { return _finalValueDec; }
             set
             {
-                if (_finalValuedec == value)
+                if (_finalValueDec == value)
                     return;
-                _finalValuedec = value;
+                _finalValueDec = value;
+            }
+        }
+
+        public string SharePrice
+        {
+            get
+            {
+                if (UpdateViewFormatted)
+                {
+                    // Only return the value if the share price is greater than '0'
+                    if (_sharePriceDec > 0)
+                        return Helper.FormatDecimal(_sharePriceDec, Helper.Currencysixlength, true, Helper.Currencytwofixlength);
+                    return @"";
+                }
+                else
+                {
+                    return _sharePrice;
+                }
+            }
+            set
+            {
+                if (_sharePrice == value)
+                    return;
+                _sharePrice = value;
+
+                // Try to parse
+                if (!decimal.TryParse(_sharePrice, out _sharePriceDec))
+                    _sharePriceDec = 0;
+            }
+        }
+
+        public decimal SharePricedec
+        {
+            get { return _sharePriceDec; }
+            set
+            {
+                if (_sharePriceDec == value)
+                    return;
+                _sharePriceDec = value;
+
+                SharePrice = _sharePriceDec.ToString();
             }
         }
 

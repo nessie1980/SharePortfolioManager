@@ -42,27 +42,49 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
             view.PropertyChanged += OnViewChange;
             view.FormatInputValues += OnViewFormatInputValues;
             view.AddDividend += OnAddDividend;
-            //view.EditDividend += OnEditDividend;
-            //view.DeleteDividend += OnDeleteDividend;
-            view.EditTax += OnEditTax;
+            view.EditDividend += OnEditDividend;
+            view.DeleteDividend += OnDeleteDividend;
             view.DocumentBrowse += OnDocumentBrowse;
         }
 
         private void UpdateViewWithModel()
         {
-            _view.ShareObject = _model.ShareObject;
+            //_view.ShareObject = _model.ShareObject;
             _view.ErrorCode = _model.ErrorCode;
+
+            // Copy decimal values from the dividend object to the model
+            if (_model.DividendObject != null)
+            {
+                _model.Date = Convert.ToDateTime(_model.DividendObject.DateTime).Date.ToShortDateString();
+                _model.Time = Convert.ToDateTime(_model.DividendObject.DateTime).Date.ToShortTimeString();
+                _model.EnableFC = _model.DividendObject.EnableFC;
+                _model.ExchangeRatioDec = _model.DividendObject.ExchangeRatioDec;
+                _model.CultureInfoFC = _model.DividendObject.CultureInfoFC;
+                _model.RateDec = _model.DividendObject.RateDec;
+                _model.VolumeDec = _model.DividendObject.VolumeDec;
+                _model.PayoutDec = _model.DividendObject.PayoutDec;
+                _model.PayoutFCDec = _model.DividendObject.PayoutFCDec;
+                _model.TaxAtSourceDec = _model.DividendObject.TaxAtSourceDec;
+                _model.CapitalGainsTaxDec = _model.DividendObject.CapitalGainsTaxDec;
+                _model.SolidarityTaxDec = _model.DividendObject.SolidarityTaxDec;
+                _model.TaxDec = _model.DividendObject.TaxesSumDec;
+                _model.PayoutAfterTaxDec = _model.DividendObject.PayoutWithTaxesDec;
+                _model.YieldDec = _model.DividendObject.YieldDec;
+                _model.PriceDec = _model.DividendObject.PriceDec;
+                _model.Document = _model.DividendObject.Document;
+            }
 
             _view.Date = _model.Date;
             _view.Time = _model.Time;
-            _view.EnableFC = _model.EnableFC;
-            _view.CultureInfoFC = _model.CultureInfoFC;
+            _view.EnableFC = _model.DividendObject.EnableFC;
+            _view.ExchangeRatio = _model.ExchangeRatio;
             _view.Rate = _model.Rate;
-            _view.RateFC = _model.RateFC;
             _view.Volume = _model.Volume;
-            _view.LossBalance = _model.LossBalance;
             _view.Payout = _model.Payout;
-            _view.TaxValuesCurrent = _model.TaxValuesCurrent;
+            _view.PayoutFC = _model.PayoutFC;
+            _view.TaxAtSource = _model.TaxAtSource;
+            _view.CapitalGainsTax = _model.CapitalGainsTax;
+            _view.SolidarityTax = _model.SolidarityTax;
             _view.Tax = _model.Tax;
             _view.PayoutAfterTax = _model.PayoutAfterTax;
             _view.Yield = _model.Yield;
@@ -86,11 +108,11 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
 
         private void UpdateModelwithView()
         {
-            _model.ShareObject = _view.ShareObject;
+            _model.ShareObjectMarketValue = _view.ShareObjectMarketValue;
+            _model.ShareObjectFinalValue = _view.ShareObjectFinalValue;
             _model.ErrorCode = _view.ErrorCode;
             _model.UpdateDividend = _view.UpdateDividend;
-
-            _model.TaxValuesCurrent = _view.TaxValuesCurrent;
+            _model.SelectedDate = _view.SelectedDate;
 
             _model.Logger = _view.Logger;
             _model.Language = _view.Language;
@@ -102,23 +124,48 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
             _model.EnableFC = _view.EnableFC;
             _model.CultureInfoFC = _view.CultureInfoFC;
             _model.Rate = _view.Rate;
-            _model.RateFC = _view.RateFC;
             _model.Volume = _view.Volume;
-            _model.LossBalance = _view.LossBalance;
-            _model.Payout = _view.Payout;
-            _model.Tax = _view.Tax;
+            _model.TaxAtSource = _view.TaxAtSource;
+            _model.CapitalGainsTax = _view.CapitalGainsTax;
+            _model.SolidarityTax = _view.SolidarityTax;
             _model.PayoutAfterTax = _view.PayoutAfterTax;
-            _model.Yield = _view.Yield;
             _model.Price = _view.Price;
             _model.Document = _view.Document;
 
-            // Calculations
-            CalculateLossBalanceForeignCurrency();
-            CalculateDividendPayOut();
-            CalculateDividendPayOutFC();
-            CalculateDividendYield();
-            CaluclateDividendRateFromDividendRateFC();
-            CalculateTaxes();
+            // Copy model values to the dividend object
+            if (_model.DividendObject == null)
+            {
+                _model.DividendObject = new DividendObject(
+                    _model.ShareObjectFinalValue.CultureInfo,
+                    _model.CultureInfoFC,
+                    _model.EnableFC,
+                    _model.ExchangeRatioDec,
+                    _model.Date + " " + _model.Time,
+                    _model.RateDec,
+                    _model.VolumeDec,
+                    _model.TaxAtSourceDec,
+                    _model.CapitalGainsTaxDec,
+                    _model.SolidarityTaxDec,
+                    _model.PriceDec,
+                    _model.Document
+                    );
+            }
+            else
+            {
+                _model.DividendObject.DateTime = _model.Date + " " + _model.Time;
+                _model.DividendObject.EnableFC = _model.EnableFC;
+                _model.DividendObject.ExchangeRatio = _model.ExchangeRatio;
+                _model.DividendObject.CultureInfoFC = _model.CultureInfoFC;
+                _model.DividendObject.Rate = _model.Rate;
+                _model.DividendObject.Volume = _model.Volume;
+                _model.DividendObject.TaxAtSource = _model.TaxAtSource;
+                _model.DividendObject.CapitalGainsTax = _model.CapitalGainsTax;
+                _model.DividendObject.SolidarityTax = _model.SolidarityTax;
+                _model.DividendObject.Price = _model.Price;
+                _model.DividendObject.Document = _model.Document;
+            }
+
+            _model.UpdateView = _model.DividendObject.UpdateView;
 
             if (_model.UpdateView)
                 UpdateViewWithModel();
@@ -142,8 +189,9 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
                 {
                     bool bAddFlag = false;
 
-                    bAddFlag = _model.ShareObject.AddDividend(strDateTime, _model.TaxValuesCurrent, _model.RateDec,
-                        _model.LossBalanceDec, _model.PriceDec, _model.VolumeDec, _model.Document);
+                    bAddFlag = _model.ShareObjectFinalValue.AddDividend(_model.CultureInfoFC, _model.EnableFC, _model.ExchangeRatioDec, strDateTime, _model.RateDec, _model.VolumeDec,
+                        _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec,
+                        _model.PriceDec, _model.Document);
 
                     if (bAddFlag)
                     {
@@ -163,27 +211,51 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
             MessageBox.Show(_model.ErrorCode.ToString(), @"Info", MessageBoxButtons.OK);
         }
 
-        /// <summary>
-        /// This function opens the edit dialog for the taxes
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnEditTax(object sender, EventArgs e)
+        private void OnEditDividend(object sender, EventArgs e)
         {
-            // Check if all inputs are made for entering taxes
-            if ( _model.PayoutDec > 0 && _model.EnableFC == CheckState.Unchecked
-                ||
-                _model.PayoutDec > 0 && _model.ExchangeRatioDec > 0 && _model.EnableFC == CheckState.Checked)
+            // Check the input values
+            if (!CheckInputValues(_model.UpdateDividend))
             {
-                _model.TaxValuesCurrent.ValueWithoutTaxes = _model.PayoutDec;
-                _model.TaxValuesCurrent.ExchangeRatio = _model.ExchangeRatioDec;
+                string strDateTime = _model.Date + " " + _model.Time;
 
-                ShareDividendTaxesEdit dlgShareDividendTaxesEdit = new ShareDividendTaxesEdit(_model.TaxValuesCurrent, _model.Logger, _model.Language, _model.LanguageName);
-                dlgShareDividendTaxesEdit.ShowDialog();
+                if (_model.ShareObjectFinalValue.RemoveDividend(_model.SelectedDate) &&
+                    _model.ShareObjectFinalValue.AddDividend(
+                        _model.CultureInfoFC, _model.EnableFC, _model.ExchangeRatioDec, _model.Date, _model.RateDec, _model.VolumeDec,
+                        _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, _model.PriceDec, _model.Document)
+                        )
+                {
+                    UpdateViewWithModel();
 
-                _model.TaxDec = _model.TaxValuesCurrent.TaxesValue;
-                _model.TaxFCDec = _model.TaxValuesCurrent.TaxesValueFC;
+                    _view.AddEditDeleteFinish();
+
+                    MessageBox.Show(_model.ErrorCode.ToString(), @"Info", MessageBoxButtons.OK);
+
+                    return;
+                }
             }
+
+            _model.ErrorCode = DividendErrorCode.EditFailed;
+            UpdateViewWithModel();
+
+            _view.AddEditDeleteFinish();
+        }
+
+        private void OnDeleteDividend(object sender, EventArgs e)
+        {
+           // Delete the buy of the selected date
+            if (_model.ShareObjectFinalValue.RemoveDividend(_model.SelectedDate))
+            {
+                _model.ErrorCode = DividendErrorCode.DeleteSuccessful;
+            }
+            else
+            {
+                _model.ErrorCode = DividendErrorCode.DeleteFailed;
+            }
+
+            // Update error code
+            _view.ErrorCode = _model.ErrorCode;
+
+            _view.AddEditDeleteFinish();
         }
 
         /// <summary>
@@ -196,7 +268,14 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
             try
             {
                 const string strFilter = "pdf (*.pdf)|*.pdf|txt (*.txt)|.txt|doc (*.doc)|.doc|docx (*.docx)|.docx";
-                _model.Document = Helper.SetDocument(_model.Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/OpenFileDialog/Title", _model.LanguageName), strFilter, _model.Document);
+                if (_model.DividendObject != null)
+                    _model.DividendObject.Document = Helper.SetDocument(_model.Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/OpenFileDialog/Title", _model.LanguageName), strFilter, _model.DividendObject.Document);
+                else
+                    _model.Document = Helper.SetDocument(_model.Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/OpenFileDialog/Title", _model.LanguageName), strFilter, _model.Document);
+
+                UpdateViewWithModel();
+
+                _view.DocumentBrowseFinish();
             }
             catch (Exception ex)
             {
@@ -206,155 +285,10 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
 #endif
                 _model.ErrorCode = DividendErrorCode.DocumentBrowseFailed;
 
-                //// Add status message
-                //Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                //    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/ChoseDocumentFailed", LanguageName),
-                //    Language, LanguageName,
-                //    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                MessageBox.Show(_model.ErrorCode.ToString(), @"Info", MessageBoxButtons.OK);
             }
 
         }
-
-        #region Calculation functions
-
-        /// <summary>
-        /// This function calculates the loss balance foreign currency
-        /// </summary>
-        private void CalculateLossBalanceForeignCurrency()
-        {
-            try
-            {
-                if (Math.Abs(_model.ExchangeRatioDec) > 0
-                    && Math.Abs(_model.LossBalanceDec) > 0)
-                {
-                    _model.LossBalanceFCDec = _model.ExchangeRatioDec * _model.LossBalanceDec;
-                }
-            }
-            catch (Exception ex)
-            {
-#if DEBUG
-                MessageBox.Show("CalculateLossBalanceForeignCurrency()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                _model.LossBalanceFCDec = 0;
-            }
-        }
-
-        /// <summary>
-        /// This function calculates the dividend payout
-        /// </summary>
-        private void CalculateDividendPayOut()
-        {
-            try
-            {
-                if (Math.Abs(_model.RateDec) > 0
-                    && Math.Abs(_model.VolumeDec) > 0)
-                {
-                    _model.PayoutDec = Math.Round(_model.RateDec * _model.VolumeDec, 2, MidpointRounding.AwayFromZero);
-                }
-                else
-                {
-                    _model.Payout = @"";
-                }
-            }
-            catch (Exception ex)
-            {
-#if DEBUG
-                MessageBox.Show("CalculateDividendPayOut()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                _model.PayoutDec = 0;
-            }
-        }
-
-        /// <summary>
-        /// This function calculates the dividend payout in the foreign currency
-        /// </summary>
-        private void CalculateDividendPayOutFC()
-        {
-            try
-            {
-                if (Math.Abs(_model.RateFCDec) > 0
-                    && Math.Abs(_model.VolumeDec) > 0)
-                {
-                    _model.PayoutFCDec = Math.Round(_model.RateFCDec * _model.VolumeDec, 2, MidpointRounding.AwayFromZero);
-                }
-            }
-            catch (Exception ex)
-            {
-#if DEBUG
-                MessageBox.Show("CalculateDividendPayOutForeignCurrency()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                _model.PayoutFCDec = 0;
-            }
-        }
-
-        /// <summary>
-        /// This function calculates the dividend yield 
-        /// </summary>
-        private void CalculateDividendYield()
-        {
-            try
-            {
-                if (Math.Abs(_model.PriceDec) > 0
-                    && Math.Abs(_model.RateDec) > 0)
-                {
-                    _model.YieldDec = _model.RateDec / _model.PriceDec * 100;
-                }
-            }
-            catch (Exception ex)
-            {
-#if DEBUG
-                MessageBox.Show("CalculateDividendYield()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                _model.YieldDec = 0;
-            }
-        }
-
-        /// <summary>
-        /// This function calculates from the foreign currency price the normal payout
-        /// </summary>
-        private void CaluclateDividendRateFromDividendRateFC()
-        {
-            try
-            {
-                if (Math.Abs(_model.ExchangeRatioDec) > 0
-                    && Math.Abs(_model.RateFCDec) > 0)
-                {
-                    _model.RateDec = _model.RateFCDec / _model.ExchangeRatioDec;
-                }
-            }
-            catch (Exception ex)
-            {
-#if DEBUG
-                MessageBox.Show("CaluclatePayoutFromForeignCurrencyPrice()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
-                            MessageBoxIcon.Error);
-#endif
-                _model.RateDec = 0;
-            }
-        }
-
-        private void CalculateTaxes()
-        {
-//            if (Math.Abs(_model.Payoutdec) > 0)
-//            {
-                _model.TaxValuesCurrent.ValueWithoutTaxes = _model.PayoutDec;
-                _model.TaxValuesCurrent.ValueWithoutTaxesFC = _model.PayoutFCDec;
-
-                //_model.Taxdec = _model.TaxValuesCurrent.ValueWithoutTaxes;
-                //_model.TaxFCdec = _model.TaxValuesCurrent.ValueWithoutTaxesFC;
-
-                _model.TaxDec = _model.TaxValuesCurrent.TaxesValue;
-                _model.TaxFCDec = _model.TaxValuesCurrent.TaxesValueFC;
-
-                _model.PayoutAfterTaxDec = _model.TaxValuesCurrent.ValueWithTaxes;
-                _model.PayoutAfterTaxFCDec = _model.TaxValuesCurrent.ValueWithTaxesFC;
-//            }
-        }
-
-        #endregion Calculation functions
 
         /// <summary>
         /// This function checks if the input is correct
@@ -372,19 +306,17 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
             else
                 _model.ErrorCode = DividendErrorCode.AddSuccessful;
 
-            _model.CultureInfoFC = _model.ShareObject.CultureInfo;
-
             string strDateTime = _model.Date + " " + _model.Time;
 
             try
             {
                 // Check if a dividend with the given date and time already exists
-                foreach (var dividend in _model.ShareObject.AllDividendEntries.GetAllDividendsOfTheShare())
+                foreach (var dividend in _model.ShareObjectFinalValue.AllDividendEntries.GetAllDividendsOfTheShare())
                 {
-                    if (bFlagEdit)
+                    if (!bFlagEdit)
                     {
                         // By an Add all dates and times must be checked
-                        if (dividend.DividendDate == strDateTime)
+                        if (dividend.DateTime == strDateTime)
                         {
                             _model.ErrorCode = DividendErrorCode.DateExists;
                             bErrorFlag = true;
@@ -394,9 +326,9 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
                     else
                     {
                         // By an Edit all dividends without the edit entry date and time must be checked
-                        if (dividend.DividendDate == strDateTime
+                        if (dividend.DateTime == strDateTime
                             && _model.SelectedDate != null
-                            && dividend.DividendDate != _model.SelectedDate)
+                            && dividend.DateTime != _model.SelectedDate)
                         {
                             _model.ErrorCode = DividendErrorCode.DateWrongFormat;
                             bErrorFlag = true;
@@ -425,24 +357,6 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
                         _model.ErrorCode = DividendErrorCode.ExchangeRatioWrongValue;
                         bErrorFlag = true;
                     }
-
-                    // Check if a dividend rate is given (foreign currency)
-                    decimal decRateFC = -1;
-                    if (_model.RateFC == @"" && bErrorFlag == false)
-                    {
-                        _model.ErrorCode = DividendErrorCode.RateEmpty;
-                        bErrorFlag = true;
-                    }
-                    else if (!decimal.TryParse(_model.RateFC, out decRateFC) && bErrorFlag == false)
-                    {
-                        _model.ErrorCode = DividendErrorCode.RateWrongFormat;
-                        bErrorFlag = true;
-                    }
-                    else if (decRateFC <= 0 && bErrorFlag == false)
-                    {
-                        _model.ErrorCode = DividendErrorCode.RateWrongValue;
-                        bErrorFlag = true;
-                    }
                 }
                 else
                 {
@@ -465,17 +379,21 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
                     }
                 }
 
-                // Loss balance 
-                decimal decLossBalance = -1;
-                if (_model.LossBalance != @"" &&
-                    !decimal.TryParse(_model.LossBalance, out decLossBalance) && bErrorFlag == false)
+                // Volume
+                decimal decVolume = -1;
+                if (_model.Volume == @"" && bErrorFlag == false)
                 {
-                    _model.ErrorCode = DividendErrorCode.LossBalanceWrongFormat;
+                    _model.ErrorCode = DividendErrorCode.VolumeEmpty;
                     bErrorFlag = true;
                 }
-                else if (_model.LossBalance != @"" && decLossBalance <= 0 && bErrorFlag == false)
+                else if (!decimal.TryParse(_model.Volume, out decVolume) && bErrorFlag == false)
                 {
-                    _model.ErrorCode = DividendErrorCode.LossBalanceWrongValue;
+                    _model.ErrorCode = DividendErrorCode.VolumeWrongFormat;
+                    bErrorFlag = true;
+                }
+                else if (decVolume <= 0 && bErrorFlag == false)
+                {
+                    _model.ErrorCode = DividendErrorCode.VolumeWrongValue;
                     bErrorFlag = true;
                 }
 
@@ -494,24 +412,6 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
                 else if (decPrice <= 0 && bErrorFlag == false)
                 {
                     _model.ErrorCode = DividendErrorCode.PriceWrongValue;
-                    bErrorFlag = true;
-                }
-
-                // Volume
-                decimal decVolume = -1;
-                if (_model.Volume == @"" && bErrorFlag == false)
-                {
-                    _model.ErrorCode = DividendErrorCode.VolumeEmpty;
-                    bErrorFlag = true;
-                }
-                else if (!decimal.TryParse(_model.Volume, out decVolume) && bErrorFlag == false)
-                {
-                    _model.ErrorCode = DividendErrorCode.VolumeWrongFormat;
-                    bErrorFlag = true;
-                }
-                else if (decVolume <= 0 && bErrorFlag == false)
-                {
-                    _model.ErrorCode = DividendErrorCode.VolumeWrongValue;
                     bErrorFlag = true;
                 }
 
@@ -539,7 +439,7 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
                 _model.Time = @"";
                 _model.Document = @"";
 
-                _model.ErrorCode = DividendErrorCode.InputeValuesInvalid;
+                _model.ErrorCode = DividendErrorCode.InputValuesInvalid;
                 return false;
             }
         }

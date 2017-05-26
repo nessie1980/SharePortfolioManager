@@ -43,11 +43,6 @@ namespace SharePortfolioManager
         private string _date;
 
         /// <summary>
-        /// Stores the value of the bought shares (without reduction and costs)
-        /// </summary>
-        private decimal _marketValue = -1;
-
-        /// <summary>
         /// Stores the buy volume
         /// </summary>
         private decimal _volume = -1;
@@ -68,9 +63,19 @@ namespace SharePortfolioManager
         private decimal _costs = -1;
 
         /// <summary>
+        /// Stores the value of the bought shares without reduction and costs
+        /// </summary>
+        private decimal _marketValue = -1;
+
+        /// <summary>
+        /// Stores the value of the bought shares with reduction
+        /// </summary>
+        private decimal _marketValueReduction = -1;
+
+        /// <summary>
         /// Stores the buy market value minus reduction and plus costs
         /// </summary>
-        private decimal _finalValue = -1;
+        private decimal _marketValueReductionCosts = -1;
 
         /// <summary>
         /// Stores the document of the buy
@@ -103,29 +108,6 @@ namespace SharePortfolioManager
         }
 
         [Browsable(false)]
-        public decimal MarketValue
-        {
-            get { return _marketValue; }
-            internal set
-            {
-                _marketValue = value;
-            }
-        }
-
-        [Browsable(true)]
-        [DisplayName(@"Value")]
-        public string MarketValueAsStr
-        {
-            get { return Helper.FormatDecimal(MarketValue, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CultureInfo); }
-        }
-
-        [Browsable(false)]
-        public string MarketValueAsStrUnit
-        {
-            get { return Helper.FormatDecimal(MarketValue, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CultureInfo); }
-        }
-
-        [Browsable(false)]
         public decimal Volume
         {
             get { return _volume; }
@@ -136,7 +118,7 @@ namespace SharePortfolioManager
                 _volume = value;
 
                 // Calculate the values
-                CalculateMarketValueAndFinalValue();
+                CalculateMarketValueAndMarketValueReduction();
             }
         }
 
@@ -164,7 +146,7 @@ namespace SharePortfolioManager
                 _sharePrice = value;
 
                 // Calculate the values
-                CalculateMarketValueAndFinalValue();
+                CalculateMarketValueAndMarketValueReduction();
             }
         }
 
@@ -182,28 +164,6 @@ namespace SharePortfolioManager
         }
 
         [Browsable(false)]
-        public decimal FinalValue
-        {
-            get { return _finalValue; }
-            internal set
-            {
-                _finalValue = value;
-            }
-        }
-
-        [Browsable(false)]
-        public string FinalValueAStr
-        {
-            get { return Helper.FormatDecimal(FinalValue, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CultureInfo); }
-        }
-
-        [Browsable(false)]
-        public string FinalValueAStrUnit
-        {
-            get { return Helper.FormatDecimal(FinalValue, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CultureInfo); }
-        }
-
-        [Browsable(false)]
         public decimal Reduction
         {
             get { return _reduction; }
@@ -214,7 +174,7 @@ namespace SharePortfolioManager
                 _reduction = value;
 
                 // Calculate the values
-                CalculateMarketValueAndFinalValue();
+                CalculateMarketValueAndMarketValueReduction();
             }
         }
 
@@ -241,7 +201,7 @@ namespace SharePortfolioManager
                 _costs = value;
 
                 // Calculate the values
-                CalculateMarketValueAndFinalValue();
+                CalculateMarketValueAndMarketValueReduction();
             }
         }
 
@@ -255,6 +215,73 @@ namespace SharePortfolioManager
         public string CostsAsStrUnit
         {
             get { return Helper.FormatDecimal(Costs, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CultureInfo); }
+        }
+
+        [Browsable(false)]
+        public decimal MarketValue
+        {
+            get { return _marketValue; }
+            internal set
+            {
+                _marketValue = value;
+            }
+        }
+
+        [Browsable(true)]
+        [DisplayName(@"Value")]
+        public string MarketValueAsStr
+        {
+            get { return Helper.FormatDecimal(MarketValue, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CultureInfo); }
+        }
+
+        [Browsable(false)]
+        public string MarketValueAsStrUnit
+        {
+            get { return Helper.FormatDecimal(MarketValue, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CultureInfo); }
+        }
+
+        [Browsable(false)]
+        public decimal MarketValueReduction
+        {
+            get { return _marketValueReduction; }
+            internal set
+            {
+                _marketValueReduction = value;
+            }
+        }
+
+        [Browsable(false)]
+        public string MarketValueReductionAsStr
+        {
+            get { return Helper.FormatDecimal(MarketValueReduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CultureInfo); }
+        }
+
+        [Browsable(false)]
+        public string MarketValueReductionAsStrUnit
+        {
+            get { return Helper.FormatDecimal(MarketValueReduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CultureInfo); }
+        }
+
+        [Browsable(false)]
+        public decimal MarketValueReductionCosts
+        {
+            get { return _marketValueReductionCosts; }
+            internal set
+            {
+                _marketValueReductionCosts = value;
+            }
+        }
+
+        [Browsable(false)]
+        public string MarketValueReductionCostsAsStr
+        {
+            get { return Helper.FormatDecimal(MarketValueReductionCosts, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CultureInfo); }
+        }
+
+        [Browsable(false)]
+        public string MarketValueReductionCostsAsStrUnit
+        {
+            get { return Helper.FormatDecimal(MarketValueReductionCosts, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CultureInfo); }
         }
 
         [Browsable(false)]
@@ -307,7 +334,6 @@ namespace SharePortfolioManager
             Console.WriteLine(@"MarketValue: {0}", MarketValue);
             Console.WriteLine(@"Reduction: {0}", Reduction);
             Console.WriteLine(@"Costs: {0}", Costs);
-            Console.WriteLine(@"FinalValue: {0}", FinalValue);
             Console.WriteLine(@"Document: {0}", Document);
             Console.WriteLine(@"");
 #endif
@@ -317,16 +343,18 @@ namespace SharePortfolioManager
         /// This function calculates the market value with the reduction
         /// with the given volume and share price of the buy
         /// </summary>
-        private void CalculateMarketValueAndFinalValue()
+        private void CalculateMarketValueAndMarketValueReduction()
         {
             decimal decMarketValue = 0;
-            decimal decFinalValue = 0;
+            decimal decMarketValueReduction = 0;
+            decimal decMarketValueReductionCosts = 0;
 
-            Helper.CalcMarketValueAndFinalValue(Volume, SharePrice, Costs,
-                Reduction, out decMarketValue, out decFinalValue);
+            Helper.CalcBuyValues( Volume, SharePrice, Costs,
+                Reduction, out decMarketValue, out decMarketValueReduction, out decMarketValueReductionCosts);
 
             MarketValue = decMarketValue;
-            FinalValue = decFinalValue;
+            MarketValueReduction = decMarketValueReduction;
+            MarketValueReductionCosts = decMarketValueReductionCosts;
         }
 
         #endregion Methods

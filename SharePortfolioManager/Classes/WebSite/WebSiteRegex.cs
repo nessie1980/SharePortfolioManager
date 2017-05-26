@@ -76,7 +76,7 @@ namespace SharePortfolioManager
         {
             _webSiteName = webSiteName;
             _webSiteEncodingType = webSiteEncodingType;
-            _webSiteRegexList = webSiteRegexList;
+            WebSiteRegexList = webSiteRegexList;
         }
 
         #endregion Methods

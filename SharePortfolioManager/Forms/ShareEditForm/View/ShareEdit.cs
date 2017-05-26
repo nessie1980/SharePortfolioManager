@@ -30,6 +30,7 @@ using SharePortfolioManager.Forms.DividendForm.Model;
 using SharePortfolioManager.Forms.DividendForm.Presenter;
 using SharePortfolioManager.Forms.DividendForm.View;
 using SharePortfolioManager.Forms.SalesForm;
+using SharePortfolioManager.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -57,33 +58,97 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores the language file
         /// </summary>
-        private Language _xmlLanguage;
+        private Language _language;
 
         /// <summary>
         /// Stores the language
         /// </summary>
-        private String _strLanguage;
+        private string _languageName;
 
         /// <summary>
         /// Stores the WKN number of the share which should be edited
         /// </summary>
-        private String _shareWkn;
+        private string _shareWkn;
 
         /// <summary>
         /// Stores if the share must be saved because the dividends has been modified
         /// </summary>
-        private Boolean _bSave;
+        private bool _bSave;
 
         /// <summary>
-        /// Stores the share object which should be edited
+        /// Stores the market value share object which should be edited
         /// </summary>
-        private ShareObject _shareObject;
+        private ShareObjectMarketValue _shareObjectMarketValue;
+
+        /// <summary>
+        /// Stores the final value share object which should be edited
+        /// </summary>
+        private ShareObjectFinalValue _shareObjectFinalValue;
+
         /// <summary>
         /// Flag if the form should be closed
         /// </summary>
         private bool _stopFomClosing;
 
         #endregion Variables
+
+        #region Properties
+
+        public FrmMain ParentWindow
+        {
+            get { return _parentWindow; }
+            set { _parentWindow = value; }
+        }
+
+        public Logger Logger
+        {
+            get { return _logger; }
+            set { _logger = value; }
+        }
+
+        public Language Language
+        {
+            get { return _language; }
+            set { _language = value; }
+        }
+
+        public string LanguageName
+        {
+            get { return _languageName; }
+            set { _languageName = value; }
+        }
+
+        public string ShareWkn
+        {
+            get { return _shareWkn; }
+            set { _shareWkn = value; }
+        }
+
+        public bool Save
+        {
+            get { return _bSave; }
+            set { _bSave = value; }
+        }
+
+        public ShareObjectMarketValue ShareObjectMarketValue
+        {
+            get { return _shareObjectMarketValue; }
+            set { _shareObjectMarketValue = value; }
+        }
+
+        public ShareObjectFinalValue ShareObjectFinalValue
+        {
+            get { return _shareObjectFinalValue; }
+            set { _shareObjectFinalValue = value; }
+        }
+
+        public bool StopFomClosingFlag
+        {
+            get { return _stopFomClosing; }
+            set { _stopFomClosing = value; }
+        }
+
+        #endregion Properties
 
         #region Form
 
@@ -94,12 +159,12 @@ namespace SharePortfolioManager
         {
             InitializeComponent();
 
-            _parentWindow = parentWindow;
-            _logger = logger;
-            _xmlLanguage = xmlLanguage;
-            _strLanguage = language;
-            _shareWkn = shareWkn;
-            _bSave = false;
+            ParentWindow = parentWindow;
+            Logger = logger;
+            Language = xmlLanguage;
+            LanguageName = language;
+            ShareWkn = shareWkn;
+            Save = false;
         }
 
         /// <summary>
@@ -114,22 +179,23 @@ namespace SharePortfolioManager
             {
                 #region Fill in the values of the share object
 
-                if (_parentWindow.ShareObject != null)
+                if (ParentWindow.ShareObjectMarketValue != null && ParentWindow.ShareObjectFinalValue != null)
                 {
-                    _shareObject = _parentWindow.ShareObject;
+                    ShareObjectMarketValue = ParentWindow.ShareObjectMarketValue;
+                    ShareObjectFinalValue = ParentWindow.ShareObjectFinalValue;
 
-                    Thread.CurrentThread.CurrentCulture = _shareObject.CultureInfo;
+                    Thread.CurrentThread.CurrentCulture = ShareObjectMarketValue.CultureInfo;
 
                     #region GroupBox General 
 
-                    lblWknValue.Text = _shareObject.Wkn;
-                    lblDateValue.Text = _shareObject.AllBuyEntries.AllBuysOfTheShareDictionary.Values.First().BuyListYear.First().Date;
-                    txtBoxName.Text = _shareObject.Name;
-                    lblDepositValue.Text = _shareObject.MarketValueAsStr;
-                    lblDepositUnit.Text = _shareObject.CurrencyUnit;
-                    lblVolumeValue.Text = _shareObject.VolumeAsStr;
+                    lblWknValue.Text = ShareObjectFinalValue.Wkn;
+                    lblDateValue.Text = ShareObjectFinalValue.AllBuyEntries.AllBuysOfTheShareDictionary.Values.First().BuyListYear.First().Date;
+                    txtBoxName.Text = ShareObjectFinalValue.Name;
+                    lblPurchaseValue.Text = ShareObjectFinalValue.PurchaseValueAsStr;
+                    lblDepositUnit.Text = ShareObjectFinalValue.CurrencyUnit;
+                    lblVolumeValue.Text = ShareObjectFinalValue.VolumeAsStr;
                     lblVolumeUnit.Text = ShareObject.PieceUnit;
-                    txtBoxWebSite.Text = _shareObject.WebSite;
+                    txtBoxWebSite.Text = ShareObjectFinalValue.WebSite;
 
                     #region Get culture info
 
@@ -155,7 +221,7 @@ namespace SharePortfolioManager
                             cboBoxCultureInfo.Items.Add(value);
                     }
 
-                    cboBoxCultureInfo.SelectedIndex = cboBoxCultureInfo.FindStringExact(_shareObject.CultureInfo.Name);
+                    cboBoxCultureInfo.SelectedIndex = cboBoxCultureInfo.FindStringExact(ShareObjectMarketValue.CultureInfo.Name);
 
                     #endregion Get culture info
 
@@ -163,29 +229,18 @@ namespace SharePortfolioManager
                     
                     #region GroupBox EarningsExpenditure
 
-                    lblBuysValue.Text = _shareObject.AllBuyEntries.BuyMarketValueTotalAsStr;
-                    lblBuysUnit.Text = _shareObject.CurrencyUnit;
-                    lblSalesValue.Text = _shareObject.AllSaleEntries.SaleValueTotalAsString;
-                    lblSalesUnit.Text = _shareObject.CurrencyUnit;
-                    lblProfitLossValue.Text = _shareObject.AllSaleEntries.SaleProfitLossTotalAsString;
-                    lblProfitLossUnit.Text = _shareObject.CurrencyUnit;
-                    lblDividendValue.Text = _shareObject.AllDividendEntries.DividendValueTotalWithTaxesAsString;
-                    lblDividendUnit.Text = _shareObject.CurrencyUnit;
-                    lblCostValue.Text = _shareObject.AllCostsEntries.CostValueTotalAsString;
-                    lblCostUnit.Text = _shareObject.CurrencyUnit;
+                    lblBuysValue.Text = ShareObjectFinalValue.AllBuyEntries.BuyMarketValueReductionTotalAsStr;
+                    lblBuysUnit.Text = ShareObjectFinalValue.CurrencyUnit;
+                    lblSalesValue.Text = ShareObjectFinalValue.AllSaleEntries.SaleValueTotalAsString;
+                    lblSalesUnit.Text = ShareObjectFinalValue.CurrencyUnit;
+                    lblProfitLossValue.Text = ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotalAsString;
+                    lblProfitLossUnit.Text = ShareObjectFinalValue.CurrencyUnit;
+                    lblDividendValue.Text = ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesAsString;
+                    lblDividendUnit.Text = ShareObjectFinalValue.CurrencyUnit;
+                    lblCostValue.Text = ShareObjectFinalValue.AllCostsEntries.CostValueTotalAsString;
+                    lblCostUnit.Text = ShareObjectFinalValue.CurrencyUnit;
 
                     #endregion GroupBox EarningsExpenditure
-
-                    #region GroupBox Taxes
-
-                    chkTaxAtSource.Checked = _shareObject.TaxTaxAtSourceFlag;
-                    txtBoxTaxAtSource.Text = _shareObject.TaxTaxAtSourcePercentage.ToString();
-                    chkCapitalGainsTax.Checked = _shareObject.TaxCapitalGainsFlag;
-                    txtBoxCapitalGainsTax.Text = _shareObject.TaxCapitalGainsPercentage.ToString();
-                    chkSolidarityTax.Checked = _shareObject.TaxSolidarityFlag;
-                    txtBoxSolidarityTax.Text = _shareObject.TaxSolidarityPercentage.ToString();
-
-                    #endregion GroupBox Taxes
 
                     Thread.CurrentThread.CurrentCulture = CultureInfo.CurrentUICulture;
                 }
@@ -196,76 +251,74 @@ namespace SharePortfolioManager
 
                 #region GroupBox General
 
-                Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Caption", _strLanguage);
-                grpBoxGeneral.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Caption", _strLanguage);
-                lblWkn.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/WKN", _strLanguage);
-                lblDate.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Date", _strLanguage);
-                lblName.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Name", _strLanguage);
-                lblDeposit.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Deposit", _strLanguage);
-                lblVolume.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Volume", _strLanguage);
-                lblWebSite.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/WebSite", _strLanguage);
-                lblCultureInfo.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/CultureInfo", _strLanguage);
-                lblDividendPayoutInterval.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/PayoutInterval", _strLanguage);
+                Text = Language.GetLanguageTextByXPath(@"/EditFormShare/Caption", LanguageName);
+                grpBoxGeneral.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Caption", LanguageName);
+                lblWkn.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/WKN", LanguageName);
+                lblDate.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Date", LanguageName);
+                lblName.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Name", LanguageName);
+                lblPurchase.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Purchase", LanguageName);
+                lblVolume.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Volume", LanguageName);
+                lblWebSite.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/WebSite", LanguageName);
+                lblCultureInfo.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/CultureInfo", LanguageName);
+                lblDividendPayoutInterval.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/PayoutInterval", LanguageName);
 
                 cbxDividendPayoutInterval.Items.Add(
-                    _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item0",
-                        _strLanguage));
+                    Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item0",
+                        LanguageName));
                 cbxDividendPayoutInterval.Items.Add(
-                    _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item1",
-                        _strLanguage));
+                    Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item1",
+                        LanguageName));
                 cbxDividendPayoutInterval.Items.Add(
-                    _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item2",
-                        _strLanguage));
+                    Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item2",
+                        LanguageName));
                 cbxDividendPayoutInterval.Items.Add(
-                    _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item3",
-                        _strLanguage));
+                    Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item3",
+                        LanguageName));
 
                 // Select the payout interval for the dividend
-                cbxDividendPayoutInterval.SelectedIndex = _shareObject.DividendPayoutInterval;
+                cbxDividendPayoutInterval.SelectedIndex = ShareObjectFinalValue.DividendPayoutInterval;
 
                 #endregion GroupBox General
 
                 #region GroupBox EarningsExpenditure
 
-                grpBoxEarningsExpenditure.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Caption", _strLanguage);
-                lblBuys.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Buys", _strLanguage);
-                btnShareBuysEdit.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Buttons/Buys",
-                    _strLanguage);
-                lblSales.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Sales",
-                    _strLanguage);
+                grpBoxEarningsExpenditure.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Caption", LanguageName);
+                lblBuys.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Buys", LanguageName);
+                btnShareBuysEdit.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Buttons/Buys",
+                    LanguageName);
+                lblSales.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Sales",
+                    LanguageName);
                 btnShareSalesEdit.Text =
-                    _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Buttons/Sales",
-                    _strLanguage);
-                if (_shareObject.AllSaleEntries.SaleProfitLossTotal < 0)
-                    lblProfitLoss.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Loss",
-                        _strLanguage);
+                    Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Buttons/Sales",
+                    LanguageName);
+                if (ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotal < 0)
+                    lblProfitLoss.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Loss",
+                        LanguageName);
                 else
-                    lblProfitLoss.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Profit",
-                        _strLanguage);
-                lblDividend.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Dividend",
-                    _strLanguage);
-                btnShareDividendsEdit.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Buttons/Dividend",
-                    _strLanguage);
-                lblCost.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Costs", _strLanguage);
-                btnShareCostsEdit.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Buttons/Costs",
-                    _strLanguage);
+                    lblProfitLoss.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Profit",
+                        LanguageName);
+                lblDividend.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Dividend",
+                    LanguageName);
+                btnShareDividendsEdit.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Buttons/Dividend",
+                    LanguageName);
+                lblCost.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Costs", LanguageName);
+                btnShareCostsEdit.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Buttons/Costs",
+                    LanguageName);
+
+                // Load button images
+                btnShareBuysEdit.Image = Resources.black_edit;
+                btnShareSalesEdit.Image = Resources.black_edit;
+                btnShareCostsEdit.Image = Resources.black_edit;
+                btnShareDividendsEdit.Image = Resources.black_edit;
 
                 #endregion GroupBox EarningsExpenditure
 
-                #region GroupBox Taxes
+                btnSave.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/Buttons/Save", LanguageName);
+                btnCancel.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/Buttons/Cancel", LanguageName);
 
-                grpBoxTaxes.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxTaxes/Caption", _strLanguage);
-                lblTaxAtSource.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxTaxes/Labels/TaxAtSource", _strLanguage);
-                lblTaxAtSourceUnit.Text = ShareObject.PercentageUnit;
-                lblCapitalGainsTax.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxTaxes/Labels/CapitalGainsTax", _strLanguage);
-                lblCapitalGainsTaxUnit.Text = ShareObject.PercentageUnit;
-                lblSolidarityTax.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxTaxes/Labels/SolidarityTax", _strLanguage);
-                lblSolidarityTaxUnit.Text = ShareObject.PercentageUnit;
-
-                #endregion GroupBox Taxes
-
-                btnSave.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Buttons/Save", _strLanguage);
-                btnCancel.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Buttons/Cancel", _strLanguage);
+                // Load button images
+                btnSave.Image = Resources.black_save;
+                btnCancel.Image = Resources.black_cancel;
 
                 #endregion Language configuration
 
@@ -278,9 +331,9 @@ namespace SharePortfolioManager
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                    _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Errors/ShowFailed", _strLanguage),
-                    _xmlLanguage, _strLanguage,
-                    Color.DarkRed, _logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/ShowFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -293,18 +346,18 @@ namespace SharePortfolioManager
         private void FrmShareEdit_FormClosing(object sender, FormClosingEventArgs e)
         {
             // Check if the form should be closed
-            if (_stopFomClosing)
+            if (StopFomClosingFlag)
             {
                 // Stop closing the form
                 e.Cancel = true;
             }
 
             // Reset closing flag
-            _stopFomClosing = false;
+            StopFomClosingFlag = false;
 
             // Set the dialog result correct of saving or not saving the share
             // Share must be saved because a dividend has been added or deleted
-            if (_bSave)
+            if (Save)
                 DialogResult = DialogResult.OK;
             else
                 DialogResult = DialogResult.Cancel;
@@ -323,16 +376,10 @@ namespace SharePortfolioManager
         {
             try
             {
-                _stopFomClosing = true;
+                StopFomClosingFlag = true;
                 var errorFlag = false;
                 decimal volume = 0;
-                decimal deposit = 0;
-                bool taxAtSourceFlag = chkTaxAtSource.Checked;
-                decimal taxAtSourcePercentage = 0;
-                bool capitalGainsTaxFlag = chkCapitalGainsTax.Checked;
-                decimal capitalGainsTaxPercentage = 0;
-                bool solidarityTaxFlag = chkSolidarityTax.Checked;
-                decimal solidarityTaxPercentage = 0;
+                decimal purchase = 0;
 
                 statusStrip1.ForeColor = Color.Red;
 
@@ -341,60 +388,79 @@ namespace SharePortfolioManager
                     txtBoxName.Focus();
                     // Add status message
                     Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Errors/NameEmpty", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/NameEmpty", LanguageName),
+                        Language, LanguageName,
+                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                     errorFlag = true;
                 }
                 else
                 {
-                    // Check if an share with the given share name already exists
-                    foreach (var shareObject in _parentWindow.ShareObjectList)
+                    // Check if a market value share with the given share name already exists
+                    foreach (var shareObjectMarketValue in ParentWindow.ShareObjectListMarketValue)
                     {
-                        if (shareObject.Name == txtBoxName.Text && shareObject != _shareObject)
+                        if (shareObjectMarketValue.Name == txtBoxName.Text && shareObjectMarketValue != ShareObjectMarketValue)
                         {
                             errorFlag = true;
-                            _stopFomClosing = true;
+                            StopFomClosingFlag = true;
                             txtBoxName.Focus();
                             // Add status message
                             Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                                _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Errors/NameExists", _strLanguage),
-                                _xmlLanguage, _strLanguage,
-                                Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                                Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/NameExists", LanguageName),
+                                Language, LanguageName,
+                                Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                             break;
                         }
+                    }
 
+                    if (errorFlag == false)
+                    {
+                        // Check if a market value share with the given share name already exists
+                        foreach (var shareObjectFinalValue in ParentWindow.ShareObjectListFinalValue)
+                        {
+                            if (shareObjectFinalValue.Name == txtBoxName.Text && shareObjectFinalValue != ShareObjectFinalValue)
+                            {
+                                errorFlag = true;
+                                StopFomClosingFlag = true;
+                                txtBoxName.Focus();
+                                // Add status message
+                                Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                                    Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/NameExists", LanguageName),
+                                    Language, LanguageName,
+                                    Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                                break;
+                            }
+                        }
                     }
                 }
 
-                if (lblDepositValue.Text == @"" && errorFlag == false)
+                if (lblPurchaseValue.Text == @"" && errorFlag == false)
                 {
-                    lblDepositValue.Focus();
+                    lblPurchaseValue.Focus();
                     // Add status message
                     Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Errors/DepositEmpty", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DepositEmpty", LanguageName),
+                        Language, LanguageName,
+                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                     errorFlag = true;
                 }
-                else if(!Decimal.TryParse(lblDepositValue.Text, out deposit) && errorFlag == false)
+                else if (!Decimal.TryParse(lblPurchaseValue.Text, out purchase) && errorFlag == false)
                 {
-                    lblDepositValue.Focus();
+                    lblPurchaseValue.Focus();
                     // Add status message
                     Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Errors/DepositWrongFormat", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DepositWrongFormat", LanguageName),
+                        Language, LanguageName,
+                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                     errorFlag = true;
                 }
-                else if (deposit <= 0 && errorFlag == false)
+                else if (purchase <= 0 && errorFlag == false)
                 {
-                    lblDepositValue.Focus();
+                    lblPurchaseValue.Focus();
                     // Add status message
                     Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Errors/DepositWrongValue", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DepositWrongValue", LanguageName),
+                        Language, LanguageName,
+                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                     errorFlag = true;
                 }
                 else if (lblVolumeValue.Text == @"" && errorFlag == false)
@@ -402,9 +468,9 @@ namespace SharePortfolioManager
                     lblVolumeValue.Focus();
                     // Add status message
                     Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Errors/VolumeEmpty", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/VolumeEmpty", LanguageName),
+                        Language, LanguageName,
+                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                     errorFlag = true;
                 }
                 else if (!Decimal.TryParse(lblVolumeValue.Text, out volume) && errorFlag == false)
@@ -412,9 +478,9 @@ namespace SharePortfolioManager
                     lblVolumeValue.Focus();
                     // Add status message
                     Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Errors/VolumeWrongFormat", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/VolumeWrongFormat", LanguageName),
+                        Language, LanguageName,
+                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                     errorFlag = true;
                 }
                 else if (volume <= 0 && errorFlag == false)
@@ -422,9 +488,9 @@ namespace SharePortfolioManager
                     lblVolumeValue.Focus();
                     // Add status message
                     Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Errors/VolumeWrongValue", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/VolumeWrongValue", LanguageName),
+                        Language, LanguageName,
+                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                     errorFlag = true;
                 }
                 else if (txtBoxWebSite.Text == @"" && errorFlag == false)
@@ -432,114 +498,74 @@ namespace SharePortfolioManager
                     txtBoxWebSite.Focus();
                     // Add status message
                     Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteEmpty", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-                    errorFlag = true;
-                }
-                else if (chkTaxAtSource.CheckState == CheckState.Checked && txtBoxTaxAtSource.Text == @"" && errorFlag == false)
-                {
-                    txtBoxTaxAtSource.Focus();
-                    // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Errors/TaxAtSourceEmpty", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-                    errorFlag = true;
-                }
-                else if (chkTaxAtSource.CheckState == CheckState.Checked && !Decimal.TryParse(txtBoxTaxAtSource.Text, out taxAtSourcePercentage) && errorFlag == false)
-                {
-                    txtBoxTaxAtSource.Focus();
-                    // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Errors/TaxAtSourceWrongFormat", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-                    errorFlag = true;
-                }
-                else if (chkCapitalGainsTax.CheckState == CheckState.Checked && txtBoxCapitalGainsTax.Text == @"" && errorFlag == false)
-                {
-                    txtBoxCapitalGainsTax.Focus();
-                    // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Errors/CapitalGainsTaxEmpty", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-                    errorFlag = true;
-                }
-                else if (chkCapitalGainsTax.CheckState == CheckState.Checked && !Decimal.TryParse(txtBoxCapitalGainsTax.Text, out capitalGainsTaxPercentage) && errorFlag == false)
-                {
-                    txtBoxCapitalGainsTax.Focus();
-                    // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Errors/CapitalGainsTaxWrongFormat", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-                    errorFlag = true;
-                }
-                else if (chkSolidarityTax.CheckState == CheckState.Checked && txtBoxSolidarityTax.Text == @"" && errorFlag == false)
-                {
-                    txtBoxSolidarityTax.Focus();
-                    // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Errors/SolidarityTaxEmpty", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-                    errorFlag = true;
-                }
-                else if (chkSolidarityTax.CheckState == CheckState.Checked && !Decimal.TryParse(txtBoxSolidarityTax.Text, out solidarityTaxPercentage) && errorFlag == false)
-                {
-                    txtBoxSolidarityTax.Focus();
-                    // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Errors/SolidarityTaxWrongFormat", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteEmpty", LanguageName),
+                        Language, LanguageName,
+                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                     errorFlag = true;
                 }
                 else if (errorFlag == false)
                 {
-                    // Check if an share with the given WKN number already exists
-                    foreach (var shareObject in _parentWindow.ShareObjectList)
+                    // Check if a market value share with the given WKN number already exists
+                    foreach (var shareObjectMarketValue in ParentWindow.ShareObjectListMarketValue)
                     {
-                        if (shareObject.WebSite == txtBoxWebSite.Text && shareObject != _shareObject)
+                        if (shareObjectMarketValue.WebSite == txtBoxWebSite.Text && shareObjectMarketValue != ShareObjectMarketValue)
                         {
                             errorFlag = true;
-                            _stopFomClosing = true;
+                            StopFomClosingFlag = true;
                             txtBoxWebSite.Focus();
                             // Add status message
                             Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                                _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteExists", _strLanguage),
-                                _xmlLanguage, _strLanguage,
-                                Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                                Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteExists", LanguageName),
+                                Language, LanguageName,
+                                Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                             break;
                         }
+                    }
 
+                    if (errorFlag == false)
+                    {
+                        // Check if a final value share with the given WKN number already exists
+                        foreach (var shareObjectFinalValue in ParentWindow.ShareObjectListFinalValue)
+                        {
+                            if (shareObjectFinalValue.WebSite == txtBoxWebSite.Text && shareObjectFinalValue != ShareObjectFinalValue)
+                            {
+                                errorFlag = true;
+                                StopFomClosingFlag = true;
+                                txtBoxWebSite.Focus();
+                                // Add status message
+                                Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                                    Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteExists", LanguageName),
+                                    Language, LanguageName,
+                                    Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                                break;
+                            }
+                        }
                     }
                 }
 
                 if (errorFlag == false)
                 {
-                    _stopFomClosing = false;
-                    _bSave = true;
-
-                    _shareObject.Wkn = lblWknValue.Text;
-                    _shareObject.Name = txtBoxName.Text;
-                    _shareObject.Volume = volume;
-                    _shareObject.MarketValue = deposit;
-                    _shareObject.WebSite = txtBoxWebSite.Text;
+                    StopFomClosingFlag = false;
+                    Save = true;
 
                     CultureInfo cultureInfo = new CultureInfo(cboBoxCultureInfo.GetItemText(cboBoxCultureInfo.SelectedItem));
-                    _shareObject.CultureInfo = cultureInfo;
 
-                    _shareObject.DividendPayoutInterval = cbxDividendPayoutInterval.SelectedIndex;
+                    // Market value share
+                    ShareObjectMarketValue.Wkn = lblWknValue.Text;
+                    ShareObjectMarketValue.Name = txtBoxName.Text;
+                    ShareObjectMarketValue.Volume = volume;
+                    ShareObjectMarketValue.PurchaseValue = purchase;
+                    ShareObjectMarketValue.WebSite = txtBoxWebSite.Text;
+                    ShareObjectMarketValue.CultureInfo = cultureInfo;
 
-                    _shareObject.TaxTaxAtSourceFlag = taxAtSourceFlag;
-                    _shareObject.TaxTaxAtSourcePercentage = taxAtSourcePercentage;
-                    _shareObject.TaxCapitalGainsFlag = capitalGainsTaxFlag;
-                    _shareObject.TaxCapitalGainsPercentage = capitalGainsTaxPercentage;
-                    _shareObject.TaxSolidarityFlag = solidarityTaxFlag;
-                    _shareObject.TaxSolidarityPercentage = solidarityTaxPercentage;
+                    // Final value share
+                    ShareObjectFinalValue.Wkn = lblWknValue.Text;
+                    ShareObjectFinalValue.Name = txtBoxName.Text;
+                    ShareObjectFinalValue.Volume = volume;
+                    ShareObjectFinalValue.PurchaseValue = purchase;
+                    ShareObjectFinalValue.WebSite = txtBoxWebSite.Text;
+                    ShareObjectFinalValue.CultureInfo = cultureInfo;
+                    ShareObjectFinalValue.DividendPayoutInterval = cbxDividendPayoutInterval.SelectedIndex;
                 }
             }
             catch (Exception ex)
@@ -548,13 +574,13 @@ namespace SharePortfolioManager
                 MessageBox.Show("btnSave_Click()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
-                _stopFomClosing = true;
+                StopFomClosingFlag = true;
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                    _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Errors/EditSaveFailed", _strLanguage),
-                    _xmlLanguage, _strLanguage,
-                    Color.DarkRed, _logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
-                _stopFomClosing = true;
+                    Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/EditSaveFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                StopFomClosingFlag = true;
             }
         }
 
@@ -565,7 +591,7 @@ namespace SharePortfolioManager
         /// <param name="e">EventArgs</param>
         private void OnBtnCancel_Click(object sender, EventArgs e)
         {
-            _stopFomClosing = false;
+            StopFomClosingFlag = false;
             Close();
         }
 
@@ -577,22 +603,16 @@ namespace SharePortfolioManager
         private void OnBtnShareBuysEdit_Click(object sender, EventArgs e)
         {
             IModelBuyEdit model = new ModelBuyEdit();
-            IViewBuyEdit view = new ViewBuyEdit(_shareObject, _logger, _xmlLanguage, _strLanguage);
+            IViewBuyEdit view = new ViewBuyEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, LanguageName);
             PresenterBuyEdit presenterBuyEdit = new PresenterBuyEdit (view, model);
 
             DialogResult dlgResult = view.ShowDialog();
             if (dlgResult == DialogResult.OK)
-                _bSave = true;
+                Save = true;
             else
-                _bSave = false;
+                Save = false;
 
-            lblVolumeValue.Text = string.Format("{0:N2}", _shareObject.Volume);
-            lblDepositValue.Text = string.Format("{0:N2}", _shareObject.MarketValue);
-            lblBuysValue.Text = string.Format("{0:N2}", _shareObject.AllBuyEntries.BuyMarketValueTotal);
-            lblSalesValue.Text = string.Format("{0:N2}", _shareObject.AllSaleEntries.SaleValueTotal);
-            lblCostValue.Text = string.Format("{0:N2}", _shareObject.AllCostsEntries.CostValueTotal);
-            lblProfitLossValue.Text = string.Format("{0:N2}", _shareObject.AllSaleEntries.SaleProfitLossTotal);
-            lblDividendValue.Text = string.Format("{0:N2}", _shareObject.AllDividendEntries.DividendValueTotalWithTaxes);
+            SetShareValuesToTextBoxes();
         }
 
         /// <summary>
@@ -602,21 +622,15 @@ namespace SharePortfolioManager
         /// <param name="e">EventArgs</param>
         private void OnBtnShareSalesEdit_Click(object sender, EventArgs e)
         {
-            FrmShareSalesEdit shareSalesEdit = new FrmShareSalesEdit(_shareObject, _logger, _xmlLanguage, _strLanguage);
+            FrmShareSalesEdit shareSalesEdit = new FrmShareSalesEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, LanguageName);
 
             DialogResult dlgResult = shareSalesEdit.ShowDialog();
             if (dlgResult == DialogResult.OK)
-                _bSave = true;
+                Save = true;
             else
-                _bSave = false;
+                Save = false;
 
-            lblVolumeValue.Text = string.Format("{0:N2}", _shareObject.Volume);
-            lblDepositValue.Text = string.Format("{0:N2}", _shareObject.MarketValue);
-            lblBuysValue.Text = string.Format("{0:N2}", _shareObject.AllBuyEntries.BuyMarketValueTotal);
-            lblSalesValue.Text = string.Format("{0:N2}", _shareObject.AllSaleEntries.SaleValueTotal);
-            lblCostValue.Text = string.Format("{0:N2}", _shareObject.AllCostsEntries.CostValueTotal);
-            lblProfitLossValue.Text = string.Format("{0:N2}", _shareObject.AllSaleEntries.SaleProfitLossTotal);
-            lblDividendValue.Text = string.Format("{0:N2}", _shareObject.AllDividendEntries.DividendValueTotalWithTaxes);
+            SetShareValuesToTextBoxes();
         }
 
         /// <summary>
@@ -627,22 +641,16 @@ namespace SharePortfolioManager
         private void OnBtnShareDividendsEdit_Click(object sender, EventArgs e)
         {
             IModelDividendEdit model = new ModelDividendEdit();
-            IViewDividendEdit view = new ViewDividendEdit(_shareObject, _logger, _xmlLanguage, _strLanguage);
+            IViewDividendEdit view = new ViewDividendEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, LanguageName);
             PresenterDividendEdit presenterDividendEdit = new PresenterDividendEdit(view, model);
 
             DialogResult dlgResult = view.ShowDialog();
             if (dlgResult == DialogResult.OK)
-                _bSave = true;
+                Save = true;
             else
-                _bSave = false;
+                Save = false;
 
-            lblVolumeValue.Text = string.Format("{0:N2}", _shareObject.Volume);
-            lblDepositValue.Text = string.Format("{0:N2}", _shareObject.MarketValue);
-            lblBuysValue.Text = string.Format("{0:N2}", _shareObject.AllBuyEntries.BuyMarketValueTotal);
-            lblSalesValue.Text = string.Format("{0:N2}", _shareObject.AllSaleEntries.SaleValueTotal);
-            lblCostValue.Text = string.Format("{0:N2}", _shareObject.AllCostsEntries.CostValueTotal);
-            lblProfitLossValue.Text = string.Format("{0:N2}", _shareObject.AllSaleEntries.SaleProfitLossTotal);
-            lblDividendValue.Text = string.Format("{0:N2}", _shareObject.AllDividendEntries.DividendValueTotalWithTaxes);
+            SetShareValuesToTextBoxes();
         }
 
         /// <summary>
@@ -652,87 +660,31 @@ namespace SharePortfolioManager
         /// <param name="e">EventArgs</param>
         private void OnBtnShareCostsEdit_Click(object sender, EventArgs e)
         {
-            FrmShareCostEdit shareCostEdit = new FrmShareCostEdit(_shareObject, _logger, _xmlLanguage, _strLanguage);
+            FrmShareCostEdit shareCostEdit = new FrmShareCostEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, LanguageName);
 
             DialogResult dlgResult = shareCostEdit.ShowDialog();
             if (dlgResult == DialogResult.OK)
-                _bSave = true;
+                Save = true;
             else
-                _bSave = false;
+                Save = false;
 
-            lblVolumeValue.Text = string.Format("{0:N2}", _shareObject.Volume);
-            lblDepositValue.Text = string.Format("{0:N2}", _shareObject.MarketValue);
-            lblBuysValue.Text = string.Format("{0:N2}", _shareObject.AllBuyEntries.BuyMarketValueTotal);
-            lblSalesValue.Text = string.Format("{0:N2}", _shareObject.AllSaleEntries.SaleValueTotal);
-            lblCostValue.Text = string.Format("{0:N2}", _shareObject.AllCostsEntries.CostValueTotal);
-            lblProfitLossValue.Text = string.Format("{0:N2}", _shareObject.AllSaleEntries.SaleProfitLossTotal);
-            lblDividendValue.Text = string.Format("{0:N2}", _shareObject.AllDividendEntries.DividendValueTotalWithTaxes);
+            SetShareValuesToTextBoxes();
+        }
+
+        /// <summary>
+        /// This function sets the new values to the corresponding text boxes
+        /// </summary>
+        private void SetShareValuesToTextBoxes()
+        {
+            lblVolumeValue.Text = Helper.FormatDecimal(ShareObjectFinalValue.Volume, Helper.Volumefivelength, false, Helper.Volumetwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
+            lblPurchaseValue.Text = Helper.FormatDecimal(ShareObjectFinalValue.PurchaseValue, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
+            lblBuysValue.Text = Helper.FormatDecimal(ShareObjectFinalValue.AllBuyEntries.BuyMarketValueReductionTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
+            lblSalesValue.Text = Helper.FormatDecimal(ShareObjectFinalValue.AllSaleEntries.SaleValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
+            lblCostValue.Text = Helper.FormatDecimal(ShareObjectFinalValue.AllCostsEntries.CostValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
+            lblProfitLossValue.Text = Helper.FormatDecimal(ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
+            lblDividendValue.Text = Helper.FormatDecimal(ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxes, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
         }
 
         #endregion Button
-
-        #region CheckBox
-
-        /// <summary>
-        /// This function enables or disables the text box for the percentage value
-        /// </summary>
-        /// <param name="sender">CheckBox</param>
-        /// <param name="e">EventArgs</param>
-        private void chkTaxAtSource_CheckedChanged(object sender, EventArgs e)
-        {
-            if (chkTaxAtSource.CheckState == CheckState.Checked)
-            {
-                txtBoxTaxAtSource.Enabled = true;
-                txtBoxTaxAtSource.ReadOnly = false;
-                txtBoxTaxAtSource.Focus();
-            }
-            else
-            {
-                txtBoxTaxAtSource.Enabled = false;
-                txtBoxTaxAtSource.ReadOnly = true;
-            }
-        }
-
-        /// <summary>
-        /// This function enables or disables the text box for the percentage value
-        /// </summary>
-        /// <param name="sender">CheckBox</param>
-        /// <param name="e">EventArgs</param>
-        private void chkCapitalGainsTax_CheckedChanged(object sender, EventArgs e)
-        {
-            if (chkCapitalGainsTax.CheckState == CheckState.Checked)
-            {
-                txtBoxCapitalGainsTax.Enabled = true;
-                txtBoxCapitalGainsTax.ReadOnly = false;
-                txtBoxCapitalGainsTax.Focus();
-            }
-            else
-            {
-                txtBoxCapitalGainsTax.Enabled = false;
-                txtBoxCapitalGainsTax.ReadOnly = true;
-            }
-        }
-
-        /// <summary>
-        /// This function enables or disables the text box for the percentage value
-        /// </summary>
-        /// <param name="sender">CheckBox</param>
-        /// <param name="e">EventArgs</param>
-        private void chkSolidarityTax_CheckedChanged(object sender, EventArgs e)
-        {
-            if (chkSolidarityTax.CheckState == CheckState.Checked)
-            {
-                txtBoxSolidarityTax.Enabled = true;
-                txtBoxSolidarityTax.ReadOnly = false;
-                txtBoxSolidarityTax.Focus();
-            }
-            else
-            {
-                txtBoxSolidarityTax.Enabled = false;
-                txtBoxSolidarityTax.ReadOnly = true;
-            }
-        }
-
-        #endregion CheckBox
     }
 }

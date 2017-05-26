@@ -47,12 +47,12 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores the language file
         /// </summary>
-        private Language _xmlLanguage;
+        private Language _language;
 
         /// <summary>
         /// Stores language
         /// </summary>
-        private String _strLanguage;
+        private String _languageName;
 
         /// <summary>
         /// Flag if the form should be closed
@@ -60,6 +60,40 @@ namespace SharePortfolioManager
         private bool _stopFomClosing;
 
         #endregion Variables
+
+        #region Properties
+
+        public FrmMain ParentWindow
+        {
+            get { return _parentWindow; }
+            set { _parentWindow = value; }
+        }
+
+        public Logger Logger
+        {
+            get { return _logger; }
+            set { _logger = value; }
+        }
+
+        public Language Language
+        {
+            get { return _language; }
+            set { _language = value; }
+        }
+
+        public string LanguageName
+        {
+            get { return _languageName; }
+            set { _languageName = value; }
+        }
+
+        public bool StopFomClosingFlag
+        {
+            get { return _stopFomClosing; }
+            set { _stopFomClosing = value; }
+        }
+
+        #endregion Properties
 
         #region Form
 
@@ -70,11 +104,11 @@ namespace SharePortfolioManager
         {
             InitializeComponent();
 
-            _parentWindow = parentWindow;
-            _logger = logger;
-            _xmlLanguage = xmlLanguage;
-            _strLanguage = strLanguage;
-            _stopFomClosing = false;
+            ParentWindow = parentWindow;
+            Logger = logger;
+            Language = xmlLanguage;
+            LanguageName = strLanguage;
+            StopFomClosingFlag = false;
         }
 
         /// <summary>
@@ -86,14 +120,14 @@ namespace SharePortfolioManager
         private void FrmLoggerSettings_FormClosing(object sender, FormClosingEventArgs e)
         {
             // Check if the form should be closed
-            if (_stopFomClosing)
+            if (StopFomClosingFlag)
             {
                 // Stop closing the form
                 e.Cancel = true;
             }
 
             // Reset closing flag
-            _stopFomClosing = false;
+            StopFomClosingFlag = false;
         }
 
         /// <summary>
@@ -107,48 +141,48 @@ namespace SharePortfolioManager
             {
                 #region Language configuration
 
-                Text = _xmlLanguage.GetLanguageTextByXPath(@"/LoggerSettingsForm/Caption", _strLanguage);
+                Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Caption", LanguageName);
 
-                grpBoxGUIEntries.Text = _xmlLanguage.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogGUIEntriesSize/Caption", _strLanguage);
-                lblGUIEntriesSize.Text = _xmlLanguage.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogGUIEntriesSize/Labels/GUIEntriesSize", _strLanguage);
+                grpBoxGUIEntries.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogGUIEntriesSize/Caption", LanguageName);
+                lblGUIEntriesSize.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogGUIEntriesSize/Labels/GUIEntriesSize", LanguageName);
 
-                grpBoxEnableFileLogging.Text = _xmlLanguage.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxFileLogging/Caption", _strLanguage);
-                chkBoxEnableFileLogging.Text = _xmlLanguage.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxFileLogging/States/EnableFileLogging", _strLanguage);
+                grpBoxEnableFileLogging.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxFileLogging/Caption", LanguageName);
+                chkBoxEnableFileLogging.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxFileLogging/States/EnableFileLogging", LanguageName);
 
-                grpBoxStoredLogFiles.Text = _xmlLanguage.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxStoredFiles/Caption", _strLanguage);
-                lblStoredLogFiles.Text = _xmlLanguage.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxStoredFiles/Labels/StoredLogFiles", _strLanguage);
-                btnLogFileCleanUp.Text = _xmlLanguage.GetLanguageTextByXPath(@"/LoggerSettingsForm/Buttons/CleanUp", _strLanguage);
+                grpBoxStoredLogFiles.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxStoredFiles/Caption", LanguageName);
+                lblStoredLogFiles.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxStoredFiles/Labels/StoredLogFiles", LanguageName);
+                btnLogFileCleanUp.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Buttons/CleanUp", LanguageName);
 
-                grpBoxCleanUpAtStartUp.Text = _xmlLanguage.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxCleanUpAtStartUp/Caption", _strLanguage);
-                chkBoxEnableCleanUpAtStartUp.Text = _xmlLanguage.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxCleanUpAtStartUp/States/EnableCleanUpAtStartUp", _strLanguage);
+                grpBoxCleanUpAtStartUp.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxCleanUpAtStartUp/Caption", LanguageName);
+                chkBoxEnableCleanUpAtStartUp.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxCleanUpAtStartUp/States/EnableCleanUpAtStartUp", LanguageName);
 
-                grpBoxComponents.Text = _xmlLanguage.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogComponents/Caption", _strLanguage);
-                chkBoxApplication.Text = _xmlLanguage.GetLanguageTextByXPath(@"/Logger/ComponentNames/Application", _strLanguage);
-                chkBoxWebParser.Text = _xmlLanguage.GetLanguageTextByXPath(@"/Logger/ComponentNames/WebParser", _strLanguage);
-                chkBoxLanguageHander.Text = _xmlLanguage.GetLanguageTextByXPath(@"/Logger/ComponentNames/LanguageHandler", _strLanguage);
+                grpBoxComponents.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogComponents/Caption", LanguageName);
+                chkBoxApplication.Text = Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Application", LanguageName);
+                chkBoxWebParser.Text = Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/WebParser", LanguageName);
+                chkBoxLanguageHander.Text = Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/LanguageHandler", LanguageName);
 
-                grpBoxLogLevel.Text = _xmlLanguage.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogLevels/Caption", _strLanguage);
-                chkBoxStart.Text = _xmlLanguage.GetLanguageTextByXPath(@"/Logger/States/Start", _strLanguage);
-                chkBoxInfo.Text = _xmlLanguage.GetLanguageTextByXPath(@"/Logger/States/Info", _strLanguage);
-                chkBoxWarning.Text = _xmlLanguage.GetLanguageTextByXPath(@"/Logger/States/Warning", _strLanguage);
-                chkBoxError.Text = _xmlLanguage.GetLanguageTextByXPath(@"/Logger/States/Error", _strLanguage);
-                chkBoxFatalError.Text = _xmlLanguage.GetLanguageTextByXPath(@"/Logger/States/FatalError", _strLanguage);
+                grpBoxLogLevel.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogLevels/Caption", LanguageName);
+                chkBoxStart.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Start", LanguageName);
+                chkBoxInfo.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Info", LanguageName);
+                chkBoxWarning.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Warning", LanguageName);
+                chkBoxError.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Error", LanguageName);
+                chkBoxFatalError.Text = Language.GetLanguageTextByXPath(@"/Logger/States/FatalError", LanguageName);
 
-                grpBoxLogColors.Text = _xmlLanguage.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogLevelColors/Caption", _strLanguage);
-                lblColorStart.Text = _xmlLanguage.GetLanguageTextByXPath(@"/Logger/States/Start", _strLanguage);
-                lblColorInfo.Text = _xmlLanguage.GetLanguageTextByXPath(@"/Logger/States/Info", _strLanguage);
-                lblColorWarning.Text = _xmlLanguage.GetLanguageTextByXPath(@"/Logger/States/Warning", _strLanguage);
-                lblColorError.Text = _xmlLanguage.GetLanguageTextByXPath(@"/Logger/States/Error", _strLanguage);
-                lblColorFatalError.Text = _xmlLanguage.GetLanguageTextByXPath(@"/Logger/States/FatalError", _strLanguage);
+                grpBoxLogColors.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogLevelColors/Caption", LanguageName);
+                lblColorStart.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Start", LanguageName);
+                lblColorInfo.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Info", LanguageName);
+                lblColorWarning.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Warning", LanguageName);
+                lblColorError.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Error", LanguageName);
+                lblColorFatalError.Text = Language.GetLanguageTextByXPath(@"/Logger/States/FatalError", LanguageName);
 
-                btnSave.Text = _xmlLanguage.GetLanguageTextByXPath(@"/LoggerSettingsForm/Buttons/Save", _strLanguage);
-                btnCancel.Text = _xmlLanguage.GetLanguageTextByXPath(@"/LoggerSettingsForm/Buttons/Cancel", _strLanguage);
+                btnSave.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Buttons/Save", LanguageName);
+                btnCancel.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Buttons/Cancel", LanguageName);
 
                 #endregion Language configuration
 
                 #region GUI log entries
 
-                int iIndexGUI = cbxGUIEntriesList.FindStringExact(_parentWindow.LoggerGUIEntriesSize.ToString());
+                int iIndexGUI = cbxGUIEntriesList.FindStringExact(ParentWindow.LoggerGUIEntriesSize.ToString());
                 cbxGUIEntriesList.SelectedIndex = iIndexGUI;
 
                 #endregion GUI log entries
@@ -156,14 +190,14 @@ namespace SharePortfolioManager
                 #region Logging to file
 
                 bool bFlagLoggingToFile = false;
-                Boolean.TryParse(_parentWindow.LoggerLogToFileEnabled.ToString(), out bFlagLoggingToFile);
+                Boolean.TryParse(ParentWindow.LoggerLogToFileEnabled.ToString(), out bFlagLoggingToFile);
                 chkBoxEnableFileLogging.Checked = bFlagLoggingToFile;
 
                 #endregion Logging to file
 
                 #region Stored log files
 
-                int iIndexStored = cbxStoredLogFiles.FindStringExact(_parentWindow.LoggerStoredLogFiles.ToString());
+                int iIndexStored = cbxStoredLogFiles.FindStringExact(ParentWindow.LoggerStoredLogFiles.ToString());
                 cbxStoredLogFiles.SelectedIndex = iIndexStored;
 
                 #endregion Stored log files
@@ -171,24 +205,24 @@ namespace SharePortfolioManager
                 #region Logging to file
 
                 bool bFlagCleanUpAtStartUp = false;
-                Boolean.TryParse(_parentWindow.LoggerLogCleanUpAtStartUpEnabled.ToString(), out bFlagCleanUpAtStartUp);
+                Boolean.TryParse(ParentWindow.LoggerLogCleanUpAtStartUpEnabled.ToString(), out bFlagCleanUpAtStartUp);
                 chkBoxEnableCleanUpAtStartUp.Checked = bFlagCleanUpAtStartUp;
 
                 #endregion Logging to file
 
                 #region Log components
 
-                if ((_parentWindow.LoggerComponentLevel & 1) == 1)
+                if ((ParentWindow.LoggerComponentLevel & 1) == 1)
                     chkBoxApplication.Checked = true;
                 else
                     chkBoxApplication.Checked = false;
 
-                if ((_parentWindow.LoggerComponentLevel & 2) == 2)
+                if ((ParentWindow.LoggerComponentLevel & 2) == 2)
                     chkBoxWebParser.Checked = true;
                 else
                     chkBoxWebParser.Checked = false;
 
-                if ((_parentWindow.LoggerComponentLevel & 4) == 4)
+                if ((ParentWindow.LoggerComponentLevel & 4) == 4)
                     chkBoxLanguageHander.Checked = true;
                 else
                     chkBoxLanguageHander.Checked = false;
@@ -197,27 +231,27 @@ namespace SharePortfolioManager
 
                 #region Log state levels
 
-                if ((_parentWindow.LoggerStateLevel & 1) == 1)
+                if ((ParentWindow.LoggerStateLevel & 1) == 1)
                     chkBoxStart.Checked = true;
                 else
                     chkBoxStart.Checked = false;
 
-                if ((_parentWindow.LoggerStateLevel & 2) == 2)
+                if ((ParentWindow.LoggerStateLevel & 2) == 2)
                     chkBoxInfo.Checked = true;
                 else
                     chkBoxInfo.Checked = false;
 
-                if ((_parentWindow.LoggerStateLevel & 4) == 4)
+                if ((ParentWindow.LoggerStateLevel & 4) == 4)
                     chkBoxWarning.Checked = true;
                 else
                     chkBoxWarning.Checked = false;
 
-                if ((_parentWindow.LoggerStateLevel & 8) == 8)
+                if ((ParentWindow.LoggerStateLevel & 8) == 8)
                     chkBoxError.Checked = true;
                 else
                     chkBoxError.Checked = false;
 
-                if ((_parentWindow.LoggerStateLevel & 16) == 16)
+                if ((ParentWindow.LoggerStateLevel & 16) == 16)
                     chkBoxFatalError.Checked = true;
                 else
                     chkBoxFatalError.Checked = false;
@@ -282,11 +316,11 @@ namespace SharePortfolioManager
                     iIndex++;
                 }
 
-                cbxColorStart.SelectedIndex = cbxColorStart.FindStringExact(_logger.LoggerColorList[0].Name);
-                cbxColorInfo.SelectedIndex = cbxColorInfo.FindStringExact(_logger.LoggerColorList[1].Name);
-                cbxColorWarning.SelectedIndex = cbxColorWarning.FindStringExact(_logger.LoggerColorList[2].Name);
-                cbxColorError.SelectedIndex = cbxColorError.FindStringExact(_logger.LoggerColorList[3].Name);
-                cboBoxColorFatalError.SelectedIndex = cboBoxColorFatalError.FindStringExact(_logger.LoggerColorList[4].Name);
+                cbxColorStart.SelectedIndex = cbxColorStart.FindStringExact(Logger.LoggerColorList[0].Name);
+                cbxColorInfo.SelectedIndex = cbxColorInfo.FindStringExact(Logger.LoggerColorList[1].Name);
+                cbxColorWarning.SelectedIndex = cbxColorWarning.FindStringExact(Logger.LoggerColorList[2].Name);
+                cbxColorError.SelectedIndex = cbxColorError.FindStringExact(Logger.LoggerColorList[3].Name);
+                cboBoxColorFatalError.SelectedIndex = cboBoxColorFatalError.FindStringExact(Logger.LoggerColorList[4].Name);
 
                 #endregion Color configuration  
             }
@@ -298,9 +332,9 @@ namespace SharePortfolioManager
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                   _xmlLanguage.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/LoggerSettingsShowFailed", _strLanguage),
-                   _xmlLanguage, _strLanguage,
-                   Color.DarkRed, _logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                   Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/LoggerSettingsShowFailed", LanguageName),
+                   Language, LanguageName,
+                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -320,12 +354,12 @@ namespace SharePortfolioManager
                 int iStoredLogFiles = 0;
                 int iDeletedFiles = 0;
                 Int32.TryParse(cbxStoredLogFiles.SelectedItem.ToString(), out iStoredLogFiles);
-                iDeletedFiles =  _logger.CleanUpLogFiles(iStoredLogFiles);
+                iDeletedFiles =  Logger.CleanUpLogFiles(iStoredLogFiles);
 
                 Helper.AddStatusMessage(toolStripStatusLabel1,
-                    _xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerErrors/NotInitialized", _strLanguage),
-                    _xmlLanguage, _strLanguage,
-                    Color.Black, _logger, (int)FrmMain.EStateLevels.Info, (int)FrmMain.EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/NotInitialized", LanguageName),
+                    Language, LanguageName,
+                    Color.Black, Logger, (int)FrmMain.EStateLevels.Info, (int)FrmMain.EComponentLevels.Application);
             }
             catch (LoggerException loggerException) // TODO
             {
@@ -334,37 +368,37 @@ namespace SharePortfolioManager
                     MessageBoxIcon.Error);
 #endif
                 //// Check the logger initialization state
-                //switch (_logger.InitState)
+                //switch (Logger.InitState)
                 //{
                 //    case Logger.EInitState.NotInitialized:
-                //        Helper.AddStatusMessage(rchTxtBoxStateMessage, _xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerErrors/NotInitialized", _languageName), Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                //        Helper.AddStatusMessage(rchTxtBoxStateMessage, Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/NotInitialized", LanguageName), Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
                 //        break;
                 //    case Logger.EInitState.WrongSize:
-                //        Helper.AddStatusMessage(rchTxtBoxStateMessage, _xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerErrors/WrongSize", _languageName), Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                //        Helper.AddStatusMessage(rchTxtBoxStateMessage, Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/WrongSize", LanguageName), Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
                 //        break;
                 //    case Logger.EInitState.ComponentLevelInvalid:
-                //        Helper.AddStatusMessage(rchTxtBoxStateMessage, _xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerErrors/ComponentLevelInvalid", _languageName), Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                //        Helper.AddStatusMessage(rchTxtBoxStateMessage, Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/ComponentLevelInvalid", LanguageName), Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
                 //        break;
                 //    case Logger.EInitState.ComponentNamesMaxCount:
-                //        Helper.AddStatusMessage(rchTxtBoxStateMessage, _xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerErrors/ComponentNamesMaxCount", _languageName), Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                //        Helper.AddStatusMessage(rchTxtBoxStateMessage, Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/ComponentNamesMaxCount", LanguageName), Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
                 //        break;
                 //    case Logger.EInitState.StateLevelInvalid:
-                //        Helper.AddStatusMessage(rchTxtBoxStateMessage, _xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerErrors/StateLevelInvalid", _languageName), Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                //        Helper.AddStatusMessage(rchTxtBoxStateMessage, Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/StateLevelInvalid", LanguageName), Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
                 //        break;
                 //    case Logger.EInitState.StatesMaxCount:
-                //        Helper.AddStatusMessage(rchTxtBoxStateMessage, _xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerErrors/StatesMaxCount", _languageName), Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                //        Helper.AddStatusMessage(rchTxtBoxStateMessage, Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/StatesMaxCount", LanguageName), Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
                 //        break;
                 //    case Logger.EInitState.ColorsMaxCount:
-                //        Helper.AddStatusMessage(rchTxtBoxStateMessage, _xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerErrors/ColorsMaxCount", _languageName), Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                //        Helper.AddStatusMessage(rchTxtBoxStateMessage, Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/ColorsMaxCount", LanguageName), Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
                 //        break;
                 //    case Logger.EInitState.WriteStartupFailed:
-                //        Helper.AddStatusMessage(rchTxtBoxStateMessage, _xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerErrors/WriteStartupFailed", _languageName), Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                //        Helper.AddStatusMessage(rchTxtBoxStateMessage, Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/WriteStartupFailed", LanguageName), Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
                 //        break;
                 //    case Logger.EInitState.LogPathCreationFailed:
-                //        Helper.AddStatusMessage(rchTxtBoxStateMessage, _xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerErrors/LogPathCreationFailed", _languageName), Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                //        Helper.AddStatusMessage(rchTxtBoxStateMessage, Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/LogPathCreationFailed", LanguageName), Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
                 //        break;
                 //    case Logger.EInitState.InitializationFailed:
-                //        Helper.AddStatusMessage(rchTxtBoxStateMessage, _xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerErrors/InitializationFailed", _languageName), Color.DarkRed, _logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                //        Helper.AddStatusMessage(rchTxtBoxStateMessage, Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/InitializationFailed", LanguageName), Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
                 //        break;
                 //}
             }
@@ -385,7 +419,7 @@ namespace SharePortfolioManager
         /// <param name="e">EventArgs</param>
         private void OnBtnCancel_Click(object sender, EventArgs e)
         {
-            _stopFomClosing = false;
+            StopFomClosingFlag = false;
             Close();
         }
 
@@ -397,21 +431,21 @@ namespace SharePortfolioManager
         private void OnBtnSave_Click(object sender, EventArgs e)
         {
             // Set window start position and window size
-            if (_parentWindow.XmlSettings != null)
+            if (ParentWindow.Settings != null)
             {
                 try
                 {
                     #region GUI entries size
 
                     // Save logger GUI entries size
-                    var nodeLogGUIEntriesSize = _parentWindow.XmlSettings.SelectSingleNode("/Settings/Logger/GUIEntries");
+                    var nodeLogGUIEntriesSize = ParentWindow.Settings.SelectSingleNode("/Settings/Logger/GUIEntries");
 
                     if (nodeLogGUIEntriesSize != null)
                     {
                         int iGUIEntriesSize = 0;
                         Int32.TryParse(cbxGUIEntriesList.SelectedItem.ToString(), out iGUIEntriesSize);
                         // Set GUI entries size value to FrmMain member variable
-                        _parentWindow.LoggerGUIEntriesSize = iGUIEntriesSize;
+                        ParentWindow.LoggerGUIEntriesSize = iGUIEntriesSize;
                         // Set GUI entries size value to the XML
                         nodeLogGUIEntriesSize.InnerXml = iGUIEntriesSize.ToString();
                     }
@@ -421,12 +455,12 @@ namespace SharePortfolioManager
                     #region Write to file flag
 
                     // Save logger flag write to file
-                    var nodeLogFlagWriteToFile = _parentWindow.XmlSettings.SelectSingleNode("/Settings/Logger/LogToFileEnable");
+                    var nodeLogFlagWriteToFile = ParentWindow.Settings.SelectSingleNode("/Settings/Logger/LogToFileEnable");
 
                     if (nodeLogFlagWriteToFile != null)
                     {
                         // Set GUI entries size value to FrmMain member variable
-                        _parentWindow.LoggerLogToFileEnabled = chkBoxEnableFileLogging.Checked;
+                        ParentWindow.LoggerLogToFileEnabled = chkBoxEnableFileLogging.Checked;
                         // Set GUI entries size value to the XML
                         nodeLogFlagWriteToFile.InnerXml = chkBoxEnableFileLogging.Checked.ToString();
                     }
@@ -436,14 +470,14 @@ namespace SharePortfolioManager
                     #region Stored log files
 
                     // Save logger stored log files
-                    var nodeLogStoredLogFiles = _parentWindow.XmlSettings.SelectSingleNode("/Settings/Logger/StoredLogFiles");
+                    var nodeLogStoredLogFiles = ParentWindow.Settings.SelectSingleNode("/Settings/Logger/StoredLogFiles");
 
                     if (nodeLogStoredLogFiles != null)
                     {
                         int iStoredLogFiles = 0;
                         Int32.TryParse(cbxStoredLogFiles.SelectedItem.ToString(), out iStoredLogFiles);
                         // Set GUI entries size value to FrmMain member variable
-                        _parentWindow.LoggerStoredLogFiles = iStoredLogFiles;
+                        ParentWindow.LoggerStoredLogFiles = iStoredLogFiles;
                         // Set GUI entries size value to the XML
                         nodeLogStoredLogFiles.InnerXml = iStoredLogFiles.ToString();
                     }
@@ -453,12 +487,12 @@ namespace SharePortfolioManager
                     #region Cleanup log files at startup flag
 
                     // Save logger flag write to file
-                    var nodeLogFlagCleanUpAtStartUp = _parentWindow.XmlSettings.SelectSingleNode("/Settings/Logger/LogCleanUpAtStartUpEnable");
+                    var nodeLogFlagCleanUpAtStartUp = ParentWindow.Settings.SelectSingleNode("/Settings/Logger/LogCleanUpAtStartUpEnable");
 
                     if (nodeLogFlagCleanUpAtStartUp != null)
                     {
                         // Set GUI entries size value to FrmMain member variable
-                        _parentWindow.LoggerLogCleanUpAtStartUpEnabled = chkBoxEnableCleanUpAtStartUp.Checked;
+                        ParentWindow.LoggerLogCleanUpAtStartUpEnabled = chkBoxEnableCleanUpAtStartUp.Checked;
                         // Set GUI entries size value to the XML
                         nodeLogFlagCleanUpAtStartUp.InnerXml = chkBoxEnableCleanUpAtStartUp.Checked.ToString();
                     }
@@ -468,7 +502,7 @@ namespace SharePortfolioManager
                     #region Component levels
 
                     // Save logger component level 
-                    var nodeLogComponents = _parentWindow.XmlSettings.SelectSingleNode("/Settings/Logger/LogComponents");
+                    var nodeLogComponents = ParentWindow.Settings.SelectSingleNode("/Settings/Logger/LogComponents");
 
                     if (nodeLogComponents != null)
                     {
@@ -482,7 +516,7 @@ namespace SharePortfolioManager
                             iLogComponents += 4;
 
                         // Set calculated log components value to FrmMain member variable
-                        _parentWindow.LoggerComponentLevel = iLogComponents;
+                        ParentWindow.LoggerComponentLevel = iLogComponents;
                         // Set calculated log components value to the XML
                         nodeLogComponents.InnerXml = iLogComponents.ToString();
                     }
@@ -492,7 +526,7 @@ namespace SharePortfolioManager
                     #region State levels
 
                     // Save logger log state level
-                    var nodeLogStateLevels = _parentWindow.XmlSettings.SelectSingleNode("/Settings/Logger/LogLevels");
+                    var nodeLogStateLevels = ParentWindow.Settings.SelectSingleNode("/Settings/Logger/LogLevels");
 
                     if (nodeLogStateLevels != null)
                     {
@@ -510,7 +544,7 @@ namespace SharePortfolioManager
                             iLogStateLevel += 16;
 
                         // Set calculated log components value to FrmMain member variable
-                        _parentWindow.LoggerStateLevel = iLogStateLevel;
+                        ParentWindow.LoggerStateLevel = iLogStateLevel;
                         // Set calculated log components value to the XML
                         nodeLogStateLevels.InnerXml = iLogStateLevel.ToString();
                     }
@@ -518,10 +552,10 @@ namespace SharePortfolioManager
                     #endregion State levels
 
                     // Show own message box that a restart of the software should be done
-                    OwnMessageBox ombReboot = new OwnMessageBox(_xmlLanguage.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Info", _strLanguage),
-                        _xmlLanguage.GetLanguageTextByXPath(@"/MessageBoxForm/Content/LoggerSetttingsReboot", _strLanguage),
-                        _xmlLanguage.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", _strLanguage),
-                        _xmlLanguage.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", _strLanguage));
+                    OwnMessageBox ombReboot = new OwnMessageBox(Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Info", LanguageName),
+                        Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/LoggerSetttingsReboot", LanguageName),
+                        Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", LanguageName),
+                        Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", LanguageName));
                     ombReboot.ShowDialog();
                 }
                 catch (Exception ex)
@@ -530,24 +564,24 @@ namespace SharePortfolioManager
                     MessageBox.Show("btnSave_Click()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
 #endif
-                    _stopFomClosing = true;
+                    StopFomClosingFlag = true;
 
                     // Add status message
                     Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                       _xmlLanguage.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/SaveSettingsFailed", _strLanguage),
-                       _xmlLanguage, _strLanguage,
-                       Color.DarkRed, _logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                       Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/SaveSettingsFailed", LanguageName),
+                       Language, LanguageName,
+                       Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
                 }
             }
             else
             {
-                _stopFomClosing = true;
+                StopFomClosingFlag = true;
 
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                   _xmlLanguage.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/SaveSettingsFailed", _strLanguage),
-                   _xmlLanguage, _strLanguage,
-                   Color.DarkRed, _logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);               
+                   Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/SaveSettingsFailed", LanguageName),
+                   Language, LanguageName,
+                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);               
             }
         }
 
