@@ -23,6 +23,7 @@
 using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Classes;
+using SharePortfolioManager.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -54,15 +55,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         ReductionWrongValue,
         WebSiteEmpty,
         DocumentDoesNotExists,
-        TaxAtSourceEmpty,
-        TaxAtSourceWrongFormat,
-        TaxAtSourceWrongValue,
-        CapitalGainsTaxEmpty,
-        CapitalGainsTaxWrongFormat,
-        CapitalGainsTaxWrongValue,
-        SolidarityTaxEmpty,
-        SolidarityTaxWrongFormat,
-        SolidarityTaxWrongValue,
         WebSiteRegexNotFound
     };
 
@@ -97,13 +89,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         CultureInfo CultureInfo { get; }
         int DividendPayoutInterval { get; set; }
         string Document { get; set; }
-
-        CheckState TaxAtSourceFlag { get; set; }
-        string TaxAtSource { get; set; }
-        CheckState CapitalGainsTaxFlag { get; set; }
-        string CapitalGainsTax { get; set; }
-        CheckState SolidarityTaxFlag { get; set; }
-        string SolidarityTax { get; set; }
 
         DialogResult ShowDialog();
         void AddFinish();
@@ -345,72 +330,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
             }
         }
 
-        public CheckState TaxAtSourceFlag
-        {
-            get { return chkTaxAtSource.CheckState; }
-            set
-            {
-                if (chkTaxAtSource.CheckState == value)
-                    return;
-                chkTaxAtSource.CheckState = value;
-            }
-        }
-
-        public string TaxAtSource
-        {
-            get { return txtBoxTaxAtSource.Text; }
-            set
-            {
-                if (txtBoxTaxAtSource.Text == value)
-                    return;
-                txtBoxTaxAtSource.Text = value;
-            }
-        }
-
-        public CheckState CapitalGainsTaxFlag
-        {
-            get { return chkCapitalGainsTax.CheckState; }
-            set
-            {
-                if (chkCapitalGainsTax.CheckState == value)
-                    return;
-                chkCapitalGainsTax.CheckState = value;
-            }
-        }
-
-        public string CapitalGainsTax
-        {
-            get { return txtBoxCapitalGainsTax.Text; }
-            set
-            {
-                if (txtBoxCapitalGainsTax.Text == value)
-                    return;
-                txtBoxCapitalGainsTax.Text = value;
-            }
-        }
-
-        public CheckState SolidarityTaxFlag
-        {
-            get { return chkSolidarityTax.CheckState; }
-            set
-            {
-                if (chkSolidarityTax.CheckState == value)
-                    return;
-                chkSolidarityTax.CheckState = value;
-            }
-        }
-
-        public string SolidarityTax
-        {
-            get { return txtBoxSolidarityTax.Text; }
-            set
-            {
-                if (txtBoxSolidarityTax.Text == value)
-                    return;
-                txtBoxSolidarityTax.Text = value;
-            }
-        }
-
         #endregion Input values
 
         // TODO
@@ -520,7 +439,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 case ShareAddErrorCode.SharePriceWrongFormat:
                     {
                         strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/SharePriceWrongValue", _strLanguage);
+                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/SharePriceWrongFormat", _strLanguage);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
                         txtBoxSharePrice.Focus();
@@ -586,87 +505,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                             _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/FileDoesNotExist", _strLanguage);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
-                        break;
-                    }
-                case ShareAddErrorCode.TaxAtSourceEmpty:
-                    {
-                        strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/TaxAtSourceEmpty", _strLanguage);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxTaxAtSource.Focus();
-                        break;
-                    }
-                case ShareAddErrorCode.TaxAtSourceWrongFormat:
-                    {
-                        strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/TaxAtSourceWrongFormat", _strLanguage);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxTaxAtSource.Focus();
-                        break;
-                    }
-                case ShareAddErrorCode.TaxAtSourceWrongValue:
-                    {
-                        strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/TaxAtSourceWrongValue", _strLanguage);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxTaxAtSource.Focus();
-                        break;
-                    }
-                case ShareAddErrorCode.CapitalGainsTaxEmpty:
-                    {
-                        strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/CapitalGainsTaxEmpty", _strLanguage);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxCapitalGainsTax.Focus();
-                        break;
-                    }
-                case ShareAddErrorCode.CapitalGainsTaxWrongFormat:
-                    {
-                        strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/CapitalGainsTaxWrongFormat", _strLanguage);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxCapitalGainsTax.Focus();
-                        break;
-                    }
-                case ShareAddErrorCode.CapitalGainsTaxWrongValue:
-                    {
-                        strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/CapitalGainsTaxWrongValue", _strLanguage);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxCapitalGainsTax.Focus();
-                        break;
-                    }
-                case ShareAddErrorCode.SolidarityTaxEmpty:
-                    {
-                        strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/SolidarityTaxEmpty", _strLanguage);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxSolidarityTax.Focus();
-                        break;
-                    }
-                case ShareAddErrorCode.SolidarityTaxWrongFormat:
-                    {
-                        strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/SolidarityTaxWrongFormat", _strLanguage);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxSolidarityTax.Focus();
-                        break;
-                    }
-                case ShareAddErrorCode.SolidarityTaxWrongValue:
-                    {
-                        strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Errors/SolidarityTaxWrongValue", _strLanguage);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxSolidarityTax.Focus();
                         break;
                     }
                 case ShareAddErrorCode.WebSiteRegexNotFound:
@@ -782,14 +620,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                     _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/CultureInfo", _strLanguage);
                 lblDocument.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Document", _strLanguage);
 
-                grpBoxTaxes.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxTaxes/Caption", _strLanguage);
-                lblTaxAtSource.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxTaxes/Labels/TaxAtSource", _strLanguage);
-                lblTaxAtSourceUnit.Text = ShareObject.PercentageUnit;
-                lblCapitalGainsTax.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxTaxes/Labels/CapitalGainsTax", _strLanguage);
-                lblCapitalGainsTaxUnit.Text = ShareObject.PercentageUnit;
-                lblSolidarityTax.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxTaxes/Labels/SolidarityTax", _strLanguage);
-                lblSolidarityTaxUnit.Text = ShareObject.PercentageUnit;
-
                 btnSave.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Buttons/Save", _strLanguage);
                 btnCancel.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddFormShare/Buttons/Cancel", _strLanguage);
 
@@ -824,6 +654,10 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 cboBoxCultureInfo.SelectedIndex = cboBoxCultureInfo.FindStringExact(cultureInfo.Name);
 
                 #endregion Get culture info
+
+                // Load button images
+                btnSave.Image = Resources.black_save;
+                btnCancel.Image = Resources.black_cancel;
 
                 cbxDividendPayoutInterval.SelectedIndex = 0;
 
@@ -1039,118 +873,5 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         }
 
         #endregion Comboboxes
-
-        #region CheckBoxes tax
-
-        /// <summary>
-        /// This function enables or disables the text box for the percentage value
-        /// </summary>
-        /// <param name="sender">CheckBox</param>
-        /// <param name="e">EventArgs</param>
-        private void chkTaxAtSource_CheckedChanged(object sender, EventArgs e)
-        {
-            if (chkTaxAtSource.CheckState == CheckState.Checked)
-            {
-                txtBoxTaxAtSource.Enabled = true;
-                txtBoxTaxAtSource.ReadOnly = false;
-                txtBoxTaxAtSource.Focus();
-            }
-            else
-            {
-                txtBoxTaxAtSource.Enabled = false;
-                txtBoxTaxAtSource.ReadOnly = true;
-            }
-
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("TaxAtSourceFlag"));
-        }
-
-        /// <summary>
-        /// This function enables or disables the text box for the percentage value
-        /// </summary>
-        /// <param name="sender">CheckBox</param>
-        /// <param name="e">EventArgs</param>
-        private void chkCapitalGainsTax_CheckedChanged(object sender, EventArgs e)
-        {
-            if (chkCapitalGainsTax.CheckState == CheckState.Checked)
-            {
-                txtBoxCapitalGainsTax.Enabled = true;
-                txtBoxCapitalGainsTax.ReadOnly = false;
-                txtBoxCapitalGainsTax.Focus();
-            }
-            else
-            {
-                txtBoxCapitalGainsTax.Enabled = false;
-                txtBoxCapitalGainsTax.ReadOnly = true;
-            }
-
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("CapitalGainsTaxFlag"));
-        }
-
-        /// <summary>
-        /// This function enables or disables the text box for the percentage value
-        /// </summary>
-        /// <param name="sender">CheckBox</param>
-        /// <param name="e">EventArgs</param>
-        private void chkSolidarityTax_CheckedChanged(object sender, EventArgs e)
-        {
-            if (chkSolidarityTax.CheckState == CheckState.Checked)
-            {
-                txtBoxSolidarityTax.Enabled = true;
-                txtBoxSolidarityTax.ReadOnly = false;
-                txtBoxSolidarityTax.Focus();
-            }
-            else
-            {
-                txtBoxSolidarityTax.Enabled = false;
-                txtBoxSolidarityTax.ReadOnly = true;
-            }
-
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("SolidarityTaxFlag"));
-        }
-
-        #endregion CheckBoxes tax
-
-        #region TextBoxes tax
-
-        private void OnTxtBoxTaxAtSource_TextChanged(object sender, EventArgs e)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("TaxAtSource"));
-        }
-
-        private void OnTxtBoxTaxAtSource_Leave(object sender, EventArgs e)
-        {
-            if (FormatInputValues != null)
-                FormatInputValues(this, new EventArgs());
-        }
-
-        private void OnTxtBoxCapitalGainsTax_TextChanged(object sender, EventArgs e)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("CapitalGainsTax"));
-        }
-
-        private void OnTxtBoxCapitalGainsTax_Leave(object sender, EventArgs e)
-        {
-            if (FormatInputValues != null)
-                FormatInputValues(this, new EventArgs());
-        }
-
-        private void OnTxtBoxSolidarityTax_TextChanged(object sender, EventArgs e)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("SolidarityTax"));
-        }
-
-        private void OnTxtBoxSolidarityTax_Leave(object sender, EventArgs e)
-        {
-            if (FormatInputValues != null)
-                FormatInputValues(this, new EventArgs());
-        }
-
-        #endregion TextBoxes tax
     }
 }

@@ -21,7 +21,6 @@
 //SOFTWARE.
 
 using SharePortfolioManager.Classes;
-using SharePortfolioManager.Classes.Taxes;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -432,148 +431,42 @@ namespace SharePortfolioManager
 
                                                 foreach (XmlElement nodeList in nodeElement.ChildNodes[i].ChildNodes)
                                                 {
+                                                    // Check if the dividend values are correct
+                                                    // and if the foreign currency value are correct
                                                     if (nodeList != null &&
                                                         nodeList.ChildNodes.Count ==
-                                                        ShareObjectList[ShareObjectList.Count - 1].DividendChildNodeCount)
+                                                        ShareObjectList[ShareObjectList.Count - 1].DividendChildNodeCount &&
+                                                        nodeList.ChildNodes[0].Attributes != null &&
+                                                        nodeList.ChildNodes[0].Attributes.Count ==
+                                                        ShareObjectList[ShareObjectList.Count - 1].DividendAttrCountForeignCu)
                                                     {
-                                                        // Create tax values object
-                                                        Taxes taxValues = new Taxes();
-
-                                                        if (nodeList.ChildNodes[0].Attributes != null &&
-                                                            nodeList.ChildNodes[0].Attributes.Count ==
-                                                            ShareObjectList[ShareObjectList.Count - 1].DividendAttrCountForeignCu)
-                                                        {
-                                                            // ForeignCurrency
-                                                            taxValues.FCFlag = Convert.ToBoolean(
-                                                                nodeList.ChildNodes[0].Attributes[0].Value);
-                                                            // ForeignCurrencyFactor
-                                                            taxValues.ExchangeRatio = Convert.ToDecimal(
-                                                                nodeList.ChildNodes[0].Attributes[1].Value);
-                                                            // ForeignCurrencyName
-                                                            taxValues.CiShareFC =
-                                                                Helper.GetCultureByName(
-                                                                    nodeList.ChildNodes[0].Attributes[2].Value);
-                                                            // ForeignCurrencyName
-                                                            taxValues.CiShareCurrency =
-                                                                ShareObjectList[ShareObjectList.Count - 1]
-                                                                    .CultureInfo;
-                                                        }
-                                                        else
-                                                            loadPortfolio = false;
-
-                                                        // Load the tax values
-                                                        if (nodeList.ChildNodes[1].ChildNodes[0] != null &&
-                                                            nodeList.ChildNodes[1].ChildNodes.Count ==
-                                                            ShareObjectList[ShareObjectList.Count - 1].TaxAttrCount)
-                                                        {
-                                                            if (nodeList.ChildNodes[1].ChildNodes[0].Attributes != null &&
-                                                                nodeList.ChildNodes[1].ChildNodes[0].Attributes.Count ==
-                                                                ShareObjectList[ShareObjectList.Count - 1]
-                                                                    .TaxTaxAtSourceAttrCount &&
-                                                                nodeList.ChildNodes[1].ChildNodes[1].Attributes != null &&
-                                                                nodeList.ChildNodes[1].ChildNodes[1].Attributes.Count ==
-                                                                ShareObjectList[ShareObjectList.Count - 1]
-                                                                    .TaxCapitalGainsAttrCount &&
-                                                                nodeList.ChildNodes[1].ChildNodes[2].Attributes != null &&
-                                                                nodeList.ChildNodes[1].ChildNodes[2].Attributes.Count ==
-                                                                ShareObjectList[ShareObjectList.Count - 1]
-                                                                    .TaxSolidarityAttrCount
-                                                                )
-                                                            {
-                                                                // Tax at source flag
-                                                                taxValues.TaxAtSourceFlag =
-                                                                    Convert.ToBoolean(
-                                                                        nodeList.ChildNodes[1].ChildNodes[0].Attributes[
-                                                                            ShareObjectList[
-                                                                                ShareObjectList.Count - 1]
-                                                                                .TaxTaxAtSourceFlagAttrName].Value);
-                                                                // Tax at source percentage
-                                                                if (nodeList.ChildNodes[1].ChildNodes[0].Attributes[
-                                                                            ShareObjectList[
-                                                                                ShareObjectList.Count - 1]
-                                                                                .TaxTaxAtSourcePercentageAttrName]
-                                                                            .Value == @"-")
-                                                                    taxValues.TaxAtSourcePercentage = 0;
-                                                                else
-                                                                {
-                                                                    taxValues.TaxAtSourcePercentage =
-                                                                    Convert.ToDecimal(
-                                                                        nodeList.ChildNodes[1].ChildNodes[0].Attributes[
-                                                                            ShareObjectList[
-                                                                                ShareObjectList.Count - 1]
-                                                                                .TaxTaxAtSourcePercentageAttrName]
-                                                                            .Value);
-                                                                }
-                                                                // Capital gains tax flag
-                                                                taxValues.CapitalGainsTaxFlag =
-                                                                    Convert.ToBoolean(
-                                                                        nodeList.ChildNodes[1].ChildNodes[1].Attributes[
-                                                                            ShareObjectList[
-                                                                                ShareObjectList.Count - 1]
-                                                                                .TaxCapitalGainsFlagAttrName].Value);
-                                                                // Capital gain tax percentage
-                                                                if (nodeList.ChildNodes[1].ChildNodes[1].Attributes[
-                                                                            ShareObjectList[
-                                                                                ShareObjectList.Count - 1]
-                                                                                .TaxCapitalGainsPercentageAttrName]
-                                                                            .Value == @"-")
-                                                                    taxValues.CapitalGainsTaxPercentage = 0;
-                                                                else
-                                                                {
-                                                                    taxValues.CapitalGainsTaxPercentage =
-                                                                    Convert.ToDecimal(
-                                                                        nodeList.ChildNodes[1].ChildNodes[1].Attributes[
-                                                                            ShareObjectList[
-                                                                                ShareObjectList.Count - 1]
-                                                                                .TaxCapitalGainsPercentageAttrName]
-                                                                            .Value);
-                                                                }
-
-                                                                // Solidarity tax flag
-                                                                taxValues.SolidarityTaxFlag =
-                                                                    Convert.ToBoolean(
-                                                                        nodeList.ChildNodes[1].ChildNodes[2].Attributes[
-                                                                            ShareObjectList[
-                                                                                ShareObjectList.Count - 1]
-                                                                                .TaxSolidarityFlagAttrName].Value);
-                                                                // Solidarity tax percentage
-                                                                if (nodeList.ChildNodes[1].ChildNodes[2].Attributes[
-                                                                            ShareObjectList[
-                                                                                ShareObjectList.Count - 1]
-                                                                                .TaxSolidarityPercentageAttrName]
-                                                                            .Value == @"-")
-                                                                    taxValues.SolidarityTaxPercentage = 0;
-                                                                else
-                                                                {
-                                                                    taxValues.SolidarityTaxPercentage =
-                                                                    Convert.ToDecimal(
-                                                                        nodeList.ChildNodes[1].ChildNodes[2].Attributes[
-                                                                            ShareObjectList[
-                                                                                ShareObjectList.Count - 1]
-                                                                                .TaxSolidarityPercentageAttrName]
-                                                                            .Value);
-                                                                }
-                                                            }
-                                                            else
-                                                                loadPortfolio = false;
-                                                        }
-                                                        else
-                                                            loadPortfolio = false;
+                                                        // Convert string of the checkstate to the windows forms checkstate
+                                                        CheckState enableFC = CheckState.Unchecked;
+                                                        if (nodeList.ChildNodes[0].Attributes[0].Value == @"Checked")
+                                                            enableFC = CheckState.Checked;
 
                                                         if (!ShareObjectList[ShareObjectList.Count - 1]
                                                             .AddDividend(
-                                                                nodeList.Attributes[0].Value,         // Date
-                                                                taxValues,                            // Taxes
+                                                                Helper.GetCultureByName(
+                                                                    nodeList.ChildNodes[0].Attributes[2].Value),        //CultureInfo FC
+                                                                enableFC,                                               // FC enabled
                                                                 Convert.ToDecimal(
-                                                                    nodeList.Attributes[4].Value),    // DividendRate
+                                                                nodeList.ChildNodes[0].Attributes[1].Value),            // Exchange ratio
+                                                                nodeList.Attributes[0].Value,                           // Date
                                                                 Convert.ToDecimal(
-                                                                    nodeList.Attributes[2].Value),    // LossBalance
+                                                                    nodeList.Attributes[1].Value),                      // Rate
                                                                 Convert.ToDecimal(
-                                                                    nodeList.Attributes[3].Value),    // Price
+                                                                    nodeList.Attributes[2].Value),                      // Volume     
                                                                 Convert.ToDecimal(
-                                                                    nodeList.Attributes[1].Value),    // Volume               
-                                                                nodeList.Attributes[5].Value))        // Document
-                                                            loadPortfolio = false;
+                                                                    nodeList.Attributes[3].Value),                      // Tax at source
+                                                                Convert.ToDecimal(
+                                                                    nodeList.Attributes[4].Value),                      // Capital gains tax
+                                                                Convert.ToDecimal(
+                                                                    nodeList.Attributes[5].Value),                      // Solidarity tax
+                                                                Convert.ToDecimal(
+                                                                    nodeList.Attributes[6].Value),                      // Price
+                                                                nodeList.Attributes[7].Value))                          // Document
+                                                            loadPortfolio = false;                                                    
                                                     }
                                                     else
                                                         loadPortfolio = false;
@@ -582,109 +475,8 @@ namespace SharePortfolioManager
 
                                             #endregion Dividends
 
-                                            #region Taxes
-
-                                            case 12:
-                                                    if (nodeElement.ChildNodes[i].ChildNodes.Count ==
-                                                        ShareObjectList[ShareObjectList.Count - 1]
-                                                            .TaxAttrCount)
-                                                    {
-                                                        if (nodeElement.ChildNodes[i].ChildNodes[0].Attributes != null &&
-                                                            nodeElement.ChildNodes[i].ChildNodes[0].Attributes.Count ==
-                                                            ShareObjectList[ShareObjectList.Count - 1]
-                                                                .TaxTaxAtSourceAttrCount &&
-                                                            nodeElement.ChildNodes[i].ChildNodes[1].Attributes != null &&
-                                                            nodeElement.ChildNodes[i].ChildNodes[1].Attributes.Count ==
-                                                            ShareObjectList[ShareObjectList.Count - 1]
-                                                                .TaxCapitalGainsAttrCount &&
-                                                            nodeElement.ChildNodes[i].ChildNodes[2].Attributes != null &&
-                                                            nodeElement.ChildNodes[i].ChildNodes[2].Attributes.Count ==
-                                                            ShareObjectList[ShareObjectList.Count - 1]
-                                                                .TaxSolidarityAttrCount
-                                                            )
-                                                        {
-                                                            // Tax at source flag
-                                                            ShareObjectList[ShareObjectList.Count - 1].TaxTaxAtSourceFlag =
-                                                                Convert.ToBoolean(
-                                                                    nodeElement.ChildNodes[i].ChildNodes[0].Attributes[
-                                                                        ShareObjectList[
-                                                                            ShareObjectList.Count - 1]
-                                                                            .TaxTaxAtSourceFlagAttrName].Value);
-                                                            // Tax at source percentage
-                                                            if (nodeElement.ChildNodes[i].ChildNodes[0].Attributes[
-                                                                    ShareObjectList[
-                                                                        ShareObjectList.Count - 1]
-                                                                        .TaxTaxAtSourcePercentageAttrName]
-                                                                    .Value == @"-")
-                                                                ShareObjectList[ShareObjectList.Count - 1].TaxTaxAtSourcePercentage = 0;
-                                                            else
-                                                            {
-                                                                ShareObjectList[ShareObjectList.Count - 1].TaxTaxAtSourcePercentage =
-                                                            Convert.ToDecimal(
-                                                                    nodeElement.ChildNodes[i].ChildNodes[0].Attributes[
-                                                                        ShareObjectList[
-                                                                            ShareObjectList.Count - 1]
-                                                                            .TaxTaxAtSourcePercentageAttrName]
-                                                                        .Value);
-                                                            }
-                                                            // Capital gains tax flag
-                                                            ShareObjectList[ShareObjectList.Count - 1].TaxCapitalGainsFlag =
-                                                                Convert.ToBoolean(
-                                                                    nodeElement.ChildNodes[i].ChildNodes[1].Attributes[
-                                                                        ShareObjectList[
-                                                                            ShareObjectList.Count - 1]
-                                                                            .TaxCapitalGainsFlagAttrName].Value);
-                                                            // Capital gain tax percentage
-                                                            if (nodeElement.ChildNodes[i].ChildNodes[1].Attributes[
-                                                                        ShareObjectList[
-                                                                            ShareObjectList.Count - 1]
-                                                                            .TaxCapitalGainsPercentageAttrName]
-                                                                        .Value == @"-")
-                                                                ShareObjectList[ShareObjectList.Count - 1].TaxCapitalGainsPercentage = 0;
-                                                            else
-                                                            {
-                                                                ShareObjectList[ShareObjectList.Count - 1].TaxCapitalGainsPercentage =
-                                                                    Convert.ToDecimal(
-                                                                        nodeElement.ChildNodes[i].ChildNodes[1].Attributes[
-                                                                            ShareObjectList[
-                                                                                ShareObjectList.Count - 1]
-                                                                                .TaxCapitalGainsPercentageAttrName]
-                                                                            .Value);
-                                                            }
-                                                            // Solidarity tax flag
-                                                            ShareObjectList[ShareObjectList.Count - 1].TaxSolidarityFlag =
-                                                                Convert.ToBoolean(
-                                                                    nodeElement.ChildNodes[i].ChildNodes[2].Attributes[
-                                                                        ShareObjectList[
-                                                                            ShareObjectList.Count - 1]
-                                                                            .TaxSolidarityFlagAttrName].Value);
-                                                            // Solidarity tax percentage
-                                                            if (nodeElement.ChildNodes[i].ChildNodes[2].Attributes[
-                                                                        ShareObjectList[
-                                                                            ShareObjectList.Count - 1]
-                                                                            .TaxSolidarityPercentageAttrName]
-                                                                        .Value == @"-")
-                                                                ShareObjectList[ShareObjectList.Count - 1].TaxSolidarityPercentage = 0;
-                                                            else
-                                                            {
-                                                                ShareObjectList[ShareObjectList.Count - 1].TaxSolidarityPercentage =
-                                                                    Convert.ToDecimal(
-                                                                        nodeElement.ChildNodes[i].ChildNodes[2].Attributes[
-                                                                            ShareObjectList[
-                                                                                ShareObjectList.Count - 1]
-                                                                                .TaxSolidarityPercentageAttrName]
-                                                                            .Value);
-                                                            }
-                                                        }
-                                                        else
-                                                            loadPortfolio = false;
-                                                    }
-                                                break;
-
                                             default:
                                                 break;
-
-                                            #endregion Taxes
                                         }
                                     }
                                 

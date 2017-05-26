@@ -22,9 +22,9 @@
 
 using System;
 using System.Collections.Generic;
-using SharePortfolioManager.Classes.Taxes;
 using System.Globalization;
 using SharePortfolioManager.Classes;
+using System.Windows.Forms;
 
 namespace SharePortfolioManager
 {
@@ -99,15 +99,20 @@ namespace SharePortfolioManager
         /// It also recalculates the dividend value and the dividend percent value of the hole year
         /// </summary>
         /// <param name="cultureInfo">Culture info of the share</param>
-        /// <param name="strDate">Pay date of the new dividend list entry</param>
-        /// <param name="taxesValues">Taxes which must be paid</param>
-        /// <param name="decDividendRate">Paid dividend of one share</param>
-        /// <param name="decLossBalance">Loss balance of the share</param>
-        /// <param name="decSharePrice">Share price at the pay date</param>
+        /// <param name="cultureInfoFC">Culture info of the share for the foreign currency</param>
+        /// <param name="csEnableFC">Flag if the payout is in a foreign currency</param>
+        /// <param name="decExchangeRatio">Exchange ratio for the foreign currency</param>
+        /// <param name="strDateTime">Pay date of the new dividend list entry</param>
+        /// <param name="decRate">Paid dividend of one share</param>
         /// <param name="decVolume">Share volume at the pay date</param>
+        /// <param name="decTaxAtSource">Tax at source value</param>
+        /// <param name="decCapitalGainsTax">Capital gains tax value</param>
+        /// <param name="decSolidarityTax">Solidarity tax value</param>
+        /// <param name="decSharePrice">Share price at the pay date</param>
         /// <param name="strDoc">Document of the dividend</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddDividendObject(CultureInfo cultureInfo, string strDate, Taxes taxesValues, decimal decDividendRate, decimal decLossBalance, decimal decSharePrice, decimal decVolume, string strDoc = "")
+        public bool AddDividendObject(CultureInfo cultureInfo, CultureInfo cultureInfoFC, CheckState csEnableFC, decimal decExchangeRatio, string strDateTime, decimal decRate, decimal decVolume,
+            decimal decTaxAtSource, decimal decCapitalGainsTax, decimal decSolidarityTax, decimal decSharePrice, string strDoc = "")
         {
 #if DEBUG
             Console.WriteLine(@"AddDividendObject");
@@ -118,7 +123,8 @@ namespace SharePortfolioManager
                 CultureInfo = cultureInfo;
 
                 // Create new DividendObject
-                DividendObject addObject = new DividendObject(cultureInfo, strDate, taxesValues, decDividendRate, decLossBalance, decSharePrice, decVolume, strDoc);
+                DividendObject addObject = new DividendObject(cultureInfo, cultureInfoFC, csEnableFC, decExchangeRatio, strDateTime, decRate, decVolume,
+                    decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decSharePrice, strDoc);
 
                 // Add object to the list
                 DividendListYear.Add(addObject);
@@ -130,7 +136,7 @@ namespace SharePortfolioManager
 
                 // TODO With or without taxes!!!
                 //DividendValueYear += addObject.DividendPayOut;
-                DividendValueYear += addObject.DividendPayOutWithTaxes;
+                DividendValueYear += addObject.PayoutWithTaxesDec;
 
 #if DEBUG
                 Console.WriteLine(@"DividendValueYear: {0}", DividendValueYear);
@@ -162,7 +168,7 @@ namespace SharePortfolioManager
                 int iFoundIndex = -1;
                 foreach (DividendObject dividendObject in DividendListYear)
                 {
-                    if (dividendObject.DividendDate == strDate)
+                    if (dividendObject.DateTime == strDate)
                     {
                         iFoundIndex =  DividendListYear.IndexOf(dividendObject);
                         break;
@@ -175,7 +181,7 @@ namespace SharePortfolioManager
                 DividendListYear.Remove(removeObject);
 
                 // Calculate dividend value
-                DividendValueYear -= removeObject.DividendPayOutWithTaxes;
+                DividendValueYear -= removeObject.PayoutWithTaxesDec;
 
                 //// Calculate dividend percent value
                 //decimal tempDividendPercentValueSum = 0;

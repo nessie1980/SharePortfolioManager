@@ -23,8 +23,6 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
-using System.Threading;
 using System.Windows.Forms;
 using LanguageHandler;
 using Logging;
@@ -32,7 +30,6 @@ using SharePortfolioManager.Classes;
 using SharePortfolioManager.Properties;
 using System.Linq;
 using System.IO;
-using SharePortfolioManager.Classes.Taxes;
 
 namespace SharePortfolioManager.Forms.SalesForm
 {
@@ -98,26 +95,6 @@ namespace SharePortfolioManager.Forms.SalesForm
         /// Stores the current selected sale object
         /// </summary>
         private SaleObject _currentSelectedSaleObject;
-
-        #region Taxes
-
-        /// <summary>
-        /// Stores the values for the current tax values
-        /// </summary>
-        Taxes _taxValusCurrent;
-
-        /// <summary>
-        /// Stores the values for the usual tax values
-        /// </summary>
-        Taxes _taxValuesNormal;
-
-        /// <summary>
-        /// Stores the values for the edit tax values
-        /// </summary>
-        Taxes _taxValueDividend;
-
-        #endregion Taxes
-
 
         #region Input values
 
@@ -228,24 +205,6 @@ namespace SharePortfolioManager.Forms.SalesForm
             internal set { _selectedDataGridView = value; }
         }
 
-        public Taxes TaxValuesCurrent
-        {
-            get { return _taxValusCurrent; }
-            set { _taxValusCurrent = value; }
-        }
-
-        public Taxes TaxValuesNormal
-        {
-            get { return _taxValuesNormal; }
-            internal set { _taxValuesNormal = value; }
-        }
-
-        public Taxes TaxValuesEditDividend
-        {
-            get { return _taxValueDividend; }
-            set { _taxValueDividend = value; }
-        }
-
         #endregion Properties
 
         #region Methods
@@ -278,23 +237,6 @@ namespace SharePortfolioManager.Forms.SalesForm
             try
             {
                 _bLoadShareObjectSalesTaxValues = false;
-
-                // Set tax values
-                if (TaxValuesNormal == null)
-                    TaxValuesNormal = new Taxes();
-
-                if (TaxValuesCurrent == null)
-                    TaxValuesCurrent = new Taxes();
-
-                TaxValuesNormal.TaxAtSourceFlag = ShareObject.TaxTaxAtSourceFlag;
-                TaxValuesNormal.TaxAtSourcePercentage = ShareObject.TaxTaxAtSourcePercentage;
-                TaxValuesNormal.CapitalGainsTaxFlag = ShareObject.TaxCapitalGainsFlag;
-                TaxValuesNormal.CapitalGainsTaxPercentage = ShareObject.TaxCapitalGainsPercentage;
-                TaxValuesNormal.SolidarityTaxFlag = ShareObject.TaxSolidarityFlag;
-                TaxValuesNormal.SolidarityTaxPercentage = ShareObject.TaxSolidarityPercentage;
-                TaxValuesNormal.CiShareCurrency = ShareObject.CultureInfo;
-
-                TaxValuesCurrent.DeepCopy(TaxValuesNormal);
 
                 Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormSale/Caption", _languageName);
                 grpBoxAddSales.Text =
@@ -370,7 +312,7 @@ namespace SharePortfolioManager.Forms.SalesForm
                 txtBoxAddSalesVolume.Text = _shareObject.VolumeAsStr;
 
                 // Set currency to combobox
-                foreach (var temp in Helper.ListNameUnitCurrency)
+                foreach (var temp in Helper.ListNameCultureInfoCurrencySymbol)
                 {
                     cbxBoxAddSalesFC.Items.Add(string.Format("{0} - {1}", temp.Key, temp.Value));
                 }
@@ -380,11 +322,6 @@ namespace SharePortfolioManager.Forms.SalesForm
                 // Chose USD item
                 int iIndex = cbxBoxAddSalesFC.FindString("USD");
                 cbxBoxAddSalesFC.SelectedIndex = iIndex;
-
-                // Set currency units
-                TaxValuesCurrent.CurrencyUnit = lblAddSalesBuyPriceUnit.Text;
-                TaxValuesCurrent.FCUnit = cbxBoxAddSalesFC.SelectedItem.ToString().Split('-')[1].Trim();
-                TaxValuesCurrent.CiShareFC = Helper.GetCultureByISOCurrencySymbol(cbxBoxAddSalesFC.SelectedItem.ToString().Split('-')[0].Trim());
 
                 ShowSales();
             }
@@ -1260,8 +1197,6 @@ namespace SharePortfolioManager.Forms.SalesForm
             if (_bForeignFlag)
             {
                 Decimal.TryParse(((TextBox)sender).Text, out _decExchangeRatio);
-
-                TaxValuesCurrent.ExchangeRatio = _decExchangeRatio;
             }
 
             // Calculate the original payout
@@ -1422,10 +1357,11 @@ namespace SharePortfolioManager.Forms.SalesForm
         {
             Decimal.TryParse(txtBoxAddSalesSum.Text, out _decSalePayout);
 
-            TaxValuesCurrent.ValueWithoutTaxes = _decSalePayout;
+            // TODO
+            //TaxValuesCurrent.ValueWithoutTaxes = _decSalePayout;
 
-            _decTax = TaxValuesCurrent.ValueWithoutTaxes;
-            _decTaxFC = TaxValuesCurrent.ValueWithoutTaxesFC;
+            //_decTax = TaxValuesCurrent.ValueWithoutTaxes;
+            //_decTaxFC = TaxValuesCurrent.ValueWithoutTaxesFC;
 
             // TODO
             //txtBoxAddSalesTax.Text = TaxValuesCurrent.ValueWithTaxesAsString;
@@ -1872,9 +1808,6 @@ namespace SharePortfolioManager.Forms.SalesForm
                     txtBoxAddSalesTax.Text = @"-";
                 }
                 txtBoxAddSalesExchangeRatioFC.Focus();
-
-                // Set edit values variable
-                TaxValuesCurrent.FCFlag = true;
             }
             else
             {
@@ -1900,9 +1833,6 @@ namespace SharePortfolioManager.Forms.SalesForm
                 }
 
                 txtBoxAddSalesVolume.Focus();
-
-                // Set edit values variable
-                TaxValuesCurrent.FCFlag = false;
             }
         }
 
@@ -1914,15 +1844,16 @@ namespace SharePortfolioManager.Forms.SalesForm
         /// <param name="e">EventArgs</param>
         private void cbxBoxAddSalesForeignCurrency_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // TODO
 //            lblAddSalesPriceShareFCUnit.Text = ((ComboBox)sender).SelectedItem.ToString().Split('-')[1].Trim();
 
             // Set currency units
 //            TaxValuesCurrent.CurrencyUnit = lblAddSalesPriceShareFCUnit.Text;
-            if (((ComboBox)sender).SelectedItem != null)
-            {
-                TaxValuesCurrent.FCUnit = ((ComboBox)sender).SelectedItem.ToString().Split('-')[1].Trim();
-                TaxValuesCurrent.CiShareFC = Helper.GetCultureByISOCurrencySymbol(((ComboBox)sender).SelectedItem.ToString().Split('-')[0].Trim());
-            }
+            //if (((ComboBox)sender).SelectedItem != null)
+            //{
+            //    TaxValuesCurrent.FCUnit = ((ComboBox)sender).SelectedItem.ToString().Split('-')[1].Trim();
+            //    TaxValuesCurrent.CiShareFC = Helper.GetCultureByISOCurrencySymbol(((ComboBox)sender).SelectedItem.ToString().Split('-')[0].Trim());
+            //}
         }
 
         /// <summary>

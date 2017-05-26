@@ -392,6 +392,14 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                         stateLevel = FrmMain.EStateLevels.Error;
                         break;
                     }
+                case BuyErrorCode.InputeValuesInvalid:
+                    {
+                        strMessage =
+                            _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/CheckInputFailure", _strLanguage);
+                        clrMessage = Color.Red;
+                        stateLevel = FrmMain.EStateLevels.Error;
+                        break;
+                    }
                 case BuyErrorCode.DateExists:
                     {
                         strMessage =
@@ -449,7 +457,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 case BuyErrorCode.SharePriceWrongFormat:
                     {
                         strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SharePriceWrongValue", _strLanguage);
+                            _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SharePriceWrongFormat", _strLanguage);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
                         txtBoxPrice.Focus();

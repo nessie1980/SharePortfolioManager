@@ -120,17 +120,22 @@ namespace SharePortfolioManager.Classes
         #region Variables
 
         /// <summary>
-        /// Stores the list of the names and the units of the currency's
+        /// Stores the list of the names and the corresponding culture info and currency symbol
         /// </summary>
-        static private IEnumerable<KeyValuePair<string, string>> _listNameUnitCurrency;
+        static private IEnumerable<KeyValuePair<string, CultureInformation>> _listNameCultureInfoCurrencySymbol;
 
         #endregion Variables
 
         #region Properties
 
-        static public IEnumerable<KeyValuePair<string, string>> ListNameUnitCurrency
+        static public IEnumerable<KeyValuePair<string, CultureInformation>> ListNameCultureInfoCurrencySymbol
         {
-            get { return _listNameUnitCurrency; }
+            get { return _listNameCultureInfoCurrencySymbol; }
+        }
+
+        static public Dictionary<string, CultureInformation> DictionaryListNameCultureInfoCurrencySymbol
+        {
+            get { return _listNameCultureInfoCurrencySymbol.ToDictionary(x => x.Key, x => x.Value); }
         }
 
         #endregion Properties
@@ -142,8 +147,7 @@ namespace SharePortfolioManager.Classes
         /// </summary>
         static Helper()
         {
-            // Create the name and currency unit list
-            _listNameUnitCurrency = GetCurrencyList();
+            CreateNameCultureInfoCurrencySymbolList();
         }
 
         /// <summary>
@@ -839,29 +843,27 @@ namespace SharePortfolioManager.Classes
         /// in three letter ISO name and the ISO currency unit
         /// </summary>
         /// <returns>IEnumberable with a KeyValuePair list</returns>
-        public static IEnumerable<KeyValuePair<string, string>> GetCurrencyList()
+        public static void CreateNameCultureInfoCurrencySymbolList()
         {
-            IEnumerable<KeyValuePair<string, string>> currencyMap;
-            currencyMap = CultureInfo
+            _listNameCultureInfoCurrencySymbol = CultureInfo
             .GetCultures(CultureTypes.AllCultures)
             .Where(c => !c.IsNeutralCulture)
-            .Select(culture => {
+            .Select(culture =>
+            {
                 try
                 {
-                    return new RegionInfo(culture.LCID);
+                    return new KeyValuePair<String, CultureInformation>(culture.Name, new CultureInformation(culture, new RegionInfo(culture.LCID).CurrencySymbol));
                 }
                 catch
                 {
-                    return null;
+                    return new KeyValuePair<String, CultureInformation>(null, null);
                 }
             })
-            .Where(ri => ri != null)
-            .GroupBy(ri => ri.ISOCurrencySymbol)
-            .ToDictionary(x => x.Key, x => x.First().CurrencySymbol);
+            .Where(ci => ci.Key != null)
+            .OrderBy(ci => ci.Key)
+            .ToDictionary(x => x.Key, x => x.Value);
 
-            IEnumerable<KeyValuePair<string, string>> result = currencyMap.OrderBy(ci => ci.Key);
-
-            return result;
+            _listNameCultureInfoCurrencySymbol.OrderBy(ci => ci.Key);
         }
 
         #endregion Get currency list
@@ -871,33 +873,10 @@ namespace SharePortfolioManager.Classes
         public static CultureInfo GetCultureByName(string name)
         {
             CultureInfo[] cultures = CultureInfo.GetCultures(CultureTypes.AllCultures & ~CultureTypes.NeutralCultures);
-            foreach(var temp in cultures)
+            foreach (var temp in cultures)
             {
                 if (temp.Name == name)
                     return temp;
-            }
-
-            return null;
-        }
-
-        public static CultureInfo GetCultureByISOCurrencySymbol(string ISOCurrencySymbol)
-        {
-            CultureInfo[] cultures = CultureInfo.GetCultures(CultureTypes.AllCultures & ~CultureTypes.NeutralCultures);
-            foreach (var temp in cultures)
-            {
-                RegionInfo ri = null;
-                try
-                {
-                    ri = new RegionInfo(temp.LCID);
-                }
-                catch
-                {
-                    ri = null;
-                }
-
-                if (ri != null)
-                    if (ri.ISOCurrencySymbol == ISOCurrencySymbol)
-                        return temp;
             }
 
             return null;
@@ -1055,82 +1034,40 @@ namespace SharePortfolioManager.Classes
                                         foreach (var dividendObject in shareObject.AllDividendEntries.GetAllDividendsOfTheShare())
                                         {
                                             XmlElement newDividendElement = xmlPortfolio.CreateElement(shareObject.DividendTagName);
-                                            newDividendElement.SetAttribute(shareObject.DividendDateAttrName, dividendObject.DividendDateAsString);
-                                            newDividendElement.SetAttribute(shareObject.DividendVolumeAttrName, dividendObject.ShareVolumeAsString);
-                                            newDividendElement.SetAttribute(shareObject.DividendLossBalanceAttrName, dividendObject.LossBalanceAsString);
-                                            newDividendElement.SetAttribute(shareObject.DividendPriceAttrName, dividendObject.SharePriceAsString);
-                                            newDividendElement.SetAttribute(shareObject.DividendRateAttrName, dividendObject.DividendRateAsString);
-                                            newDividendElement.SetAttribute(shareObject.DividendDocumentAttrName, dividendObject.DividendDocument);
+                                            newDividendElement.SetAttribute(shareObject.DividendDateAttrName, dividendObject.DateTimeStr);
+                                            newDividendElement.SetAttribute(shareObject.DividendRateAttrName, dividendObject.Rate);
+                                            newDividendElement.SetAttribute(shareObject.DividendVolumeAttrName, dividendObject.Volume);
+
+                                            newDividendElement.SetAttribute(shareObject.DividendTaxAtSourceAttrName, dividendObject.TaxAtSource);
+                                            newDividendElement.SetAttribute(shareObject.DividendCapitalGainsTaxAttrName, dividendObject.CapitalGainsTax);
+                                            newDividendElement.SetAttribute(shareObject.DividendSolidarityTaxAttrName, dividendObject.SolidarityTax);
+
+                                            newDividendElement.SetAttribute(shareObject.DividendPriceAttrName, dividendObject.Price);
+                                            newDividendElement.SetAttribute(shareObject.DividendDocumentAttrName, dividendObject.Document);
                                             
                                             // Foreign currency information
                                             XmlElement newForeignCurrencyElement = xmlPortfolio.CreateElement(shareObject.DividendTagNameForeignCu);
 
-                                            newForeignCurrencyElement.SetAttribute(shareObject.DividendForeignCuFlagAttrName, dividendObject.DividendTaxes.FCFlag.ToString());
+                                            newForeignCurrencyElement.SetAttribute(shareObject.DividendForeignCuFlagAttrName, dividendObject.EnableFCStr);
 
-                                            if (dividendObject.DividendTaxes.FCFlag)
+                                            if (dividendObject.EnableFC == CheckState.Checked)
                                             {
-                                                newForeignCurrencyElement.SetAttribute(shareObject.DividendExchangeRatioAttrName, dividendObject.DividendTaxes.ExchangeRatio.ToString());
-                                                newForeignCurrencyElement.SetAttribute(shareObject.DividendNameAttrName, dividendObject.DividendTaxes.CiShareFC.Name);
+                                                newForeignCurrencyElement.SetAttribute(shareObject.DividendExchangeRatioAttrName, dividendObject.ExchangeRatio);
+                                                newForeignCurrencyElement.SetAttribute(shareObject.DividendNameAttrName, dividendObject.CultureInfoFC.Name);
                                             }
                                             else
                                             {
                                                 newForeignCurrencyElement.SetAttribute(shareObject.DividendExchangeRatioAttrName, 0.ToString());
-                                                newForeignCurrencyElement.SetAttribute(shareObject.DividendNameAttrName, dividendObject.DividendTaxes.CiShareFC.Name);
+                                                newForeignCurrencyElement.SetAttribute(shareObject.DividendNameAttrName, dividendObject.CultureInfo.Name);
 
                                             }
                                             newDividendElement.AppendChild(newForeignCurrencyElement);
-
-
-                                            // Add child nodes (taxes)
-                                            XmlElement newTaxesElement = xmlPortfolio.CreateElement(shareObject.TaxTagName);
-
-                                            XmlElement newTaxAtSourceElement = xmlPortfolio.CreateElement(shareObject.TaxTagNameTaxAtSource);
-                                            newTaxAtSourceElement.SetAttribute(shareObject.TaxTaxAtSourceFlagAttrName, dividendObject.DividendTaxes.TaxAtSourceFlag.ToString());
-                                            newTaxAtSourceElement.SetAttribute(shareObject.TaxTaxAtSourcePercentageAttrName, dividendObject.DividendTaxes.TaxAtSourcePercentage.ToString());
-                                            newTaxesElement.AppendChild(newTaxAtSourceElement);
-
-                                            XmlElement newCapitalGainsTaxElement = xmlPortfolio.CreateElement(shareObject.TaxTagNameCapitalGains);
-                                            newCapitalGainsTaxElement.SetAttribute(shareObject.TaxCapitalGainsFlagAttrName, dividendObject.DividendTaxes.CapitalGainsTaxFlag.ToString());
-                                            newCapitalGainsTaxElement.SetAttribute(shareObject.TaxCapitalGainsPercentageAttrName, dividendObject.DividendTaxes.CapitalGainsTaxPercentage.ToString());
-                                            newTaxesElement.AppendChild(newCapitalGainsTaxElement);
-
-                                            XmlElement newSolidarityTaxElement = xmlPortfolio.CreateElement(shareObject.TaxTagNameSolidarity);
-                                            newSolidarityTaxElement.SetAttribute(shareObject.TaxSolidarityFlagAttrName, dividendObject.DividendTaxes.SolidarityTaxFlag.ToString());
-                                            newSolidarityTaxElement.SetAttribute(shareObject.TaxSolidarityPercentageAttrName, dividendObject.DividendTaxes.SolidarityTaxPercentage.ToString());
-                                            newTaxesElement.AppendChild(newSolidarityTaxElement);
-
-                                            newDividendElement.AppendChild(newTaxesElement);
 
                                             nodeElement.ChildNodes[i].AppendChild(newDividendElement);
                                         }
                                         break;
 
                                     #endregion Dividends
-
-                                    #region Taxes
-                                    
-                                    case 12:
-                                        // Remove old taxes
-                                        nodeElement.ChildNodes[i].RemoveAll();
-
-                                        XmlElement newRegularTaxAtSourceElement = xmlPortfolio.CreateElement(shareObject.TaxTagNameTaxAtSource);
-                                        newRegularTaxAtSourceElement.SetAttribute(shareObject.TaxTaxAtSourceFlagAttrName, shareObject.TaxTaxAtSourceFlagAsStr);
-                                        newRegularTaxAtSourceElement.SetAttribute(shareObject.TaxTaxAtSourcePercentageAttrName, shareObject.TaxTaxAtSourcePercentageAsStr);
-                                        nodeElement.ChildNodes[i].AppendChild(newRegularTaxAtSourceElement);
-
-                                        XmlElement newRegularCapitalGainsTaxElement = xmlPortfolio.CreateElement(shareObject.TaxTagNameCapitalGains);
-                                        newRegularCapitalGainsTaxElement.SetAttribute(shareObject.TaxCapitalGainsFlagAttrName, shareObject.CapitalGainsTaxFlagAsStr);
-                                        newRegularCapitalGainsTaxElement.SetAttribute(shareObject.TaxCapitalGainsPercentageAttrName, shareObject.TaxCapitalGainsPercentageAsStr);
-                                        nodeElement.ChildNodes[i].AppendChild(newRegularCapitalGainsTaxElement);
-
-                                        XmlElement newRegularSolidarityTaxElement = xmlPortfolio.CreateElement(shareObject.TaxTagNameSolidarity);
-                                        newRegularSolidarityTaxElement.SetAttribute(shareObject.TaxSolidarityFlagAttrName, shareObject.TaxSolidarityFlagAsStr);
-                                        newRegularSolidarityTaxElement.SetAttribute(shareObject.TaxSolidarityPercentageAttrName, shareObject.TaxSolidarityPercentageAsStr);
-                                        nodeElement.ChildNodes[i].AppendChild(newRegularSolidarityTaxElement);
-
-                                        break;
-
-                                    #endregion Taxes 
 
                                     default:
                                         break;
@@ -1259,30 +1196,6 @@ namespace SharePortfolioManager.Classes
 
                     #endregion Buys / Sales / Costs / Dividends
 
-                    #region Taxes
-
-                    // Add child nodes (taxes)
-                    XmlElement newRegularTaxesElement = xmlPortfolio.CreateElement(shareObject.TaxTagNameRegularTaxes);
-
-                    XmlElement newRegularTaxAtSourceElement = xmlPortfolio.CreateElement(shareObject.TaxTagNameTaxAtSource);
-                    newRegularTaxAtSourceElement.SetAttribute(shareObject.TaxTaxAtSourceFlagAttrName, shareObject.TaxTaxAtSourceFlagAsStr);
-                    newRegularTaxAtSourceElement.SetAttribute(shareObject.TaxTaxAtSourcePercentageAttrName, shareObject.TaxTaxAtSourcePercentageAsStr);
-                    newRegularTaxesElement.AppendChild(newRegularTaxAtSourceElement);
-
-                    XmlElement newRegularCapitalGainsTaxElement = xmlPortfolio.CreateElement(shareObject.TaxTagNameCapitalGains);
-                    newRegularCapitalGainsTaxElement.SetAttribute(shareObject.TaxCapitalGainsFlagAttrName, shareObject.CapitalGainsTaxFlagAsStr);
-                    newRegularCapitalGainsTaxElement.SetAttribute(shareObject.TaxCapitalGainsPercentageAttrName, shareObject.TaxCapitalGainsPercentageAsStr);
-                    newRegularTaxesElement.AppendChild(newRegularCapitalGainsTaxElement);
-
-                    XmlElement newRegularSolidarityTaxElement = xmlPortfolio.CreateElement(shareObject.TaxTagNameSolidarity);
-                    newRegularSolidarityTaxElement.SetAttribute(shareObject.TaxSolidarityFlagAttrName, shareObject.TaxSolidarityFlagAsStr);
-                    newRegularSolidarityTaxElement.SetAttribute(shareObject.TaxSolidarityPercentageAttrName, shareObject.TaxSolidarityPercentageAsStr);
-                    newRegularTaxesElement.AppendChild(newRegularSolidarityTaxElement);
-
-                    newShareNode.AppendChild(newRegularTaxesElement);
-
-                    #endregion Taxes
-
                     // Add share name to XML
                     rootPortfolio.AppendChild(newShareNode);
                 }
@@ -1309,4 +1222,52 @@ namespace SharePortfolioManager.Classes
 
         #endregion Methods
     }
+
+    // This class stores the informations of a culture info
+    public class CultureInformation
+    {
+        private string _currencySymbol;
+        private CultureInfo _cultureInfo;
+
+        public string CurrencySymbol
+        {
+            get { return _currencySymbol; }
+            set { _currencySymbol = value; }
+        }
+
+        public CultureInfo CultureInfo
+        {
+            get { return _cultureInfo; }
+            set { _cultureInfo = value; }
+        }
+
+        public CultureInformation(string currencySymbol)
+        {
+            _currencySymbol = currencySymbol;
+        }
+
+        public CultureInformation(CultureInfo cultureInfo)
+        {
+            _cultureInfo = cultureInfo;
+        }
+
+        public CultureInformation(CultureInfo cultureInfo, string currencySymbol)
+        {
+            _currencySymbol = currencySymbol;
+            _cultureInfo = cultureInfo;
+        }
+    }
+
+    //class CultureInformationTest <String, CultureInformation>
+    //{
+    //    public string _cultureISOCurrencySymbol;
+    //    public CultureInformation _cultureInformation;
+
+    //    public CultureInformationTest(string cultureISOCurrencySymbol, CultureInformation cultureInformation)
+    //    {
+    //        _cultureISOCurrencySymbol = cultureISOCurrencySymbol;
+    //        _cultureInformation = cultureInformation;
+    //    }
+
+    //}
 }

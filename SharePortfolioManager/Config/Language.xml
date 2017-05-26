@@ -88,6 +88,9 @@
 				</DgvPortfolio>
 				<DgvPortfolio_Error>
 					<ConfigurationFailed text="Configuration of the datagridview 'portfolio' failed!" />
+					<DisplayFailed text="Show of the shares failed!"/>
+					<CellFormattingFailed text="Formatting the cells failed!"/>
+					<CellPaintingBorderFailed text="Formatting the border failed!"/>
 				</DgvPortfolio_Error>
 				
 				<!-- DataGridView portfolio footer -->
@@ -99,6 +102,9 @@
 				</DgvPortfolioFooter>
 				<DgvPortfolioFooter_Error>
 					<ConfigurationFailed text="Configuration of the datagridview 'portfolio footer' failed!" />
+					<CellFormattingFailed text="Formatting the cells failed!"/>
+					<CellPaintingBorderFailed text="Formatting the border failed!"/>
+					<RefreshFailed text="Refresh of the footer failed!"/>
 				</DgvPortfolioFooter_Error>
 
 				<!-- Buttons -->
@@ -118,6 +124,7 @@
 			<GrpBoxDetails>
 				<Caption text="Share details" /> <!-- only a place holder -->
 				<ShareWKN text="WKN" />
+				<ShareUpdate text="Last update:" />
 				<ShareUpdateNotDone text="-" />
 
 				<!-- TabControl with the details -->
@@ -133,6 +140,7 @@
 							<TotalDividend text="Dividend (total):" />		
 							<TotalCosts text="Costs (total):" />
 							<CurrentPrice text="Current share price:" />
+							<DiffPerformancePrevDay text="Performance (pre. day)"/>
 							<DiffSumPrevDay text="Profit / loss (pre. day):" />
 							<PricePrevDay text="Share price (pre. day):" />
 							<Deposit text="Deposit:" />
@@ -152,10 +160,12 @@
 							<Volume text="Volume:"/>
 							<TotalDividend text="Dividend (total):" />		
 							<TotalCosts text="Costs (total):" />
+							<DiffPerformancePrevDay text="Performance (pre. day)"/>
 							<CurrentPrice text="Current share price:" />
 							<DiffSumPrevDay text="Profit / loss (pre. day):" />
 							<PricePrevDay text="Share price (pre. day):" />
 							<Deposit text="Deposit:" />
+							<TotalPerformance text="Performance (total):" />
 							<TotalProfitLoss text="Profit / loss (total):" />
 							<TotalSum text="Sum (total):" />
 						</Labels>
@@ -219,7 +229,6 @@
 					</TabPgProfitLoss>
 					<TabPgProfitLoss_Error>
 						<ShowFailed text="An error occurred while the profit / loss details should be shown!" />
-						<RenameHeaderFailed text="Renaming of the column headers failed!" />
 					</TabPgProfitLoss_Error>
 				</TabCtrlDetails>
 			</GrpBoxDetails>
@@ -228,7 +237,12 @@
 			<GrpBoxUpdateState>
 				<Caption text="Update status" />
 			</GrpBoxUpdateState>
-	
+
+			<!-- Groupbox state messages -->		
+			<GrpBoxStatusMessage>
+				<Caption text="State messages" />
+			</GrpBoxStatusMessage>
+			
 			<!-- Update messages -->
 			<UpdateMessages>
 				<Start1 text="Update of the share '"/>
@@ -331,18 +345,6 @@
 					<Item3 text="quarterly" />
 				</ComboBoxItemsPayout>
 			</GrpBoxGeneral>
-
-			<!-- Group box with the taxes info of the share -->
-			<GrpBoxTaxes>
-				<Caption text="Taxes" />
-				
-				<!-- Labels -->
-				<Labels>
-					<TaxAtSource text="Tax at source: " />
-					<CapitalGainsTax text="Capital gains tax: " />
-					<SolidarityTax text="Solidarity tax: " />
-				</Labels>
-			</GrpBoxTaxes>
 			
 			<!-- Open file dialog -->
 			<OpenFileDialog>
@@ -372,20 +374,9 @@
 				<ReductionWrongFormat text="Format for the value 'Reduction' is invalid." />
 				<ReductionWrongValue text="The value for 'Reduction' must be higher than '0'." />
 				<WebSiteEmpty text="Please insert a website address." />
-				<WebSiteExists text="The website already exists." />
 				<WebSiteRegexNotFound text="No parse configuration for the given web address available!" />
 				<AddSaveFailed text="An exception occurred. Add of the share failed!" />
-				<AddShowFailed text="An exception occurred. Showing the dialog failed!" />
 				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
-				<TaxAtSourceEmpty text="Please insert a tax at source." />
-				<TaxAtSourceWrongFormat text="Format for the value 'Tax at source' is invalid." />
-				<TaxAtSourceWrongValue text="The value 'Tax at source' must be higher than '0'." />
-				<CapitalGainsTaxEmpty text="Please insert a capital gains tax." />
-				<CapitalGainsTaxWrongFormat text="Format for the value 'Capital gains tax' is invalid." />
-				<CapitalGainsTaxWrongValue text="The value 'Capital gains tax' must be higher than '0'." />
-				<SolidarityTaxEmpty text="Please insert a solidarity tax." />
-				<SolidarityTaxWrongFormat text="Format for the value 'Solidarity tax' is invalid." />
-				<SolidarityTaxWrongValue text="The value 'Solidarity tax' must be higher than '0'." />
 				<FileDoesNotExist text="The given file does not exist!" />
 			</Errors>
 		</AddFormShare>
@@ -442,18 +433,6 @@
 				</Buttons>	
 			</GrpBoxEarningsExpenditure>
 			
-			<!-- Group box with the taxes info of the share -->
-			<GrpBoxTaxes>
-				<Caption text="Taxes" />
-				
-				<!-- Labels -->
-				<Labels>
-					<TaxAtSource text="Tax at source: " />
-					<CapitalGainsTax text="Capital gains tax: " />
-					<SolidarityTax text="Solidarity tax: " />
-				</Labels>
-			</GrpBoxTaxes>
-
 			<!-- Buttons -->
 			<Buttons>
 				<Save text="   Save" />
@@ -473,12 +452,6 @@
 				<VolumeWrongValue text="The value for 'Volume' must be higher than '0'." />
 				<WebSiteEmpty text="Please insert a website address." />
 				<WebSiteExists text="The website already exists." />
-				<TaxAtSourceEmpty text="Please insert a tax at source." />
-				<TaxAtSourceWrongFormat text="Format for the value 'Tax at source' is invalid.." />
-				<CapitalGainsTaxEmpty text="Please insert a capital gains tax." />
-				<CapitalGainsTaxWrongFormat text="Format for the value 'Capital gains tax' is invalid.." />
-				<SolidarityTaxEmpty text="Please insert a solidarity tax." />
-				<SolidarityTaxWrongFormat text="Format for the value 'Solidarity tax' is invalid.." />
 				<EditSaveFailed text="An error occurred. Edit of the share failed!" />
 			</Errors>
 		</EditFormShare>
@@ -553,7 +526,6 @@
 			<Errors>
 				<ShowFailed text="An error occurred while the buy should be shown!" />
 				<DeselectFailed text="Deselect of the selected rows failed!" />
-				<SearchFailed text="Getting the buy entry for the chosen date failed!" />
 				<RenameColHeaderFailed text="Renaming of the column headers failed!" />
 				<SelectionChangeFailed text="The selection change failed!" />
 				<DateExists text="An entry for this date already exists." />
@@ -696,9 +668,8 @@
 					<Date text="Date of the payout:" />
 					<EnableForeignCurrency text="Activate foreign currency input:" />
 					<ExchangeRatio text="Exchange rate:" />
-					<Dividendrate text="Dividend rate:" />
+					<DividendRate text="Dividend rate:" />
 					<Volume text="Volume at the payout day:" />
-					<LossBalance text="Loss balance:" />
 					<Payout text="Payout:" />
 					<Tax text="Tax:" />
 					<PayoutAfterTax text="After tax payout:" />
@@ -740,7 +711,6 @@
 						<ColHeader_Payout text="Pay" />
 						<ColHeader_Dividend text="Div." />
 						<ColHeader_Yield text="Yield" />
-						<ColHeader_YieldUnit text="%" />
 						<ColHeader_Price text="Pr." />
 						<ColHeader_Volume text="Vol." />
 						<ColHeader_Document text="Document" />
@@ -759,28 +729,19 @@
 			<Errors>
 				<ShowFailed text="An error occurred while the dividend should be shown!" />
 				<DeselectFailed text="Deselect of the selected rows failed!" />
-				<SearchFailed text="Getting the dividend entry for the chosen date failed!" />
 				<RenameColHeaderFailed text="Renaming of the column headers failed!" />
 				<SelectionChangeFailed text="The selection change failed!" />
 				<DateExists text="An entry for this date already exists." />
 				<DateWrongFormat text="Invalid date format. Current date is set." />
-				<DividendForeignCurrencyFactorEmpty text="Please insert a factor for the foreign currency." />
-				<DividendForeignCurrencyFactorWrongFormat text="Format for the value 'Factor' for the foreign currency is invalid." />
-				<DividendForeignCurrencyFactorWrongValue text="The value for 'Factor' for the foreign currency must be higher than '0'." />
+				<DividendExchangeRatioEmpty text="Please insert a factor for the foreign currency." />
+				<DividendExchangeRatioWrongFormat text="Format for the value 'Factor' for the foreign currency is invalid." />
+				<DividendExchangeRatioWrongValue text="The value for 'Factor' for the foreign currency must be higher than '0'." />
 				<DividendEmpty text="Please insert a dividend." />
 				<DividendWrongFormat text="Format for the value 'Dividend' is invalid." />
 				<DividendWrongValue text="The value for 'Dividend' must be higher than '0'." />
-				<LossBalanceWrongFormat text="Format for the value 'Loss balance' is invalid." />
-				<LossBalanceWrongValue text="The value for 'Loss balance' must be higher than '0'." />
-				<DividendForeignCurrencyEmpty text="Please insert a dividend in the foreign currency." />
-				<DividendForeignCurrencyWrongFormat text="Format for the value 'Dividend' in the foreign currency is invalid." />
-				<DividendForeignCurrencyWrongValue text="The value for 'Dividend' in the foreign currency must be higher than '0'." />
 				<PriceEmpty text="Please insert a price." />
 				<PriceWrongFormat text="Format for the value 'Price' is invalid." />
 				<PriceWrongValue text="The value for 'Price' must be higher than '0'." />
-				<PriceForeignCurrencyEmpty text="Please insert a price in the foreign currency." />
-				<PriceForeignCurrencyWrongFormat text="Format for the value 'Price' in the foreign currency is invalid." />
-				<PriceForeignCurrencyWrongValue text="The value for 'Price' in the foreign currency must be higher than '0'." />
 				<VolumeEmpty text="Please insert a volume." />
 				<VolumeWrongFormat text="Format for the value 'Volume' is invalid." />
 				<VolumeWrongValue text="The value for 'Volume' must be higher than '0'." />
@@ -794,42 +755,6 @@
 				<DocumentShowFailed text="Show of the document failed!" />
 			</Errors>
 		</AddEditFormDividend>
-
-		<!-- Taxes edit -->
-		<Taxes>
-			<Caption text="Edit taxes of this share" />
-
-			<!-- Groupbox edit taxes -->
-			<GrpBoxEdit>
-				<Caption text="Edit taxes" />
-					
-				<!-- Labels -->
-				<Labels>
-					<Payout text="Payout without taxes:" />
-					<CapitalGainsValue text="Cap. tax liable on cap. gains tax:" />
-					<LossBalance text="Loss balance:" />
-					<TaxAtSource text="Tax at source:" />
-					<TaxAtSourceValue text="Value:" />
-					<CapitalGainsTax text="Capital gains tax:" />
-					<CapitalGainsTaxValue text="Value:" />
-					<SolidarityTax text="Solidarity tax:" />
-					<SolidarityTaxValue text="Value:" />
-					<PayoutWithTaxes text="Payout with taxes:" />
-				</Labels>
-				
-				<!-- Buttons -->
-				<Buttons>
-					<Ok text="   Ok" />
-					<Reset text="   Reset" />
-					<Cancel text="   Return" />
-				</Buttons>
-			</GrpBoxEdit>
-			
-			<!-- Taxes edit errors -->
-			<Errors>
-				<ShowFailed text="An error occurred while the taxes should be shown!" />
-			</Errors>
-		</Taxes>
 
 		<!-- Costs add / edit -->
 		<AddEditFormCosts>
@@ -1132,6 +1057,9 @@
 				</DgvPortfolio>
 				<DgvPortfolio_Error>
 					<ConfigurationFailed text="Konfiguration des DataGridView 'Portfolio' fehlgeschlagen!" />
+					<DisplayFailed text="Anzeigen der Aktien ist fehlgeschlagen!"/>
+					<CellFormattingFailed text="Formatieren der Zellen ist fehlgeschlagen!"/>
+					<CellPaintingBorderFailed text="Formatieren der Umrandung ist fehlgeschlagen!"/>
 				</DgvPortfolio_Error>
 				
 				<!-- DataGridView portfolio footer -->
@@ -1143,6 +1071,9 @@
 				</DgvPortfolioFooter>
 				<DgvPortfolioFooter_Error>
 					<ConfigurationFailed text="Konfiguration des DataGridView für den 'Portfolio- Footer' fehlgeschlagen!" />
+					<CellFormattingFailed text="Formatieren der Zellen ist fehlgeschlagen!"/>
+					<CellPaintingBorderFailed text="Formatieren der Umrandung ist fehlgeschlagen!"/>
+					<RefreshFailed text="Aktualierung des Footer ist fehlgeschlagen!"/>
 				</DgvPortfolioFooter_Error>
 
 				<!-- Buttons -->
@@ -1162,6 +1093,7 @@
 			<GrpBoxDetails>
 				<Caption text="Aktien- Details" /> <!-- only a place holder -->
 				<ShareWKN text="WKN" />
+				<ShareUpdate text="Letzte Aktualisierung:" />
 				<ShareUpdateNotDone text="-" />
 
 				<!-- TabControl with the details -->
@@ -1177,6 +1109,7 @@
 							<TotalDividend text="Dividenden (gesamt):" />		
 							<TotalCosts text="Kosten (gesamt):" />
 							<CurrentPrice text="Aktueller Aktien- Preis:" />
+							<DiffPerformancePrevDay text="Entwicklung (Vortag)"/>
 							<DiffSumPrevDay text="Gewinn / Verlust (Vortag):" />
 							<PricePrevDay text="Aktien- Preis (Vortag):" />
 							<Deposit text="Einzahlungen:" />
@@ -1197,9 +1130,11 @@
 							<TotalDividend text="Dividenden (gesamt):" />		
 							<TotalCosts text="Kosten (gesamt):" />
 							<CurrentPrice text="Aktueller Aktien- Preis:" />
+							<DiffPerformancePrevDay text="Entwicklung (Vortag)"/>
 							<DiffSumPrevDay text="Gewinn / Verlust (Vortag):" />
 							<PricePrevDay text="Aktien- Preis (Vortag):" />
 							<Deposit text="Einzahlungen:" />
+							<TotalPerformance text="Entwicklung (gesamt):" />
 							<TotalProfitLoss text="Gewinn / Verlust (gesamt):" />
 							<TotalSum text="Summe (gesamt):" />
 						</Labels>
@@ -1263,7 +1198,6 @@
 					</TabPgProfitLoss>
 					<TabPgProfitLoss_Error>
 						<ShowFailed text="Es trat ein Fehler beim Anzeigen der Gewinn / Verlust- Details auf!" />
-						<RenameHeaderFailed text="Umbennenen der Spalten- Namen ist fehlgeschlagen!" />
 					</TabPgProfitLoss_Error>
 				</TabCtrlDetails>
 			</GrpBoxDetails>
@@ -1272,6 +1206,11 @@
 			<GrpBoxUpdateState>
 				<Caption text="Aktualisierungs- Status" />
 			</GrpBoxUpdateState>
+	
+			<!-- Groupbox state messages -->		
+			<GrpBoxStatusMessage>
+				<Caption text="Status- Meldungen" />
+			</GrpBoxStatusMessage>
 	
 			<!-- Update messages -->
 			<UpdateMessages>
@@ -1375,18 +1314,6 @@
 					<Item3 text="vierteljährlich" />
 				</ComboBoxItemsPayout>
 			</GrpBoxGeneral>
-
-			<!-- Group box with the taxes info of the share -->
-			<GrpBoxTaxes>
-				<Caption text="Steuern" />
-				
-				<!-- Labels -->
-				<Labels>
-					<TaxAtSource text="Quellensteuer: " />
-					<CapitalGainsTax text="Kapitalertragssteuer: " />
-					<SolidarityTax text="Solidaritätszuschlag: " />
-				</Labels>
-			</GrpBoxTaxes>
 			
 			<!-- Open file dialog -->
 			<OpenFileDialog>
@@ -1416,20 +1343,9 @@
 				<ReductionWrongFormat text="Format für den 'Rabatt'- Wert ist ungültig." />
 				<ReductionWrongValue text="Der Wert für 'Rabatt' muss größer '0' sein." />
 				<WebSiteEmpty text="Bitte geben Sie eine Webseiten- Adresse ein." />
-				<WebSiteExists text="Die Webseite existiert bereits." />
 				<WebSiteRegexNotFound text="Kein Parser-Konfiguration für die angegebene Web- Addresse verfügbar!" />
 				<AddSaveFailed text="Es trat ein Fehler auf. Hinzufügen der Aktien ist fehlgeschlagen!" />
-				<AddShowFailed text="Es trat ein Fehler auf. Anzeigen des Dialogs fehlgeschlagen!" />
 				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
-				<TaxAtSourceEmpty text="Bitte geben Sie eine Quellensteuer ein." />
-				<TaxAtSourceWrongFormat text="Format für den 'Quellensteuer'- Wert ist ungültig." />
-				<TaxAtSourceWrongValue text="Der Wert für 'Quellensteuer' muss größer '0' sein." />
-				<CapitalGainsTaxEmpty text="Bitte geben Sie eine Kapitalertragssteuer ein." />
-				<CapitalGainsTaxWrongFormat text="Format für den 'Kapitalertragssteuer'- Wert ist ungültig." />
-				<CapitalGainsTaxWrongValue text="Der Wert für 'Kapitalertragssteuer' muss größer '0' sein." />
-				<SolidarityTaxEmpty text="Bitte geben Sie einen Solidaritätszuschlag ein." />
-				<SolidarityTaxWrongFormat text="Format für den 'Solidaritätszuschlag'- Wert ist ungültig." />
-				<SolidarityTaxWrongValue text="Der Wert für 'Solidaritätszuschlag' muss größer '0' sein." />
 				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
 			</Errors>
 		</AddFormShare>
@@ -1486,18 +1402,6 @@
 				</Buttons>
 			</GrpBoxEarningsExpenditure>
 
-			<!-- Group box with the taxes info of the share -->
-			<GrpBoxTaxes>
-				<Caption text="Steuern" />
-				
-				<!-- Labels -->
-				<Labels>
-					<TaxAtSource text="Quellensteuer: " />
-					<CapitalGainsTax text="Kapitalertragssteuer: " />
-					<SolidarityTax text="Solidaritätszuschlag: " />
-				</Labels>
-			</GrpBoxTaxes>
-
 			<!-- Buttons -->
 			<Buttons>
 				<Save text="   Speichern" />
@@ -1517,12 +1421,6 @@
 				<VolumeWrongValue text="Der Wert für 'Anteile' muss größer '0' sein." />
 				<WebSiteEmpty text="Bitte geben Sie eine Webseiten- Adresse ein." />
 				<WebSiteExists text="Die Webseite existiert bereits." />
-				<TaxAtSourceEmpty text="Bitte geben Sie eine Quellensteuer ein." />
-				<TaxAtSourceWrongFormat text="Format für den 'Quellensteuer'- Wert ist ungültig." />
-				<CapitalGainsTaxEmpty text="Bitte geben Sie eine Kapitalertragssteuer ein." />
-				<CapitalGainsTaxWrongFormat text="Format für den 'Kapitalertragssteuer'- Wert ist ungültig." />
-				<SolidarityTaxEmpty text="Bitte geben Sie einen Solidaritätszuschlag ein." />
-				<SolidarityTaxWrongFormat text="Format für den 'Solidaritätszuschlag'- Wert ist ungültig." />
 				<EditSaveFailed text="Es trat ein Fehler auf. Editieren der Aktien ist fehlgeschlagen!" />
 			</Errors>
 		</EditFormShare>
@@ -1737,9 +1635,8 @@
 					<Date text="Datum der Auszahlung:" />
 					<EnableForeignCurrency text="Fremdwährungseingabe aktivieren:" />
 					<ExchangeRatio text="Devisenkurs:" />
-					<Dividendrate text="Dividendensatz:" />
+					<DividendRate text="Dividendensatz:" />
 					<Volume text="Anteile am Auszahlungstag:" />
-					<LossBalance text="Verrechnungstopf:" />
 					<Payout text="Auszahlung:" />
 					<Tax text="Steuern:" />
 					<PayoutAfterTax text="Auszahlung nach Steuern:" />
@@ -1781,7 +1678,6 @@
 						<ColHeader_Payout text="Ausz." />
 						<ColHeader_Dividend text="Div." />
 						<ColHeader_Yield text="Ren." />
-						<ColHeader_YieldUnit text="%" />
 						<ColHeader_Price text="Pr." />
 						<ColHeader_Volume text="Ant." />
 						<ColHeader_Document text="Dokument" />
@@ -1789,7 +1685,7 @@
 				</TabCtrl>
 			</GrpBoxDividend>
 			
-			<!-- Dividen add / edit state messages -->
+			<!-- Dividend add / edit state messages -->
 			<StateMessages>
 				<AddSuccess text="Dividende wurde hinzugefügt." />
 				<EditSuccess text="Dividenden- Änderung wurde gespeichert." />
@@ -1800,28 +1696,19 @@
 			<Errors>
 				<ShowFailed text="Es trat ein Fehler beim Anzeigen der Dividende(n) auf!" />
 				<DeselectFailed text="Deselektieren der selektierten Zeile ist fehlgeschlagen!" />
-				<SearchFailed text="Ermitteln des Dividenen- Eintrags / der Dividenden- Einträge für das ausgewählte Datum ist fehlgeschalgen!" />
 				<RenameColHeaderFailed text="Umbennenen der Spalten- Namen ist fehlgeschlagen!" />
 				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
 				<DateExists text="Es besteht bereits ein Eintrag für das eingegebene Datum." />
 				<DateWrongFormat text="Ungültiges Datumsformat. Aktuelles Datum wurde gesetzt." />
-				<DividendForeignCurrenyFactorEmpty text="Bitte geben Sie einen Faktor für der Fremdwährung ein." />
-				<DividendForeignCurrenyFactorWrongFormat text="Format für den 'Faktor'- Wert für der Fremdwährung ist ungültig." />
-				<DividendForeignCurrenyFactorWrongValue text="Der Wert für den 'Faktor' für der Fremdwährung muss größer als '0' sein." />
+				<DividendExchangeRatioEmpty text="Bitte geben Sie einen Faktor für der Fremdwährung ein." />
+				<DividendExchangeRatioWrongFormat text="Format für den 'Faktor'- Wert für der Fremdwährung ist ungültig." />
+				<DividendExchangeRatioWrongValue text="Der Wert für den 'Faktor' für der Fremdwährung muss größer als '0' sein." />
 				<DividendEmpty text="Bitte geben Sie eine Dividende ein." />
 				<DividendWrongFormat text="Format für den 'Dividend'- Wert ist ungültig." />
 				<DividendWrongValue text="Der Wert für 'Dividend' muss größer als '0' sein." />
-				<LossBalanceWrongFormat text="Format für den 'Verrechnungstopf'- Wert ist ungültig." />
-				<LossBalanceWrongValue text="Der Wert für 'Verrechnungstopf' muss größer als '0' sein." />
-				<DividendForeignCurrenyEmpty text="Bitte geben Sie eine Dividende in der Fremdwährung ein." />
-				<DividendForeignCurrenyWrongFormat text="Format für den 'Dividend'- Wert in der Fremdwährung ist ungültig." />
-				<DividendForeignCurrenyWrongValue text="Der Wert für 'Dividend' in der Fremdwährung muss größer als '0' sein." />
 				<PriceEmpty text="Bitte geben Sie einen Preis ein." />
 				<PriceWrongFormat text="Format für den 'Preis'- Wert ist ungültig." />
 				<PriceWrongValue text="Der Wert für 'Preis' muss größer als '0' sein." />
-				<PriceForeignCurrenyEmpty text="Bitte geben Sie einen Preis für die Fremdwährung ein." />
-				<PriceForeignCurrenyWrongFormat text="Format für den 'Preis'- Wert in der Fremdwährung ist ungültig." />
-				<PriceForeignCurrenyWrongValue text="Der Wert für 'Preis' in der Fremdwährung muss größer als '0' sein." />
 				<VolumeEmpty text="Bitte geben Sie einen Anteile- Wert ein." />
 				<VolumeWrongFormat text="Format für den 'Anteile'- Wert ist ungültig." />
 				<VolumeWrongValue text="Der Wert für 'Anteile' muss größer als '0' sein." />
@@ -1835,42 +1722,6 @@
 				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
 			</Errors>
 		</AddEditFormDividend>
-
-		<!-- Taxes edit -->
-		<Taxes>
-			<Caption text="Editiern der Steuern dieser Aktie" />
-
-			<!-- Groupbox edit taxes -->
-			<GrpBoxEdit>
-				<Caption text="Steuern editieren" />
-					
-				<!-- Labels -->
-				<Labels>
-					<Payout text="Auszahlung ohne Steuern:" />
-					<CapitalGainsValue text="KapSt-pflichtiger Kapitalertrag:" />
-					<LossBalance text="Verrechnungstopf:" />
-					<TaxAtSource text="Quellensteuer:" />
-					<TaxAtSourceValue text="Wert:" />
-					<CapitalGainsTax text="Kapitalertragssteuer:" />
-					<CapitalGainsTaxValue text="Wert:" />
-					<SolidarityTax text="Solidaritätszuschlag:" />
-					<SolidarityTaxValue text="Wert:" />
-					<PayoutWithTaxes text="Auszahlung mit Steuern:" />
-				</Labels>
-				
-				<!-- Buttons -->
-				<Buttons>
-					<Ok text="   Ok" />
-					<Reset text="   Reset" />
-					<Cancel text="   Zurück" />
-				</Buttons>
-			</GrpBoxEdit>
-			
-			<!-- Taxes edit errors -->
-			<Errors>
-				<ShowFailed text="Es trat ein Fehler beim Anzeigen der Steuern auf!" />
-			</Errors>
-		</Taxes>
 		
 		<!-- Costs add / edit -->
 		<AddEditFormCosts>

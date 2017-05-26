@@ -1,4 +1,7 @@
-﻿namespace SharePortfolioManager.Forms.SalesForm
+﻿
+using SharePortfolioManager.Properties;
+
+namespace SharePortfolioManager.Forms.SalesForm
 {
     partial class FrmShareSalesEdit
     {
@@ -100,7 +103,7 @@
             // 
             this.btnSalesDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSalesDelete.Enabled = false;
-            this.btnSalesDelete.Image = global::SharePortfolioManager.Properties.Resources.black_delete;
+            this.btnSalesDelete.Image = Resources.black_delete;
             this.btnSalesDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSalesDelete.Location = new System.Drawing.Point(297, 293);
             this.btnSalesDelete.Name = "btnSalesDelete";
@@ -114,7 +117,7 @@
             // btnSalesCancel
             // 
             this.btnSalesCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSalesCancel.Image = global::SharePortfolioManager.Properties.Resources.black_cancel;
+            this.btnSalesCancel.Image = Resources.black_cancel;
             this.btnSalesCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSalesCancel.Location = new System.Drawing.Point(641, 293);
             this.btnSalesCancel.Name = "btnSalesCancel";
@@ -129,7 +132,7 @@
             // 
             this.btnSalesReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSalesReset.Enabled = false;
-            this.btnSalesReset.Image = global::SharePortfolioManager.Properties.Resources.black_cancel;
+            this.btnSalesReset.Image = Resources.black_cancel;
             this.btnSalesReset.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSalesReset.Location = new System.Drawing.Point(469, 293);
             this.btnSalesReset.Name = "btnSalesReset";
@@ -143,7 +146,7 @@
             // btnSalesAddSave
             // 
             this.btnSalesAddSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSalesAddSave.Image = global::SharePortfolioManager.Properties.Resources.black_add;
+            this.btnSalesAddSave.Image = Resources.black_add;
             this.btnSalesAddSave.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSalesAddSave.Location = new System.Drawing.Point(125, 293);
             this.btnSalesAddSave.Name = "btnSalesAddSave";

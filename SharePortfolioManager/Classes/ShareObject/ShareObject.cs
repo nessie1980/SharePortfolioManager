@@ -21,7 +21,6 @@
 //SOFTWARE.
 
 using SharePortfolioManager.Classes;
-using SharePortfolioManager.Classes.Taxes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -29,6 +28,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms;
 using WebParser;
 
 namespace SharePortfolioManager
@@ -42,7 +42,7 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores the count of the share object tags in the XML
         /// </summary>
-        private const short _ShareObjectTagCount = 13;
+        private const short _ShareObjectTagCount = 12;
 
         /// <summary>
         /// Stores the WKN of a share
@@ -358,22 +358,32 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores the XML attribute name for the dividend pay for one share
         /// </summary>
-        private const string _dividendRateAttrName = "DividendRate";
-
-        /// <summary>
-        /// Stores the XML attribute name for the dividend pay for one share
-        /// </summary>
-        private const string _dividendLossBalanceAttrName = "LossBalance";
-
-        /// <summary>
-        /// Stores the XML attribute name for the share price at the pay date
-        /// </summary>
-        private const string _dividendPriceAttrName = "Price";
+        private const string _dividendRateAttrName = "Rate";
 
         /// <summary>
         /// Stores the XML attribute name for the share volume at the pay date
         /// </summary>
         private const string _dividendVolumeAttrName = "Volume";
+
+        /// <summary>
+        /// Stores the XML attribute name for the dividend tax at source value
+        /// </summary>
+        private const string _dividendTaxAtSourceAttrName = "TaxAtSource";
+
+        /// <summary>
+        /// Stores the XML attribute name for the dividend capital gains tax value
+        /// </summary>
+        private const string _dividendCapitalGainsTaxAttrName = "CapitalGainsTax";
+
+        /// <summary>
+        /// Stores the XML attribute name for the dividend capital gains tax value
+        /// </summary>
+        private const string _dividendSolidarityTaxAttrName = "SolidarityTax";
+
+        /// <summary>
+        /// Stores the XML attribute name for the share price at the pay date
+        /// </summary>
+        private const string _dividendPriceAttrName = "Price";
 
         /// <summary>
         /// Stores the XML attribute name for the document of a dividend
@@ -398,7 +408,7 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores the XML attribute name for the name of the foreign currency
         /// </summary>
-        private const string _dividendNameAttrName = "Name";
+        private const string _dividendNameAttrName = "FCName";
 
         /// <summary>
         /// Stores the attribute count for the foreign currency information
@@ -408,124 +418,14 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores the attribute count for the dividend
         /// </summary>
-        private const short _dividendAttrCount = 6;
+        private const short _dividendAttrCount = 9;
 
         /// <summary>
         /// Stores the child node count for the dividend
         /// </summary>
-        private const short _dividendChildNodeCount = 2;
+        private const short _dividendChildNodeCount = 1;
 
         #endregion Dividends share variables
-
-        #region Taxes share variables
-
-        /// <summary>
-        /// Stores if tax at source must be paid for the share
-        /// </summary>
-        private bool _taxTaxAtSourceFlag;
-
-        /// <summary>
-        /// Stores the percentage value for the tax at source
-        /// </summary>
-        private decimal _taxTaxAtSourcePercentage;
-
-        /// <summary>
-        /// Stores the count of the tax at source attributes
-        /// </summary>
-        private const int _taxTaxAtSourceAttrCount = 2;
-
-        /// <summary>
-        /// Stores if capital gains tax must be paid for the share
-        /// </summary>
-        private bool _taxCapitalGainsFlag;
-
-        /// <summary>
-        /// Stores the percentage value for the capital gains tax
-        /// </summary>
-        private decimal _taxCapitalGainsPercentage;
-
-        /// <summary>
-        /// Stores the count of the capital gains tax attributes
-        /// </summary>
-        private const int _taxCapitalGainsAttrCount = 2;
-
-        /// <summary>
-        /// Stores if solidarity tax must be paid for the share
-        /// </summary>
-        private bool _taxSolidarityFlag;
-
-        /// <summary>
-        /// Stores the percentage value for the solidarity tax
-        /// </summary>
-        private decimal _taxSolidarityPercentage;
-
-        /// <summary>
-        /// Stores the count of the solidarity tax attributes
-        /// </summary>
-        private const int _taxSolidarityAttrCount = 2;
-
-        /// <summary>
-        /// Stores the XML tag name prefix of the taxes
-        /// </summary>
-        private const string _taxTagName = "Taxes";
-
-        /// <summary>
-        /// Stores the XML tag name prefix of the regular taxes
-        /// </summary>
-        private const string _taxTagNameRegularTaxes = "RegularTaxes";
-
-        /// <summary>
-        /// Stores the XML tag name prefix of the tax at source
-        /// </summary>
-        private const string _taxTagNameTaxAtSource = "TaxAtSource";
-
-        /// <summary>
-        /// Stores the XML attribute name for the tax at source flag
-        /// </summary>
-        private const string _taxTaxAtSourceFlagAttrName = "Flag";
-
-        /// <summary>
-        /// Stores the XML attribute name for the tax at source percentage
-        /// </summary>
-        private const string _taxTaxAtSourcePercentageAttrName = "Percentage";
-
-
-        /// <summary>
-        /// Stores the XML tag name prefix of the capital gains tax
-        /// </summary>
-        private const string _taxTagNameCapitalGains = "CapitalGainsTax";
-
-        /// <summary>
-        /// Stores the XML attribute name for the capital gains tax flag
-        /// </summary>
-        private const string _taxCapitalGainsFlagAttrName = "Flag";
-
-        /// <summary>
-        /// Stores the XML attribute name for the capital gains tax percentage
-        /// </summary>
-        private const string _taxCapitalGainsPercentageAttrName = "Percentage";
-
-        /// <summary>
-        /// Stores the XML tag name prefix of the solidarity tax
-        /// </summary>
-        private const string _taxTagNameSolidarity = "SolidarityTax";
-
-        /// <summary>
-        /// Stores the XML attribute name for the solidarity tax flag
-        /// </summary>
-        private const string _taxSolidarityFlagAttrName = "Flag";
-
-        /// <summary>
-        /// Stores the XML attribute name for the solidarity tax percentage
-        /// </summary>
-        private const string _taxSolidarityPercentageAttrName = "Percentage";
-
-        /// <summary>
-        /// Stores the attribute count for the taxes
-        /// </summary>
-        private const short _taxAttrCount = 3;
-
-        #endregion Taxes share variables
 
         #region Value units
 
@@ -1611,6 +1511,48 @@ namespace SharePortfolioManager
         }
 
         [Browsable(false)]
+        public string DividendRateAttrName
+        {
+            get { return _dividendRateAttrName; }
+        }
+
+        [Browsable(false)]
+        public string DividendVolumeAttrName
+        {
+            get { return _dividendVolumeAttrName; }
+        }
+
+        [Browsable(false)]
+        public string DividendTaxAtSourceAttrName
+        {
+            get { return _dividendTaxAtSourceAttrName; }
+        }
+
+        [Browsable(false)]
+        public string DividendCapitalGainsTaxAttrName
+        {
+            get { return _dividendCapitalGainsTaxAttrName; }
+        }
+
+        [Browsable(false)]
+        public string DividendSolidarityTaxAttrName
+        {
+            get { return _dividendSolidarityTaxAttrName; }
+        }
+
+        [Browsable(false)]
+        public string DividendPriceAttrName
+        {
+            get { return _dividendPriceAttrName; }
+        }
+
+        [Browsable(false)]
+        public string DividendDocumentAttrName
+        {
+            get { return _dividendDocumentAttrName; }
+        }
+
+        [Browsable(false)]
         public string DividendTagNameForeignCu
         {
             get { return _dividendTagNameForeignCu; }
@@ -1641,36 +1583,6 @@ namespace SharePortfolioManager
         }
 
         [Browsable(false)]
-        public string DividendRateAttrName
-        {
-            get { return _dividendRateAttrName; }
-        }
-
-        [Browsable(false)]
-        public string DividendPriceAttrName
-        {
-            get { return _dividendPriceAttrName; }
-        }
-
-        [Browsable(false)]
-        public string DividendLossBalanceAttrName
-        {
-            get { return _dividendLossBalanceAttrName; }
-        }
-
-        [Browsable(false)]
-        public string DividendVolumeAttrName
-        {
-            get { return _dividendVolumeAttrName; }
-        }
-
-        [Browsable(false)]
-        public string DividendDocumentAttrName
-        {
-            get { return _dividendDocumentAttrName; }
-        }
-
-        [Browsable(false)]
         public short DividendAttrCount
         {
             get { return _dividendAttrCount; }
@@ -1683,196 +1595,6 @@ namespace SharePortfolioManager
         }
 
         #endregion Dividends share properties
-
-        #region Taxes properties
-
-        [Browsable(false)]
-        public bool TaxTaxAtSourceFlag
-        {
-            get { return _taxTaxAtSourceFlag; }
-            set { _taxTaxAtSourceFlag = value; }
-        }
-
-        [Browsable(false)]
-        public string TaxTaxAtSourceFlagAsStr
-        {
-            get { return TaxTaxAtSourceFlag.ToString(); }
-        }
-
-        [Browsable(false)]
-        public decimal TaxTaxAtSourcePercentage
-        {
-            get { return _taxTaxAtSourcePercentage; }
-            set
-            {
-                if (_taxTaxAtSourceFlag)
-                    _taxTaxAtSourcePercentage = value;
-                else
-                    _taxTaxAtSourcePercentage = 0;
-            }
-        }
-
-        [Browsable(false)]
-        public string TaxTaxAtSourcePercentageAsStr
-        {
-            get { return TaxTaxAtSourcePercentage.ToString(); }
-        }
-
-        [Browsable(false)]
-        public bool TaxCapitalGainsFlag
-        {
-            get { return _taxCapitalGainsFlag; }
-            set { _taxCapitalGainsFlag = value; }
-        }
-
-        [Browsable(false)]
-        public string CapitalGainsTaxFlagAsStr
-        {
-            get { return TaxCapitalGainsFlag.ToString(); }
-        }
-
-        [Browsable(false)]
-        public decimal TaxCapitalGainsPercentage
-        {
-            get { return _taxCapitalGainsPercentage; }
-            set
-            {
-                if (_taxCapitalGainsFlag)
-                    _taxCapitalGainsPercentage = value;
-                else
-                    _taxCapitalGainsPercentage = 0;
-            }
-        }
-
-        [Browsable(false)]
-        public string TaxCapitalGainsPercentageAsStr
-        {
-            get { return TaxCapitalGainsPercentage.ToString(); }
-        }
-
-        [Browsable(false)]
-        public bool TaxSolidarityFlag
-        {
-            get { return _taxSolidarityFlag; }
-            set { _taxSolidarityFlag = value; }
-        }
-
-        [Browsable(false)]
-        public string TaxSolidarityFlagAsStr
-        {
-            get { return TaxSolidarityFlag.ToString(); }
-        }
-
-        [Browsable(false)]
-        public decimal TaxSolidarityPercentage
-        {
-            get { return _taxSolidarityPercentage; }
-            set
-            {
-                if (_taxSolidarityFlag)
-                    _taxSolidarityPercentage = value;
-                else
-                    _taxSolidarityPercentage = 0;
-            }
-        }
-
-        [Browsable(false)]
-        public string TaxSolidarityPercentageAsStr
-        {
-            get { return TaxSolidarityPercentage.ToString(); }
-        }
-
-        [Browsable(false)]
-        public string TaxTagName
-        {
-            get { return _taxTagName; }
-        }
-
-        [Browsable(false)]
-        public string TaxTagNameRegularTaxes
-        {
-            get { return _taxTagNameRegularTaxes; }
-        }
-
-        [Browsable(false)]
-        public string TaxTagNameTaxAtSource
-        {
-            get { return _taxTagNameTaxAtSource; }
-        }
-
-        [Browsable(false)]
-        public string TaxTaxAtSourceFlagAttrName
-        {
-            get { return _taxTaxAtSourceFlagAttrName; }
-        }
-
-        [Browsable(false)]
-        public string TaxTaxAtSourcePercentageAttrName
-        {
-            get { return _taxTaxAtSourcePercentageAttrName; }
-        }
-
-        [Browsable(false)]
-        public int TaxTaxAtSourceAttrCount
-        {
-            get { return _taxTaxAtSourceAttrCount; }
-        }
-
-        [Browsable(false)]
-        public string TaxTagNameCapitalGains
-        {
-            get { return _taxTagNameCapitalGains; }
-        }
-
-        [Browsable(false)]
-        public string TaxCapitalGainsFlagAttrName
-        {
-            get { return _taxCapitalGainsFlagAttrName; }
-        }
-
-        [Browsable(false)]
-        public string TaxCapitalGainsPercentageAttrName
-        {
-            get { return _taxCapitalGainsPercentageAttrName; }
-        }
-
-        [Browsable(false)]
-        public int TaxCapitalGainsAttrCount
-        {
-            get { return _taxCapitalGainsAttrCount; }
-        }
-
-        [Browsable(false)]
-        public string TaxSolidarityFlagAttrName
-        {
-            get { return _taxSolidarityFlagAttrName; }
-        }
-
-        [Browsable(false)]
-        public string TaxTagNameSolidarity
-        {
-            get { return _taxTagNameSolidarity; }
-        }
-
-        [Browsable(false)]
-        public string TaxSolidarityPercentageAttrName
-        {
-            get { return _taxSolidarityPercentageAttrName; }
-        }
-
-        [Browsable(false)]
-        public int TaxSolidarityAttrCount
-        {
-            get { return _taxSolidarityAttrCount; }
-        }
-
-        [Browsable(false)]
-        public int TaxAttrCount
-        {
-            get { return _taxAttrCount; }
-        }
-
-        #endregion Taxes propierties
 
         #region Portfolio value properties
 
@@ -2164,8 +1886,7 @@ namespace SharePortfolioManager
             DateTime lastUpdateInternet, DateTime lastUpdateShareDate, DateTime lastUpdateShareTime,
             decimal price, decimal volume, decimal reduction, decimal costs, decimal deposit,
             string webSite, List<Image> imageListForDayBeforePerformance, RegExList regexList, CultureInfo cultureInfo,
-            int dividendPayoutInterval, string document, bool taxAtSourceFlag, decimal taxAtSourcePercentage,
-            bool capitalGainsTaxFlag, decimal capitalGainsTaxPercentage, bool solidarityTaxFlag, decimal solidarityTaxPercentage)
+            int dividendPayoutInterval, string document)
         {
 #if DEBUG_SHAREOBJECT
             Console.WriteLine("");
@@ -2212,12 +1933,6 @@ namespace SharePortfolioManager
             RegexList = regexList;
             CultureInfo = cultureInfo;
             DividendPayoutInterval = dividendPayoutInterval;
-            TaxTaxAtSourceFlag = taxAtSourceFlag;
-            TaxTaxAtSourcePercentage = taxAtSourcePercentage;
-            TaxCapitalGainsFlag = capitalGainsTaxFlag;
-            TaxCapitalGainsPercentage = capitalGainsTaxPercentage;
-            TaxSolidarityFlag = solidarityTaxFlag;
-            TaxSolidarityPercentage = solidarityTaxPercentage;
 
             AddBuy(true, AddDateTime, volume, price, reduction, costs, document);
         }
@@ -2802,32 +2517,44 @@ namespace SharePortfolioManager
         /// <summary>
         /// This function adds the dividend payouts for the share to the dictionary
         /// </summary>
-        /// <param name="strDateTime">Date and time of the dividend pay</param>
-        /// <param name="taxesValues">Taxes which must be paid</param>
-        /// <param name="decDividendRate">Dividend paid per share</param>
-        /// <param name="decLossBalance">Loss balance of the share</param>
-        /// <param name="decSharePrice">Price of the share at the pay date</param>
-        /// <param name="decShareVolume">Volume of the share at the pay date</param>
+        /// <param name="cultureInfoFC">CultureInfo of the share for the foreign currency</param>
+        /// <param name="csEnableFC">Flag if the payout is in a foreign currency</param>
+        /// <param name="decExchangeRatio">Exchange ratio for the foreign currency</param>
+        /// <param name="strDate">Pay date of the new dividend list entry</param>
+        /// <param name="decRate">Paid dividend of one share</param>
+        /// <param name="decVolume">Share volume at the pay date</param>
+        /// <param name="decTaxAtSource">Tax at source value</param>
+        /// <param name="decCapitalGainsTax">Capital gains tax value</param>
+        /// <param name="decSolidarityTax">Solidarity tax value</param>
+        /// <param name="decSharePrice">Share price at the pay date</param>
         /// <param name="strDoc">Document of the dividend</param>
         /// <returns>Flag if the add was successful</returns>  
-        public bool AddDividend(string strDateTime, Taxes taxesValues, decimal decDividendRate, decimal decLossBalance, decimal decSharePrice, decimal decShareVolume, string strDoc = "")
+        public bool AddDividend(CultureInfo cultureInfoFC, CheckState csEnableFC, decimal decExchangeRatio, string strDate, decimal decRate, decimal decVolume,
+            decimal decTaxAtSource, decimal decCapitalGainsTax, decimal decSolidarityTax, decimal decSharePrice, string strDoc = "")
         {
             try
             {
 #if DEBUG_SHAREOBJECT
                 Console.WriteLine("");
                 Console.WriteLine("AddDividend()");
+                Console.WriteLine("EnableFC: {0}", csEnableFC);
+                if (csEnableFC == CheckState.Checked)
+                Console.WriteLine("cultureInfoFC: {0}", culturInfoFC);
+                Console.WriteLine("decExchangeRatio: {0}", decExchangeRatio);
                 Console.WriteLine("strDateTime: {0}", strDateTime);
                 Console.WriteLine("decDividendRate: {0}", decDividendRate);
-                Console.WriteLine("decLossBalance: {0}", decLossBalance);
-                Console.WriteLine("decSharePrice: {0}", decSharePrice);
+                Console.WriteLine("decTaxAtSource: {0}", decTaxAtSource);
+                Console.WriteLine("decCapitalGainsTax: {0}", decCapitalGainsTax);
+                Console.WriteLine("decSolidarityTax: {0}", decSolidarityTax);
                 Console.WriteLine("decShareVolume: {0}", decShareVolume);
+                Console.WriteLine("decSharePrice: {0}", decSharePrice);
                 Console.WriteLine("strDoc: {0}", strDoc);
 #endif
-                // Remove current dividend of the share from the divdend of all shares
-                _portfolioDividend -= DividendValueTotal;
+                // Remove current dividend of the share from the dividend of all shares
+                PortfolioDividend -= DividendValueTotal;
 
-                if (!AllDividendEntries.AddDividend(strDateTime, taxesValues , decDividendRate, decLossBalance, decSharePrice, decShareVolume, strDoc))
+                if (!AllDividendEntries.AddDividend(cultureInfoFC, csEnableFC, decExchangeRatio, strDate, decRate, decVolume,
+                    decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decSharePrice, strDoc))
                     return false;
 
                 // TODO With or without taxes!!!
@@ -2846,10 +2573,10 @@ namespace SharePortfolioManager
                 // Recalculate the profit or lose of the share
                 CalculateProfitLoseShareValues();
 
-                // Realculate the performance of all shares
+                // Recalculate the performance of all shares
                 CalculatePerformanceOfAllShares();
 
-                // Recalulate the profit or lose of all shares
+                // Recalculate the profit or lose of all shares
                 CalculateProfitLoseOfAllShares();
 
 #if DEBUG_SHAREOBJECT
@@ -2888,16 +2615,19 @@ namespace SharePortfolioManager
                 // Set dividend of the share
                 DividendValueTotal = AllDividendEntries.DividendValueTotalWithTaxes;
 
+                // Set dividend of all shares
+                PortfolioDividend += DividendValueTotal;
+                
                 // Recalculate the total sum of the share
                 CalculateTotalShareValues();
 
-                // Recalculate the apperciation
+                // Recalculate the appreciation
                 CalculateTotalPerformancesOfShare();
 
                 // Recalculate the profit or lose of the share
                 CalculateProfitLoseShareValues();
 
-                // Realculate the performance of all shares
+                // Recalculate the performance of all shares
                 CalculatePerformanceOfAllShares();
 
                 // Recalulate the profit or lose of all shares

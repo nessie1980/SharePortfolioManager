@@ -23,7 +23,6 @@
 using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Classes;
-using SharePortfolioManager.Classes.Taxes;
 using SharePortfolioManager.Properties;
 using System;
 using System.ComponentModel;
@@ -45,8 +44,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         AddFailed,
         EditFailed,
         DeleteFailed,
-        DeleteFailedUnerasable,
-        InputeValuesInvalid,
+        InputValuesInvalid,
         DateExists,
         DateWrongFormat,
         ExchangeRatioEmpty,
@@ -55,17 +53,20 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         RateEmpty,
         RateWrongFormat,
         RateWrongValue,
-        RateFCEmpty,
-        RateFCWrongFormat,
-        RateFCWrongValue,
-        LossBalanceWrongFormat,
-        LossBalanceWrongValue,
-        PriceEmpty,
-        PriceWrongFormat,
-        PriceWrongValue,
         VolumeEmpty,
         VolumeWrongFormat,
         VolumeWrongValue,
+        TaxAtSourceWrongFormat,
+        TaxAtSourceWrongValue,
+        CapitalGainsTaxWrongFormat,
+        CapitalGainsTaxWrongValue,
+        SolidarityTaxWrongFormat,
+        SolidarityTaxWrongValue,
+        TaxWrongFormat,
+        TaxWrongValue,
+        PriceEmpty,
+        PriceWrongFormat,
+        PriceWrongValue,
         DocumentBrowseFailed,
         DocumentDoesNotExists
     }
@@ -79,7 +80,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         event EventHandler AddDividend;
         event EventHandler EditDividend;
         event EventHandler DeleteDividend;
-        event EventHandler EditTax;
         event EventHandler DocumentBrowse;
 
         DividendErrorCode ErrorCode { get; set; }
@@ -96,13 +96,14 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         string Time { get; set; }
         CheckState EnableFC { get; set; }
         string ExchangeRatio { get; set; }
-        CultureInfo CultureInfoFC { get; set; }
+        CultureInfo CultureInfoFC { get; }
         string Rate { get; set; }
-        string RateFC { get; set; }
         string Volume { get; set; }
-        string LossBalance { get; set; }
         string Payout { get; set; }
-        Taxes TaxValuesCurrent { get; set; }
+        string PayoutFC { get; set; }
+        string TaxAtSource { get; set; }
+        string CapitalGainsTax { get; set; }
+        string SolidarityTax { get; set; }
         string Tax { get; set; }
         string PayoutAfterTax { get; set; }
         string Yield { get; set; }
@@ -166,25 +167,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
         #endregion Flags
 
-        #region Tax values
-
-        /// <summary>
-        /// Stores the values for the current tax values
-        /// </summary>
-        Taxes _taxValusCurrent;
-
-        /// <summary>
-        /// Stores the values for the usual tax values
-        /// </summary>
-        Taxes _taxValuesNormal;
-
-        /// <summary>
-        /// Stores the values for the edit tax values
-        /// </summary>
-        Taxes _taxValueDividend;
-
-        #endregion Tax values
-
         #region Input values
 
         /// <summary>
@@ -203,21 +185,14 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         CultureInfo _cultureInfoFC;
 
         /// <summary>
-        /// Stores the volume of the shares
-        /// </summary>
-        decimal _decVolume = 0;
-
-        /// <summary>
         /// Stores the dividend rate
         /// </summary>
         decimal _decRate = 0;
-        decimal _decRateFC = 0;
 
         /// <summary>
-        /// Stores the loss balance
+        /// Stores the volume of the shares
         /// </summary>
-        decimal _decLossBalance = 0;
-        decimal _decLossBalanceFC = 0;
+        decimal _decVolume = 0;
 
         /// <summary>
         /// Stores the dividend payout
@@ -226,10 +201,19 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         decimal _decDividendPayoutFC = 0;
 
         /// <summary>
-        /// Stores the dividend tax
+        /// Stores the tax at source pay value
         /// </summary>
-        decimal _decTax = 0;
-        decimal _decTaxFC = 0;
+        decimal _decTaxAtSource = 0;
+
+        /// <summary>
+        /// Stores the capital gains tax pay value
+        /// </summary>
+        decimal _decCapitalGainsTax = 0;
+
+        /// <summary>
+        /// Stores t he solidarity tax pay value
+        /// </summary>
+        decimal _decSolidarityTax = 0;
 
         /// <summary>
         /// Stores the dividend yield
@@ -240,7 +224,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// Stores the share price at the payout day
         /// </summary>
         decimal _decSharePriceAtThePayoutDay = 0;
-        decimal _decSharePriceAtThePayoutDayFC = 0;
 
         /// <summary>
         /// Stores the document for the dividend payout
@@ -311,12 +294,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             }
         }
 
-        public Taxes TaxesCurrent
-        {
-            get { return _taxValusCurrent; }
-            set { _taxValusCurrent = value; }
-        }
-
         #region Input values
 
         public string Date
@@ -354,8 +331,19 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
         public CultureInfo CultureInfoFC
         {
-            get { return _cultureInfoFC; }
-            set { _cultureInfoFC = value; }
+            get
+            {
+                if (cbxBoxDividendFCUnit.SelectedItem != null)
+                {
+                    CultureInformation ciTemp;
+                    if (Helper.DictionaryListNameCultureInfoCurrencySymbol.TryGetValue(cbxBoxDividendFCUnit.SelectedItem.ToString().Split('/')[0].Trim(), out ciTemp))
+                        return ciTemp.CultureInfo;
+                    else
+                        return null;
+                }
+                else
+                    return null;
+            }
         }
 
         public string ExchangeRatio
@@ -380,17 +368,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             }
         }
 
-        public string RateFC
-        {
-            get { return txtBoxRateFC.Text; }
-            set
-            {
-                if (txtBoxRateFC.Text == value)
-                    return;
-                txtBoxRateFC.Text = value;
-            }
-        }
-
         public string Volume
         {
             get { return txtBoxVolume.Text; }
@@ -402,17 +379,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             }
         }
 
-        public string LossBalance
-        {
-            get { return txtBoxLossBalance.Text; }
-            set
-            {
-                if (txtBoxLossBalance.Text == value)
-                    return;
-                txtBoxLossBalance.Text = value;
-            }
-        }
-
         public string Payout
         {
             get { return txtBoxPayout.Text; }
@@ -421,6 +387,50 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 if (txtBoxPayout.Text == value)
                     return;
                 txtBoxPayout.Text = value;
+            }
+        }
+
+        public string PayoutFC
+        {
+            get { return txtBoxPayoutFC.Text; }
+            set
+            {
+                if (txtBoxPayoutFC.Text == value)
+                    return;
+                txtBoxPayoutFC.Text = value;
+            }
+        }
+
+        public string TaxAtSource
+        {
+            get { return txtBoxTaxAtSource.Text; }
+            set
+            {
+                if (txtBoxTaxAtSource.Text == value)
+                    return;
+                txtBoxTaxAtSource.Text = value;
+            }
+        }
+
+        public string CapitalGainsTax
+        {
+            get { return txtBoxCapitalGainsTax.Text; }
+            set
+            {
+                if (txtBoxCapitalGainsTax.Text == value)
+                    return;
+                txtBoxCapitalGainsTax.Text = value;
+            }
+        }
+
+        public string SolidarityTax
+        {
+            get { return txtBoxSolidarityTax.Text; }
+            set
+            {
+                if (txtBoxSolidarityTax.Text == value)
+                    return;
+                txtBoxSolidarityTax.Text = value;
             }
         }
 
@@ -511,81 +521,81 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                         txtBoxVolume.Focus();
                         break;
                     }
-                //    case BuyErrorCode.EditSuccessful:
-                //        {
-                //            // Enable button(s)
-                //            btnAddSave.Text =
-                //                _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add",
-                //                    _strLanguage);
-                //            btnAddSave.Image = Resources.black_add;
-                //            // Disable button(s)
-                //            btnReset.Enabled = false;
-                //            btnDelete.Enabled = false;
+                case DividendErrorCode.EditSuccessful:
+                    {
+                        // Enable button(s)
+                        btnAddSave.Text =
+                            _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Add",
+                                LanguageName);
+                        btnAddSave.Image = Resources.black_add;
+                        // Disable button(s)
+                        btnReset.Enabled = false;
+                        btnDelete.Enabled = false;
 
-                //            // Rename group box
-                //            grpBoxAdd.Text =
-                //                _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Add_Caption",
-                //                    _strLanguage);
+                        // Rename group box
+                        grpBoxAddDividend.Text =
+                            _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption",
+                                LanguageName);
 
-                //            strMessage =
-                //                _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormBuy/StateMessages/EditSuccess", _strLanguage);
-                //            // Set flag to save the share object.
-                //            _bSave = true;
-                //            // Reset values
-                //            ResetValues();
-                //            // Refresh the buy list
-                //            ShowBuys();
-                //            break;
-                //        }
-                //    case BuyErrorCode.EditFailed:
-                //        {
-                //            strMessage =
-                //                _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/EditFailed", _strLanguage);
-                //            clrMessage = Color.Red;
-                //            stateLevel = FrmMain.EStateLevels.Error;
-                //            txtBoxVolume.Focus();
-                //            break;
-                //        }
-                //    case BuyErrorCode.DeleteSuccessful:
-                //        {
-                //            strMessage =
-                //                _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormBuy/StateMessages/DeleteSuccess", _strLanguage);
-                //            // Set flag to save the share object.
-                //            _bSave = true;
-                //            // Reset values
-                //            ResetValues();
+                        strMessage =
+                            _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/StateMessages/EditSuccess", LanguageName);
+                        // Set flag to save the share object.
+                        _bSave = true;
+                        // Reset values
+                        ResetValues();
+                        // Refresh the buy list
+                        ShowDividends();
+                        break;
+                    }
+                case DividendErrorCode.EditFailed:
+                    {
+                        strMessage =
+                            _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/EditFailed", LanguageName);
+                        clrMessage = Color.Red;
+                        stateLevel = FrmMain.EStateLevels.Error;
+                        txtBoxVolume.Focus();
+                        break;
+                    }
+                case DividendErrorCode.DeleteSuccessful:
+                    {
+                        strMessage =
+                            _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/StateMessages/DeleteSuccess", LanguageName);
+                        // Set flag to save the share object.
+                        _bSave = true;
+                        // Reset values
+                        ResetValues();
 
-                //            // Enable button(s)
-                //            btnAddSave.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", _strLanguage);
-                //            btnAddSave.Image = Resources.black_add;
+                        // Enable button(s)
+                        btnAddSave.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Add", LanguageName);
+                        btnAddSave.Image = Resources.black_add;
 
-                //            // Disable button(s)
-                //            btnReset.Enabled = false;
-                //            btnDelete.Enabled = false;
+                        // Disable button(s)
+                        btnReset.Enabled = false;
+                        btnDelete.Enabled = false;
 
-                //            // Rename group box
-                //            grpBoxAdd.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Add_Caption", _strLanguage);
+                        // Rename group box
+                        grpBoxAddDividend.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", LanguageName);
 
-                //            // Refresh the buy list
-                //            ShowBuys();
-                //            break;
-                //        }
-                //    case BuyErrorCode.DeleteFailed:
-                //        {
-                //            strMessage =
-                //                _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DeleteFailed", _strLanguage);
-                //            clrMessage = Color.Red;
-                //            stateLevel = FrmMain.EStateLevels.Error;
-                //            break;
-                //        }
-                //    case BuyErrorCode.DeleteFailedUnerasable:
-                //        {
-                //            strMessage =
-                //                _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DeleteFailedUnerasable", _strLanguage);
-                //            clrMessage = Color.Red;
-                //            stateLevel = FrmMain.EStateLevels.Error;
-                //            break;
-                //        }
+                        // Refresh the buy list
+                        ShowDividends();
+                        break;
+                    }
+                case DividendErrorCode.DeleteFailed:
+                    {
+                        strMessage =
+                            _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DeleteFailed", LanguageName);
+                        clrMessage = Color.Red;
+                        stateLevel = FrmMain.EStateLevels.Error;
+                        break;
+                    }
+                case DividendErrorCode.InputValuesInvalid:
+                    {
+                        strMessage =
+                            _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/CheckInputFailure", LanguageName);
+                        clrMessage = Color.Red;
+                        stateLevel = FrmMain.EStateLevels.Error;
+                        break;
+                    }
                 case DividendErrorCode.DateExists:
                     {
                         strMessage =
@@ -607,7 +617,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 case DividendErrorCode.ExchangeRatioEmpty:
                     {
                         strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DividendForeignCurrencyFactorEmpty", LanguageName);
+                            _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DividendExchangeRatioEmpty", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
                         txtBoxExchangeRatio.Focus();
@@ -616,7 +626,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 case DividendErrorCode.ExchangeRatioWrongFormat:
                     {
                         strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DividendForeignCurrencyFactorWrongFormat", LanguageName);
+                            _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DividendExchangeRatioWrongFormat", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
                         txtBoxExchangeRatio.Focus();
@@ -625,40 +635,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 case DividendErrorCode.ExchangeRatioWrongValue:
                     {
                         strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DividendCurrencyFactorWrongValue", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxExchangeRatio.Focus();
-                        break;
-                    }
-                case DividendErrorCode.RateFCEmpty:
-                    {
-                        txtBoxRateFC.Focus();
-
-                        strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DividendFCEmpty", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxExchangeRatio.Focus();
-                        break;
-                    }
-                case DividendErrorCode.RateFCWrongFormat:
-                    {
-                        txtBoxRateFC.Focus();
-
-                        strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DividendFCWrongFormat", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxExchangeRatio.Focus();
-                        break;
-                    }
-                case DividendErrorCode.RateFCWrongValue:
-                    {
-                        txtBoxRateFC.Focus();
-
-                        strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DividendFCWrongValue", LanguageName);
+                            _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DividendExchangeRatioWrongValue", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
                         txtBoxExchangeRatio.Focus();
@@ -666,90 +643,56 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     }
                 case DividendErrorCode.RateEmpty:
                     {
-                        txtBoxRate.Focus();
-
                         strMessage =
                             _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DividendEmpty", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxExchangeRatio.Focus();
+                        txtBoxRate.Focus();
                         break;
                     }
                 case DividendErrorCode.RateWrongFormat:
                     {
-                        txtBoxRate.Focus();
-
                         strMessage =
                             _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DividendWrongFormat", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxExchangeRatio.Focus();
+                        txtBoxRate.Focus();
                         break;
                     }
                 case DividendErrorCode.RateWrongValue:
                     {
-                        txtBoxRate.Focus();
-
                         strMessage =
                             _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DividendWrongValue", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxExchangeRatio.Focus();
-                        break;
-                    }
-                case DividendErrorCode.LossBalanceWrongFormat:
-                    {
-                        txtBoxLossBalance.Focus();
-
-                        strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/LossBalanceWrongFormat", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxExchangeRatio.Focus();
-                        break;
-                    }
-                case DividendErrorCode.LossBalanceWrongValue:
-                    {
-                        txtBoxLossBalance.Focus();
-
-                        strMessage =
-                            _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/LossBalanceWrongValue", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxExchangeRatio.Focus();
+                        txtBoxRate.Focus();
                         break;
                     }
                 case DividendErrorCode.PriceEmpty:
                     {
-                        txtBoxPrice.Focus();
-
                         strMessage =
                             _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/PriceEmpty", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxExchangeRatio.Focus();
+                        txtBoxPrice.Focus();
                         break;
                     }
                 case DividendErrorCode.PriceWrongFormat:
                     {
-                        txtBoxPrice.Focus();
-
                         strMessage =
                             _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/PriceWrongFormat", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxExchangeRatio.Focus();
+                        txtBoxPrice.Focus();
                         break;
                     }
                 case DividendErrorCode.PriceWrongValue:
                     {
-                        txtBoxPrice.Focus();
-
                         strMessage =
                             _xmlLanguage.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/PriceWrongValue", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxExchangeRatio.Focus();
+                        txtBoxPrice.Focus();
                         break;
                     }
                 case DividendErrorCode.VolumeEmpty:
@@ -863,28 +806,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
         #endregion Flags
 
-        #region Tax values
-
-        public Taxes TaxValuesCurrent
-        {
-            get { return _taxValusCurrent; }
-            set { _taxValusCurrent = value; }
-        }
-
-        public Taxes TaxValuesNormal
-        {
-            get { return _taxValuesNormal; }
-            internal set { _taxValuesNormal = value; }
-        }
-
-        public Taxes TaxValuesEditDividend
-        {
-            get { return _taxValueDividend; }
-            set { _taxValueDividend = value; }
-        }
-
-        #endregion Tax values
-
         #endregion Properties
 
         #region Methods
@@ -920,45 +841,25 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             {
                 _bLoadShareObjectDividendTaxValues = false;
 
-                // Set tax values
-                if (TaxValuesNormal == null)
-                    TaxValuesNormal = new Taxes();
-
-                if (TaxValuesCurrent == null)
-                    TaxValuesCurrent = new Taxes();
-
-                TaxValuesNormal.TaxAtSourceFlag = ShareObject.TaxTaxAtSourceFlag;
-                TaxValuesNormal.TaxAtSourcePercentage = ShareObject.TaxTaxAtSourcePercentage;
-                TaxValuesNormal.CapitalGainsTaxFlag = ShareObject.TaxCapitalGainsFlag;
-                TaxValuesNormal.CapitalGainsTaxPercentage = ShareObject.TaxCapitalGainsPercentage;
-                TaxValuesNormal.SolidarityTaxFlag = ShareObject.TaxSolidarityFlag;
-                TaxValuesNormal.SolidarityTaxPercentage = ShareObject.TaxSolidarityPercentage;
-                TaxValuesNormal.CiShareCurrency = ShareObject.CultureInfo;
-
-                TaxValuesCurrent.DeepCopy(TaxValuesNormal);
-
                 Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Caption", LanguageName);
                 grpBoxAddDividend.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", LanguageName);
                 grpBoxDividends.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxDividend/Caption",
                         LanguageName);
-                lblAddDate.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Labels/Date",
+                lblDate.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Labels/Date",
                     LanguageName);
-                lblAddEnableForeignCurrency.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Labels/EnableForeignCurrency",
+                lblEnableForeignCurrency.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Labels/EnableForeignCurrency",
                     LanguageName);
-                lblAddDividendExchangeRatio.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Labels/ExchangeRatio",
+                lblDividendExchangeRatio.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Labels/ExchangeRatio",
                     LanguageName);
-                lblAddDividendRate.Text =
+                lblDividendRate.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Labels/DividendRate",
                         LanguageName);
-                lblAddVolume.Text =
+                lblVolume.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Labels/Volume",
                         LanguageName);
-                lblAddLossBalance.Text =
-                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Labels/LossBalance",
-                        LanguageName);
-                lblAddPayout.Text =
+                lblPayout.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Labels/Payout",
                         LanguageName);
                 lblAddTax.Text =
@@ -989,37 +890,34 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                         LanguageName);
 
                 // Load button images
-                btnAddSave.Image = Resources.black_save;
+                btnAddSave.Image = Resources.black_add;
                 btnDelete.Image = Resources.black_delete;
                 btnReset.Image = Resources.black_cancel;
                 btnCancel.Image = Resources.black_cancel;
 
                 // Set dividend units to the edit boxes
-                lblDividendRateUnit.Text = _shareObject.CurrencyUnit;
+                lblDividendRateUnit.Text = ShareObject.CurrencyUnit;
                 lblVolumeUnit.Text = ShareObject.PieceUnit;
-                lblLossBalanceUnit.Text = _shareObject.CurrencyUnit;
-                lblPayoutUnit.Text = _shareObject.CurrencyUnit;
-                lblTaxUnit.Text = _shareObject.CurrencyUnit;
-                lblPayoutAfterTaxUnit.Text = _shareObject.CurrencyUnit;
+                lblPayoutUnit.Text = ShareObject.CurrencyUnit;
+                lblTaxAtSourceUnit.Text = ShareObject.CurrencyUnit;
+                lblCapitalGainsTaxUnit.Text = ShareObject.CurrencyUnit;
+                lblSolidarityTaxUnit.Text = ShareObject.CurrencyUnit;
+                lblTaxUnit.Text = ShareObject.CurrencyUnit;
+                lblPayoutAfterTaxUnit.Text = ShareObject.CurrencyUnit;
                 lblYieldUnit.Text = ShareObject.PercentageUnit;
-                lblPriceUnit.Text = _shareObject.CurrencyUnit;
+                lblPriceUnit.Text = ShareObject.CurrencyUnit;
 
                 // Set currency to ComboBox
-                foreach (var temp in Helper.ListNameUnitCurrency)
+                foreach (var temp in Helper.ListNameCultureInfoCurrencySymbol)
                 {
-                    cbxBoxDividendFCUnit.Items.Add(string.Format("{0} - {1}", temp.Key, temp.Value));
+                    cbxBoxDividendFCUnit.Items.Add(string.Format("{0} / {1}", temp.Key, temp.Value.CurrencySymbol));
                 }
 
                 CheckForeignCurrencyCalulationShouldBeDone();
 
                 // Chose USD item
-                int iIndex = cbxBoxDividendFCUnit.FindString("USD");
+                int iIndex = cbxBoxDividendFCUnit.FindString("en-US");
                 cbxBoxDividendFCUnit.SelectedIndex = iIndex;
-
-                // Set currency units
-                TaxValuesCurrent.CurrencyUnit = lblPayoutUnit.Text;
-                TaxValuesCurrent.FCUnit = cbxBoxDividendFCUnit.SelectedItem.ToString().Split('-')[1].Trim();
-                TaxValuesCurrent.CiShareFC = Helper.GetCultureByISOCurrencySymbol(cbxBoxDividendFCUnit.SelectedItem.ToString().Split('-')[0].Trim());
 
                 ShowDividends();
             }
@@ -1077,25 +975,17 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             chkBoxEnableFC.CheckState = CheckState.Unchecked;
             txtBoxExchangeRatio.Text = @"";
             txtBoxVolume.Text = @"";
-            txtBoxLossBalance.Text = @"";
+            txtBoxRate.Text = @"";
             txtBoxPayout.Text = @"";
+            txtBoxPayoutFC.Text = @"";
+            txtBoxTaxAtSource.Text = @"";
+            txtBoxCapitalGainsTax.Text = @"";
+            txtBoxSolidarityTax.Text = @"";
             txtBoxTax.Text = @"";
             txtBoxPayoutAfterTax.Text = @"";
-            txtBoxRate.Text = @"";
-            txtBoxRateFC.Text = @"";
+            txtBoxYield.Text = @"";
             txtBoxPrice.Text = @"";
             txtBoxDocument.Text = @"";
-
-            // Set normal tax values
-            TaxValuesCurrent.DeepCopy(TaxValuesNormal);
-
-            // Set currency units
-            TaxValuesCurrent.CurrencyUnit = lblPayoutUnit.Text;
-            if (cbxBoxDividendFCUnit.SelectedItem != null)
-            {
-                TaxValuesCurrent.FCUnit = cbxBoxDividendFCUnit.SelectedItem.ToString().Split('-')[1].Trim();
-                TaxValuesCurrent.CiShareFC = Helper.GetCultureByISOCurrencySymbol(cbxBoxDividendFCUnit.SelectedItem.ToString().Split('-')[0].Trim());
-            }
 
             // Reset status message
             toolStripStatusLabelMessage.Text = @"";
@@ -1114,9 +1004,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         {
             try
             {
-                // Reset tax values to normal tax values
-                TaxValuesCurrent.DeepCopy(TaxValuesNormal);
-
                 // Reset tab control
                 foreach (TabPage tabPage in tabCtrlDividends.TabPages)
                 {
@@ -1305,12 +1192,12 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                             foreach (var temp in ShareObject.AllDividendEntries.GetAllDividendsOfTheShare())
                             {
                                 // Check if the dividend date and time is the same as the date and time of the clicked buy item
-                                if (temp.DividendDate == strDateTime)
+                                if (temp.DateTime == strDateTime)
                                 {
                                     // Check if the file still exists
-                                    if (File.Exists(temp.DividendDocument))
+                                    if (File.Exists(temp.Document))
                                         // Open the file
-                                        Process.Start(temp.DividendDocument);
+                                        Process.Start(temp.Document);
                                     else
                                     {
                                         string strCaption =
@@ -1332,9 +1219,9 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                                         if (messageBox.ShowDialog() == DialogResult.OK)
                                         {
                                             // Remove dividend object and add it with no document
-                                            if (ShareObject.RemoveDividend(temp.DividendDate) &&
-                                                ShareObject.AddDividend(strDateTime, temp.DividendTaxes, temp.DividendRate, temp.LossBalance,
-                                                    temp.SharePrice, temp.ShareVolume))
+                                            if (ShareObject.RemoveDividend(temp.DateTime) &&
+                                                ShareObject.AddDividend(temp.CultureInfoFC, temp.EnableFC, temp.ExchangeRatioDec, strDateTime, temp.RateDec, temp.VolumeDec,
+                                                   temp.TaxAtSourceDec, temp.CapitalGainsTaxDec, temp.SolidarityTaxDec, temp.PriceDec))
                                             {
                                                 // Set flag to save the share object.
                                                 SaveFlag = true;
@@ -1408,11 +1295,14 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     // Get the currently selected item in the ListBox
                     DataGridViewSelectedRowCollection curItem = ((DataGridView) sender).SelectedRows;
 
+                    // Set selected date
+                    SelectedDate = curItem[0].Cells[0].Value.ToString();
+
                     // Get DividendObject of the selected DataGridView row
-                    DividendObject selectedDividendObject = ShareObject.AllDividendEntries.GetDividendObjectByDateTime(curItem[0].Cells[0].Value.ToString());
+                    DividendObject selectedDividendObject = ShareObject.AllDividendEntries.GetDividendObjectByDateTime(SelectedDate);
                     if (selectedDividendObject != null)
                     {
-                        if (selectedDividendObject.DividendTaxes.FCFlag)
+                        if (selectedDividendObject.EnableFC == CheckState.Checked)
                         {
                             LoadGridSelectionFlag = true;
 
@@ -1420,39 +1310,35 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                             chkBoxEnableFC.CheckState = CheckState.Checked;
 
                             // Set foreign currency values
-                            txtBoxExchangeRatio.Text = selectedDividendObject.DividendTaxes.ExchangeRatio.ToString();
-                            txtBoxRateFC.Text = selectedDividendObject.DividendRateAsString;
+                            txtBoxExchangeRatio.Text = selectedDividendObject.ExchangeRatio;
 
-                            // Calculate the values in the normal currency from the given foreign currency values
-                            //txtBoxAddDividendRate.Text = Helper.FormatDecimal((selectedDividendObject.DividendRate / selectedDividendObject.DividendTaxes.ExchangeRatio),
-                            //    Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", _shareObject.ShareCulture);
                             // TODO find correct currency
-                            if (selectedDividendObject.DividendTaxes.FCUnit != null)
-                                cbxBoxDividendFCUnit.SelectedIndex = cbxBoxDividendFCUnit.FindString(new RegionInfo(selectedDividendObject.DividendTaxes.CiShareFC.LCID).ISOCurrencySymbol); // ?NAME
+                            //if (selectedDividendObject.DividendTaxes.FCUnit != null)
+                            //    cbxBoxDividendFCUnit.SelectedIndex = cbxBoxDividendFCUnit.FindString(new RegionInfo(selectedDividendObject.DividendTaxes.CiShareFC.LCID).ISOCurrencySymbol); // ?NAME
+
+                            cbxBoxDividendFCUnit.SelectedIndex = cbxBoxDividendFCUnit.FindString(selectedDividendObject.CultureInfoFC.Name);
 
                             LoadGridSelectionFlag = false;
                         }
                         else
                         {
-                            txtBoxRate.Text = selectedDividendObject.DividendRateAsString;
+                            txtBoxRate.Text = selectedDividendObject.Rate;
 
                             // Chose USD item
-                            int iIndex = cbxBoxDividendFCUnit.FindString("USD");
+                            int iIndex = cbxBoxDividendFCUnit.FindString("en-US");
                             cbxBoxDividendFCUnit.SelectedIndex = iIndex;
                         }
 
-                        // Set tax values to the edit dividend values only if the form is already opened
-                        if (_bLoadShareObjectDividendTaxValues)
-                            TaxValuesCurrent.DeepCopy(selectedDividendObject.DividendTaxes);
-
-                        datePickerDate.Value = Convert.ToDateTime(selectedDividendObject.DividendDate);
-                        datePickerTime.Value = Convert.ToDateTime(selectedDividendObject.DividendDate);
-                        txtBoxVolume.Text = selectedDividendObject.ShareVolumeAsString;
-                        txtBoxLossBalance.Text = selectedDividendObject.LossBalanceAsString;
-                        //txtBoxAddPayout.Text = selectedDividendObject.DividendPayOutAsString;
-                        txtBoxYield.Text = selectedDividendObject.DividendYieldAsString;
-                        txtBoxPrice.Text = selectedDividendObject.SharePriceAsString;
-                        txtBoxDocument.Text = selectedDividendObject.DividendDocument;
+                        datePickerDate.Value = Convert.ToDateTime(selectedDividendObject.DateTime);
+                        datePickerTime.Value = Convert.ToDateTime(selectedDividendObject.DateTime);
+                        txtBoxRate.Text = selectedDividendObject.Rate;
+                        txtBoxVolume.Text = selectedDividendObject.Volume;
+                        txtBoxTaxAtSource.Text = selectedDividendObject.TaxAtSource;
+                        txtBoxCapitalGainsTax.Text = selectedDividendObject.CapitalGainsTax;
+                        txtBoxSolidarityTax.Text = selectedDividendObject.SolidarityTax;
+                        txtBoxYield.Text = selectedDividendObject.Yield;
+                        txtBoxPrice.Text = selectedDividendObject.Price;
+                        txtBoxDocument.Text = selectedDividendObject.Document;
                     }
                     else
                     {
@@ -1467,7 +1353,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     }
 
                     // Enable button(s)
-                    btnReset.Enabled = true;
+                    //btnReset.Enabled = true;
                     btnDelete.Enabled = true;
                     // Rename button
                     btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Save", LanguageName);
@@ -1485,7 +1371,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Add", LanguageName);
                     btnAddSave.Image = Resources.black_add;
                     // Disable button(s)
-                    btnReset.Enabled = false;
+                    //btnReset.Enabled = false;
                     btnDelete.Enabled = false;
 
                     // Rename group box
@@ -1751,23 +1637,8 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     // Check if a row is selected
                     if (SelectedDataGridView != null && SelectedDataGridView.SelectedRows.Count == 1)
                     {
-                        if (
-                            !ShareObject.RemoveDividend(SelectedDataGridView.SelectedRows[0].Cells[0].Value.ToString()))
-                        {
-                            // Add status message
-                            Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                                Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DeleteFailed", LanguageName),
-                                Language, LanguageName,
-                                Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-                        }
-                        else
-                        {
-                            // Add status message
-                            Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                                Language.GetLanguageTextByXPath(@"/AddEditFormDividend/StateMessages/DeleteSuccess", LanguageName),
-                                Language, LanguageName,
-                                Color.Black, Logger, (int)FrmMain.EStateLevels.Info, (int)FrmMain.EComponentLevels.Application);
-                        }
+                        if (DeleteDividend != null)
+                            DeleteDividend(this, null);
                     }
 
                     // Reset values
@@ -1778,8 +1649,8 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     btnAddSave.Image = Resources.black_add;
 
                     // Disable button(s)
-                    btnReset.Enabled = false;
-                    btnDelete.Enabled = false;
+                    //btnReset.Enabled = false;
+                    //btnDelete.Enabled = false;
 
                     // Rename group box
                     grpBoxAddDividend.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", LanguageName);
@@ -1820,10 +1691,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Add", LanguageName);
                 btnAddSave.Image = Resources.black_add;
 
-                // Disable button(s)
-                btnReset.Enabled = false;
-                btnDelete.Enabled = false;
-
                 // Rename group box
                 grpBoxAddDividend.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", LanguageName);
@@ -1842,9 +1709,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     tabCtrlDividends.SelectTab(
                         Language.GetLanguageTextByXPath(
                             @"/AddEditFormDividend/GrpBoxDividend/TabCtrl/TabPgOverview/Overview", LanguageName));
-
-                // Reset tax values to normal tax values
-                TaxValuesCurrent.DeepCopy(TaxValuesNormal);
             }
             catch (Exception ex)
             {
@@ -1915,6 +1779,17 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         }
 
         /// <summary>
+        /// This function updates the view with the formatted value
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void txtBoxExchangeRatio_Leave(object sender, EventArgs e)
+        {
+            if (FormatInputValues != null)
+                FormatInputValues(this, new EventArgs());
+        }
+
+        /// <summary>
         /// This function update the model if the rate has been changed
         /// </summary>
         /// <param name="sender">Text box</param>
@@ -1923,6 +1798,17 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs("Rate"));
+        }
+
+        /// <summary>
+        /// This function updates the view with the formatted value
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void txtBoxRate_Leave(object sender, EventArgs e)
+        {
+            if (FormatInputValues != null)
+                FormatInputValues(this, new EventArgs());
         }
 
         /// <summary>
@@ -1948,14 +1834,91 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         }
 
         /// <summary>
-        /// This function updates the model if the loss balance has been changed
+        /// This function updates the view with the formatted value
         /// </summary>
-        /// <param name="sender">TextBox</param>
+        /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void OnTxtBoxAddLossBalance_TextChanged(object sender, EventArgs e)
+        private void txtBoxVolume_Leave(object sender, EventArgs e)
+        {
+            if (FormatInputValues != null)
+                FormatInputValues(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function updates the model if tax at source value has been changed
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void txtBoxTaxAtSource_TextChanged(object sender, EventArgs e)
         {
             if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("LossBalance"));
+                PropertyChanged(this, new PropertyChangedEventArgs("TaxAtSource"));
+        }
+
+        /// <summary>
+        /// This function updates the view with the formatted value
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void txtBoxTaxAtSource_Leave(object sender, EventArgs e)
+        {
+            if (FormatInputValues != null)
+                FormatInputValues(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function updates the model if capital gains tax value has been changed
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void txtBoxCapitalGainsTax_TextChanged(object sender, EventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs("CapitalGainsTax"));
+        }
+
+        /// <summary>
+        /// This function updates the view with the formatted value
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void txtBoxCapitalGainsTax_Leave(object sender, EventArgs e)
+        {
+            if (FormatInputValues != null)
+                FormatInputValues(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function updates the model if solidarity tax value has been changed
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void txtBoxSolidarityTax_TextChanged(object sender, EventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs("SolidarityTax"));
+        }
+
+        /// <summary>
+        /// This function updates the view with the formatted value
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void txtBoxSolidarityTax_Leave(object sender, EventArgs e)
+        {
+            if (FormatInputValues != null)
+                FormatInputValues(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function updates the view with the formatted value
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void txtBoxPrice_Leave(object sender, EventArgs e)
+        {
+            if (FormatInputValues != null)
+                FormatInputValues(this, new EventArgs());
         }
 
         /// <summary>
@@ -1967,17 +1930,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs("Price"));
-        }
-
-        /// <summary>
-        /// This function opens the dividend taxes edit dialog
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnTxtBoxAddTax_decimalClick(object sender, EventArgs e)
-        {
-            if (EditTax != null)
-                EditTax(this, new EventArgs());
         }
 
         #endregion TextBoxes
@@ -1999,14 +1951,9 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 // Enable controls
                 txtBoxExchangeRatio.Enabled = true;
                 txtBoxExchangeRatio.ReadOnly = false;
+                txtBoxTaxAtSource.Enabled = true;
+                txtBoxTaxAtSource.ReadOnly = false;
                 cbxBoxDividendFCUnit.Enabled = true;
-
-                txtBoxRateFC.Enabled = true;
-                txtBoxRateFC.ReadOnly = false;
-
-                // Disable controls
-                txtBoxRate.Enabled = false;
-                txtBoxRate.ReadOnly = true;
 
                 // Set values
                 if (!LoadGridSelectionFlag)
@@ -2014,16 +1961,21 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     txtBoxExchangeRatio.Text = @"";
                     txtBoxVolume.Text = @"";
                     txtBoxRate.Text = @"";
-                    txtBoxRateFC.Text = @"";
-                    txtBoxLossBalance.Text = @"";
                     txtBoxPayout.Text = @"";
+                    txtBoxPayoutFC.Text = @"";
+                    txtBoxTaxAtSource.Text = @"";
+                    txtBoxCapitalGainsTax.Text = @"";
+                    txtBoxSolidarityTax.Text = @"";
+                    txtBoxTax.Text = @"";
+                    txtBoxPayoutAfterTax.Text = @"";
                     txtBoxPrice.Text = @"";
                     txtBoxDocument.Text = @"";
-                }
-                txtBoxExchangeRatio.Focus();
 
-                // Set edit values variable
-                TaxValuesCurrent.FCFlag = true;
+                    // Reset status message
+                    toolStripStatusLabelMessage.Text = @"";
+                }
+
+                txtBoxExchangeRatio.Focus();
             }
             else
             {
@@ -2034,32 +1986,27 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 txtBoxExchangeRatio.ReadOnly = true;
                 cbxBoxDividendFCUnit.Enabled = false;
 
-                txtBoxRateFC.Enabled = false;
-                txtBoxRateFC.ReadOnly = true;
-
-                // Enable controls
-                txtBoxRate.Enabled = true;
-                txtBoxRate.ReadOnly = false;
-                txtBoxPrice.Enabled = true;
-                txtBoxPrice.ReadOnly = false;
-
                 // Set values
                 if (!LoadGridSelectionFlag)
                 {
                     txtBoxExchangeRatio.Text = @"";
                     txtBoxVolume.Text = @"";
                     txtBoxRate.Text = @"";
-                    txtBoxRateFC.Text = @"";
-                    txtBoxLossBalance.Text = @"";
                     txtBoxPayout.Text = @"";
+                    txtBoxPayoutFC.Text = @"";
+                    txtBoxTaxAtSource.Text = @"";
+                    txtBoxCapitalGainsTax.Text = @"";
+                    txtBoxSolidarityTax.Text = @"";
+                    txtBoxTax.Text = @"";
+                    txtBoxPayoutAfterTax.Text = @"";
                     txtBoxPrice.Text = @"";
                     txtBoxDocument.Text = @"";
+
+                    // Reset status message
+                    toolStripStatusLabelMessage.Text = @"";
                 }
 
-                txtBoxExchangeRatio.Focus();
-
-                // Set edit values variable
-                TaxValuesCurrent.FCFlag = false;
+                txtBoxRate.Focus();
             }
         }
 
@@ -2071,19 +2018,8 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// <param name="e">EventArgs</param>
         private void CbxBoxAddDividendForeignCurrency_SelectedIndexChanged(object sender, EventArgs e)
         {
-            lblRateFCUnit.Text = ((ComboBox)sender).SelectedItem.ToString().Split('-')[1].Trim();
+            lblPayoutFCUnit.Text = ((ComboBox)sender).SelectedItem.ToString().Split('/')[1].Trim();
 
-            // Set currency units
-            TaxValuesCurrent.CurrencyUnit = lblPayoutUnit.Text;
-            if (((ComboBox)sender).SelectedItem != null)
-            {
-                TaxValuesCurrent.FCUnit = ((ComboBox)sender).SelectedItem.ToString().Split('-')[1].Trim();
-                TaxValuesCurrent.CiShareFC = Helper.GetCultureByISOCurrencySymbol(((ComboBox)sender).SelectedItem.ToString().Split('-')[0].Trim());
-                CultureInfoFC = TaxValuesCurrent.CiShareFC;
-            }
-
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("TaxValuesCurrent"));
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs("CultureInfoFC"));
         }

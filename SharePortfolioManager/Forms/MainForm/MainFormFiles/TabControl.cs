@@ -632,9 +632,7 @@ namespace SharePortfolioManager
                             ((DataGridView)sender).Columns[i].HeaderText =
                                 _xmlLanguage.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Yield",
                                     _languageName) +
-                                string.Format(@" ({0})",
-                                    _xmlLanguage.GetLanguageTextByXPath(
-                                        @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_YieldUnit", _languageName));
+                                string.Format(@" ({0})", ShareObject.PercentageUnit);
                             break;
                         case 4:
                             ((DataGridView)sender).Columns[i].HeaderText =

@@ -30,6 +30,7 @@ using SharePortfolioManager.Forms.DividendForm.Model;
 using SharePortfolioManager.Forms.DividendForm.Presenter;
 using SharePortfolioManager.Forms.DividendForm.View;
 using SharePortfolioManager.Forms.SalesForm;
+using SharePortfolioManager.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -176,17 +177,6 @@ namespace SharePortfolioManager
 
                     #endregion GroupBox EarningsExpenditure
 
-                    #region GroupBox Taxes
-
-                    chkTaxAtSource.Checked = _shareObject.TaxTaxAtSourceFlag;
-                    txtBoxTaxAtSource.Text = _shareObject.TaxTaxAtSourcePercentage.ToString();
-                    chkCapitalGainsTax.Checked = _shareObject.TaxCapitalGainsFlag;
-                    txtBoxCapitalGainsTax.Text = _shareObject.TaxCapitalGainsPercentage.ToString();
-                    chkSolidarityTax.Checked = _shareObject.TaxSolidarityFlag;
-                    txtBoxSolidarityTax.Text = _shareObject.TaxSolidarityPercentage.ToString();
-
-                    #endregion GroupBox Taxes
-
                     Thread.CurrentThread.CurrentCulture = CultureInfo.CurrentUICulture;
                 }
 
@@ -250,22 +240,20 @@ namespace SharePortfolioManager
                 btnShareCostsEdit.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Buttons/Costs",
                     _strLanguage);
 
+                // Load button images
+                btnShareBuysEdit.Image = Resources.black_edit;
+                btnShareSalesEdit.Image = Resources.black_edit;
+                btnShareCostsEdit.Image = Resources.black_edit;
+                btnShareDividendsEdit.Image = Resources.black_edit;
+
                 #endregion GroupBox EarningsExpenditure
-
-                #region GroupBox Taxes
-
-                grpBoxTaxes.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxTaxes/Caption", _strLanguage);
-                lblTaxAtSource.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxTaxes/Labels/TaxAtSource", _strLanguage);
-                lblTaxAtSourceUnit.Text = ShareObject.PercentageUnit;
-                lblCapitalGainsTax.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxTaxes/Labels/CapitalGainsTax", _strLanguage);
-                lblCapitalGainsTaxUnit.Text = ShareObject.PercentageUnit;
-                lblSolidarityTax.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxTaxes/Labels/SolidarityTax", _strLanguage);
-                lblSolidarityTaxUnit.Text = ShareObject.PercentageUnit;
-
-                #endregion GroupBox Taxes
 
                 btnSave.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Buttons/Save", _strLanguage);
                 btnCancel.Text = _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Buttons/Cancel", _strLanguage);
+
+                // Load button images
+                btnSave.Image = Resources.black_save;
+                btnCancel.Image = Resources.black_cancel;
 
                 #endregion Language configuration
 
@@ -327,12 +315,6 @@ namespace SharePortfolioManager
                 var errorFlag = false;
                 decimal volume = 0;
                 decimal deposit = 0;
-                bool taxAtSourceFlag = chkTaxAtSource.Checked;
-                decimal taxAtSourcePercentage = 0;
-                bool capitalGainsTaxFlag = chkCapitalGainsTax.Checked;
-                decimal capitalGainsTaxPercentage = 0;
-                bool solidarityTaxFlag = chkSolidarityTax.Checked;
-                decimal solidarityTaxPercentage = 0;
 
                 statusStrip1.ForeColor = Color.Red;
 
@@ -437,66 +419,6 @@ namespace SharePortfolioManager
                         Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                     errorFlag = true;
                 }
-                else if (chkTaxAtSource.CheckState == CheckState.Checked && txtBoxTaxAtSource.Text == @"" && errorFlag == false)
-                {
-                    txtBoxTaxAtSource.Focus();
-                    // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Errors/TaxAtSourceEmpty", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-                    errorFlag = true;
-                }
-                else if (chkTaxAtSource.CheckState == CheckState.Checked && !Decimal.TryParse(txtBoxTaxAtSource.Text, out taxAtSourcePercentage) && errorFlag == false)
-                {
-                    txtBoxTaxAtSource.Focus();
-                    // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Errors/TaxAtSourceWrongFormat", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-                    errorFlag = true;
-                }
-                else if (chkCapitalGainsTax.CheckState == CheckState.Checked && txtBoxCapitalGainsTax.Text == @"" && errorFlag == false)
-                {
-                    txtBoxCapitalGainsTax.Focus();
-                    // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Errors/CapitalGainsTaxEmpty", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-                    errorFlag = true;
-                }
-                else if (chkCapitalGainsTax.CheckState == CheckState.Checked && !Decimal.TryParse(txtBoxCapitalGainsTax.Text, out capitalGainsTaxPercentage) && errorFlag == false)
-                {
-                    txtBoxCapitalGainsTax.Focus();
-                    // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Errors/CapitalGainsTaxWrongFormat", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-                    errorFlag = true;
-                }
-                else if (chkSolidarityTax.CheckState == CheckState.Checked && txtBoxSolidarityTax.Text == @"" && errorFlag == false)
-                {
-                    txtBoxSolidarityTax.Focus();
-                    // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Errors/SolidarityTaxEmpty", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-                    errorFlag = true;
-                }
-                else if (chkSolidarityTax.CheckState == CheckState.Checked && !Decimal.TryParse(txtBoxSolidarityTax.Text, out solidarityTaxPercentage) && errorFlag == false)
-                {
-                    txtBoxSolidarityTax.Focus();
-                    // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        _xmlLanguage.GetLanguageTextByXPath(@"/EditFormShare/Errors/SolidarityTaxWrongFormat", _strLanguage),
-                        _xmlLanguage, _strLanguage,
-                        Color.Red, _logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-                    errorFlag = true;
-                }
                 else if (errorFlag == false)
                 {
                     // Check if an share with the given WKN number already exists
@@ -533,13 +455,6 @@ namespace SharePortfolioManager
                     _shareObject.CultureInfo = cultureInfo;
 
                     _shareObject.DividendPayoutInterval = cbxDividendPayoutInterval.SelectedIndex;
-
-                    _shareObject.TaxTaxAtSourceFlag = taxAtSourceFlag;
-                    _shareObject.TaxTaxAtSourcePercentage = taxAtSourcePercentage;
-                    _shareObject.TaxCapitalGainsFlag = capitalGainsTaxFlag;
-                    _shareObject.TaxCapitalGainsPercentage = capitalGainsTaxPercentage;
-                    _shareObject.TaxSolidarityFlag = solidarityTaxFlag;
-                    _shareObject.TaxSolidarityPercentage = solidarityTaxPercentage;
                 }
             }
             catch (Exception ex)
@@ -670,69 +585,5 @@ namespace SharePortfolioManager
         }
 
         #endregion Button
-
-        #region CheckBox
-
-        /// <summary>
-        /// This function enables or disables the text box for the percentage value
-        /// </summary>
-        /// <param name="sender">CheckBox</param>
-        /// <param name="e">EventArgs</param>
-        private void chkTaxAtSource_CheckedChanged(object sender, EventArgs e)
-        {
-            if (chkTaxAtSource.CheckState == CheckState.Checked)
-            {
-                txtBoxTaxAtSource.Enabled = true;
-                txtBoxTaxAtSource.ReadOnly = false;
-                txtBoxTaxAtSource.Focus();
-            }
-            else
-            {
-                txtBoxTaxAtSource.Enabled = false;
-                txtBoxTaxAtSource.ReadOnly = true;
-            }
-        }
-
-        /// <summary>
-        /// This function enables or disables the text box for the percentage value
-        /// </summary>
-        /// <param name="sender">CheckBox</param>
-        /// <param name="e">EventArgs</param>
-        private void chkCapitalGainsTax_CheckedChanged(object sender, EventArgs e)
-        {
-            if (chkCapitalGainsTax.CheckState == CheckState.Checked)
-            {
-                txtBoxCapitalGainsTax.Enabled = true;
-                txtBoxCapitalGainsTax.ReadOnly = false;
-                txtBoxCapitalGainsTax.Focus();
-            }
-            else
-            {
-                txtBoxCapitalGainsTax.Enabled = false;
-                txtBoxCapitalGainsTax.ReadOnly = true;
-            }
-        }
-
-        /// <summary>
-        /// This function enables or disables the text box for the percentage value
-        /// </summary>
-        /// <param name="sender">CheckBox</param>
-        /// <param name="e">EventArgs</param>
-        private void chkSolidarityTax_CheckedChanged(object sender, EventArgs e)
-        {
-            if (chkSolidarityTax.CheckState == CheckState.Checked)
-            {
-                txtBoxSolidarityTax.Enabled = true;
-                txtBoxSolidarityTax.ReadOnly = false;
-                txtBoxSolidarityTax.Focus();
-            }
-            else
-            {
-                txtBoxSolidarityTax.Enabled = false;
-                txtBoxSolidarityTax.ReadOnly = true;
-            }
-        }
-
-        #endregion CheckBox
     }
 }

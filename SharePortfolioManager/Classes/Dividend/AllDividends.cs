@@ -21,11 +21,11 @@
 //SOFTWARE.
 
 using SharePortfolioManager.Classes;
-using SharePortfolioManager.Classes.Taxes;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace SharePortfolioManager
 {
@@ -107,15 +107,20 @@ namespace SharePortfolioManager
         /// <summary>
         /// This function adds a dividend to the list of the dividends of the share
         /// </summary>
-        /// <param name="strDateTime">Date of the dividend pay out</param>
-        /// <param name="taxesValues">Taxes which must be paid</param>
-        /// <param name="decDiviendRate">Dividend paid for one share</param>
-        /// <param name="decLossBalance">Loss balance of the share</param>
-        /// <param name="decSharePrice">Share price at the pay out day</param>
-        /// <param name="decVolume">Volume at the pay out day</param>
-        /// <param name="strDoc">Document of the dividend pay out</param>
+        /// <param name="cultureInfoFC">Culture info of the payout for the foreign currency</param>
+        /// <param name="csEnableFC">Flag if the payout is in a foreign currency</param>
+        /// <param name="decExchangeRatio">Exchange ratio for the foreign currency</param>
+        /// <param name="strDateTime">Pay date of the new dividend list entry</param>
+        /// <param name="decRate">Paid dividend of one share</param>
+        /// <param name="decVolume">Share volume at the pay date</param>
+        /// <param name="decTaxAtSource">Tax at source value</param>
+        /// <param name="decCapitalGainsTax">Capital gains tax value</param>
+        /// <param name="decSolidarityTax">Solidarity tax value</param>
+        /// <param name="decSharePrice">Share price at the pay date</param>
+        /// <param name="strDoc">Document of the dividend</param>
         /// <returns></returns>
-        public bool AddDividend(string strDateTime, Taxes taxesValues, decimal decDiviendRate, decimal decLossBalance, decimal decSharePrice, decimal decVolume, string strDoc = "")
+        public bool AddDividend(CultureInfo cultureInfoFC, CheckState csEnableFC, decimal decExchangeRatio, string strDateTime, decimal decRate, decimal decVolume,
+            decimal decTaxAtSource, decimal decCapitalGainsTax, decimal decSolidarityTax, decimal decSharePrice, string strDoc = "")
         {
 #if DEBUG
             Console.WriteLine(@"Add DividendYearOfTheShare");
@@ -132,7 +137,8 @@ namespace SharePortfolioManager
                 DividendYearOfTheShare searchObject;
                 if (AllDividendsOfTheShareDictionary.TryGetValue(year, out searchObject))
                 {
-                    if (!searchObject.AddDividendObject(CultureInfo, strDateTime, taxesValues, decDiviendRate, decLossBalance, decSharePrice, decVolume, strDoc))
+                    if (!searchObject.AddDividendObject(CultureInfo, cultureInfoFC, csEnableFC, decExchangeRatio, strDateTime, decRate, decVolume,
+                        decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decSharePrice, strDoc))
                         return false;
                 }
                 else
@@ -140,7 +146,8 @@ namespace SharePortfolioManager
                     // Add new year dividend object for the dividend with a new year
                     DividendYearOfTheShare addObject = new DividendYearOfTheShare();
                     // Add dividend with the new year to the dividend year list
-                    if (addObject.AddDividendObject(CultureInfo, strDateTime, taxesValues, decDiviendRate, decLossBalance, decSharePrice, decVolume, strDoc))
+                    if (addObject.AddDividendObject(CultureInfo, cultureInfoFC, csEnableFC, decExchangeRatio, strDateTime, decRate, decVolume,
+                        decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decSharePrice, strDoc))
                     {
                         AllDividendsOfTheShareDictionary.Add(year, addObject);
                     }
@@ -282,7 +289,7 @@ namespace SharePortfolioManager
                 {
                     foreach (var dividendObject in AllDividendsOfTheShareDictionary[strYear].DividendListYear)
                     {
-                        if (dividendObject.DividendDate == strDateTime)
+                        if (dividendObject.DateTime == strDateTime)
                         {
                             return dividendObject;
                         }

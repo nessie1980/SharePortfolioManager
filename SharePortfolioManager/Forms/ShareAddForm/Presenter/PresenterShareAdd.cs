@@ -63,13 +63,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             _view.GrandTotal = _model.FinalValue;
             _view.WebSite = _model.WebSite;
             _view.Document = _model.Document;
-
-            _view.TaxAtSourceFlag = _model.TaxAtSourceFlag;
-            _view.TaxAtSource = _model.TaxAtSource;
-            _view.CapitalGainsTaxFlag = _model.CapitalGainsTaxFlag;
-            _view.CapitalGainsTax = _model.CapitalGainsTax;
-            _view.SolidarityTaxFlag = _model.SolidarityTaxFlag;
-            _view.SolidarityTax = _model.SolidarityTax;
         }
 
         private void OnViewFormatInputValues(object sender, EventArgs e)
@@ -108,13 +101,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             _model.CultureInfo = _view.CultureInfo;
             _model.DividendPayoutInterval = _view.DividendPayoutInterval;
             _model.Document = _view.Document;
-
-            _model.TaxAtSourceFlag = _view.TaxAtSourceFlag;
-            _model.TaxAtSource = _view.TaxAtSource;
-            _model.CapitalGainsTaxFlag = _view.CapitalGainsTaxFlag;
-            _model.CapitalGainsTax = _view.CapitalGainsTax;
-            _model.SolidarityTaxFlag = _view.SolidarityTaxFlag;
-            _model.SolidarityTax = _view.SolidarityTax;
 
             CalculateMarketValueAndFinalValue();
 
@@ -173,30 +159,12 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                             null,
                             _model.CultureInfo,
                             0,
-                            _model.Document,
-                            false,
-                            0,
-                            false,
-                            0,
-                            false,
-                            0
+                            _model.Document
                             ));
 
                 // Check if for the given share a website configuration exists
                 if (tempShareObject[0].SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList))
                 {
-                    bool bTaxAtSourceFlag = false;
-                    if (_model.TaxAtSourceFlag == CheckState.Checked)
-                        bTaxAtSourceFlag = true;
-
-                    bool bCapitalGainsTaxFlag = false;
-                    if (_model.CapitalGainsTaxFlag == CheckState.Checked)
-                        bCapitalGainsTaxFlag = true;
-
-                    bool bSolidarityTaxFlag = false;
-                    if (_model.SolidarityTaxFlag == CheckState.Checked)
-                        bSolidarityTaxFlag = true;
-
                     _model.ShareObjectList.Add(new ShareObject(
                             _model.Wkn,
                             strDateTime,
@@ -214,13 +182,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                             null,
                             _model.CultureInfo,
                             _model.DividendPayoutInterval,
-                            _model.Document,
-                            bTaxAtSourceFlag,
-                            _model.TaxAtSourcedec,
-                            bCapitalGainsTaxFlag,
-                            _model.CapitalGainsTaxdec,
-                            bSolidarityTaxFlag,
-                            _model.SolidarityTaxdec
+                            _model.Document
                             ));
 
                     // Set parsing expression to the share list
@@ -392,75 +354,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             {
                 _model.ErrorCode = ShareAddErrorCode.DocumentDoesNotExists;
                 bErrorFlag = true;
-            }
-
-            // Check tax at source input
-            if (_model.TaxAtSourceFlag == CheckState.Checked)
-            {
-                decimal decTaxAtSource = 0;
-                if (_model.TaxAtSource == @"" && bErrorFlag == false)
-                {
-                    _model.ErrorCode = ShareAddErrorCode.TaxAtSourceEmpty;
-                    bErrorFlag = true;
-                }
-                else if (!decimal.TryParse(_model.TaxAtSource, out decTaxAtSource) && bErrorFlag == false)
-                {
-                    _model.ErrorCode = ShareAddErrorCode.TaxAtSourceWrongFormat;
-                    bErrorFlag = true;
-                }
-                else if (decTaxAtSource <= 0 && bErrorFlag == false)
-                {
-                    _model.ErrorCode = ShareAddErrorCode.TaxAtSourceWrongValue;
-                    bErrorFlag = true;
-                }
-                else if (bErrorFlag == false)
-                    _model.TaxAtSourcedec = decTaxAtSource;
-            }
-
-            // Check capital gains tax input
-            if (_model.CapitalGainsTaxFlag == CheckState.Checked)
-            {
-                decimal decCapitalGainsTax = 0;
-                if (_model.CapitalGainsTax == @"" && bErrorFlag == false)
-                {
-                    _model.ErrorCode = ShareAddErrorCode.CapitalGainsTaxEmpty;
-                    bErrorFlag = true;
-                }
-                else if (!decimal.TryParse(_model.CapitalGainsTax, out decCapitalGainsTax) && bErrorFlag == false)
-                {
-                    _model.ErrorCode = ShareAddErrorCode.CapitalGainsTaxWrongFormat;
-                    bErrorFlag = true;
-                }
-                else if (decCapitalGainsTax <= 0)
-                {
-                    _model.ErrorCode = ShareAddErrorCode.CapitalGainsTaxWrongValue;
-                    bErrorFlag = true;
-                }
-                else if (bErrorFlag == false)
-                    _model.CapitalGainsTaxdec = decCapitalGainsTax;
-            }
-
-            // Check solidarity tax input
-            if (_model.SolidarityTaxFlag == CheckState.Checked)
-            {
-                decimal decSolidarityTax = 0;
-                if (_model.SolidarityTax == @"" && bErrorFlag == false)
-                {
-                    _model.ErrorCode = ShareAddErrorCode.SolidarityTaxEmpty;
-                    bErrorFlag = true;
-                }
-                else if (!decimal.TryParse(_model.SolidarityTax, out decSolidarityTax) && bErrorFlag == false)
-                {
-                    _model.ErrorCode = ShareAddErrorCode.SolidarityTaxWrongFormat;
-                    bErrorFlag = true;
-                }
-                else if (decSolidarityTax <= 0)
-                {
-                    _model.ErrorCode = ShareAddErrorCode.SolidarityTaxWrongValue;
-                    bErrorFlag = true;
-                }
-                else if (bErrorFlag == false)
-                    _model.SolidarityTaxdec = decSolidarityTax;
             }
 
             return bErrorFlag;
