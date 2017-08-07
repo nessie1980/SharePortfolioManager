@@ -1369,7 +1369,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// This function deselects all selected rows of the
         /// DataGridViews in the TabPages
         /// </summary>
-        void DeselectRowsOfDataGridViews(DataGridView DataGridView)
+        private void DeselectRowsOfDataGridViews(DataGridView DataGridView)
         {
             try
             {
@@ -1456,7 +1456,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// </summary>
         /// <param name="sender">Pressed button of the user</param>
         /// <param name="arg">EventArgs</param>
-        void OnBtnDelete_Click(object sender, EventArgs arg)
+        private void OnBtnDelete_Click(object sender, EventArgs arg)
         {
             try
             {

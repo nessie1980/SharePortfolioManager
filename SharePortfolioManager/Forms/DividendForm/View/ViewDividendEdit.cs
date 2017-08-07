@@ -1040,9 +1040,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             txtBoxPrice.Text = @"";
             txtBoxDocument.Text = @"";
 
-            // Reset status message
-            toolStripStatusLabelMessage.Text = @"";
-
             txtBoxRate.Focus();
         }
 
@@ -1626,6 +1623,8 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         {
             try
             {
+                toolStripStatusLabelMessage.Text = @"";
+
                 // Disable controls
                 this.Enabled = false;
 
