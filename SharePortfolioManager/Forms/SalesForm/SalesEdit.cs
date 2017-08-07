@@ -1575,6 +1575,17 @@ namespace SharePortfolioManager.Forms.SalesForm
                 //    errorFlag = true;
                 //}
 
+                // Check if a given document directory exists
+                if (strDoc != @"" && strDoc != @"-" && !Directory.Exists(Path.GetDirectoryName(strDoc)) && errorFlag == false)
+                {
+                    // Add status message
+                    Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                       Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/DirectoryDoesNotExist", LanguageName),
+                       Language, LanguageName,
+                       Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                    errorFlag = true;
+                }
+
                 // Check if a given document exists
                 if (strDoc != @"" && strDoc != @"-" && !File.Exists(strDoc) && errorFlag == false)
                 {

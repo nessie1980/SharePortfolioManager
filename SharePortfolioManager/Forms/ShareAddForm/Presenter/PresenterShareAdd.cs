@@ -266,8 +266,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             UpdateViewWithModel();
 
             _view.AddFinish();
-
-            MessageBox.Show(_model.ErrorCode.ToString(), @"Info", MessageBoxButtons.OK);
         }
 
         /// <summary>
@@ -437,9 +435,16 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             // TODO Web address validation
 
             // Check document input
+            else if (_model.Document != @"" && !Directory.Exists(Path.GetDirectoryName(_model.Document)) && bErrorFlag == false)
+            {
+                _model.ErrorCode = ShareAddErrorCode.DocumentDirectoryDoesNotExists;
+                bErrorFlag = true;
+            }
+
+            // Check document input
             else if (_model.Document != @"" && !File.Exists(_model.Document) && bErrorFlag == false)
             {
-                _model.ErrorCode = ShareAddErrorCode.DocumentDoesNotExists;
+                _model.ErrorCode = ShareAddErrorCode.DocumentFileDoesNotExists;
                 bErrorFlag = true;
             }
 

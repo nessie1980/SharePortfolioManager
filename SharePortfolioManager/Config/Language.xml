@@ -408,6 +408,7 @@
 				<WebSiteRegexNotFound text="No parse configuration for the given web address available!" />
 				<AddSaveFailed text="An exception occurred. Add of the share failed!" />
 				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
+				<DirectoryDoesNotExist text="The directory does not exist!" />
 				<FileDoesNotExist text="The given file does not exist!" />
 			</Errors>
 		</AddFormShare>
@@ -578,6 +579,7 @@
 				<CancelFailure text="An error occurred while the cancel should be done!" />
 				<CheckInputFailure text="An error occurred while the input check should be done!" />
 				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
+				<DirectoryDoesNotExist text="The directory does not exist!" />
 				<FileDoesNotExist text="The given file does not exist!" />
 				<DocumentShowFailed text="Show of the document failed!" />
 			</Errors>
@@ -680,6 +682,7 @@
 				<CancelFailure text="An error occurred while the cancel should be done!" />
 				<CheckInputFailure text="An error occurred while the input check should be done!" />
 				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
+				<DirectoryDoesNotExist text="The directory does not exist!" />
 				<FileDoesNotExist text="The given file does not exist!" />
 				<DocumentShowFailed text="Show of the document failed!" />
 			</Errors>
@@ -785,6 +788,7 @@
 				<CancelFailure text="An error occurred while the cancel should be done!" />
 				<CheckInputFailure text="An error occurred while the input check should be done!" />
 				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
+				<DirectoryDoesNotExist text="The directory does not exist!" />
 				<FileDoesNotExist text="The given file does not exist!" />
 				<DocumentShowFailed text="Show of the document failed!" />
 			</Errors>
@@ -867,6 +871,7 @@
 				<CancelFailure text="An error occurred while the cancel should be done!" />
 				<CheckInputFailure text="An error occurred while the input check should be done!" />
 				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
+				<DirectoryDoesNotExist text="The directory does not exist!" />
 				<FileDoesNotExist text="The given file does not exist!" />
 				<DocumentShowFailed text="Show of the document failed!" />
 			</Errors>
@@ -1411,6 +1416,7 @@
 				<WebSiteRegexNotFound text="Kein Parser-Konfiguration für die angegebene Web- Addresse verfügbar!" />
 				<AddSaveFailed text="Es trat ein Fehler auf. Hinzufügen der Aktien ist fehlgeschlagen!" />
 				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
+				<DirectoryDoesNotExist text="Das angegebene Verzeichnis existiert nicht!" />
 				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
 			</Errors>
 		</AddFormShare>
@@ -1582,6 +1588,7 @@
 				<CancelFailure text="Es ist ein Fehler aufgetreten beim Abbrechen!" />
 				<CheckInputFailure text="Es ist ein Fehler aufgetreten beim der Eingabenprüfung!" />
 				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
+				<DirectoryDoesNotExist text="Das angegebene Verzeichnis existiert nicht!" />
 				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
 				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
 			</Errors>
@@ -1681,6 +1688,7 @@
 				<CancelFailure text="Es ist ein Fehler aufgetreten beim Abbrechen!" />
 				<CheckInputFailure text="Es ist ein Fehler aufgetreten beim der Eingabenprüfung!" />
 				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
+				<DirectoryDoesNotExist text="Das angegebene Verzeichnis existiert nicht!" />
 				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
 				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
 			</Errors>
@@ -1786,6 +1794,7 @@
 				<CancelFailure text="Es ist ein Fehler aufgetreten beim Abbrechen!" />
 				<CheckInputFailure text="Es ist ein Fehler aufgetreten beim der Eingabenprüfung!" />
 				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
+				<DirectoryDoesNotExist text="Das angegebene Verzeichnis existiert nicht!" />
 				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
 				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
 			</Errors>
@@ -1870,6 +1879,7 @@
 				<CancelFailure text="Es ist ein Fehler aufgetreten beim Abbrechen!" />
 				<CheckInputFailure text="Es ist ein Fehler aufgetreten beim der Eingabenprüfung!" />
 				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
+				<DirectoryDoesNotExist text="Das angegebene Verzeichnis existiert nicht!" />
 				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
 				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
 			</Errors>

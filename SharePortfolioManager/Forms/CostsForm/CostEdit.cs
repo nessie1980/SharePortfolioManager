@@ -1147,6 +1147,17 @@ namespace SharePortfolioManager
                     errorFlag = true;
                 }
 
+                // Check if a given document directory exists
+                if (strDoc != @"" && !Directory.Exists(Path.GetDirectoryName(strDoc)) && errorFlag == false)
+                {
+                    // Add status message
+                    Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                        Language.GetLanguageTextByXPath(@"/AddEditFormCosts/Errors/DirectoryDoesNotExist", _languageName),
+                        Language, _languageName,
+                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                    errorFlag = true;
+                }
+
                 // Check if a given document exists
                 if (strDoc != @"" && !File.Exists(strDoc) && errorFlag == false)
                 {

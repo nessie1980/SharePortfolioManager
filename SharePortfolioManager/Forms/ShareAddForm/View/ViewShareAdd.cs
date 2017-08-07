@@ -54,7 +54,8 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         ReductionWrongFormat,
         ReductionWrongValue,
         WebSiteEmpty,
-        DocumentDoesNotExists,
+        DocumentDirectoryDoesNotExists,
+        DocumentFileDoesNotExists,
         WebSiteRegexNotFound
     };
 
@@ -547,7 +548,15 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                         txtBoxWebSite.Focus();
                         break;
                     }
-                case ShareAddErrorCode.DocumentDoesNotExists:
+                case ShareAddErrorCode.DocumentDirectoryDoesNotExists:
+                    {
+                        strMessage =
+                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DirectoryDoesNotExist", LanguageName);
+                        clrMessage = Color.Red;
+                        stateLevel = FrmMain.EStateLevels.Error;
+                        break;
+                    }
+                case ShareAddErrorCode.DocumentFileDoesNotExists:
                     {
                         strMessage =
                             Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/FileDoesNotExist", LanguageName);

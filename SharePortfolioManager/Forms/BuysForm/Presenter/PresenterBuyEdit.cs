@@ -124,8 +124,6 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
             UpdateViewWithModel();
 
             _view.AddEditDeleteFinish();
-
-            MessageBox.Show(_model.ErrorCode.ToString(), @"Info", MessageBoxButtons.OK);
         }
 
         private void OnEditBuy(object sender, EventArgs e)
@@ -156,13 +154,11 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
 
                     _view.AddEditDeleteFinish();
 
-                    MessageBox.Show(_model.ErrorCode.ToString(), @"Info", MessageBoxButtons.OK);
-
                     return;
                 }
             }
 
-            _model.ErrorCode = BuyErrorCode.EditFailed;
+            //_model.ErrorCode = BuyErrorCode.EditFailed;
             UpdateViewWithModel();
 
             _view.AddEditDeleteFinish();
@@ -364,9 +360,15 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
                 // Check if a given document exists
                 if (_model.Document == null)
                     _model.Document = @"";
+                else if(_model.Document != @"" && _model.Document != @"-" && !Directory.Exists(Path.GetDirectoryName(_model.Document)))
+                {
+                    _model.ErrorCode = BuyErrorCode.DocumentDirectoryDoesNotExits;
+                    bErrorFlag = true;
+                }
                 else if(_model.Document != @"" && _model.Document != @"-" && !File.Exists(_model.Document) && bErrorFlag == false)
                 {
                     _model.Document = @"";
+                    _model.ErrorCode = BuyErrorCode.DocumentFileDoesNotExists;
                     bErrorFlag = true;
                 }
 
@@ -375,7 +377,7 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
             catch
             {
                 _model.ErrorCode = BuyErrorCode.InputeValuesInvalid;
-                return false;
+                return true;
             }
         }
     }

@@ -77,13 +77,13 @@
             this.lblAddPrice = new System.Windows.Forms.Label();
             this.lblDividendRate = new System.Windows.Forms.Label();
             this.lblDate = new System.Windows.Forms.Label();
+            this.toolStripStatusLabelMessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.grpBoxDividends = new System.Windows.Forms.GroupBox();
             this.tabCtrlDividends = new System.Windows.Forms.TabControl();
             this.lblAddDate = new System.Windows.Forms.Label();
             this.lblAddDividendExchangeRatio = new System.Windows.Forms.Label();
             this.lblAddVolume = new System.Windows.Forms.Label();
             this.lblAddTaxAtSource = new System.Windows.Forms.Label();
-            this.toolStripStatusLabelMessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.grpBoxAddDividend.SuspendLayout();
             this.grpBoxDividends.SuspendLayout();
             this.SuspendLayout();
@@ -562,6 +562,7 @@
             // 
             this.btnReset.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnReset.Location = new System.Drawing.Point(398, 402);
+			this.btnReset.Enabled = false;
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(166, 31);
             this.btnReset.TabIndex = 18;
@@ -667,6 +668,13 @@
             this.lblDate.Text = "_addDate";
             this.lblDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // toolStripStatusLabelMessage
+            // 
+            this.toolStripStatusLabelMessage.BackColor = System.Drawing.SystemColors.Control;
+            this.toolStripStatusLabelMessage.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripStatusLabelMessage.Name = "toolStripStatusLabelMessage";
+            this.toolStripStatusLabelMessage.Size = new System.Drawing.Size(0, 17);
+            // 
             // grpBoxDividends
             // 
             this.grpBoxDividends.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -675,7 +683,7 @@
             this.grpBoxDividends.Controls.Add(this.tabCtrlDividends);
             this.grpBoxDividends.Location = new System.Drawing.Point(8, 473);
             this.grpBoxDividends.Name = "grpBoxDividends";
-            this.grpBoxDividends.Size = new System.Drawing.Size(744, 136);
+            this.grpBoxDividends.Size = new System.Drawing.Size(744, 139);
             this.grpBoxDividends.TabIndex = 3;
             this.grpBoxDividends.TabStop = false;
             this.grpBoxDividends.Text = "_dividends";
@@ -689,8 +697,11 @@
             this.tabCtrlDividends.Location = new System.Drawing.Point(9, 22);
             this.tabCtrlDividends.Name = "tabCtrlDividends";
             this.tabCtrlDividends.SelectedIndex = 0;
-            this.tabCtrlDividends.Size = new System.Drawing.Size(726, 105);
+            this.tabCtrlDividends.Size = new System.Drawing.Size(726, 108);
             this.tabCtrlDividends.TabIndex = 0;
+            this.tabCtrlDividends.SelectedIndexChanged += new System.EventHandler(this.tabCtrlDividends_SelectedIndexChanged);
+            this.tabCtrlDividends.MouseEnter += new System.EventHandler(this.tabCtrlDividends_MouseEnter);
+            this.tabCtrlDividends.MouseLeave += new System.EventHandler(this.tabCtrlDividends_MouseLeave);
             // 
             // lblAddDate
             // 
@@ -735,13 +746,6 @@
             this.lblAddTaxAtSource.TabIndex = 52;
             this.lblAddTaxAtSource.Text = "_addTaxAtSource";
             this.lblAddTaxAtSource.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // toolStripStatusLabelMessage
-            // 
-            this.toolStripStatusLabelMessage.BackColor = System.Drawing.SystemColors.Control;
-            this.toolStripStatusLabelMessage.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolStripStatusLabelMessage.Name = "toolStripStatusLabelMessage";
-            this.toolStripStatusLabelMessage.Size = new System.Drawing.Size(0, 17);
             // 
             // ViewDividendEdit
             // 

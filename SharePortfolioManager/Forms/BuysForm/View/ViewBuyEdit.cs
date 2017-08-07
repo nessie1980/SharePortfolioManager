@@ -56,7 +56,8 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         CostsWrongValue,
         ReductionWrongFormat,
         ReductionWrongValue,
-        DocumentDoesNotExists
+        DocumentDirectoryDoesNotExits,
+        DocumentFileDoesNotExists
     };
 
     /// <summary>
@@ -351,10 +352,14 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                             Language.GetLanguageTextByXPath(@"/AddEditFormBuy/StateMessages/AddSuccess", LanguageName);
                         // Set flag to save the share object.
                         _bSave = true;
-                        // Reset values
-                        ResetValues();
+                        
                         // Refresh the buy list
                         ShowBuys();
+
+                        // Reset values
+                        this.Enabled = true;
+                        ResetInputValues();
+
                         break;
                     }
                 case BuyErrorCode.AddFailed:
@@ -363,7 +368,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                             Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/AddFailed", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
                         txtBoxVolume.Focus();
+
                         break;
                     }
                 case BuyErrorCode.EditSuccessful:
@@ -386,10 +394,14 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                             Language.GetLanguageTextByXPath(@"/AddEditFormBuy/StateMessages/EditSuccess", LanguageName);
                         // Set flag to save the share object.
                         _bSave = true;
-                        // Reset values
-                        ResetValues();
+                        
                         // Refresh the buy list
                         ShowBuys();
+
+                        // Reset values
+                        this.Enabled = true;
+                        ResetInputValues();
+
                         break;
                     }
                 case BuyErrorCode.EditFailed:
@@ -398,7 +410,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                             Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/EditFailed", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
                         txtBoxVolume.Focus();
+
                         break;
                     }
                 case BuyErrorCode.DeleteSuccessful:
@@ -407,8 +422,6 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                             Language.GetLanguageTextByXPath(@"/AddEditFormBuy/StateMessages/DeleteSuccess", LanguageName);
                         // Set flag to save the share object.
                         _bSave = true;
-                        // Reset values
-                        ResetValues();
 
                         // Enable button(s)
                         btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", LanguageName);
@@ -423,6 +436,11 @@ namespace SharePortfolioManager.Forms.BuysForm.View
 
                         // Refresh the buy list
                         ShowBuys();
+
+                        // Reset values
+                        this.Enabled = true;
+                        ResetInputValues();
+
                         break;
                     }
                 case BuyErrorCode.DeleteFailed:
@@ -431,6 +449,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                             Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DeleteFailed", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
+                        txtBoxVolume.Focus();
+
                         break;
                     }
                 case BuyErrorCode.DeleteFailedUnerasable:
@@ -439,6 +461,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                             Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DeleteFailedUnerasable", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
+                        txtBoxVolume.Focus();
+
                         break;
                     }
                 case BuyErrorCode.InputeValuesInvalid:
@@ -447,6 +473,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                             Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/CheckInputFailure", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
+                        txtBoxVolume.Focus();
+
                         break;
                     }
                 case BuyErrorCode.DateExists:
@@ -455,7 +485,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                             Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DateExists", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
                         datePickerDate.Focus();
+
                         break;
                     }
                 case BuyErrorCode.DateWrongFormat:
@@ -464,7 +497,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                             Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DateWrongFormat", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
                         datePickerDate.Focus();
+
                         break;
                     }
                 case BuyErrorCode.VolumeEmpty:
@@ -473,7 +509,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                             Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/VolumeEmpty", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
                         txtBoxVolume.Focus();
+
                         break;
                     }
                 case BuyErrorCode.VolumeWrongFormat:
@@ -482,7 +521,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                             Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/VolumeWrongFormat", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
                         txtBoxVolume.Focus();
+
                         break;
                     }
                 case BuyErrorCode.VolumeWrongValue:
@@ -491,7 +533,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                             Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/VolumeWrongValue", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
                         txtBoxVolume.Focus();
+
                         break;
                     }
                 case BuyErrorCode.SharePricEmpty:
@@ -500,7 +545,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                             Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SharePriceEmpty", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
                         txtBoxPrice.Focus();
+
                         break;
                     }
                 case BuyErrorCode.SharePriceWrongFormat:
@@ -509,7 +557,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                             Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SharePriceWrongFormat", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
                         txtBoxPrice.Focus();
+
                         break;
                     }
                 case BuyErrorCode.SharePriceWrongValue:
@@ -518,7 +569,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                             Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SharePriceWrongValue", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
                         txtBoxPrice.Focus();
+
                         break;
                     }
                 case BuyErrorCode.CostsWrongFormat:
@@ -527,7 +581,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                             Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/CostsWrongFormat", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
                         txtBoxCosts.Focus();
+
                         break;
                     }
                 case BuyErrorCode.CostsWrongValue:
@@ -536,7 +593,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                             Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/CostsWrongValue", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
                         txtBoxCosts.Focus();
+
                         break;
                     }
                 case BuyErrorCode.ReductionWrongFormat:
@@ -545,7 +605,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                             Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ReductionWrongFormat", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
                         txtBoxReduction.Focus();
+
                         break;
                     }
                 case BuyErrorCode.ReductionWrongValue:
@@ -554,21 +617,31 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                             Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ReductionWrongValue", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
                         txtBoxReduction.Focus();
+
                         break;
                     }
-                case BuyErrorCode.DocumentDoesNotExists:
+                case BuyErrorCode.DocumentDirectoryDoesNotExits:
+                    {
+                        strMessage =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DirectoryDoesNotExist", LanguageName);
+                        clrMessage = Color.Red;
+                        stateLevel = FrmMain.EStateLevels.Error;
+
+                        break;
+                    }
+                case BuyErrorCode.DocumentFileDoesNotExists:
                     {
                         strMessage =
                             Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/FileDoesNotExist", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
+
                         break;
                     }
             }
-
-            // Enable controls
-            this.Enabled = true;
 
             Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
                strMessage,
@@ -723,6 +796,26 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 DialogResult = DialogResult.Cancel;
         }
 
+        /// <summary>
+        /// This function resets the text box values
+        /// and sets the date time picker to the current date.
+        /// </summary>
+        private void ResetInputValues()
+        {
+            // Reset date time picker
+            datePickerDate.Value = DateTime.Now;
+            datePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+
+            // Reset text boxes
+            txtBoxVolume.Text = @"";
+            txtBoxPrice.Text = @"";
+            txtBoxFinalValue.Text = @"";
+            txtBoxCosts.Text = @"";
+            txtBoxReduction.Text = @"";
+            txtBoxDocument.Text = @"";
+            txtBoxVolume.Focus();
+        }
+
         #endregion Form
 
         #region TextBoxes
@@ -828,582 +921,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
 
         #endregion TextBoxes
 
-        /// <summary>
-        /// This function paints the buy list of the share
-        /// </summary>
-        private void ShowBuys()
-        {
-            try
-            {
-                // Reset tab control
-                foreach (TabPage tabPage in tabCtrlBuys.TabPages)
-                {
-                    foreach (var control in tabPage.Controls)
-                    {
-                        DataGridView dataGridView = control as DataGridView;
-                        if (dataGridView != null)
-                        {
-                            dataGridView.SelectionChanged -= OnDataGridViewBuysOfAYear_SelectionChanged;
-                            dataGridView.SelectionChanged -= OnDataGridViewBuysOfYears_SelectionChanged;
-                            dataGridView.DataBindingComplete -= OnDataGridViewBuysOfAYear_DataBindingComplete;
-                        }
-                    }
-                    tabPage.Controls.Clear();
-                    tabCtrlBuys.TabPages.Remove(tabPage);
-                }
-
-                tabCtrlBuys.TabPages.Clear();
-
-                // Create TabPage for the buys of the years
-                TabPage newTabPageOverviewYears = new TabPage();
-                // Set TabPage name
-                newTabPageOverviewYears.Name =
-                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxBuy/TabCtrl/TabPgOverview/Overview",
-                        LanguageName);
-                newTabPageOverviewYears.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxBuy/TabCtrl/TabPgOverview/Overview", LanguageName) +
-                                          @" (" + ShareObjectFinalValue.AllBuyEntries.BuyMarketValueReductionTotalAsStrUnit + @")";
-
-                // Create Binding source for the buy data
-                BindingSource bindingSourceOverview = new BindingSource();
-                if (ShareObjectFinalValue.AllBuyEntries.GetAllBuysTotalValues().Count > 0)
-                    bindingSourceOverview.DataSource =
-                        ShareObjectFinalValue.AllBuyEntries.GetAllBuysTotalValues();
-
-                // Create DataGridView
-                DataGridView dataGridViewBuysOverviewOfAYears = new DataGridView();
-                dataGridViewBuysOverviewOfAYears.Dock = DockStyle.Fill;
-                // Bind source with buy values to the DataGridView
-                dataGridViewBuysOverviewOfAYears.DataSource = bindingSourceOverview;
-                // Set the delegate for the DataBindingComplete event
-                dataGridViewBuysOverviewOfAYears.DataBindingComplete += OnDataGridViewBuysOfAYear_DataBindingComplete;
-
-                // Set row select event
-                dataGridViewBuysOverviewOfAYears.SelectionChanged += OnDataGridViewBuysOfYears_SelectionChanged;
-
-                // Advanced configuration DataGridView buys
-                DataGridViewCellStyle styleOverviewOfYears = dataGridViewBuysOverviewOfAYears.ColumnHeadersDefaultCellStyle;
-                styleOverviewOfYears.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                styleOverviewOfYears.Font = new Font("Trebuchet MS", 10, FontStyle.Bold);
-
-                dataGridViewBuysOverviewOfAYears.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-                dataGridViewBuysOverviewOfAYears.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-                dataGridViewBuysOverviewOfAYears.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-
-
-                dataGridViewBuysOverviewOfAYears.RowHeadersVisible = false;
-                dataGridViewBuysOverviewOfAYears.RowsDefaultCellStyle.BackColor = Color.White;
-                dataGridViewBuysOverviewOfAYears.DefaultCellStyle.SelectionBackColor = Color.Blue;
-                dataGridViewBuysOverviewOfAYears.DefaultCellStyle.SelectionForeColor = Color.Yellow;
-
-                dataGridViewBuysOverviewOfAYears.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-
-                dataGridViewBuysOverviewOfAYears.MultiSelect = false;
-
-                dataGridViewBuysOverviewOfAYears.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                dataGridViewBuysOverviewOfAYears.AllowUserToResizeColumns = false;
-                dataGridViewBuysOverviewOfAYears.AllowUserToResizeRows = false;
-
-                dataGridViewBuysOverviewOfAYears.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
-                newTabPageOverviewYears.Controls.Add(dataGridViewBuysOverviewOfAYears);
-                dataGridViewBuysOverviewOfAYears.Parent = newTabPageOverviewYears;
-                tabCtrlBuys.Controls.Add(newTabPageOverviewYears);
-                newTabPageOverviewYears.Parent = tabCtrlBuys;
-
-
-                // Check if buys exists
-                if (ShareObjectFinalValue.AllBuyEntries.AllBuysOfTheShareDictionary.Count > 0)
-                {
-                    // Loop through the years of the buys
-                    foreach (
-                        var keyName in ShareObjectFinalValue.AllBuyEntries.AllBuysOfTheShareDictionary.Keys.Reverse()
-                        )
-                    {
-                        // Create TabPage
-                        TabPage newTabPage = new TabPage();
-                        // Set TabPage name
-                        newTabPage.Name = keyName;
-                        newTabPage.Text = keyName + " (" +
-                                          ShareObjectFinalValue.AllBuyEntries.AllBuysOfTheShareDictionary[keyName]
-                                          .BuyMarketValueReductionYearAsStrUnit
-                                          + ")";
-
-                        // Create Binding source for the buy data
-                        BindingSource bindingSource = new BindingSource();
-                        bindingSource.DataSource =
-                            ShareObjectFinalValue.AllBuyEntries.AllBuysOfTheShareDictionary[keyName].BuyListYear;
-
-                        // Create DataGridView
-                        DataGridView dataGridViewBuysOfAYear = new DataGridView();
-                        dataGridViewBuysOfAYear.Dock = DockStyle.Fill;
-                        // Bind source with buy values to the DataGridView
-                        dataGridViewBuysOfAYear.DataSource = bindingSource;
-                        // Set the delegate for the DataBindingComplete event
-                        dataGridViewBuysOfAYear.DataBindingComplete += OnDataGridViewBuysOfAYear_DataBindingComplete;
-
-                        // Set row select event
-                        dataGridViewBuysOfAYear.SelectionChanged += OnDataGridViewBuysOfAYear_SelectionChanged;
-                        // Set cell decimal click event
-                        dataGridViewBuysOfAYear.CellContentDoubleClick += OnDataGridViewBuysOfAYear_CellContentdecimalClick;
-
-                        // Advanced configuration DataGridView buys
-                        DataGridViewCellStyle style = dataGridViewBuysOfAYear.ColumnHeadersDefaultCellStyle;
-                        style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                        style.Font = new Font("Trebuchet MS", 10, FontStyle.Bold);
-
-                        dataGridViewBuysOfAYear.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-                        dataGridViewBuysOfAYear.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-                        dataGridViewBuysOfAYear.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-
-                        dataGridViewBuysOfAYear.RowHeadersVisible = false;
-                        dataGridViewBuysOfAYear.RowsDefaultCellStyle.BackColor = Color.White;
-                        dataGridViewBuysOfAYear.DefaultCellStyle.SelectionBackColor = Color.Blue;
-                        dataGridViewBuysOfAYear.DefaultCellStyle.SelectionForeColor = Color.Yellow;
-
-                        dataGridViewBuysOfAYear.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-
-                        dataGridViewBuysOfAYear.MultiSelect = false;
-
-                        dataGridViewBuysOfAYear.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                        dataGridViewBuysOfAYear.AllowUserToResizeColumns = false;
-                        dataGridViewBuysOfAYear.AllowUserToResizeRows = false;
-
-                        dataGridViewBuysOfAYear.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
-                        newTabPage.Controls.Add(dataGridViewBuysOfAYear);
-                        dataGridViewBuysOfAYear.Parent = newTabPage;
-                        tabCtrlBuys.Controls.Add(newTabPage);
-                        newTabPage.Parent = tabCtrlBuys;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-#if DEBUG
-                MessageBox.Show("ShowBuys()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ShowFailed", LanguageName),
-                   Language, LanguageName, Color.DarkRed, Logger,
-                   (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
-            }
-        }
-
-        /// <summary>
-        /// This function deselects the other selected rows of any other DataGridViews
-        /// Write the values of the selected row to the text boxes
-        /// and enables or disables the buttons
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        private void OnDataGridViewBuysOfAYear_SelectionChanged(object sender, EventArgs args)
-        {
-            try
-            {
-                if (tabCtrlBuys.TabPages.Count > 0)
-                {
-                    // Deselect row only of the other TabPages DataGridViews
-                    if (tabCtrlBuys.SelectedTab.Controls.Contains((DataGridView)sender))
-                        DeselectRowsOfDataGridViews((DataGridView)sender);
-                }
-
-                if (((DataGridView)sender).SelectedRows.Count == 1)
-                {
-                    // Get the currently selected item in the ListBox
-                    DataGridViewSelectedRowCollection curItem = ((DataGridView)sender).SelectedRows;
-
-                    // Set selected date
-                    SelectedDate = curItem[0].Cells[0].Value.ToString();
-
-                    // Get BuyObject of the selected DataGridView row
-                    BuyObject selectedBuyObject = ShareObjectFinalValue.AllBuyEntries.GetBuyObjectByDateTime(SelectedDate);
-
-                    // Get CostObject of the selected DataGridView row if a cost is set by this buy
-                    CostObject selectedCostObject = ShareObjectFinalValue.AllCostsEntries.GetCostObjectByDateTime(SelectedDate);
-
-                    // Set buy values
-                    if (selectedBuyObject != null)
-                    {
-                        datePickerDate.Value = Convert.ToDateTime(selectedBuyObject.Date);
-                        datePickerTime.Value = Convert.ToDateTime(selectedBuyObject.Date);
-                        txtBoxVolume.Text = selectedBuyObject.VolumeAsStr;
-                        txtBoxFinalValue.Text = selectedBuyObject.MarketValueReductionCostsAsStr;
-                        txtBoxReduction.Text = selectedBuyObject.ReductionAsStr;
-                        txtBoxPrice.Text = selectedBuyObject.SharePriceAsStr;
-                        txtBoxDocument.Text = selectedBuyObject.Document;
-                    }
-                    else
-                    {
-                        datePickerDate.Value = Convert.ToDateTime(SelectedDate);
-                        datePickerTime.Value = Convert.ToDateTime(SelectedDate);
-                        txtBoxVolume.Text =  curItem[0].Cells[1].Value.ToString();
-                        txtBoxFinalValue.Text = curItem[0].Cells[3].Value.ToString();
-                        txtBoxReduction.Text = @"0,00";
-                        txtBoxPrice.Text = curItem[0].Cells[2].Value.ToString();
-                        txtBoxDocument.Text = curItem[0].Cells[4].Value.ToString();
-                    }
-
-                    // Set cost values
-                    if (selectedCostObject != null && selectedCostObject.CostOfABuy)
-                        txtBoxCosts.Text = selectedCostObject.CostValueAsString;
-                    else
-                        txtBoxCosts.Text = @"";
-
-                    if (ShareObjectFinalValue.AllBuyEntries.IsDateLastDate(SelectedDate) &&
-                        ShareObjectFinalValue.AllSaleEntries.IsDateLastDate(SelectedDate)
-                        )
-                    {
-                        if (ShareObjectFinalValue.AllBuyEntries.GetAllBuysOfTheShare().Count > 1)
-                            // Enable Button(s)
-                            btnDelete.Enabled = true;
-                        else
-                            // Enable Button(s)
-                            btnDelete.Enabled = false;
-
-                        // Enable TextBoxe(s)
-                        datePickerDate.Enabled = true;
-                        datePickerTime.Enabled = true;
-                        txtBoxVolume.Enabled = true;
-                        txtBoxPrice.Enabled = true;
-                        txtBoxMarketValue.Enabled = true;
-                        txtBoxCosts.Enabled = true;
-                        txtBoxReduction.Enabled = true;
-                        txtBoxFinalValue.Enabled = true;
-                    }
-                    else
-                    {
-                        // Disable Button(s)
-                        btnDelete.Enabled = false;
-                        // Disable TextBoxe(s)
-                        datePickerDate.Enabled = false;
-                        datePickerTime.Enabled = false;
-                        txtBoxVolume.Enabled = false;
-                        txtBoxMarketValue.Enabled = false;
-                        txtBoxPrice.Enabled = false;
-                        txtBoxCosts.Enabled = false;
-                        txtBoxReduction.Enabled = false;
-                        txtBoxFinalValue.Enabled = false;
-                    }
-
-                    // Enable button(s)
-                    btnReset.Enabled = true;
-                    // Rename button
-                    btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Save", LanguageName);
-                    btnAddSave.Image = Resources.black_edit;
-
-                    // Rename group box
-                    grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Edit_Caption", LanguageName);
-
-                    // Store DataGridView instance
-                    _selectedDataGridView = (DataGridView)sender;
-
-                    // Format the input value
-                    if (FormatInputValues != null)
-                        FormatInputValues(this, new EventArgs());
-                }
-                else
-                {
-                    // Rename button
-                    btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", LanguageName);
-                    btnAddSave.Image = Resources.black_add;
-                    // Disable button(s)
-                    btnReset.Enabled = false;
-                    btnDelete.Enabled = false;
-                    // Enable Button(s)
-                    btnAddSave.Enabled = true;
-                    // Enabled TextBoxe(s)
-                    datePickerDate.Enabled = true;
-                    datePickerTime.Enabled = true;
-                    txtBoxVolume.Enabled = true;
-                    txtBoxPrice.Enabled = true;
-                    txtBoxCosts.Enabled = true;
-                    txtBoxReduction.Enabled = true;
-
-                    // Rename group box
-                    grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Add_Caption", LanguageName);
-
-                    // Reset stored DataGridView instance
-                    _selectedDataGridView = null;
-                }
-            }
-            catch (Exception ex)
-            {
-#if DEBUG
-                MessageBox.Show("dataGridViewBuysOfAYear_SelectionChanged()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SelectionChangeFailed", LanguageName),
-                   Language, LanguageName,
-                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
-
-                ResetValues();
-
-                ShowBuys();
-            }
-        }
-
-        /// <summary>
-        /// This functions selects the tab page of the chosen year
-        /// and deselects all rows in the DataGridViews
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        private void OnDataGridViewBuysOfYears_SelectionChanged(object sender, EventArgs args)
-        {
-            try
-            {
-                if (((DataGridView)sender).SelectedRows.Count == 1)
-                {
-                    // Get the currently selected item in the ListBox
-                    DataGridViewSelectedRowCollection curItem = ((DataGridView)sender).SelectedRows;
-
-                    foreach (TabPage tabPage in tabCtrlBuys.TabPages)
-                    {
-                        if (tabPage.Name == curItem[0].Cells[0].Value.ToString())
-                        {
-                            tabCtrlBuys.SelectTab(tabPage);
-                            tabPage.Focus();
-
-                            // Deselect rows
-                            DeselectRowsOfDataGridViews(null);
-
-                            break;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-#if DEBUG
-                MessageBox.Show("dataGridViewBuysOfYears_SelectionChanged()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SelectionChangeFailed", LanguageName),
-                   Language, LanguageName,
-                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
-            }
-        }
-
-        /// <summary>
-        /// This function deselects the select row after the DataBinding is complete
-        /// </summary>
-        /// <param name="sender">DataGridView</param>
-        /// <param name="e">DataGridViewBindingCompleteEventArgs</param>
-        private void OnDataGridViewBuysOfAYear_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
-        {
-            try
-            {
-                // Set column headers
-                for (int i = 0; i < ((DataGridView)sender).ColumnCount; i++)
-                {
-                    // Set alignment of the column
-                    ((DataGridView)sender).Columns[i].DefaultCellStyle.Alignment =
-                        DataGridViewContentAlignment.MiddleCenter;
-
-                    switch (i)
-                    {
-                        case 0:
-                            ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Date",
-                                    LanguageName);
-                            break;
-                        case 1:
-                            ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Volume",
-                                    LanguageName) + @" (" + ShareObject.PieceUnit + @")";
-                            ;
-                            break;
-                        case 2:
-                            ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Price",
-                                    LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
-                            break;
-                        case 3:
-                            ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Value",
-                                    LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
-                            break;
-                        case 4:
-                            ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Document",
-                                    LanguageName);
-                            break;
-                    }
-                }
-
-                if (((DataGridView)sender).Rows.Count > 0)
-                    ((DataGridView)sender).Rows[0].Selected = false;
-
-                // Reset the text box values
-                ResetValues();
-            }
-            catch (Exception ex)
-            {
-#if DEBUG
-                MessageBox.Show("dataGridViewBuysOfAYear_DataBindingComplete()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/RenameColHeaderFailed", LanguageName),
-                   Language, LanguageName,
-                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
-            }
-        }
-
-        /// <summary>
-        /// This function opens the buy document if a document is present
-        /// </summary>
-        /// <param name="sender">DataGridView</param>
-        /// <param name="e">DataGridViewCellEventArgs</param>
-        private void OnDataGridViewBuysOfAYear_CellContentdecimalClick(object sender, DataGridViewCellEventArgs e)
-        {
-            try
-            {
-                // Get column count of the given DataGridView
-                int iColumnCount = ((DataGridView)sender).ColumnCount;
-
-                // Check if the last column (document column) has been clicked
-                if (e.ColumnIndex == iColumnCount - 1)
-                {
-                    // Check if a row is selected
-                    if (((DataGridView)sender).SelectedRows.Count == 1)
-                    {
-                        // Get the current selected row
-                        DataGridViewSelectedRowCollection curItem = ((DataGridView)sender).SelectedRows;
-                        // Get date and time of the selected buy item
-                        string strDateTime = curItem[0].Cells[0].Value.ToString();
-
-                        // Check if a document is set
-                        if (curItem[0].Cells[iColumnCount - 1].Value.ToString() != @"-")
-                        {
-                            // Get doc from the buy with the strDateTime
-                            foreach (var temp in ShareObjectFinalValue.AllBuyEntries.GetAllBuysOfTheShare())
-                            {
-                                // Check if the buy date and time is the same as the date and time of the clicked buy item
-                                if (temp.Date == strDateTime)
-                                {
-                                    // Check if the file still exists
-                                    if (File.Exists(temp.Document))
-                                        // Open the file
-                                        Process.Start(temp.Document);
-                                    else
-                                    {
-                                        string strCaption =
-                                            Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Error",
-                                                LanguageName);
-                                        string strMessage =
-                                            Language.GetLanguageTextByXPath(
-                                                @"/MessageBoxForm/Content/DocumentDoesNotExistDelete",
-                                                LanguageName);
-                                        string strOk =
-                                            Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Yes",
-                                                LanguageName);
-                                        string strCancel =
-                                            Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/No",
-                                                LanguageName);
-
-                                        OwnMessageBox messageBox = new OwnMessageBox(strCaption, strMessage, strOk,
-                                            strCancel);
-                                        if (messageBox.ShowDialog() == DialogResult.OK)
-                                        {
-                                            // Remove buy object and add it with no document
-                                            if (ShareObjectFinalValue.RemoveBuy(temp.Date) &&
-                                                ShareObjectFinalValue.AddBuy(strDateTime, temp.Volume, temp.Reduction, temp.Costs, temp.MarketValue))
-                                            {
-                                                // Set flag to save the share object.
-                                                _bSave = true;
-
-                                                ResetValues();
-                                                ShowBuys();
-
-                                                // Add status message
-                                                Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                                                    Language.GetLanguageTextByXPath(
-                                                        @"/AddEditFormBuy/StateMessages/EditSuccess", LanguageName),
-                                                    Language, LanguageName,
-                                                    Color.Black, Logger, (int)FrmMain.EStateLevels.Info,
-                                                    (int)FrmMain.EComponentLevels.Application);
-                                            }
-                                            else
-                                            {
-                                                Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                                                    Language.GetLanguageTextByXPath(
-                                                        @"/AddEditFormBuy/Errors/EditFailed", LanguageName),
-                                                    Language, LanguageName,
-                                                    Color.Red, Logger, (int)FrmMain.EStateLevels.Error,
-                                                    (int)FrmMain.EComponentLevels.Application);
-                                            }
-                                        }
-                                    }
-
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-#if DEBUG
-                MessageBox.Show("dataGridViewBuysOfAYear_CellContentdecimalClick()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DocumentShowFailed", LanguageName),
-                    Language, LanguageName,
-                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError,
-                    (int)FrmMain.EComponentLevels.Application);
-            }
-        }
-
-        /// <summary>
-        /// This function deselects all selected rows of the
-        /// DataGridViews in the TabPages
-        /// </summary>
-        void DeselectRowsOfDataGridViews(DataGridView DataGridView)
-        {
-            try
-            {
-                // Deselect the row
-                foreach (TabPage TabPage in tabCtrlBuys.TabPages)
-                {
-                    foreach (Control control in TabPage.Controls)
-                    {
-                        DataGridView view = control as DataGridView;
-                        if (view != null && view != DataGridView)
-                        {
-                            foreach (DataGridViewRow selectedRow in view.SelectedRows)
-                            {
-                                selectedRow.Selected = false;
-                            }
-                        }
-                    }
-                }
-
-                ResetValues();
-            }
-            catch (Exception ex)
-            {
-#if DEBUG
-                MessageBox.Show("DeselectRowsOfDataGridViews()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DeselectFailed", LanguageName),
-                   Language, LanguageName,
-                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
-            }
-        }
+        #region Buttons
 
         /// <summary>
         /// This function adds a new buy entry to the share object
@@ -1417,7 +935,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             try
             {
                 // Disable controls
-                this.Enabled = false;
+                //this.Enabled = false;
 
                 if (btnAddSave.Text == Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", LanguageName))
                 {
@@ -1456,7 +974,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// </summary>
         /// <param name="sender">Pressed button of the user</param>
         /// <param name="arg">EventArgs</param>
-        void OnBtnDelete_Click(object sender, EventArgs arg)
+        private void OnBtnDelete_Click(object sender, EventArgs arg)
         {
             try
             {
@@ -1557,25 +1075,336 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             Close();
         }
 
-        /// <summary>
-        /// This function resets the text box values
-        /// and sets the date time picker to the current date
-        /// It also reset the background colors
-        /// </summary>
-        private void ResetValues()
-        {
-            // Reset date time picker
-            datePickerDate.Value = DateTime.Now;
-            datePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+        #endregion Buttons
 
-            // Reset text boxes
-            txtBoxVolume.Text = @"";
-            txtBoxPrice.Text = @"";
-            txtBoxFinalValue.Text = @"";
-            txtBoxCosts.Text = @"";
-            txtBoxReduction.Text = @"";
-            txtBoxDocument.Text = @"";
-            txtBoxVolume.Focus();
+        #region Data grid view
+
+        /// <summary>
+        /// This function paints the buy list of the share
+        /// </summary>
+        private void ShowBuys()
+        {
+            try
+            {
+                // Reset tab control
+                foreach (TabPage tabPage in tabCtrlBuys.TabPages)
+                {
+                    foreach (var control in tabPage.Controls)
+                    {
+                        DataGridView dataGridView = control as DataGridView;
+                        if (dataGridView != null)
+                        {
+                            if (tabPage.Name == "Overview")
+                            {
+                                dataGridView.SelectionChanged -= OnDataGridViewBuysOfYears_SelectionChanged;
+                                dataGridView.MouseEnter -= OnDataGridViewBuysOfYears_MouseEnter;
+                                dataGridView.MouseLeave -= OnDataGridViewBuysOfYears_MouseLeave;
+                            }
+                            else
+                            {
+                                dataGridView.SelectionChanged -= OnDataGridViewBuysOfAYear_SelectionChanged;
+                                dataGridView.MouseEnter -= OnDataGridViewBuysOfAYear_MouseEnter;
+                                dataGridView.MouseLeave -= OnDataGridViewBuysOfAYear_MouseEnter;
+                            }
+
+                            dataGridView.DataBindingComplete -= OnDataGridViewBuys_DataBindingComplete;
+                        }
+                    }
+                    tabPage.Controls.Clear();
+                    tabCtrlBuys.TabPages.Remove(tabPage);
+                }
+
+                tabCtrlBuys.TabPages.Clear();
+
+                #region Add page
+
+                // Create TabPage for the buys of the years
+                TabPage newTabPageOverviewYears = new TabPage();
+                // Set TabPage name
+                newTabPageOverviewYears.Name =
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxBuy/TabCtrl/TabPgOverview/Overview",
+                        LanguageName);
+                newTabPageOverviewYears.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxBuy/TabCtrl/TabPgOverview/Overview", LanguageName) +
+                                          @" (" + ShareObjectFinalValue.AllBuyEntries.BuyMarketValueReductionTotalAsStrUnit + @")";
+
+                #endregion Add page
+
+                #region Data source, data binding and data grid view
+
+                // Create Binding source for the buy data
+                BindingSource bindingSourceOverview = new BindingSource();
+                if (ShareObjectFinalValue.AllBuyEntries.GetAllBuysTotalValues().Count > 0)
+                    bindingSourceOverview.DataSource =
+                        ShareObjectFinalValue.AllBuyEntries.GetAllBuysTotalValues();
+
+                // Create DataGridView
+                DataGridView dataGridViewBuysOverviewOfAYears = new DataGridView();
+                dataGridViewBuysOverviewOfAYears.Dock = DockStyle.Fill;
+                // Bind source with buy values to the DataGridView
+                dataGridViewBuysOverviewOfAYears.DataSource = bindingSourceOverview;
+
+                #endregion Data source, data binding and data grid view
+
+                #region Events
+
+                // Set the delegate for the DataBindingComplete event
+                dataGridViewBuysOverviewOfAYears.DataBindingComplete += OnDataGridViewBuys_DataBindingComplete;
+                // Set the delegate for the mouse enter event
+                dataGridViewBuysOverviewOfAYears.MouseEnter += OnDataGridViewBuysOfYears_MouseEnter;
+                // Set the delegate for the mouse leave event
+                dataGridViewBuysOverviewOfAYears.MouseLeave += OnDataGridViewBuysOfYears_MouseLeave;
+                // Set row select event
+                dataGridViewBuysOverviewOfAYears.SelectionChanged += OnDataGridViewBuysOfYears_SelectionChanged;
+
+                #endregion Events
+
+                #region Style 
+
+                // Advanced configuration DataGridView buys
+                DataGridViewCellStyle styleOverviewOfYears = dataGridViewBuysOverviewOfAYears.ColumnHeadersDefaultCellStyle;
+                styleOverviewOfYears.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                styleOverviewOfYears.Font = new Font("Trebuchet MS", 10, FontStyle.Bold);
+
+                dataGridViewBuysOverviewOfAYears.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+                dataGridViewBuysOverviewOfAYears.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+                dataGridViewBuysOverviewOfAYears.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+
+
+                dataGridViewBuysOverviewOfAYears.RowHeadersVisible = false;
+                dataGridViewBuysOverviewOfAYears.RowsDefaultCellStyle.BackColor = Color.White;
+                dataGridViewBuysOverviewOfAYears.DefaultCellStyle.SelectionBackColor = Color.Blue;
+                dataGridViewBuysOverviewOfAYears.DefaultCellStyle.SelectionForeColor = Color.Yellow;
+
+                dataGridViewBuysOverviewOfAYears.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+
+                dataGridViewBuysOverviewOfAYears.MultiSelect = false;
+
+                dataGridViewBuysOverviewOfAYears.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                dataGridViewBuysOverviewOfAYears.AllowUserToResizeColumns = false;
+                dataGridViewBuysOverviewOfAYears.AllowUserToResizeRows = false;
+
+                dataGridViewBuysOverviewOfAYears.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+                #endregion Style
+
+                #region Control add
+
+                newTabPageOverviewYears.Controls.Add(dataGridViewBuysOverviewOfAYears);
+                dataGridViewBuysOverviewOfAYears.Parent = newTabPageOverviewYears;
+                tabCtrlBuys.Controls.Add(newTabPageOverviewYears);
+                newTabPageOverviewYears.Parent = tabCtrlBuys;
+
+                #endregion Control add
+
+                // Check if buys exists
+                if (ShareObjectFinalValue.AllBuyEntries.AllBuysOfTheShareDictionary.Count > 0)
+                {
+                    // Loop through the years of the buys
+                    foreach (
+                        var keyName in ShareObjectFinalValue.AllBuyEntries.AllBuysOfTheShareDictionary.Keys.Reverse()
+                        )
+                    {
+                        #region Add page
+
+                        // Create TabPage
+                        TabPage newTabPage = new TabPage();
+                        // Set TabPage name
+                        newTabPage.Name = keyName;
+                        newTabPage.Text = keyName + " (" +
+                                          ShareObjectFinalValue.AllBuyEntries.AllBuysOfTheShareDictionary[keyName]
+                                          .BuyMarketValueReductionYearAsStrUnit
+                                          + ")";
+
+                        #endregion Add page
+
+                        #region Data source, data binding and data grid view
+
+                        // Create Binding source for the buy data
+                        BindingSource bindingSource = new BindingSource();
+                        bindingSource.DataSource =
+                            ShareObjectFinalValue.AllBuyEntries.AllBuysOfTheShareDictionary[keyName].BuyListYear;
+
+                        // Create DataGridView
+                        DataGridView dataGridViewBuysOfAYear = new DataGridView();
+                        dataGridViewBuysOfAYear.Dock = DockStyle.Fill;
+                        // Bind source with buy values to the DataGridView
+                        dataGridViewBuysOfAYear.DataSource = bindingSource;
+
+                        #endregion Data source, data binding and data grid view
+
+                        #region Events
+
+                        // Set the delegate for the DataBindingComplete event
+                        dataGridViewBuysOfAYear.DataBindingComplete += OnDataGridViewBuys_DataBindingComplete;
+                        // Set the delegate for the mouse enter event
+                        dataGridViewBuysOfAYear.MouseEnter += OnDataGridViewBuysOfAYear_MouseEnter;
+                        // Set the delegate for the mouse leave event
+                        dataGridViewBuysOfAYear.MouseLeave += OnDataGridViewBuysOfAYear_MouseLeave;
+                        // Set row select event
+                        dataGridViewBuysOfAYear.SelectionChanged += OnDataGridViewBuysOfAYear_SelectionChanged;
+                        // Set cell decimal click event
+                        dataGridViewBuysOfAYear.CellContentDoubleClick += OnDataGridViewBuysOfAYear_CellContentdecimalClick;
+
+                        #endregion Events
+
+                        #region Style
+
+                        // Advanced configuration DataGridView buys
+                        DataGridViewCellStyle style = dataGridViewBuysOfAYear.ColumnHeadersDefaultCellStyle;
+                        style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                        style.Font = new Font("Trebuchet MS", 10, FontStyle.Bold);
+
+                        dataGridViewBuysOfAYear.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+                        dataGridViewBuysOfAYear.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+                        dataGridViewBuysOfAYear.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+
+                        dataGridViewBuysOfAYear.RowHeadersVisible = false;
+                        dataGridViewBuysOfAYear.RowsDefaultCellStyle.BackColor = Color.White;
+                        dataGridViewBuysOfAYear.DefaultCellStyle.SelectionBackColor = Color.Blue;
+                        dataGridViewBuysOfAYear.DefaultCellStyle.SelectionForeColor = Color.Yellow;
+
+                        dataGridViewBuysOfAYear.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+
+                        dataGridViewBuysOfAYear.MultiSelect = false;
+
+                        dataGridViewBuysOfAYear.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                        dataGridViewBuysOfAYear.AllowUserToResizeColumns = false;
+                        dataGridViewBuysOfAYear.AllowUserToResizeRows = false;
+
+                        dataGridViewBuysOfAYear.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+                        #endregion Style
+
+                        #region Control add
+
+                        newTabPage.Controls.Add(dataGridViewBuysOfAYear);
+                        dataGridViewBuysOfAYear.Parent = newTabPage;
+                        tabCtrlBuys.Controls.Add(newTabPage);
+                        newTabPage.Parent = tabCtrlBuys;
+
+                        #endregion Control add
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                MessageBox.Show("ShowBuys()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+#endif
+                // Add status message
+                Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
+                   Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ShowFailed", LanguageName),
+                   Language, LanguageName, Color.DarkRed, Logger,
+                   (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+            }
+        }
+
+        /// <summary>
+        /// This function deselects the select row after the DataBinding is complete
+        /// </summary>
+        /// <param name="sender">DataGridView</param>
+        /// <param name="e">DataGridViewBindingCompleteEventArgs</param>
+        private void OnDataGridViewBuys_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            try
+            {
+                // Set column headers
+                for (int i = 0; i < ((DataGridView)sender).ColumnCount; i++)
+                {
+                    // Set alignment of the column
+                    ((DataGridView)sender).Columns[i].DefaultCellStyle.Alignment =
+                        DataGridViewContentAlignment.MiddleCenter;
+
+                    switch (i)
+                    {
+                        case 0:
+                            ((DataGridView)sender).Columns[i].HeaderText =
+                                Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Date",
+                                    LanguageName);
+                            break;
+                        case 1:
+                            ((DataGridView)sender).Columns[i].HeaderText =
+                                Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Volume",
+                                    LanguageName) + @" (" + ShareObject.PieceUnit + @")";
+                            ;
+                            break;
+                        case 2:
+                            ((DataGridView)sender).Columns[i].HeaderText =
+                                Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Price",
+                                    LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
+                            break;
+                        case 3:
+                            ((DataGridView)sender).Columns[i].HeaderText =
+                                Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Value",
+                                    LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
+                            break;
+                        case 4:
+                            ((DataGridView)sender).Columns[i].HeaderText =
+                                Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Document",
+                                    LanguageName);
+                            break;
+                    }
+                }
+
+                if (((DataGridView)sender).Rows.Count > 0)
+                    ((DataGridView)sender).Rows[0].Selected = false;
+
+                // Reset the text box values
+                ResetInputValues();
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                MessageBox.Show("dataGridViewBuysOfAYear_DataBindingComplete()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+#endif
+                // Add status message
+                Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
+                   Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/RenameColHeaderFailed", LanguageName),
+                   Language, LanguageName,
+                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+            }
+        }
+
+        /// <summary>
+        /// This function deselects all selected rows of the
+        /// DataGridViews in the TabPages
+        /// </summary>
+        private void DeselectRowsOfDataGridViews(DataGridView DataGridView)
+        {
+            try
+            {
+                // Deselect the row
+                foreach (TabPage TabPage in tabCtrlBuys.TabPages)
+                {
+                    foreach (Control control in TabPage.Controls)
+                    {
+                        DataGridView view = control as DataGridView;
+                        if (view != null && view != DataGridView)
+                        {
+                            foreach (DataGridViewRow selectedRow in view.SelectedRows)
+                            {
+                                selectedRow.Selected = false;
+                            }
+                        }
+                    }
+                }
+
+                ResetInputValues();
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                MessageBox.Show("DeselectRowsOfDataGridViews()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+#endif
+                // Add status message
+                Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
+                   Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DeselectFailed", LanguageName),
+                   Language, LanguageName,
+                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+            }
         }
 
         /// <summary>
@@ -1604,6 +1433,413 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
+
+        #region Tab control delegates
+
+        /// <summary>
+        /// This function sets the focus on the data grid view of the new selected tab page of the tab control
+        /// </summary>
+        /// <param name="sender">Tab control</param>
+        /// <param name="e">EventArgs</param>
+        private void tabCtrlBuys_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabCtrlBuys.SelectedTab != null)
+            {
+                // Loop trough the controls of the selected tab page and set focus on the data grid view
+                foreach (Control control in tabCtrlBuys.SelectedTab.Controls)
+                {
+                    if (control is DataGridView)
+                        ((DataGridView)control).Focus();
+                }
+            }
+        }
+
+        /// <summary>
+        /// This function sets the focus on the data grid view of the current selected tab page of the tab control
+        /// </summary>
+        /// <param name="sender">Data grid view</param>
+        /// <param name="args">EventArgs</param>
+        private void tabCtrlBuys_MouseEnter(object sender, EventArgs e)
+        {
+            if (tabCtrlBuys.SelectedTab != null)
+            {
+                // Loop trough the controls of the selected tab page and set focus on the data grid view
+                foreach (Control control in tabCtrlBuys.SelectedTab.Controls)
+                {
+                    if (control is DataGridView)
+                        ((DataGridView)control).Focus();
+                }
+            }
+        }
+
+        /// <summary>
+        /// This function sets the focus to the group box add / edit when the mouse leaves the data grid view
+        /// </summary>
+        /// <param name="sender">Tab control</param>
+        /// <param name="e">EventArgs</param>
+        private void tabCtrlBuys_MouseLeave(object sender, EventArgs e)
+        {
+            grpBoxAdd.Focus();
+        }
+
+        #endregion Tab control delegates
+
+        #region Buys of years
+
+        /// <summary>
+        /// This functions selects the tab page of the chosen year
+        /// and deselects all rows in the DataGridViews
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void OnDataGridViewBuysOfYears_SelectionChanged(object sender, EventArgs args)
+        {
+            try
+            {
+                if (((DataGridView)sender).SelectedRows.Count == 1)
+                {
+                    // Get the currently selected item in the ListBox
+                    DataGridViewSelectedRowCollection curItem = ((DataGridView)sender).SelectedRows;
+
+                    foreach (TabPage tabPage in tabCtrlBuys.TabPages)
+                    {
+                        if (tabPage.Name == curItem[0].Cells[0].Value.ToString())
+                        {
+                            tabCtrlBuys.SelectTab(tabPage);
+                            tabPage.Focus();
+
+                            // Deselect rows
+                            DeselectRowsOfDataGridViews(null);
+
+                            break;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                MessageBox.Show("dataGridViewBuysOfYears_SelectionChanged()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+#endif
+                // Add status message
+                Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
+                   Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SelectionChangeFailed", LanguageName),
+                   Language, LanguageName,
+                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+            }
+        }
+
+        /// <summary>
+        /// This function sets the focus to the entered data grid view
+        /// </summary>
+        /// <param name="sender">Entered data grid view</param>
+        /// <param name="args">EventArgs</param>
+        private void OnDataGridViewBuysOfYears_MouseEnter(object sender, EventArgs args)
+        {
+            ((DataGridView)sender).Focus();
+        }
+
+        /// <summary>
+        /// This function sets the focus to the left data grid view
+        /// </summary>
+        /// <param name="sender">Left data grid view</param>
+        /// <param name="args">EventArgs</param>
+        private void OnDataGridViewBuysOfYears_MouseLeave(object sender, EventArgs args)
+        {
+            grpBoxAdd.Focus();
+        }
+
+        #endregion Buys of years
+
+        #region Buys of a year
+
+        /// <summary>
+        /// This function deselects the other selected rows of any other DataGridViews
+        /// Write the values of the selected row to the text boxes
+        /// and enables or disables the buttons
+        /// </summary>
+        /// <param name="sender">Data grid view</param>
+        /// <param name="args">EventArgs</param>
+        private void OnDataGridViewBuysOfAYear_SelectionChanged(object sender, EventArgs args)
+        {
+            try
+            {
+                if (tabCtrlBuys.TabPages.Count > 0)
+                {
+                    // Deselect row only of the other TabPages DataGridViews
+                    if (tabCtrlBuys.SelectedTab.Controls.Contains((DataGridView)sender))
+                        DeselectRowsOfDataGridViews((DataGridView)sender);
+                }
+
+                if (((DataGridView)sender).SelectedRows.Count == 1)
+                {
+                    // Get the currently selected item in the ListBox
+                    DataGridViewSelectedRowCollection curItem = ((DataGridView)sender).SelectedRows;
+
+                    // Set selected date
+                    SelectedDate = curItem[0].Cells[0].Value.ToString();
+
+                    // Get BuyObject of the selected DataGridView row
+                    BuyObject selectedBuyObject = ShareObjectFinalValue.AllBuyEntries.GetBuyObjectByDateTime(SelectedDate);
+
+                    // Get CostObject of the selected DataGridView row if a cost is set by this buy
+                    CostObject selectedCostObject = ShareObjectFinalValue.AllCostsEntries.GetCostObjectByDateTime(SelectedDate);
+
+                    // Set buy values
+                    if (selectedBuyObject != null)
+                    {
+                        datePickerDate.Value = Convert.ToDateTime(selectedBuyObject.Date);
+                        datePickerTime.Value = Convert.ToDateTime(selectedBuyObject.Date);
+                        txtBoxVolume.Text = selectedBuyObject.VolumeAsStr;
+                        txtBoxFinalValue.Text = selectedBuyObject.MarketValueReductionCostsAsStr;
+                        txtBoxReduction.Text = selectedBuyObject.ReductionAsStr;
+                        txtBoxPrice.Text = selectedBuyObject.SharePriceAsStr;
+                        txtBoxDocument.Text = selectedBuyObject.Document;
+                    }
+                    else
+                    {
+                        datePickerDate.Value = Convert.ToDateTime(SelectedDate);
+                        datePickerTime.Value = Convert.ToDateTime(SelectedDate);
+                        txtBoxVolume.Text = curItem[0].Cells[1].Value.ToString();
+                        txtBoxFinalValue.Text = curItem[0].Cells[3].Value.ToString();
+                        txtBoxReduction.Text = @"0,00";
+                        txtBoxPrice.Text = curItem[0].Cells[2].Value.ToString();
+                        txtBoxDocument.Text = curItem[0].Cells[4].Value.ToString();
+                    }
+
+                    // Set cost values
+                    if (selectedCostObject != null && selectedCostObject.CostOfABuy)
+                        txtBoxCosts.Text = selectedCostObject.CostValueAsString;
+                    else
+                        txtBoxCosts.Text = @"";
+
+                    if (ShareObjectFinalValue.AllBuyEntries.IsDateLastDate(SelectedDate) &&
+                        ShareObjectFinalValue.AllSaleEntries.IsDateLastDate(SelectedDate)
+                        )
+                    {
+                        if (ShareObjectFinalValue.AllBuyEntries.GetAllBuysOfTheShare().Count > 1)
+                            // Enable Button(s)
+                            btnDelete.Enabled = true;
+                        else
+                            // Enable Button(s)
+                            btnDelete.Enabled = false;
+
+                        // Enable TextBoxe(s)
+                        datePickerDate.Enabled = true;
+                        datePickerTime.Enabled = true;
+                        txtBoxVolume.Enabled = true;
+                        txtBoxPrice.Enabled = true;
+                        txtBoxMarketValue.Enabled = true;
+                        txtBoxCosts.Enabled = true;
+                        txtBoxReduction.Enabled = true;
+                        txtBoxFinalValue.Enabled = true;
+                    }
+                    else
+                    {
+                        // Disable Button(s)
+                        btnDelete.Enabled = false;
+                        // Disable TextBoxe(s)
+                        datePickerDate.Enabled = false;
+                        datePickerTime.Enabled = false;
+                        txtBoxVolume.Enabled = false;
+                        txtBoxMarketValue.Enabled = false;
+                        txtBoxPrice.Enabled = false;
+                        txtBoxCosts.Enabled = false;
+                        txtBoxReduction.Enabled = false;
+                        txtBoxFinalValue.Enabled = false;
+                    }
+
+                    // Enable button(s)
+                    btnReset.Enabled = true;
+                    // Rename button
+                    btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Save", LanguageName);
+                    btnAddSave.Image = Resources.black_edit;
+
+                    // Rename group box
+                    grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Edit_Caption", LanguageName);
+
+                    // Store DataGridView instance
+                    SelectedDataGridView = (DataGridView)sender;
+
+                    // Format the input value
+                    if (FormatInputValues != null)
+                        FormatInputValues(this, new EventArgs());
+                }
+                else
+                {
+                    // Rename button
+                    btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", LanguageName);
+                    btnAddSave.Image = Resources.black_add;
+                    // Disable button(s)
+                    btnReset.Enabled = false;
+                    btnDelete.Enabled = false;
+                    // Enable Button(s)
+                    btnAddSave.Enabled = true;
+                    // Enabled TextBoxe(s)
+                    datePickerDate.Enabled = true;
+                    datePickerTime.Enabled = true;
+                    txtBoxVolume.Enabled = true;
+                    txtBoxPrice.Enabled = true;
+                    txtBoxCosts.Enabled = true;
+                    txtBoxReduction.Enabled = true;
+
+                    // Rename group box
+                    grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Add_Caption", LanguageName);
+
+                    // Reset stored DataGridView instance
+                    _selectedDataGridView = null;
+                }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                MessageBox.Show("dataGridViewBuysOfAYear_SelectionChanged()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+#endif
+                // Add status message
+                Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
+                   Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SelectionChangeFailed", LanguageName),
+                   Language, LanguageName,
+                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+
+                ResetInputValues();
+
+                ShowBuys();
+            }
+        }
+
+        /// <summary>
+        /// This function sets the focus to the entered data grid view
+        /// </summary>
+        /// <param name="sender">Entered data grid view</param>
+        /// <param name="args">EventArgs</param>
+        private void OnDataGridViewBuysOfAYear_MouseEnter(object sender, EventArgs args)
+        {
+            ((DataGridView)sender).Focus();
+        }
+
+        /// <summary>
+        /// This function sets the focus to the left data grid view
+        /// </summary>
+        /// <param name="sender">Left data grid view</param>
+        /// <param name="args">EventArgs</param>
+        private void OnDataGridViewBuysOfAYear_MouseLeave(object sender, EventArgs args)
+        {
+            grpBoxAdd.Focus();
+        }
+
+        /// <summary>
+        /// This function opens the buy document if a document is present
+        /// </summary>
+        /// <param name="sender">DataGridView</param>
+        /// <param name="e">DataGridViewCellEventArgs</param>
+        private void OnDataGridViewBuysOfAYear_CellContentdecimalClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                // Get column count of the given DataGridView
+                int iColumnCount = ((DataGridView)sender).ColumnCount;
+
+                // Check if the last column (document column) has been clicked
+                if (e.ColumnIndex == iColumnCount - 1)
+                {
+                    // Check if a row is selected
+                    if (((DataGridView)sender).SelectedRows.Count == 1)
+                    {
+                        // Get the current selected row
+                        DataGridViewSelectedRowCollection curItem = ((DataGridView)sender).SelectedRows;
+                        // Get date and time of the selected buy item
+                        string strDateTime = curItem[0].Cells[0].Value.ToString();
+
+                        // Check if a document is set
+                        if (curItem[0].Cells[iColumnCount - 1].Value.ToString() != @"-")
+                        {
+                            // Get doc from the buy with the strDateTime
+                            foreach (var temp in ShareObjectFinalValue.AllBuyEntries.GetAllBuysOfTheShare())
+                            {
+                                // Check if the buy date and time is the same as the date and time of the clicked buy item
+                                if (temp.Date == strDateTime)
+                                {
+                                    // Check if the file still exists
+                                    if (File.Exists(temp.Document))
+                                        // Open the file
+                                        Process.Start(temp.Document);
+                                    else
+                                    {
+                                        string strCaption =
+                                            Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Error",
+                                                LanguageName);
+                                        string strMessage =
+                                            Language.GetLanguageTextByXPath(
+                                                @"/MessageBoxForm/Content/DocumentDoesNotExistDelete",
+                                                LanguageName);
+                                        string strOk =
+                                            Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Yes",
+                                                LanguageName);
+                                        string strCancel =
+                                            Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/No",
+                                                LanguageName);
+
+                                        OwnMessageBox messageBox = new OwnMessageBox(strCaption, strMessage, strOk,
+                                            strCancel);
+                                        if (messageBox.ShowDialog() == DialogResult.OK)
+                                        {
+                                            // Remove buy object and add it with no document
+                                            if (ShareObjectFinalValue.RemoveBuy(temp.Date) &&
+                                                ShareObjectFinalValue.AddBuy(strDateTime, temp.Volume, temp.Reduction, temp.Costs, temp.MarketValue))
+                                            {
+                                                // Set flag to save the share object.
+                                                _bSave = true;
+
+                                                ResetInputValues();
+                                                ShowBuys();
+
+                                                // Add status message
+                                                Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
+                                                    Language.GetLanguageTextByXPath(
+                                                        @"/AddEditFormBuy/StateMessages/EditSuccess", LanguageName),
+                                                    Language, LanguageName,
+                                                    Color.Black, Logger, (int)FrmMain.EStateLevels.Info,
+                                                    (int)FrmMain.EComponentLevels.Application);
+                                            }
+                                            else
+                                            {
+                                                Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
+                                                    Language.GetLanguageTextByXPath(
+                                                        @"/AddEditFormBuy/Errors/EditFailed", LanguageName),
+                                                    Language, LanguageName,
+                                                    Color.Red, Logger, (int)FrmMain.EStateLevels.Error,
+                                                    (int)FrmMain.EComponentLevels.Application);
+                                            }
+                                        }
+                                    }
+
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                MessageBox.Show("dataGridViewBuysOfAYear_CellContentdecimalClick()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+#endif
+                // Add status message
+                Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DocumentShowFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError,
+                    (int)FrmMain.EComponentLevels.Application);
+            }
+        }
+
+        #endregion Buys of a year
+
+        #endregion Data grid view
 
         #endregion Methods
     }

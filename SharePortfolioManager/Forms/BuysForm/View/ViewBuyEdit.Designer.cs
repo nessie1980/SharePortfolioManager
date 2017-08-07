@@ -58,12 +58,11 @@
             this.lblVolume = new System.Windows.Forms.Label();
             this.datePickerDate = new System.Windows.Forms.DateTimePicker();
             this.lblDate = new System.Windows.Forms.Label();
+            this.toolStripStatusLabelMessageBuyEdit = new System.Windows.Forms.ToolStripStatusLabel();
             this.grpBoxOverview = new System.Windows.Forms.GroupBox();
             this.tabCtrlBuys = new System.Windows.Forms.TabControl();
             this.lblPurchaseValue = new System.Windows.Forms.Label();
-            this.toolStripStatusLabelMessageBuyEdit = new System.Windows.Forms.ToolStripStatusLabel();
             this.grpBoxAdd.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
             this.grpBoxOverview.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -453,6 +452,13 @@
             this.lblDate.Text = "_addDate";
             this.lblDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // toolStripStatusLabelMessageBuyEdit
+            // 
+            this.toolStripStatusLabelMessageBuyEdit.BackColor = System.Drawing.SystemColors.Control;
+            this.toolStripStatusLabelMessageBuyEdit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripStatusLabelMessageBuyEdit.Name = "toolStripStatusLabelMessageBuyEdit";
+            this.toolStripStatusLabelMessageBuyEdit.Size = new System.Drawing.Size(0, 17);
+            // 
             // grpBoxOverview
             // 
             this.grpBoxOverview.Controls.Add(this.tabCtrlBuys);
@@ -475,6 +481,9 @@
             this.tabCtrlBuys.Size = new System.Drawing.Size(794, 132);
             this.tabCtrlBuys.TabIndex = 0;
             this.tabCtrlBuys.TabStop = false;
+            this.tabCtrlBuys.SelectedIndexChanged += new System.EventHandler(this.tabCtrlBuys_SelectedIndexChanged);
+            this.tabCtrlBuys.MouseEnter += new System.EventHandler(this.tabCtrlBuys_MouseEnter);
+            this.tabCtrlBuys.MouseLeave += new System.EventHandler(this.tabCtrlBuys_MouseLeave);
             // 
             // lblPurchaseValue
             // 
@@ -486,13 +495,6 @@
             this.lblPurchaseValue.TabIndex = 15;
             this.lblPurchaseValue.Text = "_addFinalValue";
             this.lblPurchaseValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // toolStripStatusLabelMessageBuyEdit
-            // 
-            this.toolStripStatusLabelMessageBuyEdit.BackColor = System.Drawing.SystemColors.Control;
-            this.toolStripStatusLabelMessageBuyEdit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolStripStatusLabelMessageBuyEdit.Name = "toolStripStatusLabelMessageBuyEdit";
-            this.toolStripStatusLabelMessageBuyEdit.Size = new System.Drawing.Size(118, 17);
             // 
             // ViewBuyEdit
             // 
@@ -517,8 +519,6 @@
             this.Load += new System.EventHandler(this.ShareBuysEdit_Load);
             this.grpBoxAdd.ResumeLayout(false);
             this.grpBoxAdd.PerformLayout();
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
             this.grpBoxOverview.ResumeLayout(false);
             this.ResumeLayout(false);
 

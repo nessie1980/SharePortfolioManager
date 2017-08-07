@@ -207,8 +207,6 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
             UpdateViewWithModel();
 
             _view.AddEditDeleteFinish();
-
-            MessageBox.Show(_model.ErrorCode.ToString(), @"Info", MessageBoxButtons.OK);
         }
 
         private void OnEditDividend(object sender, EventArgs e)
@@ -227,8 +225,6 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
                     UpdateViewWithModel();
 
                     _view.AddEditDeleteFinish();
-
-                    MessageBox.Show(_model.ErrorCode.ToString(), @"Info", MessageBoxButtons.OK);
 
                     return;
                 }
@@ -284,8 +280,6 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
                     MessageBoxIcon.Error);
 #endif
                 _model.ErrorCode = DividendErrorCode.DocumentBrowseFailed;
-
-                MessageBox.Show(_model.ErrorCode.ToString(), @"Info", MessageBoxButtons.OK);
             }
 
         }
@@ -416,9 +410,16 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
                 }
 
                 // Check if a given document exists
-                if (_model.Document != @"" && !File.Exists(_model.Document) && bErrorFlag == false)
+                if (_model.Document == null)
+                    _model.Document = @"";
+                else if (_model.Document != @"" && _model.Document != @"-" && !Directory.Exists(Path.GetDirectoryName(_model.Document)) && bErrorFlag == false)
                 {
-                    _model.ErrorCode = DividendErrorCode.DocumentDoesNotExists;
+                    _model.ErrorCode = DividendErrorCode.DirectoryDoesNotExists;
+                    bErrorFlag = true;
+                }
+                else if (_model.Document != @"" && _model.Document != @"-" && !File.Exists(_model.Document) && bErrorFlag == false)
+                {
+                    _model.ErrorCode = DividendErrorCode.FileDoesNotExists;
                     bErrorFlag = true;
                 }
 
