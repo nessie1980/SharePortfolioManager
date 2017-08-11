@@ -29,6 +29,9 @@ using SharePortfolioManager.Forms.BuysForm.View;
 using SharePortfolioManager.Forms.DividendForm.Model;
 using SharePortfolioManager.Forms.DividendForm.Presenter;
 using SharePortfolioManager.Forms.DividendForm.View;
+using SharePortfolioManager.Forms.CostsForm.Model;
+using SharePortfolioManager.Forms.CostsForm.Presenter;
+using SharePortfolioManager.Forms.CostsForm.View;
 using SharePortfolioManager.Forms.SalesForm;
 using SharePortfolioManager.Properties;
 using System;
@@ -660,9 +663,11 @@ namespace SharePortfolioManager
         /// <param name="e">EventArgs</param>
         private void OnBtnShareCostsEdit_Click(object sender, EventArgs e)
         {
-            FrmShareCostEdit shareCostEdit = new FrmShareCostEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, LanguageName);
+            IModelCostEdit model = new ModelCostEdit();
+            IViewCostEdit view = new ViewCostEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, LanguageName);
+            PresenterCostEdit presenterCostEdit = new PresenterCostEdit(view, model);
 
-            DialogResult dlgResult = shareCostEdit.ShowDialog();
+            DialogResult dlgResult = view.ShowDialog();
             if (dlgResult == DialogResult.OK)
                 Save = true;
             else

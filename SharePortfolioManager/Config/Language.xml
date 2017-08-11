@@ -795,7 +795,7 @@
 		</AddEditFormDividend>
 
 		<!-- Costs add / edit -->
-		<AddEditFormCosts>
+		<AddEditFormCost>
 			<Caption text="Add / edit costs of this share" />
 			
 			<!-- GroupBox add / edit costs -->
@@ -806,7 +806,7 @@
 				<!-- Labels -->
 				<Labels>
 					<Date text="Date:" />
-					<Value text="Costs:" />
+					<Cost text="Costs:" />
 					<Document text="Document:" />
 				</Labels>
 
@@ -826,7 +826,7 @@
 			</GrpBoxAddEdit>
 			
 			<!-- GroupBox costs overview -->
-			<GrpBoxCosts>
+			<GrpBoxCost>
 				<Caption text="Costs overview" />
 
 				<!-- TabCtrl costs overview -->
@@ -838,13 +838,13 @@
 					</TabPgOverview>
 					
 					<!-- DataGridView costs -->
-					<DgvCostsOverview>
+					<DgvCostOverview>
 						<ColHeader_Date text="Date" />
 						<ColHeader_Costs text="Costs" />
 						<ColHeader_Document text="Document" />
-					</DgvCostsOverview>
+					</DgvCostOverview>
 				</TabCtrl>
-			</GrpBoxCosts>
+			</GrpBoxCost>
 			
 			<!-- Costs add / edit state messages -->
 			<StateMessages>
@@ -875,7 +875,7 @@
 				<FileDoesNotExist text="The given file does not exist!" />
 				<DocumentShowFailed text="Show of the document failed!" />
 			</Errors>
-		</AddEditFormCosts>
+		</AddEditFormCost>
 		
 		<!-- Logger settings -->
 		<LoggerSettingsForm>
@@ -975,7 +975,7 @@
 				<BuyDelete text="Do you really want to remove this buy?" />
 				<SaleDelete text="Do you really want to remove this sale?" />
 				<DividendDelete text="Do you realy want to remove this dividend?" />
-				<CostsDelete text="Do you realy want to remove this costs?" />
+				<CostDelete text="Do you realy want to remove this cost?" />
 				<DocumentDoesNotExistDelete text="The document does not exist. Would you delete the document from the data?"/>
 				<ShareDelete text="Do you really want to delete this share from the portfolio?"/>
 				<LoggerSetttingsReboot text="The changes of the logger settings will be used after a software restarted"/>
@@ -1801,7 +1801,7 @@
 		</AddEditFormDividend>
 		
 		<!-- Costs add / edit -->
-		<AddEditFormCosts>
+		<AddEditFormCost>
 			<Caption text="Hinzufügen / editieren der Kosten dieser Aktie" />
 			
 			<!-- GroupBox add / edit costs -->
@@ -1812,7 +1812,7 @@
 				<!-- Labels -->
 				<Labels>
 					<Date text="Datum:" />
-					<Value text="Kosten:" />
+					<Cost text="Kosten:" />
 					<Document text="Dokument:" />
 				</Labels>
 
@@ -1832,7 +1832,7 @@
 			</GrpBoxAddEdit>
 			
 			<!-- GroupBox costs overview -->
-			<GrpBoxCosts>
+			<GrpBoxCost>
 				<Caption text="Kosten- Übersicht" />
 
 				<!-- TabCtrl costs overview -->
@@ -1844,13 +1844,13 @@
 					</TabPgOverview>
 					
 					<!-- DataGridView costs -->
-					<DgvCostsOverview>
+					<DgvCostOverview>
 						<ColHeader_Date text="Datum" />
 						<ColHeader_Costs text="Kosten" />
 						<ColHeader_Document text="Dokument" />
-					</DgvCostsOverview>
+					</DgvCostOverview>
 				</TabCtrl>
-			</GrpBoxCosts>
+			</GrpBoxCost>
 			
 			<!-- Costs add / edit state messages -->
 			<StateMessages>
@@ -1883,7 +1883,7 @@
 				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
 				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
 			</Errors>
-		</AddEditFormCosts>
+		</AddEditFormCost>
 
 		<!-- Logger settings -->
 		<LoggerSettingsForm>
@@ -1983,7 +1983,7 @@
 				<BuyDelete text="Möchten Sie den Kauf wirklich entfernen"/>
 				<SaleDelete text="Möchten Sie den Verkauf wirklich entfernen"/>
 				<DividendDelete text="Möchten Sie den Dividenden- Eintrag wirklich entfernen?" />
-				<CostsDelete text="Möchten Sie den Kosten- Eintrag wirklich entfernen?" />
+				<CostDelete text="Möchten Sie den Kosten- Eintrag wirklich entfernen?" />
 				<DocumentDoesNotExistDelete text="Das Dokument existiert nicht mehr. Möchten Sie das Dokument aus den Daten entfernen?"/>
 				<ShareDelete text="Möchten Sie den Aktien- Eintrag wirklich aus dem Portfolio entfernen?"/>
 				<LoggerSetttingsReboot text="Die Änderungen der Logger- Einstellung werden erst nach meinem Software- Neustart angewendet."/>
