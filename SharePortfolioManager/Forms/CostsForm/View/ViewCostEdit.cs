@@ -127,18 +127,18 @@ namespace SharePortfolioManager.Forms.CostsForm.View
         /// <summary>
         /// Stores the current error code of the form
         /// </summary>
-        private CostErrorCode _errorCode;
+        CostErrorCode _errorCode;
 
         /// <summary>
         /// Stores if a cost has been deleted or added
         /// and so a save must be done in the lower dialog
         /// </summary>
-        private bool _bSave;
+        bool _bSave;
 
         /// <summary>
         /// Stores the DataGridView of the selected row
         /// </summary>
-        private DataGridView _selectedDataGridView = null;
+        DataGridView _selectedDataGridView = null;
 
         #endregion Fields
 
@@ -1511,7 +1511,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
                                         {
                                             // Remove cost object and add it with no document
                                             if (ShareObjectFinalValue.RemoveCost(temp.CostDate) &&
-                                                ShareObjectFinalValue.AddCost(false, strDateTime, temp.CostValue))
+                                                ShareObjectFinalValue.AddCost(false, false, strDateTime, temp.CostValue))
                                             {
                                                 // Set flag to save the share object.
                                                 _bSave = true;

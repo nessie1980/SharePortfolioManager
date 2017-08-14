@@ -157,12 +157,12 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// Stores if a dividend has been deleted or added
         /// and so a save must be done in the lower dialog
         /// </summary>
-        private bool _bSave;
+        bool _bSave;
 
         /// <summary>
         /// Stores if a dividend should be load from the portfolio
         /// </summary>
-        private bool _bLoadGridSelectionFlag;
+        bool _bLoadGridSelectionFlag;
 
         /// <summary>
         /// Stores if a dividend should be updated

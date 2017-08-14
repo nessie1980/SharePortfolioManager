@@ -333,7 +333,7 @@ namespace SharePortfolioManager
 
             foreach (var key in AllBuysOfTheShareDictionary.Keys)
             {
-                allBuysOfTheShare.Add(key, string.Format(@"{0:N2}", AllBuysOfTheShareDictionary[key].BuyMarketValueYear));
+                allBuysOfTheShare.Add(key, Helper.FormatDecimal(AllBuysOfTheShareDictionary[key].BuyMarketValueYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo));
             }
             return allBuysOfTheShare;
         }

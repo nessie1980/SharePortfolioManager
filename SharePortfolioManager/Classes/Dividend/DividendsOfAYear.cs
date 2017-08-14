@@ -35,7 +35,7 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores the culture info of the share
         /// </summary>
-        private CultureInfo _cultureInfo;
+        private CultureInfo _dividendCultureInfo;
 
         /// <summary>
         /// Stores the paid dividend value in a year
@@ -56,10 +56,10 @@ namespace SharePortfolioManager
         
         #region Properties
 
-        public CultureInfo CultureInfo
+        public CultureInfo DividendCultureInfo
         {
-            get { return _cultureInfo; }
-            internal set { _cultureInfo = value; }
+            get { return _dividendCultureInfo; }
+            internal set { _dividendCultureInfo = value; }
         }
 
         public decimal DividendValueYear
@@ -70,12 +70,12 @@ namespace SharePortfolioManager
 
         public string DividendValueYearAsString
         {
-            get { return Helper.FormatDecimal(_dividendValueYear, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(_dividendValueYear, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", DividendCultureInfo); }
         }
 
         public string DividendValueYearWithUnitAsString
         {
-            get { return Helper.FormatDecimal(_dividendValueYear, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(_dividendValueYear, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", DividendCultureInfo); }
         }
 
         public List<DividendObject> DividendListYear
@@ -120,7 +120,7 @@ namespace SharePortfolioManager
             try
             {
                 // Set culture info of the share
-                CultureInfo = cultureInfo;
+                DividendCultureInfo = cultureInfo;
 
                 // Create new DividendObject
                 DividendObject addObject = new DividendObject(cultureInfo, cultureInfoFC, csEnableFC, decExchangeRatio, strDateTime, decRate, decVolume,

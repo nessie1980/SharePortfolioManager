@@ -478,22 +478,6 @@ namespace SharePortfolioManager.Classes
         #region Formatting functions
 
         /// <summary>
-        /// This function formats the share price
-        /// </summary>
-        /// <param name="decSharePrice"></param>
-        static public string FormatSharePrice(decimal decSharePrice)
-        {
-            string strSharePrice = string.Format("{0:#.000}", decSharePrice);
-
-            if (strSharePrice[strSharePrice.Length - 1] == '0')
-                strSharePrice = string.Format("{0:C2}", decSharePrice);
-            else
-                strSharePrice = string.Format("{0:C3}", decSharePrice);
-
-            return strSharePrice;
-        }
-
-        /// <summary>
         /// This function formats the given decimal value
         /// with the given format options.
         /// </summary>

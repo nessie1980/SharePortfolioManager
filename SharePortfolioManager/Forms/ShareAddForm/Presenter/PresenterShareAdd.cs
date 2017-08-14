@@ -248,7 +248,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
 
                     // Cost entry if the costs value is not 0 and add it to the final value list
                     if (_model.Costsdec > 0)
-                        _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1].AddCost(true, strDateTime, _model.Costsdec, _model.Document);
+                        _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1].AddCost(true, false, strDateTime, _model.Costsdec, _model.Document);
 
                     // Sort portfolio list in order of the share names
                     _model.ShareObjectListFinalValue.Sort(new ShareObjectListComparer());

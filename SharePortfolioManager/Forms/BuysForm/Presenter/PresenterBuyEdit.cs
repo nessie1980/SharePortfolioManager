@@ -29,7 +29,6 @@ using System.Windows.Forms;
 
 namespace SharePortfolioManager.Forms.BuysForm.Presenter
 {
-
     public class PresenterBuyEdit  
     {
         private readonly IModelBuyEdit _model;
@@ -108,7 +107,7 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
 
                 // Cost entry if the costs value is not 0
                 if (_model.CostsDec > 0)
-                    bErrorFlag = !_model.ShareObjectFinalValue.AddCost(true, strDateTime, _model.CostsDec, _model.Document);
+                    bErrorFlag = !_model.ShareObjectFinalValue.AddCost(true, false, strDateTime, _model.CostsDec, _model.Document);
 
                 if (_model.ShareObjectFinalValue.AddBuy(strDateTime, _model.VolumeDec, _model.SharePricedec, _model.ReductionDec, _model.CostsDec, _model.Document)
                     && bErrorFlag == false)
@@ -143,7 +142,7 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
 
                     // Check if a new cost entry must be made
                     if (bFlagCostEdit && _model.CostsDec > 0)
-                        bFlagCostEdit = _model.ShareObjectFinalValue.AddCost(true, strDateTime, _model.CostsDec, _model.Document);
+                        bFlagCostEdit = _model.ShareObjectFinalValue.AddCost(true, false, strDateTime, _model.CostsDec, _model.Document);
 
                     if (bFlagCostEdit)
                     {
@@ -376,7 +375,7 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
             }
             catch
             {
-                _model.ErrorCode = BuyErrorCode.InputeValuesInvalid;
+                _model.ErrorCode = BuyErrorCode.InputValuesInvalid;
                 return true;
             }
         }

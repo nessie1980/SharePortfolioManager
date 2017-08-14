@@ -40,6 +40,7 @@ namespace SharePortfolioManager.Forms.CostsForm.Model
         CostErrorCode ErrorCode { get; set; }
         string SelectedDate { get; set; }
         bool PartOfABuy { get; set; }
+        bool PartOfASale { get; set; }
         string Date { get; set; }
         string Time { get; set; }
         string Costs { get; set; }
@@ -65,6 +66,7 @@ namespace SharePortfolioManager.Forms.CostsForm.Model
 
         string _selectedDate;
         bool _partOfABuy;
+        bool _partOfASale;
         string _date;
         string _time;
         string _costs;
@@ -131,6 +133,12 @@ namespace SharePortfolioManager.Forms.CostsForm.Model
         {
             get { return _partOfABuy; }
             set { _partOfABuy = value; }
+        }
+
+        public bool PartOfASale
+        {
+            get { return _partOfASale; }
+            set { _partOfASale = value; }
         }
 
         public string Date

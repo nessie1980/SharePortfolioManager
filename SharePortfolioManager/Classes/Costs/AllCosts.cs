@@ -35,7 +35,7 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores the culture info of the share
         /// </summary>
-        private CultureInfo _cultureInfo;
+        private CultureInfo _costCultureInfo;
 
         /// <summary>
         /// Stores the total cost value of the share
@@ -51,10 +51,10 @@ namespace SharePortfolioManager
 
         #region Properties
 
-        public CultureInfo CultureInfo
+        public CultureInfo CostCultureInfo
         {
-            get { return _cultureInfo; }
-            internal set { _cultureInfo = value; }
+            get { return _costCultureInfo; }
+            internal set { _costCultureInfo = value; }
         }
 
         public decimal CostValueTotal
@@ -65,12 +65,12 @@ namespace SharePortfolioManager
 
         public string CostValueTotalAsString
         {
-            get { return Helper.FormatDecimal(_costValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(_costValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CostCultureInfo); }
         }
 
         public string CostValueTotalWithUnitAsString
         {
-            get { return Helper.FormatDecimal(_costValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(_costValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CostCultureInfo); }
         }
 
         public SortedDictionary<string, CostYearOfTheShare> AllCostsOfTheShareDictionary
@@ -94,18 +94,19 @@ namespace SharePortfolioManager
         /// <param name="cultureInfo"></param>
         public void SetCultureInfo(CultureInfo cultureInfo)
         {
-            CultureInfo = cultureInfo;
+            CostCultureInfo = cultureInfo;
         }
 
         /// <summary>
         /// This function adds a cost to the list
         /// </summary>
         /// <param name="bCostOfABuy">Flag if the cost is part of a buy</param>
+        /// <param name="bCostOfASale">Flag if the cost is part of a Sale</param>
         /// <param name="strDateTime">Date and time of the costs</param>
         /// <param name="decValue">Value of the costs</param>
         /// <param name="strDoc">Document of the costs</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddCost(bool bCostOfABuy, string strDateTime, decimal decValue, string strDoc = "")
+        public bool AddCost(bool bCostOfABuy, bool bCostOfASale, string strDateTime, decimal decValue, string strDoc = "")
         {
 #if DEBUG
             Console.WriteLine(@"Add CostYearOfTheShare");
@@ -122,7 +123,7 @@ namespace SharePortfolioManager
                 CostYearOfTheShare searchObject;
                 if (AllCostsOfTheShareDictionary.TryGetValue(year, out searchObject))
                 {
-                    if (!searchObject.AddCostObject(bCostOfABuy, CultureInfo, strDateTime, decValue, strDoc))
+                    if (!searchObject.AddCostObject(bCostOfABuy, bCostOfASale, CostCultureInfo, strDateTime, decValue, strDoc))
                         return false;
                 }
                 else
@@ -130,7 +131,7 @@ namespace SharePortfolioManager
                     // Add new year cost object for the cost with a new year
                     CostYearOfTheShare addObject = new CostYearOfTheShare();
                     // Add cost with the new year to the cost year list
-                    if (addObject.AddCostObject(bCostOfABuy, CultureInfo, strDateTime, decValue, strDoc))
+                    if (addObject.AddCostObject(bCostOfABuy, bCostOfASale, CostCultureInfo, strDateTime, decValue, strDoc))
                     {
                         AllCostsOfTheShareDictionary.Add(year, addObject);
                     }
@@ -248,7 +249,7 @@ namespace SharePortfolioManager
 
             foreach (var key in AllCostsOfTheShareDictionary.Keys)
             {
-                allCostsOfTheShare.Add(key, string.Format(@"{0:N2}", AllCostsOfTheShareDictionary[key].CostValueYear));
+                allCostsOfTheShare.Add(key, Helper.FormatDecimal(AllCostsOfTheShareDictionary[key].CostValueYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", CostCultureInfo));
             }
             return allCostsOfTheShare;
         }

@@ -138,7 +138,7 @@
     <Compile Include="Classes\ShareObjects\ShareObject.cs" />
     <Compile Include="Classes\ShareObjects\ShareObjectFinalValue.cs" />
     <Compile Include="Classes\ShareObjects\ShareObjectMarketValue.cs" />
-    <Compile Include="Classes\Helper.cs" />	
+    <Compile Include="Classes\Helper.cs" />
     <Compile Include="Forms\AboutForm\About.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -153,7 +153,6 @@
       <DependentUpon>ViewBuyEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\BuysForm\Model\ModelBuyEdit.cs" />
-	
     <Compile Include="Forms\CostsForm\Presenter\PresenterCostEdit.cs" />
     <Compile Include="Forms\CostsForm\View\ViewCostEdit.cs">
       <SubType>Form</SubType>
@@ -162,7 +161,6 @@
       <DependentUpon>ViewCostEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\CostsForm\Model\ModelCostEdit.cs" />
-
     <Compile Include="Forms\DividendForm\Model\ModelDividendEdit.cs" />
     <Compile Include="Forms\DividendForm\Presenter\PresenterDividendEdit.cs" />
     <Compile Include="Forms\DividendForm\View\ViewDividendEdit.cs">
@@ -213,11 +211,13 @@
     <Compile Include="Forms\OwnMessageBoxForm\OwnMessageBox.Designer.cs">
       <DependentUpon>OwnMessageBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SalesForm\SalesEdit.cs">
+    <Compile Include="Forms\SalesForm\Model\ModelSaleEdit.cs" />
+    <Compile Include="Forms\SalesForm\Presenter\PresenterSaleEdit.cs" />
+    <Compile Include="Forms\SalesForm\View\ViewSaleEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\SalesForm\SalesEdit.Designer.cs">
-      <DependentUpon>SalesEdit.cs</DependentUpon>
+    <Compile Include="Forms\SalesForm\View\ViewSaleEdit.Designer.cs">
+      <DependentUpon>ViewSaleEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ShareAddForm\Model\ModelShareAdd.cs" />
     <Compile Include="Forms\ShareAddForm\Presenter\PresenterShareAdd.cs" />
@@ -257,6 +257,9 @@
     <EmbeddedResource Include="Forms\DividendForm\View\ViewDividendEdit.resx">
       <DependentUpon>ViewDividendEdit.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SalesForm\View\ViewSaleEdit.resx">
+      <DependentUpon>ViewSaleEdit.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\InvalidLanguageKeysForm\InvalidLanguageKeys.resx">
       <DependentUpon>InvalidLanguageKeys.cs</DependentUpon>
     </EmbeddedResource>
@@ -269,9 +272,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\OwnMessageBoxForm\OwnMessageBox.resx">
       <DependentUpon>OwnMessageBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SalesForm\SalesEdit.resx">
-      <DependentUpon>SalesEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ShareAddForm\View\ViewShareAdd.resx">
       <DependentUpon>ViewShareAdd.cs</DependentUpon>

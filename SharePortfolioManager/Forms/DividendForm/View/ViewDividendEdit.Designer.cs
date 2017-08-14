@@ -71,13 +71,13 @@
             this.lblPriceUnit = new System.Windows.Forms.Label();
             this.lblDividendRateUnit = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabelMessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.datePickerDate = new System.Windows.Forms.DateTimePicker();
             this.txtBoxPrice = new System.Windows.Forms.TextBox();
             this.txtBoxRate = new System.Windows.Forms.TextBox();
             this.lblAddPrice = new System.Windows.Forms.Label();
             this.lblDividendRate = new System.Windows.Forms.Label();
             this.lblDate = new System.Windows.Forms.Label();
-            this.toolStripStatusLabelMessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.grpBoxDividends = new System.Windows.Forms.GroupBox();
             this.tabCtrlDividends = new System.Windows.Forms.TabControl();
             this.lblAddDate = new System.Windows.Forms.Label();
@@ -85,6 +85,7 @@
             this.lblAddVolume = new System.Windows.Forms.Label();
             this.lblAddTaxAtSource = new System.Windows.Forms.Label();
             this.grpBoxAddDividend.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.grpBoxDividends.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -171,7 +172,7 @@
             // 
             this.txtBoxSolidarityTax.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtBoxSolidarityTax.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxSolidarityTax.Location = new System.Drawing.Point(314, 239);
+            this.txtBoxSolidarityTax.Location = new System.Drawing.Point(315, 239);
             this.txtBoxSolidarityTax.Name = "txtBoxSolidarityTax";
             this.txtBoxSolidarityTax.Size = new System.Drawing.Size(338, 23);
             this.txtBoxSolidarityTax.TabIndex = 11;
@@ -182,7 +183,7 @@
             // 
             this.lblSolidarityTax.BackColor = System.Drawing.Color.LightGray;
             this.lblSolidarityTax.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblSolidarityTax.Location = new System.Drawing.Point(9, 239);
+            this.lblSolidarityTax.Location = new System.Drawing.Point(10, 239);
             this.lblSolidarityTax.Name = "lblSolidarityTax";
             this.lblSolidarityTax.Size = new System.Drawing.Size(300, 23);
             this.lblSolidarityTax.TabIndex = 58;
@@ -203,7 +204,7 @@
             // 
             this.txtBoxCapitalGainsTax.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtBoxCapitalGainsTax.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxCapitalGainsTax.Location = new System.Drawing.Point(314, 212);
+            this.txtBoxCapitalGainsTax.Location = new System.Drawing.Point(315, 212);
             this.txtBoxCapitalGainsTax.Name = "txtBoxCapitalGainsTax";
             this.txtBoxCapitalGainsTax.Size = new System.Drawing.Size(338, 23);
             this.txtBoxCapitalGainsTax.TabIndex = 10;
@@ -214,7 +215,7 @@
             // 
             this.lblCapitalGainsTax.BackColor = System.Drawing.Color.LightGray;
             this.lblCapitalGainsTax.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblCapitalGainsTax.Location = new System.Drawing.Point(9, 212);
+            this.lblCapitalGainsTax.Location = new System.Drawing.Point(10, 212);
             this.lblCapitalGainsTax.Name = "lblCapitalGainsTax";
             this.lblCapitalGainsTax.Size = new System.Drawing.Size(300, 23);
             this.lblCapitalGainsTax.TabIndex = 55;
@@ -235,7 +236,7 @@
             // 
             this.txtBoxTaxAtSource.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtBoxTaxAtSource.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxTaxAtSource.Location = new System.Drawing.Point(314, 185);
+            this.txtBoxTaxAtSource.Location = new System.Drawing.Point(315, 185);
             this.txtBoxTaxAtSource.Name = "txtBoxTaxAtSource";
             this.txtBoxTaxAtSource.Size = new System.Drawing.Size(338, 23);
             this.txtBoxTaxAtSource.TabIndex = 9;
@@ -246,7 +247,7 @@
             // 
             this.lblTaxAtSource.BackColor = System.Drawing.Color.LightGray;
             this.lblTaxAtSource.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblTaxAtSource.Location = new System.Drawing.Point(9, 185);
+            this.lblTaxAtSource.Location = new System.Drawing.Point(10, 185);
             this.lblTaxAtSource.Name = "lblTaxAtSource";
             this.lblTaxAtSource.Size = new System.Drawing.Size(300, 23);
             this.lblTaxAtSource.TabIndex = 52;
@@ -374,7 +375,7 @@
             this.txtBoxExchangeRatio.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtBoxExchangeRatio.Enabled = false;
             this.txtBoxExchangeRatio.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxExchangeRatio.Location = new System.Drawing.Point(314, 76);
+            this.txtBoxExchangeRatio.Location = new System.Drawing.Point(315, 76);
             this.txtBoxExchangeRatio.Name = "txtBoxExchangeRatio";
             this.txtBoxExchangeRatio.ReadOnly = true;
             this.txtBoxExchangeRatio.Size = new System.Drawing.Size(122, 23);
@@ -560,9 +561,9 @@
             // 
             // btnReset
             // 
+            this.btnReset.Enabled = false;
             this.btnReset.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnReset.Location = new System.Drawing.Point(398, 402);
-			this.btnReset.Enabled = false;
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(166, 31);
             this.btnReset.TabIndex = 18;
@@ -601,6 +602,13 @@
             this.statusStrip1.Size = new System.Drawing.Size(738, 22);
             this.statusStrip1.TabIndex = 11;
             this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabelMessage
+            // 
+            this.toolStripStatusLabelMessage.BackColor = System.Drawing.SystemColors.Control;
+            this.toolStripStatusLabelMessage.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripStatusLabelMessage.Name = "toolStripStatusLabelMessage";
+            this.toolStripStatusLabelMessage.Size = new System.Drawing.Size(0, 17);
             // 
             // datePickerDate
             // 
@@ -668,13 +676,6 @@
             this.lblDate.Text = "_addDate";
             this.lblDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // toolStripStatusLabelMessage
-            // 
-            this.toolStripStatusLabelMessage.BackColor = System.Drawing.SystemColors.Control;
-            this.toolStripStatusLabelMessage.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolStripStatusLabelMessage.Name = "toolStripStatusLabelMessage";
-            this.toolStripStatusLabelMessage.Size = new System.Drawing.Size(0, 17);
-            // 
             // grpBoxDividends
             // 
             this.grpBoxDividends.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -683,7 +684,7 @@
             this.grpBoxDividends.Controls.Add(this.tabCtrlDividends);
             this.grpBoxDividends.Location = new System.Drawing.Point(8, 473);
             this.grpBoxDividends.Name = "grpBoxDividends";
-            this.grpBoxDividends.Size = new System.Drawing.Size(744, 139);
+            this.grpBoxDividends.Size = new System.Drawing.Size(744, 137);
             this.grpBoxDividends.TabIndex = 3;
             this.grpBoxDividends.TabStop = false;
             this.grpBoxDividends.Text = "_dividends";
@@ -694,10 +695,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabCtrlDividends.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-            this.tabCtrlDividends.Location = new System.Drawing.Point(9, 22);
+            this.tabCtrlDividends.Location = new System.Drawing.Point(10, 22);
             this.tabCtrlDividends.Name = "tabCtrlDividends";
             this.tabCtrlDividends.SelectedIndex = 0;
-            this.tabCtrlDividends.Size = new System.Drawing.Size(726, 108);
+            this.tabCtrlDividends.Size = new System.Drawing.Size(726, 106);
             this.tabCtrlDividends.TabIndex = 0;
             this.tabCtrlDividends.SelectedIndexChanged += new System.EventHandler(this.tabCtrlDividends_SelectedIndexChanged);
             this.tabCtrlDividends.MouseEnter += new System.EventHandler(this.tabCtrlDividends_MouseEnter);
@@ -771,6 +772,8 @@
             this.Shown += new System.EventHandler(this.ShareDividendEdit_Shown);
             this.grpBoxAddDividend.ResumeLayout(false);
             this.grpBoxAddDividend.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.grpBoxDividends.ResumeLayout(false);
             this.ResumeLayout(false);
 

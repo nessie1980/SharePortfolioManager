@@ -831,12 +831,12 @@ namespace SharePortfolioManager
                             foreach (var temp in ShareObjectFinalValue.AllSaleEntries.GetAllSalesOfTheShare())
                             {
                                 // Check if the buy date and time is the same as the date and time of the clicked buy item
-                                if (temp.SaleDate == strDateTime)
+                                if (temp.Date == strDateTime)
                                 {
                                     // Check if the file still exists
-                                    if (File.Exists(temp.SaleDocument))
+                                    if (File.Exists(temp.Document))
                                         // Open the file
-                                        Process.Start(temp.SaleDocument);
+                                        Process.Start(temp.Document);
                                     else
                                     {
                                         string strCaption =
@@ -858,46 +858,47 @@ namespace SharePortfolioManager
                                         if (messageBox.ShowDialog() == DialogResult.OK)
                                         {
                                             // Remove sale object and add it with no document
-                                            if (ShareObjectFinalValue.RemoveSale(temp.SaleDate) &&
-                                                ShareObjectFinalValue.AddSale(false, strDateTime, temp.SaleVolume, temp.SaleValue, temp.SaleProfitLoss, 0))
-                                            {
-                                                // TODO Refresh profit or loss
-                                                //Show();
+                                            // TODO
+                                            //if (ShareObjectFinalValue.RemoveSale(temp.Date) &&
+                                            //    ShareObjectFinalValue.AddSale(false, strDateTime, temp.SaleVolume, temp.SaleValue, temp.SaleProfitLoss, 0))
+                                            //{
+                                            //    // TODO Refresh profit or loss
+                                            //    //Show();
 
-                                                // Add status message
-                                                Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                                    Language.GetLanguageTextByXPath(@"/AddEditFormSale/StateMessages/EditSuccess", LanguageName),
-                                                    Language, LanguageName,
-                                                    Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
+                                            //    // Add status message
+                                            //    Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                            //        Language.GetLanguageTextByXPath(@"/AddEditFormSale/StateMessages/EditSuccess", LanguageName),
+                                            //        Language, LanguageName,
+                                            //        Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
 
-                                                // Save the share values to the XML
-                                                if (ShareObjectFinalValue.SaveShareObject(ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedRows[0].Index], ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio, PortfolioFileName, out Exception exception))
-                                                {
-                                                    // Add status message
-                                                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                                        Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/EditSaveSuccessful", LanguageName),
-                                                        Language, LanguageName,
-                                                        Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
+                                            //    // Save the share values to the XML
+                                            //    if (ShareObjectFinalValue.SaveShareObject(ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedRows[0].Index], ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio, PortfolioFileName, out Exception exception))
+                                            //    {
+                                            //        // Add status message
+                                            //        Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                            //            Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/EditSaveSuccessful", LanguageName),
+                                            //            Language, LanguageName,
+                                            //            Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
 
-                                                    // Reset / refresh DataGridView portfolio binding source
-                                                    _dgvPortfolioBindingSourceFinalValue.ResetBindings(false);
-                                                }
-                                                else
-                                                {
-                                                    // Add status message
-                                                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                                        Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
-                                                        Language, LanguageName,
-                                                        Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
-                                                }
-                                            }
-                                            else
-                                            {
-                                                Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                                    Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/EditFailed", LanguageName),
-                                                    Language, LanguageName,
-                                                    Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
-                                            }
+                                            //        // Reset / refresh DataGridView portfolio binding source
+                                            //        _dgvPortfolioBindingSourceFinalValue.ResetBindings(false);
+                                            //    }
+                                            //    else
+                                            //    {
+                                            //        // Add status message
+                                            //        Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                            //            Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
+                                            //            Language, LanguageName,
+                                            //            Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
+                                            //    }
+                                            //}
+                                            //else
+                                            //{
+                                            //    Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                            //        Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/EditFailed", LanguageName),
+                                            //        Language, LanguageName,
+                                            //        Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
+                                            //}
                                         }
                                     }
 

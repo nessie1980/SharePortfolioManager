@@ -32,7 +32,7 @@ using SharePortfolioManager.Forms.DividendForm.View;
 using SharePortfolioManager.Forms.CostsForm.Model;
 using SharePortfolioManager.Forms.CostsForm.Presenter;
 using SharePortfolioManager.Forms.CostsForm.View;
-using SharePortfolioManager.Forms.SalesForm;
+using SharePortfolioManager.Forms.SalesForm.View;
 using SharePortfolioManager.Properties;
 using System;
 using System.Collections.Generic;
@@ -234,7 +234,7 @@ namespace SharePortfolioManager
 
                     lblBuysValue.Text = ShareObjectFinalValue.AllBuyEntries.BuyMarketValueReductionTotalAsStr;
                     lblBuysUnit.Text = ShareObjectFinalValue.CurrencyUnit;
-                    lblSalesValue.Text = ShareObjectFinalValue.AllSaleEntries.SaleValueTotalAsString;
+                    lblSalesValue.Text = ShareObjectFinalValue.AllSaleEntries.SalePayoutTotalAsString;
                     lblSalesUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                     lblProfitLossValue.Text = ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotalAsString;
                     lblProfitLossUnit.Text = ShareObjectFinalValue.CurrencyUnit;
@@ -625,9 +625,9 @@ namespace SharePortfolioManager
         /// <param name="e">EventArgs</param>
         private void OnBtnShareSalesEdit_Click(object sender, EventArgs e)
         {
-            FrmShareSalesEdit shareSalesEdit = new FrmShareSalesEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, LanguageName);
+            IViewSaleEdit viewSalesEdit = new ViewSaleEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, LanguageName);
 
-            DialogResult dlgResult = shareSalesEdit.ShowDialog();
+            DialogResult dlgResult = viewSalesEdit.ShowDialog();
             if (dlgResult == DialogResult.OK)
                 Save = true;
             else
@@ -684,7 +684,7 @@ namespace SharePortfolioManager
             lblVolumeValue.Text = Helper.FormatDecimal(ShareObjectFinalValue.Volume, Helper.Volumefivelength, false, Helper.Volumetwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
             lblPurchaseValue.Text = Helper.FormatDecimal(ShareObjectFinalValue.PurchaseValue, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
             lblBuysValue.Text = Helper.FormatDecimal(ShareObjectFinalValue.AllBuyEntries.BuyMarketValueReductionTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
-            lblSalesValue.Text = Helper.FormatDecimal(ShareObjectFinalValue.AllSaleEntries.SaleValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
+            lblSalesValue.Text = Helper.FormatDecimal(ShareObjectFinalValue.AllSaleEntries.SalePayoutTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
             lblCostValue.Text = Helper.FormatDecimal(ShareObjectFinalValue.AllCostsEntries.CostValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
             lblProfitLossValue.Text = Helper.FormatDecimal(ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
             lblDividendValue.Text = Helper.FormatDecimal(ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxes, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);

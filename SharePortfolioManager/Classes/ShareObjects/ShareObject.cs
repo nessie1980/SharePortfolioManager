@@ -949,7 +949,7 @@ namespace SharePortfolioManager
 #if DEBUG_SHAREOBJECT
             Console.WriteLine("");
             Console.WriteLine("ShareObject()");
-            Console.WriteLine("wkn: {0}", wkn);
+            Console.WriteLine("WKN: {0}", wkn);
             Console.WriteLine("addDateTime: {0}", addDateTime);
             Console.WriteLine("name: {0}", name);
             Console.WriteLine("lastUpdateInternet: {0}", lastUpdateInternet);
@@ -1111,30 +1111,38 @@ namespace SharePortfolioManager
         /// <summary>
         /// This function adds the sale for the share to the dictionary
         /// </summary>
-        /// <param name="bPurchaseValueCalc">Flag if the PurchaseValue should be recalculated</param>
-        /// <param name="strDateTime">Date and time of the sale</param>
-        /// <param name="decVolume">Sale volume</param>
-        /// <param name="decValue">Sale value</param>
-        /// <param name="decProfitLoss">Sale profit or loss</param>
-        /// <param name="decCurrentVolume">Current share volume</param>
+        /// <param name="strDate">Date of the share sale</param>
+        /// <param name="decVolume">Volume of the sale</param>
+        /// <param name="decBuyPrice">Buy price of the share</param>
+        /// <param name="decSalePrice">Sale price of the share</param>
+        /// <param name="decLossBalance">Loss balance of the share</param>
+        /// <param name="decTaxAtSource">Tax at source of the sale</param>
+        /// <param name="decCapitalGainsTax">Capital gains tax of the sale</param>
+        /// <param name="decSolidarityTax">Solidarity tax of the sale</param>
+        /// <param name="decCosts">Costs of the sale</param>
         /// <param name="strDoc">Document of the sale</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddSale(bool bPurchaseValueCalc, string strDateTime, decimal decVolume, decimal decValue, decimal decProfitLoss, decimal decCurrentVolume, string strDoc = "")
+        public bool AddSale(string strDate, decimal decVolume, decimal decBuyPrice, decimal decSalePrice, decimal decLossBalance, decimal decTaxAtSource, decimal decCapitalGains,
+             decimal decSolidarityTax, decimal decCosts, string strDoc = "")
         {
             try
             {
 #if DEBUG_SHAREOBJECT
                 Console.WriteLine("");
                 Console.WriteLine("AddSale()");
-                Console.WriteLine("bPurchaseValueCalc: {0}", bPurchaseValueCalc);
                 Console.WriteLine("strDateTime: {0}", strDateTime);
                 Console.WriteLine("decVolume: {0}", decVolume);
-                Console.WriteLine("decValue: {0}", decValue);
-                Console.WriteLine("decProfitLoss: {0}", decProfitLoss);
-                Console.WriteLine("decCurrentVolume: {0}", decCurrentVolume);
+                Console.WriteLine("decBuyPrice: {0}", decBuyPrice);
+                Console.WriteLine("decSalePrice: {0}", decSalePrice);
+                Console.WriteLine("decLossBalance: {0}", decLossBalance);
+                Console.WriteLine("decTaxAtSource: {0}", decTaxAtSource);
+                Console.WriteLine("decCapitalGains: {0}", decCapitalGains);
+                Console.WriteLine("decSolidarityTax: {0}", decSolidarityTax);
+                Console.WriteLine("decCosts: {0}", decCosts);
                 Console.WriteLine("strDoc: {0}", strDoc);
 #endif
-                if (!AllSaleEntries.AddSale(strDateTime, decVolume, decValue, decProfitLoss, strDoc))
+                if (!AllSaleEntries.AddSale(strDate, decVolume, decBuyPrice, decSalePrice, decLossBalance, decTaxAtSource, decCapitalGains,
+                                            decSolidarityTax, decCosts, strDoc = ""))
                     return false;
 
                 // Set sale value of the share
@@ -1146,7 +1154,6 @@ namespace SharePortfolioManager
                 Volume -= decVolume;
 #if DEBUG_SHAREOBJECT
                 Console.WriteLine("Volume: {0}", Volume);
-                Console.WriteLine("PurchaseValue: {0}", PurchaseValue);
 #endif
                 return true;
             }
@@ -1178,10 +1185,9 @@ namespace SharePortfolioManager
                     if (!_allSaleEntries.RemoveSale(strDateTime))
                         return false;
 
-                    Volume += saleObject.SaleVolume;
+                    Volume += saleObject.Volume;
 #if DEBUG_SHAREOBJECT
                     Console.WriteLine("Volume: {0}", Volume);
-                    Console.WriteLine("PurchaseValue: {0}", PurchaseValue);
 #endif
                 }
                 else

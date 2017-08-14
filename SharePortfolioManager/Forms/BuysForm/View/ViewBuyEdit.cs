@@ -43,7 +43,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         EditFailed,
         DeleteFailed,
         DeleteFailedUnerasable,
-        InputeValuesInvalid,
+        InputValuesInvalid,
         DateExists,
         DateWrongFormat,
         VolumeEmpty,
@@ -95,6 +95,8 @@ namespace SharePortfolioManager.Forms.BuysForm.View
     {
         #region Fields
 
+        #region Transfer parameter
+
         /// <summary>
         /// Stores the chosen market value share object
         /// </summary>
@@ -120,10 +122,22 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// </summary>
         string _languageName;
 
+        #endregion Transfer parameter
+
+        #region Flags
+
+        /// <summary>
+        /// Stores if a buy has been deleted or added
+        /// and so a save must be done in the lower dialog
+        /// </summary>
+        bool _bSave;
+
         /// <summary>
         /// Stores if a buy should be updated
         /// </summary>
         bool _bUpdateBuy;
+
+        #endregion Flags
 
         /// <summary>
         /// Stores the date of a selected buy row
@@ -133,18 +147,12 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// <summary>
         /// Stores the current error code of the form
         /// </summary>
-        private BuyErrorCode _errorCode;
-
-        /// <summary>
-        /// Stores if a buy has been deleted or added
-        /// and so a save must be done in the lower dialog
-        /// </summary>
-        private bool _bSave;
+        BuyErrorCode _errorCode;
 
         /// <summary>
         /// Stores the DataGridView of the selected row
         /// </summary>
-        private DataGridView _selectedDataGridView = null;
+        DataGridView _selectedDataGridView = null;
 
         #endregion Fields
 
@@ -467,7 +475,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
 
                         break;
                     }
-                case BuyErrorCode.InputeValuesInvalid:
+                case BuyErrorCode.InputValuesInvalid:
                     {
                         strMessage =
                             Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/CheckInputFailure", LanguageName);
@@ -935,7 +943,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             try
             {
                 // Disable controls
-                //this.Enabled = false;
+                this.Enabled = false;
 
                 if (btnAddSave.Text == Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", LanguageName))
                 {

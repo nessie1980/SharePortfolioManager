@@ -35,7 +35,7 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores the culture info of the buy
         /// </summary>
-        private CultureInfo _cultureInfo;
+        private CultureInfo _buyCultureInfo;
 
         /// <summary>
         /// Stores the date string of the buy date
@@ -87,10 +87,10 @@ namespace SharePortfolioManager
         #region Properties
 
         [Browsable(false)]
-        public CultureInfo CultureInfo
+        public CultureInfo BuyCultureInfo
         {
-            get { return _cultureInfo; }
-            internal set { _cultureInfo = value; }
+            get { return _buyCultureInfo; }
+            internal set { _buyCultureInfo = value; }
         }
 
         [Browsable(false)]
@@ -126,13 +126,13 @@ namespace SharePortfolioManager
         [DisplayName(@"Volume")]
         public string VolumeAsStr
         {
-            get { return Helper.FormatDecimal(Volume, Helper.Volumefivelength, false, Helper.Volumetwofixlength, false, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(Volume, Helper.Volumefivelength, false, Helper.Volumetwofixlength, false, @"", BuyCultureInfo); }
         }
 
         [Browsable(false)]
         public string VolumeAsStrUnit
         {
-            get { return Helper.FormatDecimal(Volume, Helper.Volumefivelength, false, Helper.Volumetwofixlength, true, ShareObject.PieceUnit, CultureInfo); }
+            get { return Helper.FormatDecimal(Volume, Helper.Volumefivelength, false, Helper.Volumetwofixlength, true, ShareObject.PieceUnit, BuyCultureInfo); }
         }
 
         [Browsable(false)]
@@ -154,13 +154,13 @@ namespace SharePortfolioManager
         [DisplayName(@"Price")]
         public string SharePriceAsStr
         {
-            get { return Helper.FormatDecimal(SharePrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(SharePrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo); }
         }
 
         [Browsable(false)]
         public string SharePriceAsStrUnit
         {
-            get { return Helper.FormatDecimal(SharePrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(SharePrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo); }
         }
 
         [Browsable(false)]
@@ -181,13 +181,13 @@ namespace SharePortfolioManager
         [Browsable(false)]
         public string ReductionAsStr
         {
-            get { return Helper.FormatDecimal(Reduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(Reduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo); }
         }
 
         [Browsable(false)]
         public string ReductionAsStrUnit
         {
-            get { return Helper.FormatDecimal(Reduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(Reduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo); }
         }
 
         [Browsable(false)]
@@ -208,13 +208,13 @@ namespace SharePortfolioManager
         [Browsable(false)]
         public string CostsAsStr
         {
-            get { return Helper.FormatDecimal(Costs, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(Costs, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo); }
         }
 
         [Browsable(false)]
         public string CostsAsStrUnit
         {
-            get { return Helper.FormatDecimal(Costs, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(Costs, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo); }
         }
 
         [Browsable(false)]
@@ -231,13 +231,13 @@ namespace SharePortfolioManager
         [DisplayName(@"Value")]
         public string MarketValueAsStr
         {
-            get { return Helper.FormatDecimal(MarketValue, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(MarketValue, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo); }
         }
 
         [Browsable(false)]
         public string MarketValueAsStrUnit
         {
-            get { return Helper.FormatDecimal(MarketValue, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(MarketValue, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo); }
         }
 
         [Browsable(false)]
@@ -253,13 +253,13 @@ namespace SharePortfolioManager
         [Browsable(false)]
         public string MarketValueReductionAsStr
         {
-            get { return Helper.FormatDecimal(MarketValueReduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(MarketValueReduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo); }
         }
 
         [Browsable(false)]
         public string MarketValueReductionAsStrUnit
         {
-            get { return Helper.FormatDecimal(MarketValueReduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(MarketValueReduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo); }
         }
 
         [Browsable(false)]
@@ -275,13 +275,13 @@ namespace SharePortfolioManager
         [Browsable(false)]
         public string MarketValueReductionCostsAsStr
         {
-            get { return Helper.FormatDecimal(MarketValueReductionCosts, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(MarketValueReductionCosts, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo); }
         }
 
         [Browsable(false)]
         public string MarketValueReductionCostsAsStrUnit
         {
-            get { return Helper.FormatDecimal(MarketValueReductionCosts, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(MarketValueReductionCosts, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo); }
         }
 
         [Browsable(false)]
@@ -317,7 +317,7 @@ namespace SharePortfolioManager
         /// <param name="strDoc">Document of the share buy</param>
         public BuyObject(CultureInfo cultureInfo, string buyDate, decimal decVolume, decimal decSharePrice, decimal decReduction, decimal decCosts, string strDoc = "")
         {
-            CultureInfo = cultureInfo;
+            BuyCultureInfo = cultureInfo;
             Date = buyDate;
             Volume = decVolume;
             Reduction = decReduction;

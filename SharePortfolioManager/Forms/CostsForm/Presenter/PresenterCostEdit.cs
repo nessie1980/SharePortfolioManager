@@ -95,7 +95,7 @@ namespace SharePortfolioManager.Forms.CostsForm.Presenter
             if (!CheckInputValues(_model.UpdateCost))
             {
                 string strDateTime = _model.Date + " " + _model.Time;
-                if (_model.ShareObjectFinalValue.AddCost(false, strDateTime, _model.CostsDec, _model.Document))
+                if (_model.ShareObjectFinalValue.AddCost(false, false, strDateTime, _model.CostsDec, _model.Document))
                 {
                     _model.ErrorCode = CostErrorCode.AddSuccessful;
                 }
@@ -117,7 +117,7 @@ namespace SharePortfolioManager.Forms.CostsForm.Presenter
             {
                 string strDateTime = _model.Date + " " + _model.Time;
 
-                if (_model.ShareObjectFinalValue.RemoveCost(_model.SelectedDate) && _model.ShareObjectFinalValue.AddCost(_model.PartOfABuy, strDateTime, _model.CostsDec, _model.Document))
+                if (_model.ShareObjectFinalValue.RemoveCost(_model.SelectedDate) && _model.ShareObjectFinalValue.AddCost(_model.PartOfABuy, _model.PartOfASale, strDateTime, _model.CostsDec, _model.Document))
                 {
                     _model.ErrorCode = CostErrorCode.EditSuccessful;
 

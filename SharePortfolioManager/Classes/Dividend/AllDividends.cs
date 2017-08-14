@@ -36,7 +36,7 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores the culture info of the share
         /// </summary>
-        private CultureInfo _cultureInfo;
+        private CultureInfo _dividendCultureInfo;
 
         /// <summary>
         /// Stores the total dividend value of the share with taxes
@@ -57,10 +57,10 @@ namespace SharePortfolioManager
 
         #region Properties
 
-        public CultureInfo CultureInfo
+        public CultureInfo DividendCultureInfo
         {
-            get { return _cultureInfo; }
-            internal set { _cultureInfo = value; }
+            get { return _dividendCultureInfo; }
+            internal set { _dividendCultureInfo = value; }
         }
 
         public decimal DividendValueTotalWithTaxes
@@ -71,12 +71,12 @@ namespace SharePortfolioManager
 
         public string DividendValueTotalWithTaxesAsString
         {
-            get { return Helper.FormatDecimal(_dividendValueTotalWithTaxes, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(_dividendValueTotalWithTaxes, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", DividendCultureInfo); }
         }
 
         public string DividendValueTotalWithTaxesWithUnitAsString
         {
-            get { return Helper.FormatDecimal(_dividendValueTotalWithTaxes, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(_dividendValueTotalWithTaxes, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", DividendCultureInfo); }
         }
 
         public SortedDictionary<string, DividendYearOfTheShare> AllDividendsOfTheShareDictionary
@@ -101,7 +101,7 @@ namespace SharePortfolioManager
         /// <param name="cultureInfo"></param>
         public void SetCultureInfo(CultureInfo cultureInfo)
         {
-            CultureInfo = cultureInfo;
+            DividendCultureInfo = cultureInfo;
         }
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace SharePortfolioManager
                 DividendYearOfTheShare searchObject;
                 if (AllDividendsOfTheShareDictionary.TryGetValue(year, out searchObject))
                 {
-                    if (!searchObject.AddDividendObject(CultureInfo, cultureInfoFC, csEnableFC, decExchangeRatio, strDateTime, decRate, decVolume,
+                    if (!searchObject.AddDividendObject(DividendCultureInfo, cultureInfoFC, csEnableFC, decExchangeRatio, strDateTime, decRate, decVolume,
                         decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decSharePrice, strDoc))
                         return false;
                 }
@@ -146,7 +146,7 @@ namespace SharePortfolioManager
                     // Add new year dividend object for the dividend with a new year
                     DividendYearOfTheShare addObject = new DividendYearOfTheShare();
                     // Add dividend with the new year to the dividend year list
-                    if (addObject.AddDividendObject(CultureInfo, cultureInfoFC, csEnableFC, decExchangeRatio, strDateTime, decRate, decVolume,
+                    if (addObject.AddDividendObject(DividendCultureInfo, cultureInfoFC, csEnableFC, decExchangeRatio, strDateTime, decRate, decVolume,
                         decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decSharePrice, strDoc))
                     {
                         AllDividendsOfTheShareDictionary.Add(year, addObject);
@@ -268,7 +268,7 @@ namespace SharePortfolioManager
 
             foreach (var key in AllDividendsOfTheShareDictionary.Keys)
             {
-                allDividendsOfTheShare.Add(key, string.Format(@"{0:N2}", AllDividendsOfTheShareDictionary[key].DividendValueYear));
+                    allDividendsOfTheShare.Add(key, Helper.FormatDecimal(AllDividendsOfTheShareDictionary[key].DividendValueYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", DividendCultureInfo));
             }
             return allDividendsOfTheShare;
         }

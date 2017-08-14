@@ -38,9 +38,9 @@ namespace SharePortfolioManager
         private CultureInfo _cultureInfo;
 
         /// <summary>
-        /// Stores the total sale value of the share
+        /// Stores the total sale payout of the share
         /// </summary>
-        private decimal _saleValueTotal = 0;
+        private decimal _salePayoutTotal = 0;
 
         /// <summary>
         /// Stores the total sale volume of the share
@@ -61,26 +61,26 @@ namespace SharePortfolioManager
 
         #region Properties
 
-        public CultureInfo CultureInfo
+        public CultureInfo SaleCultureInfo
         {
             get { return _cultureInfo; }
             internal set { _cultureInfo = value; }
         }
 
-        public decimal SaleValueTotal
+        public decimal SalePayoutTotal
         {
-            get { return _saleValueTotal; }
-            internal set { _saleValueTotal = value; }
+            get { return _salePayoutTotal; }
+            internal set { _salePayoutTotal = value; }
         }
 
-        public string SaleValueTotalAsString
+        public string SalePayoutTotalAsString
         {
-            get { return Helper.FormatDecimal(_saleValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(_salePayoutTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
         }
 
-        public string SaleValueTotalWithUnitAsString
+        public string SalePayoutTotalWithUnitAsString
         {
-            get { return Helper.FormatDecimal(_saleValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(_salePayoutTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo); }
         }
 
         public decimal SaleVolumeTotal
@@ -91,12 +91,12 @@ namespace SharePortfolioManager
 
         public string SaleVolumeTotalAsString
         {
-            get { return Helper.FormatDecimal(_saleVolumeTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(_saleVolumeTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
         }
 
         public string SaleVolumeTotalWithUnitAsString
         {
-            get { return Helper.FormatDecimal(_saleVolumeTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, ShareObject.PieceUnit, CultureInfo); }
+            get { return Helper.FormatDecimal(_saleVolumeTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, ShareObject.PieceUnit, SaleCultureInfo); }
         }
 
         public decimal SaleProfitLossTotal
@@ -107,12 +107,12 @@ namespace SharePortfolioManager
 
         public string SaleProfitLossTotalAsString
         {
-            get { return Helper.FormatDecimal(_saleProfitLossTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(_saleProfitLossTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
         }
 
         public string SaleProfitLossTotalWithUnitAsString
         {
-            get { return Helper.FormatDecimal(_saleProfitLossTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(_saleProfitLossTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo); }
         }
 
         public SortedDictionary<string, SalesYearOfTheShare> AllSalesOfTheShareDictionary
@@ -136,19 +136,25 @@ namespace SharePortfolioManager
         /// <param name="cultureInfo"></param>
         public void SetCultureInfo(CultureInfo cultureInfo)
         {
-            CultureInfo = cultureInfo;
+            SaleCultureInfo = cultureInfo;
         }
 
         /// <summary>
         /// This function adds a sale to the list
         /// </summary>
-        /// <param name="strDateTime">Date and time of the sale</param>
+        /// <param name="strDate">Date of the share sale</param>
         /// <param name="decVolume">Volume of the sale</param>
-        /// <param name="decValue">Value of the sale</param>
-        /// <param name="decProfitLoss">Profit loss of the sale</param>
+        /// <param name="decBuyPrice">Buy price of the share</param>
+        /// <param name="decSalePrice">Sale price of the share</param>
+        /// <param name="decLossBalance">Loss balance of the share</param>
+        /// <param name="decTaxAtSource">Tax at source of the sale</param>
+        /// <param name="decCapitalGainsTax">Capital gains tax of the sale</param>
+        /// <param name="decSolidarityTax">Solidarity tax of the sale</param>
+        /// <param name="decCosts">Costs of the sale</param>
         /// <param name="strDoc">Document of the sale</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddSale(string strDateTime, decimal decVolume, decimal decValue, decimal decProfitLoss, string strDoc = "")
+        public bool AddSale(string strDate, decimal decVolume, decimal decBuyPrice, decimal decSalePrice, decimal decLossBalance, decimal decTaxAtSource, decimal decCapitalGains,
+             decimal decSolidarityTax, decimal decCosts, string strDoc = "")
         {
 #if DEBUG
             Console.WriteLine(@"Add AllSalesOfTheShare");
@@ -157,7 +163,7 @@ namespace SharePortfolioManager
             {
                 // Get year of the date of the new sale
                 string year = "";
-                GetYearOfDate(strDateTime, out year);
+                GetYearOfDate(strDate, out year);
                 if (year == null)
                     return false;
 
@@ -165,7 +171,7 @@ namespace SharePortfolioManager
                 SalesYearOfTheShare searchObject;
                 if (AllSalesOfTheShareDictionary.TryGetValue(year, out searchObject))
                 {
-                    if (!searchObject.AddSaleObject(CultureInfo, strDateTime, decVolume, decValue, decProfitLoss, strDoc))
+                    if (!searchObject.AddSaleObject(SaleCultureInfo, strDate, decVolume, decBuyPrice, decSalePrice, decLossBalance, decTaxAtSource, decCapitalGains, decSolidarityTax, decCosts, strDoc))
                         return false;
                 }
                 else
@@ -173,7 +179,7 @@ namespace SharePortfolioManager
                     // Add new year sale object for the sale with a new year
                     SalesYearOfTheShare addObject = new SalesYearOfTheShare();
                     // Add sale with the new year to the sale year list
-                    if (addObject.AddSaleObject(CultureInfo, strDateTime, decVolume, decValue, decProfitLoss, strDoc))
+                    if (addObject.AddSaleObject(SaleCultureInfo, strDate, decVolume, decBuyPrice, decSalePrice, decLossBalance, decTaxAtSource, decCapitalGains, decSolidarityTax, decCosts, strDoc))
                     {
                         AllSalesOfTheShareDictionary.Add(year, addObject);
                     }
@@ -183,19 +189,19 @@ namespace SharePortfolioManager
 
                 // Calculate the total sale value, total sale volume and sale profit or loss
                 // Reset total sale value, sale volume and profit or loss
-                SaleValueTotal = 0;
+                SalePayoutTotal = 0;
                 SaleVolumeTotal = 0;
                 SaleProfitLossTotal = 0;
 
                 // Calculate the new total sale value, sale volume and profit or loss
                 foreach (var calcObject in AllSalesOfTheShareDictionary.Values)
                 {
-                    SaleValueTotal += calcObject.SaleValueYear;
+                    SalePayoutTotal += calcObject.SalePayoutYear;
                     SaleVolumeTotal += calcObject.SaleVolumeYear;
                     SaleProfitLossTotal += calcObject.SaleProfitLossYear;
                 }
 #if DEBUG
-                Console.WriteLine(@"SaleValueTotal:{0}", SaleValueTotal);
+                Console.WriteLine(@"SalePayoutTotal:{0}", SalePayoutTotal);
                 Console.WriteLine(@"SaleVolumeTotal:{0}", SaleVolumeTotal);
                 Console.WriteLine(@"SaleProfitLossTotal:{0}", SaleProfitLossTotal);
 #endif
@@ -247,20 +253,20 @@ namespace SharePortfolioManager
 
                 // Calculate the total sale value, volume and profit or loss
                 // Reset total sale value, volume and profit or loss
-                SaleValueTotal = 0;
+                SalePayoutTotal = 0;
                 SaleVolumeTotal = 0;
                 SaleProfitLossTotal = 0;
 
                 // Calculate the new total sale value, volume and profit or loss
                 foreach (var calcObject in AllSalesOfTheShareDictionary.Values)
                 {
-                    SaleValueTotal += calcObject.SaleValueYear;
+                    SalePayoutTotal += calcObject.SalePayoutYear;
                     SaleVolumeTotal += calcObject.SaleVolumeYear;
                     SaleProfitLossTotal += calcObject.SaleProfitLossYear;
                 }
 
 #if DEBUG
-                Console.WriteLine(@"SaleValueTotal:{0}", SaleValueTotal);
+                Console.WriteLine(@"SaleValueTotal:{0}", SalePayoutTotal);
                 Console.WriteLine(@"SaleVolumeTotal:{0}", SaleVolumeTotal);
                 Console.WriteLine(@"SaleProfitLossTotal:{0}", SaleProfitLossTotal);
 #endif
@@ -302,7 +308,7 @@ namespace SharePortfolioManager
 
             foreach (var key in AllSalesOfTheShareDictionary.Keys)
             {
-                allSalesOfTheShare.Add(key, string.Format(@"{0:N2}", AllSalesOfTheShareDictionary[key].SaleValueYear));
+                allSalesOfTheShare.Add(key, Helper.FormatDecimal(AllSalesOfTheShareDictionary[key].SalePayoutYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo));
             }
             return allSalesOfTheShare;
         }
@@ -318,7 +324,7 @@ namespace SharePortfolioManager
 
             foreach (var key in AllSalesOfTheShareDictionary.Keys)
             {
-                allProfitLossOfTheShare.Add(key, string.Format(@"{0:N2}", AllSalesOfTheShareDictionary[key].SaleProfitLossYear));
+                allProfitLossOfTheShare.Add(key, Helper.FormatDecimal(AllSalesOfTheShareDictionary[key].SaleProfitLossYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo));
             }
             return allProfitLossOfTheShare;
         }
@@ -339,7 +345,7 @@ namespace SharePortfolioManager
                 {
                     foreach (var saleObject in AllSalesOfTheShareDictionary[strYear].SaleListYear)
                     {
-                        if (saleObject.SaleDate == strDateTime)
+                        if (saleObject.Date == strDateTime)
                         {
                             return saleObject;
                         }
@@ -363,7 +369,7 @@ namespace SharePortfolioManager
                 {
                     if (lastYearEntries.SaleListYear.Count > 0)
                     {
-                        DateTime tempTimeDate = Convert.ToDateTime(lastYearEntries.SaleListYear.Last().SaleDate);
+                        DateTime tempTimeDate = Convert.ToDateTime(lastYearEntries.SaleListYear.Last().Date);
                         DateTime givenTimeDate = Convert.ToDateTime(strDateTime);
 
                         if (givenTimeDate >= tempTimeDate)

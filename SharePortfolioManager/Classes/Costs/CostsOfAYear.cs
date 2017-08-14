@@ -34,7 +34,7 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores the culture info of the share
         /// </summary>
-        private CultureInfo _cultureInfo;
+        private CultureInfo _costCultureInfo;
 
         /// <summary>
         /// Stores the paid cost value in a year
@@ -50,10 +50,10 @@ namespace SharePortfolioManager
 
         #region Properties
 
-        public CultureInfo CultureInfo
+        public CultureInfo CostCultureInfo
         {
-            get { return _cultureInfo; }
-            internal set { _cultureInfo = value; }
+            get { return _costCultureInfo; }
+            internal set { _costCultureInfo = value; }
         }
 
         public decimal CostValueYear
@@ -64,12 +64,12 @@ namespace SharePortfolioManager
 
         public string CostValueYearAsString
         {
-            get { return Helper.FormatDecimal(_costValueYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(_costValueYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", CostCultureInfo); }
         }
 
         public string CostValueYearWithUnitAsString
         {
-            get { return Helper.FormatDecimal(_costValueYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(_costValueYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", CostCultureInfo); }
         }
 
         public List<CostObject> CostListYear
@@ -92,12 +92,13 @@ namespace SharePortfolioManager
         /// It also recalculates the cost value
         /// </summary>
         /// <param name="bCostOfABuy">Flag if the cost is a part of a share buy</param>
+        /// <param name="bCostOfASale">Flag if the cost is a part of a share sale</param>
         /// <param name="cultureInfo">Culture info of the share</param>
         /// <param name="strDate">Pay date of the new cost list entry</param>
         /// <param name="decValue">Paid cost value</param>
         /// <param name="strDoc">Document of the cost</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddCostObject(bool bCostOfABuy, CultureInfo cultureInfo, string strDate, decimal decValue, string strDoc = "")
+        public bool AddCostObject(bool bCostOfABuy, bool bCostOfASale, CultureInfo cultureInfo, string strDate, decimal decValue, string strDoc = "")
         {
 #if DEBUG
             Console.WriteLine(@"AddCostObject");
@@ -105,10 +106,10 @@ namespace SharePortfolioManager
             try
             {
                 // Set culture info of the share
-                CultureInfo = cultureInfo;
+                CostCultureInfo = cultureInfo;
 
                 // Create new CostObject
-                CostObject addObject = new CostObject(bCostOfABuy, cultureInfo, strDate, decValue, strDoc);
+                CostObject addObject = new CostObject(bCostOfABuy, bCostOfASale, cultureInfo, strDate, decValue, strDoc);
 
                 // Add object to the list
                 CostListYear.Add(addObject);

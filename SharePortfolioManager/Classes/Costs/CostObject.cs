@@ -35,12 +35,17 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores the culture info of the share
         /// </summary>
-        private CultureInfo _cultureInfo;
+        private CultureInfo _costCultureInfo;
 
         /// <summary>
         /// Flag if the cost is part of a share buy
         /// </summary>
         private bool _costOfABuy;
+
+        /// <summary>
+        /// Flag if the cost is part of a share sale
+        /// </summary>
+        private bool _costOfASale;
 
         /// <summary>
         /// Stores the date string of the cost pay date
@@ -62,10 +67,10 @@ namespace SharePortfolioManager
         #region Properties
 
         [Browsable(false)]
-        public CultureInfo CultureInfo
+        public CultureInfo CostCultureInfo
         {
-            get { return _cultureInfo; }
-            internal set { _cultureInfo = value; }
+            get { return _costCultureInfo; }
+            internal set { _costCultureInfo = value; }
         }
 
         [Browsable(false)]
@@ -76,9 +81,22 @@ namespace SharePortfolioManager
         }
 
         [Browsable(false)]
+        public bool CostOfASale
+        {
+            get { return _costOfASale; }
+            set { _costOfASale = value; }
+        }
+
+        [Browsable(false)]
         public string CostOfABuyAsString
         {
             get { return _costOfABuy.ToString(); }
+        }
+
+        [Browsable(false)]
+        public string CostOfASaleAsString
+        {
+            get { return _costOfASale.ToString(); }
         }
 
         [Browsable(false)]
@@ -106,13 +124,13 @@ namespace SharePortfolioManager
         [DisplayName(@"Value")]
         public string CostValueAsString
         {
-            get { return Helper.FormatDecimal(_costValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(_costValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", CostCultureInfo); }
         }
 
         [Browsable(false)]
         public string CostValueWithUnitAsString
         {
-            get { return Helper.FormatDecimal(_costValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", CultureInfo); }
+            get { return Helper.FormatDecimal(_costValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", CostCultureInfo); }
         }
 
         [Browsable(false)]
@@ -137,14 +155,16 @@ namespace SharePortfolioManager
         /// Constructor with parameters
         /// </summary>
         /// <param name="bCostOfABuy">Flag if the cost is part of a share buy</param>
+        /// <param name="bCostOfASale">Flag if the cost is part of a share sale</param>
         /// <param name="cultureInfo">Culture info of the share</param>
         /// <param name="strDate">Date of the cost pay</param>
         /// <param name="decValue">Value of the cost</param>
         /// <param name="strDoc">Document of the cost</param>
-        public CostObject(bool bCostOfABuy, CultureInfo cultureInfo, string strDate, decimal decValue, string strDoc = "")
+        public CostObject(bool bCostOfABuy, bool bCostOfASale, CultureInfo cultureInfo, string strDate, decimal decValue, string strDoc = "")
         {
             CostOfABuy = bCostOfABuy;
-            CultureInfo = cultureInfo;
+            CostOfASale = bCostOfASale;
+            CostCultureInfo = cultureInfo;
             CostDate = strDate;
             CostValue = decValue;
             CostDocument = strDoc;
@@ -153,6 +173,7 @@ namespace SharePortfolioManager
             Console.WriteLine(@"");
             Console.WriteLine(@"New CostObject created");
             Console.WriteLine(@"CostOfABuy: {0}", bCostOfABuy);
+            Console.WriteLine(@"CostOfASale: {0}", bCostOfASale);
             Console.WriteLine(@"Date: {0}", strDate);
             Console.WriteLine(@"Value: {0}", decValue);
             Console.WriteLine(@"Document: {0}", strDoc);
