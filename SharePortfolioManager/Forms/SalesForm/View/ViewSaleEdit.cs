@@ -808,6 +808,9 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
+                        this.Enabled = true;
+                        txtBoxDocument.Focus();
+
                         break;
                     }
                 case SaleErrorCode.FileDoesNotExists:
@@ -816,6 +819,9 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                             Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/FileDoesNotExist", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
+                        txtBoxDocument.Focus();
 
                         break;
                     }

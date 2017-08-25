@@ -230,7 +230,6 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
                 }
             }
 
-            _model.ErrorCode = DividendErrorCode.EditFailed;
             UpdateViewWithModel();
 
             _view.AddEditDeleteFinish();
@@ -388,6 +387,11 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
                 else if (decVolume <= 0 && bErrorFlag == false)
                 {
                     _model.ErrorCode = DividendErrorCode.VolumeWrongValue;
+                    bErrorFlag = true;
+                }
+                else if (decVolume > _model.ShareObjectFinalValue.Volume && bErrorFlag == false)
+                {
+                    _model.ErrorCode = DividendErrorCode.VolumeMaxValue;
                     bErrorFlag = true;
                 }
 

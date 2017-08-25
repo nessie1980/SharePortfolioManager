@@ -638,6 +638,9 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
+                        this.Enabled = true;
+                        txtBoxDocument.Focus();
+
                         break;
                     }
                 case BuyErrorCode.DocumentFileDoesNotExists:

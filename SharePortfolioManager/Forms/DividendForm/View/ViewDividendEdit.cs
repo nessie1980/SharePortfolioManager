@@ -56,6 +56,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         VolumeEmpty,
         VolumeWrongFormat,
         VolumeWrongValue,
+        VolumeMaxValue,
         TaxAtSourceWrongFormat,
         TaxAtSourceWrongValue,
         CapitalGainsTaxWrongFormat,
@@ -799,12 +800,29 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
                         break;
                     }
+                case DividendErrorCode.VolumeMaxValue:
+                    {
+                        strMessage =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/VolumeMaxValue_1", LanguageName) +
+                            ShareObjectFinalValue.Volume +
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/VolumeMaxValue_2", LanguageName);
+                        clrMessage = Color.Red;
+                        stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
+                        txtBoxVolume.Focus();
+
+                        break;
+                    }
                 case DividendErrorCode.DirectoryDoesNotExists:
                     {
                         strMessage =
                             Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DirectoryDoesNotExist", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
+                        txtBoxDocument.Focus();
 
                         break;
                     }
@@ -2134,6 +2152,10 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
                     // Store DataGridView instance
                     SelectedDataGridView = (DataGridView)sender;
+
+                    // Format the input value
+                    if (FormatInputValues != null)
+                        FormatInputValues(this, new EventArgs());
                 }
                 else
                 {

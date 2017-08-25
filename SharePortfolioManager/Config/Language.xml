@@ -674,6 +674,8 @@
 				<ValueEmpty text="Please insert a value." />
 				<ValueWrongFormat text="Format for the value 'Value' is invalid." />
 				<ValueWrongValue text="The value for 'Value' must be higher than '0'." />
+				<VolumeMaxValue_1 text="The value for 'Volume' is to high. The maximum value for 'Volume' is '" />
+				<VolumeMaxValue_2 text="'!" />
 				<ProfitLossEmpty text="Please insert a profit or loss." />
 				<ProfitLossWrongFormat text="Format for the value 'Profit / Loss' is invalid." />
 				<AddFailed text="Sale add has been failed!" />
@@ -782,6 +784,8 @@
 				<VolumeEmpty text="Please insert a volume." />
 				<VolumeWrongFormat text="Format for the value 'Volume' is invalid." />
 				<VolumeWrongValue text="The value for 'Volume' must be higher than '0'." />
+				<VolumeMaxValue_1 text="The value for 'Volume' is to high. The maximum value for 'Volume' is '" />
+				<VolumeMaxValue_2 text="'!" />
 				<AddFailed text="Dividend add has been failed!" />
 				<EditFailed text="Dividend changes save has been failed!" />
 				<DeleteFailed text="Delete of the dividend entry has been failed!" />
@@ -1676,7 +1680,8 @@
 				<VolumeEmpty text="Bitte geben Sie einen Anteile- Wert ein." />
 				<VolumeWrongFormat text="Format für den 'Anteile'- Wert ist ungültig." />
 				<VolumeWrongValue text="Der Wert für 'Anteile' muss größer als '0' sein." />
-				<VolumeMaxValue text="Der Wert für 'Anteile' ist über dem Maximum." />
+				<VolumeMaxValue_1 text="Der Wert für 'Anteile' ist zu groß. Der Höchstwerte für 'Anteile' '" />
+				<VolumeMaxValue_2 text="' ist!" />
 				<ValueEmpty text="Bitte geben Sie eine Summe ein." />
 				<ValueWrongFormat text="Format für den 'Summe'- Wert ist ungültig." />
 				<ValueWrongValue text="Der Wert für 'Summe' muss größer als '0' sein." />
@@ -1788,6 +1793,8 @@
 				<VolumeEmpty text="Bitte geben Sie einen Anteile- Wert ein." />
 				<VolumeWrongFormat text="Format für den 'Anteile'- Wert ist ungültig." />
 				<VolumeWrongValue text="Der Wert für 'Anteile' muss größer als '0' sein." />
+				<VolumeMaxValue_1 text="Der Wert für 'Anteile' ist zu groß. Der Höchstwerte für 'Anteile' '" />
+				<VolumeMaxValue_2 text="' ist!" />
 				<AddFailed text="Hinzufügen der Dividende ist fehlgeschlagen!" />
 				<EditFailed text="Speichern der Dividenden- Änderung ist fehlgeschlagen!" />
 				<DeleteFailed text="Entfernen des Dividenden- Eintrags ist fehlgeschlagen!" />
