@@ -478,10 +478,10 @@
 				<NameExists text="The name already exists." />
 				<DepositEmpty text="Please insert a deposit." />
 				<DepositWrongFormat text="Format for the value 'Deposit' is invalid." />
-				<DepositWrongValue text="The value for 'Deposit' must be higher than '0'." />
+				<DepositWrongValue text="The value for 'Deposit' must be equal or higher than '0'." />
 				<VolumeEmpty text="Please insert a volume." />
 				<VolumeWrongFormat text="Format for the value 'Volume' is invalid." />
-				<VolumeWrongValue text="The value for 'Volume' must be higher than '0'." />
+				<VolumeWrongValue text="The value for 'Volume' must be equal or higher than '0'." />
 				<WebSiteEmpty text="Please insert a website address." />
 				<WebSiteExists text="The website already exists." />
 				<EditSaveFailed text="An error occurred. Edit of the share failed!" />
@@ -597,15 +597,17 @@
 				<!-- Labels -->
 				<Labels>
 					<Date text="Date of the sale:" />
-					<ForeignCurrencyActivation text="Activate foreign currency input:" />
-					<ForeignCurrencyFactor text="Calculation factor:" />
+<!--					<ForeignCurrencyActivation text="Activate foreign currency input:" /> -->
+<!--					<ForeignCurrencyFactor text="Calculation factor:" /> -->
 					<Volume text="Sale volume:" />
 					<BuyPrice text="Buy price of one share:" />
 					<SalesPrice text="Sale price of one share:" />
-					<SalesLossBalance text="Loss balance:" />
-					<SalesSum text="Sales sum:" />
-					<SalesSumAfterTax text="After tax sales sum:" />
+					<TaxAtSource text="Tax at source:" />
+					<CapitalGainsTax text="Capital gains tax:" />
+					<SolidarityTax text="Solidarity tax:" />
 					<Costs text="Costs" />
+					<ProfitLoss text="Profit / loss:" />
+					<Payout text="Payout:" />
 					<Document text="Document:" />
 				</Labels>
 				
@@ -640,9 +642,9 @@
 					<DgvSaleOverview>
 						<ColHeader_Date text="Date" />
 						<ColHeader_Volume text="Volume" />
-						<ColHeader_Value text="Value" />
+						<ColHeader_Purchase text="Purchase" />
 						<ColHeader_ProfitLoss text="Profit / Loss" />
-						<ColHeader_Price text="Price" />
+						<ColHeader_Sale text="Sale" />
 						<ColHeader_Document text="Document" />
 					</DgvSaleOverview>
 				</TabCtrl>
@@ -667,17 +669,19 @@
 				<VolumeEmpty text="Please insert a volume." />
 				<VolumeWrongFormat text="Format for the value 'Volume' is invalid." />
 				<VolumeWrongValue text="The value for 'Volume' must be higher than '0'." />
-				<VolumeMaxValue text="The value for 'Volume' is over the maximum." />
-				<PriceEmpty text="Please insert a price." />
-				<PriceWrongFormat text="Format for the value 'Price' is invalid." />
-				<PriceWrongValue text="The value for 'price' must be higher than '0'." />
-				<ValueEmpty text="Please insert a value." />
-				<ValueWrongFormat text="Format for the value 'Value' is invalid." />
-				<ValueWrongValue text="The value for 'Value' must be higher than '0'." />
 				<VolumeMaxValue_1 text="The value for 'Volume' is to high. The maximum value for 'Volume' is '" />
 				<VolumeMaxValue_2 text="'!" />
-				<ProfitLossEmpty text="Please insert a profit or loss." />
-				<ProfitLossWrongFormat text="Format for the value 'Profit / Loss' is invalid." />
+				<SalePriceEmpty text="Please insert a sale price." />
+				<SalePriceWrongFormat text="Format for the value 'Sale price' is invalid." />
+				<SalePriceWrongValue text="The value for 'Sale price' must be higher than '0'." />
+				<TaxAtSourceWrongFormat text="Format for the value 'Tax at source' is invalid." />
+				<TaxAtSourceWrongValue text="The value for 'Tax at source' must be higher than '0'." />
+				<CapitalGainsTaxWrongFormat text="Format for the value 'Capital gains tax' is invalid." />
+				<CapitalGainsTaxWrongValue text="The value for 'Capital gains tax' must be higher than '0'." />
+				<SolidarityTaxWrongFormat text="Format for the value 'Solidarity tax' is invalid." />
+				<SolidarityTaxWrongValue text="The value for 'Solidarity tax' must be higher than '0'." />
+				<CostsWrongFormat text="Format for the value 'Costs' is invalid." />
+				<CostsWrongValue text="The value for 'Costs' must be higher than '0'." />
 				<AddFailed text="Sale add has been failed!" />
 				<EditFailed text="Sale changes save has been failed!" />
 				<DeleteFailed text="Delete of the sale entry has been failed!" />
@@ -772,12 +776,18 @@
 				<SelectionChangeFailed text="The selection change failed!" />
 				<DateExists text="An entry for this date already exists." />
 				<DateWrongFormat text="Invalid date format. Current date is set." />
-				<DividendExchangeRatioEmpty text="Please insert a factor for the foreign currency." />
-				<DividendExchangeRatioWrongFormat text="Format for the value 'Factor' for the foreign currency is invalid." />
-				<DividendExchangeRatioWrongValue text="The value for 'Factor' for the foreign currency must be higher than '0'." />
-				<DividendEmpty text="Please insert a dividend." />
-				<DividendWrongFormat text="Format for the value 'Dividend' is invalid." />
-				<DividendWrongValue text="The value for 'Dividend' must be higher than '0'." />
+				<ExchangeRatioEmpty text="Please insert a factor for the foreign currency." />
+				<ExchangeRatioWrongFormat text="Format for the value 'Factor' for the foreign currency is invalid." />
+				<ExchangeRatioWrongValue text="The value for 'Factor' for the foreign currency must be higher than '0'." />
+				<RateEmpty text="Please insert a dividend." />
+				<RateWrongFormat text="Format for the value 'Dividend' is invalid." />
+				<RateWrongValue text="The value for 'Dividend' must be higher than '0'." />
+				<TaxAtSourceWrongFormat text="Format for the value 'Tax at source' is invalid." />
+				<TaxAtSourceWrongValue text="The value for 'Tax at source' must be higher than '0'." />
+				<CapitalGainsTaxWrongFormat text="Format for the value 'Capital gains tax' is invalid." />
+				<CapitalGainsTaxWrongValue text="The value for 'Capital gains tax' must be higher than '0'." />
+				<SolidarityTaxWrongFormat text="Format for the value 'Solidarity tax' is invalid." />
+				<SolidarityTaxWrongValue text="The value for 'Solidarity tax' must be higher than '0'." />
 				<PriceEmpty text="Please insert a price." />
 				<PriceWrongFormat text="Format for the value 'Price' is invalid." />
 				<PriceWrongValue text="The value for 'Price' must be higher than '0'." />
@@ -1490,10 +1500,10 @@
 				<NameExists text="Der Name existiert bereits." />
 				<DepositEmpty text="Bitte geben Sie eine Einzahlung ein." />
 				<DepositWrongFormat text="Format für den 'Einzahlung'- Wert ist ungültig." />
-				<DepositWrongValue text="Der Wert für 'Einzahlung' muss größer als '0' sein." />
+				<DepositWrongValue text="Der Wert für 'Einzahlung' muss gleich oder größer als '0' sein." />
 				<VolumeEmpty text="Bitte geben Sie einen Anteile- Wert ein." />
 				<VolumeWrongFormat text="Format für den 'Anteile'- Wert ist ungültig." />
-				<VolumeWrongValue text="Der Wert für 'Anteile' muss größer '0' sein." />
+				<VolumeWrongValue text="Der Wert für 'Anteile' muss gleich oder größer '0' sein." />
 				<WebSiteEmpty text="Bitte geben Sie eine Webseiten- Adresse ein." />
 				<WebSiteExists text="Die Webseite existiert bereits." />
 				<EditSaveFailed text="Es trat ein Fehler auf. Editieren der Aktien ist fehlgeschlagen!" />
@@ -1570,7 +1580,6 @@
 			<Errors>
 				<ShowFailed text="Es trat ein Fehler beim Anzeigen der Käufe auf!" />
 				<DeselectFailed text="Deselektieren der selektierten Zeile ist fehlgeschlagen!" />
-				<SearchFailed text="Ermitteln des Kauf- Eintrags / der Kauf- Einträge für das ausgewählte Datum ist fehlgeschalgen!" />
 				<RenameColHeaderFailed text="Umbennenen der Spalten- Namen ist fehlgeschlagen!" />
 				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
 				<DateExists text="Es besteht bereits ein Eintrag für das eingegebene Datum." />
@@ -1610,15 +1619,17 @@
 				<!-- Labels -->
 				<Labels>
 					<Date text="Datum des Verkaufs:" />
-					<ForeignCurrencyActivation text="Fremdwährungseingabe aktivieren:" />
-					<ForeignCurrencyFactor text="Umrechnungsfaktor:" />
+<!--					<ForeignCurrencyActivation text="Fremdwährungseingabe aktivieren:" /> -->
+<!--					<ForeignCurrencyFactor text="Umrechnungsfaktor:" /> -->
 					<Volume text="Verkaufte Anteile:" />
 					<BuyPrice text="Kauf- Preis einer Aktie:" />
 					<SalesPrice text="Verkaufs- Preis einer Aktie:" />
-					<SalesLossBalance text="Verrechnungstopf:" />
-					<SalesSum text="Verkaufs- Summe:" />
-					<SalesSumAfterTax text="Verkaufs- Summe nach Steuern:" />
-					<Costs text="Kosten:" />
+					<TaxAtSource text="Quellsteuer:" />
+					<CapitalGainsTax text="Kapitalertragssteuer:" />
+					<SolidarityTax text="Solidaritätszuschlag:" />
+					<Costs text="Kosten" />
+					<ProfitLoss text="Gewinn / Verlust:" />
+					<Payout text="Auszahlung:" />
 					<Document text="Dokument:" />
 				</Labels>
 				
@@ -1653,9 +1664,9 @@
 					<DgvSaleOverview>
 						<ColHeader_Date text="Datum" />
 						<ColHeader_Volume text="Anteile" />
-						<ColHeader_Value text="Summe" />
+						<ColHeader_Purchase text="Kaufsumme" />
 						<ColHeader_ProfitLoss text="Gewinn / Verlust" />
-						<ColHeader_Price text="Preis" />
+						<ColHeader_Sale text="Verkaufsumme" />
 						<ColHeader_Document text="Dokument" />
 					</DgvSaleOverview>
 				</TabCtrl>
@@ -1682,11 +1693,17 @@
 				<VolumeWrongValue text="Der Wert für 'Anteile' muss größer als '0' sein." />
 				<VolumeMaxValue_1 text="Der Wert für 'Anteile' ist zu groß. Der Höchstwerte für 'Anteile' '" />
 				<VolumeMaxValue_2 text="' ist!" />
-				<ValueEmpty text="Bitte geben Sie eine Summe ein." />
-				<ValueWrongFormat text="Format für den 'Summe'- Wert ist ungültig." />
-				<ValueWrongValue text="Der Wert für 'Summe' muss größer als '0' sein." />
-				<ProfitLossEmpty text="Bitte geben Sie einen Gewinn oder Verlust ein." />
-				<ProfitLossWrongFormat text="Format für den 'Gewinn / Verlust'- Wert ist ungültig." />
+				<SalePriceEmpty text="Bitte geben Sie einen Verkaufspreis ein." />
+				<SalePriceWrongFormat text="Format für den 'Verkaufspreis'- Wert ist ungültig." />
+				<SalePriceWrongValue text="Der Wert für 'Verkaufspreis' muss größer als '0' sein." />
+				<TaxAtSourceWrongFormat text="Format für den 'Quellsteuer'- Wert ist ungültig." />
+				<TaxAtSourceWrongValue text="Der Wert für 'Quellsteuer' muss größer als '0' sein." />
+				<CapitalGainsTaxWrongFormat text="Format für 'Kapitalertragssteuer'- Wert ist ungültig." />
+				<CapitalGainsTaxWrongValue text="Der Wert für 'Kapitalertragssteuer' muss größer als '0' sein." />
+				<SolidarityTaxWrongFormat text="Format für den 'Solidaritätszuschlag'- Wert ist ungültig." />
+				<SolidarityTaxWrongValue text="Der Wert für 'Solidaritätszuschlag' muss größer als '0' sein." />
+				<CostsWrongFormat text="Format für den 'Kosten'- Wert ist ungültig." />
+				<CostsWrongValue text="Der Wert für 'Kosten' muss größer '0' sein." />
 				<AddFailed text="Hinzufügen des Kaufs ist fehlgeschlagen!" />
 				<EditFailed text="Speichern der Kauf- Änderung ist fehlgeschlagen!" />
 				<DeleteFailed text="Entfernen des Kauf- Eintrags ist fehlgeschlagen!" />
@@ -1781,12 +1798,18 @@
 				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
 				<DateExists text="Es besteht bereits ein Eintrag für das eingegebene Datum." />
 				<DateWrongFormat text="Ungültiges Datumsformat. Aktuelles Datum wurde gesetzt." />
-				<DividendExchangeRatioEmpty text="Bitte geben Sie einen Faktor für der Fremdwährung ein." />
-				<DividendExchangeRatioWrongFormat text="Format für den 'Faktor'- Wert für der Fremdwährung ist ungültig." />
-				<DividendExchangeRatioWrongValue text="Der Wert für den 'Faktor' für der Fremdwährung muss größer als '0' sein." />
-				<DividendEmpty text="Bitte geben Sie eine Dividende ein." />
-				<DividendWrongFormat text="Format für den 'Dividend'- Wert ist ungültig." />
-				<DividendWrongValue text="Der Wert für 'Dividend' muss größer als '0' sein." />
+				<ExchangeRatioEmpty text="Bitte geben Sie einen Faktor für der Fremdwährung ein." />
+				<ExchangeRatioWrongFormat text="Format für den 'Faktor'- Wert für der Fremdwährung ist ungültig." />
+				<ExchangeRatioWrongValue text="Der Wert für den 'Faktor' für der Fremdwährung muss größer als '0' sein." />
+				<RateEmpty text="Bitte geben Sie eine Dividende ein." />
+				<RateWrongFormat text="Format für den 'Dividend'- Wert ist ungültig." />
+				<RateWrongValue text="Der Wert für 'Dividend' muss größer als '0' sein." />
+				<TaxAtSourceWrongFormat text="Format für den 'Quellsteuer'- Wert ist ungültig." />
+				<TaxAtSourceWrongValue text="Der Wert für 'Quellsteuer' muss größer als '0' sein." />
+				<CapitalGainsTaxWrongFormat text="Format für 'Kapitalertragssteuer'- Wert ist ungültig." />
+				<CapitalGainsTaxWrongValue text="Der Wert für 'Kapitalertragssteuer' muss größer als '0' sein." />
+				<SolidarityTaxWrongFormat text="Format für den 'Solidaritätszuschlag'- Wert ist ungültig." />
+				<SolidarityTaxWrongValue text="Der Wert für 'Solidaritätszuschlag' muss größer als '0' sein." />
 				<PriceEmpty text="Bitte geben Sie einen Preis ein." />
 				<PriceWrongFormat text="Format für den 'Preis'- Wert ist ungültig." />
 				<PriceWrongValue text="Der Wert für 'Preis' muss größer als '0' sein." />
@@ -1878,8 +1901,6 @@
 				<CostsEmpty text="Bitte geben Sie die Kosten ein." />
 				<CostsWrongFormat text="Format für den 'Kosten'- Wert ist ungültig." />
 				<CostsWrongValue text="Der Wert für 'Kosten' muss größer als '0' sein." />
-				<PriceEmpty text="Bitte geben Sie einen Preis ein." />
-				<PriceWrongFormat text="Format für den 'Preis'- Wert ist ungültig." />
 				<AddFailed text="Hinzufügen der Kosten ist fehlgeschlagen!" />
 				<EditFailed text="Speichern der Kosten- Änderung ist fehlgeschlagen!" />
 				<DeleteFailed text="Entfernen des Kosten- Eintrags ist fehlgeschlagen!" />

@@ -44,6 +44,7 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
             view.AddBuy += OnAddBuy;
             view.EditBuy += OnEditBuy;
             view.DeleteBuy += OnDeleteBuy;
+            view.DocumentBrowse += OnDocumentBrowse;
         }
 
         private void UpdateViewWithModel()
@@ -81,6 +82,11 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
             _model.ErrorCode = _view.ErrorCode;
             _model.UpdateBuy = _view.UpdateBuy;
             _model.SelectedDate = _view.SelectedDate;
+
+            _model.Logger = _view.Logger;
+            _model.Language = _view.Language;
+            _model.LanguageName = _view.LanguageName;
+
             _model.Date = _view.Date;
             _model.Time = _view.Time;
             _model.Volume = _view.Volume;
@@ -200,6 +206,33 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
             _view.ErrorCode = _model.ErrorCode;
 
             _view.AddEditDeleteFinish();
+        }
+
+        /// <summary>
+        /// This function opens the document browse dialog and set the chosen document
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnDocumentBrowse(object sender, EventArgs e)
+        {
+            try
+            {
+                const string strFilter = "pdf (*.pdf)|*.pdf|txt (*.txt)|.txt|doc (*.doc)|.doc|docx (*.docx)|.docx";
+                _model.Document = Helper.SetDocument(_model.Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/OpenFileDialog/Title", _model.LanguageName), strFilter, _model.Document);
+
+                UpdateViewWithModel();
+
+                _view.DocumentBrowseFinish();
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                MessageBox.Show("OnDocumentBrowse()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+#endif
+                _model.ErrorCode = BuyErrorCode.DocumentBrowseFailed;
+            }
+
         }
 
         /// <summary>

@@ -58,6 +58,31 @@ namespace SharePortfolioManager
         /// </summary>
         private int _statusMessageClearTimerValue = 5000;
 
+        /// <summary>
+        /// Stores the name of the final value tab control
+        /// </summary>
+        private readonly string TabPageDetailsFinalValue = "tabPgDetailsFinalValue";
+
+        /// <summary>
+        /// Stores the name of the market value tab control
+        /// </summary>
+        private readonly string TabPageDetailsMarketValue = "tabPgDetailsMarketValue";
+
+        /// <summary>
+        /// Stores the name of the dividends tab control
+        /// </summary>
+        private readonly string TabPageDetailsDividendValue = "tabPgDividends";
+
+        /// <summary>
+        /// Stores the name of the costs tab control
+        /// </summary>
+        private readonly string TabPageDetailsCostsValue = "tabPgCosts";
+
+        /// <summary>
+        /// Stores the name of the profit / loss value tab control
+        /// </summary>
+        private readonly string TabPageDetailsProfitLossValue = "tabPgProfitLoss";
+
         #endregion From
 
         #region Logger
@@ -600,6 +625,12 @@ namespace SharePortfolioManager
             get { return _enableDisableControlNames; }
         }
 
+        TabPage tempFinalValues = null;
+        TabPage tempMarketValues = null;
+        TabPage tempProfitLoss = null;
+        TabPage tempDividends = null;
+        TabPage tempCosts = null;
+
         #endregion Properties
 
         #region MainFrom
@@ -775,6 +806,22 @@ namespace SharePortfolioManager
                 //}
 
                 #endregion Enable / disable controls
+
+                #region Set tab controls names
+
+                TabPageDetailsFinalValue = tabCtrlDetails.TabPages[0].Name;
+                TabPageDetailsMarketValue = tabCtrlDetails.TabPages[1].Name;
+                TabPageDetailsProfitLossValue = tabCtrlDetails.TabPages[2].Name;
+                TabPageDetailsDividendValue = tabCtrlDetails.TabPages[3].Name;
+                TabPageDetailsCostsValue = tabCtrlDetails.TabPages[4].Name;
+
+                tempFinalValues = tabCtrlDetails.TabPages[TabPageDetailsFinalValue];
+                tempMarketValues = tabCtrlDetails.TabPages[TabPageDetailsMarketValue];
+                tempDividends = tabCtrlDetails.TabPages[TabPageDetailsDividendValue];
+                tempCosts = tabCtrlDetails.TabPages[TabPageDetailsCostsValue];
+                tempProfitLoss = tabCtrlDetails.TabPages[TabPageDetailsProfitLossValue];
+
+                #endregion Set tab controls names
 
                 #region Select first item
 
@@ -952,7 +999,7 @@ namespace SharePortfolioManager
 
         #region MainForm resize
 
-        // TODO here we check if the user minimized window, we hide the form
+        // Here we check if the user minimized window, we hide the form
         private void FrmMain_Resize(object sender, EventArgs e)
         {
             if (this.WindowState == FormWindowState.Minimized)
@@ -966,7 +1013,7 @@ namespace SharePortfolioManager
 
         #region MainFrom visibility changed
 
-        // TODO when the form is hidden, we show notify icon and when the form is visible we hide it
+        // When the form is hidden, we show notify icon and when the form is visible we hide it
         private void FrmMain_VisibleChanged(object sender, EventArgs e)
         {
             this.notifyIcon.Visible = !this.Visible;
@@ -976,7 +1023,7 @@ namespace SharePortfolioManager
 
         #region NotifyIcon
 
-        // TODO When click on notify icon, we bring the form to front
+        // When click on notify icon, we bring the form to front
         private void NotifyIcon_Click(object sender, EventArgs e)
         {
             this.ShowInTaskbar = true;

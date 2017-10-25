@@ -56,6 +56,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         CostsWrongValue,
         ReductionWrongFormat,
         ReductionWrongValue,
+        DocumentBrowseFailed,
         DocumentDirectoryDoesNotExits,
         DocumentFileDoesNotExists
     };
@@ -69,11 +70,16 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         event EventHandler AddBuy;
         event EventHandler EditBuy;
         event EventHandler DeleteBuy;
+        event EventHandler DocumentBrowse;
 
         BuyErrorCode ErrorCode { get; set; }
 
         ShareObjectMarketValue ShareObjectMarketValue { get; }
         ShareObjectFinalValue ShareObjectFinalValue { get; }
+
+        Logger Logger { get; }
+        Language Language { get; }
+        string LanguageName { get; }
 
         bool UpdateBuy { get; set; }
         string SelectedDate { get; set; }
@@ -89,6 +95,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
 
         DialogResult ShowDialog();
         void AddEditDeleteFinish();
+        void DocumentBrowseFinish();
     }
 
     public partial class ViewBuyEdit : Form, IViewBuyEdit
@@ -110,12 +117,12 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// <summary>
         /// Stores the logger
         /// </summary>
-        readonly Logger _logger;
+        Logger _logger;
 
         /// <summary>
         /// Stores the given language file
         /// </summary>
-        readonly Language _language;
+        Language _language;
 
         /// <summary>
         /// Stores the given language
@@ -158,20 +165,29 @@ namespace SharePortfolioManager.Forms.BuysForm.View
 
         #region Properties
 
+        #region Transfer parameter
+
         public Logger Logger
         {
             get { return _logger; }
+            internal set { _logger = value; }
         }
 
         public Language Language
         {
             get { return _language; }
+            internal set { _language = value; }
         }
 
         public string LanguageName
         {
             get { return _languageName; }
+            internal set { _languageName = value; }
         }
+
+        #endregion Transfer parameter
+
+        #region Flags
 
         public bool UpdateBuyFlag
         {
@@ -184,6 +200,8 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             get { return _bSave; }
             set { _bSave = value; }
         }
+
+        #endregion Flags
 
         public DataGridView SelectedDataGridView
         {
@@ -664,6 +682,35 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                (int)FrmMain.EComponentLevels.Application);
         }
 
+        public void DocumentBrowseFinish()
+        {
+            // Set messages
+            string strMessage = @"";
+            Color clrMessage = Color.Black;
+            FrmMain.EStateLevels stateLevel = FrmMain.EStateLevels.Info;
+
+            switch (ErrorCode)
+            {
+                case BuyErrorCode.DocumentBrowseFailed:
+                    {
+                        txtBoxDocument.Text = @"-";
+
+                        strMessage =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/ChoseDocumentFailed", LanguageName);
+                        break;
+                    }
+            }
+
+            Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
+               strMessage,
+               Language,
+               LanguageName,
+               clrMessage,
+               Logger,
+               (int)stateLevel,
+               (int)FrmMain.EComponentLevels.Application);
+        }
+
         #endregion IView members
 
         #region Event members
@@ -673,6 +720,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         public event EventHandler AddBuy;
         public event EventHandler EditBuy;
         public event EventHandler DeleteBuy;
+        public event EventHandler DocumentBrowse;
 
         #endregion
 
@@ -1621,7 +1669,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
 
                     // Set cost values
                     if (selectedCostObject != null && selectedCostObject.CostOfABuy)
-                        txtBoxCosts.Text = selectedCostObject.CostValueAsString;
+                        txtBoxCosts.Text = selectedCostObject.CostValueAsStr;
                     else
                         txtBoxCosts.Text = @"";
 

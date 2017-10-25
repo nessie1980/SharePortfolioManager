@@ -571,7 +571,7 @@ namespace SharePortfolioManager
             this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsFinalValuePrevPriceValue);
             this.tabPgDetailsFinalValue.Location = new System.Drawing.Point(4, 26);
             this.tabPgDetailsFinalValue.Margin = new System.Windows.Forms.Padding(0);
-            this.tabPgDetailsFinalValue.Name = TabPageDetailsFinalValue;
+            this.tabPgDetailsFinalValue.Name = "tabPgDetailsFinalValue";
             this.tabPgDetailsFinalValue.Size = new System.Drawing.Size(1189, 118);
             this.tabPgDetailsFinalValue.TabIndex = 0;
             this.tabPgDetailsFinalValue.Text = "DetailsFinalValue_";
@@ -884,7 +884,7 @@ namespace SharePortfolioManager
             this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValueTotalProfit);
             this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValuePrevPriceValue);
             this.tabPgDetailsMarketValue.Location = new System.Drawing.Point(4, 26);
-            this.tabPgDetailsMarketValue.Name = TabPageDetailsMarketValue;
+            this.tabPgDetailsMarketValue.Name = "tabPgDetailsMarketValue";
             this.tabPgDetailsMarketValue.Size = new System.Drawing.Size(1189, 118);
             this.tabPgDetailsMarketValue.TabIndex = 3;
             this.tabPgDetailsMarketValue.Text = "DetailsMarketValue_";
@@ -1177,7 +1177,7 @@ namespace SharePortfolioManager
             this.tabPgProfitLoss.Controls.Add(this.tabCtrlProfitLoss);
             this.tabPgProfitLoss.Location = new System.Drawing.Point(4, 26);
             this.tabPgProfitLoss.Margin = new System.Windows.Forms.Padding(0);
-            this.tabPgProfitLoss.Name = TabPageDetailsProfitLossValue;
+            this.tabPgProfitLoss.Name = "tabPgProfitLoss";
             this.tabPgProfitLoss.Size = new System.Drawing.Size(1189, 118);
             this.tabPgProfitLoss.TabIndex = 4;
             this.tabPgProfitLoss.Text = "ProfitLoss_";
@@ -1201,7 +1201,7 @@ namespace SharePortfolioManager
             this.tabPgDividends.Controls.Add(this.tabCtrlDividends);
             this.tabPgDividends.Location = new System.Drawing.Point(4, 26);
             this.tabPgDividends.Margin = new System.Windows.Forms.Padding(0);
-            this.tabPgDividends.Name = TabPageDetailsDividendValue;
+            this.tabPgDividends.Name = "tabPgDividends";
             this.tabPgDividends.Size = new System.Drawing.Size(1189, 118);
             this.tabPgDividends.TabIndex = 1;
             this.tabPgDividends.Text = "Dividends_";
@@ -1225,7 +1225,7 @@ namespace SharePortfolioManager
             this.tabPgCosts.Controls.Add(this.tabCtrlCosts);
             this.tabPgCosts.Location = new System.Drawing.Point(4, 26);
             this.tabPgCosts.Margin = new System.Windows.Forms.Padding(0);
-            this.tabPgCosts.Name = TabPageDetailsCostsValue;
+            this.tabPgCosts.Name = "tabPgCosts";
             this.tabPgCosts.Size = new System.Drawing.Size(1189, 118);
             this.tabPgCosts.TabIndex = 2;
             this.tabPgCosts.Text = "Costs_";

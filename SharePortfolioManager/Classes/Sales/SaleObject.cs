@@ -58,11 +58,6 @@ namespace SharePortfolioManager
         private decimal _salePrice = -1;
 
         /// <summary>
-        /// Stores the loss balance
-        /// </summary>
-        private decimal _lossBalance = -1;
-
-        /// <summary>
         /// Stores the tax at source
         /// </summary>
         private decimal _taxAtSource = -1;
@@ -88,14 +83,29 @@ namespace SharePortfolioManager
         private decimal _costs = -1;
 
         /// <summary>
-        /// Stores the profit / loss of the sale
+        /// Stores the sold purchase value of the bought purchase value
+        /// </summary>
+        private decimal _purchaseValue = -1;
+
+        /// <summary>
+        /// Stores the profit / loss with costs of the sale
         /// </summary>
         private decimal _profitLoss = 0;
 
         /// <summary>
-        /// Stores the payout of the sale
+        /// Stores the profit / loss without costs of the sale
+        /// </summary>
+        private decimal _profitLossWithoutCosts = 0;
+
+        /// <summary>
+        /// Stores the payout with costs of the sale
         /// </summary>
         private decimal _payout = 0;
+
+        /// <summary>
+        /// Stores the payout without costs of the sale
+        /// </summary>
+        private decimal _payoutWithOutCosts = 0;
 
         /// <summary>
         /// Stores the document of the sale
@@ -122,7 +132,7 @@ namespace SharePortfolioManager
 
         [Browsable(true)]
         [DisplayName(@"Date")]
-        public string DateAsString
+        public string DateAsStr
         {
             get { return _date; }
         }
@@ -142,13 +152,13 @@ namespace SharePortfolioManager
 
         [Browsable(true)]
         [DisplayName(@"Volume")]
-        public string VolumeAsString
+        public string VolumeAsStr
         {
             get { return Helper.FormatDecimal(_volume, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
         }
 
         [Browsable(false)]
-        public string VolumeWithUnitAsString
+        public string VolumeWithUnitAsStr
         {
             get { return Helper.FormatDecimal(_volume, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, ShareObject.PieceUnit, SaleCultureInfo); }
         }
@@ -166,15 +176,14 @@ namespace SharePortfolioManager
             }
         }
 
-        [Browsable(true)]
-        [DisplayName(@"BuyPrice")]
-        public string BuyPriceAsString
+        [Browsable(false)]
+        public string BuyPriceAsStr
         {
-            get { return Helper.FormatDecimal(_buyPrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
+            get { return BuyPrice.ToString(); /*Helper.FormatDecimal(_buyPrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);*/ }
         }
 
         [Browsable(false)]
-        public string BuyPriceWithUnitAsString
+        public string BuyPriceWithUnitAsStr
         {
             get { return Helper.FormatDecimal(_buyPrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo); }
         }
@@ -192,42 +201,16 @@ namespace SharePortfolioManager
             }
         }
 
-        [Browsable(true)]
-        [DisplayName(@"SalePrice")]
-        public string SalePriceAsString
+        [Browsable(false)]
+        public string SalePriceAsStr
         {
             get { return Helper.FormatDecimal(_salePrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
         }
 
         [Browsable(false)]
-        public string SalePriceWithUnitAsString
+        public string SalePriceWithUnitAsStr
         {
             get { return Helper.FormatDecimal(_salePrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo); }
-        }
-
-        [Browsable(false)]
-        public decimal LossBalance
-        {
-            get { return _lossBalance; }
-            internal set
-            {
-                _lossBalance = value;
-
-                // Calculate profit / loss and payout
-                CalculateProfitLossAndPayout();
-            }
-        }
-
-        [Browsable(false)]
-        public string LossBalanceAsString
-        {
-            get { return Helper.FormatDecimal(_lossBalance, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
-        }
-
-        [Browsable(false)]
-        public string LossBalanceWithUnitAsString
-        {
-            get { return Helper.FormatDecimal(_lossBalance, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo); }
         }
 
         [Browsable(false)]
@@ -247,15 +230,15 @@ namespace SharePortfolioManager
         }
 
         [Browsable(false)]
-        public string TaxAtSourceAsString
+        public string TaxAtSourceAsStr
         {
-            get { return Helper.FormatDecimal(_taxAtSource, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
+            get { return Helper.FormatDecimal(_taxAtSource, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
         }
 
         [Browsable(false)]
-        public string TaxAtSourceWithUnitAsString
+        public string TaxAtSourceWithUnitAsStr
         {
-            get { return Helper.FormatDecimal(_taxAtSource, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo); }
+            get { return Helper.FormatDecimal(_taxAtSource, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo); }
         }
 
         [Browsable(false)]
@@ -275,15 +258,15 @@ namespace SharePortfolioManager
         }
 
         [Browsable(false)]
-        public string CapitalGainsTaxAsString
+        public string CapitalGainsTaxAsStr
         {
-            get { return Helper.FormatDecimal(_capitalGainsTax, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
+            get { return Helper.FormatDecimal(_capitalGainsTax, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
         }
 
         [Browsable(false)]
-        public string CapitalGainsTaxWithUnitAsString
+        public string CapitalGainsTaxWithUnitAsStr
         {
-            get { return Helper.FormatDecimal(_capitalGainsTax, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo); }
+            get { return Helper.FormatDecimal(_capitalGainsTax, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo); }
         }
 
         [Browsable(false)]
@@ -303,19 +286,18 @@ namespace SharePortfolioManager
        }
 
         [Browsable(false)]
-        public string SolidarityTaxAsString
+        public string SolidarityTaxAsStr
         {
-            get { return Helper.FormatDecimal(_solidarityTax, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
+            get { return Helper.FormatDecimal(_solidarityTax, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
         }
 
         [Browsable(false)]
-        public string SolidarityTaxWithUnitAsString
+        public string SolidarityTaxWithUnitAsStr
         {
-            get { return Helper.FormatDecimal(_solidarityTax, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo); }
+            get { return Helper.FormatDecimal(_solidarityTax, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo); }
         }
 
-        [Browsable(true)]
-        [DisplayName("TaxSum")]
+        [Browsable(false)]
         public decimal TaxSum
         {
             get { return _taxSum; }
@@ -329,19 +311,18 @@ namespace SharePortfolioManager
         }
 
         [Browsable(false)]
-        public string TaxSumTaxAsString
+        public string TaxSumTaxAsStr
         {
             get { return Helper.FormatDecimal(_taxSum, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
         }
 
         [Browsable(false)]
-        public string TaxSumWithUnitAsString
+        public string TaxSumWithUnitAsStr
         {
             get { return Helper.FormatDecimal(_taxSum, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo); }
         }
 
-        [Browsable(true)]
-        [DisplayName("Costs")]
+        [Browsable(false)]
         public decimal Costs
         {
             get { return _costs; }
@@ -355,19 +336,41 @@ namespace SharePortfolioManager
         }
 
         [Browsable(false)]
-        public string CostsAsString
+        public string CostsAsStr
         {
-            get { return Helper.FormatDecimal(_costs, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
+            get { return Helper.FormatDecimal(_costs, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
         }
 
         [Browsable(false)]
-        public string CostsWithUnitAsString
+        public string CostsWithUnitAsStr
         {
-            get { return Helper.FormatDecimal(_costs, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo); }
+            get { return Helper.FormatDecimal(_costs, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo); }
+        }
+
+        [Browsable(false)]
+        public decimal PurchaseValue
+        {
+            get { return _purchaseValue; }
+            internal set
+            {
+                _purchaseValue = value;
+            }
         }
 
         [Browsable(true)]
-        [DisplayName("ProfitLoss")]
+        [DisplayName("PurchaseValue")]
+        public string PurchaseValueAsStr
+        {
+            get { return Helper.FormatDecimal(_purchaseValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
+        }
+
+        [Browsable(false)]
+        public string PurchaseValueWithUnitAsStr
+        {
+            get { return Helper.FormatDecimal(_purchaseValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo); }
+        }
+
+        [Browsable(false)]
         public decimal ProfitLoss
         {
             get { return _profitLoss; }
@@ -377,20 +380,42 @@ namespace SharePortfolioManager
             }
         }
 
-        [Browsable(false)]
-        public string ProfitLossAsString
-        {
-            get { return Helper.FormatDecimal(_profitLoss, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
-        }
-
-        [Browsable(false)]
-        public string ProfitLossWithUnitAsString
-        {
-            get { return Helper.FormatDecimal(_profitLoss, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo); }
-        }
-
         [Browsable(true)]
-        [DisplayName("Payout")]
+        [DisplayName("ProfitLoss")]
+        public string ProfitLossAsStr
+        {
+            get { return Helper.FormatDecimal(_profitLoss, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
+        }
+
+        [Browsable(false)]
+        public string ProfitLossWithUnitAsStr
+        {
+            get { return Helper.FormatDecimal(_profitLoss, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo); }
+        }
+
+        [Browsable(false)]
+        public decimal ProfitLossWithoutCosts
+        {
+            get { return _profitLossWithoutCosts; }
+            internal set
+            {
+                _profitLossWithoutCosts = value;
+            }
+        }
+
+        [Browsable(false)]
+        public string ProfitLossWithoutCostsAsStr
+        {
+            get { return Helper.FormatDecimal(_profitLossWithoutCosts, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
+        }
+
+        [Browsable(false)]
+        public string ProfitLossWithoutCostsWithUnitAsStr
+        {
+            get { return Helper.FormatDecimal(_profitLossWithoutCosts, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo); }
+        }
+
+        [Browsable(false)]
         public decimal Payout
         {
             get { return _payout; }
@@ -400,16 +425,39 @@ namespace SharePortfolioManager
             }
         }
 
-        [Browsable(false)]
-        public string PayoutAsString
+        [Browsable(true)]
+        [DisplayName("Payout")]
+        public string PayoutAsStr
         {
-            get { return Helper.FormatDecimal(_payout, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
+            get { return Helper.FormatDecimal(_payout, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
         }
 
         [Browsable(false)]
-        public string PayoutWithUnitAsString
+        public string PayoutWithUnitAsStr
         {
-            get { return Helper.FormatDecimal(_payout, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo); }
+            get { return Helper.FormatDecimal(_payout, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo); }
+        }
+
+        [Browsable(false)]
+        public decimal PayoutWithoutCosts
+        {
+            get { return _payoutWithOutCosts; }
+            internal set
+            {
+                _payoutWithOutCosts = value;
+            }
+        }
+
+        [Browsable(false)]
+        public string PayoutWithoutCostsAsStr
+        {
+            get { return Helper.FormatDecimal(_payoutWithOutCosts, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
+        }
+
+        [Browsable(false)]
+        public string PayoutWithoutCostsWithUnitAsStr
+        {
+            get { return Helper.FormatDecimal(_payoutWithOutCosts, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo); }
         }
 
         [Browsable(false)]
@@ -441,13 +489,12 @@ namespace SharePortfolioManager
         /// <param name="decVolume">Volume of the sale</param>
         /// <param name="decBuyPrice">Buy price of the share</param>
         /// <param name="decSalePrice">Sale price of the share</param>
-        /// <param name="decLossBalance">Loss balance of the share</param>
         /// <param name="decTaxAtSource">Tax at source of the sale</param>
         /// <param name="decCapitalGainsTax">Capital gains tax of the sale</param>
         /// <param name="decSolidarityTax">Solidarity tax of the sale</param>
         /// <param name="decCosts">Costs of the sale</param>
         /// <param name="strDoc">Document of the sale</param>
-        public SaleObject(CultureInfo cultureInfo, string strDate, decimal decVolume, decimal decBuyPrice, decimal decSalePrice, decimal decLossBalance, decimal decTaxAtSource, decimal decCapitalGains,
+        public SaleObject(CultureInfo cultureInfo, string strDate, decimal decVolume, decimal decBuyPrice, decimal decSalePrice, decimal decTaxAtSource, decimal decCapitalGains,
              decimal decSolidarityTax, decimal decCosts, string strDoc = "")
         {
             SaleCultureInfo = cultureInfo;
@@ -455,7 +502,6 @@ namespace SharePortfolioManager
             Volume = decVolume;
             BuyPrice = decBuyPrice;
             SalePrice = decSalePrice;
-            LossBalance = decLossBalance;
             TaxAtSource = decTaxAtSource;
             CapitalGainsTax = decCapitalGains;
             SolidarityTax = decSolidarityTax;
@@ -469,7 +515,6 @@ namespace SharePortfolioManager
             Console.WriteLine(@"Volume: {0}", Volume);
             Console.WriteLine(@"BuyPrice: {0}", BuyPrice);
             Console.WriteLine(@"SalePrice: {0}", SalePrice);
-            Console.WriteLine(@"LossBalance: {0}", LossBalance);
             Console.WriteLine(@"TaxAtSource: {0}", TaxAtSource);
             Console.WriteLine(@"CapitalGainsTax: {0}", CapitalGainsTax);
             Console.WriteLine(@"SolidarityTax: {0}", SolidarityTax);
@@ -484,15 +529,16 @@ namespace SharePortfolioManager
         /// </summary>
         private void CalculateProfitLossAndPayout()
         {
-            decimal decBuyValue = 0;
             decimal decSaleValue = 0;
-            if (Volume > -1 && BuyPrice > -1 && SalePrice > -1 && LossBalance > -1)
+            if (Volume > -1 && SalePrice > -1)
             {
-                decBuyValue = Volume * BuyPrice;
+                PurchaseValue = Volume * BuyPrice;
                 decSaleValue = Volume * SalePrice;
 
-                ProfitLoss = decSaleValue - decBuyValue + LossBalance - TaxSum - Costs;
-                Payout = decSaleValue + LossBalance - TaxSum - Costs;
+                ProfitLossWithoutCosts = decSaleValue - PurchaseValue - TaxSum;
+                ProfitLoss = ProfitLossWithoutCosts - Costs;
+                PayoutWithoutCosts = decSaleValue - TaxSum;
+                Payout = PayoutWithoutCosts - Costs;
             }
         }
 
@@ -576,13 +622,13 @@ namespace SharePortfolioManager
 
         [Browsable(true)]
         [DisplayName(@"ProfitLoss")]
-        public string ProfitLossAsString
+        public string ProfitLossAsStr
         {
             get { return Helper.FormatDecimal(_profitLoss, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @""); }
         }
 
         [Browsable(false)]
-        public string ProfitLossWithUnitAsString
+        public string ProfitLossWithUnitAsStr
         {
             get { return Helper.FormatDecimal(_profitLoss, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit); }
         }

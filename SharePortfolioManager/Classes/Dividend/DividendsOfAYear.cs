@@ -68,12 +68,12 @@ namespace SharePortfolioManager
             internal set { _dividendValueYear = value; }
         }
 
-        public string DividendValueYearAsString
+        public string DividendValueYearAsStr
         {
             get { return Helper.FormatDecimal(_dividendValueYear, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", DividendCultureInfo); }
         }
 
-        public string DividendValueYearWithUnitAsString
+        public string DividendValueYearWithUnitAsStr
         {
             get { return Helper.FormatDecimal(_dividendValueYear, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", DividendCultureInfo); }
         }

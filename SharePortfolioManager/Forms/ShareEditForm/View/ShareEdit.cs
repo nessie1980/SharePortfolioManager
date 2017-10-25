@@ -41,6 +41,8 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using SharePortfolioManager.Forms.SalesForm.Model;
+using SharePortfolioManager.Forms.SalesForm.Presenter;
 
 namespace SharePortfolioManager
 {
@@ -234,13 +236,13 @@ namespace SharePortfolioManager
 
                     lblBuysValue.Text = ShareObjectFinalValue.AllBuyEntries.BuyMarketValueReductionTotalAsStr;
                     lblBuysUnit.Text = ShareObjectFinalValue.CurrencyUnit;
-                    lblSalesValue.Text = ShareObjectFinalValue.AllSaleEntries.SalePayoutTotalAsString;
+                    lblSalesValue.Text = ShareObjectFinalValue.AllSaleEntries.SalePayoutTotalAsStr;
                     lblSalesUnit.Text = ShareObjectFinalValue.CurrencyUnit;
-                    lblProfitLossValue.Text = ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotalAsString;
+                    lblProfitLossValue.Text = ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotalAsStr;
                     lblProfitLossUnit.Text = ShareObjectFinalValue.CurrencyUnit;
-                    lblDividendValue.Text = ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesAsString;
+                    lblDividendValue.Text = ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesAsStr;
                     lblDividendUnit.Text = ShareObjectFinalValue.CurrencyUnit;
-                    lblCostValue.Text = ShareObjectFinalValue.AllCostsEntries.CostValueTotalAsString;
+                    lblCostValue.Text = ShareObjectFinalValue.AllCostsEntries.CostValueTotalAsStr;
                     lblCostUnit.Text = ShareObjectFinalValue.CurrencyUnit;
 
                     #endregion GroupBox EarningsExpenditure
@@ -456,7 +458,7 @@ namespace SharePortfolioManager
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                     errorFlag = true;
                 }
-                else if (purchase <= 0 && errorFlag == false)
+                else if (purchase < 0 && errorFlag == false)
                 {
                     lblPurchaseValue.Focus();
                     // Add status message
@@ -486,7 +488,7 @@ namespace SharePortfolioManager
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                     errorFlag = true;
                 }
-                else if (volume <= 0 && errorFlag == false)
+                else if (volume < 0 && errorFlag == false)
                 {
                     lblVolumeValue.Focus();
                     // Add status message
@@ -558,6 +560,7 @@ namespace SharePortfolioManager
                     ShareObjectMarketValue.Name = txtBoxName.Text;
                     ShareObjectMarketValue.Volume = volume;
                     ShareObjectMarketValue.PurchaseValue = purchase;
+                    //ShareObjectMarketValue.SalePurchaseValueTotal = ShareObjectFinalValue.
                     ShareObjectMarketValue.WebSite = txtBoxWebSite.Text;
                     ShareObjectMarketValue.CultureInfo = cultureInfo;
 
@@ -625,9 +628,11 @@ namespace SharePortfolioManager
         /// <param name="e">EventArgs</param>
         private void OnBtnShareSalesEdit_Click(object sender, EventArgs e)
         {
-            IViewSaleEdit viewSalesEdit = new ViewSaleEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, LanguageName);
+            IModelSaleEdit model = new ModelSaleEdit();
+            IViewSaleEdit view = new ViewSaleEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, LanguageName);
+            PresenterSaleEdit presenterSaleEdit = new PresenterSaleEdit(view, model);
 
-            DialogResult dlgResult = viewSalesEdit.ShowDialog();
+            DialogResult dlgResult = view.ShowDialog();
             if (dlgResult == DialogResult.OK)
                 Save = true;
             else
@@ -681,13 +686,13 @@ namespace SharePortfolioManager
         /// </summary>
         private void SetShareValuesToTextBoxes()
         {
-            lblVolumeValue.Text = Helper.FormatDecimal(ShareObjectFinalValue.Volume, Helper.Volumefivelength, false, Helper.Volumetwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
-            lblPurchaseValue.Text = Helper.FormatDecimal(ShareObjectFinalValue.PurchaseValue, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
-            lblBuysValue.Text = Helper.FormatDecimal(ShareObjectFinalValue.AllBuyEntries.BuyMarketValueReductionTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
-            lblSalesValue.Text = Helper.FormatDecimal(ShareObjectFinalValue.AllSaleEntries.SalePayoutTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
-            lblCostValue.Text = Helper.FormatDecimal(ShareObjectFinalValue.AllCostsEntries.CostValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
-            lblProfitLossValue.Text = Helper.FormatDecimal(ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
-            lblDividendValue.Text = Helper.FormatDecimal(ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxes, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
+            lblVolumeValue.Text = ShareObjectFinalValue.VolumeAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.Volume, Helper.Volumefivelength, false, Helper.Volumetwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
+            lblPurchaseValue.Text = ShareObjectFinalValue.PurchaseValueAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.PurchaseValue, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
+            lblBuysValue.Text = ShareObjectFinalValue.AllBuyEntries.BuyMarketValueReductionTotalAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.AllBuyEntries.BuyMarketValueReductionTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
+            lblSalesValue.Text = ShareObjectFinalValue.AllSaleEntries.SalePayoutTotalAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.AllSaleEntries.SalePayoutTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
+            lblCostValue.Text = ShareObjectFinalValue.CostsValueTotalAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.AllCostsEntries.CostValueTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
+            lblProfitLossValue.Text = ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotalAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
+            lblDividendValue.Text = ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxes, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
         }
 
         #endregion Button

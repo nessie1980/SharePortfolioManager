@@ -912,7 +912,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
                     Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxCost/TabCtrl/TabPgOverview/Overview",
                         LanguageName);
                 newTabPageOverviewYears.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxCost/TabCtrl/TabPgOverview/Overview", LanguageName) +
-                                          @" (" + ShareObjectFinalValue.AllCostsEntries.CostValueTotalWithUnitAsString + @")";
+                                          @" (" + ShareObjectFinalValue.AllCostsEntries.CostValueTotalWithUnitAsStr + @")";
 
                 #endregion Add page
 
@@ -999,7 +999,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
                         newTabPage.Name = keyName;
                         newTabPage.Text = keyName + " (" +
                                           ShareObjectFinalValue.AllCostsEntries.AllCostsOfTheShareDictionary[keyName]
-                                          .CostValueYearWithUnitAsString
+                                          .CostValueYearWithUnitAsStr
                                           + ")";
 
                         #endregion Add page
@@ -1338,7 +1338,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
                     {
                         datePickerDate.Value = Convert.ToDateTime(selectedCostObject.CostDate);
                         datePickerTime.Value = Convert.ToDateTime(selectedCostObject.CostDate);
-                        txtBoxCosts.Text = selectedCostObject.CostValueAsString;
+                        txtBoxCosts.Text = selectedCostObject.CostValueAsStr;
                         txtBoxDocument.Text = selectedCostObject.CostDocument;
                     }
                     else

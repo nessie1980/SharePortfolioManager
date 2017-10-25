@@ -34,16 +34,6 @@ namespace SharePortfolioManager
 {
     partial class FrmMain
     {
-        #region Variables
-
-        private readonly string TabPageDetailsFinalValue = "tabPgDetailsFinalValue";
-        private readonly string TabPageDetailsMarketValue = "tabPgDetailsMarketValue";
-        private readonly string TabPageDetailsDividendValue = "tabPgDividends";
-        private readonly string TabPageDetailsCostsValue = "tabPgCosts";
-        private readonly string TabPageDetailsProfitLossValue = "tabPgProfitLoss";
-
-        #endregion Variables
-
         #region Tab control overview
 
         /// <summary>
@@ -81,9 +71,9 @@ namespace SharePortfolioManager
             ResetShareDetails();
 
             UpdateShareDetails(MarketValueOverviewTabSelected);
-            UpdateProfitLossDetails();
-            UpdateDividendDetails(MarketValueOverviewTabSelected);
+            UpdateProfitLossDetails(MarketValueOverviewTabSelected);
             UpdateCostsDetails(MarketValueOverviewTabSelected);
+            UpdateDividendDetails(MarketValueOverviewTabSelected);
 
             tabCtrlDetails.SelectedIndex = 0;
         }
@@ -91,10 +81,6 @@ namespace SharePortfolioManager
         #endregion Tab control overview
 
         #region Tab control details
-
-        TabPage tempFinalValues = null;
-        TabPage tempDividends = null;
-        TabPage tempCosts = null;
 
         /// <summary>
         /// This function updates the dividend, costs and profit / loss values in the tab controls
@@ -105,15 +91,15 @@ namespace SharePortfolioManager
         private void TabCtrlDetails_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Update the profit or loss page
-            if (((TabControl)sender).SelectedIndex == 2)
-                UpdateProfitLossDetails();
+            if (((TabControl)sender).SelectedIndex == 1)
+                UpdateProfitLossDetails(MarketValueOverviewTabSelected);
 
             // Update the dividend page
-            if (((TabControl)sender).SelectedIndex == 3)
+            if (((TabControl)sender).SelectedIndex == 2)
                 UpdateDividendDetails(MarketValueOverviewTabSelected);
 
             // Update the costs page
-            if (((TabControl)sender).SelectedIndex == 4)
+            if (((TabControl)sender).SelectedIndex == 3)
                 UpdateCostsDetails(MarketValueOverviewTabSelected);
         }
 
@@ -131,9 +117,14 @@ namespace SharePortfolioManager
                 Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Caption",
                     LanguageName);
 
-            tabCtrlDetails.TabPages[TabPageDetailsMarketValue].Text =
+            if (tabCtrlDetails.TabPages.ContainsKey(TabPageDetailsMarketValue))
+                tabCtrlDetails.TabPages[TabPageDetailsMarketValue].Text =
                     Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Caption",
                         LanguageName);
+
+            if (tabCtrlDetails.TabPages.ContainsKey(TabPageDetailsProfitLossValue))
+                tabCtrlDetails.TabPages[TabPageDetailsProfitLossValue].Text =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Caption", LanguageName);
 
             if (tabCtrlDetails.TabPages.ContainsKey(TabPageDetailsDividendValue))
                 tabCtrlDetails.TabPages[TabPageDetailsDividendValue].Text =
@@ -142,9 +133,6 @@ namespace SharePortfolioManager
             if (tabCtrlDetails.TabPages.ContainsKey(TabPageDetailsCostsValue))
                 tabCtrlDetails.TabPages[TabPageDetailsCostsValue].Text =
                 Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgCosts/Caption", LanguageName);
-
-            tabCtrlDetails.TabPages[TabPageDetailsProfitLossValue].Text =
-                Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Caption", LanguageName);
 
             // Label values of the market value
             lblDetailsMarketValueDateValue.Text = @"";
@@ -196,6 +184,10 @@ namespace SharePortfolioManager
                         tempFinalValues = tabCtrlDetails.TabPages[TabPageDetailsFinalValue];
                         tabCtrlDetails.TabPages.Remove(tabCtrlDetails.TabPages[TabPageDetailsFinalValue]);
                     }
+
+                    // Add page
+                    if (!tabCtrlDetails.TabPages.ContainsKey(TabPageDetailsMarketValue))
+                        tabCtrlDetails.TabPages.Insert(0, tempMarketValues);
 
                     // Check if a share is selected
                     if (ShareObjectMarketValue == null)
@@ -350,9 +342,23 @@ namespace SharePortfolioManager
                 }
                 else
                 {
+                    // Remove page
+                    if (tabCtrlDetails.TabPages.ContainsKey(TabPageDetailsMarketValue))
+                    {
+                        // Save page for later adding when the final value overview is selected again
+                        tempMarketValues = tabCtrlDetails.TabPages[TabPageDetailsMarketValue];
+                        tabCtrlDetails.TabPages.Remove(tabCtrlDetails.TabPages[TabPageDetailsMarketValue]);
+                    }
+
                     // Add page
                     if (!tabCtrlDetails.TabPages.ContainsKey(TabPageDetailsFinalValue))
                         tabCtrlDetails.TabPages.Insert(0, tempFinalValues);
+                    if (!tabCtrlDetails.TabPages.ContainsKey(TabPageDetailsDividendValue))
+                        tabCtrlDetails.TabPages.Insert(1, tempDividends);
+                    if (!tabCtrlDetails.TabPages.ContainsKey(TabPageDetailsProfitLossValue))
+                        tabCtrlDetails.TabPages.Insert(2, tempProfitLoss);
+                    if (!tabCtrlDetails.TabPages.ContainsKey(TabPageDetailsCostsValue))
+                        tabCtrlDetails.TabPages.Insert(3, tempCosts);
 
                     // Check if a share is selected
                     if (ShareObjectFinalValue == null)
@@ -412,14 +418,14 @@ namespace SharePortfolioManager
 
                     // Set dividend value
                     lblDetailsFinalValueDividendValue.Text =
-                        ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesWithUnitAsString;
+                        ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesWithUnitAsStr;
                     // Disable the dividend labels 
                     lblDetailsMarketValueDividend.Enabled = false;
                     lblDetailsMarketValueDividendValue.Enabled = false;
                     
                     // Set cost value
                     lblDetailsFinalValueCostsValue.Text =
-                        ShareObjectFinalValue.AllCostsEntries.CostValueTotalWithUnitAsString;
+                        ShareObjectFinalValue.AllCostsEntries.CostValueTotalWithUnitAsStr;
                     // Disable the cost labels 
                     lblDetailsMarketValueCost.Enabled = false;
                     lblDetailsMarketValueCostValue.Enabled = false;
@@ -530,21 +536,42 @@ namespace SharePortfolioManager
         /// <summary>
         /// This function updates the profit or loss information of a share
         /// </summary>
-        private void UpdateProfitLossDetails()
+        private void UpdateProfitLossDetails(bool bShowMarketValue)
         {
             try
             {
-                // TODO Final value or market value
-                if (ShareObjectFinalValue != null)
+                if (bShowMarketValue)
                 {
+                    // Remove page
+                    if (tabCtrlDetails.TabPages.ContainsKey(TabPageDetailsProfitLossValue))
+                    {
+                        // Save page for later adding when the final value overview is selected again
+                        tempProfitLoss = tabCtrlDetails.TabPages[TabPageDetailsProfitLossValue];
+                        tabCtrlDetails.TabPages.Remove(tabCtrlDetails.TabPages[TabPageDetailsProfitLossValue]);
+                    }
+                }
+                else
+                {
+                    // Add page
+                    if (!tabCtrlDetails.TabPages.ContainsKey(TabPageDetailsProfitLossValue))
+                        tabCtrlDetails.TabPages.Insert(1, tempProfitLoss);
+
+                    // Check if a share is selected
+                    if (ShareObjectFinalValue == null)
+                    {
+                        ResetShareDetails();
+                        return;
+                    }
+
                     Thread.CurrentThread.CurrentCulture = ShareObjectFinalValue.CultureInfo;
 
-                    // TODO Replace format
-                    tabCtrlDetails.TabPages[TabPageDetailsProfitLossValue].Text = string.Format("{0} ({1:C2})", Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Caption", LanguageName), ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotal);
+                    tabCtrlDetails.TabPages[TabPageDetailsProfitLossValue].Text = 
+                        string.Format("{0} ({1})", Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Caption", LanguageName),
+                            Helper.FormatDecimal(ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", ShareObjectFinalValue.CultureInfo));
 
                     Thread.CurrentThread.CurrentCulture = CultureInfo.CurrentUICulture;
 
-                    if (tabCtrlDetails.SelectedIndex == 2)
+                    if (tabCtrlDetails.SelectedIndex == 1)
                     {
                         Thread.CurrentThread.CurrentCulture = ShareObjectFinalValue.CultureInfo;
 
@@ -642,12 +669,9 @@ namespace SharePortfolioManager
                                 // Set TabPage name
                                 newTabPage.Name = keyName;
                                 newTabPage.Text = keyName +
-                                    // TODO Replace format
-                                                  string.Format(" ({0:C2})",
-                                                      ShareObjectFinalValue.AllSaleEntries.AllSalesOfTheShareDictionary[
-                                                          keyName
-                                                          ]
-                                                          .SaleProfitLossYear);
+                                                  string.Format(" ({0})",
+                                                  Helper.FormatDecimal(ShareObjectFinalValue.AllSaleEntries.AllSalesOfTheShareDictionary[keyName].SaleProfitLossYear,
+                                                  Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", ShareObjectFinalValue.CultureInfo));
 
                                 // Create Binding source for the dividend data
                                 BindingSource bindingSource = new BindingSource();
@@ -775,6 +799,7 @@ namespace SharePortfolioManager
                         if (tabPage.Name == curItem[0].Cells[0].Value.ToString())
                         {
                             tabCtrlProfitLoss.SelectTab(tabPage);
+                            tabPage.Focus();
 
                             // Deselect rows
                             DeselectRowsOfDataGridViews(null);
@@ -997,7 +1022,6 @@ namespace SharePortfolioManager
         /// <param name="e"></param>
         private void TabCtrlProfitLoss_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //TODO
             try
             {
                 // Deselect all rows
@@ -1042,7 +1066,7 @@ namespace SharePortfolioManager
                 {
                     // Add page
                     if (!tabCtrlDetails.TabPages.ContainsKey(TabPageDetailsDividendValue))
-                        tabCtrlDetails.TabPages.Insert(3, tempDividends);
+                        tabCtrlDetails.TabPages.Insert(2, tempDividends);
 
                     // Check if a share is selected
                     if (ShareObjectFinalValue == null)
@@ -1053,13 +1077,13 @@ namespace SharePortfolioManager
 
                     Thread.CurrentThread.CurrentCulture = ShareObjectFinalValue.CultureInfo;
 
-                    tabCtrlDetails.TabPages[TabPageDetailsDividendValue].Text = string.Format("{0} ({1})", Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/Caption", LanguageName), ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesWithUnitAsString);
+                    tabCtrlDetails.TabPages[TabPageDetailsDividendValue].Text = string.Format("{0} ({1})", Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/Caption", LanguageName), ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesWithUnitAsStr);
 
                     Thread.CurrentThread.CurrentCulture = CultureInfo.CurrentUICulture;
 
-                    if (tabCtrlDetails.SelectedIndex == 3)
+                    if (tabCtrlDetails.SelectedIndex == 2)
                     {
-                        Thread.CurrentThread.CurrentCulture = ShareObjectFinalValue.CultureInfo;
+                        //Thread.CurrentThread.CurrentCulture = ShareObjectFinalValue.CultureInfo;
 
                         // Reset tab control
                         foreach (TabPage tabPage in tabCtrlDividends.TabPages)
@@ -1088,7 +1112,7 @@ namespace SharePortfolioManager
                         newTabPageOverviewYears.Text =
                             Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/Overview",
                                 LanguageName) +
-                            string.Format(" ({0})", ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesWithUnitAsString);
+                            string.Format(" ({0})", ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesWithUnitAsStr);
 
                         // Create Binding source for the dividend data
                         BindingSource bindingSourceOverview = new BindingSource();
@@ -1161,7 +1185,7 @@ namespace SharePortfolioManager
                                                       ShareObjectFinalValue.AllDividendEntries.AllDividendsOfTheShareDictionary[
                                                           keyName
                                                           ]
-                                                          .DividendValueYearWithUnitAsString);
+                                                          .DividendValueYearWithUnitAsStr);
 
                                 // Create Binding source for the dividend data
                                 BindingSource bindingSource = new BindingSource();
@@ -1286,6 +1310,7 @@ namespace SharePortfolioManager
                         if (tabPage.Name == curItem[0].Cells[0].Value.ToString())
                         {
                             tabCtrlDividends.SelectTab(tabPage);
+                            tabPage.Focus();
 
                             // Deselect rows
                             DeselectRowsOfDataGridViews(null);
@@ -1404,9 +1429,7 @@ namespace SharePortfolioManager
                 }
 
                 if (((DataGridView)sender).Rows.Count > 0)
-                {
                     ((DataGridView)sender).Rows[0].Selected = false;
-                }
             }
             catch (Exception ex)
             {
@@ -1429,7 +1452,6 @@ namespace SharePortfolioManager
         /// <param name="e"></param>
         private void TabCtrlDividends_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //TODO
             try
             {
                 // Deselect all rows
@@ -1446,53 +1468,6 @@ namespace SharePortfolioManager
                     Language.GetLanguageTextByXPath(@"/MainForm/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
-            }
-        }
-
-        /// <summary>
-        /// This function deselects all selected rows of the
-        /// DataGridViews in the TabPages
-        /// </summary>
-        void DeselectRowsOfDataGridViews(DataGridView DataGridView)
-        {
-            try
-            {
-                // Deselect the row
-                foreach (TabPage TabPage in tabCtrlDividends.TabPages)
-                {
-                    foreach (Control control in TabPage.Controls)
-                    {
-                        if (control is DataGridView view && view != DataGridView)
-                        {
-                            foreach (DataGridViewRow selectedRow in view.SelectedRows)
-                            {
-                                selectedRow.Selected = false;
-                            }
-                        }
-                    }
-                }
-
-                // Deselect the row
-                foreach (TabPage TabPage in tabCtrlCosts.TabPages)
-                {
-                    foreach (Control control in TabPage.Controls)
-                    {
-                        if (control is DataGridView view && view != DataGridView)
-                        {
-                            foreach (DataGridViewRow selectedRow in view.SelectedRows)
-                            {
-                                selectedRow.Selected = false;
-                            }
-                        }
-                    }
-                }
-            }
-            catch(Exception ex)
-            {
-#if DEBUG
-                MessageBox.Show("DeselectRowsOfDataGridViews()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
             }
         }
 
@@ -1522,7 +1497,7 @@ namespace SharePortfolioManager
                 {
                     // Add page
                     if (!tabCtrlDetails.TabPages.ContainsKey(TabPageDetailsCostsValue))
-                        tabCtrlDetails.TabPages.Insert(4, tempCosts);
+                        tabCtrlDetails.TabPages.Insert(3, tempCosts);
 
                     // Check if a share is selected
                     if (ShareObjectFinalValue == null)
@@ -1533,11 +1508,11 @@ namespace SharePortfolioManager
 
                     Thread.CurrentThread.CurrentCulture = ShareObjectFinalValue.CultureInfo;
 
-                    tabCtrlDetails.TabPages[TabPageDetailsCostsValue].Text = string.Format("{0} ({1})", Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgCosts/Caption", LanguageName), ShareObjectFinalValue.AllCostsEntries.CostValueTotalWithUnitAsString);
+                    tabCtrlDetails.TabPages[TabPageDetailsCostsValue].Text = string.Format("{0} ({1})", Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgCosts/Caption", LanguageName), ShareObjectFinalValue.AllCostsEntries.CostValueTotalWithUnitAsStr);
 
                     Thread.CurrentThread.CurrentCulture = CultureInfo.CurrentUICulture;
 
-                    if (tabCtrlDetails.SelectedIndex == 4)
+                    if (tabCtrlDetails.SelectedIndex == 3)
                     {
 
                         // Reset tab control
@@ -1561,8 +1536,11 @@ namespace SharePortfolioManager
                         // Create TabPage for the costs of the years
                         TabPage newTabPageOverviewYears = new TabPage();
                         // Set TabPage name
+                        newTabPageOverviewYears.Name =
+                            Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgCosts/Overview",
+                                LanguageName);
                         newTabPageOverviewYears.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgCosts/Overview", LanguageName) +
-                                                  string.Format(" ({0})", ShareObjectFinalValue.AllCostsEntries.CostValueTotalWithUnitAsString);
+                                                  string.Format(" ({0})", ShareObjectFinalValue.AllCostsEntries.CostValueTotalWithUnitAsStr);
 
                         // Create Binding source for the costs data
                         BindingSource bindingSourceOverview = new BindingSource();
@@ -1628,7 +1606,7 @@ namespace SharePortfolioManager
                                                   string.Format(" ({0})",
                                                       ShareObjectFinalValue.AllCostsEntries.AllCostsOfTheShareDictionary[keyName
                                                           ]
-                                                          .CostValueYearWithUnitAsString);
+                                                          .CostValueYearWithUnitAsStr);
 
                                 // Create Binding source for the costs data
                                 BindingSource bindingSource = new BindingSource();
@@ -1703,7 +1681,7 @@ namespace SharePortfolioManager
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        void DataGridViewCostsOfAYear_SelectionChanged(object sender, EventArgs args)
+        private void DataGridViewCostsOfAYear_SelectionChanged(object sender, EventArgs args)
         {
             try
             {
@@ -1880,6 +1858,53 @@ namespace SharePortfolioManager
         }
 
         #endregion Costs details
+
+        /// <summary>
+        /// This function deselects all selected rows of the
+        /// DataGridViews in the TabPages
+        /// </summary>
+        void DeselectRowsOfDataGridViews(DataGridView DataGridView)
+        {
+            try
+            {
+                // Deselect the row
+                foreach (TabPage TabPage in tabCtrlDividends.TabPages)
+                {
+                    foreach (Control control in TabPage.Controls)
+                    {
+                        if (control is DataGridView view && view != DataGridView)
+                        {
+                            foreach (DataGridViewRow selectedRow in view.SelectedRows)
+                            {
+                                selectedRow.Selected = false;
+                            }
+                        }
+                    }
+                }
+
+                // Deselect the row
+                foreach (TabPage TabPage in tabCtrlCosts.TabPages)
+                {
+                    foreach (Control control in TabPage.Controls)
+                    {
+                        if (control is DataGridView view && view != DataGridView)
+                        {
+                            foreach (DataGridViewRow selectedRow in view.SelectedRows)
+                            {
+                                selectedRow.Selected = false;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                MessageBox.Show("DeselectRowsOfDataGridViews()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+#endif
+            }
+        }
 
         #endregion Tab control details 
     }

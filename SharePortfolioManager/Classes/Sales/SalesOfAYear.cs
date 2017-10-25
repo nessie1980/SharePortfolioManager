@@ -37,9 +37,14 @@ namespace SharePortfolioManager
         private CultureInfo _saleCultureInfo;
 
         /// <summary>
-        /// Stores the sale payout in a year
+        /// Stores the sale payout with costs in a year
         /// </summary>
         private decimal _salePayoutYear = -1;
+
+        /// <summary>
+        /// Stores the sale payout without costs in a year
+        /// </summary>
+        private decimal _salePayoutWithoutCostsYear = -1;
 
         /// <summary>
         /// Stores the sale volume in a year
@@ -47,9 +52,19 @@ namespace SharePortfolioManager
         private decimal _saleVolumeYear = -1;
 
         /// <summary>
+        /// Stores the sale purchase value in a year
+        /// </summary>
+        private decimal _salePurchaseValueYear = -1;
+
+        /// <summary>
         /// Stores the sale profit or loss in a year
         /// </summary>
         private decimal _saleProfitLossYear = -1;
+
+        /// <summary>
+        /// Stores the sale profit or loss without costs in a year
+        /// </summary>
+        private decimal _saleProfitLossWithoutCostsYear = -1;
 
         /// <summary>
         /// Stores the single sales of a year
@@ -77,14 +92,30 @@ namespace SharePortfolioManager
             internal set { _salePayoutYear = value; }
         }
 
-        public string SalePayoutYearAsString
+        public string SalePayoutYearAsStr
         {
-            get { return Helper.FormatDecimal(_salePayoutYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
+            get { return Helper.FormatDecimal(_salePayoutYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
         }
 
-        public string SalePayoutYearWithUnitAsString
+        public string SalePayoutYearWithUnitAsStr
         {
-            get { return Helper.FormatDecimal(_salePayoutYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo); }
+            get { return Helper.FormatDecimal(_salePayoutYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo); }
+        }
+
+        public decimal SalePayoutWithoutCostsYear
+        {
+            get { return _salePayoutWithoutCostsYear; }
+            internal set { _salePayoutWithoutCostsYear = value; }
+        }
+
+        public string SalePayoutWithoutCostsYearAsStr
+        {
+            get { return Helper.FormatDecimal(_salePayoutWithoutCostsYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
+        }
+
+        public string SalePayoutWithoutCostsYearWithUnitAsStr
+        {
+            get { return Helper.FormatDecimal(_salePayoutWithoutCostsYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo); }
         }
 
         public decimal SaleVolumeYear
@@ -93,14 +124,30 @@ namespace SharePortfolioManager
             internal set { _saleVolumeYear = value; }
         }
 
-        public string SaleVolumeYearAsString
+        public string SaleVolumeYearAsStr
         {
-            get { return Helper.FormatDecimal(_saleVolumeYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
+            get { return Helper.FormatDecimal(_saleVolumeYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
         }
 
-        public string SaleVolumeYearWithUnitAsString
+        public string SaleVolumeYearWithUnitAsStr
         {
-            get { return Helper.FormatDecimal(_saleVolumeYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, ShareObject.PieceUnit, SaleCultureInfo); }
+            get { return Helper.FormatDecimal(_saleVolumeYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, ShareObject.PieceUnit, SaleCultureInfo); }
+        }
+
+        public decimal SalePurchaseValueYear
+        {
+            get { return _salePurchaseValueYear; }
+            internal set { _salePurchaseValueYear = value; }
+        }
+
+        public string SalePurchaseValueYearAsStr
+        {
+            get { return Helper.FormatDecimal(_salePurchaseValueYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
+        }
+
+        public string SalePurchaseValueYearWithUnitAsStr
+        {
+            get { return Helper.FormatDecimal(_salePurchaseValueYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, ShareObject.PieceUnit, SaleCultureInfo); }
         }
 
         public decimal SaleProfitLossYear
@@ -109,14 +156,30 @@ namespace SharePortfolioManager
             internal set { _saleProfitLossYear = value; }
         }
 
-        public string SaleProfitLossYearAsString
+        public string SaleProfitLossYearAsStr
         {
-            get { return Helper.FormatDecimal(_saleProfitLossYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
+            get { return Helper.FormatDecimal(_saleProfitLossYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
         }
 
-        public string SaleProfitLossYearWithUnitAsString
+        public string SaleProfitLossYearWithUnitAsStr
         {
-            get { return Helper.FormatDecimal(_saleProfitLossYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo); }
+            get { return Helper.FormatDecimal(_saleProfitLossYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo); }
+        }
+
+        public decimal SaleProfitLossWithoutCostsYear
+        {
+            get { return _saleProfitLossWithoutCostsYear; }
+            internal set { _saleProfitLossWithoutCostsYear = value; }
+        }
+
+        public string SaleProfitLossWithoutCostsYearAsStr
+        {
+            get { return Helper.FormatDecimal(_saleProfitLossWithoutCostsYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
+        }
+
+        public string SaleProfitLossYearWithoutCostsWithUnitAsStr
+        {
+            get { return Helper.FormatDecimal(_saleProfitLossWithoutCostsYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo); }
         }
 
         public List<SaleObject> SaleListYear
@@ -148,14 +211,13 @@ namespace SharePortfolioManager
         /// <param name="decVolume">Volume of the sale</param>
         /// <param name="decBuyPrice">Buy price of the share</param>
         /// <param name="decSalePrice">Sale price of the share</param>
-        /// <param name="decLossBalance">Loss balance of the share</param>
         /// <param name="decTaxAtSource">Tax at source of the sale</param>
         /// <param name="decCapitalGainsTax">Capital gains tax of the sale</param>
         /// <param name="decSolidarityTax">Solidarity tax of the sale</param>
         /// <param name="decCosts">Costs of the sale</param>
         /// <param name="strDoc">Document of the sale</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddSaleObject(CultureInfo cultureInfo, string strDate, decimal decVolume, decimal decBuyPrice, decimal decSalePrice, decimal decLossBalance, decimal decTaxAtSource, decimal decCapitalGains,
+        public bool AddSaleObject(CultureInfo cultureInfo, string strDate, decimal decVolume, decimal decBuyPrice, decimal decSalePrice, decimal decTaxAtSource, decimal decCapitalGains,
              decimal decSolidarityTax, decimal decCosts, string strDoc = "")
         {
 #if DEBUG
@@ -167,7 +229,7 @@ namespace SharePortfolioManager
                 SaleCultureInfo = cultureInfo;
 
                 // Create new SaleObject
-                SaleObject addObject = new SaleObject(cultureInfo, strDate, decVolume, decBuyPrice, decSalePrice, decLossBalance, decTaxAtSource, decCapitalGains, decSolidarityTax, decCosts, strDoc = "");
+                SaleObject addObject = new SaleObject(cultureInfo, strDate, decVolume, decBuyPrice, decSalePrice, decTaxAtSource, decCapitalGains, decSolidarityTax, decCosts, strDoc = "");
                 ProfitLossObject addPorfitLossObject = new ProfitLossObject(cultureInfo, strDate, addObject.ProfitLoss, strDoc);
 
                 // Add object to the list
@@ -182,21 +244,35 @@ namespace SharePortfolioManager
                 if (SalePayoutYear == -1)
                     SalePayoutYear = 0;
                 SalePayoutYear += addObject.Payout;
+                if (SalePayoutWithoutCostsYear == -1)
+                    SalePayoutWithoutCostsYear = 0;
+                SalePayoutWithoutCostsYear += addObject.PayoutWithoutCosts;
 
                 // Calculate sale volume
                 if (SaleVolumeYear == -1)
                     SaleVolumeYear = 0;
                 SaleVolumeYear += addObject.Volume;
 
+                // Calculate sale purchase value
+                if (SalePurchaseValueYear == -1)
+                    SalePurchaseValueYear = 0;
+                SalePurchaseValueYear += addObject.PurchaseValue;
+
                 // Calculate sale profit or loss
                 if (SaleProfitLossYear == -1)
                     SaleProfitLossYear = 0;
                 SaleProfitLossYear += addObject.ProfitLoss;
+                if (SaleProfitLossWithoutCostsYear == -1)
+                    SaleProfitLossWithoutCostsYear = 0;
+                SaleProfitLossWithoutCostsYear += addObject.ProfitLossWithoutCosts;
 
 #if DEBUG
                 Console.WriteLine(@"SalePayoutYear: {0}", SalePayoutYear);
+                Console.WriteLine(@"SalePayoutWithoutCostsYear: {0}", SalePayoutWithoutCostsYear);
                 Console.WriteLine(@"SaleVolumeYear: {0}", SaleVolumeYear);
+                Console.WriteLine(@"SalePurchaseValueYear: {0}", SalePurchaseValueYear);
                 Console.WriteLine(@"SaleProfitLossYear: {0}", SaleProfitLossYear);
+                Console.WriteLine(@"SaleProfitLossWithoutCostsYear: {0}", SaleProfitLossWithoutCostsYear);
                 Console.WriteLine(@"");
 #endif
             }
@@ -239,10 +315,14 @@ namespace SharePortfolioManager
 
                 // Calculate sale value
                 SalePayoutYear -= removeObject.Payout;
+                SalePayoutWithoutCostsYear -= removeObject.PayoutWithoutCosts;
                 // Calculate sale volume
                 SaleVolumeYear -= removeObject.Volume;
+                // Calculate purchase vale
+                SalePurchaseValueYear -= removeObject.PurchaseValue;
                 // Calculate sale profit or loss
                 SaleProfitLossYear -= removeObject.ProfitLoss;
+                SaleProfitLossWithoutCostsYear -= removeObject.ProfitLossWithoutCosts;
 
                 // Search for the remove object
                 iFoundIndex = -1;
@@ -262,8 +342,9 @@ namespace SharePortfolioManager
 
 #if DEBUG
                 Console.WriteLine(@"SalePayoutYear: {0}", SalePayoutYear);
+                Console.WriteLine(@"SalePayoutWithoutCostsYear: {0}", SalePayoutWithoutCostsYear);
                 Console.WriteLine(@"SaleVolumeYear: {0}", SaleVolumeYear);
-                Console.WriteLine(@"SaleProfitLossYear: {0}", SaleProfitLossYear);
+                Console.WriteLine(@"SaleProfitLossWithoutCostsYear: {0}", SaleProfitLossWithoutCostsYear);
                 Console.WriteLine(@"");
 #endif
             }

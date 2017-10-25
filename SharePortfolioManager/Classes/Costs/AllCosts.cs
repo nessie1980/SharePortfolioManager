@@ -63,12 +63,12 @@ namespace SharePortfolioManager
             internal set { _costValueTotal = value; }
         }
 
-        public string CostValueTotalAsString
+        public string CostValueTotalAsStr
         {
             get { return Helper.FormatDecimal(_costValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CostCultureInfo); }
         }
 
-        public string CostValueTotalWithUnitAsString
+        public string CostValueTotalWithUnitAsStr
         {
             get { return Helper.FormatDecimal(_costValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CostCultureInfo); }
         }

@@ -62,12 +62,12 @@ namespace SharePortfolioManager
             internal set { _costValueYear = value; }
         }
 
-        public string CostValueYearAsString
+        public string CostValueYearAsStr
         {
             get { return Helper.FormatDecimal(_costValueYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", CostCultureInfo); }
         }
 
-        public string CostValueYearWithUnitAsString
+        public string CostValueYearWithUnitAsStr
         {
             get { return Helper.FormatDecimal(_costValueYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", CostCultureInfo); }
         }

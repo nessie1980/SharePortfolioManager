@@ -20,6 +20,8 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+using LanguageHandler;
+using Logging;
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Forms.BuysForm.View;
 using System.Collections.Generic;
@@ -31,14 +33,21 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
     /// </summary>
     public interface IModelBuyEdit
     {
-        ShareObjectMarketValue ShareObjectMarketValue { get; set; }
-        ShareObjectFinalValue ShareObjectFinalValue { get; set; }
-        List<WebSiteRegex> WebSiteRegexList { get; set; }
         bool UpdateView { get; set; }
         bool UpdateViewFormatted { get; set; }
         bool UpdateBuy { get; set; }
+
         BuyErrorCode ErrorCode { get; set; }
         string SelectedDate { get; set; }
+
+        ShareObjectMarketValue ShareObjectMarketValue { get; set; }
+        ShareObjectFinalValue ShareObjectFinalValue { get; set; }
+        List<WebSiteRegex> WebSiteRegexList { get; set; }
+
+        Logger Logger { get; set; }
+        Language Language { get; set; }
+        string LanguageName { get; set; }
+
         string Date { get; set; }
         string Time { get; set; }
         string Volume { get; set; }
@@ -69,12 +78,17 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
         bool _updateViewFormatted;
         bool _updateBuy;
 
+        BuyErrorCode _errorCode;
+        string _selectedDate;
+
         ShareObjectMarketValue _shareObjectMarketValue;
         ShareObjectFinalValue _shareObjectFinalValue;
         List<WebSiteRegex> _webSiteRegexList;
-        BuyErrorCode _errorCode;
 
-        string _selectedDate;
+        Logger _logger;
+        Language _language;
+        string _languageName;
+
         string _date;
         string _time;
         string _volume;
@@ -115,6 +129,22 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
             set { _updateBuy = value; }
         }
 
+        public BuyErrorCode ErrorCode
+        {
+            get { return _errorCode; }
+
+            set
+            {
+                _errorCode = value;
+            }
+        }
+
+        public string SelectedDate
+        {
+            get { return _selectedDate; }
+            set { _selectedDate = value; }
+        }
+
         public ShareObjectMarketValue ShareObjectMarketValue
         {
             get { return _shareObjectMarketValue; }
@@ -133,20 +163,22 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
             set { _webSiteRegexList = value; }
         }
 
-        public BuyErrorCode ErrorCode
+        public Logger Logger
         {
-            get { return _errorCode; }
-
-            set
-            {
-                _errorCode = value;
-            }
+            get { return _logger; }
+            set { _logger = value; }
         }
 
-        public string SelectedDate
+        public Language Language
         {
-            get { return _selectedDate; }
-            set { _selectedDate = value; }
+            get { return _language; }
+            set { _language = value; }
+        }
+
+        public string LanguageName
+        {
+            get { return _languageName; }
+            set { _languageName = value; }
         }
 
         public string Date

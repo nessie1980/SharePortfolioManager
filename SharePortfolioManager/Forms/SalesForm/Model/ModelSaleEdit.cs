@@ -47,8 +47,6 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
         decimal BuyPriceDec { get; set; }
         string SalePrice { get; set; }
         decimal SalePriceDec { get; set; }
-        string LossBalance { get; set; }
-        decimal LossBalanceDec { get; set; }
         string TaxAtSource { get; set; }
         decimal TaxAtSourceDec { get; set; }
         string CapitalGainsTax { get; set; }
@@ -67,7 +65,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
     /// <summary>
     /// Model class of the SaleEdit
     /// </summary>
-    public class ModelBuyEdit : IModelSaleEdit
+    public class ModelSaleEdit : IModelSaleEdit
     {
         #region Fields
 
@@ -89,8 +87,6 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
         decimal _buyPriceDec;
         string _salePrice;
         decimal _salePriceDec;
-        string _lossBalance;
-        decimal _lossBalanceDec;
         string _taxAtSource;
         decimal _taxAtSourceDec;
         string _capitalGainsTax;
@@ -228,18 +224,12 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
         {
             get
             {
-                if (UpdateViewFormatted)
-                {
-                    // Only return the value if the buy price is greater than '0'
-                    if (_buyPriceDec > 0)
-                        return Helper.FormatDecimal(_buyPriceDec, Helper.Currencyfivelength, true, Helper.Currencytwofixlength);
-                    return @"";
-                }
-                else
-                {
-                    return _buyPrice;
-                }
+                // Only return the value if the value is greater than '0'
+                if (_buyPriceDec > 0)
+                    return Helper.FormatDecimal(_buyPriceDec, Helper.Currencyfivelength, true, Helper.Currencytwofixlength);
+                return @"";
             }
+
             set
             {
                 if (_buyPrice == value)
@@ -303,47 +293,6 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
                 _salePriceDec = value;
 
                 SalePrice = _salePriceDec.ToString();
-            }
-        }
-
-        public string LossBalance
-        {
-            get
-            {
-                if (UpdateViewFormatted)
-                {
-                    // Only return the value if the loss balance is greater than '0'
-                    if (_lossBalanceDec > 0)
-                        return Helper.FormatDecimal(_lossBalanceDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
-                    return @"";
-                }
-                else
-                {
-                    return _lossBalance;
-                }
-            }
-            set
-            {
-                if (_lossBalance == value)
-                    return;
-                _lossBalance = value;
-
-                // Try to parse
-                if (!decimal.TryParse(_lossBalance, out _lossBalanceDec))
-                    _lossBalanceDec = 0;
-            }
-        }
-
-        public decimal LossBalanceDec
-        {
-            get { return _lossBalanceDec; }
-            set
-            {
-                if (_lossBalanceDec == value)
-                    return;
-                _lossBalanceDec = value;
-
-                LossBalance = _lossBalanceDec.ToString();
             }
         }
 
@@ -515,7 +464,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
         {
             get
             {
-                return Helper.FormatDecimal(_profitLossDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
+                return Helper.FormatDecimal(_profitLossDec, Helper.Currencyfivelength, true, Helper.Currencytwofixlength);
             }
 
             set
@@ -540,6 +489,8 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
                 _profitLossDec = value;
 
                 ProfitLoss = _profitLossDec.ToString();
+
+                UpdateView = true;
             }
         }
 
@@ -547,14 +498,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
         {
             get
             {
-                if (UpdateViewFormatted)
-                {
-                    return Helper.FormatDecimal(_payoutDec, Helper.Currencysixlength, true, Helper.Currencytwofixlength);
-                }
-                else
-                {
-                    return _payout;
-                }
+               return Helper.FormatDecimal(_payoutDec, Helper.Currencyfivelength, true, Helper.Currencytwofixlength);
             }
             set
             {
@@ -578,6 +522,8 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
                 _payoutDec = value;
 
                 Payout = _payoutDec.ToString();
+
+                UpdateView = true;
             }
         }
 

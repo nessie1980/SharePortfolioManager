@@ -31,6 +31,9 @@ using System.Windows.Forms;
 
 namespace SharePortfolioManager.Forms.DividendForm.Model
 {
+    /// <summary>
+    /// Interface of the DividendEdit model
+    /// </summary>
     interface IModelDividendEdit
     {
         bool UpdateView { get; set; }
@@ -92,7 +95,6 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
         bool _updateView;
         bool _updateViewFormatted;
         bool _updateDividend;
-
 
         DividendErrorCode _errorCode;
         string _selectedDate;

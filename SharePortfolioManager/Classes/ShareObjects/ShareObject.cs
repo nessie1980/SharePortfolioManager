@@ -177,6 +177,11 @@ namespace SharePortfolioManager
         private decimal _buyMarketValueTotal = 0;
 
         /// <summary>
+        /// Stores the average buy price of all buys
+        /// </summary>
+        private decimal _averageBuyPrice = 0;
+
+        /// <summary>
         /// Stores the buys of the share
         /// </summary>
         private AllBuysOfTheShare _allBuyEntries = new AllBuysOfTheShare();
@@ -225,9 +230,9 @@ namespace SharePortfolioManager
         #region Sale variables
 
         /// <summary>
-        /// Stores the total sale value of the share
+        /// Stores the purchase value of the sale of the share
         /// </summary>
-        private decimal _saleValueTotal = 0;
+        private decimal _salePurchaseValueTotal = decimal.MinValue / 2;
 
         /// <summary>
         /// Stores the sales of the share
@@ -254,14 +259,29 @@ namespace SharePortfolioManager
         private const string _saleVolumeAttrName = "Volume";
 
         /// <summary>
-        /// Stores the XML attribute name for price of one share of a sale
+        /// Stores the XML attribute name for the buy price of one share of a sale
         /// </summary>
-        private const string _salePriceAttrName = "Price";
+        private const string _saleBuyPriceAttrName = "BuyPrice";
 
         /// <summary>
-        /// Stores the XML attribute name for profit or loss of a sale
+        /// Stores the XML attribute name for the sale price of one share of a sale
         /// </summary>
-        private const string _saleProfitLossAttrName = "ProfitLoss";
+        private const string _saleSalePriceAttrName = "SalePrice";
+
+        /// <summary>
+        /// Stores the XML attribute name for the tax at source of a sale
+        /// </summary>
+        private const string _saleTaxAtSourceAttrName = "TaxAtSource";
+
+        /// <summary>
+        /// Stores the XML attribute name for the capital gains tax of a sale
+        /// </summary>
+        private const string _saleCapitalGainsTaxAttrName = "CapitalGainsTax";
+
+        /// <summary>
+        /// Stores the XML attribute name for the solidarity tax of a sale
+        /// </summary>
+        private const string _saleSolidarityTaxAttrName = "SolidarityTax";
 
         /// <summary>
         /// Stores the XML attribute name for the document of a sale
@@ -271,7 +291,7 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores the attribute count for the dividend
         /// </summary>
-        private const short _saleAttrCount = 5;
+        private const short _saleAttrCount = 8;
 
         #endregion Sale XML variables
 
@@ -482,7 +502,7 @@ namespace SharePortfolioManager
         }
 
         [Browsable(false)]
-        public string BuyValueTotalAsStr
+        public string BuyMarketValueTotalAsStr
         {
             get
             {
@@ -491,11 +511,39 @@ namespace SharePortfolioManager
         }
 
         [Browsable(false)]
-        public string BuyValueTotalAsStrUnit
+        public string BuyMarketValueTotalAsStrUnit
         {
             get
             {
                 return Helper.FormatDecimal(BuyMarketValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+            }
+        }
+
+        [Browsable(false)]
+        public decimal AverageBuyPrice
+        {
+            get { return _averageBuyPrice; }
+            internal set
+            {
+                _averageBuyPrice = value;
+            }
+        }
+
+        [Browsable(false)]
+        public string AverageBuyPriceAsStr
+        {
+            get
+            {
+                return Helper.FormatDecimal(AverageBuyPrice, Helper.Currencyfivelength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
+            }
+        }
+
+        [Browsable(false)]
+        public string AverageBuyPriceAsStrUnit
+        {
+            get
+            {
+                return Helper.FormatDecimal(AverageBuyPrice, Helper.Currencyfourlength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
             }
         }
 
@@ -557,30 +605,30 @@ namespace SharePortfolioManager
         #region Sales properties
 
         [Browsable(false)]
-        public decimal SaleValueTotal
+        public virtual decimal SalePurchaseValueTotal
         {
-            get { return _saleValueTotal; }
-            internal set
+            get { return _salePurchaseValueTotal; }
+            set
             {
-                _saleValueTotal = value;
+                _salePurchaseValueTotal = value;
             }
         }
 
         [Browsable(false)]
-        public string SaleValueAsStr
+        public string SalePurchaseValueTotalAsStr
         {
             get
             {
-                return Helper.FormatDecimal(SaleValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
+                return Helper.FormatDecimal(SalePurchaseValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
             }
         }
 
         [Browsable(false)]
-        public string SaleValueAsStrUnit
+        public string SalePurchaseValueTotalAsStrUnit
         {
             get
             {
-                return Helper.FormatDecimal(SaleValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+                return Helper.FormatDecimal(SalePurchaseValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
             }
         }
 
@@ -614,15 +662,33 @@ namespace SharePortfolioManager
         }
 
         [Browsable(false)]
-        public string SalePriceAttrName
+        public string SaleBuyPriceAttrName
         {
-            get { return _salePriceAttrName; }
+            get { return _saleBuyPriceAttrName; }
         }
 
         [Browsable(false)]
-        public string SaleProfitLossAttrName
+        public string SalePriceAttrName
         {
-            get { return _saleProfitLossAttrName; }
+            get { return _saleSalePriceAttrName; }
+        }
+
+        [Browsable(false)]
+        public string SaleTaxAtSourceAttrName
+        {
+            get { return _saleTaxAtSourceAttrName; }
+        }
+
+        [Browsable(false)]
+        public string SaleCapitalGainsTaxAttrName
+        {
+            get { return _saleCapitalGainsTaxAttrName; }
+        }
+
+        [Browsable(false)]
+        public string SaleSolidarityTaxAttrName
+        {
+            get { return _saleSolidarityTaxAttrName; }
         }
 
         [Browsable(false)]
@@ -854,7 +920,6 @@ namespace SharePortfolioManager
             {
                 if (value != _purchaseValue)
                 {
-                    // TODO comment
                     _purchaseValue = value;
 #if DEBUG_SHAREOBJECT
                     Console.WriteLine(@"");
@@ -1050,10 +1115,18 @@ namespace SharePortfolioManager
                 if (PurchaseValue == decimal.MinValue / 2)
                     PurchaseValue = 0;
                 PurchaseValue += AllBuyEntries.GetBuyObjectByDateTime(strDateTime).MarketValueReduction;
+
+                // Recalculate buy price average
+                if (PurchaseValue > 0 && Volume > 0)
+                    AverageBuyPrice = PurchaseValue / Volume;
+                else
+                    AverageBuyPrice = 0;
+
 #if DEBUG_SHAREOBJECT
                 Console.WriteLine("Volume: {0}", Volume);
                 Console.WriteLine("PurchaseValue: {0}", PurchaseValue);
                 Console.WriteLine("BuyValueTotal: {0}", BuyMarketValueTotal);
+                Console.WriteLine("AverageBuyPrice: {0}", AverageBuyPrice);
 #endif
                 return true;
             }
@@ -1084,6 +1157,13 @@ namespace SharePortfolioManager
                     Volume -= buyObject.Volume;
                     PurchaseValue -= buyObject.MarketValueReduction;
                     BuyMarketValueTotal = AllBuyEntries.BuyMarketValueTotal;
+
+                    // Recalculate buy price average
+                    if (PurchaseValue > 0 && Volume > 0)
+                        AverageBuyPrice = PurchaseValue / Volume;
+                    else
+                        AverageBuyPrice = 0;
+
 #if DEBUG_SHAREOBJECT
                     Console.WriteLine("Volume: {0}", Volume);
                     Console.WriteLine("PurchaseValue: {0}", PurchaseValue);
@@ -1098,8 +1178,9 @@ namespace SharePortfolioManager
 
                 return true;
             }
-            catch
+            catch(Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return false;
             }
         }
@@ -1115,14 +1196,13 @@ namespace SharePortfolioManager
         /// <param name="decVolume">Volume of the sale</param>
         /// <param name="decBuyPrice">Buy price of the share</param>
         /// <param name="decSalePrice">Sale price of the share</param>
-        /// <param name="decLossBalance">Loss balance of the share</param>
         /// <param name="decTaxAtSource">Tax at source of the sale</param>
         /// <param name="decCapitalGainsTax">Capital gains tax of the sale</param>
         /// <param name="decSolidarityTax">Solidarity tax of the sale</param>
         /// <param name="decCosts">Costs of the sale</param>
         /// <param name="strDoc">Document of the sale</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddSale(string strDate, decimal decVolume, decimal decBuyPrice, decimal decSalePrice, decimal decLossBalance, decimal decTaxAtSource, decimal decCapitalGains,
+        public bool AddSale(string strDate, decimal decVolume, decimal decBuyPrice, decimal decSalePrice, decimal decTaxAtSource, decimal decCapitalGains,
              decimal decSolidarityTax, decimal decCosts, string strDoc = "")
         {
             try
@@ -1134,30 +1214,49 @@ namespace SharePortfolioManager
                 Console.WriteLine("decVolume: {0}", decVolume);
                 Console.WriteLine("decBuyPrice: {0}", decBuyPrice);
                 Console.WriteLine("decSalePrice: {0}", decSalePrice);
-                Console.WriteLine("decLossBalance: {0}", decLossBalance);
                 Console.WriteLine("decTaxAtSource: {0}", decTaxAtSource);
                 Console.WriteLine("decCapitalGains: {0}", decCapitalGains);
                 Console.WriteLine("decSolidarityTax: {0}", decSolidarityTax);
                 Console.WriteLine("decCosts: {0}", decCosts);
                 Console.WriteLine("strDoc: {0}", strDoc);
 #endif
-                if (!AllSaleEntries.AddSale(strDate, decVolume, decBuyPrice, decSalePrice, decLossBalance, decTaxAtSource, decCapitalGains,
+                if (!AllSaleEntries.AddSale(strDate, decVolume, decBuyPrice, decSalePrice, decTaxAtSource, decCapitalGains,
                                             decSolidarityTax, decCosts, strDoc = ""))
                     return false;
-
-                // Set sale value of the share
-                //SaleValue = AllSaleEntries.SaleValueTotal;
 
                 // Set new volume
                 if (Volume == decimal.MinValue / 2)
                     Volume = 0;
                 Volume -= decVolume;
-#if DEBUG_SHAREOBJECT
+
+                // Recalculate PurchaseValue and SalePurchaseValueTotal
+                if (SalePurchaseValueTotal == decimal.MinValue / 2)
+                    SalePurchaseValueTotal = 0;
+
+                if (PurchaseValue == decimal.MinValue / 2)
+                    PurchaseValue = 0;
+                else
+                {
+                    if (Volume > 0 && PurchaseValue > 0)
+                    {
+                        SalePurchaseValueTotal += AverageBuyPrice * decVolume;
+                        PurchaseValue -= AverageBuyPrice * decVolume;
+                    }
+                    else
+                    {
+                        SalePurchaseValueTotal += PurchaseValue;
+                        PurchaseValue = 0;
+                    }
+                }
+
+//#if DEBUG_SHAREOBJECT
                 Console.WriteLine("Volume: {0}", Volume);
-#endif
+                Console.WriteLine("PurchaseValue: {0}", PurchaseValueAsStr);
+                Console.WriteLine("SalePurchaseValueTotal: {0}", SalePurchaseValueTotalAsStr);
+//#endif
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
                 return false;
             }
@@ -1181,13 +1280,25 @@ namespace SharePortfolioManager
                 SaleObject saleObject = AllSaleEntries.GetSaleObjectByDateTime(strDateTime);
                 if (saleObject != null)
                 {
+                    Volume += saleObject.Volume;
+                    PurchaseValue += saleObject.PurchaseValue;
+                    SalePurchaseValueTotal -= saleObject.PurchaseValue;
+
+
+                    // Recalculate buy price average
+                    if (PurchaseValue > 0 && Volume > 0)
+                        AverageBuyPrice = PurchaseValue / Volume;
+                    else
+                        AverageBuyPrice = 0;
+
                     // Remove sale by date and time
                     if (!_allSaleEntries.RemoveSale(strDateTime))
-                        return false;
+                    return false;
 
-                    Volume += saleObject.Volume;
 #if DEBUG_SHAREOBJECT
-                    Console.WriteLine("Volume: {0}", Volume);
+                Console.WriteLine("Volume: {0}", Volume);
+                Console.WriteLine("PurchaseValue: {0}", PurchaseValue);
+                Console.WriteLine("SalePurchaseValueTotal: {0}", SalePurchaseValueTotalAsStr);
 #endif
                 }
                 else

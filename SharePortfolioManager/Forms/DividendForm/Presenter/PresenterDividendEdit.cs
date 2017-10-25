@@ -49,7 +49,6 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
 
         private void UpdateViewWithModel()
         {
-            //_view.ShareObject = _model.ShareObject;
             _view.ErrorCode = _model.ErrorCode;
 
             // Copy decimal values from the dividend object to the model
@@ -171,11 +170,6 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
                 UpdateViewWithModel();
         }
 
-        /// <summary>
-        /// This function checks the input values and then adds the new dividend
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void OnAddDividend(object sender, EventArgs e)
         {
             // Check the input values
@@ -275,7 +269,7 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show("btnAddDividendDocumentBrowse_Click()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                MessageBox.Show("OnDocumentBrowse()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 _model.ErrorCode = DividendErrorCode.DocumentBrowseFailed;
@@ -351,25 +345,23 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
                         bErrorFlag = true;
                     }
                 }
-                else
+
+                // Dividend rate
+                decimal decRate = -1;
+                if (_model.Rate == @"" && bErrorFlag == false)
                 {
-                    // Check if a dividend rate is given
-                    decimal decRate = -1;
-                    if (_model.Rate == @"")
-                    {
-                        _model.ErrorCode = DividendErrorCode.RateEmpty;
-                        bErrorFlag = true;
-                    }
-                    else if (!decimal.TryParse(_model.Rate, out decRate) && bErrorFlag == false)
-                    {
-                        _model.ErrorCode = DividendErrorCode.RateWrongFormat;
-                        bErrorFlag = true;
-                    }
-                    else if (decRate <= 0 && bErrorFlag == false)
-                    {
-                        _model.ErrorCode = DividendErrorCode.RateWrongValue;
-                        bErrorFlag = true;
-                    }
+                    _model.ErrorCode = DividendErrorCode.RateEmpty;
+                    bErrorFlag = true;
+                }
+                else if (!decimal.TryParse(_model.Rate, out decRate) && bErrorFlag == false)
+                {
+                    _model.ErrorCode = DividendErrorCode.RateWrongFormat;
+                    bErrorFlag = true;
+                }
+                else if (decRate <= 0 && bErrorFlag == false)
+                {
+                    _model.ErrorCode = DividendErrorCode.RateWrongValue;
+                    bErrorFlag = true;
                 }
 
                 // Volume
@@ -392,6 +384,45 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
                 else if (decVolume > _model.ShareObjectFinalValue.Volume && bErrorFlag == false)
                 {
                     _model.ErrorCode = DividendErrorCode.VolumeMaxValue;
+                    bErrorFlag = true;
+                }
+
+                // Tax at source
+                decimal decTaxAtSource = -1;
+                if (!decimal.TryParse(_model.TaxAtSource, out decTaxAtSource) && bErrorFlag == false)
+                {
+                    _model.ErrorCode = DividendErrorCode.TaxAtSourceWrongFormat;
+                    bErrorFlag = true;
+                }
+                else if (decTaxAtSource <= 0 && bErrorFlag == false)
+                {
+                    _model.ErrorCode = DividendErrorCode.TaxAtSourceWrongValue;
+                    bErrorFlag = true;
+                }
+
+                // Capital gains tax
+                decimal decCapitalGainsTax = -1;
+                if (!decimal.TryParse(_model.CapitalGainsTax, out decCapitalGainsTax) && bErrorFlag == false)
+                {
+                    _model.ErrorCode = DividendErrorCode.CapitalGainsTaxWrongFormat;
+                    bErrorFlag = true;
+                }
+                else if (decCapitalGainsTax <= 0 && bErrorFlag == false)
+                {
+                    _model.ErrorCode = DividendErrorCode.CapitalGainsTaxWrongValue;
+                    bErrorFlag = true;
+                }
+
+                // Solidarity tax
+                decimal decSolidarityTax = -1;
+                if (!decimal.TryParse(_model.SolidarityTax, out decSolidarityTax) && bErrorFlag == false)
+                {
+                    _model.ErrorCode = DividendErrorCode.SolidarityTaxWrongFormat;
+                    bErrorFlag = true;
+                }
+                else if (decSolidarityTax <= 0 && bErrorFlag == false)
+                {
+                    _model.ErrorCode = DividendErrorCode.SolidarityTaxWrongValue;
                     bErrorFlag = true;
                 }
 

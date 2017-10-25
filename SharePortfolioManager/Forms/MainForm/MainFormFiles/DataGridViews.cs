@@ -346,7 +346,7 @@ namespace SharePortfolioManager
                     if (ShareObjectMarketValue != null && ShareObjectFinalValue != null)
                     {
                         UpdateShareDetails(MarketValueOverviewTabSelected);
-                        UpdateProfitLossDetails();
+                        UpdateProfitLossDetails(MarketValueOverviewTabSelected);
                         UpdateDividendDetails(MarketValueOverviewTabSelected);
                         UpdateCostsDetails(MarketValueOverviewTabSelected);
                     }
@@ -416,7 +416,7 @@ namespace SharePortfolioManager
                     if (ShareObjectFinalValue != null && ShareObjectListMarketValue != null)
                     {
                         UpdateShareDetails(MarketValueOverviewTabSelected);
-                        UpdateProfitLossDetails();
+                        UpdateProfitLossDetails(MarketValueOverviewTabSelected);
                         UpdateDividendDetails(MarketValueOverviewTabSelected);
                         UpdateCostsDetails(MarketValueOverviewTabSelected);
                     }
@@ -441,7 +441,6 @@ namespace SharePortfolioManager
             }
         }
 
-        // TODO Exception
         /// <summary>
         /// Function which deselects the first row of the data grid view market value footer
         /// </summary>
@@ -453,7 +452,6 @@ namespace SharePortfolioManager
                 dgvPortfolioFooterMarketValue.SelectedRows[0].Selected = false;
         }
 
-        // TODO Exception
         /// <summary>
         /// Function which deselects the first row of the data gird view final footer
         /// </summary>
@@ -828,7 +826,6 @@ namespace SharePortfolioManager
 
         #region DataBinding data grid view portfolio
 
-        // TODO Exception is thrown three times...
         /// <summary>
         /// This function does data grid view market value configuration when the data binding is done.
         /// </summary>
@@ -996,7 +993,6 @@ namespace SharePortfolioManager
 
         }
 
-        // TODO Exception is thrown three times...
         /// <summary>
         /// This function does DataGridView portfolio configuration when the data binding is done.
         /// </summary>

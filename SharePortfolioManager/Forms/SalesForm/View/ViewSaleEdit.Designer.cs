@@ -47,9 +47,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.lblPayout = new System.Windows.Forms.Label();
             this.lblSolidarityTax = new System.Windows.Forms.Label();
             this.lblCapitalGainsTax = new System.Windows.Forms.Label();
-            this.lblLossBalanceUnit = new System.Windows.Forms.Label();
-            this.txtBoxLossBalance = new System.Windows.Forms.TextBox();
-            this.lblLossBalance = new System.Windows.Forms.Label();
             this.lblBuyPriceUnit = new System.Windows.Forms.Label();
             this.txtBoxBuyPrice = new System.Windows.Forms.TextBox();
             this.lblBuyPrice = new System.Windows.Forms.Label();
@@ -84,9 +81,9 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             // grpBoxSales
             // 
             this.grpBoxSales.Controls.Add(this.tabCtrlSales);
-            this.grpBoxSales.Location = new System.Drawing.Point(8, 422);
+            this.grpBoxSales.Location = new System.Drawing.Point(8, 395);
             this.grpBoxSales.Name = "grpBoxSales";
-            this.grpBoxSales.Size = new System.Drawing.Size(744, 188);
+            this.grpBoxSales.Size = new System.Drawing.Size(744, 215);
             this.grpBoxSales.TabIndex = 3;
             this.grpBoxSales.TabStop = false;
             this.grpBoxSales.Text = "_sales";
@@ -100,7 +97,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.tabCtrlSales.Location = new System.Drawing.Point(10, 22);
             this.tabCtrlSales.Name = "tabCtrlSales";
             this.tabCtrlSales.SelectedIndex = 0;
-            this.tabCtrlSales.Size = new System.Drawing.Size(726, 156);
+            this.tabCtrlSales.Size = new System.Drawing.Size(726, 183);
             this.tabCtrlSales.TabIndex = 0;
             this.tabCtrlSales.SelectedIndexChanged += new System.EventHandler(this.tabCtrlSales_SelectedIndexChanged);
             this.tabCtrlSales.MouseEnter += new System.EventHandler(this.tabCtrlSales_MouseEnter);
@@ -112,7 +109,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.btnDelete.Enabled = false;
             this.btnDelete.Image = global::SharePortfolioManager.Properties.Resources.black_delete;
             this.btnDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDelete.Location = new System.Drawing.Point(226, 349);
+            this.btnDelete.Location = new System.Drawing.Point(226, 324);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(166, 31);
             this.btnDelete.TabIndex = 19;
@@ -126,7 +123,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.Image = global::SharePortfolioManager.Properties.Resources.black_cancel;
             this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCancel.Location = new System.Drawing.Point(570, 349);
+            this.btnCancel.Location = new System.Drawing.Point(570, 324);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(166, 31);
             this.btnCancel.TabIndex = 21;
@@ -141,7 +138,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.btnReset.Enabled = false;
             this.btnReset.Image = global::SharePortfolioManager.Properties.Resources.black_cancel;
             this.btnReset.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnReset.Location = new System.Drawing.Point(398, 349);
+            this.btnReset.Location = new System.Drawing.Point(398, 324);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(166, 31);
             this.btnReset.TabIndex = 20;
@@ -155,7 +152,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.btnAddSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAddSave.Image = global::SharePortfolioManager.Properties.Resources.black_add;
             this.btnAddSave.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAddSave.Location = new System.Drawing.Point(54, 349);
+            this.btnAddSave.Location = new System.Drawing.Point(54, 324);
             this.btnAddSave.Name = "btnAddSave";
             this.btnAddSave.Size = new System.Drawing.Size(166, 31);
             this.btnAddSave.TabIndex = 18;
@@ -175,9 +172,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.grpBoxAdd.Controls.Add(this.lblPayout);
             this.grpBoxAdd.Controls.Add(this.lblSolidarityTax);
             this.grpBoxAdd.Controls.Add(this.lblCapitalGainsTax);
-            this.grpBoxAdd.Controls.Add(this.lblLossBalanceUnit);
-            this.grpBoxAdd.Controls.Add(this.txtBoxLossBalance);
-            this.grpBoxAdd.Controls.Add(this.lblLossBalance);
             this.grpBoxAdd.Controls.Add(this.lblBuyPriceUnit);
             this.grpBoxAdd.Controls.Add(this.txtBoxBuyPrice);
             this.grpBoxAdd.Controls.Add(this.lblBuyPrice);
@@ -209,14 +203,14 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.grpBoxAdd.Controls.Add(this.lblAddSaleDate);
             this.grpBoxAdd.Location = new System.Drawing.Point(8, 5);
             this.grpBoxAdd.Name = "grpBoxAdd";
-            this.grpBoxAdd.Size = new System.Drawing.Size(744, 409);
+            this.grpBoxAdd.Size = new System.Drawing.Size(744, 384);
             this.grpBoxAdd.TabIndex = 2;
             this.grpBoxAdd.TabStop = false;
             this.grpBoxAdd.Text = "_grpBoxAddSales";
             // 
             // lblPayoutUnit
             // 
-            this.lblPayoutUnit.Location = new System.Drawing.Point(659, 293);
+            this.lblPayoutUnit.Location = new System.Drawing.Point(659, 266);
             this.lblPayoutUnit.Name = "lblPayoutUnit";
             this.lblPayoutUnit.Size = new System.Drawing.Size(74, 23);
             this.lblPayoutUnit.TabIndex = 68;
@@ -226,7 +220,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             // lblProfitLossUnit
             // 
             this.lblProfitLossUnit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblProfitLossUnit.Location = new System.Drawing.Point(659, 266);
+            this.lblProfitLossUnit.Location = new System.Drawing.Point(659, 239);
             this.lblProfitLossUnit.Name = "lblProfitLossUnit";
             this.lblProfitLossUnit.Size = new System.Drawing.Size(74, 23);
             this.lblProfitLossUnit.TabIndex = 67;
@@ -236,7 +230,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             // lblCapitalGainsTaxUnit
             // 
             this.lblCapitalGainsTaxUnit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCapitalGainsTaxUnit.Location = new System.Drawing.Point(658, 185);
+            this.lblCapitalGainsTaxUnit.Location = new System.Drawing.Point(658, 158);
             this.lblCapitalGainsTaxUnit.Name = "lblCapitalGainsTaxUnit";
             this.lblCapitalGainsTaxUnit.Size = new System.Drawing.Size(74, 23);
             this.lblCapitalGainsTaxUnit.TabIndex = 66;
@@ -248,8 +242,9 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.txtBoxProfitLoss.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtBoxProfitLoss.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtBoxProfitLoss.Enabled = false;
             this.txtBoxProfitLoss.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxProfitLoss.Location = new System.Drawing.Point(315, 266);
+            this.txtBoxProfitLoss.Location = new System.Drawing.Point(315, 239);
             this.txtBoxProfitLoss.Name = "txtBoxProfitLoss";
             this.txtBoxProfitLoss.ReadOnly = true;
             this.txtBoxProfitLoss.Size = new System.Drawing.Size(337, 23);
@@ -261,7 +256,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtBoxSolidarityTax.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtBoxSolidarityTax.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxSolidarityTax.Location = new System.Drawing.Point(315, 212);
+            this.txtBoxSolidarityTax.Location = new System.Drawing.Point(315, 185);
             this.txtBoxSolidarityTax.Name = "txtBoxSolidarityTax";
             this.txtBoxSolidarityTax.Size = new System.Drawing.Size(337, 23);
             this.txtBoxSolidarityTax.TabIndex = 64;
@@ -274,7 +269,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtBoxCapitalGainsTax.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtBoxCapitalGainsTax.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxCapitalGainsTax.Location = new System.Drawing.Point(315, 185);
+            this.txtBoxCapitalGainsTax.Location = new System.Drawing.Point(315, 158);
             this.txtBoxCapitalGainsTax.Name = "txtBoxCapitalGainsTax";
             this.txtBoxCapitalGainsTax.Size = new System.Drawing.Size(337, 23);
             this.txtBoxCapitalGainsTax.TabIndex = 63;
@@ -285,7 +280,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             // 
             this.lblPayout.BackColor = System.Drawing.Color.LightGray;
             this.lblPayout.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblPayout.Location = new System.Drawing.Point(10, 293);
+            this.lblPayout.Location = new System.Drawing.Point(10, 266);
             this.lblPayout.Name = "lblPayout";
             this.lblPayout.Size = new System.Drawing.Size(300, 23);
             this.lblPayout.TabIndex = 62;
@@ -296,7 +291,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             // 
             this.lblSolidarityTax.BackColor = System.Drawing.Color.LightGray;
             this.lblSolidarityTax.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblSolidarityTax.Location = new System.Drawing.Point(10, 212);
+            this.lblSolidarityTax.Location = new System.Drawing.Point(10, 185);
             this.lblSolidarityTax.Name = "lblSolidarityTax";
             this.lblSolidarityTax.Size = new System.Drawing.Size(300, 23);
             this.lblSolidarityTax.TabIndex = 60;
@@ -307,46 +302,12 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             // 
             this.lblCapitalGainsTax.BackColor = System.Drawing.Color.LightGray;
             this.lblCapitalGainsTax.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblCapitalGainsTax.Location = new System.Drawing.Point(10, 185);
+            this.lblCapitalGainsTax.Location = new System.Drawing.Point(10, 158);
             this.lblCapitalGainsTax.Name = "lblCapitalGainsTax";
             this.lblCapitalGainsTax.Size = new System.Drawing.Size(300, 23);
             this.lblCapitalGainsTax.TabIndex = 59;
             this.lblCapitalGainsTax.Text = "_addCaptialGainsTax";
             this.lblCapitalGainsTax.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblLossBalanceUnit
-            // 
-            this.lblLossBalanceUnit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLossBalanceUnit.Location = new System.Drawing.Point(658, 131);
-            this.lblLossBalanceUnit.Name = "lblLossBalanceUnit";
-            this.lblLossBalanceUnit.Size = new System.Drawing.Size(74, 23);
-            this.lblLossBalanceUnit.TabIndex = 58;
-            this.lblLossBalanceUnit.Text = "_lblLossBalanceUnit";
-            this.lblLossBalanceUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // txtBoxLossBalance
-            // 
-            this.txtBoxLossBalance.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtBoxLossBalance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtBoxLossBalance.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxLossBalance.Location = new System.Drawing.Point(315, 131);
-            this.txtBoxLossBalance.Name = "txtBoxLossBalance";
-            this.txtBoxLossBalance.Size = new System.Drawing.Size(338, 23);
-            this.txtBoxLossBalance.TabIndex = 55;
-            this.txtBoxLossBalance.TextChanged += new System.EventHandler(this.OnTxtBoxLossBalance_TextChanged);
-            this.txtBoxLossBalance.Leave += new System.EventHandler(this.txtBoxLossBalance_Leave);
-            // 
-            // lblLossBalance
-            // 
-            this.lblLossBalance.BackColor = System.Drawing.Color.LightGray;
-            this.lblLossBalance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblLossBalance.Location = new System.Drawing.Point(10, 131);
-            this.lblLossBalance.Name = "lblLossBalance";
-            this.lblLossBalance.Size = new System.Drawing.Size(300, 23);
-            this.lblLossBalance.TabIndex = 57;
-            this.lblLossBalance.Text = "_addLossBalance";
-            this.lblLossBalance.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblBuyPriceUnit
             // 
@@ -367,6 +328,8 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.txtBoxBuyPrice.ReadOnly = true;
             this.txtBoxBuyPrice.Size = new System.Drawing.Size(338, 23);
             this.txtBoxBuyPrice.TabIndex = 7;
+            this.txtBoxBuyPrice.TextChanged += new System.EventHandler(this.OnTxtBoxAddBuyPrice_TextChanged);
+            this.txtBoxBuyPrice.Leave += new System.EventHandler(this.txtBoxBuyPrice_Leave);
             // 
             // lblBuyPrice
             // 
@@ -383,7 +346,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             // lblSolidarityTaxUnit
             // 
             this.lblSolidarityTaxUnit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSolidarityTaxUnit.Location = new System.Drawing.Point(659, 212);
+            this.lblSolidarityTaxUnit.Location = new System.Drawing.Point(659, 185);
             this.lblSolidarityTaxUnit.Name = "lblSolidarityTaxUnit";
             this.lblSolidarityTaxUnit.Size = new System.Drawing.Size(74, 23);
             this.lblSolidarityTaxUnit.TabIndex = 50;
@@ -396,7 +359,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtBoxTaxAtSource.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtBoxTaxAtSource.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxTaxAtSource.Location = new System.Drawing.Point(315, 158);
+            this.txtBoxTaxAtSource.Location = new System.Drawing.Point(315, 131);
             this.txtBoxTaxAtSource.Name = "txtBoxTaxAtSource";
             this.txtBoxTaxAtSource.Size = new System.Drawing.Size(337, 23);
             this.txtBoxTaxAtSource.TabIndex = 12;
@@ -407,7 +370,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             // 
             this.lblTaxAtSource.BackColor = System.Drawing.Color.LightGray;
             this.lblTaxAtSource.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblTaxAtSource.Location = new System.Drawing.Point(10, 158);
+            this.lblTaxAtSource.Location = new System.Drawing.Point(10, 131);
             this.lblTaxAtSource.Name = "lblTaxAtSource";
             this.lblTaxAtSource.Size = new System.Drawing.Size(300, 23);
             this.lblTaxAtSource.TabIndex = 49;
@@ -417,7 +380,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             // lblTaxAtSourceUnit
             // 
             this.lblTaxAtSourceUnit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTaxAtSourceUnit.Location = new System.Drawing.Point(658, 158);
+            this.lblTaxAtSourceUnit.Location = new System.Drawing.Point(658, 131);
             this.lblTaxAtSourceUnit.Name = "lblTaxAtSourceUnit";
             this.lblTaxAtSourceUnit.Size = new System.Drawing.Size(74, 23);
             this.lblTaxAtSourceUnit.TabIndex = 45;
@@ -431,7 +394,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.txtBoxPayout.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtBoxPayout.Enabled = false;
             this.txtBoxPayout.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxPayout.Location = new System.Drawing.Point(315, 293);
+            this.txtBoxPayout.Location = new System.Drawing.Point(315, 266);
             this.txtBoxPayout.Name = "txtBoxPayout";
             this.txtBoxPayout.ReadOnly = true;
             this.txtBoxPayout.Size = new System.Drawing.Size(337, 23);
@@ -441,7 +404,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             // 
             this.lblProfitLoss.BackColor = System.Drawing.Color.LightGray;
             this.lblProfitLoss.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblProfitLoss.Location = new System.Drawing.Point(10, 266);
+            this.lblProfitLoss.Location = new System.Drawing.Point(10, 239);
             this.lblProfitLoss.Name = "lblProfitLoss";
             this.lblProfitLoss.Size = new System.Drawing.Size(300, 23);
             this.lblProfitLoss.TabIndex = 44;
@@ -494,7 +457,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelMessageSaleEdit});
-            this.statusStrip1.Location = new System.Drawing.Point(3, 384);
+            this.statusStrip1.Location = new System.Drawing.Point(3, 359);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(738, 22);
             this.statusStrip1.TabIndex = 25;
@@ -509,7 +472,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             // 
             // lblCostsUnit
             // 
-            this.lblCostsUnit.Location = new System.Drawing.Point(659, 239);
+            this.lblCostsUnit.Location = new System.Drawing.Point(659, 212);
             this.lblCostsUnit.Name = "lblCostsUnit";
             this.lblCostsUnit.Size = new System.Drawing.Size(74, 23);
             this.lblCostsUnit.TabIndex = 24;
@@ -520,7 +483,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             // 
             this.txtBoxCosts.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtBoxCosts.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxCosts.Location = new System.Drawing.Point(315, 239);
+            this.txtBoxCosts.Location = new System.Drawing.Point(315, 212);
             this.txtBoxCosts.Name = "txtBoxCosts";
             this.txtBoxCosts.Size = new System.Drawing.Size(338, 23);
             this.txtBoxCosts.TabIndex = 14;
@@ -531,7 +494,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             // 
             this.lblCosts.BackColor = System.Drawing.Color.LightGray;
             this.lblCosts.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblCosts.Location = new System.Drawing.Point(10, 239);
+            this.lblCosts.Location = new System.Drawing.Point(10, 212);
             this.lblCosts.Name = "lblCosts";
             this.lblCosts.Size = new System.Drawing.Size(300, 23);
             this.lblCosts.TabIndex = 16;
@@ -542,7 +505,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             // 
             this.btnSalesDocumentBrowse.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSalesDocumentBrowse.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnSalesDocumentBrowse.Location = new System.Drawing.Point(659, 320);
+            this.btnSalesDocumentBrowse.Location = new System.Drawing.Point(659, 293);
             this.btnSalesDocumentBrowse.Name = "btnSalesDocumentBrowse";
             this.btnSalesDocumentBrowse.Size = new System.Drawing.Size(77, 23);
             this.btnSalesDocumentBrowse.TabIndex = 17;
@@ -555,7 +518,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             // 
             this.txtBoxDocument.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtBoxDocument.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxDocument.Location = new System.Drawing.Point(315, 320);
+            this.txtBoxDocument.Location = new System.Drawing.Point(315, 293);
             this.txtBoxDocument.Name = "txtBoxDocument";
             this.txtBoxDocument.Size = new System.Drawing.Size(338, 23);
             this.txtBoxDocument.TabIndex = 16;
@@ -566,7 +529,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.lblSalesDocument.BackColor = System.Drawing.Color.LightGray;
             this.lblSalesDocument.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblSalesDocument.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSalesDocument.Location = new System.Drawing.Point(10, 320);
+            this.lblSalesDocument.Location = new System.Drawing.Point(10, 293);
             this.lblSalesDocument.Name = "lblSalesDocument";
             this.lblSalesDocument.Size = new System.Drawing.Size(300, 23);
             this.lblSalesDocument.TabIndex = 25;
@@ -691,9 +654,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         private System.Windows.Forms.Label lblBuyPrice;
         private System.Windows.Forms.Label lblBuyPriceUnit;
         private System.Windows.Forms.TextBox txtBoxBuyPrice;
-        private System.Windows.Forms.Label lblLossBalanceUnit;
-        private System.Windows.Forms.TextBox txtBoxLossBalance;
-        private System.Windows.Forms.Label lblLossBalance;
         private System.Windows.Forms.Label lblCapitalGainsTax;
         private System.Windows.Forms.Label lblSolidarityTax;
         private System.Windows.Forms.Label lblPayout;

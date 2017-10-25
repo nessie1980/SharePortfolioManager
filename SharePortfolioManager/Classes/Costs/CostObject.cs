@@ -88,13 +88,13 @@ namespace SharePortfolioManager
         }
 
         [Browsable(false)]
-        public string CostOfABuyAsString
+        public string CostOfABuyAsStr
         {
             get { return _costOfABuy.ToString(); }
         }
 
         [Browsable(false)]
-        public string CostOfASaleAsString
+        public string CostOfASaleAsStr
         {
             get { return _costOfASale.ToString(); }
         }
@@ -108,7 +108,7 @@ namespace SharePortfolioManager
 
         [Browsable(true)]
         [DisplayName(@"Date")]
-        public string CostDateAsString
+        public string CostDateAsStr
         {
             get { return _costDate; }
         }
@@ -122,13 +122,13 @@ namespace SharePortfolioManager
 
         [Browsable(true)]
         [DisplayName(@"Value")]
-        public string CostValueAsString
+        public string CostValueAsStr
         {
             get { return Helper.FormatDecimal(_costValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", CostCultureInfo); }
         }
 
         [Browsable(false)]
-        public string CostValueWithUnitAsString
+        public string CostValueWithUnitAsStr
         {
             get { return Helper.FormatDecimal(_costValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", CostCultureInfo); }
         }

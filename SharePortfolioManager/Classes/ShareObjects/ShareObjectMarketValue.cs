@@ -59,17 +59,80 @@ namespace SharePortfolioManager
 
         #endregion General variables
 
+        #region Costs variables
+
+        /// <summary>
+        /// Stores the total costs of the share
+        /// </summary>
+        private decimal _costsValueTotal = 0;
+
+        /// <summary>
+        /// Stores the cost pays of the share
+        /// </summary>
+        private AllCostsOfTheShare _allCostsEntries = new AllCostsOfTheShare();
+
+        #endregion Costs variables
+
+        #region Costs XML variables
+
+        /// <summary>
+        /// Stores the tag name prefix of a cost entry
+        /// </summary>
+        private const string _costsTagNamePre = "Cost";
+
+        /// <summary>
+        /// Stores the attribute name for the flag if the cost is a part of a buy
+        /// </summary>
+        private const string _costsBuyPartAttrName = "BuyPart";
+
+        /// <summary>
+        /// Stores the attribute name for the flag if the cost is a part of a sale
+        /// </summary>
+        private const string _costsSalePartAttrName = "SalePart";
+
+        /// <summary>
+        /// Stores the attribute name for the date 
+        /// </summary>
+        private const string _costsDateAttrName = "Date";
+
+        /// <summary>
+        /// Stores the attribute name for the value
+        /// </summary>
+        private const string _costsValueAttrName = "Value";
+
+        /// <summary>
+        /// Stores the XML attribute name for the document of a cost
+        /// </summary>
+        private const string _costsDocumentAttrName = "Doc";
+
+        /// <summary>
+        /// Stores the attribute count for the costs
+        /// </summary>
+        private const short _costsAttrCount = 5;
+
+        #endregion Costs XML variables
+
         #region Portfolio value variables
 
         /// <summary>
         /// Stores the value of the portfolio (all shares) without dividends, costs, profits and loss
         /// </summary>
-        static private decimal _portfolioMPurchaseValue = 0;
+        static private decimal _portfolioPurchaseValue = 0;
+
+        /// <summary>
+        /// Stores the purchase of sales of the portfolio (all shares)
+        /// </summary>
+        static private decimal _portfolioSalePurchaseValue = 0;
 
         /// <summary>
         /// Stores the current value of the portfolio (all shares) without dividends, costs, profits and loss
         /// </summary>
         static private decimal _portfolioMarketValue = 0;
+
+        /// <summary>
+        /// Stores the costs of the portfolio (all shares)
+        /// </summary>
+        static private decimal _portfolioCosts = 0;
 
         /// <summary>
         /// Stores the performance of the portfolio (all shares) without dividends, costs, profits and loss
@@ -142,14 +205,14 @@ namespace SharePortfolioManager
                     // Recalculate the profit or loss to the previous day
                     CalculatePrevDayProfitLoss();
 
+                    // Recalculate the total sum of the share
+                    CalculateMarketValue();
+
                     // Recalculate the appreciation
                     CalculatePerformance();
 
                     // Recalculate the profit or loss of the share
                     CalculateProfitLoss();
-
-                    // Recalculate the total sum of the share
-                    CalculateMarketValue();
                 }
             }
         }
@@ -171,14 +234,14 @@ namespace SharePortfolioManager
                     // Recalculate the profit or loss to the previous day
                     CalculatePrevDayProfitLoss();
 
+                    // Recalculate the total sum of the share
+                    CalculateMarketValue();
+
                     // Recalculate the appreciation
                     CalculatePerformance();
 
                     // Recalculate the profit or loss of the share
                     CalculateProfitLoss();
-
-                    // Recalculate the total sum of the share
-                    CalculateMarketValue();
                 }
             }
         }
@@ -199,14 +262,33 @@ namespace SharePortfolioManager
 
                     base.PurchaseValue = value;
 
+                    // Recalculate the total sum of the share
+                    CalculateMarketValue();
+
                     // Recalculate the appreciation
                     CalculatePerformance();
 
                     // Recalculate the profit or loss of the share
                     CalculateProfitLoss();
+                }
+            }
+        }
 
-                    // Recalculate the total sum of the share
-                    CalculateMarketValue();
+        [Browsable(false)]
+        public override decimal SalePurchaseValueTotal
+        {
+            get { return base.SalePurchaseValueTotal; }
+            set
+            {
+                // Set the new purchase value
+                if (value != base.SalePurchaseValueTotal)
+                {
+                    // Recalculate portfolio purchase value
+                    if (base.SalePurchaseValueTotal > decimal.MinValue / 2)
+                        PortfolioSalePurchaseValue -= base.SalePurchaseValueTotal;
+                    PortfolioSalePurchaseValue += value;
+
+                    base.SalePurchaseValueTotal = value;
                 }
             }
         }
@@ -350,17 +432,102 @@ namespace SharePortfolioManager
 
         #endregion Market value properties
 
+        #region Costs properties
+
+        [Browsable(false)]
+        public decimal CostsValueTotal
+        {
+            get { return _costsValueTotal; }
+            internal set
+            {
+                _costsValueTotal = value;
+            }
+        }
+
+        [Browsable(false)]
+        public string CostsValueTotalAsStr
+        {
+            get
+            {
+                return Helper.FormatDecimal(CostsValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
+            }
+        }
+
+        [Browsable(false)]
+        public string CostsValueAsStrUnit
+        {
+            get
+            {
+                return Helper.FormatDecimal(CostsValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+            }
+        }
+
+        [Browsable(false)]
+        public AllCostsOfTheShare AllCostsEntries
+        {
+            get { return _allCostsEntries; }
+            set { _allCostsEntries = value; }
+        }
+
+        #endregion Costs properties
+
+        #region Costs XML properties
+
+        [Browsable(false)]
+        public string CostsTagNamePre
+        {
+            get { return _costsTagNamePre; }
+        }
+
+        [Browsable(false)]
+        public string CostsBuyPartAttrName
+        {
+            get { return _costsBuyPartAttrName; }
+        }
+
+        [Browsable(false)]
+        public string CostsSalePartAttrName
+        {
+            get { return _costsSalePartAttrName; }
+        }
+
+        [Browsable(false)]
+        public string CostsDateAttrName
+        {
+            get { return _costsDateAttrName; }
+        }
+
+        [Browsable(false)]
+        public string CostsValueAttrName
+        {
+            get { return _costsValueAttrName; }
+        }
+
+        [Browsable(false)]
+        public string CostsDocumentAttrName
+        {
+            get { return _costsDocumentAttrName; }
+        }
+
+        [Browsable(false)]
+        public short CostsAttrCount
+        {
+            get { return _costsAttrCount; }
+        }
+
+        #endregion Costs XML properties
+
         #region Portfolio value properties
 
         [Browsable(false)]
         public decimal PortfolioPurchaseValue
         {
-            get { return _portfolioMPurchaseValue; }
+            get { return _portfolioPurchaseValue; }
             internal set
             {
-                if (_portfolioMPurchaseValue != value)
+                if (_portfolioPurchaseValue != value)
                 {
-                    _portfolioMPurchaseValue = value;
+                    _portfolioPurchaseValue = value;
 
                     // Recalculate the performance of all shares
                     CalculatePortfolioPerformance();
@@ -386,6 +553,68 @@ namespace SharePortfolioManager
             get
             {
                 return Helper.FormatDecimal(PortfolioPurchaseValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+            }
+        }
+
+        [Browsable(false)]
+        public decimal PortfolioSalePurchaseValue
+        {
+            get { return _portfolioSalePurchaseValue; }
+            internal set
+            {
+                if (_portfolioSalePurchaseValue != value)
+                {
+                    _portfolioSalePurchaseValue = value;
+
+                    // RecalcuSalelate the performance of all shares
+                    CalculatePortfolioPerformance();
+
+                    // Recalculate the profit or lose of all shares
+                    CalculatePortfolioProfitLoss();
+                }
+            }
+        }
+
+        [Browsable(false)]
+        public string PortfolioSalePurchaseValueAsStr
+        {
+            get
+            {
+                return Helper.FormatDecimal(PortfolioSalePurchaseValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
+            }
+        }
+
+        [Browsable(false)]
+        public string PortfolioSalePurchaseValueAsStrUnit
+        {
+            get
+            {
+                return Helper.FormatDecimal(PortfolioSalePurchaseValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+            }
+        }
+
+        [Browsable(false)]
+        public decimal PortfolioCosts
+        {
+            get { return _portfolioCosts; }
+            internal set { _portfolioCosts = value; }
+        }
+
+        [Browsable(false)]
+        public string PortfolioCostsAsStr
+        {
+            get
+            {
+                return Helper.FormatDecimal(PortfolioCosts, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
+            }
+        }
+
+        [Browsable(false)]
+        public string PortfolioCostsAsStrUnit
+        {
+            get
+            {
+                return Helper.FormatDecimal(PortfolioCosts, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
             }
         }
 
@@ -614,6 +843,122 @@ namespace SharePortfolioManager
 
         #endregion Destructor
 
+        #region Costs methods
+
+        /// <summary>
+        /// This function adds the costs for the share to the dictionary
+        /// </summary>
+        /// <param name="bCostOfABuy">Flag if the cost is part of a buy</param>
+        /// <param name="bCostOfASale">Flag if the cost is part of a Sale</param>
+        /// <param name="strDateTime">Date and time of the cost</param>
+        /// <param name="decValue">Cost value</param>
+        /// <param name="strDoc">Doc of the cost</param>
+        /// <returns>Flag if the add was successful</returns>
+        public bool AddCost(bool bCostOfABuy, bool bCostOfASale, string strDateTime, decimal decValue, string strDoc = "")
+        {
+            try
+            {
+#if DEBUG_SHAREOBJECT
+                Console.WriteLine("");
+                Console.WriteLine("AddCost()");
+                Console.WriteLine("bCostOfABuy: {0}", bCostOfABuy);
+                Console.WriteLine("strDateTime: {0}", strDateTime);
+                Console.WriteLine("decValue: {0}", decValue);
+                Console.WriteLine("strDoc: {0}", strDoc);
+#endif
+                // Remove current costs of the share from the costs of all shares
+                PortfolioCosts -= CostsValueTotal;
+
+                if (!AllCostsEntries.AddCost(bCostOfABuy, bCostOfASale, strDateTime, decValue, strDoc))
+                    return false;
+
+                // Set costs of the share
+                CostsValueTotal = AllCostsEntries.CostValueTotal;
+
+                // Add new costs of the share to the costs of all shares
+                PortfolioCosts += CostsValueTotal;
+
+                // Recalculate the total sum of the share
+                CalculateMarketValue();
+
+                // Recalculate the profit or lose of the share
+                CalculateProfitLoss();
+
+                // Recalculate the appreciation
+                CalculatePerformance();
+
+                // Recalculate the performance of all shares
+                CalculatePortfolioPerformance();
+
+                // Recalculate the profit or lose of all shares
+                CalculatePortfolioProfitLoss();
+
+#if DEBUG_SHAREOBJECT
+                Console.WriteLine("CostsValueTotal: {0}", CostsValueTotal);
+#endif
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// This function removes a cost for the share from the dictionary
+        /// </summary>
+        /// <param name="strDateTime">Date of the cost remove</param>
+        /// <returns>Flag if the remove was successful</returns>
+        public bool RemoveCost(string strDateTime)
+        {
+            try
+            {
+#if DEBUG_SHAREOBJECT
+                Console.WriteLine("");
+                Console.WriteLine("RemoveCost()");
+                Console.WriteLine("strDateTime: {0}", strDateTime);
+#endif
+                // Remove current costs the share to the costs of all shares
+                PortfolioCosts -= AllCostsEntries.CostValueTotal;
+
+                // Remove cost by date
+                if (!_allCostsEntries.RemoveCost(strDateTime))
+                    return false;
+
+                // Set costs of the share
+                CostsValueTotal = AllCostsEntries.CostValueTotal;
+
+                // Add new costs of the share to the costs of all shares
+                PortfolioCosts += AllCostsEntries.CostValueTotal;
+
+                // Recalculate the total sum of the share
+                CalculateMarketValue();
+
+                // Recalculate the profit or lose of the share
+                CalculateProfitLoss();
+
+                // Recalculate the appreciation
+                CalculatePerformance();
+
+                // Recalculate the performance of all shares
+                CalculatePortfolioPerformance();
+
+                // Recalculate the profit or lose of all shares
+                CalculatePortfolioProfitLoss();
+
+#if DEBUG_SHAREOBJECT
+                Console.WriteLine("CostsValueTotal: {0}", CostsValueTotal);
+#endif
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        #endregion Costs methods
+
         #region Performance methods
 
         /// <summary>
@@ -624,9 +969,13 @@ namespace SharePortfolioManager
         {
             if (CurPrice > decimal.MinValue / 2
                 && Volume > decimal.MinValue / 2
+                && AllCostsEntries.CostValueTotal > decimal.MinValue / 2
+                && AllSaleEntries.SaleProfitLossTotal > decimal.MinValue / 2
                 )
             {
                 MarketValue = CurPrice * Volume;
+                    //- AllCostsEntries.CostValueTotal
+                    //+ AllSaleEntries.SaleProfitLossTotal;
             }
 
 #if DEBUG_SHAREOBJECT
@@ -648,7 +997,9 @@ namespace SharePortfolioManager
                 && Volume > decimal.MinValue / 2
                 )
             {
-                ProfitLossValue = CurPrice * Volume - PurchaseValue;
+                ProfitLossValue = CurPrice * Volume
+                    - PurchaseValue;
+                    //+ AllSaleEntries.SaleProfitLossTotal;
             }
 
 #if DEBUG_SHAREOBJECT
@@ -669,10 +1020,12 @@ namespace SharePortfolioManager
         {
             if (MarketValue > decimal.MinValue / 2
                 && PurchaseValue > decimal.MinValue / 2
-                && PurchaseValue != 0
                 )
             {
-                PerformanceValue = (MarketValue * 100) / PurchaseValue - 100;
+                //if ((PurchaseValue + AllSaleEntries.SalePurchaseValueTotal) != 0)
+                //    PerformanceValue = ((MarketValue + AllSaleEntries.SalePurchaseValueTotal) * 100) / (PurchaseValue + AllSaleEntries.SalePurchaseValueTotal) - 100;
+                if (PurchaseValue != 0)
+                    PerformanceValue = (MarketValue * 100) / PurchaseValue - 100;
             }
 
 #if DEBUG_SHAREOBJECT
@@ -764,18 +1117,20 @@ namespace SharePortfolioManager
 
                                     case 8:
                                         // Remove old sales
-                                        // TODO
-                                        //nodeElement.ChildNodes[i].RemoveAll();
-                                        //foreach (var saleElementYear in shareObject.AllSaleEntries.GetAllSalesOfTheShare())
-                                        //{
-                                        //    XmlElement newSaleElement = xmlPortfolio.CreateElement(shareObject.SaleTagNamePre);
-                                        //    newSaleElement.SetAttribute(shareObject.SaleDateAttrName, saleElementYear.SaleDateAsString);
-                                        //    newSaleElement.SetAttribute(shareObject.SaleVolumeAttrName, saleElementYear.SaleVolumeAsString);
-                                        //    newSaleElement.SetAttribute(shareObject.SalePriceAttrName, saleElementYear.SaleValueAsString);
-                                        //    newSaleElement.SetAttribute(shareObject.SaleProfitLossAttrName, saleElementYear.SaleProfitLossAsString);
-                                        //    newSaleElement.SetAttribute(shareObject.SaleDocumentAttrName, saleElementYear.SaleDocument);
-                                        //    nodeElement.ChildNodes[i].AppendChild(newSaleElement);
-                                        //}
+                                        nodeElement.ChildNodes[i].RemoveAll();
+                                        foreach (var saleElementYear in shareObject.AllSaleEntries.GetAllSalesOfTheShare())
+                                        {
+                                            XmlElement newSaleElement = xmlPortfolio.CreateElement(shareObject.SaleTagNamePre);
+                                            newSaleElement.SetAttribute(shareObject.SaleDateAttrName, saleElementYear.DateAsStr);
+                                            newSaleElement.SetAttribute(shareObject.SaleVolumeAttrName, saleElementYear.VolumeAsStr);
+                                            newSaleElement.SetAttribute(shareObject.SaleBuyPriceAttrName, saleElementYear.BuyPriceAsStr);
+                                            newSaleElement.SetAttribute(shareObject.SalePriceAttrName, saleElementYear.SalePriceAsStr);
+                                            newSaleElement.SetAttribute(shareObject.SaleTaxAtSourceAttrName, saleElementYear.TaxAtSourceAsStr);
+                                            newSaleElement.SetAttribute(shareObject.SaleCapitalGainsTaxAttrName, saleElementYear.CapitalGainsTaxAsStr);
+                                            newSaleElement.SetAttribute(shareObject.SaleSolidarityTaxAttrName, saleElementYear.SolidarityTaxAsStr);
+                                            newSaleElement.SetAttribute(shareObject.SaleDocumentAttrName, saleElementYear.Document);
+                                            nodeElement.ChildNodes[i].AppendChild(newSaleElement);
+                                        }
                                         break;
 
                                     #endregion Sales
@@ -785,14 +1140,12 @@ namespace SharePortfolioManager
                                     case 9:
                                         // Remove old costs
                                         nodeElement.ChildNodes[i].RemoveAll();
-                                        // Remove old costs
-                                        nodeElement.ChildNodes[i].RemoveAll();
                                         foreach (var costElementYear in shareObject.AllCostsEntries.GetAllCostsOfTheShare())
                                         {
                                             XmlElement newCostElement = xmlPortfolio.CreateElement(shareObject.CostsTagNamePre);
-                                            newCostElement.SetAttribute(shareObject.CostsBuyPartAttrName, costElementYear.CostOfABuyAsString);
-                                            newCostElement.SetAttribute(shareObject.CostsDateAttrName, costElementYear.CostDateAsString);
-                                            newCostElement.SetAttribute(shareObject.CostsValueAttrName, costElementYear.CostValueAsString);
+                                            newCostElement.SetAttribute(shareObject.CostsBuyPartAttrName, costElementYear.CostOfABuyAsStr);
+                                            newCostElement.SetAttribute(shareObject.CostsDateAttrName, costElementYear.CostDateAsStr);
+                                            newCostElement.SetAttribute(shareObject.CostsValueAttrName, costElementYear.CostValueAsStr);
                                             newCostElement.SetAttribute(shareObject.BuyDocumentAttrName, costElementYear.CostDocument);
                                             nodeElement.ChildNodes[i].AppendChild(newCostElement);
                                         }
@@ -906,9 +1259,9 @@ namespace SharePortfolioManager
                     foreach (var costElementYear in shareObject.AllCostsEntries.GetAllCostsOfTheShare())
                     {
                         XmlElement newCostElement = xmlPortfolio.CreateElement(shareObject.CostsTagNamePre);
-                        newCostElement.SetAttribute(shareObject.CostsBuyPartAttrName, costElementYear.CostOfABuyAsString);
-                        newCostElement.SetAttribute(shareObject.CostsDateAttrName, costElementYear.CostDateAsString);
-                        newCostElement.SetAttribute(shareObject.CostsValueAttrName, costElementYear.CostValueAsString);
+                        newCostElement.SetAttribute(shareObject.CostsBuyPartAttrName, costElementYear.CostOfABuyAsStr);
+                        newCostElement.SetAttribute(shareObject.CostsDateAttrName, costElementYear.CostDateAsStr);
+                        newCostElement.SetAttribute(shareObject.CostsValueAttrName, costElementYear.CostValueAsStr);
                         newCostElement.SetAttribute(shareObject.BuyDocumentAttrName, costElementYear.CostDocument);
                         newCosts.AppendChild(newCostElement);
                     }
@@ -953,10 +1306,12 @@ namespace SharePortfolioManager
         /// </summary>
         private void CalculatePortfolioPerformance()
         {
+            //if (PortfolioPurchaseValue + PortfolioSalePurchaseValue != 0)
+            //{
+            //    PortfolioPerformanceValue = (PortfolioMarketValue + PortfolioSalePurchaseValue) * 100 / (PortfolioPurchaseValue + PortfolioSalePurchaseValue) - 100;
+            //}
             if (PortfolioPurchaseValue != 0)
-            {
                 PortfolioPerformanceValue = PortfolioMarketValue * 100 / PortfolioPurchaseValue - 100;
-            }
 #if DEBUG_SHAREOBJECT
             Console.WriteLine("");
             Console.WriteLine("CalculatePerformancePortfolio()");

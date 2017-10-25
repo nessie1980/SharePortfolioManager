@@ -198,13 +198,19 @@ namespace SharePortfolioManager
                     dgvPortfolioMarketValue.SelectedCells[0].Value != null &&
                     dgvPortfolioMarketValue.SelectedCells[0].Value.ToString() != ""
                    )
+                {
                     WKN = dgvPortfolioMarketValue.SelectedCells[0].Value.ToString();
+                    SelectedDataGridViewShareIndex = dgvPortfolioMarketValue.SelectedRows[0].Index;
+                }
 
                 if (MarketValueOverviewTabSelected == false &&
                     dgvPortfolioFinalValue.SelectedCells[0].Value != null &&
                     dgvPortfolioFinalValue.SelectedCells[0].Value.ToString() != ""
                    )
+                {
                     WKN = dgvPortfolioFinalValue.SelectedCells[0].Value.ToString();
+                    SelectedDataGridViewShareIndex = dgvPortfolioFinalValue.SelectedRows[0].Index;
+                }
 
                 if (WKN != @"")
                 {

@@ -221,6 +221,7 @@ namespace SharePortfolioManager
                     BuyMarketValueReductionCostsTotal += calcObject.BuyMarketValueReductionCostsYear;
                     BuyVolumeTotal += calcObject.BuyVolumeYear;
                 }
+
 #if DEBUG
                 Console.WriteLine(@"MarketValueTotal:{0}", BuyMarketValueTotal);
                 Console.WriteLine(@"PurchaseValueTotal:{0}", BuyMarketValueReductionTotal);

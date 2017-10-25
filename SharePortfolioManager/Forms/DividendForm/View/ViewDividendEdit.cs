@@ -659,7 +659,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 case DividendErrorCode.ExchangeRatioEmpty:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DividendExchangeRatioEmpty", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/ExchangeRatioEmpty", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -671,7 +671,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 case DividendErrorCode.ExchangeRatioWrongFormat:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DividendExchangeRatioWrongFormat", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/ExchangeRatioWrongFormat", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -683,7 +683,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 case DividendErrorCode.ExchangeRatioWrongValue:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DividendExchangeRatioWrongValue", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/ExchangeRatioWrongValue", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -695,7 +695,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 case DividendErrorCode.RateEmpty:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DividendEmpty", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/RateEmpty", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -707,7 +707,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 case DividendErrorCode.RateWrongFormat:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DividendWrongFormat", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/RateWrongFormat", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -719,12 +719,84 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 case DividendErrorCode.RateWrongValue:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DividendWrongValue", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/RateWrongValue", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
                         this.Enabled = true;
                         txtBoxRate.Focus();
+
+                        break;
+                    }
+                case DividendErrorCode.TaxAtSourceWrongFormat:
+                    {
+                        strMessage =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/TaxAtSourceWrongFormat", LanguageName);
+                        clrMessage = Color.Red;
+                        stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
+                        txtBoxTaxAtSource.Focus();
+
+                        break;
+                    }
+                case DividendErrorCode.TaxAtSourceWrongValue:
+                    {
+                        strMessage =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/TaxAtSourceWrongValue", LanguageName);
+                        clrMessage = Color.Red;
+                        stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
+                        txtBoxTaxAtSource.Focus();
+
+                        break;
+                    }
+                case DividendErrorCode.CapitalGainsTaxWrongFormat:
+                    {
+                        strMessage =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/CapitalGainsTaxWrongFormat", LanguageName);
+                        clrMessage = Color.Red;
+                        stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
+                        txtBoxCapitalGainsTax.Focus();
+
+                        break;
+                    }
+                case DividendErrorCode.CapitalGainsTaxWrongValue:
+                    {
+                        strMessage =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/CapitalGainsTaxWrongValue", LanguageName);
+                        clrMessage = Color.Red;
+                        stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
+                        txtBoxCapitalGainsTax.Focus();
+
+                        break;
+                    }
+                case DividendErrorCode.SolidarityTaxWrongFormat:
+                    {
+                        strMessage =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/SolidarityTaxWrongFormat", LanguageName);
+                        clrMessage = Color.Red;
+                        stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
+                        txtBoxSolidarityTax.Focus();
+
+                        break;
+                    }
+                case DividendErrorCode.SolidarityTaxWrongValue:
+                    {
+                        strMessage =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/SolidarityTaxWrongValue", LanguageName);
+                        clrMessage = Color.Red;
+                        stateLevel = FrmMain.EStateLevels.Error;
+
+                        this.Enabled = true;
+                        txtBoxSolidarityTax.Focus();
 
                         break;
                     }
@@ -927,13 +999,13 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             internal set { _bLoadGridSelectionFlag = value; }
         }
 
+        #endregion Flags
+
         public DataGridView SelectedDataGridView
         {
             get { return _selectedDataGridView; }
             internal set { _selectedDataGridView = value; }
         }
-
-        #endregion Flags
 
         #endregion Properties
 
@@ -1628,7 +1700,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxDividend/TabCtrl/TabPgOverview/Overview",
                         LanguageName);
                 newTabPageOverviewYears.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxDividend/TabCtrl/TabPgOverview/Overview", LanguageName)
-                                          + @" (" + ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesWithUnitAsString + @")";
+                                          + @" (" + ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesWithUnitAsStr + @")";
 
                 #endregion Add page
 
@@ -1714,7 +1786,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                         newTabPage.Name = keyName;
                         newTabPage.Text = keyName + @" (" +
                                               ShareObjectFinalValue.AllDividendEntries.AllDividendsOfTheShareDictionary[keyName]
-                                                  .DividendValueYearWithUnitAsString
+                                                  .DividendValueYearWithUnitAsStr
                                                   + @")";
 
                         #endregion Add page

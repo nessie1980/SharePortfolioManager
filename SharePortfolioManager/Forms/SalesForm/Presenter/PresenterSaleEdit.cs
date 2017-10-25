@@ -54,7 +54,6 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
             _view.Volume = _model.Volume;
             _view.BuyPrice = _model.BuyPrice;
             _view.SalePrice = _model.SalePrice;
-            _view.LossBalance = _model.LossBalance;
             _view.TaxAtSource = _model.TaxAtSource;
             _view.CapitalGainsTax = _model.CapitalGainsTax;
             _view.SolidarityTax = _model.SolidarityTax;
@@ -90,7 +89,6 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
             _model.Volume = _view.Volume;
             _model.BuyPrice = _view.BuyPrice;
             _model.SalePrice = _view.SalePrice;
-            _model.LossBalance = _view.LossBalance;
             _model.TaxAtSource = _view.TaxAtSource;
             _model.CapitalGainsTax = _view.CapitalGainsTax;
             _model.SolidarityTax = _view.SolidarityTax;
@@ -99,7 +97,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
             _model.Payout = _view.Payout;
             _model.Document = _view.Document;
 
-            CalculateMarketValueAndFinalValue();
+            CalculateProfitLossAndPayout();
 
             if (_model.UpdateView)
                 UpdateViewWithModel();
@@ -107,26 +105,26 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
 
         private void OnAddSale(object sender, EventArgs e)
         {
-            // TODO
             // Check the input values
             if (!CheckInputValues(_model.UpdateSale))
             {
-                //bool bErrorFlag = false;
-                //string strDateTime = _model.Date + " " + _model.Time;
+                bool bErrorFlag = false;
+                string strDateTime = _model.Date + " " + _model.Time;
 
-                //// Cost entry if the costs value is not 0
-                //if (_model.CostsDec > 0)
-                //    bErrorFlag = !_model.ShareObjectFinalValue.AddCost(true, strDateTime, _model.CostsDec, _model.Document);
+                // Cost entry if the costs value is not 0
+                if (_model.CostsDec > 0)
+                    bErrorFlag = !_model.ShareObjectFinalValue.AddCost(false, true, strDateTime, _model.CostsDec, _model.Document);
 
-                //if (_model.ShareObjectFinalValue.AddSale(strDateTime, _model.VolumeDec, _model.SharePricedec, _model.ReductionDec, _model.CostsDec, _model.Document)
-                //    && bErrorFlag == false)
-                //{
-                //    _model.ErrorCode = SaleErrorCode.AddSuccessful;
-                //}
-                //else
-                //{
-                //    _model.ErrorCode = SaleErrorCode.AddFailed;
-                //}
+                if (_model.ShareObjectFinalValue.AddSale(strDateTime, _model.VolumeDec, _model.ShareObjectFinalValue.AverageBuyPrice, _model.SalePriceDec,
+                    _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, _model.CostsDec, _model.Document)
+                    && bErrorFlag == false)
+                {
+                    _model.ErrorCode = SaleErrorCode.AddSuccessful;
+                }
+                else
+                {
+                    _model.ErrorCode = SaleErrorCode.AddFailed;
+                }
             }
 
             UpdateViewWithModel();
@@ -136,35 +134,35 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
 
         private void OnEditSale(object sender, EventArgs e)
         {
-            // TODO
             // Check the input values
             if (!CheckInputValues(_model.UpdateSale))
             {
-                //string strDateTime = _model.Date + " " + _model.Time;
+                string strDateTime = _model.Date + " " + _model.Time;
 
-                //if (_model.ShareObjectFinalValue.RemoveSale(_model.SelectedDate) && _model.ShareObjectFinalValue.AddSale(strDateTime, _model.VolumeDec, _model.SharePricedec, _model.ReductionDec, _model.CostsDec, _model.Document))
-                //{
-                //    bool bFlagCostEdit = true;
+                if (_model.ShareObjectFinalValue.RemoveSale(_model.SelectedDate) && _model.ShareObjectFinalValue.AddSale(strDateTime, _model.VolumeDec, _model.ShareObjectFinalValue.AverageBuyPrice, _model.SalePriceDec,
+                    _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, _model.CostsDec, _model.Document))
+                {
+                    bool bFlagCostEdit = true;
 
-                //    // Check if an old cost entry must be deleted
-                //    if (_model.ShareObjectFinalValue.AllCostsEntries.GetCostObjectByDateTime(strDateTime) != null)
-                //        bFlagCostEdit = _model.ShareObjectFinalValue.RemoveCost(strDateTime);
+                    // Check if an old cost entry must be deleted
+                    if (_model.ShareObjectFinalValue.AllCostsEntries.GetCostObjectByDateTime(strDateTime) != null)
+                        bFlagCostEdit = _model.ShareObjectFinalValue.RemoveCost(strDateTime);
 
-                //    // Check if a new cost entry must be made
-                //    if (bFlagCostEdit && _model.CostsDec > 0)
-                //        bFlagCostEdit = _model.ShareObjectFinalValue.AddCost(true, strDateTime, _model.CostsDec, _model.Document);
+                    // Check if a new cost entry must be made
+                    if (bFlagCostEdit && _model.CostsDec > 0)
+                        bFlagCostEdit = _model.ShareObjectFinalValue.AddCost(false, true, strDateTime, _model.CostsDec, _model.Document);
 
-                //    if (bFlagCostEdit)
-                //    {
-                //        _model.ErrorCode = SaleErrorCode.EditSuccessful;
-                //    }
+                    if (bFlagCostEdit)
+                    {
+                        _model.ErrorCode = SaleErrorCode.EditSuccessful;
+                    }
 
-                //    UpdateViewWithModel();
+                    UpdateViewWithModel();
 
-                //    _view.AddEditDeleteFinish();
+                    _view.AddEditDeleteFinish();
 
-                //    return;
-                //}
+                    return;
+                }
             }
 
             //_model.ErrorCode = SaleErrorCode.EditFailed;
@@ -213,33 +211,28 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
         }
 
         /// <summary>
-        /// This function calculates the market value and purchase price of the given values
-        /// If a given values are not valid the market value and final value is set to "0"
+        /// This function calculates the profit or loss and the payout of the sale
         /// </summary>
-        private void CalculateMarketValueAndFinalValue()
+        private void CalculateProfitLossAndPayout()
         {
-//            try
-//            {
-//                decimal decMarketValue = 0;
-//                decimal decPurchaseValue = 0;
-//                decimal decFinalValue = 0;
+            try
+            {
+                decimal decProfitLoss = 0;
+                decimal decPayout = 0;
 
-//                Helper.CalcSaleValues(_model.VolumeDec, _model.SharePricedec, _model.CostsDec,
-//                    _model.ReductionDec, out decMarketValue, out decPurchaseValue, out decFinalValue);
+                decProfitLoss = (_model.SalePriceDec - _model.ShareObjectFinalValue.AverageBuyPrice) * _model.VolumeDec;
+                decPayout = decProfitLoss - _model.TaxAtSourceDec - _model.CapitalGainsTaxDec - _model.SolidarityTaxDec - _model.CostsDec;
 
-//                _model.MarketValueDec = decMarketValue;
-//                _model.PurchaseValueDec = decPurchaseValue;
-//                _model.FinalValueDec = decFinalValue;
-//            }
-//            catch (Exception ex)
-//            {
-//#if DEBUG
-//                MessageBox.Show("CalculateMarketValueAndFinalValue()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
-//                    MessageBoxIcon.Error);
-//#endif
-//                _model.MarketValueDec = 0;
-//                _model.FinalValueDec = 0;
-//            }
+                _model.ProfitLossDec = decProfitLoss;
+                _model.PayoutDec = decPayout;
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                MessageBox.Show("CalculateProfitLossAndPayout()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+#endif
+            }
         }
 
         /// <summary>
@@ -251,146 +244,142 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
         /// <returns>Flag if the input values are correct or not</returns>
         bool CheckInputValues(bool bFlagEdit)
         {
-            //try
-            //{
-            //    bool bErrorFlag = false;
+            try
+            {
+                bool bErrorFlag = false;
 
-            //    if (bFlagEdit)
-            //        _model.ErrorCode = SaleErrorCode.EditSuccessful;
-            //    else
-            //        _model.ErrorCode = SaleErrorCode.AddSuccessful;
+                if (bFlagEdit)
+                    _model.ErrorCode = SaleErrorCode.EditSuccessful;
+                else
+                    _model.ErrorCode = SaleErrorCode.AddSuccessful;
 
-            //    string strDate = _model.Date + " " + _model.Time;
+                string strDate = _model.Date + " " + _model.Time;
 
-            //    // Check if a sale with the given date and time already exists
-            //    foreach (var saleObject in _model.ShareObjectFinalValue.AllSaleEntries.GetAllSalesOfTheShare())
-            //    {
-            //        // Check if a sale should be added or a sale should be edit
-            //        if (!bFlagEdit)
-            //        {
-            //            // By an Add all dates must be checked
-            //            if (saleObject.Date == strDate)
-            //            {
-            //                _model.ErrorCode = SaleErrorCode.DateExists;
-            //                bErrorFlag = true;
-            //                break;
-            //            }
-            //        }
-            //        else
-            //        {
-            //            // By an Edit all sales without the edit entry date and time must be checked
-            //            if (saleObject.Date == strDate
-            //                && _model.SelectedDate != null
-            //                && saleObject.Date != _model.SelectedDate)
-            //            {
-            //                _model.ErrorCode = SaleErrorCode.DateExists;
-            //                bErrorFlag = true;
-            //                break;
-            //            }
-            //        }
-            //    }
+                // Check if a sale with the given date and time already exists
+                foreach (var saleObject in _model.ShareObjectFinalValue.AllSaleEntries.GetAllSalesOfTheShare())
+                {
+                    // Check if a sale should be added or a sale should be edit
+                    if (!bFlagEdit)
+                    {
+                        // By an Add all dates must be checked
+                        if (saleObject.Date == strDate)
+                        {
+                            _model.ErrorCode = SaleErrorCode.DateExists;
+                            bErrorFlag = true;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        // By an Edit all sales without the edit entry date and time must be checked
+                        if (saleObject.Date == strDate
+                            && _model.SelectedDate != null
+                            && saleObject.Date != _model.SelectedDate)
+                        {
+                            _model.ErrorCode = SaleErrorCode.DateExists;
+                            bErrorFlag = true;
+                            break;
+                        }
+                    }
+                }
 
-            //    // Check if a correct volume for the sale is given
-            //    decimal decVolume = -1;
-            //    if (_model.Volume == @"" && bErrorFlag == false)
-            //    {
-            //        _model.ErrorCode = SaleErrorCode.VolumeEmpty;
-            //        bErrorFlag = true;
-            //    }
-            //    else if (!decimal.TryParse(_model.Volume, out decVolume) && bErrorFlag == false)
-            //    {
-            //        _model.ErrorCode = SaleErrorCode.VolumeWrongFormat;
-            //        bErrorFlag = true;
-            //    }
-            //    else if (decVolume <= 0 && bErrorFlag == false)
-            //    {
-            //        _model.ErrorCode = SaleErrorCode.VolumeWrongValue;
-            //        bErrorFlag = true;
-            //    }
-            //    else if (bErrorFlag == false)
-            //        _model.VolumeDec = decVolume;
+                // Check if a correct volume for the sale is given
+                decimal decVolume = -1;
+                if (_model.Volume == @"" && bErrorFlag == false)
+                {
+                    _model.ErrorCode = SaleErrorCode.VolumeEmpty;
+                    bErrorFlag = true;
+                }
+                else if (!decimal.TryParse(_model.Volume, out decVolume) && bErrorFlag == false)
+                {
+                    _model.ErrorCode = SaleErrorCode.VolumeWrongFormat;
+                    bErrorFlag = true;
+                }
+                else if (decVolume <= 0 && bErrorFlag == false)
+                {
+                    _model.ErrorCode = SaleErrorCode.VolumeWrongValue;
+                    bErrorFlag = true;
+                }
+                else
+                {
+                    if (!bFlagEdit)
+                    {
+                        if (decVolume > _model.ShareObjectFinalValue.Volume && bErrorFlag == false)
+                        {
+                            _model.ErrorCode = SaleErrorCode.VolumeMaxValue;
+                            bErrorFlag = true;
+                        }
+                    }
+                    else
+                    {
+                        if (decVolume > _model.ShareObjectFinalValue.AllSaleEntries.GetSaleObjectByDateTime(strDate).Volume + _model.ShareObjectFinalValue.Volume)
+                        {
+                            _model.ErrorCode = SaleErrorCode.VolumeMaxValue;
+                            bErrorFlag = true;
+                        }
+                    }
+                }
 
-            //    // Check if a correct price for the sale is given
-            //    decimal decPrice = -1;
-            //    if (_model.SharePrice == @"" && bErrorFlag == false)
-            //    {
-            //        _model.ErrorCode = SaleErrorCode.SharePricEmpty;
-            //        bErrorFlag = true;
-            //    }
-            //    else if (!decimal.TryParse(_model.SharePrice, out decPrice) && bErrorFlag == false)
-            //    {
-            //        _model.ErrorCode = SaleErrorCode.SharePriceWrongFormat;
-            //        bErrorFlag = true;
-            //    }
-            //    else if (decPrice <= 0 && bErrorFlag == false)
-            //    {
-            //        _model.ErrorCode = SaleErrorCode.SharePriceWrongValue;
-            //        bErrorFlag = true;
-            //    }
-            //    else if (bErrorFlag == false)
-            //        _model.SharePricedec = decPrice;
+                // Check if a correct price for the sale is given
+                decimal decSalePrice = -1;
+                if (_model.SalePrice == @"" && bErrorFlag == false)
+                {
+                    _model.ErrorCode = SaleErrorCode.SalePriceEmpty;
+                    bErrorFlag = true;
+                }
+                else if (!decimal.TryParse(_model.SalePrice, out decSalePrice) && bErrorFlag == false)
+                {
+                    _model.ErrorCode = SaleErrorCode.SalePriceWrongFormat;
+                    bErrorFlag = true;
+                }
+                else if (decSalePrice <= 0 && bErrorFlag == false)
+                {
+                    _model.ErrorCode = SaleErrorCode.SalePriceWrongValue;
+                    bErrorFlag = true;
+                }
+                else if (bErrorFlag == false)
+                    _model.SalePriceDec = decSalePrice;
 
-            //    // Costs input check
-            //    if (_model.Costs != "" && bErrorFlag == false)
-            //    {
-            //        decimal decCosts = 0;
-            //        if (!decimal.TryParse(_model.Costs, out decCosts) && bErrorFlag == false)
-            //        {
-            //            _model.ErrorCode = SaleErrorCode.CostsWrongFormat;
-            //            bErrorFlag = true;
-            //        }
-            //        else if (decCosts < 0 && bErrorFlag == false)
-            //        {
-            //            _model.ErrorCode = SaleErrorCode.CostsWrongValue;
-            //            bErrorFlag = true;
-            //        }
-            //        else if (bErrorFlag == false)
-            //            _model.CostsDec = decCosts;
-            //    }
+                // Costs input check
+                if (_model.Costs != "" && bErrorFlag == false)
+                {
+                    decimal decCosts = 0;
+                    if (!decimal.TryParse(_model.Costs, out decCosts) && bErrorFlag == false)
+                    {
+                        _model.ErrorCode = SaleErrorCode.CostsWrongFormat;
+                        bErrorFlag = true;
+                    }
+                    else if (decCosts < 0 && bErrorFlag == false)
+                    {
+                        _model.ErrorCode = SaleErrorCode.CostsWrongValue;
+                        bErrorFlag = true;
+                    }
+                    else if (bErrorFlag == false)
+                        _model.CostsDec = decCosts;
+                }
 
-            //    // Reduction input check
-            //    if (_model.Reduction != "" && bErrorFlag == false)
-            //    {
-            //        decimal decReduction = 0;
-            //        if (!decimal.TryParse(_model.Reduction, out decReduction) && bErrorFlag == false)
-            //        {
-            //            _model.ErrorCode = SaleErrorCode.ReductionWrongFormat;
-            //            bErrorFlag = true;
-            //        }
-            //        else if (decReduction < 0 && bErrorFlag == false)
-            //        {
-            //            _model.ErrorCode = SaleErrorCode.ReductionWrongValue;
-            //            bErrorFlag = true;
-            //        }
-            //        else if (bErrorFlag == false)
-            //            _model.ReductionDec = decReduction;
-            //    }
+                // Check if a given document exists
+                if (_model.Document == null)
+                    _model.Document = @"";
+                else if (_model.Document != @"" && _model.Document != @"-" && !Directory.Exists(Path.GetDirectoryName(_model.Document)))
+                {
+                    _model.ErrorCode = SaleErrorCode.DirectoryDoesNotExists;
+                    bErrorFlag = true;
+                }
+                else if (_model.Document != @"" && _model.Document != @"-" && !File.Exists(_model.Document) && bErrorFlag == false)
+                {
+                    _model.Document = @"";
+                    _model.ErrorCode = SaleErrorCode.FileDoesNotExists;
+                    bErrorFlag = true;
+                }
 
-            //    // Check if a given document exists
-            //    if (_model.Document == null)
-            //        _model.Document = @"";
-            //    else if (_model.Document != @"" && _model.Document != @"-" && !Directory.Exists(Path.GetDirectoryName(_model.Document)))
-            //    {
-            //        _model.ErrorCode = SaleErrorCode.DocumentDirectoryDoesNotExits;
-            //        bErrorFlag = true;
-            //    }
-            //    else if (_model.Document != @"" && _model.Document != @"-" && !File.Exists(_model.Document) && bErrorFlag == false)
-            //    {
-            //        _model.Document = @"";
-            //        _model.ErrorCode = SaleErrorCode.DocumentFileDoesNotExists;
-            //        bErrorFlag = true;
-            //    }
-
-            //    return bErrorFlag;
-            //}
-            //catch
-            //{
-            //    _model.ErrorCode = SaleErrorCode.InputValuesInvalid;
-            //    return true;
-            //}
-
-            // TODO remove
-            return true;
+                return bErrorFlag;
+            }
+            catch
+            {
+                _model.ErrorCode = SaleErrorCode.InputValuesInvalid;
+                return true;
+            }
         }
     }
 }

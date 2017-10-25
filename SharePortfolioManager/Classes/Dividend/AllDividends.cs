@@ -69,12 +69,12 @@ namespace SharePortfolioManager
             internal set { _dividendValueTotalWithTaxes = value; }
         }
 
-        public string DividendValueTotalWithTaxesAsString
+        public string DividendValueTotalWithTaxesAsStr
         {
             get { return Helper.FormatDecimal(_dividendValueTotalWithTaxes, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", DividendCultureInfo); }
         }
 
-        public string DividendValueTotalWithTaxesWithUnitAsString
+        public string DividendValueTotalWithTaxesWithUnitAsStr
         {
             get { return Helper.FormatDecimal(_dividendValueTotalWithTaxes, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", DividendCultureInfo); }
         }

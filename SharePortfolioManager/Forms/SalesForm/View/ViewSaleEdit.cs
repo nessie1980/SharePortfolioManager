@@ -31,7 +31,6 @@ using SharePortfolioManager.Properties;
 using System.Linq;
 using System.IO;
 using System.ComponentModel;
-using System.Globalization;
 
 namespace SharePortfolioManager.Forms.SalesForm.View
 {
@@ -50,14 +49,10 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         VolumeEmpty,
         VolumeWrongFormat,
         VolumeWrongValue,
-        BuyPriceEmpty,
-        BuyPriceWrongFormat,
-        BuyPriceWrongValue,
+        VolumeMaxValue,
         SalePriceEmpty,
         SalePriceWrongFormat,
         SalePriceWrongValue,
-        LossBalanceWrongFormat,
-        LossBalanceWrongValue,
         TaxAtSourceWrongFormat,
         TaxAtSourceWrongValue,
         CapitalGainsTaxWrongFormat,
@@ -92,7 +87,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         string Volume { get; set; }
         string BuyPrice { get; set; }
         string SalePrice { get; set; }
-        string LossBalance { get; set; }
         string TaxAtSource { get; set; }
         string CapitalGainsTax { get; set; }
         string SolidarityTax { get; set; }
@@ -329,17 +323,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             }
         }
 
-        public string LossBalance
-        {
-            get { return txtBoxLossBalance.Text; }
-            set
-            {
-                if (txtBoxLossBalance.Text == value)
-                    return;
-                txtBoxLossBalance.Text = value;
-            }
-        }
-
         public string TaxAtSource
         {
             get { return txtBoxTaxAtSource.Text; }
@@ -353,7 +336,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
 
         public string CapitalGainsTax
         {
-            get { return txtBoxPayout.Text; }
+            get { return txtBoxCapitalGainsTax.Text; }
             set
             {
                 if (txtBoxCapitalGainsTax.Text == value)
@@ -609,39 +592,27 @@ namespace SharePortfolioManager.Forms.SalesForm.View
 
                         break;
                     }
-                case SaleErrorCode.BuyPriceEmpty:
+                case SaleErrorCode.VolumeMaxValue:
                     {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/BuyPriceEmpty", LanguageName);
+                        if (btnAddSave.Text == Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Buttons/Add", LanguageName))
+                        {
+                            strMessage =
+                                Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/VolumeMaxValue_1", LanguageName) +
+                                ShareObjectFinalValue.Volume +
+                                Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/VolumeMaxValue_2", LanguageName);
+                        }
+                        else
+                        {
+                            strMessage =
+                                Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/VolumeMaxValue_1", LanguageName) +
+                                (ShareObjectFinalValue.Volume + ShareObjectFinalValue.AllSaleEntries.GetSaleObjectByDateTime(datePickerDate.Text + " " + datePickerTime.Text).Volume) +
+                                Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/VolumeMaxValue_2", LanguageName);
+                        }
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
                         this.Enabled = true;
-                        txtBoxBuyPrice.Focus();
-
-                        break;
-                    }
-                case SaleErrorCode.BuyPriceWrongFormat:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/BuyPriceWrongFormat", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-
-                        this.Enabled = true;
-                        txtBoxBuyPrice.Focus();
-
-                        break;
-                    }
-                case SaleErrorCode.BuyPriceWrongValue:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/BuyPriceWrongValue", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-
-                        this.Enabled = true;
-                        txtBoxBuyPrice.Focus();
+                        txtBoxVolume.Focus();
 
                         break;
                     }
@@ -678,30 +649,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
 
                         this.Enabled = true;
                         txtBoxSalePrice.Focus();
-
-                        break;
-                    }
-                case SaleErrorCode.LossBalanceWrongFormat:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/LossBalanceWrongFormat", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-
-                        this.Enabled = true;
-                        txtBoxLossBalance.Focus();
-
-                        break;
-                    }
-                case SaleErrorCode.LossBalanceWrongValue:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/LossBalanceWrongValue", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-
-                        this.Enabled = true;
-                        txtBoxLossBalance.Focus();
 
                         break;
                     }
@@ -935,9 +882,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 lblSalePrice.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Labels/SalesPrice",
                         LanguageName);
-                lblLossBalance.Text =
-                    Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Labels/LossBalance",
-                        LanguageName);
                 lblTaxAtSource.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Labels/TaxAtSource",
                         LanguageName);
@@ -980,7 +924,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 lblVolumeUnit.Text = ShareObject.PieceUnit;
                 lblBuyPriceUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                 lblSalePriceUnit.Text = ShareObjectFinalValue.CurrencyUnit;
-                lblLossBalanceUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                 lblTaxAtSourceUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                 lblCapitalGainsTaxUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                 lblSolidarityTaxUnit.Text = ShareObjectFinalValue.CurrencyUnit;
@@ -999,12 +942,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 btnCancel.Image = Resources.black_cancel;
 
                 #endregion Image configuration
-
-                // Set current share value
-                txtBoxVolume.Text = ShareObjectFinalValue.VolumeAsStr;
-
-                // Set current share price
-                txtBoxSalePrice.Text = ShareObjectFinalValue.CurPriceAsStr;
 
                 ShowSales();
             }
@@ -1050,7 +987,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             txtBoxVolume.Text = @"";
             txtBoxBuyPrice.Text = @"";
             txtBoxSalePrice.Text = @"";
-            txtBoxLossBalance.Text = @"";
             txtBoxTaxAtSource.Text = @"";
             txtBoxCapitalGainsTax.Text = @"";
             txtBoxSolidarityTax.Text = @"";
@@ -1058,6 +994,36 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             txtBoxProfitLoss.Text = @"";
             txtBoxPayout.Text = @"";
             txtBoxDocument.Text = @"";
+
+            // Check if any volume is present
+            if (ShareObjectFinalValue.Volume > 0)
+            {
+                // Set current share value
+                txtBoxVolume.Text = ShareObjectFinalValue.VolumeAsStr;
+
+                // Set current share price
+                txtBoxSalePrice.Text = ShareObjectFinalValue.CurPriceAsStr;
+
+                // Set current buy price
+                txtBoxBuyPrice.Text = ShareObjectFinalValue.AverageBuyPriceAsStr;
+            }
+            else
+            {
+                datePickerDate.Enabled = false;
+                datePickerTime.Enabled = false;
+
+                txtBoxVolume.Enabled = false;
+                txtBoxTaxAtSource.Enabled = false;
+                txtBoxCapitalGainsTax.Enabled = false;
+                txtBoxSolidarityTax.Enabled = false;
+
+                txtBoxSalePrice.Enabled = false;
+                txtBoxCosts.Enabled = false;
+                txtBoxDocument.Enabled = false;
+                btnSalesDocumentBrowse.Enabled = false;
+
+                btnAddSave.Enabled = false;
+            }
 
             txtBoxVolume.Focus();
         }
@@ -1093,6 +1059,28 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
+        private void OnTxtBoxAddBuyPrice_TextChanged(object sender, EventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs("BuyPrice"));
+        }
+
+        /// <summary>
+        /// This function updates the view with the formatted value
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void txtBoxBuyPrice_Leave(object sender, EventArgs e)
+        {
+            if (FormatInputValues != null)
+                FormatInputValues(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function updates the model if the text has changed
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
         private void OnTxtBoxSalePrice_TextChanged(object sender, EventArgs e)
         {
             if (PropertyChanged != null)
@@ -1109,28 +1097,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             if (FormatInputValues != null)
                 FormatInputValues(this, new EventArgs());
 
-        }
-
-        /// <summary>
-        /// This function updates the model if the text has changed
-        /// </summary>
-        /// <param name="sender">Text box</param>
-        /// <param name="e">EventArgs</param>
-        private void OnTxtBoxLossBalance_TextChanged(object sender, EventArgs e)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("LossBalance"));
-        }
-
-        /// <summary>
-        /// This function updates the view with the formatted value
-        /// </summary>
-        /// <param name="sender">Text box</param>
-        /// <param name="e">EventArgs</param>
-        private void txtBoxLossBalance_Leave(object sender, EventArgs e)
-        {
-            if (FormatInputValues != null)
-                FormatInputValues(this, new EventArgs());
         }
 
         /// <summary>
@@ -1399,8 +1365,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         {
             try
             {
-                // TODO refactoring
-
                 // Reset tab control
                 foreach (TabPage tabPage in tabCtrlSales.TabPages)
                 {
@@ -1428,9 +1392,9 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         LanguageName);
                 newTabPageOverviewYears.Text = Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxSale/TabCtrl/TabPgOverview/Overview", LanguageName)
                                          + @" ("
-                                         + _shareObjectFinalValue.AllSaleEntries.SalePayoutTotalWithUnitAsString
+                                         + _shareObjectFinalValue.AllSaleEntries.SalePayoutTotalWithUnitAsStr
                                          + @" / "
-                                         + _shareObjectFinalValue.AllSaleEntries.SaleProfitLossTotalWithUnitAsString
+                                         + _shareObjectFinalValue.AllSaleEntries.SaleProfitLossTotalWithUnitAsStr
                                          + @")";
 
                 // Create Binding source for the sale data
@@ -1480,7 +1444,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 tabCtrlSales.Controls.Add(newTabPageOverviewYears);
                 newTabPageOverviewYears.Parent = tabCtrlSales;
 
-
                 // Check if sales exists
                 if (_shareObjectFinalValue.AllSaleEntries.AllSalesOfTheShareDictionary.Count > 0)
                 {
@@ -1496,10 +1459,10 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         newTabPage.Text = keyName
                                             + @" ("
                                             + _shareObjectFinalValue.AllSaleEntries.AllSalesOfTheShareDictionary[keyName]
-                                              .SalePayoutYearWithUnitAsString
+                                              .SalePayoutYearWithUnitAsStr
                                             + @" / "
                                             + _shareObjectFinalValue.AllSaleEntries.AllSalesOfTheShareDictionary[keyName]
-                                              .SaleProfitLossYearWithUnitAsString
+                                              .SaleProfitLossYearWithUnitAsStr
                                             + @")";
 
                         // Create Binding source for the sale data
@@ -1590,13 +1553,12 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                             break;
                         case 1:
                             ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(
-                                    @"/AddEditFormSale/GrpBoxSale/TabCtrl/DgvSaleOverview/ColHeader_Value",
-                                    LanguageName) + @" (" + _shareObjectFinalValue.CurrencyUnit + ")";
+                                Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxSale/TabCtrl/DgvSaleOverview/ColHeader_Volume",
+                                    LanguageName) + @" (" + ShareObject.PieceUnit + ")";
                             break;
                         case 2:
                             ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxSale/TabCtrl/DgvSaleOverview/ColHeader_Price",
+                                Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxSale/TabCtrl/DgvSaleOverview/ColHeader_Purchase",
                                     LanguageName) + @" (" + _shareObjectFinalValue.CurrencyUnit + ")";
                             break;
                         case 3:
@@ -1606,8 +1568,8 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                             break;
                         case 4:
                             ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxSale/TabCtrl/DgvSaleOverview/ColHeader_Volume",
-                                    LanguageName) + ShareObject.PieceUnit;
+                                Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxSale/TabCtrl/DgvSaleOverview/ColHeader_Sale",
+                                    LanguageName) + @" (" + _shareObjectFinalValue.CurrencyUnit + ")";
                             break;
                         case 5:
                             ((DataGridView)sender).Columns[i].HeaderText =
@@ -1836,52 +1798,81 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         {
             try
             {
+                btnAddSave.Enabled = true;
+                btnSalesDocumentBrowse.Enabled = true;
+                txtBoxDocument.Enabled = true;
+
                 if (((DataGridView)sender).SelectedRows.Count == 1)
                 {
                     // Get the currently selected item in the ListBox
                     DataGridViewSelectedRowCollection curItem = ((DataGridView)sender).SelectedRows;
 
+                    // Set selected date
+                    SelectedDate = curItem[0].Cells[0].Value.ToString();
+
                     // Get SaleObject of the selected DataGridView row
-                    SaleObject saleObject = ShareObjectFinalValue.AllSaleEntries.GetSaleObjectByDateTime(curItem[0].Cells[0].Value.ToString());
+                    SaleObject saleObject = ShareObjectFinalValue.AllSaleEntries.GetSaleObjectByDateTime(SelectedDate);
                     if (saleObject != null)
                     {
-                        // TODO
-                        //datePickerDate.Value = Convert.ToDateTime(saleObject.Date);
-                        //datePickerTime.Value = Convert.ToDateTime(saleObject.Date);
-                        //txtBoxCosts.Text = saleObject.ValueAsString;
-                        //txtBoxSalePrice.Text = saleObject.PriceAsString;
-                        //txtBoxVolume.Text = saleObject.VolumeAsString;
-                        //txtBoxDocument.Text = saleObject.Document;
+                        datePickerDate.Value = Convert.ToDateTime(saleObject.Date);
+                        datePickerTime.Value = Convert.ToDateTime(saleObject.Date);
+                        txtBoxVolume.Text = saleObject.VolumeAsStr;
+                        txtBoxBuyPrice.Text = saleObject.BuyPriceAsStr;
+                        txtBoxSalePrice.Text = saleObject.SalePriceAsStr;
+                        txtBoxTaxAtSource.Text = saleObject.TaxAtSourceAsStr;
+                        txtBoxCapitalGainsTax.Text = saleObject.CapitalGainsTaxAsStr;
+                        txtBoxSolidarityTax.Text = saleObject.SolidarityTaxAsStr;
+                        txtBoxCosts.Text = saleObject.CostsAsStr;
+                        txtBoxProfitLoss.Text = saleObject.ProfitLossAsStr;
+                        txtBoxPayout.Text = saleObject.PayoutAsStr;
+                        txtBoxDocument.Text = saleObject.Document;
                     }
                     else
                     {
                         // TODO
-                        //datePickerDate.Value = Convert.ToDateTime(curItem[0].Cells[0].Value.ToString());
-                        //datePickerTime.Value = Convert.ToDateTime(curItem[0].Cells[0].Value.ToString());
-                        //txtBoxCosts.Text = curItem[0].Cells[1].Value.ToString();
-                        //txtBoxSalePrice.Text = curItem[0].Cells[2].Value.ToString();
-                        //txtBoxVolume.Text = curItem[0].Cells[4].Value.ToString();
-                        //txtBoxDocument.Text = curItem[0].Cells[5].Value.ToString();
+                        datePickerDate.Value = Convert.ToDateTime(curItem[0].Cells[0].Value.ToString());
+                        datePickerTime.Value = Convert.ToDateTime(curItem[0].Cells[0].Value.ToString());
+                        txtBoxVolume.Text = curItem[0].Cells[1].Value.ToString();
+                        txtBoxProfitLoss.Text = curItem[0].Cells[3].Value.ToString();
+                        txtBoxPayout.Text = curItem[0].Cells[4].Value.ToString();
+                        txtBoxDocument.Text = curItem[0].Cells[5].Value.ToString();
                     }
 
-                    if (_shareObjectFinalValue.AllBuyEntries.IsDateLastDate(curItem[0].Cells[0].Value.ToString()) &&
-                        _shareObjectFinalValue.AllSaleEntries.IsDateLastDate(curItem[0].Cells[0].Value.ToString()))
+                    if (ShareObjectFinalValue.AllBuyEntries.IsDateLastDate(SelectedDate) &&
+                        ShareObjectFinalValue.AllSaleEntries.IsDateLastDate(SelectedDate)
+                        )
                     {
-                        // Enable button(s)
-                        btnDelete.Enabled = true;
+                        // Check if a sale exists
+                        if (ShareObjectFinalValue.AllSaleEntries.GetAllSalesOfTheShare().Count > 1)
+                            // Enable Button(s)
+                            btnDelete.Enabled = true;
+                        else
+                            // Enable Button(s)
+                            btnDelete.Enabled = false;
+
                         // Enable text box(es)
-                        txtBoxSalePrice.Enabled = true;
-                        txtBoxCosts.Enabled = true;
+                        datePickerDate.Enabled = true;
+                        datePickerTime.Enabled = true;
                         txtBoxVolume.Enabled = true;
+                        txtBoxSalePrice.Enabled = true;
+                        txtBoxTaxAtSource.Enabled = true;
+                        txtBoxCapitalGainsTax.Enabled = true;
+                        txtBoxSolidarityTax.Enabled = true;
+                        txtBoxCosts.Enabled = true;
                     }
                     else
                     {
-                        // Disable button(s)
+                        // Disable Button(s)
                         btnDelete.Enabled = false;
                         // Disable text box(es)
-                        txtBoxSalePrice.Enabled = false;
-                        txtBoxCosts.Enabled = false;
+                        datePickerDate.Enabled = false;
+                        datePickerTime.Enabled = false;
                         txtBoxVolume.Enabled = false;
+                        txtBoxSalePrice.Enabled = false;
+                        txtBoxTaxAtSource.Enabled = false;
+                        txtBoxCapitalGainsTax.Enabled = false;
+                        txtBoxSolidarityTax.Enabled = false;
+                        txtBoxCosts.Enabled = false;
                     }
 
                     // Enable button(s)
@@ -1905,10 +1896,17 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                     // Disable button(s)
                     btnReset.Enabled = false;
                     btnDelete.Enabled = false;
+                    // Enable Button(s)
+                    btnAddSave.Enabled = true;
                     // Enable text box(es)
-                    txtBoxSalePrice.Enabled = true;
-                    txtBoxCosts.Enabled = true;
+                    datePickerDate.Enabled = true;
+                    datePickerTime.Enabled = true;
                     txtBoxVolume.Enabled = true;
+                    txtBoxSalePrice.Enabled = true;
+                    txtBoxTaxAtSource.Enabled = true;
+                    txtBoxCapitalGainsTax.Enabled = true;
+                    txtBoxSolidarityTax.Enabled = true;
+                    txtBoxCosts.Enabled = true;
 
                     // Rename group box
                     grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Add_Caption", LanguageName);
@@ -2064,234 +2062,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         #endregion Data grid view
 
         /// <summary>
-        /// This function checks if the input is correct
-        /// With the flag "bFlagAddEdit" it is chosen if
-        /// a buy should be add or edit.
-        /// </summary>
-        /// <param name="bFlagAddEdit">Flag if a sale should be add (true) or edit (false)</param>
-        /// <param name="strDateTime">Date and time of the sale</param>
-        /// <param name="decVolume">Volume of the sale</param>
-        /// <param name="decMaxVolume"></param>
-        /// <param name="decValue">Value of the sale</param>
-        /// <param name="strDoc">Document of the sale</param>
-        /// <returns>Flag if the input values are correct or not</returns>
-        bool CheckSaleInput(bool bFlagAddEdit, out string strDateTime, out decimal decVolume, decimal decMaxVolume, out decimal decValue, out decimal decProfitLoss, out string strDoc)
-        {
-            bool errorFlag = false;
-            decVolume = 0;
-            decValue = 0;
-            decProfitLoss = 0;
-            strDateTime = datePickerDate.Text + " " + datePickerTime.Text;
-            strDoc = txtBoxDocument.Text;
-
-            try
-            {
-                toolStripStatusLabelMessageSaleEdit.ForeColor = Color.Red;
-                toolStripStatusLabelMessageSaleEdit.Text = "";
-
-                // Check if a sale with the given date and time already exists
-                foreach (var sale in _shareObjectFinalValue.AllSaleEntries.GetAllSalesOfTheShare())
-                {
-                    if (bFlagAddEdit)
-                    {
-                        // By an Add all dates must be checked
-                        if (sale.Date == strDateTime)
-                        {
-                            // Add status message
-                            Helper.AddStatusMessage(toolStripStatusLabelMessageSaleEdit,
-                               Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/DateExists", LanguageName),
-                               Language, LanguageName,
-                               Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-
-                            errorFlag = true;
-                        }
-                    }
-                    else
-                    {
-                        // By an Edit all sales without the edit entry date and time must be checked
-                        if (sale.Date == strDateTime
-                            && _selectedDataGridView != null
-                            && _selectedDataGridView.SelectedRows.Count == 1
-                            && sale.Date != _selectedDataGridView.SelectedRows[0].Cells[0].Value.ToString())
-                        {
-                            // Add status message
-                            Helper.AddStatusMessage(toolStripStatusLabelMessageSaleEdit,
-                               Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/DateWrongFormat", LanguageName),
-                               Language, LanguageName,
-                               Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-
-                            errorFlag = true;
-                        }
-                    }
-                }
-
-                // Check if a volume for the sale is given
-                if (txtBoxVolume.Text == @"" && errorFlag == false)
-                {
-                    txtBoxVolume.Focus();
-
-                    // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessageSaleEdit,
-                       Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/VolumeEmpty", LanguageName),
-                       Language, LanguageName,
-                       Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-
-                    errorFlag = true;
-                }
-                else if (!decimal.TryParse(txtBoxVolume.Text, out decVolume) && errorFlag == false)
-                {
-                    txtBoxVolume.Focus();
-
-                    // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessageSaleEdit,
-                       Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/VolumeWrongFormat", LanguageName),
-                       Language, LanguageName,
-                       Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-
-                    errorFlag = true;
-                }
-                else if (decVolume <= 0 && errorFlag == false)
-                {
-                    txtBoxVolume.Focus();
-
-                    // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessageSaleEdit,
-                       Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/VolumeWrongValue", LanguageName),
-                       Language, LanguageName,
-                       Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-
-                    errorFlag = true;
-                }
-                else if (decVolume > decMaxVolume && errorFlag == false)
-                {
-                    txtBoxVolume.Text = String.Format("{0:N2}", decMaxVolume);
-                    txtBoxVolume.Focus();
-
-                    // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessageSaleEdit,
-                       Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/VolumeMaxValue", LanguageName),
-                       Language, LanguageName,
-                       Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-
-                    errorFlag = true;
-                }
-
-                // Value
-                if (txtBoxCosts.Text == @"" && errorFlag == false)
-                {
-                    txtBoxCosts.Focus();
-
-                    // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessageSaleEdit,
-                       Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/ValueEmpty", LanguageName),
-                       Language, LanguageName,
-                       Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-
-                    errorFlag = true;
-                }
-                else if (!decimal.TryParse(txtBoxCosts.Text, out decValue) && errorFlag == false)
-                {
-                    txtBoxCosts.Focus();
-
-                    // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessageSaleEdit,
-                       Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/ValueWrongFormat", LanguageName),
-                       Language, LanguageName,
-                       Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-
-                    errorFlag = true;
-                }
-                else if (decValue <= 0 && errorFlag == false)
-                {
-                    txtBoxCosts.Focus();
-
-                    // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessageSaleEdit,
-                       Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/ValueWrongValue", LanguageName),
-                       Language, LanguageName,
-                       Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-
-                    errorFlag = true;
-                }
-
-                //// Profit or loss
-                //if (txtBoxAddSalesProfitLossPercentage.Text == @"" && errorFlag == false)
-                //{
-                //    txtBoxAddSalesProfitLossPercentage.Focus();
-
-                //    // Add status message
-                //    Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                //       XmlLanguage.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/ProfitLossEmpty", LanguageName),
-                //       XmlLanguage, LanguageName,
-                //       Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-
-                //    errorFlag = true;
-                //}
-                //else if (!decimal.TryParse(txtBoxAddSalesProfitLossPercentage.Text, out decProfitLoss) && errorFlag == false)
-                //{
-                //    txtBoxAddSalesProfitLossPercentage.Focus();
-
-                //    // Add status message
-                //    Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                //       XmlLanguage.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/ProfitLossWrongFormat", LanguageName),
-                //       XmlLanguage, LanguageName,
-                //       Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-
-                //    errorFlag = true;
-                //}
-
-                // Check if a given document directory exists
-                if (strDoc != @"" && strDoc != @"-" && !Directory.Exists(Path.GetDirectoryName(strDoc)) && errorFlag == false)
-                {
-                    // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessageSaleEdit,
-                       Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/DirectoryDoesNotExist", LanguageName),
-                       Language, LanguageName,
-                       Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-                    errorFlag = true;
-                }
-
-                // Check if a given document exists
-                if (strDoc != @"" && strDoc != @"-" && !File.Exists(strDoc) && errorFlag == false)
-                {
-                    // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessageSaleEdit,
-                       Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/FileDoesNotExist", LanguageName),
-                       Language, LanguageName,
-                       Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-                    errorFlag = true;
-                }
-
-                // Reset string values
-                if (errorFlag)
-                {
-                    strDateTime = @"";
-                    strDoc = @"";
-                }
-
-                return errorFlag;
-            }
-            catch (Exception ex)
-            {
-#if DEBUG
-                MessageBox.Show("CheckSaleInput()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessageSaleEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/CheckInputFailure", LanguageName),
-                   Language, LanguageName,
-                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
-
-                // Reset string values
-                strDateTime = @"";
-                strDoc = @"";
-
-                return true;
-            }
-        }
-
-        /// <summary>
         /// This function calculates the value of the given values
         /// If a given value is not valid the value text box is set to "-"
         /// <returns>String with the value or "-" if the calculation failed</returns>>
@@ -2432,26 +2202,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         //                return @"-";
         //            }
         //        }
-
-        /// <summary>
-        /// This function changes the currency unit when the currency
-        /// has been changed
-        /// </summary>
-        /// <param name="sender">ComboBox</param>
-        /// <param name="e">EventArgs</param>
-        private void cbxBoxAddSalesForeignCurrency_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            // TODO
-//            lblAddSalesPriceShareFCUnit.Text = ((ComboBox)sender).SelectedItem.ToString().Split('-')[1].Trim();
-
-            // Set currency units
-//            TaxValuesCurrent.CurrencyUnit = lblAddSalesPriceShareFCUnit.Text;
-            //if (((ComboBox)sender).SelectedItem != null)
-            //{
-            //    TaxValuesCurrent.FCUnit = ((ComboBox)sender).SelectedItem.ToString().Split('-')[1].Trim();
-            //    TaxValuesCurrent.CiShareFC = Helper.GetCultureByISOCurrencySymbol(((ComboBox)sender).SelectedItem.ToString().Split('-')[0].Trim());
-            //}
-        }
 
         #endregion Methods
     }

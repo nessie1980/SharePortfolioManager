@@ -195,7 +195,7 @@ namespace SharePortfolioManager
                 // Load portfolio file
                 try
                 {
-                    // Reset share object list // TODO Reset portfolio values
+                    // Reset share object list
                     ShareObjectListMarketValue.Clear();
                     ShareObjectListFinalValue.Clear();
                     ShareObjectFinalValue.PortfolioValuesReset();
@@ -392,32 +392,45 @@ namespace SharePortfolioManager
                                                         ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
                                                             .SaleAttrCount)
                                                     {
-                                                        // TODO
-                                                        //if (!ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].AddSale(
-                                                        //    false,
-                                                        //    nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].SaleDateAttrName].Value,               // Date
-                                                        //    Convert.ToDecimal(
-                                                        //        nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].SaleVolumeAttrName].Value),        // Volume
-                                                        //    Convert.ToDecimal(
-                                                        //        nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].SalePriceAttrName].Value),         // Value
-                                                        //    Convert.ToDecimal(
-                                                        //        nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].SaleProfitLossAttrName].Value),    // ProfitLoss
-                                                        //    0,                                                                                                                          //CurrentVolume
-                                                        //    nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].SaleDocumentAttrName].Value))          // Document
-                                                        //    loadPortfolio = false;
+                                                        if (!ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].AddSale(
+                                                            nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].SaleDateAttrName].Value,                   // Date
+                                                            Convert.ToDecimal(
+                                                                nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].SaleVolumeAttrName].Value),            // Volume
+                                                            Convert.ToDecimal(
+                                                                nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].SaleBuyPriceAttrName].Value),          // Buy price of a share
+                                                            Convert.ToDecimal(
+                                                                nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].SalePriceAttrName].Value),             // Sale price of a share
+                                                            Convert.ToDecimal(
+                                                                nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].SaleTaxAtSourceAttrName].Value),       // Tax at source
+                                                            Convert.ToDecimal(
+                                                                nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].SaleCapitalGainsTaxAttrName].Value),   // Capital gains tax
+                                                            Convert.ToDecimal(
+                                                                nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].SaleSolidarityTaxAttrName].Value),     // Solidarity tax
+                                                            //Convert.ToDecimal(
+                                                            //    nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].SaleCostsAttrName].Value),             // Costs
+                                                            0,
+                                                            nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].SaleDocumentAttrName].Value))              // Document
+                                                            loadPortfolio = false;
 
-                                                        //if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].AddSale(
-                                                        //    false,
-                                                        //    nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].SaleDateAttrName].Value,                 // Date
-                                                        //    Convert.ToDecimal(
-                                                        //        nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].SaleVolumeAttrName].Value),          // Volume
-                                                        //    Convert.ToDecimal(
-                                                        //        nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].SalePriceAttrName].Value),           // Value
-                                                        //    Convert.ToDecimal(
-                                                        //        nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].SaleProfitLossAttrName].Value),      // ProfitLoss
-                                                        //    0,                                                                                                                          //CurrentVolume
-                                                        //    nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].SaleDocumentAttrName].Value))            // Document
-                                                        //    loadPortfolio = false;
+                                                        if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].AddSale(
+                                                            nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].SaleDateAttrName].Value,                   // Date
+                                                            Convert.ToDecimal(
+                                                                nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].SaleVolumeAttrName].Value),            // Volume
+                                                            Convert.ToDecimal(
+                                                                nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].SaleBuyPriceAttrName].Value),          // Buy price of a share
+                                                            Convert.ToDecimal(
+                                                                nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].SalePriceAttrName].Value),             // Sale price of a share
+                                                            Convert.ToDecimal(
+                                                                nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].SaleTaxAtSourceAttrName].Value),       // Tax at source
+                                                            Convert.ToDecimal(
+                                                                nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].SaleCapitalGainsTaxAttrName].Value),   // Capital gains tax
+                                                            Convert.ToDecimal(
+                                                                nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].SaleSolidarityTaxAttrName].Value),     // Solidarity tax
+                                                            //Convert.ToDecimal(
+                                                            //    nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].SaleCostsAttrName].Value),             // Costs
+                                                            0,
+                                                            nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].SaleDocumentAttrName].Value))              // Document
+                                                            loadPortfolio = false;
                                                     }
                                                     else
                                                         loadPortfolio = false;
@@ -500,12 +513,30 @@ namespace SharePortfolioManager
                                                                         tempSaleObject.Volume,
                                                                         tempSaleObject.BuyPrice,
                                                                         tempSaleObject.SalePrice,
-                                                                        tempSaleObject.LossBalance,
                                                                         tempSaleObject.TaxAtSource,
                                                                         tempSaleObject.CapitalGainsTax,
                                                                         tempSaleObject.SolidarityTax,
                                                                         Convert.ToDecimal(
                                                                             nodeList.Attributes[ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].CostsValueAttrName].Value   // Value
+                                                                        ),
+                                                                        tempSaleObject.Document))
+                                                                        loadPortfolio = false;
+                                                                }
+                                                                else
+                                                                    loadPortfolio = false;
+
+                                                                if (ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].RemoveSale(nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].CostsDateAttrName].Value))
+                                                                {
+                                                                    if (!ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].AddSale(
+                                                                        nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].CostsDateAttrName].Value,
+                                                                        tempSaleObject.Volume,
+                                                                        tempSaleObject.BuyPrice,
+                                                                        tempSaleObject.SalePrice,
+                                                                        tempSaleObject.TaxAtSource,
+                                                                        tempSaleObject.CapitalGainsTax,
+                                                                        tempSaleObject.SolidarityTax,
+                                                                        Convert.ToDecimal(
+                                                                            nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].CostsValueAttrName].Value   // Value
                                                                         ),
                                                                         tempSaleObject.Document))
                                                                         loadPortfolio = false;
