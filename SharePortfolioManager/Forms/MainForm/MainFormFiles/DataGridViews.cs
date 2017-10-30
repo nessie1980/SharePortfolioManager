@@ -317,8 +317,8 @@ namespace SharePortfolioManager
                 // Save current selected ShareObject via the selected WKN number
                 if (dgvPortfolioMarketValue.SelectedRows.Count == 1 &&
                     dgvPortfolioMarketValue.SelectedRows[0].Cells.Count > 0 &&
-                    dgvPortfolioMarketValue.SelectedRows[0].Cells[0].Value != null &&
-                    AddFlagMarketValue == false)
+                    dgvPortfolioMarketValue.SelectedRows[0].Cells[0].Value != null /*&&
+                    AddFlagMarketValue == false*/)
                 {
                     // Get selected WKN number
                     string selectedWKNNumber = dgvPortfolioMarketValue.SelectedRows[0].Cells[0].Value.ToString();
@@ -387,8 +387,8 @@ namespace SharePortfolioManager
                 // Save current selected ShareObject via the selected WKN number
                 if (dgvPortfolioFinalValue.SelectedRows.Count == 1 &&
                     dgvPortfolioFinalValue.SelectedRows[0].Cells.Count > 0 &&
-                    dgvPortfolioFinalValue.SelectedRows[0].Cells[0].Value != null &&
-                    AddFlagFinalValue == false)
+                    dgvPortfolioFinalValue.SelectedRows[0].Cells[0].Value != null/* &&
+                    AddFlagFinalValue == false*/)
                 {
                     // Get selected WKN number
                     string selectedWKNNumber = dgvPortfolioFinalValue.SelectedRows[0].Cells[0].Value.ToString();
@@ -697,6 +697,10 @@ namespace SharePortfolioManager
             {
                 try
                 {
+                    // Clear footers
+                    dgvPortfolioFooterMarketValue.Rows.Clear();
+                    dgvPortfolioFooterFinalValue.Rows.Clear();
+
                     #region dgvPortfolioFooterMarketValue
 
                     // Check if the share object list has items
@@ -914,7 +918,9 @@ namespace SharePortfolioManager
                         // Reset flag
                         AddFlagMarketValue = false;
 
-                        dgvPortfolioMarketValue.ClearSelection();
+                        if (dgvPortfolioMarketValue.Rows.Count > 1)
+                            dgvPortfolioMarketValue.ClearSelection();
+
                         SelectedDataGridViewShareIndex = ShareObjectListMarketValue.IndexOf(ShareObjectMarketValue);
                         dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
 
@@ -933,7 +939,7 @@ namespace SharePortfolioManager
                             RefreshFooters();
 
                         // Update the new share
-                        btnRefresh.PerformClick();
+                        //btnRefresh.PerformClick();
                     }
 
                     // Make an update of the footer
@@ -1093,7 +1099,9 @@ namespace SharePortfolioManager
                         // Reset flag
                         AddFlagFinalValue = false;
 
-                        dgvPortfolioFinalValue.ClearSelection();
+                        if (dgvPortfolioFinalValue.Rows.Count > 1)
+                            dgvPortfolioFinalValue.ClearSelection();
+
                         SelectedDataGridViewShareIndex = ShareObjectListFinalValue.IndexOf(ShareObjectFinalValue);
                         dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
 

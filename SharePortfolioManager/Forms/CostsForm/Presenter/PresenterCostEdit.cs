@@ -20,12 +20,10 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using SharePortfolioManager.Classes;
 using SharePortfolioManager.Forms.CostsForm.Model;
 using SharePortfolioManager.Forms.CostsForm.View;
 using System;
 using System.IO;
-using System.Windows.Forms;
 
 namespace SharePortfolioManager.Forms.CostsForm.Presenter
 {
@@ -151,38 +149,7 @@ namespace SharePortfolioManager.Forms.CostsForm.Presenter
 
             _view.AddEditDeleteFinish();
         }
-
-// TODO Is this function necessary
-//        /// <summary>
-//        /// This function calculates the market value and purchase price of the given values
-//        /// If a given values are not valid the market value and final value is set to "0"
-//        /// </summary>
-//        private void CalculateMarketValueAndFinalValue()
-//        {
-//            try
-//            {
-//                decimal decMarketValue = 0;
-//                decimal decPurchaseValue = 0;
-//                decimal decFinalValue = 0;
-
-//                Helper.CalcBuyValues(_model.VolumeDec, _model.SharePricedec, _model.CostsDec,
-//                    _model.ReductionDec, out decMarketValue, out decPurchaseValue, out decFinalValue);
-
-//                _model.MarketValueDec = decMarketValue;
-//                _model.PurchaseValueDec = decPurchaseValue;
-//                _model.FinalValueDec = decFinalValue;
-//            }
-//            catch (Exception ex)
-//            {
-//#if DEBUG
-//                MessageBox.Show("CalculateMarketValueAndFinalValue()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
-//                    MessageBoxIcon.Error);
-//#endif
-//                _model.MarketValueDec = 0;
-//                _model.FinalValueDec = 0;
-//            }
-//        }
-
+        
         /// <summary>
         /// This function checks if the input is correct
         /// With the flag "bFlagAddEdit" it is chosen if
@@ -232,28 +199,24 @@ namespace SharePortfolioManager.Forms.CostsForm.Presenter
                 }
 
                 // Costs input check
+                decimal decCosts = 0;
                 if (_model.Costs == @"" && bErrorFlag == false)
                 {
                     _model.ErrorCode = CostErrorCode.CostsEmpty;
                     bErrorFlag = true;
                 }
-
-                if (_model.Costs != @"" && bErrorFlag == false)
+                else if (!decimal.TryParse(_model.Costs, out decCosts) && bErrorFlag == false)
                 {
-                    decimal decCosts = 0;
-                    if (!decimal.TryParse(_model.Costs, out decCosts) && bErrorFlag == false)
-                    {
-                        _model.ErrorCode = CostErrorCode.CostsWrongFormat;
-                        bErrorFlag = true;
-                    }
-                    else if (decCosts < 0 && bErrorFlag == false)
-                    {
-                        _model.ErrorCode = CostErrorCode.CostsWrongValue;
-                        bErrorFlag = true;
-                    }
-                    else if (bErrorFlag == false)
-                        _model.CostsDec = decCosts;
+                    _model.ErrorCode = CostErrorCode.CostsWrongFormat;
+                    bErrorFlag = true;
                 }
+                else if (decCosts < 0 && bErrorFlag == false)
+                {
+                    _model.ErrorCode = CostErrorCode.CostsWrongValue;
+                    bErrorFlag = true;
+                }
+                else if (bErrorFlag == false)
+                    _model.CostsDec = decCosts;
 
                 // Check if a given document exists
                 if (_model.Document == null)

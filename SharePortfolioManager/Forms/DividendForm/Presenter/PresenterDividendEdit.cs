@@ -389,41 +389,50 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
 
                 // Tax at source
                 decimal decTaxAtSource = -1;
-                if (!decimal.TryParse(_model.TaxAtSource, out decTaxAtSource) && bErrorFlag == false)
+                if (_model.TaxAtSource != "" && bErrorFlag == false)
                 {
-                    _model.ErrorCode = DividendErrorCode.TaxAtSourceWrongFormat;
-                    bErrorFlag = true;
-                }
-                else if (decTaxAtSource <= 0 && bErrorFlag == false)
-                {
-                    _model.ErrorCode = DividendErrorCode.TaxAtSourceWrongValue;
-                    bErrorFlag = true;
+                    if (!decimal.TryParse(_model.TaxAtSource, out decTaxAtSource) && bErrorFlag == false)
+                    {
+                        _model.ErrorCode = DividendErrorCode.TaxAtSourceWrongFormat;
+                        bErrorFlag = true;
+                    }
+                    else if (decTaxAtSource <= 0 && bErrorFlag == false)
+                    {
+                        _model.ErrorCode = DividendErrorCode.TaxAtSourceWrongValue;
+                        bErrorFlag = true;
+                    }
                 }
 
                 // Capital gains tax
                 decimal decCapitalGainsTax = -1;
-                if (!decimal.TryParse(_model.CapitalGainsTax, out decCapitalGainsTax) && bErrorFlag == false)
+                if (_model.CapitalGainsTax != @"" && bErrorFlag == false)
                 {
-                    _model.ErrorCode = DividendErrorCode.CapitalGainsTaxWrongFormat;
-                    bErrorFlag = true;
-                }
-                else if (decCapitalGainsTax <= 0 && bErrorFlag == false)
-                {
-                    _model.ErrorCode = DividendErrorCode.CapitalGainsTaxWrongValue;
-                    bErrorFlag = true;
+                    if (!decimal.TryParse(_model.CapitalGainsTax, out decCapitalGainsTax) && bErrorFlag == false)
+                    {
+                        _model.ErrorCode = DividendErrorCode.CapitalGainsTaxWrongFormat;
+                        bErrorFlag = true;
+                    }
+                    else if (decCapitalGainsTax <= 0 && bErrorFlag == false)
+                    {
+                        _model.ErrorCode = DividendErrorCode.CapitalGainsTaxWrongValue;
+                        bErrorFlag = true;
+                    }
                 }
 
                 // Solidarity tax
                 decimal decSolidarityTax = -1;
-                if (!decimal.TryParse(_model.SolidarityTax, out decSolidarityTax) && bErrorFlag == false)
+                if (_model.SolidarityTax != @"" && bErrorFlag == false)
                 {
-                    _model.ErrorCode = DividendErrorCode.SolidarityTaxWrongFormat;
-                    bErrorFlag = true;
-                }
-                else if (decSolidarityTax <= 0 && bErrorFlag == false)
-                {
-                    _model.ErrorCode = DividendErrorCode.SolidarityTaxWrongValue;
-                    bErrorFlag = true;
+                    if (!decimal.TryParse(_model.SolidarityTax, out decSolidarityTax) && bErrorFlag == false)
+                    {
+                        _model.ErrorCode = DividendErrorCode.SolidarityTaxWrongFormat;
+                        bErrorFlag = true;
+                    }
+                    else if (decSolidarityTax <= 0 && bErrorFlag == false)
+                    {
+                        _model.ErrorCode = DividendErrorCode.SolidarityTaxWrongValue;
+                        bErrorFlag = true;
+                    }
                 }
 
                 // Price

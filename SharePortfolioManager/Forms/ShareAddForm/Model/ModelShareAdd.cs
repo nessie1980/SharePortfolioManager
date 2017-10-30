@@ -25,7 +25,6 @@ using SharePortfolioManager.Forms.ShareAddForm.View;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using System.Windows.Forms;
 
 namespace SharePortfolioManager.Forms.ShareAddForm.Model
 {
