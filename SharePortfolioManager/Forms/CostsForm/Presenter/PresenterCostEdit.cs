@@ -75,6 +75,7 @@ namespace SharePortfolioManager.Forms.CostsForm.Presenter
             _model.UpdateCost = _view.UpdateCost;
             _model.SelectedDate = _view.SelectedDate;
             _model.PartOfABuy = _view.PartOfABuy;
+            _model.PartOfASale = _view.PartOfASale;
             _model.Date = _view.Date;
             _model.Time = _view.Time;
             _model.Costs = _view.Costs;

@@ -47,6 +47,7 @@
             this.btnAddSave = new System.Windows.Forms.Button();
             this.lblBuyPrice = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabelMessageBuyEdit = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblAddFinalValueUnit = new System.Windows.Forms.Label();
             this.txtBoxFinalValue = new System.Windows.Forms.TextBox();
             this.lblFinalValue = new System.Windows.Forms.Label();
@@ -58,11 +59,11 @@
             this.lblVolume = new System.Windows.Forms.Label();
             this.datePickerDate = new System.Windows.Forms.DateTimePicker();
             this.lblDate = new System.Windows.Forms.Label();
-            this.toolStripStatusLabelMessageBuyEdit = new System.Windows.Forms.ToolStripStatusLabel();
             this.grpBoxOverview = new System.Windows.Forms.GroupBox();
             this.tabCtrlBuys = new System.Windows.Forms.TabControl();
             this.lblPurchaseValue = new System.Windows.Forms.Label();
             this.grpBoxAdd.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.grpBoxOverview.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -220,6 +221,8 @@
             this.datePickerTime.ShowUpDown = true;
             this.datePickerTime.Size = new System.Drawing.Size(169, 23);
             this.datePickerTime.TabIndex = 1;
+            this.datePickerTime.ValueChanged += new System.EventHandler(this.OnDatePickerTime_ValueChanged);
+            this.datePickerTime.Leave += new System.EventHandler(this.OnDatePickerTime_Leave);
             // 
             // btnDelete
             // 
@@ -321,6 +324,13 @@
             this.statusStrip1.TabIndex = 14;
             this.statusStrip1.Text = "statusStrip1";
             // 
+            // toolStripStatusLabelMessageBuyEdit
+            // 
+            this.toolStripStatusLabelMessageBuyEdit.BackColor = System.Drawing.SystemColors.Control;
+            this.toolStripStatusLabelMessageBuyEdit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripStatusLabelMessageBuyEdit.Name = "toolStripStatusLabelMessageBuyEdit";
+            this.toolStripStatusLabelMessageBuyEdit.Size = new System.Drawing.Size(0, 17);
+            // 
             // lblAddFinalValueUnit
             // 
             this.lblAddFinalValueUnit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -372,6 +382,7 @@
             // 
             // txtBoxDocument
             // 
+            this.txtBoxDocument.AllowDrop = true;
             this.txtBoxDocument.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtBoxDocument.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -381,6 +392,9 @@
             this.txtBoxDocument.Size = new System.Drawing.Size(370, 23);
             this.txtBoxDocument.TabIndex = 6;
             this.txtBoxDocument.TextChanged += new System.EventHandler(this.OnTxtBoxDocument_TextChanged);
+            this.txtBoxDocument.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragDrop);
+            this.txtBoxDocument.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragEnter);
+            this.txtBoxDocument.Leave += new System.EventHandler(this.OnTxtBoxDocument_Leave);
             // 
             // lblDocument
             // 
@@ -440,6 +454,8 @@
             this.datePickerDate.Name = "datePickerDate";
             this.datePickerDate.Size = new System.Drawing.Size(195, 23);
             this.datePickerDate.TabIndex = 0;
+            this.datePickerDate.ValueChanged += new System.EventHandler(this.OnDatePickerDate_ValueChanged);
+            this.datePickerDate.Leave += new System.EventHandler(this.OnDatePickerDate_Leave);
             // 
             // lblDate
             // 
@@ -451,13 +467,6 @@
             this.lblDate.TabIndex = 13;
             this.lblDate.Text = "_addDate";
             this.lblDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // toolStripStatusLabelMessageBuyEdit
-            // 
-            this.toolStripStatusLabelMessageBuyEdit.BackColor = System.Drawing.SystemColors.Control;
-            this.toolStripStatusLabelMessageBuyEdit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolStripStatusLabelMessageBuyEdit.Name = "toolStripStatusLabelMessageBuyEdit";
-            this.toolStripStatusLabelMessageBuyEdit.Size = new System.Drawing.Size(0, 17);
             // 
             // grpBoxOverview
             // 
@@ -519,6 +528,8 @@
             this.Load += new System.EventHandler(this.ShareBuysEdit_Load);
             this.grpBoxAdd.ResumeLayout(false);
             this.grpBoxAdd.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.grpBoxOverview.ResumeLayout(false);
             this.ResumeLayout(false);
 

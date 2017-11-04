@@ -311,14 +311,14 @@ namespace SharePortfolioManager
         {
             try
             {
-                ShareObjectMarketValue = null;
-                ShareObjectFinalValue = null;
+                //ShareObjectMarketValue = null;
+                //ShareObjectFinalValue = null;
 
                 // Save current selected ShareObject via the selected WKN number
                 if (dgvPortfolioMarketValue.SelectedRows.Count == 1 &&
                     dgvPortfolioMarketValue.SelectedRows[0].Cells.Count > 0 &&
-                    dgvPortfolioMarketValue.SelectedRows[0].Cells[0].Value != null /*&&
-                    AddFlagMarketValue == false*/)
+                    dgvPortfolioMarketValue.SelectedRows[0].Cells[0].Value != null &&
+                    AddFlagMarketValue == false)
                 {
                     // Get selected WKN number
                     string selectedWKNNumber = dgvPortfolioMarketValue.SelectedRows[0].Cells[0].Value.ToString();
@@ -381,14 +381,14 @@ namespace SharePortfolioManager
         {
             try
             {
-                ShareObjectMarketValue = null;
-                ShareObjectFinalValue = null;
+                //ShareObjectMarketValue = null;
+                //ShareObjectFinalValue = null;
 
                 // Save current selected ShareObject via the selected WKN number
                 if (dgvPortfolioFinalValue.SelectedRows.Count == 1 &&
                     dgvPortfolioFinalValue.SelectedRows[0].Cells.Count > 0 &&
-                    dgvPortfolioFinalValue.SelectedRows[0].Cells[0].Value != null/* &&
-                    AddFlagFinalValue == false*/)
+                    dgvPortfolioFinalValue.SelectedRows[0].Cells[0].Value != null &&
+                    AddFlagFinalValue == false)
                 {
                     // Get selected WKN number
                     string selectedWKNNumber = dgvPortfolioFinalValue.SelectedRows[0].Cells[0].Value.ToString();
@@ -844,6 +844,8 @@ namespace SharePortfolioManager
                 // At least do the row selection
                 if (dgvPortfolioMarketValue.Columns.Count == (int)ColumnIndicesPortfolioMarketValue.EShareSumColumnIndex + 1)
                 {
+                    #region Captions
+
                     dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EWknNumberColumnIndex].Name =
                         Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_WKN", LanguageName);
                     dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EWknNumberColumnIndex].HeaderText =
@@ -879,6 +881,10 @@ namespace SharePortfolioManager
                     dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareSumColumnIndex].HeaderText =
                         Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_PurchaseMarketValue", LanguageName);
 
+                    #endregion Captions
+
+                    #region Width configuration
+
                     dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EWknNumberColumnIndex].Width = WKNNumber;
                     dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePriceColumnIndex].Width = SharePrice;
                     dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareVolumeColumnIndex].Width = ShareVolume;
@@ -886,6 +892,10 @@ namespace SharePortfolioManager
                     dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EImagePerformanceColumnIndex].Width = ImagePerformance;
                     dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePerformanceColumnIndex].Width = SharePerformance;
                     dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareSumColumnIndex].Width = ShareSum;
+
+                    #endregion Width configuration
+
+                    #region Alignment configuration
 
                     dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EWknNumberColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
                     dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareNameColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -896,11 +906,17 @@ namespace SharePortfolioManager
                     dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                     dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareSumColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
+                    #endregion Alignment configuration
+
+                    #region Footer width configuration
+
                     dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.EPerformanceColumnIndex].Width = SharePerformance;
                     dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ESumColumnIndex].Width = ShareSum;
                     dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ELabelTotalColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                     dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.EPerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                     dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ESumColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+                    #endregion Footer width configuration
 
                     // Resize data grid view market value
                     OnResizeDataGridView();
@@ -918,8 +934,8 @@ namespace SharePortfolioManager
                         // Reset flag
                         AddFlagMarketValue = false;
 
-                        if (dgvPortfolioMarketValue.Rows.Count > 1)
-                            dgvPortfolioMarketValue.ClearSelection();
+                        //if (dgvPortfolioMarketValue.Rows.Count > 1)
+                        //    dgvPortfolioMarketValue.ClearSelection();
 
                         SelectedDataGridViewShareIndex = ShareObjectListMarketValue.IndexOf(ShareObjectMarketValue);
                         dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
@@ -1013,6 +1029,8 @@ namespace SharePortfolioManager
                 // At least do the row selection
                 if (dgvPortfolioFinalValue.Columns.Count == (int)ColumnIndicesPortfolioFinalValue.EShareSumColumnIndex + 1)
                 {
+                    #region Captions
+
                     dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EWknNumberColumnIndex].Name =
                         Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_WKN", LanguageName);
                     dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EWknNumberColumnIndex].HeaderText =
@@ -1053,6 +1071,10 @@ namespace SharePortfolioManager
                     dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareSumColumnIndex].HeaderText =
                         Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_PurchaseMarketValue", LanguageName);
 
+                    #endregion Captions
+
+                    #region Width configuration
+
                     dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EWknNumberColumnIndex].Width = WKNNumber;
                     dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePriceColumnIndex].Width = SharePrice;
                     dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareVolumeColumnIndex].Width = ShareVolume;
@@ -1060,8 +1082,11 @@ namespace SharePortfolioManager
                     dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePerformanceDayBeforeColumnIndex].Width = SharePerformanceDayBefore;
                     dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EImagePerformanceColumnIndex].Width = ImagePerformance;
                     dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePerformanceColumnIndex].Width = SharePerformance;
-
                     dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareSumColumnIndex].Width = ShareSum;
+
+                    #endregion With configuration
+
+                    #region Alignment configuration
 
                     dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EWknNumberColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
                     dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareNameColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -1073,6 +1098,10 @@ namespace SharePortfolioManager
                     dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                     dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareSumColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
+                    #endregion Alignment configuration
+
+                    #region Footer configuration
+
                     dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ECostsDividendIndex].Width = ShareCostsDividend;
                     dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.EPerformanceColumnIndex].Width = SharePerformance;
                     dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ESumColumnIndex].Width = ShareSum;
@@ -1082,6 +1111,8 @@ namespace SharePortfolioManager
                     dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelTotalColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                     dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.EPerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                     dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ESumColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+                    #endregion Footer configuration
 
                     // Resize data grid view final value
                     OnResizeDataGridView();
@@ -1099,8 +1130,8 @@ namespace SharePortfolioManager
                         // Reset flag
                         AddFlagFinalValue = false;
 
-                        if (dgvPortfolioFinalValue.Rows.Count > 1)
-                            dgvPortfolioFinalValue.ClearSelection();
+                        //if (dgvPortfolioFinalValue.Rows.Count > 1)
+                        //    dgvPortfolioFinalValue.ClearSelection();
 
                         SelectedDataGridViewShareIndex = ShareObjectListFinalValue.IndexOf(ShareObjectFinalValue);
                         dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
@@ -1705,6 +1736,30 @@ namespace SharePortfolioManager
         }
 
         #endregion Refresh data grid view footers
+
+        #region Data grid view enter
+
+        /// <summary>
+        /// This function sets the focus to the entered data grid view
+        /// </summary>
+        /// <param name="sender">Entered data grid view</param>
+        /// <param name="e">EventArgs</param>
+        private void dgvPortfolioFinalValue_MouseEnter(object sender, EventArgs e)
+        {
+            ((DataGridView)sender).Focus();
+        }
+
+        /// <summary>
+        /// This function sets the focus to the entered data grid view
+        /// </summary>
+        /// <param name="sender">Entered data grid view</param>
+        /// <param name="e">EventArgs</param>
+        private void dgvPortfolioMarketValue_MouseEnter(object sender, EventArgs e)
+        {
+            ((DataGridView)sender).Focus();
+        }
+
+        #endregion Data grid view enter
 
         #endregion Methods
     }

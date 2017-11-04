@@ -306,7 +306,6 @@ namespace SharePortfolioManager
                                         ShareObjectFinalValue.PrevDayPrice = Convert.ToDecimal(e.WebParserInfoState.SearchResult["PriceBefore"][0]);
                                     }
 
-                                    // TODO Exception handling
                                     // Save the share values to the XML
                                     Exception exception = null;
                                     if (!ShareObjectFinalValue.SaveShareObject(ShareObjectFinalValue, ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio, PortfolioFileName, out exception))

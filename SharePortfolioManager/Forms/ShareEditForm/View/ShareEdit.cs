@@ -335,7 +335,7 @@ namespace SharePortfolioManager
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                Helper.AddStatusMessage(editShareStatusLabelMessage,
                     Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/ShowFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
@@ -388,11 +388,13 @@ namespace SharePortfolioManager
 
                 statusStrip1.ForeColor = Color.Red;
 
+                string decodedUrl = txtBoxWebSite.Text;
+
                 if (txtBoxName.Text == @"")
                 {
                     txtBoxName.Focus();
                     // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                    Helper.AddStatusMessage(editShareStatusLabelMessage,
                         Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/NameEmpty", LanguageName),
                         Language, LanguageName,
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
@@ -409,7 +411,7 @@ namespace SharePortfolioManager
                             StopFomClosingFlag = true;
                             txtBoxName.Focus();
                             // Add status message
-                            Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                            Helper.AddStatusMessage(editShareStatusLabelMessage,
                                 Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/NameExists", LanguageName),
                                 Language, LanguageName,
                                 Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
@@ -428,7 +430,7 @@ namespace SharePortfolioManager
                                 StopFomClosingFlag = true;
                                 txtBoxName.Focus();
                                 // Add status message
-                                Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                                Helper.AddStatusMessage(editShareStatusLabelMessage,
                                     Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/NameExists", LanguageName),
                                     Language, LanguageName,
                                     Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
@@ -442,7 +444,7 @@ namespace SharePortfolioManager
                 {
                     lblPurchaseValue.Focus();
                     // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                    Helper.AddStatusMessage(editShareStatusLabelMessage,
                         Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DepositEmpty", LanguageName),
                         Language, LanguageName,
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
@@ -452,7 +454,7 @@ namespace SharePortfolioManager
                 {
                     lblPurchaseValue.Focus();
                     // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                    Helper.AddStatusMessage(editShareStatusLabelMessage,
                         Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DepositWrongFormat", LanguageName),
                         Language, LanguageName,
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
@@ -462,7 +464,7 @@ namespace SharePortfolioManager
                 {
                     lblPurchaseValue.Focus();
                     // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                    Helper.AddStatusMessage(editShareStatusLabelMessage,
                         Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DepositWrongValue", LanguageName),
                         Language, LanguageName,
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
@@ -472,7 +474,7 @@ namespace SharePortfolioManager
                 {
                     lblVolumeValue.Focus();
                     // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                    Helper.AddStatusMessage(editShareStatusLabelMessage,
                         Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/VolumeEmpty", LanguageName),
                         Language, LanguageName,
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
@@ -482,7 +484,7 @@ namespace SharePortfolioManager
                 {
                     lblVolumeValue.Focus();
                     // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                    Helper.AddStatusMessage(editShareStatusLabelMessage,
                         Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/VolumeWrongFormat", LanguageName),
                         Language, LanguageName,
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
@@ -492,7 +494,7 @@ namespace SharePortfolioManager
                 {
                     lblVolumeValue.Focus();
                     // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                    Helper.AddStatusMessage(editShareStatusLabelMessage,
                         Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/VolumeWrongValue", LanguageName),
                         Language, LanguageName,
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
@@ -502,8 +504,18 @@ namespace SharePortfolioManager
                 {
                     txtBoxWebSite.Focus();
                     // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                    Helper.AddStatusMessage(editShareStatusLabelMessage,
                         Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteEmpty", LanguageName),
+                        Language, LanguageName,
+                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                    errorFlag = true;
+                }
+                else if (!Helper.UrlChecker(ref decodedUrl, 10000))
+                {
+                    txtBoxWebSite.Focus();
+                    // Add status message
+                    Helper.AddStatusMessage(editShareStatusLabelMessage,
+                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteWrongFormat", LanguageName),
                         Language, LanguageName,
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                     errorFlag = true;
@@ -519,7 +531,7 @@ namespace SharePortfolioManager
                             StopFomClosingFlag = true;
                             txtBoxWebSite.Focus();
                             // Add status message
-                            Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                            Helper.AddStatusMessage(editShareStatusLabelMessage,
                                 Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteExists", LanguageName),
                                 Language, LanguageName,
                                 Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
@@ -538,7 +550,7 @@ namespace SharePortfolioManager
                                 StopFomClosingFlag = true;
                                 txtBoxWebSite.Focus();
                                 // Add status message
-                                Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                                Helper.AddStatusMessage(editShareStatusLabelMessage,
                                     Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteExists", LanguageName),
                                     Language, LanguageName,
                                     Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
@@ -550,6 +562,8 @@ namespace SharePortfolioManager
 
                 if (errorFlag == false)
                 {
+                    txtBoxWebSite.Text = decodedUrl;
+
                     StopFomClosingFlag = false;
                     Save = true;
 
@@ -582,7 +596,7 @@ namespace SharePortfolioManager
 #endif
                 StopFomClosingFlag = true;
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                Helper.AddStatusMessage(editShareStatusLabelMessage,
                     Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/EditSaveFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);

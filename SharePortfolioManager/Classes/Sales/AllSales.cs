@@ -215,7 +215,7 @@ namespace SharePortfolioManager
         /// <param name="decCosts">Costs of the sale</param>
         /// <param name="strDoc">Document of the sale</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddSale(string strDate, decimal decVolume, decimal decBuyPrice, decimal decSalePrice, decimal decTaxAtSource, decimal decCapitalGains,
+        public bool AddSale(string strDate, decimal decVolume, decimal decBuyPrice, decimal decSalePrice, decimal decTaxAtSource, decimal decCapitalGainsTax,
              decimal decSolidarityTax, decimal decCosts, string strDoc = "")
         {
 #if DEBUG
@@ -233,7 +233,7 @@ namespace SharePortfolioManager
                 SalesYearOfTheShare searchObject;
                 if (AllSalesOfTheShareDictionary.TryGetValue(year, out searchObject))
                 {
-                    if (!searchObject.AddSaleObject(SaleCultureInfo, strDate, decVolume, decBuyPrice, decSalePrice, decTaxAtSource, decCapitalGains, decSolidarityTax, decCosts, strDoc))
+                    if (!searchObject.AddSaleObject(SaleCultureInfo, strDate, decVolume, decBuyPrice, decSalePrice, decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decCosts, strDoc))
                         return false;
                 }
                 else
@@ -241,7 +241,7 @@ namespace SharePortfolioManager
                     // Add new year sale object for the sale with a new year
                     SalesYearOfTheShare addObject = new SalesYearOfTheShare();
                     // Add sale with the new year to the sale year list
-                    if (addObject.AddSaleObject(SaleCultureInfo, strDate, decVolume, decBuyPrice, decSalePrice, decTaxAtSource, decCapitalGains, decSolidarityTax, decCosts, strDoc))
+                    if (addObject.AddSaleObject(SaleCultureInfo, strDate, decVolume, decBuyPrice, decSalePrice, decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decCosts, strDoc))
                     {
                         AllSalesOfTheShareDictionary.Add(year, addObject);
                     }

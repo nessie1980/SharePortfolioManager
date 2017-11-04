@@ -63,10 +63,14 @@ namespace SharePortfolioManager
         private void UpdateDetails(TabControl tabControl)
         {
             if (tabControl.SelectedIndex == 0)
+            {
                 MarketValueOverviewTabSelected = false;
+            }
 
             if (tabControl.SelectedIndex == 1)
+            {
                 MarketValueOverviewTabSelected = true;
+            }
 
             ResetShareDetails();
 
@@ -76,6 +80,11 @@ namespace SharePortfolioManager
             UpdateDividendDetails(MarketValueOverviewTabSelected);
 
             tabCtrlDetails.SelectedIndex = 0;
+
+            if (MarketValueOverviewTabSelected)
+                dgvPortfolioMarketValue.Focus();
+            else
+                dgvPortfolioFinalValue.Focus();
         }
 
         #endregion Tab control overview
@@ -883,47 +892,46 @@ namespace SharePortfolioManager
                                         if (messageBox.ShowDialog() == DialogResult.OK)
                                         {
                                             // Remove sale object and add it with no document
-                                            // TODO
-                                            //if (ShareObjectFinalValue.RemoveSale(temp.Date) &&
-                                            //    ShareObjectFinalValue.AddSale(false, strDateTime, temp.SaleVolume, temp.SaleValue, temp.SaleProfitLoss, 0))
-                                            //{
-                                            //    // TODO Refresh profit or loss
-                                            //    //Show();
+                                            if (ShareObjectFinalValue.RemoveSale(temp.Date) &&
+                                                ShareObjectFinalValue.AddSale(strDateTime, temp.Volume, temp.BuyPrice, temp.SalePrice, temp.TaxAtSource, temp.CapitalGainsTax, temp.SolidarityTax, temp.Costs, @""))
+                                            {
+                                                // TODO Refresh profit or loss
+                                                //Show();
 
-                                            //    // Add status message
-                                            //    Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                            //        Language.GetLanguageTextByXPath(@"/AddEditFormSale/StateMessages/EditSuccess", LanguageName),
-                                            //        Language, LanguageName,
-                                            //        Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
+                                                // Add status message
+                                                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                                    Language.GetLanguageTextByXPath(@"/AddEditFormSale/StateMessages/EditSuccess", LanguageName),
+                                                    Language, LanguageName,
+                                                    Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
 
-                                            //    // Save the share values to the XML
-                                            //    if (ShareObjectFinalValue.SaveShareObject(ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedRows[0].Index], ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio, PortfolioFileName, out Exception exception))
-                                            //    {
-                                            //        // Add status message
-                                            //        Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                            //            Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/EditSaveSuccessful", LanguageName),
-                                            //            Language, LanguageName,
-                                            //            Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
+                                                // Save the share values to the XML
+                                                if (ShareObjectFinalValue.SaveShareObject(ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedRows[0].Index], ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio, PortfolioFileName, out Exception exception))
+                                                {
+                                                    // Add status message
+                                                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                                        Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/EditSaveSuccessful", LanguageName),
+                                                        Language, LanguageName,
+                                                        Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
 
-                                            //        // Reset / refresh DataGridView portfolio binding source
-                                            //        _dgvPortfolioBindingSourceFinalValue.ResetBindings(false);
-                                            //    }
-                                            //    else
-                                            //    {
-                                            //        // Add status message
-                                            //        Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                            //            Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
-                                            //            Language, LanguageName,
-                                            //            Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
-                                            //    }
-                                            //}
-                                            //else
-                                            //{
-                                            //    Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                            //        Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/EditFailed", LanguageName),
-                                            //        Language, LanguageName,
-                                            //        Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
-                                            //}
+                                                    // Reset / refresh DataGridView portfolio binding source
+                                                    _dgvPortfolioBindingSourceFinalValue.ResetBindings(false);
+                                                }
+                                                else
+                                                {
+                                                    // Add status message
+                                                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                                        Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
+                                                        Language, LanguageName,
+                                                        Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                                    Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/EditFailed", LanguageName),
+                                                    Language, LanguageName,
+                                                    Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
+                                            }
                                         }
                                     }
 

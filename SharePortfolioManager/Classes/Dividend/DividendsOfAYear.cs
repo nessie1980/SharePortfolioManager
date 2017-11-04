@@ -134,10 +134,7 @@ namespace SharePortfolioManager
                 if (DividendValueYear == -1)
                     DividendValueYear = 0;
 
-                // TODO With or without taxes!!!
-                //DividendValueYear += addObject.DividendPayOut;
                 DividendValueYear += addObject.PayoutWithTaxesDec;
-
 #if DEBUG
                 Console.WriteLine(@"DividendValueYear: {0}", DividendValueYear);
                 Console.WriteLine(@"");

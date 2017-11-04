@@ -4,6 +4,7 @@
 		<!-- Application name -->
 		<Application>
 			<Name text="Share portfolio management" />
+			<Version text="Version" />
 		</Application>
 		
 		<!-- Units -->
@@ -405,6 +406,8 @@
 				<ReductionWrongFormat text="Format for the value 'Reduction' is invalid." />
 				<ReductionWrongValue text="The value for 'Reduction' must be higher than '0'." />
 				<WebSiteEmpty text="Please insert a website address." />
+				<WebSiteWrongFormat text="The website address has an invalid format or is not reachable. Try it again." />
+				<WebSiteExists text="The website already exists." />
 				<WebSiteRegexNotFound text="No parse configuration for the given web address available!" />
 				<AddSaveFailed text="An exception occurred. Add of the share failed!" />
 				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
@@ -483,6 +486,7 @@
 				<VolumeWrongFormat text="Format for the value 'Volume' is invalid." />
 				<VolumeWrongValue text="The value for 'Volume' must be equal or higher than '0'." />
 				<WebSiteEmpty text="Please insert a website address." />
+				<WebSiteWrongFormat text="The website address has an invalid format or is not reachable. Try it again." />
 				<WebSiteExists text="The website already exists." />
 				<EditSaveFailed text="An error occurred. Edit of the share failed!" />
 			</Errors>
@@ -1026,6 +1030,7 @@
 		<!-- Application name -->
 		<Application>
 			<Name text="Aktien- Portfolio- Manager" />
+			<Version text="Version" />
 		</Application>
 		
 		<!-- Units -->
@@ -1427,6 +1432,8 @@
 				<ReductionWrongFormat text="Format für den 'Rabatt'- Wert ist ungültig." />
 				<ReductionWrongValue text="Der Wert für 'Rabatt' muss größer '0' sein." />
 				<WebSiteEmpty text="Bitte geben Sie eine Webseiten- Adresse ein." />
+				<WebSiteWrongFormat text="Die eingegebene Webseiten- Adresse ist ungültig oder nicht erreichbar. Versuchen Sie es noch einmal." />
+				<WebSiteExists text="Die Webseite existiert bereits." />
 				<WebSiteRegexNotFound text="Kein Parser-Konfiguration für die angegebene Web- Addresse verfügbar!" />
 				<AddSaveFailed text="Es trat ein Fehler auf. Hinzufügen der Aktien ist fehlgeschlagen!" />
 				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
@@ -1505,6 +1512,7 @@
 				<VolumeWrongFormat text="Format für den 'Anteile'- Wert ist ungültig." />
 				<VolumeWrongValue text="Der Wert für 'Anteile' muss gleich oder größer '0' sein." />
 				<WebSiteEmpty text="Bitte geben Sie eine Webseiten- Adresse ein." />
+				<WebSiteWrongFormat text="Die eingegebene Webseiten- Adresse ist ungültig oder nicht erreichbar. Versuchen Sie es noch einmal." />
 				<WebSiteExists text="Die Webseite existiert bereits." />
 				<EditSaveFailed text="Es trat ein Fehler auf. Editieren der Aktien ist fehlgeschlagen!" />
 			</Errors>

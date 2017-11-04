@@ -261,7 +261,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.txtBoxSolidarityTax.Size = new System.Drawing.Size(337, 23);
             this.txtBoxSolidarityTax.TabIndex = 64;
             this.txtBoxSolidarityTax.TextChanged += new System.EventHandler(this.OnTxtBoxSolidarityTax_TextChanged);
-            this.txtBoxSolidarityTax.Leave += new System.EventHandler(this.txtBoxSolidarityTaxLeave);
+            this.txtBoxSolidarityTax.Leave += new System.EventHandler(this.OnTxtBoxSolidarityTaxLeave);
             // 
             // txtBoxCapitalGainsTax
             // 
@@ -274,7 +274,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.txtBoxCapitalGainsTax.Size = new System.Drawing.Size(337, 23);
             this.txtBoxCapitalGainsTax.TabIndex = 63;
             this.txtBoxCapitalGainsTax.TextChanged += new System.EventHandler(this.OnTxtBoxCapitalGainsTax_TextChanged);
-            this.txtBoxCapitalGainsTax.Leave += new System.EventHandler(this.txtBoxCapitalGAinsTaxLeave);
+            this.txtBoxCapitalGainsTax.Leave += new System.EventHandler(this.OnTxtBoxCapitalGAinsTaxLeave);
             // 
             // lblPayout
             // 
@@ -329,7 +329,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.txtBoxBuyPrice.Size = new System.Drawing.Size(338, 23);
             this.txtBoxBuyPrice.TabIndex = 7;
             this.txtBoxBuyPrice.TextChanged += new System.EventHandler(this.OnTxtBoxAddBuyPrice_TextChanged);
-            this.txtBoxBuyPrice.Leave += new System.EventHandler(this.txtBoxBuyPrice_Leave);
+            this.txtBoxBuyPrice.Leave += new System.EventHandler(this.OnTxtBoxBuyPrice_Leave);
             // 
             // lblBuyPrice
             // 
@@ -364,7 +364,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.txtBoxTaxAtSource.Size = new System.Drawing.Size(337, 23);
             this.txtBoxTaxAtSource.TabIndex = 12;
             this.txtBoxTaxAtSource.TextChanged += new System.EventHandler(this.OnTxtBoxTaxAtSource_TextChanged);
-            this.txtBoxTaxAtSource.Leave += new System.EventHandler(this.txtBoxTaxAtSourceLeave);
+            this.txtBoxTaxAtSource.Leave += new System.EventHandler(this.OnTxtBoxTaxAtSourceLeave);
             // 
             // lblTaxAtSource
             // 
@@ -429,6 +429,8 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.datePickerTime.ShowUpDown = true;
             this.datePickerTime.Size = new System.Drawing.Size(125, 23);
             this.datePickerTime.TabIndex = 2;
+            this.datePickerTime.ValueChanged += new System.EventHandler(this.OnDatePickerTime_ValueChanged);
+            this.datePickerTime.Leave += new System.EventHandler(this.OnDatePickerTime_Leave);
             // 
             // txtBoxSalePrice
             // 
@@ -439,7 +441,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.txtBoxSalePrice.Size = new System.Drawing.Size(338, 23);
             this.txtBoxSalePrice.TabIndex = 8;
             this.txtBoxSalePrice.TextChanged += new System.EventHandler(this.OnTxtBoxSalePrice_TextChanged);
-            this.txtBoxSalePrice.Leave += new System.EventHandler(this.txtBoxSalePrice_Leave);
+            this.txtBoxSalePrice.Leave += new System.EventHandler(this.OnTxtBoxSalePrice_Leave);
             // 
             // lblSalePrice
             // 
@@ -488,7 +490,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.txtBoxCosts.Size = new System.Drawing.Size(338, 23);
             this.txtBoxCosts.TabIndex = 14;
             this.txtBoxCosts.TextChanged += new System.EventHandler(this.OnTxtBoxCosts_TextChanged);
-            this.txtBoxCosts.Leave += new System.EventHandler(this.txtBoxCostsTaxLeave);
+            this.txtBoxCosts.Leave += new System.EventHandler(this.OnTxtBoxCostsTaxLeave);
             // 
             // lblCosts
             // 
@@ -516,6 +518,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             // 
             // txtBoxDocument
             // 
+            this.txtBoxDocument.AllowDrop = true;
             this.txtBoxDocument.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtBoxDocument.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtBoxDocument.Location = new System.Drawing.Point(315, 293);
@@ -523,6 +526,9 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.txtBoxDocument.Size = new System.Drawing.Size(338, 23);
             this.txtBoxDocument.TabIndex = 16;
             this.txtBoxDocument.TextChanged += new System.EventHandler(this.OnTxtBoxDocument_TextChanged);
+            this.txtBoxDocument.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragDrop);
+            this.txtBoxDocument.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragEnter);
+            this.txtBoxDocument.Leave += new System.EventHandler(this.OnTxtBoxDocument_Leave);
             // 
             // lblSalesDocument
             // 
@@ -554,7 +560,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.txtBoxVolume.Size = new System.Drawing.Size(338, 23);
             this.txtBoxVolume.TabIndex = 6;
             this.txtBoxVolume.TextChanged += new System.EventHandler(this.OnTxtBoxAddVolume_TextChanged);
-            this.txtBoxVolume.Leave += new System.EventHandler(this.txtBoxVolume_Leave);
+            this.txtBoxVolume.Leave += new System.EventHandler(this.OnTxtBoxVolume_Leave);
             // 
             // lblVolume
             // 
@@ -577,6 +583,8 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.datePickerDate.Name = "datePickerDate";
             this.datePickerDate.Size = new System.Drawing.Size(121, 23);
             this.datePickerDate.TabIndex = 0;
+            this.datePickerDate.ValueChanged += new System.EventHandler(this.OnDatePickerDate_ValueChanged);
+            this.datePickerDate.Leave += new System.EventHandler(this.OnDatePickerDate_Leave);
             // 
             // lblAddSaleDate
             // 

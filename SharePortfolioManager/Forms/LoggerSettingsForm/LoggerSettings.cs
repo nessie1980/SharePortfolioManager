@@ -354,7 +354,7 @@ namespace SharePortfolioManager
                 int iStoredLogFiles = 0;
                 int iDeletedFiles = 0;
                 Int32.TryParse(cbxStoredLogFiles.SelectedItem.ToString(), out iStoredLogFiles);
-                iDeletedFiles =  Logger.CleanUpLogFiles(iStoredLogFiles);
+                iDeletedFiles = Logger.CleanUpLogFiles(iStoredLogFiles);
 
                 Helper.AddStatusMessage(toolStripStatusLabel1,
                     Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/NotInitialized", LanguageName),

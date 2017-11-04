@@ -443,12 +443,17 @@
             // 
             // txtBoxDocument
             // 
+            this.txtBoxDocument.AllowDrop = true;
             this.txtBoxDocument.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtBoxDocument.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtBoxDocument.Location = new System.Drawing.Point(315, 374);
             this.txtBoxDocument.Name = "txtBoxDocument";
             this.txtBoxDocument.Size = new System.Drawing.Size(338, 23);
             this.txtBoxDocument.TabIndex = 14;
+            this.txtBoxDocument.TextChanged += new System.EventHandler(this.txtBoxDocument_TextChanged);
+            this.txtBoxDocument.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragDrop);
+            this.txtBoxDocument.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragEnter);
+            this.txtBoxDocument.Leave += new System.EventHandler(this.txtBoxDocument_Leave);
             // 
             // lblAddDocument
             // 
@@ -469,6 +474,8 @@
             this.datePickerTime.ShowUpDown = true;
             this.datePickerTime.Size = new System.Drawing.Size(125, 23);
             this.datePickerTime.TabIndex = 1;
+            this.datePickerTime.ValueChanged += new System.EventHandler(this.OnDatePickerTime_ValueChanged);
+            this.datePickerTime.Leave += new System.EventHandler(this.OnDatePickerTime_Leave);
             // 
             // btnDelete
             // 
@@ -620,6 +627,8 @@
             this.datePickerDate.Name = "datePickerDate";
             this.datePickerDate.Size = new System.Drawing.Size(121, 23);
             this.datePickerDate.TabIndex = 0;
+            this.datePickerDate.ValueChanged += new System.EventHandler(this.OnDatePickerDate_ValueChanged);
+            this.datePickerDate.Leave += new System.EventHandler(this.OnDatePickerDate_Leave);
             // 
             // txtBoxPrice
             // 
@@ -629,7 +638,7 @@
             this.txtBoxPrice.Name = "txtBoxPrice";
             this.txtBoxPrice.Size = new System.Drawing.Size(338, 23);
             this.txtBoxPrice.TabIndex = 13;
-            this.txtBoxPrice.TextChanged += new System.EventHandler(this.TxtBoxAddPrice_TextChanged);
+            this.txtBoxPrice.TextChanged += new System.EventHandler(this.txtBoxPrice_TextChanged);
             this.txtBoxPrice.Leave += new System.EventHandler(this.txtBoxPrice_Leave);
             // 
             // txtBoxRate

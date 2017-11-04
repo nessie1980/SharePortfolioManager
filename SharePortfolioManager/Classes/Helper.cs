@@ -34,6 +34,7 @@ using Logging;
 using LanguageHandler;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
+using System.Net;
 
 namespace SharePortfolioManager.Classes
 {
@@ -906,6 +907,38 @@ namespace SharePortfolioManager.Classes
             }
         }
         #endregion  Calculate market value, market value minus reduction and market value minus reduction and plus costs
+
+        #region URL checker
+
+        static public bool UrlChecker(ref string url, int timeout)
+        {
+            if (string.IsNullOrEmpty(url))
+            {
+                return false;
+            }
+
+            HttpWebResponse response;
+            try
+            {
+                Uri urlCheck = new Uri(url);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlCheck);
+                request.Timeout = timeout;
+                request.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9.0.13) Gecko/2009073022 Firefox/3.0.13";
+
+                response = (HttpWebResponse)request.GetResponse();
+            }
+            catch
+            {
+                return false; //could not connect to the inter net (maybe) 
+            }
+
+            if (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Found)
+                return true;
+            else
+                return false;
+        }
+
+        #endregion URL checker
 
         #endregion Methods
     }

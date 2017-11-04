@@ -54,6 +54,8 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         ReductionWrongFormat,
         ReductionWrongValue,
         WebSiteEmpty,
+        WebSiteWrongFormat,
+        WebSiteExists,
         DocumentDirectoryDoesNotExists,
         DocumentFileDoesNotExists,
         WebSiteRegexNotFound
@@ -548,6 +550,24 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                         txtBoxWebSite.Focus();
                         break;
                     }
+                case ShareAddErrorCode.WebSiteWrongFormat:
+                    {
+                        strMessage =
+                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WebSiteWrongFormat", LanguageName);
+                        clrMessage = Color.Red;
+                        stateLevel = FrmMain.EStateLevels.Error;
+                        txtBoxWebSite.Focus();
+                        break;
+                    }
+                case ShareAddErrorCode.WebSiteExists:
+                    {
+                        strMessage =
+                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WebSiteExists", LanguageName);
+                        clrMessage = Color.Red;
+                        stateLevel = FrmMain.EStateLevels.Error;
+                        txtBoxWebSite.Focus();
+                        break;
+                    }
                 case ShareAddErrorCode.DocumentDirectoryDoesNotExists:
                     {
                         strMessage =
@@ -574,7 +594,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                     }
             }
 
-            Helper.AddStatusMessage(toolStripStatusLabelMessage,
+            Helper.AddStatusMessage(addShareStatusLabelMessage,
                strMessage,
                Language,
                LanguageName,
@@ -720,7 +740,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                Helper.AddStatusMessage(addShareStatusLabelMessage,
                     Language.GetLanguageTextByXPath(@"/MainForm/Errors/AddShowFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
@@ -762,7 +782,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                Helper.AddStatusMessage(addShareStatusLabelMessage,
                     Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ChoseDocumentFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
@@ -792,7 +812,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 #endif
                 StopFomClosingFlag = true;
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                Helper.AddStatusMessage(addShareStatusLabelMessage,
                     Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/AddSaveFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
@@ -905,6 +925,29 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 PropertyChanged(this, new PropertyChangedEventArgs("Document"));
         }
 
+        private void OnTxtBoxDocument_Leave(object sender, EventArgs e)
+        {
+            if (FormatInputValues != null)
+                FormatInputValues(this, new EventArgs());
+        }
+
+        private void OnTxtBoxDocument_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
+        }
+
+        private void OnTxtBoxDocument_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                foreach (string filePath in files)
+                {
+                    txtBoxDocument.Text = filePath.ToString();
+                }
+            }
+        }
+
         #endregion TextBoxes
 
         #region ComboBoxes
@@ -922,5 +965,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         }
 
         #endregion Comboboxes
+
     }
 }

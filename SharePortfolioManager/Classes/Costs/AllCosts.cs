@@ -161,9 +161,9 @@ namespace SharePortfolioManager
         }
 
         /// <summary>
-        /// TODO
+        /// This function removes a cost from the cost lists by the given date
         /// </summary>
-        /// <param name="strDate"></param>
+        /// <param name="strDate">Date of the cost entry which should be removed</param>
         /// <returns></returns>
         public bool RemoveCost(string strDate)
         {

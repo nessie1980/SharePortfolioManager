@@ -1036,14 +1036,6 @@ namespace SharePortfolioManager
             LastUpdateDate = lastUpdateShareDate;
             LastUpdateTime = lastUpdateShareTime;
             CurPrice = price;
-
-            // TODO RegEx check!
-
-            // Check if "http://" is in front of the website
-            if ((webSite.Length >= 7 && webSite.Substring(0, 7) != "http://") &&
-                (webSite.Length >= 8 && webSite.Substring(0, 8) != "https://"))
-                webSite = "http://" + webSite;
-
             WebSite = webSite;
             ImageListPrevDayPerformance = imageListForDayBeforePerformance;
             ImagePrevDayPerformance = ImageListPrevDayPerformance[0];
@@ -1202,7 +1194,7 @@ namespace SharePortfolioManager
         /// <param name="decCosts">Costs of the sale</param>
         /// <param name="strDoc">Document of the sale</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddSale(string strDate, decimal decVolume, decimal decBuyPrice, decimal decSalePrice, decimal decTaxAtSource, decimal decCapitalGains,
+        public bool AddSale(string strDate, decimal decVolume, decimal decBuyPrice, decimal decSalePrice, decimal decTaxAtSource, decimal decCapitalGainsTax,
              decimal decSolidarityTax, decimal decCosts, string strDoc = "")
         {
             try
@@ -1220,8 +1212,8 @@ namespace SharePortfolioManager
                 Console.WriteLine("decCosts: {0}", decCosts);
                 Console.WriteLine("strDoc: {0}", strDoc);
 #endif
-                if (!AllSaleEntries.AddSale(strDate, decVolume, decBuyPrice, decSalePrice, decTaxAtSource, decCapitalGains,
-                                            decSolidarityTax, decCosts, strDoc = ""))
+                if (!AllSaleEntries.AddSale(strDate, decVolume, decBuyPrice, decSalePrice, decTaxAtSource, decCapitalGainsTax,
+                                            decSolidarityTax, decCosts, strDoc))
                     return false;
 
                 // Set new volume

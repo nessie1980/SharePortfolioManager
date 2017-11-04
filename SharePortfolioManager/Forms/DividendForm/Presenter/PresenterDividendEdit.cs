@@ -54,8 +54,8 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
             // Copy decimal values from the dividend object to the model
             if (_model.DividendObject != null)
             {
-                _model.Date = Convert.ToDateTime(_model.DividendObject.DateTime).Date.ToShortDateString();
-                _model.Time = Convert.ToDateTime(_model.DividendObject.DateTime).Date.ToShortTimeString();
+                _model.Date = Convert.ToDateTime(_model.DividendObject.DateTime).ToShortDateString();
+                _model.Time = Convert.ToDateTime(_model.DividendObject.DateTime).ToShortTimeString();
                 _model.EnableFC = _model.DividendObject.EnableFC;
                 _model.ExchangeRatioDec = _model.DividendObject.ExchangeRatioDec;
                 _model.CultureInfoFC = _model.DividendObject.CultureInfoFC;

@@ -1484,7 +1484,7 @@ namespace SharePortfolioManager
                 FinalValue = CurPrice * Volume
                     - AllCostsEntries.CostValueTotal
                     + AllDividendEntries.DividendValueTotalWithTaxes
-                    + AllSaleEntries.SaleProfitLossTotal;
+                    + AllSaleEntries.SaleProfitLossTotalWithoutCosts;
             }
 
 #if DEBUG_SHAREOBJECT
@@ -1516,7 +1516,7 @@ namespace SharePortfolioManager
                     - PurchaseValue
                     - AllCostsEntries.CostValueTotal
                     + AllDividendEntries.DividendValueTotalWithTaxes
-                    + AllSaleEntries.SaleProfitLossTotal;
+                    + AllSaleEntries.SaleProfitLossTotalWithoutCosts;
             }
 
 #if DEBUG_SHAREOBJECT

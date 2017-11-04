@@ -217,7 +217,7 @@ namespace SharePortfolioManager
         /// <param name="decCosts">Costs of the sale</param>
         /// <param name="strDoc">Document of the sale</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddSaleObject(CultureInfo cultureInfo, string strDate, decimal decVolume, decimal decBuyPrice, decimal decSalePrice, decimal decTaxAtSource, decimal decCapitalGains,
+        public bool AddSaleObject(CultureInfo cultureInfo, string strDate, decimal decVolume, decimal decBuyPrice, decimal decSalePrice, decimal decTaxAtSource, decimal decCapitalGainsTax,
              decimal decSolidarityTax, decimal decCosts, string strDoc = "")
         {
 #if DEBUG
@@ -229,7 +229,7 @@ namespace SharePortfolioManager
                 SaleCultureInfo = cultureInfo;
 
                 // Create new SaleObject
-                SaleObject addObject = new SaleObject(cultureInfo, strDate, decVolume, decBuyPrice, decSalePrice, decTaxAtSource, decCapitalGains, decSolidarityTax, decCosts, strDoc = "");
+                SaleObject addObject = new SaleObject(cultureInfo, strDate, decVolume, decBuyPrice, decSalePrice, decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decCosts, strDoc);
                 ProfitLossObject addPorfitLossObject = new ProfitLossObject(cultureInfo, strDate, addObject.ProfitLoss, strDoc);
 
                 // Add object to the list

@@ -877,6 +877,54 @@ namespace SharePortfolioManager.Forms.BuysForm.View
 
         #endregion Form
 
+        #region Date Time
+
+        /// <summary>
+        /// This function updates the model if the date has changed
+        /// </summary>
+        /// <param name="sender">DateTime picker</param>
+        /// <param name="e">EventArgs</param>
+        private void OnDatePickerDate_ValueChanged(object sender, EventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs("Date"));
+        }
+
+        /// <summary>
+        /// This function updates the view with the formatted value
+        /// </summary>
+        /// <param name="sender">DateTime picker</param>
+        /// <param name="e">EventArgs</param>
+        private void OnDatePickerDate_Leave(object sender, EventArgs e)
+        {
+            if (FormatInputValues != null)
+                FormatInputValues(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function updates the model if the time has changed
+        /// </summary>
+        /// <param name="sender">DateTime picker</param>
+        /// <param name="e">EventArgs</param>
+        private void OnDatePickerTime_ValueChanged(object sender, EventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs("Time"));
+        }
+
+        /// <summary>
+        /// This function updates the view with the formatted value
+        /// </summary>
+        /// <param name="sender">DateTime picker</param>
+        /// <param name="e">EventArgs</param>
+        private void OnDatePickerTime_Leave(object sender, EventArgs e)
+        {
+            if (FormatInputValues != null)
+                FormatInputValues(this, new EventArgs());
+        }
+
+        #endregion Date Time
+
         #region TextBoxes
 
         /// <summary>
@@ -976,6 +1024,34 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs("Document"));
+        }
+
+        /// <summary>
+        /// This function updates the view with the formatted value
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxDocument_Leave(object sender, EventArgs e)
+        {
+            if (FormatInputValues != null)
+                FormatInputValues(this, new EventArgs());
+        }
+
+        private void OnTxtBoxDocument_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
+        }
+
+        private void OnTxtBoxDocument_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                foreach (string filePath in files)
+                {
+                    txtBoxDocument.Text = filePath.ToString();
+                }
+            }
         }
 
         #endregion TextBoxes
@@ -1901,5 +1977,6 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         #endregion Data grid view
 
         #endregion Methods
+
     }
 }

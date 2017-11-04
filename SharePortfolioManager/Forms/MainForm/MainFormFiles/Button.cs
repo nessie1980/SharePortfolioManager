@@ -305,13 +305,13 @@ namespace SharePortfolioManager
             string WKN = @"";
 
             // Check if a share is selected
-            if (MarketValueOverviewTabSelected == true &&
+            if (MarketValueOverviewTabSelected == false &&
                 dgvPortfolioFinalValue.SelectedCells[0].Value != null &&
                 dgvPortfolioFinalValue.SelectedCells[0].Value.ToString() != ""
                )
                 WKN = dgvPortfolioFinalValue.SelectedCells[0].Value.ToString();
 
-            if (MarketValueOverviewTabSelected == false &&
+            if (MarketValueOverviewTabSelected == true &&
                 dgvPortfolioMarketValue.SelectedCells[0].Value != null &&
                 dgvPortfolioMarketValue.SelectedCells[0].Value.ToString() != ""
                )

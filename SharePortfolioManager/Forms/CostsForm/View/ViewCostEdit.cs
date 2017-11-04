@@ -70,6 +70,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
         bool UpdateCost { get; set; }
         string SelectedDate { get; set; }
         bool PartOfABuy { get; set; }
+        bool PartOfASale { get; set; }
         string Date { get; set; }
         string Time { get; set; }
         string Costs { get; set; }
@@ -123,6 +124,11 @@ namespace SharePortfolioManager.Forms.CostsForm.View
         /// Stores if a cost is a part of a buy
         /// </summary>
         bool _bPartOfABuy;
+
+        /// <summary>
+        /// Stores if a cost is a part of a sale
+        /// </summary>
+        bool _bPartOfASale;
 
         /// <summary>
         /// Stores the current error code of the form
@@ -204,6 +210,12 @@ namespace SharePortfolioManager.Forms.CostsForm.View
         {
             get { return _bPartOfABuy; }
             set { _bPartOfABuy = value; }
+        }
+
+        public bool PartOfASale
+        {
+            get { return _bPartOfASale; }
+            set { _bPartOfASale = value; }
         }
 
         public CostErrorCode ErrorCode
@@ -643,6 +655,54 @@ namespace SharePortfolioManager.Forms.CostsForm.View
 
         #endregion Form
 
+        #region Date Time
+
+        /// <summary>
+        /// This function updates the model if the date has changed
+        /// </summary>
+        /// <param name="sender">DateTime picker</param>
+        /// <param name="e">EventArgs</param>
+        private void OnDatePickerDate_ValueChanged(object sender, EventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs("Date"));
+        }
+
+        /// <summary>
+        /// This function updates the view with the formatted value
+        /// </summary>
+        /// <param name="sender">DateTime picker</param>
+        /// <param name="e">EventArgs</param>
+        private void OnDatePickerDate_Leave(object sender, EventArgs e)
+        {
+            if (FormatInputValues != null)
+                FormatInputValues(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function updates the model if the time has changed
+        /// </summary>
+        /// <param name="sender">DateTime picker</param>
+        /// <param name="e">EventArgs</param>
+        private void OnDatePickerTime_ValueChanged(object sender, EventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs("Time"));
+        }
+
+        /// <summary>
+        /// This function updates the view with the formatted value
+        /// </summary>
+        /// <param name="sender">DateTime picker</param>
+        /// <param name="e">EventArgs</param>
+        private void datePickerTime_Leave(object sender, EventArgs e)
+        {
+            if (FormatInputValues != null)
+                FormatInputValues(this, new EventArgs());
+        }
+
+        #endregion Date Time
+
         #region TextBoxes
 
         /// <summary>
@@ -676,6 +736,34 @@ namespace SharePortfolioManager.Forms.CostsForm.View
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs("Document"));
+        }
+
+        /// <summary>
+        /// This function updates the view with the formatted value
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OntxtBoxDocument_Leave(object sender, EventArgs e)
+        {
+            if (FormatInputValues != null)
+                FormatInputValues(this, new EventArgs());
+        }
+
+        private void OnTxtBoxDocument_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
+        }
+
+        private void OnTxtBoxDocument_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                foreach (string filePath in files)
+                {
+                    txtBoxDocument.Text = filePath.ToString();
+                }
+            }
         }
 
         #endregion TextBoxes
@@ -1312,7 +1400,6 @@ namespace SharePortfolioManager.Forms.CostsForm.View
         /// <param name="args">EventArgs</param>
         private void OnDataGridViewCostsOfAYear_SelectionChanged(object sender, EventArgs args)
         {
-            // TODO Check if the cost is the cost of a buy
             try
             {
                 if (tabCtrlCosts.TabPages.Count > 0)
@@ -1350,10 +1437,13 @@ namespace SharePortfolioManager.Forms.CostsForm.View
                     }
 
                     // Set cost values
-                    if (selectedCostObject != null && selectedCostObject.CostOfABuy)
+                    if (selectedCostObject != null && (selectedCostObject.CostOfABuy || selectedCostObject.CostOfASale))
                     {
                         // Set flag if cost is part of a buy
-                        PartOfABuy = true;
+                        PartOfABuy = selectedCostObject.CostOfABuy;
+
+                        // Set flag if cost is part of a sale
+                        PartOfASale = selectedCostObject.CostOfASale;
 
                         // Enable TextBoxe(s)
                         datePickerDate.Enabled = false;
@@ -1366,7 +1456,10 @@ namespace SharePortfolioManager.Forms.CostsForm.View
                     else
                     {
                         // Set flag if cost is part of a buy
-                        PartOfABuy = false;
+                        PartOfABuy = selectedCostObject.CostOfABuy;
+
+                        // Set flag if cost is part of a sale
+                        PartOfASale = selectedCostObject.CostOfASale;
 
                         // Enable TextBoxe(s)
                         datePickerDate.Enabled = true;
@@ -1566,5 +1659,6 @@ namespace SharePortfolioManager.Forms.CostsForm.View
         #endregion Data grid view
 
         #endregion Methods
+
     }
 }

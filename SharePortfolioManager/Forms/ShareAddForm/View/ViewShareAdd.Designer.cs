@@ -40,7 +40,7 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabelMessage = new System.Windows.Forms.ToolStripStatusLabel();
+            this.addShareStatusLabelMessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.txtBoxWkn = new System.Windows.Forms.TextBox();
             this.lblCultureInfo = new System.Windows.Forms.Label();
             this.cboBoxCultureInfo = new System.Windows.Forms.ComboBox();
@@ -206,6 +206,8 @@
             // 
             this.statusStrip1.BackColor = System.Drawing.SystemColors.Control;
             this.statusStrip1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addShareStatusLabelMessage});
             this.statusStrip1.Location = new System.Drawing.Point(0, 410);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 16, 0);
@@ -214,10 +216,10 @@
             this.statusStrip1.TabIndex = 12;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // toolStripStatusLabelMessage
+            // addShareStatusLabelMessage
             // 
-            this.toolStripStatusLabelMessage.Name = "toolStripStatusLabelMessage";
-            this.toolStripStatusLabelMessage.Size = new System.Drawing.Size(0, 17);
+            this.addShareStatusLabelMessage.Name = "addShareStatusLabelMessage";
+            this.addShareStatusLabelMessage.Size = new System.Drawing.Size(0, 17);
             // 
             // txtBoxWkn
             // 
@@ -287,6 +289,7 @@
             // 
             // txtBoxDocument
             // 
+            this.txtBoxDocument.AllowDrop = true;
             this.txtBoxDocument.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtBoxDocument.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtBoxDocument.Location = new System.Drawing.Point(380, 331);
@@ -294,6 +297,9 @@
             this.txtBoxDocument.Size = new System.Drawing.Size(370, 23);
             this.txtBoxDocument.TabIndex = 11;
             this.txtBoxDocument.TextChanged += new System.EventHandler(this.OnTxtBoxDocument_TextChanged);
+            this.txtBoxDocument.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragDrop);
+            this.txtBoxDocument.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragEnter);
+            this.txtBoxDocument.Leave += new System.EventHandler(this.OnTxtBoxDocument_Leave);
             // 
             // btnDocumentBrowse
             // 
@@ -587,7 +593,6 @@
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelMessage;
         private System.Windows.Forms.TextBox txtBoxWkn;
         private System.Windows.Forms.Label lblCultureInfo;
         private System.Windows.Forms.ComboBox cboBoxCultureInfo;
@@ -615,5 +620,6 @@
         private System.Windows.Forms.Label lblFinalValue;
         private System.Windows.Forms.TextBox txtBoxFinalValue;
         private System.Windows.Forms.Label lblFinalValueUnit;
+        private System.Windows.Forms.ToolStripStatusLabel addShareStatusLabelMessage;
     }
 }

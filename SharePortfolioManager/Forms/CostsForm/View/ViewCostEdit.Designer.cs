@@ -120,6 +120,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             // 
             // txtBoxDocument
             // 
+            this.txtBoxDocument.AllowDrop = true;
             this.txtBoxDocument.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtBoxDocument.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -129,6 +130,9 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             this.txtBoxDocument.Size = new System.Drawing.Size(370, 23);
             this.txtBoxDocument.TabIndex = 2;
             this.txtBoxDocument.TextChanged += new System.EventHandler(this.OnTxtBoxDocument_TextChanged);
+            this.txtBoxDocument.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragDrop);
+            this.txtBoxDocument.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragEnter);
+            this.txtBoxDocument.Leave += new System.EventHandler(this.OntxtBoxDocument_Leave);
             // 
             // lblDocument
             // 
@@ -150,6 +154,8 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             this.datePickerTime.ShowUpDown = true;
             this.datePickerTime.Size = new System.Drawing.Size(169, 23);
             this.datePickerTime.TabIndex = 18;
+            this.datePickerTime.ValueChanged += new System.EventHandler(this.OnDatePickerTime_ValueChanged);
+            this.datePickerTime.Leave += new System.EventHandler(this.datePickerTime_Leave);
             // 
             // btnDelete
             // 
@@ -231,6 +237,8 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             this.datePickerDate.Name = "datePickerDate";
             this.datePickerDate.Size = new System.Drawing.Size(195, 23);
             this.datePickerDate.TabIndex = 10;
+            this.datePickerDate.ValueChanged += new System.EventHandler(this.OnDatePickerDate_ValueChanged);
+            this.datePickerDate.Leave += new System.EventHandler(this.OnDatePickerDate_Leave);
             // 
             // txtBoxCosts
             // 

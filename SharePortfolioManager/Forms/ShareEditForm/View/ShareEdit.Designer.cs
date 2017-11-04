@@ -35,7 +35,6 @@
             this.lblWebSite = new System.Windows.Forms.Label();
             this.txtBoxWebSite = new System.Windows.Forms.TextBox();
             this.lblVolume = new System.Windows.Forms.Label();
-            this.toolStripStatusLabelMessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblDepositUnit = new System.Windows.Forms.Label();
             this.lblVolumeUnit = new System.Windows.Forms.Label();
             this.lblPurchase = new System.Windows.Forms.Label();
@@ -71,8 +70,10 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.editShareStatusLabelMessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.grpBoxGeneral.SuspendLayout();
             this.grpBoxEarningsExpenditure.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblWkn
@@ -161,11 +162,6 @@
             this.lblVolume.Text = "_lblVolume";
             this.lblVolume.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // toolStripStatusLabelMessage
-            // 
-            this.toolStripStatusLabelMessage.Name = "toolStripStatusLabelMessage";
-            this.toolStripStatusLabelMessage.Size = new System.Drawing.Size(0, 17);
-            // 
             // lblDepositUnit
             // 
             this.lblDepositUnit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -188,19 +184,19 @@
             this.lblVolumeUnit.Text = "_lblVolumeUnit";
             this.lblVolumeUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // lblDeposit
+            // lblPurchase
             // 
             this.lblPurchase.BackColor = System.Drawing.Color.LightGray;
             this.lblPurchase.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblPurchase.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPurchase.Location = new System.Drawing.Point(10, 103);
-            this.lblPurchase.Name = "lblDeposit";
+            this.lblPurchase.Name = "lblPurchase";
             this.lblPurchase.Size = new System.Drawing.Size(365, 23);
             this.lblPurchase.TabIndex = 6;
             this.lblPurchase.Text = "_lblDeposit";
             this.lblPurchase.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // lblDepositValue
+            // lblPurchaseValue
             // 
             this.lblPurchaseValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -208,7 +204,7 @@
             this.lblPurchaseValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblPurchaseValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPurchaseValue.Location = new System.Drawing.Point(380, 103);
-            this.lblPurchaseValue.Name = "lblDepositValue";
+            this.lblPurchaseValue.Name = "lblPurchaseValue";
             this.lblPurchaseValue.Size = new System.Drawing.Size(373, 23);
             this.lblPurchaseValue.TabIndex = 23;
             this.lblPurchaseValue.Text = "_lblDepositValue";
@@ -605,7 +601,7 @@
             this.btnSave.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnSave.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSave.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnSave.Location = new System.Drawing.Point(489, 422);
+            this.btnSave.Location = new System.Drawing.Point(489, 398);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(166, 31);
             this.btnSave.TabIndex = 39;
@@ -620,7 +616,7 @@
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCancel.Location = new System.Drawing.Point(661, 422);
+            this.btnCancel.Location = new System.Drawing.Point(661, 398);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(166, 31);
             this.btnCancel.TabIndex = 40;
@@ -631,11 +627,19 @@
             // 
             // statusStrip1
             // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.editShareStatusLabelMessage});
             this.statusStrip1.Location = new System.Drawing.Point(0, 458);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(834, 22);
             this.statusStrip1.TabIndex = 41;
             this.statusStrip1.Text = "statusStrip1";
+            // 
+            // editShareStatusLabelMessage
+            // 
+            this.editShareStatusLabelMessage.BackColor = System.Drawing.SystemColors.Control;
+            this.editShareStatusLabelMessage.Name = "editShareStatusLabelMessage";
+            this.editShareStatusLabelMessage.Size = new System.Drawing.Size(0, 17);
             // 
             // FrmShareEdit
             // 
@@ -663,6 +667,8 @@
             this.grpBoxGeneral.ResumeLayout(false);
             this.grpBoxGeneral.PerformLayout();
             this.grpBoxEarningsExpenditure.ResumeLayout(false);
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -677,7 +683,6 @@
         private System.Windows.Forms.Label lblWebSite;
         private System.Windows.Forms.TextBox txtBoxWebSite;
         private System.Windows.Forms.Label lblVolume;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelMessage;
         private System.Windows.Forms.Label lblDepositUnit;
         private System.Windows.Forms.Label lblVolumeUnit;
         private System.Windows.Forms.Label lblPurchase;
@@ -713,5 +718,6 @@
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel editShareStatusLabelMessage;
     }
 }

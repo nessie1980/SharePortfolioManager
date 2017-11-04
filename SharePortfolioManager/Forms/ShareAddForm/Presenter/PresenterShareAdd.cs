@@ -276,6 +276,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
         private bool CheckInputValues()
         {
             bool bErrorFlag = false;
+            string decodedUrl = _model.WebSite;
 
             _model.ErrorCode = ShareAddErrorCode.AddSuccessful;
 
@@ -431,9 +432,41 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                 _model.ErrorCode = ShareAddErrorCode.WebSiteEmpty;
                 bErrorFlag = true;
             }
+            // Check website format
+            else if (!Helper.UrlChecker(ref decodedUrl, 10000))
+            {
+                _model.ErrorCode = ShareAddErrorCode.WebSiteWrongFormat;
+                bErrorFlag = true;
+            }
+            // Check if the website is already used
+            else if (bErrorFlag == false)
+            {
 
-            // TODO Web address validation
+                // Check if a market value share with the given WKN number already exists
+                foreach (var shareObjectMarketValue in _model.ShareObjectListMarketValue)
+                {
+                    if (shareObjectMarketValue.WebSite == _model.WebSite && shareObjectMarketValue != _model.ShareObjectMarketValue)
+                    {
+                        _model.ErrorCode = ShareAddErrorCode.WebSiteExists;
+                        bErrorFlag = true;
+                        break;
+                    }
+                }
 
+                if (bErrorFlag == false)
+                {
+                    // Check if a final value share with the given WKN number already exists
+                    foreach (var shareObjectFinalValue in _model.ShareObjectListFinalValue)
+                    {
+                        if (shareObjectFinalValue.WebSite == _model.WebSite && shareObjectFinalValue != _model.ShareObjectFinalValue)
+                        {
+                            _model.ErrorCode = ShareAddErrorCode.WebSiteExists;
+                            bErrorFlag = true;
+                            break;
+                        }
+                    }
+                }
+            }
             // Check document input
             else if (_model.Document != @"" && !Directory.Exists(Path.GetDirectoryName(_model.Document)) && bErrorFlag == false)
             {
@@ -447,6 +480,8 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                 _model.ErrorCode = ShareAddErrorCode.DocumentFileDoesNotExists;
                 bErrorFlag = true;
             }
+
+            _model.WebSite = decodedUrl;
 
             return bErrorFlag;
         }

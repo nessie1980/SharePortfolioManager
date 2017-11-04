@@ -159,7 +159,6 @@ namespace SharePortfolioManager
             this.menuStrip1.Size = new System.Drawing.Size(1235, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
-            //this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
             // 
             // fileToolStripMenuItem
             // 
@@ -176,32 +175,32 @@ namespace SharePortfolioManager
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.newToolStripMenuItem.Text = "New_";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.openToolStripMenuItem.Text = "Open_";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.saveAsToolStripMenuItem.Text = "SaveAs_";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(113, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(120, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.exitToolStripMenuItem.Text = "&Quit_";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.beendenToolStripMenuItem_Click);
             // 
@@ -217,13 +216,13 @@ namespace SharePortfolioManager
             // languageToolStripMenuItem
             // 
             this.languageToolStripMenuItem.Name = "languageToolStripMenuItem";
-            this.languageToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.languageToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.languageToolStripMenuItem.Text = "_Language";
             // 
             // loggerToolStripMenuItem
             // 
             this.loggerToolStripMenuItem.Name = "loggerToolStripMenuItem";
-            this.loggerToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.loggerToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.loggerToolStripMenuItem.Text = "_Logger";
             this.loggerToolStripMenuItem.Click += new System.EventHandler(this.loggerToolStripMenuItem_Click);
             // 
@@ -238,7 +237,7 @@ namespace SharePortfolioManager
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.aboutToolStripMenuItem.Text = "&About_";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -317,6 +316,7 @@ namespace SharePortfolioManager
             this.dgvPortfolioFinalValue.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.DgvPortfolioFinalValue_CellPainting);
             this.dgvPortfolioFinalValue.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.DgvPortfolioFinalValue_DataBindingComplete);
             this.dgvPortfolioFinalValue.SelectionChanged += new System.EventHandler(this.DgvPortfolioFinalValue_SelectionChanged);
+            this.dgvPortfolioFinalValue.MouseEnter += new System.EventHandler(this.dgvPortfolioFinalValue_MouseEnter);
             this.dgvPortfolioFinalValue.Resize += new System.EventHandler(this.DgvPortfolioFinalValue_Resize);
             // 
             // dgvPortfolioFooterFinalValue
@@ -381,6 +381,7 @@ namespace SharePortfolioManager
             this.dgvPortfolioMarketValue.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.DgvPortfolioMarketValue_CellPainting);
             this.dgvPortfolioMarketValue.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.DgvPortfolioMarketValue_DataBindingComplete);
             this.dgvPortfolioMarketValue.SelectionChanged += new System.EventHandler(this.DgvPortfolioMarketValue_SelectionChanged);
+            this.dgvPortfolioMarketValue.MouseEnter += new System.EventHandler(this.dgvPortfolioMarketValue_MouseEnter);
             this.dgvPortfolioMarketValue.Resize += new System.EventHandler(this.DgvPortfolioMarketValue_Resize);
             // 
             // dgvPortfolioFooterMarketValue

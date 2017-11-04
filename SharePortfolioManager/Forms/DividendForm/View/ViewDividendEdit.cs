@@ -1196,9 +1196,17 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             txtBoxDocument.Text = @"";
 
             txtBoxRate.Focus();
-        }
 
-        #endregion Form
+            // Check if any volume is present
+            if (ShareObjectFinalValue.Volume > 0)
+            {
+                // Set current share value
+                txtBoxVolume.Text = ShareObjectFinalValue.VolumeAsStr;
+
+            }
+
+        }
+            #endregion Form
 
         #region CheckBoxes
 
@@ -1216,6 +1224,54 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         }
 
         #endregion CheckBoxes
+
+        #region Date / Time
+
+        /// <summary>
+        /// This function updates the model if the date has been changed
+        /// </summary>
+        /// <param name="sender">DateTime picker</param>
+        /// <param name="e">EventArgs</param>
+        private void OnDatePickerDate_ValueChanged(object sender, EventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs("Date"));
+        }
+
+        /// <summary>
+        /// This function updates the view with the formatted value
+        /// </summary>
+        /// <param name="sender">DateTime picker</param>
+        /// <param name="e">EventArgs</param>
+        private void OnDatePickerDate_Leave(object sender, EventArgs e)
+        {
+            if (FormatInputValues != null)
+                FormatInputValues(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function updates the model if the time has been changed
+        /// </summary>
+        /// <param name="sender">DateTime picker</param>
+        /// <param name="e">EventArgs</param>
+        private void OnDatePickerTime_ValueChanged(object sender, EventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs("Time"));
+        }
+
+        /// <summary>
+        /// This function updates the view with the formatted value
+        /// </summary>
+        /// <param name="sender">DateTime picker</param>
+        /// <param name="e">EventArgs</param>
+        private void OnDatePickerTime_Leave(object sender, EventArgs e)
+        {
+            if (FormatInputValues != null)
+                FormatInputValues(this, new EventArgs());
+        }
+
+        #endregion Date / Time
 
         #region TextBoxes
 
@@ -1363,6 +1419,17 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         }
 
         /// <summary>
+        /// This function updates the model if price value has been changed
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void txtBoxPrice_TextChanged(object sender, EventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs("Price"));
+        }
+
+        /// <summary>
         /// This function updates the view with the formatted value
         /// </summary>
         /// <param name="sender">Text box</param>
@@ -1374,14 +1441,42 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         }
 
         /// <summary>
-        /// This function updates the model if the price has been changed
+        /// This function updates the model if document value has been changed
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void TxtBoxAddPrice_TextChanged(object sender, EventArgs e)
+        private void txtBoxDocument_TextChanged(object sender, EventArgs e)
         {
             if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("Price"));
+                PropertyChanged(this, new PropertyChangedEventArgs("Document"));
+        }
+
+        /// <summary>
+        /// This function updates the view with the formatted value
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void txtBoxDocument_Leave(object sender, EventArgs e)
+        {
+            if (FormatInputValues != null)
+                FormatInputValues(this, new EventArgs());
+        }
+
+        private void OnTxtBoxDocument_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
+        }
+
+        private void OnTxtBoxDocument_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                foreach (string filePath in files)
+                {
+                    txtBoxDocument.Text = filePath.ToString();
+                }
+            }
         }
 
         #endregion TextBoxes
@@ -1567,10 +1662,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// </summary>
         private void CheckForeignCurrencyCalulationShouldBeDone()
         {
-            // Reset date time picker
-            datePickerDate.Value = DateTime.Now;
-            datePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
-
             if (chkBoxEnableFC.CheckState == CheckState.Checked)
             {
                 _bForeignFlag = true;
@@ -2172,10 +2263,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                             // Set foreign currency values
                             txtBoxExchangeRatio.Text = selectedDividendObject.ExchangeRatio;
 
-                            // TODO find correct currency
-                            //if (selectedDividendObject.DividendTaxes.FCUnit != null)
-                            //    cbxBoxDividendFCUnit.SelectedIndex = cbxBoxDividendFCUnit.FindString(new RegionInfo(selectedDividendObject.DividendTaxes.CiShareFC.LCID).ISOCurrencySymbol); // ?NAME
-
+                            // Find correct currency
                             cbxBoxDividendFCUnit.SelectedIndex = cbxBoxDividendFCUnit.FindString(selectedDividendObject.CultureInfoFC.Name);
 
                             LoadGridSelectionFlag = false;
@@ -2392,5 +2480,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         #endregion Data grid view
 
         #endregion Methods
+
     }
 }

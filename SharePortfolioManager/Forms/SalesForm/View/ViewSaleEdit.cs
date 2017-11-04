@@ -1030,6 +1030,54 @@ namespace SharePortfolioManager.Forms.SalesForm.View
 
         #endregion Form
 
+        #region Date Time
+
+        /// <summary>
+        /// This function updates the model if the date has changed
+        /// </summary>
+        /// <param name="sender">DateTime picker</param>
+        /// <param name="e">EventArgs</param>
+        private void OnDatePickerDate_ValueChanged(object sender, EventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs("Date"));
+        }
+
+        /// <summary>
+        /// This function updates the view with the formatted value
+        /// </summary>
+        /// <param name="sender">DateTime picker</param>
+        /// <param name="e">EventArgs</param>
+        private void OnDatePickerDate_Leave(object sender, EventArgs e)
+        {
+            if (FormatInputValues != null)
+                FormatInputValues(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function updates the model if the time has changed
+        /// </summary>
+        /// <param name="sender">DateTime picker</param>
+        /// <param name="e">EventArgs</param>
+        private void OnDatePickerTime_ValueChanged(object sender, EventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs("Time"));
+        }
+
+        /// <summary>
+        /// This function updates the view with the formatted value
+        /// </summary>
+        /// <param name="sender">DateTime picker</param>
+        /// <param name="e">EventArgs</param>
+        private void OnDatePickerTime_Leave(object sender, EventArgs e)
+        {
+            if (FormatInputValues != null)
+                FormatInputValues(this, new EventArgs());
+        }
+
+        #endregion Date Time
+
         #region TextBoxes
 
         /// <summary>
@@ -1048,7 +1096,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void txtBoxVolume_Leave(object sender, EventArgs e)
+        private void OnTxtBoxVolume_Leave(object sender, EventArgs e)
         {
             if (FormatInputValues != null)
                 FormatInputValues(this, new EventArgs());
@@ -1070,7 +1118,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void txtBoxBuyPrice_Leave(object sender, EventArgs e)
+        private void OnTxtBoxBuyPrice_Leave(object sender, EventArgs e)
         {
             if (FormatInputValues != null)
                 FormatInputValues(this, new EventArgs());
@@ -1092,7 +1140,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void txtBoxSalePrice_Leave(object sender, EventArgs e)
+        private void OnTxtBoxSalePrice_Leave(object sender, EventArgs e)
         {
             if (FormatInputValues != null)
                 FormatInputValues(this, new EventArgs());
@@ -1115,7 +1163,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void txtBoxTaxAtSourceLeave(object sender, EventArgs e)
+        private void OnTxtBoxTaxAtSourceLeave(object sender, EventArgs e)
         {
             if (FormatInputValues != null)
                 FormatInputValues(this, new EventArgs());
@@ -1137,7 +1185,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void txtBoxCapitalGAinsTaxLeave(object sender, EventArgs e)
+        private void OnTxtBoxCapitalGAinsTaxLeave(object sender, EventArgs e)
         {
             if (FormatInputValues != null)
                 FormatInputValues(this, new EventArgs());
@@ -1159,7 +1207,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void txtBoxSolidarityTaxLeave(object sender, EventArgs e)
+        private void OnTxtBoxSolidarityTaxLeave(object sender, EventArgs e)
         {
             if (FormatInputValues != null)
                 FormatInputValues(this, new EventArgs());
@@ -1181,7 +1229,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void txtBoxCostsTaxLeave(object sender, EventArgs e)
+        private void OnTxtBoxCostsTaxLeave(object sender, EventArgs e)
         {
             if (FormatInputValues != null)
                 FormatInputValues(this, new EventArgs());
@@ -1196,6 +1244,34 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs("Document"));
+        }
+
+        /// <summary>
+        /// This function updates the view with the formatted value
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxDocument_Leave(object sender, EventArgs e)
+        {
+            if (FormatInputValues != null)
+                FormatInputValues(this, new EventArgs());
+        }
+
+        private void OnTxtBoxDocument_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
+        }
+
+        private void OnTxtBoxDocument_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                foreach (string filePath in files)
+                {
+                    txtBoxDocument.Text = filePath.ToString();
+                }
+            }
         }
 
         #endregion TextBoxes
@@ -1976,7 +2052,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         if (curItem[0].Cells[iColumnCount - 1].Value.ToString() != @"-")
                         {
                             // Get doc from the sale with the strDateTime
-                            foreach (var temp in ShareObjectFinalValue.AllBuyEntries.GetAllBuysOfTheShare())
+                            foreach (var temp in ShareObjectFinalValue.AllSaleEntries.GetAllSalesOfTheShare())
                             {
                                 // Check if the sale date and time is the same as the date and time of the clicked sale item
                                 if (temp.Date == strDateTime)
@@ -2006,8 +2082,8 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                                         if (messageBox.ShowDialog() == DialogResult.OK)
                                         {
                                             // Remove sale object and add it with no document
-                                            if (ShareObjectFinalValue.RemoveSale(temp.Date) // Refactoring &&
-                                                /*ShareObjectFinalValue.AddSale(strDateTime, temp.Volume, temp.Reduction, temp.Costs, temp.MarketValue)*/)
+                                            if (ShareObjectFinalValue.RemoveSale(temp.Date) &&
+                                                ShareObjectFinalValue.AddSale(strDateTime, temp.Volume, temp.BuyPrice, temp.SalePrice, temp.TaxAtSource, temp.CapitalGainsTax, temp.SolidarityTax, temp.Costs, @""))
                                             {
                                                 // Set flag to save the share object.
                                                 _bSave = true;
@@ -2204,6 +2280,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         //        }
 
         #endregion Methods
+
     }
 }
 

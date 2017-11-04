@@ -743,12 +743,12 @@ namespace SharePortfolioManager
                 #region Read shares from XML
 
                 Text = Language.GetLanguageTextByXPath(@"/Application/Name", LanguageName)
-                    + @" " + Helper.GetApplicationVersion().ToString();
+                    + @" - " + Language.GetLanguageTextByXPath(@"/Application/Version", LanguageName) + ": " + Helper.GetApplicationVersion().ToString();
 
                 // Only load portfolio if a portfolio is set in the settings
                 if (PortfolioFileName != "")
                 {
-                    Text += @" (" + Path.GetFileName(PortfolioFileName) + @")";
+                    Text += @" - (" + PortfolioFileName + @")";
 
                     LoadPortfolio();
                 }
