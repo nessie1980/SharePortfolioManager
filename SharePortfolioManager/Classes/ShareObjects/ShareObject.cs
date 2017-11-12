@@ -1106,7 +1106,7 @@ namespace SharePortfolioManager
                 // Recalculate MarketValue
                 if (PurchaseValue == decimal.MinValue / 2)
                     PurchaseValue = 0;
-                PurchaseValue += AllBuyEntries.GetBuyObjectByDateTime(strDateTime).MarketValueReduction;
+                PurchaseValue += AllBuyEntries.GetBuyObjectByDateTime(strDateTime).MarketValueReductionCosts;
 
                 // Recalculate buy price average
                 if (PurchaseValue > 0 && Volume > 0)
@@ -1147,7 +1147,7 @@ namespace SharePortfolioManager
                 if (buyObject != null)
                 {
                     Volume -= buyObject.Volume;
-                    PurchaseValue -= buyObject.MarketValueReduction;
+                    PurchaseValue -= buyObject.MarketValueReductionCosts;
                     BuyMarketValueTotal = AllBuyEntries.BuyMarketValueTotal;
 
                     // Recalculate buy price average

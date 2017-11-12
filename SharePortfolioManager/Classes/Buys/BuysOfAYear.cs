@@ -195,7 +195,6 @@ namespace SharePortfolioManager
                     BuyMarketValueReductionCostsYear = 0;
                 BuyMarketValueReductionCostsYear += addObject.MarketValueReductionCosts;
 
-
                 // Calculate buy volume
                 if (BuyVolumeYear == -1)
                     BuyVolumeYear = 0;

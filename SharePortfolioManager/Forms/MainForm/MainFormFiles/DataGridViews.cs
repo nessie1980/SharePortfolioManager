@@ -518,57 +518,11 @@ namespace SharePortfolioManager
         {
             try
             {
-                #region Data grid view column resize
-
-                #region dgvPortfolioMarketValue
-
-                if (dgvPortfolioMarketValue.ColumnCount >= (int)ColumnIndicesPortfolioMarketValue.EShareNameColumnIndex + 1)
-                {
-                    var _columnSum = WKNNumber + ShareVolume + SharePrice + SharePerformanceDayBefore + SharePerformance + ImagePerformance +
-                                     ShareSum;
-
-                    var vScrollbar = dgvPortfolioMarketValue.Controls.OfType<VScrollBar>().First();
-                    var vScrollbarWidth = 0;
-                    if (vScrollbar.Visible)
-                    {
-                        vScrollbarWidth = vScrollbar.Width;
-                    }
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareNameColumnIndex].Width =
-                        dgvPortfolioMarketValue.Width - (_columnSum + 3 + vScrollbarWidth);
-                }
-
-                #endregion dgvPortfolioMarketValue
-
-                #region dgvPortfolioFinalValue
-
-                if (dgvPortfolioFinalValue.ColumnCount >= (int)ColumnIndicesPortfolioFinalValue.EShareNameColumnIndex + 1)
-                {
-                    var _columnSum = WKNNumber + SharePrice + ShareVolume + SharePerformance + ImagePerformance +
-                                     SharePerformanceDayBefore + ShareCostsDividend + ShareSum;
-
-                    var vScrollbar = dgvPortfolioFinalValue.Controls.OfType<VScrollBar>().First();
-                    var vScrollbarWidth = 0;
-                    if (vScrollbar.Visible)
-                    {
-                        vScrollbarWidth = vScrollbar.Width;
-                    }
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareNameColumnIndex].Width =
-                        dgvPortfolioFinalValue.Width - (_columnSum + 3 + vScrollbarWidth);
-                }
-
-                #endregion dgvPortfolioFinalValue
-
-                #endregion Data grid view column resize
-
-                #region Data grid view footer column resize
-
                 #region dgvPortfolioFooterMarketValue
 
                 if (dgvPortfolioFooterMarketValue.ColumnCount >= 3)
                 {
-                    var _columnLabelTotalWidth = SharePerformance + ShareSum;
-
-                    var vScrollbarPortfolio = dgvPortfolioFooterMarketValue.Controls.OfType<VScrollBar>().First();
+                    var vScrollbarPortfolio = dgvPortfolioMarketValue.Controls.OfType<VScrollBar>().First();
                     var vScrollbarWidth = 0;
                     if (vScrollbarPortfolio.Visible)
                     {
@@ -580,11 +534,6 @@ namespace SharePortfolioManager
                         dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ESumColumnIndex].Width =
                             ShareSum;
                     }
-
-                    dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ELabelTotalColumnIndex].Width =
-                        dgvPortfolioFooterMarketValue.Width - (_columnLabelTotalWidth + 3 + vScrollbarWidth);
-
-//                    dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ELabelTotalColumnIndex].Width = _columnLabelTotalWidth;
                 }
 
                 #endregion dgvPortfolioFooterFinalValue
@@ -593,7 +542,6 @@ namespace SharePortfolioManager
 
                 if (dgvPortfolioFooterFinalValue.ColumnCount >= 5)
                 {
-                    var _columnLabelCostsDividendWidth = ShareCostsDividend + SharePrice + SharePerformanceDayBefore + ImagePerformance + SharePerformance + ShareSum;
                     var _columnLabelTotalWidth = SharePrice + SharePerformanceDayBefore + ImagePerformance;
 
                     var vScrollbarPortfolio = dgvPortfolioFinalValue.Controls.OfType<VScrollBar>().First();
@@ -609,17 +557,11 @@ namespace SharePortfolioManager
                             ShareSum;
                     }
 
-                    dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelCostsDividendIndex].Width =
-                        dgvPortfolioFooterFinalValue.Width - (_columnLabelCostsDividendWidth + 3 + vScrollbarWidth);
-
                     dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ECostsDividendIndex].Width = ShareCostsDividend;
-
                     dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelTotalColumnIndex].Width = _columnLabelTotalWidth;
                 }
 
                 #endregion dgvPortfolioFooterFinalValue
-
-                #endregion Data grid view footer column resize
             }
             catch (Exception ex)
             {
@@ -893,6 +835,9 @@ namespace SharePortfolioManager
                     dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePerformanceColumnIndex].Width = SharePerformance;
                     dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareSumColumnIndex].Width = ShareSum;
 
+                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareNameColumnIndex].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareNameColumnIndex].FillWeight = 10;
+
                     #endregion Width configuration
 
                     #region Alignment configuration
@@ -915,6 +860,9 @@ namespace SharePortfolioManager
                     dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ELabelTotalColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                     dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.EPerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                     dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ESumColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+                    dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ELabelTotalColumnIndex].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ELabelTotalColumnIndex].FillWeight = 10;
 
                     #endregion Footer width configuration
 
@@ -1084,6 +1032,9 @@ namespace SharePortfolioManager
                     dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePerformanceColumnIndex].Width = SharePerformance;
                     dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareSumColumnIndex].Width = ShareSum;
 
+                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareNameColumnIndex].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareNameColumnIndex].FillWeight = 10;
+
                     #endregion With configuration
 
                     #region Alignment configuration
@@ -1111,6 +1062,9 @@ namespace SharePortfolioManager
                     dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelTotalColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                     dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.EPerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                     dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ESumColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+                    dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelCostsDividendIndex].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelCostsDividendIndex].FillWeight = 10;
 
                     #endregion Footer configuration
 
@@ -1230,6 +1184,10 @@ namespace SharePortfolioManager
                     {
                         e.CellStyle.ForeColor = Color.Green;
                     }
+                    else if ((Convert.ToDecimal(splitString[0])) == 0)
+                    {
+                        e.CellStyle.ForeColor = Color.Black;
+                    }
                     else
                     {
                         e.CellStyle.ForeColor = Color.Red;
@@ -1270,6 +1228,10 @@ namespace SharePortfolioManager
                     if ((Convert.ToDecimal(splitString[0])) > 0)
                     {
                         e.CellStyle.ForeColor = Color.Green;
+                    }
+                    else if ((Convert.ToDecimal(splitString[0])) == 0)
+                    {
+                        e.CellStyle.ForeColor = Color.Black;
                     }
                     else
                     {
@@ -1317,6 +1279,10 @@ namespace SharePortfolioManager
                         {
                             e.CellStyle.ForeColor = Color.Green;
                         }
+                        else if ((Convert.ToDecimal(splitString[0])) == 0)
+                        {
+                            e.CellStyle.ForeColor = Color.Black;
+                        }
                         else
                         {
                             e.CellStyle.ForeColor = Color.Red;
@@ -1363,6 +1329,10 @@ namespace SharePortfolioManager
                         if ((Convert.ToDecimal(splitString[0])) > 0)
                         {
                             e.CellStyle.ForeColor = Color.Green;
+                        }
+                        else if ((Convert.ToDecimal(splitString[0])) == 0)
+                        {
+                            e.CellStyle.ForeColor = Color.Black;
                         }
                         else
                         {

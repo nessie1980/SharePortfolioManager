@@ -974,8 +974,6 @@ namespace SharePortfolioManager
                 )
             {
                 MarketValue = CurPrice * Volume;
-                    //- AllCostsEntries.CostValueTotal
-                    //+ AllSaleEntries.SaleProfitLossTotal;
             }
 
 #if DEBUG_SHAREOBJECT
@@ -999,7 +997,6 @@ namespace SharePortfolioManager
             {
                 ProfitLossValue = CurPrice * Volume
                     - PurchaseValue;
-                    //+ AllSaleEntries.SaleProfitLossTotal;
             }
 
 #if DEBUG_SHAREOBJECT
@@ -1022,10 +1019,10 @@ namespace SharePortfolioManager
                 && PurchaseValue > decimal.MinValue / 2
                 )
             {
-                //if ((PurchaseValue + AllSaleEntries.SalePurchaseValueTotal) != 0)
-                //    PerformanceValue = ((MarketValue + AllSaleEntries.SalePurchaseValueTotal) * 100) / (PurchaseValue + AllSaleEntries.SalePurchaseValueTotal) - 100;
                 if (PurchaseValue != 0)
                     PerformanceValue = (MarketValue * 100) / PurchaseValue - 100;
+                else
+                    PerformanceValue = 0;
             }
 
 #if DEBUG_SHAREOBJECT
@@ -1306,12 +1303,11 @@ namespace SharePortfolioManager
         /// </summary>
         private void CalculatePortfolioPerformance()
         {
-            //if (PortfolioPurchaseValue + PortfolioSalePurchaseValue != 0)
-            //{
-            //    PortfolioPerformanceValue = (PortfolioMarketValue + PortfolioSalePurchaseValue) * 100 / (PortfolioPurchaseValue + PortfolioSalePurchaseValue) - 100;
-            //}
             if (PortfolioPurchaseValue != 0)
                 PortfolioPerformanceValue = PortfolioMarketValue * 100 / PortfolioPurchaseValue - 100;
+            else
+                PortfolioPerformanceValue = 0;
+
 #if DEBUG_SHAREOBJECT
             Console.WriteLine("");
             Console.WriteLine("CalculatePerformancePortfolio()");

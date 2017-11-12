@@ -85,6 +85,8 @@ namespace SharePortfolioManager
                 dgvPortfolioMarketValue.Focus();
             else
                 dgvPortfolioFinalValue.Focus();
+
+            OnResizeDataGridView();
         }
 
         #endregion Tab control overview

@@ -491,6 +491,22 @@ namespace SharePortfolioManager
                                                                 }
                                                                 else
                                                                     loadPortfolio = false;
+
+                                                                if (ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].RemoveBuy(nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].CostsDateAttrName].Value))
+                                                                {
+                                                                    if (!ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].AddBuy(
+                                                                        nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].CostsDateAttrName].Value,
+                                                                        tempBuyObject.Volume,
+                                                                        tempBuyObject.SharePrice,
+                                                                        tempBuyObject.Reduction,
+                                                                        Convert.ToDecimal(
+                                                                            nodeList.Attributes[ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].CostsValueAttrName].Value   // Value
+                                                                        ),
+                                                                        tempBuyObject.Document))
+                                                                        loadPortfolio = false;
+                                                                }
+                                                                else
+                                                                    loadPortfolio = false;
                                                             }
                                                         }
 

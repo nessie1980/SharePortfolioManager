@@ -1482,7 +1482,7 @@ namespace SharePortfolioManager
                 )
             {
                 FinalValue = CurPrice * Volume
-                    - AllCostsEntries.CostValueTotal
+//                    - AllCostsEntries.CostValueTotal
                     + AllDividendEntries.DividendValueTotalWithTaxes
                     + AllSaleEntries.SaleProfitLossTotalWithoutCosts;
             }
@@ -1514,7 +1514,7 @@ namespace SharePortfolioManager
             {
                 ProfitLossValue = CurPrice * Volume
                     - PurchaseValue
-                    - AllCostsEntries.CostValueTotal
+//                    - AllCostsEntries.CostValueTotal
                     + AllDividendEntries.DividendValueTotalWithTaxes
                     + AllSaleEntries.SaleProfitLossTotalWithoutCosts;
             }
