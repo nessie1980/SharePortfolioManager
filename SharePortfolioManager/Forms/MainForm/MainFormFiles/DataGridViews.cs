@@ -1731,6 +1731,102 @@ namespace SharePortfolioManager
 
         #endregion Data grid view enter
 
+        #region Data grid view cell double click
+
+        private void dgvPortfolioFinalValue_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                foreach(var shareobject in ShareObjectListFinalValue)
+                {
+                    if (shareobject.Wkn == dgvPortfolioFinalValue.Rows[e.RowIndex].Cells[0].Value.ToString())
+                    {
+                        System.Diagnostics.Process.Start(shareobject.WebSite);
+                        break;
+                    }
+                }
+            }
+            catch(System.ComponentModel.Win32Exception noBrowser)
+            {
+                if (noBrowser.ErrorCode == -2147467259)
+                {
+#if DEBUG
+                    MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + noBrowser.Message, @"Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+#endif
+                    // Add status message
+                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                        Language.GetLanguageTextByXPath(
+                            @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio_Error/NoBrowserInstalled", LanguageName),
+                        Language, LanguageName,
+                        Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + ex.Message, @"Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+#endif
+                // Add status message
+                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(
+                        @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio_Error/CellDoubleClickFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+            }
+        }
+
+        private void dgvPortfolioMarketValue_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                foreach (var shareobject in ShareObjectListMarketValue)
+                {
+                    if (shareobject.Wkn == dgvPortfolioMarketValue.Rows[e.RowIndex].Cells[0].Value.ToString())
+                    {
+                        System.Diagnostics.Process.Start(shareobject.WebSite);
+                        break;
+                    }
+                }
+            }
+            catch (System.ComponentModel.Win32Exception noBrowser)
+            {
+                if (noBrowser.ErrorCode == -2147467259)
+                {
+#if DEBUG
+                    MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + noBrowser.Message, @"Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+#endif
+                    // Add status message
+                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                        Language.GetLanguageTextByXPath(
+                            @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio_Error/NoBrowserInstalled", LanguageName),
+                        Language, LanguageName,
+                        Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + ex.Message, @"Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+#endif
+                // Add status message
+                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(
+                        @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio_Error/CellDoubleClickFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+            }
+        }
+
+        #endregion Data grid view cell double click
+
         #endregion Methods
     }
 }

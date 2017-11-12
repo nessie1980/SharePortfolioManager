@@ -98,6 +98,8 @@
 							<DisplayFailed text="Show of the shares failed!"/>
 							<CellFormattingFailed text="Formatting the cells failed!"/>
 							<CellPaintingBorderFailed text="Formatting the border failed!"/>
+							<CellDoubleClickFailed text="Cell double click failed!" />
+							<NoBrowserInstalled text="No installed browser found!" />
 						</DgvPortfolio_Error>
 						
 						<!-- DataGridView portfolio footer -->
@@ -1124,6 +1126,8 @@
 							<DisplayFailed text="Anzeigen der Aktien ist fehlgeschlagen!"/>
 							<CellFormattingFailed text="Formatieren der Zellen ist fehlgeschlagen!"/>
 							<CellPaintingBorderFailed text="Formatieren der Umrandung ist fehlgeschlagen!"/>
+							<CellDoubleClickFailed text="Zellen Double- Click fehlgeschlagen!" />
+							<NoBrowserInstalled text="Kein installierter Browser gefunden!" />
 						</DgvPortfolio_Error>
 						
 						<!-- DataGridView portfolio footer -->
