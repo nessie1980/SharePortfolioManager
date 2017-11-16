@@ -121,16 +121,6 @@
     <value>17, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="btnClearLogger.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vAAADrwBlbxySQAAAAd0SU1FB+AIGw0gKbIWBeAAAADfSURBVDhPrZRNCkIxDITrSryUO8GFt3Dn0TyB
-        l/NnvvKmhNo+KGRgIGaSaVK1ZcNBPIqn+mkN9NCLRwXBWXyKL/EqglYwgDVq6aEXj5rHncQ38CGCkalz
-        1MQePPCqI3NKFN/iXQTR1DEaNbEHj3ZljB5FSIMnjSDXm0FfVcOs8CYaxL0+PHhvlY942UgcNWpHV1Mx
-        u+w9erI/M8MCq/XTRKL5KqZmPVhxZAbRlpFimLqyhZQvxYnUnw2n9WbQqwHiXqfHkzak/vXSH4f054uC
-        1AcWEODe3rMF0EOvPEr5AZG5pHmnO0eoAAAAAElFTkSuQmCC
-</value>
-  </data>
   <data name="btnRefreshAll.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
@@ -140,18 +130,6 @@
         wQD+F1CzRg9PUrylTll+XK8ntg7qsIfImO+wL/ZiLcIQdB3xOl4yZL9UF0uBMecteg8ZsqZaYi4wPtzX
         wvfwkkmK3YYiHhKD5+fJYmH0J7Wglz3Mi6ssRPwOWau8ZkoM8AOp/xanWTn+OlkoBmUMK4o3HMyXG1jz
         T2MAAAAASUVORK5CYII=
-</value>
-  </data>
-  <data name="btnDelete.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vAAADrwBlbxySQAAAAd0SU1FB+AIGw0hB3fbOW4AAAFXSURBVDhP3ZQ9boNAEIUxzg+1LwGWsETNQaJc
-        w1YOkDSpOEbSOE0icQSEhCkouUFukM54Mt8II8dYFjipMtKHvLvvPUa7a5yDulK8C8Hbq3vlQ1mPBA/e
-        Xj0qAq7rymQyOQuavb71dnWjPCufiuR5LnVdDwItntZLBlm2B2+KLc7nc4miaBBo9742gyznVnlVGuXr
-        QvCSQZad0J1Cy+zF00jw4CXDTpvUF8U6nE6npzo4yYEWLxnWYbeHy+VSiqKQOI7F8zxJkkTSNJXZbGbw
-        mznW0KDFg7fNsD3kseYqZFkmVFmW4vu+bLdbG4dhaFDMsYaGwoOXjF4g14CqqkqCIJCmaWy8WCwMijnW
-        0FB4BgfudjsbHwYy948Df72Hf3nK74qsVivZbDaD7yFaPHjbDAvk7/Kg2MLRZ+ksR1oyug/ttcIEb6H1
-        MeDBS8aPIp2WL6HtzHG+AeU1MWF2GI8rAAAAAElFTkSuQmCC
 </value>
   </data>
   <data name="btnEdit.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -181,6 +159,28 @@
         YheWYGmC6HyQg+Wyd1nImzjwkSM7M9k8XKpoJfZiV4EZnrB68RSPCszwhHUUnxnwhHUQXokFT1j/Qpcf
         KOwEt2ArTsIrseDBS4bsRGdhb4JXYrE3iexEa3ETXrgFGbKuNuIqML7Hp0ee4SXTFF+7iLKkBE91s1IY
         86YezMJlWfzKIF4iF3Hm3exvtkRBLuS8WGxzH1m0mRVFgbKUvtJSjxXrcWtUAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="btnDelete.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAAd0SU1FB+AIGw0hB3fbOW4AAAFXSURBVDhP3ZQ9boNAEIUxzg+1LwGWsETNQaJc
+        w1YOkDSpOEbSOE0icQSEhCkouUFukM54Mt8II8dYFjipMtKHvLvvPUa7a5yDulK8C8Hbq3vlQ1mPBA/e
+        Xj0qAq7rymQyOQuavb71dnWjPCufiuR5LnVdDwItntZLBlm2B2+KLc7nc4miaBBo9742gyznVnlVGuXr
+        QvCSQZad0J1Cy+zF00jw4CXDTpvUF8U6nE6npzo4yYEWLxnWYbeHy+VSiqKQOI7F8zxJkkTSNJXZbGbw
+        mznW0KDFg7fNsD3kseYqZFkmVFmW4vu+bLdbG4dhaFDMsYaGwoOXjF4g14CqqkqCIJCmaWy8WCwMijnW
+        0FB4BgfudjsbHwYy948Df72Hf3nK74qsVivZbDaD7yFaPHjbDAvk7/Kg2MLRZ+ksR1oyug/ttcIEb6H1
+        MeDBS8aPIp2WL6HtzHG+AeU1MWF2GI8rAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="btnClearLogger.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAAd0SU1FB+AIGw0gKbIWBeAAAADfSURBVDhPrZRNCkIxDITrSryUO8GFt3Dn0TyB
+        l/NnvvKmhNo+KGRgIGaSaVK1ZcNBPIqn+mkN9NCLRwXBWXyKL/EqglYwgDVq6aEXj5rHncQ38CGCkalz
+        1MQePPCqI3NKFN/iXQTR1DEaNbEHj3ZljB5FSIMnjSDXm0FfVcOs8CYaxL0+PHhvlY942UgcNWpHV1Mx
+        u+w9erI/M8MCq/XTRKL5KqZmPVhxZAbRlpFimLqyhZQvxYnUnw2n9WbQqwHiXqfHkzak/vXSH4f054uC
+        1AcWEODe3rMF0EOvPEr5AZG5pHmnO0eoAAAAAElFTkSuQmCC
 </value>
   </data>
   <metadata name="timerStatusMessageClear.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">

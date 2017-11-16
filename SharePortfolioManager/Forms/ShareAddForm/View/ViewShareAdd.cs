@@ -93,6 +93,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         string WebSite { get; set; }
         CultureInfo CultureInfo { get; }
         int DividendPayoutInterval { get; set; }
+        int ShareType { get; set; }
         string Document { get; set; }
 
         DialogResult ShowDialog();
@@ -367,6 +368,17 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 if (cbxDividendPayoutInterval.SelectedIndex == value)
                     return;
                 cbxDividendPayoutInterval.SelectedIndex = value;
+            }
+        }
+
+        public int ShareType
+        {
+            get { return cbxShareType.SelectedIndex; }
+            set
+            {
+                if (cbxShareType.SelectedIndex == value)
+                    return;
+                cbxShareType.SelectedIndex = value;
             }
         }
 
@@ -692,6 +704,20 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                     Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item3",
                         LanguageName));
 
+                lblShareType.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/ShareType", LanguageName);
+                cbxShareType.Items.Add(
+                    Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/ComboBoxItemsShareType/Item0",
+                        LanguageName));
+                cbxShareType.Items.Add(
+                    Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/ComboBoxItemsShareType/Item1",
+                        LanguageName));
+                cbxShareType.Items.Add(
+                    Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/ComboBoxItemsShareType/Item2",
+                        LanguageName));
+                cbxShareType.Items.Add(
+                    Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/ComboBoxItemsShareType/Item3",
+                        LanguageName));
+
                 lblWebSite.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/WebSite", LanguageName);
                 lblCultureInfo.Text =
                     Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/CultureInfo", LanguageName);
@@ -729,6 +755,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 btnCancel.Image = Resources.black_cancel;
 
                 cbxDividendPayoutInterval.SelectedIndex = 0;
+                cbxShareType.SelectedIndex = 0;
 
                 datePickerDate.Value = DateTime.Now;
                 datePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
@@ -962,6 +989,12 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs("DividendPayoutInterval"));
+        }
+
+        private void cbxShareType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs("ShareType"));
         }
 
         #endregion Comboboxes

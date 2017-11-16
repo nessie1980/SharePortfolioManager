@@ -46,6 +46,11 @@ namespace SharePortfolioManager
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.grpBoxSharePortfolio = new System.Windows.Forms.GroupBox();
+            this.tblLayPnlShareOverviews = new System.Windows.Forms.TableLayoutPanel();
+            this.btnRefreshAll = new System.Windows.Forms.Button();
+            this.btnEdit = new System.Windows.Forms.Button();
+            this.btnAdd = new System.Windows.Forms.Button();
+            this.btnRefresh = new System.Windows.Forms.Button();
             this.tabCtrlShareOverviews = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.dgvPortfolioFinalValue = new System.Windows.Forms.DataGridView();
@@ -53,64 +58,63 @@ namespace SharePortfolioManager
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.dgvPortfolioMarketValue = new System.Windows.Forms.DataGridView();
             this.dgvPortfolioFooterMarketValue = new System.Windows.Forms.DataGridView();
-            this.btnClearLogger = new System.Windows.Forms.Button();
-            this.btnRefreshAll = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
-            this.btnEdit = new System.Windows.Forms.Button();
-            this.btnAdd = new System.Windows.Forms.Button();
-            this.btnRefresh = new System.Windows.Forms.Button();
+            this.btnClearLogger = new System.Windows.Forms.Button();
             this.grpBoxShareDetails = new System.Windows.Forms.GroupBox();
+            this.tblLayPnlShareDetailsTabControls = new System.Windows.Forms.TableLayoutPanel();
             this.tabCtrlDetails = new System.Windows.Forms.TabControl();
             this.tabPgDetailsFinalValue = new System.Windows.Forms.TabPage();
-            this.lblDetailsFinalValueDateValue = new System.Windows.Forms.Label();
-            this.lblDetailsFinalValueDate = new System.Windows.Forms.Label();
-            this.lblDetailsFinalValueCostsValue = new System.Windows.Forms.Label();
-            this.lblDetailsFinalValueDividendValue = new System.Windows.Forms.Label();
-            this.lblDetailsFinaValueCurPrice = new System.Windows.Forms.Label();
+            this.tblLayPnlFinaleValueShareDetails = new System.Windows.Forms.TableLayoutPanel();
             this.lblDetailsFinalValueCost = new System.Windows.Forms.Label();
-            this.lblDetailsPurchase = new System.Windows.Forms.Label();
             this.lblDetailsFinalValueDividend = new System.Windows.Forms.Label();
             this.lblDetailsFinalValueVolume = new System.Windows.Forms.Label();
-            this.lblDetailsFinalValueDiffSumPrevValue = new System.Windows.Forms.Label();
+            this.lblDetailsFinalValueDate = new System.Windows.Forms.Label();
+            this.lblDetailsFinalValueDateValue = new System.Windows.Forms.Label();
+            this.lblDetailsFinalValueDividendValue = new System.Windows.Forms.Label();
             this.lblDetailsFinalValueTotalSum = new System.Windows.Forms.Label();
-            this.lblDetailsFinalValueDiffSumPrev = new System.Windows.Forms.Label();
-            this.lblDetailsFinalValuePerformance = new System.Windows.Forms.Label();
-            this.lblDetailsFinalValueDiffPerformancePrevValue = new System.Windows.Forms.Label();
-            this.lblDetailsFinalValueTotalPerformanceValue = new System.Windows.Forms.Label();
-            this.lblDetailsFinalValueDiffPerformancePrev = new System.Windows.Forms.Label();
-            this.lblDetailsFinalValueVolumeValue = new System.Windows.Forms.Label();
-            this.lblDetailsFinalValueCurPriceValue = new System.Windows.Forms.Label();
-            this.lblDetailsFinalValuePurchaseValue = new System.Windows.Forms.Label();
-            this.lblDetailsFinalValueTotalSumValue = new System.Windows.Forms.Label();
-            this.lblDetailsFinalValueTotalProfitValue = new System.Windows.Forms.Label();
+            this.lblDetailsFinalValueCostsValue = new System.Windows.Forms.Label();
             this.lblDetailsFinalValuePrevPrice = new System.Windows.Forms.Label();
+            this.lblDetailsFinalValueDiffSumPrev = new System.Windows.Forms.Label();
+            this.lblDetailsPurchase = new System.Windows.Forms.Label();
+            this.lblDetailsFinaValueCurPrice = new System.Windows.Forms.Label();
+            this.lblDetailsFinalValueDiffPerformancePrev = new System.Windows.Forms.Label();
             this.lblDetailsFinalVinalTotalProfit = new System.Windows.Forms.Label();
+            this.lblDetailsFinalValuePerformance = new System.Windows.Forms.Label();
             this.lblDetailsFinalValuePrevPriceValue = new System.Windows.Forms.Label();
+            this.lblDetailsFinalValueTotalSumValue = new System.Windows.Forms.Label();
+            this.lblDetailsFinalValueTotalPerformanceValue = new System.Windows.Forms.Label();
+            this.lblDetailsFinalValueTotalProfitValue = new System.Windows.Forms.Label();
+            this.lblDetailsFinalValueDiffSumPrevValue = new System.Windows.Forms.Label();
+            this.lblDetailsFinalValuePurchaseValue = new System.Windows.Forms.Label();
+            this.lblDetailsFinalValueDiffPerformancePrevValue = new System.Windows.Forms.Label();
+            this.lblDetailsFinalValueCurPriceValue = new System.Windows.Forms.Label();
+            this.lblDetailsFinalValueVolumeValue = new System.Windows.Forms.Label();
             this.tabPgDetailsMarketValue = new System.Windows.Forms.TabPage();
+            this.tblLayPnlMarketValueShareDetails = new System.Windows.Forms.TableLayoutPanel();
             this.lblDetailsMarketValueDateValue = new System.Windows.Forms.Label();
-            this.lblDetailsMarketValueDate = new System.Windows.Forms.Label();
             this.lblDetailsMarketValueCostValue = new System.Windows.Forms.Label();
-            this.lblDetailsMarketValueDividendValue = new System.Windows.Forms.Label();
-            this.lblDetailsMarketValueCurPrice = new System.Windows.Forms.Label();
             this.lblDetailsMarketValueCost = new System.Windows.Forms.Label();
-            this.lblDetailsMarketValuePurchase = new System.Windows.Forms.Label();
-            this.lblDetailsMarketValueDividend = new System.Windows.Forms.Label();
-            this.lblDetailsMarketValueVolume = new System.Windows.Forms.Label();
-            this.lblDetailsMarketValueDiffSumPrevValue = new System.Windows.Forms.Label();
-            this.lblDetailsMarketValueTotalSum = new System.Windows.Forms.Label();
-            this.lblDetailsMarketValueDiffSumPrev = new System.Windows.Forms.Label();
-            this.lblDetailsMarketValueTotalPerformance = new System.Windows.Forms.Label();
-            this.lblDetailsMarketValueDiffPerformancePrevValue = new System.Windows.Forms.Label();
-            this.lblDetailsMarketValueTotalPerformanceValue = new System.Windows.Forms.Label();
-            this.lblDetailsMarketValueDiffPerformancePrev = new System.Windows.Forms.Label();
-            this.lblDetailsMarketValueVolumeValue = new System.Windows.Forms.Label();
+            this.lblDetailsMarketValueDate = new System.Windows.Forms.Label();
+            this.lblDetailsMarketValueCurPrice = new System.Windows.Forms.Label();
+            this.lblDetailsMarketValuePrevPriceValue = new System.Windows.Forms.Label();
+            this.lblDetailsMarketValuePrevPrice = new System.Windows.Forms.Label();
+            this.lblDetailsMarketValueDividendValue = new System.Windows.Forms.Label();
+            this.lblDetailsMarketValueTotalProfit = new System.Windows.Forms.Label();
             this.lblDetailsMarketValueCurPriceValue = new System.Windows.Forms.Label();
-            this.lblDetailsMarketValuePurchaseValue = new System.Windows.Forms.Label();
+            this.lblDetailsMarketValueTotalSum = new System.Windows.Forms.Label();
             this.lblDetailsMarketValueTotalSumValue = new System.Windows.Forms.Label();
             this.lblDetailsMarketValueTotalProfitValue = new System.Windows.Forms.Label();
-            this.lblDetailsMarketValuePrevPrice = new System.Windows.Forms.Label();
-            this.lblDetailsMarketValueTotalProfit = new System.Windows.Forms.Label();
-            this.lblDetailsMarketValuePrevPriceValue = new System.Windows.Forms.Label();
+            this.lblDetailsMarketValuePurchase = new System.Windows.Forms.Label();
+            this.lblDetailsMarketValuePurchaseValue = new System.Windows.Forms.Label();
+            this.lblDetailsMarketValueVolume = new System.Windows.Forms.Label();
+            this.lblDetailsMarketValueVolumeValue = new System.Windows.Forms.Label();
+            this.lblDetailsMarketValueDiffSumPrevValue = new System.Windows.Forms.Label();
+            this.lblDetailsMarketValueDiffPerformancePrev = new System.Windows.Forms.Label();
+            this.lblDetailsMarketValueDividend = new System.Windows.Forms.Label();
+            this.lblDetailsMarketValueDiffSumPrev = new System.Windows.Forms.Label();
+            this.lblDetailsMarketValueDiffPerformancePrevValue = new System.Windows.Forms.Label();
+            this.lblDetailsMarketValueTotalPerformance = new System.Windows.Forms.Label();
+            this.lblDetailsMarketValueTotalPerformanceValue = new System.Windows.Forms.Label();
             this.tabPgProfitLoss = new System.Windows.Forms.TabPage();
             this.tabCtrlProfitLoss = new System.Windows.Forms.TabControl();
             this.tabPgDividends = new System.Windows.Forms.TabPage();
@@ -118,16 +122,19 @@ namespace SharePortfolioManager
             this.tabPgCosts = new System.Windows.Forms.TabPage();
             this.tabCtrlCosts = new System.Windows.Forms.TabControl();
             this.grpBoxStatusMessage = new System.Windows.Forms.GroupBox();
+            this.tblLayPnlStatusMessages = new System.Windows.Forms.TableLayoutPanel();
             this.rchTxtBoxStateMessage = new System.Windows.Forms.RichTextBox();
             this.lblWebParserState = new System.Windows.Forms.Label();
             this.progressBarWebParser = new System.Windows.Forms.ProgressBar();
             this.grpBoxUpdateState = new System.Windows.Forms.GroupBox();
+            this.tblLayPnlUpdateState = new System.Windows.Forms.TableLayoutPanel();
             this.lblShareNameWebParser = new System.Windows.Forms.Label();
             this.timerStatusMessageClear = new System.Windows.Forms.Timer(this.components);
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.lblShareDetailsWithOutDividendCostSharePriceCurrentValue = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.grpBoxSharePortfolio.SuspendLayout();
+            this.tblLayPnlShareOverviews.SuspendLayout();
             this.tabCtrlShareOverviews.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPortfolioFinalValue)).BeginInit();
@@ -136,14 +143,19 @@ namespace SharePortfolioManager
             ((System.ComponentModel.ISupportInitialize)(this.dgvPortfolioMarketValue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPortfolioFooterMarketValue)).BeginInit();
             this.grpBoxShareDetails.SuspendLayout();
+            this.tblLayPnlShareDetailsTabControls.SuspendLayout();
             this.tabCtrlDetails.SuspendLayout();
             this.tabPgDetailsFinalValue.SuspendLayout();
+            this.tblLayPnlFinaleValueShareDetails.SuspendLayout();
             this.tabPgDetailsMarketValue.SuspendLayout();
+            this.tblLayPnlMarketValueShareDetails.SuspendLayout();
             this.tabPgProfitLoss.SuspendLayout();
             this.tabPgDividends.SuspendLayout();
             this.tabPgCosts.SuspendLayout();
             this.grpBoxStatusMessage.SuspendLayout();
+            this.tblLayPnlStatusMessages.SuspendLayout();
             this.grpBoxUpdateState.SuspendLayout();
+            this.tblLayPnlUpdateState.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -247,36 +259,120 @@ namespace SharePortfolioManager
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grpBoxSharePortfolio.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.grpBoxSharePortfolio.Controls.Add(this.tabCtrlShareOverviews);
-            this.grpBoxSharePortfolio.Controls.Add(this.btnClearLogger);
-            this.grpBoxSharePortfolio.Controls.Add(this.btnRefreshAll);
-            this.grpBoxSharePortfolio.Controls.Add(this.btnDelete);
-            this.grpBoxSharePortfolio.Controls.Add(this.btnEdit);
-            this.grpBoxSharePortfolio.Controls.Add(this.btnAdd);
-            this.grpBoxSharePortfolio.Controls.Add(this.btnRefresh);
+            this.grpBoxSharePortfolio.Controls.Add(this.tblLayPnlShareOverviews);
             this.grpBoxSharePortfolio.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpBoxSharePortfolio.Location = new System.Drawing.Point(7, 30);
-            this.grpBoxSharePortfolio.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.grpBoxSharePortfolio.Location = new System.Drawing.Point(5, 25);
             this.grpBoxSharePortfolio.Name = "grpBoxSharePortfolio";
             this.grpBoxSharePortfolio.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.grpBoxSharePortfolio.Size = new System.Drawing.Size(1219, 362);
+            this.grpBoxSharePortfolio.Size = new System.Drawing.Size(1225, 392);
             this.grpBoxSharePortfolio.TabIndex = 3;
             this.grpBoxSharePortfolio.TabStop = false;
             this.grpBoxSharePortfolio.Text = "Share portfolio_";
             // 
+            // tblLayPnlShareOverviews
+            // 
+            this.tblLayPnlShareOverviews.ColumnCount = 7;
+            this.tblLayPnlShareOverviews.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 191F));
+            this.tblLayPnlShareOverviews.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 191F));
+            this.tblLayPnlShareOverviews.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 191F));
+            this.tblLayPnlShareOverviews.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 191F));
+            this.tblLayPnlShareOverviews.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 191F));
+            this.tblLayPnlShareOverviews.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 191F));
+            this.tblLayPnlShareOverviews.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tblLayPnlShareOverviews.Controls.Add(this.btnRefreshAll, 0, 2);
+            this.tblLayPnlShareOverviews.Controls.Add(this.btnEdit, 3, 2);
+            this.tblLayPnlShareOverviews.Controls.Add(this.btnAdd, 2, 2);
+            this.tblLayPnlShareOverviews.Controls.Add(this.btnRefresh, 1, 2);
+            this.tblLayPnlShareOverviews.Controls.Add(this.tabCtrlShareOverviews, 0, 0);
+            this.tblLayPnlShareOverviews.Controls.Add(this.btnDelete, 4, 2);
+            this.tblLayPnlShareOverviews.Controls.Add(this.btnClearLogger, 5, 2);
+            this.tblLayPnlShareOverviews.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tblLayPnlShareOverviews.Location = new System.Drawing.Point(3, 20);
+            this.tblLayPnlShareOverviews.Name = "tblLayPnlShareOverviews";
+            this.tblLayPnlShareOverviews.RowCount = 3;
+            this.tblLayPnlShareOverviews.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tblLayPnlShareOverviews.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tblLayPnlShareOverviews.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38F));
+            this.tblLayPnlShareOverviews.Size = new System.Drawing.Size(1219, 368);
+            this.tblLayPnlShareOverviews.TabIndex = 13;
+            // 
+            // btnRefreshAll
+            // 
+            this.btnRefreshAll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnRefreshAll.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRefreshAll.Image = ((System.Drawing.Image)(resources.GetObject("btnRefreshAll.Image")));
+            this.btnRefreshAll.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnRefreshAll.Location = new System.Drawing.Point(3, 334);
+            this.btnRefreshAll.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnRefreshAll.Name = "btnRefreshAll";
+            this.btnRefreshAll.Size = new System.Drawing.Size(185, 30);
+            this.btnRefreshAll.TabIndex = 8;
+            this.btnRefreshAll.Text = "&Update all_";
+            this.btnRefreshAll.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnRefreshAll.UseVisualStyleBackColor = true;
+            this.btnRefreshAll.Click += new System.EventHandler(this.OnBtnRefreshAll_Click);
+            // 
+            // btnEdit
+            // 
+            this.btnEdit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnEdit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEdit.Image = ((System.Drawing.Image)(resources.GetObject("btnEdit.Image")));
+            this.btnEdit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnEdit.Location = new System.Drawing.Point(576, 334);
+            this.btnEdit.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnEdit.Name = "btnEdit";
+            this.btnEdit.Size = new System.Drawing.Size(185, 30);
+            this.btnEdit.TabIndex = 5;
+            this.btnEdit.Text = "&Edit_";
+            this.btnEdit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnEdit.UseVisualStyleBackColor = true;
+            this.btnEdit.Click += new System.EventHandler(this.OnBtnEdit_Click);
+            // 
+            // btnAdd
+            // 
+            this.btnAdd.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnAdd.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnAdd.Image")));
+            this.btnAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnAdd.Location = new System.Drawing.Point(385, 334);
+            this.btnAdd.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(185, 30);
+            this.btnAdd.TabIndex = 4;
+            this.btnAdd.Text = "&Add_";
+            this.btnAdd.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.OnBtnAdd_Click);
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnRefresh.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRefresh.Image = ((System.Drawing.Image)(resources.GetObject("btnRefresh.Image")));
+            this.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnRefresh.Location = new System.Drawing.Point(194, 334);
+            this.btnRefresh.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(185, 30);
+            this.btnRefresh.TabIndex = 3;
+            this.btnRefresh.Text = "&Update_";
+            this.btnRefresh.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.OnBtnRefresh_Click);
+            // 
             // tabCtrlShareOverviews
             // 
-            this.tabCtrlShareOverviews.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabCtrlShareOverviews.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
+            this.tblLayPnlShareOverviews.SetColumnSpan(this.tabCtrlShareOverviews, 7);
             this.tabCtrlShareOverviews.Controls.Add(this.tabPage1);
             this.tabCtrlShareOverviews.Controls.Add(this.tabPage2);
-            this.tabCtrlShareOverviews.Location = new System.Drawing.Point(10, 23);
-            this.tabCtrlShareOverviews.Margin = new System.Windows.Forms.Padding(0);
+            this.tabCtrlShareOverviews.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabCtrlShareOverviews.Location = new System.Drawing.Point(3, 0);
+            this.tabCtrlShareOverviews.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.tabCtrlShareOverviews.Name = "tabCtrlShareOverviews";
             this.tabCtrlShareOverviews.Padding = new System.Drawing.Point(0, 0);
             this.tabCtrlShareOverviews.SelectedIndex = 0;
-            this.tabCtrlShareOverviews.Size = new System.Drawing.Size(1198, 294);
+            this.tabCtrlShareOverviews.Size = new System.Drawing.Size(1213, 310);
             this.tabCtrlShareOverviews.TabIndex = 12;
             this.tabCtrlShareOverviews.SelectedIndexChanged += new System.EventHandler(this.TabCtrlShareOverviews_SelectedIndexChanged);
             this.tabCtrlShareOverviews.Enter += new System.EventHandler(this.tabCtrlShareOverviews_Enter);
@@ -285,10 +381,10 @@ namespace SharePortfolioManager
             // 
             this.tabPage1.Controls.Add(this.dgvPortfolioFinalValue);
             this.tabPage1.Controls.Add(this.dgvPortfolioFooterFinalValue);
-            this.tabPage1.Location = new System.Drawing.Point(4, 24);
+            this.tabPage1.Location = new System.Drawing.Point(4, 27);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1190, 266);
+            this.tabPage1.Size = new System.Drawing.Size(1205, 279);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "_tabPageCompleteDepotValues";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -310,7 +406,7 @@ namespace SharePortfolioManager
             this.dgvPortfolioFinalValue.ReadOnly = true;
             this.dgvPortfolioFinalValue.RowHeadersVisible = false;
             this.dgvPortfolioFinalValue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPortfolioFinalValue.Size = new System.Drawing.Size(1189, 188);
+            this.dgvPortfolioFinalValue.Size = new System.Drawing.Size(1204, 201);
             this.dgvPortfolioFinalValue.TabIndex = 9;
             this.dgvPortfolioFinalValue.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPortfolioFinalValue_CellDoubleClick);
             this.dgvPortfolioFinalValue.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DgvPortfolioFinalValue_CellFormatting);
@@ -332,7 +428,7 @@ namespace SharePortfolioManager
             this.dgvPortfolioFooterFinalValue.ColumnHeadersVisible = false;
             this.dgvPortfolioFooterFinalValue.Enabled = false;
             this.dgvPortfolioFooterFinalValue.EnableHeadersVisualStyles = false;
-            this.dgvPortfolioFooterFinalValue.Location = new System.Drawing.Point(0, 189);
+            this.dgvPortfolioFooterFinalValue.Location = new System.Drawing.Point(0, 202);
             this.dgvPortfolioFooterFinalValue.MultiSelect = false;
             this.dgvPortfolioFooterFinalValue.Name = "dgvPortfolioFooterFinalValue";
             this.dgvPortfolioFooterFinalValue.ReadOnly = true;
@@ -340,7 +436,7 @@ namespace SharePortfolioManager
             this.dgvPortfolioFooterFinalValue.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dgvPortfolioFooterFinalValue.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dgvPortfolioFooterFinalValue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPortfolioFooterFinalValue.Size = new System.Drawing.Size(1189, 76);
+            this.dgvPortfolioFooterFinalValue.Size = new System.Drawing.Size(1204, 76);
             this.dgvPortfolioFooterFinalValue.TabIndex = 10;
             this.dgvPortfolioFooterFinalValue.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DgvPortfolioFooterFinalValue_CellFormatting);
             this.dgvPortfolioFooterFinalValue.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.DgvPortfolioFooterFinalValue_CellPainting);
@@ -351,10 +447,10 @@ namespace SharePortfolioManager
             // 
             this.tabPage2.Controls.Add(this.dgvPortfolioMarketValue);
             this.tabPage2.Controls.Add(this.dgvPortfolioFooterMarketValue);
-            this.tabPage2.Location = new System.Drawing.Point(4, 24);
+            this.tabPage2.Location = new System.Drawing.Point(4, 27);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1190, 266);
+            this.tabPage2.Size = new System.Drawing.Size(1205, 279);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "_tabPageMarketValues";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -376,7 +472,7 @@ namespace SharePortfolioManager
             this.dgvPortfolioMarketValue.ReadOnly = true;
             this.dgvPortfolioMarketValue.RowHeadersVisible = false;
             this.dgvPortfolioMarketValue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPortfolioMarketValue.Size = new System.Drawing.Size(1189, 188);
+            this.dgvPortfolioMarketValue.Size = new System.Drawing.Size(1204, 201);
             this.dgvPortfolioMarketValue.TabIndex = 11;
             this.dgvPortfolioMarketValue.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPortfolioMarketValue_CellContentDoubleClick);
             this.dgvPortfolioMarketValue.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DgvPortfolioMarketValue_CellFormatting);
@@ -398,7 +494,7 @@ namespace SharePortfolioManager
             this.dgvPortfolioFooterMarketValue.ColumnHeadersVisible = false;
             this.dgvPortfolioFooterMarketValue.Enabled = false;
             this.dgvPortfolioFooterMarketValue.EnableHeadersVisualStyles = false;
-            this.dgvPortfolioFooterMarketValue.Location = new System.Drawing.Point(0, 189);
+            this.dgvPortfolioFooterMarketValue.Location = new System.Drawing.Point(0, 202);
             this.dgvPortfolioFooterMarketValue.MultiSelect = false;
             this.dgvPortfolioFooterMarketValue.Name = "dgvPortfolioFooterMarketValue";
             this.dgvPortfolioFooterMarketValue.ReadOnly = true;
@@ -406,268 +502,174 @@ namespace SharePortfolioManager
             this.dgvPortfolioFooterMarketValue.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dgvPortfolioFooterMarketValue.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dgvPortfolioFooterMarketValue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPortfolioFooterMarketValue.Size = new System.Drawing.Size(1189, 76);
+            this.dgvPortfolioFooterMarketValue.Size = new System.Drawing.Size(1204, 76);
             this.dgvPortfolioFooterMarketValue.TabIndex = 12;
             this.dgvPortfolioFooterMarketValue.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DgvPortfolioFooterMarketValue_CellFormatting);
             this.dgvPortfolioFooterMarketValue.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.DgvPortfolioFooterMarketValue_CellPainting);
             this.dgvPortfolioFooterMarketValue.SelectionChanged += new System.EventHandler(this.DgvPortfolioFooterMarketValue_SelectionChanged);
             this.dgvPortfolioFooterMarketValue.Resize += new System.EventHandler(this.DgvPortfolioFooterMarketValue_Resize);
             // 
-            // btnClearLogger
-            // 
-            this.btnClearLogger.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnClearLogger.Enabled = false;
-            this.btnClearLogger.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnClearLogger.Image = ((System.Drawing.Image)(resources.GetObject("btnClearLogger.Image")));
-            this.btnClearLogger.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnClearLogger.Location = new System.Drawing.Point(1014, 321);
-            this.btnClearLogger.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnClearLogger.Name = "btnClearLogger";
-            this.btnClearLogger.Size = new System.Drawing.Size(194, 33);
-            this.btnClearLogger.TabIndex = 11;
-            this.btnClearLogger.Text = "&Clear_";
-            this.btnClearLogger.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnClearLogger.UseVisualStyleBackColor = true;
-            this.btnClearLogger.Visible = false;
-            // 
-            // btnRefreshAll
-            // 
-            this.btnRefreshAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnRefreshAll.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRefreshAll.Image = ((System.Drawing.Image)(resources.GetObject("btnRefreshAll.Image")));
-            this.btnRefreshAll.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnRefreshAll.Location = new System.Drawing.Point(10, 321);
-            this.btnRefreshAll.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnRefreshAll.Name = "btnRefreshAll";
-            this.btnRefreshAll.Size = new System.Drawing.Size(194, 33);
-            this.btnRefreshAll.TabIndex = 8;
-            this.btnRefreshAll.Text = "&Update all_";
-            this.btnRefreshAll.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnRefreshAll.UseVisualStyleBackColor = true;
-            this.btnRefreshAll.Click += new System.EventHandler(this.OnBtnRefreshAll_Click);
-            // 
             // btnDelete
             // 
-            this.btnDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnDelete.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnDelete.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDelete.Image = ((System.Drawing.Image)(resources.GetObject("btnDelete.Image")));
             this.btnDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDelete.Location = new System.Drawing.Point(813, 321);
+            this.btnDelete.Location = new System.Drawing.Point(767, 334);
             this.btnDelete.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(194, 33);
+            this.btnDelete.Size = new System.Drawing.Size(185, 30);
             this.btnDelete.TabIndex = 6;
             this.btnDelete.Text = "&Remove_";
             this.btnDelete.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.OnBtnDelete_Click);
             // 
-            // btnEdit
+            // btnClearLogger
             // 
-            this.btnEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnEdit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEdit.Image = ((System.Drawing.Image)(resources.GetObject("btnEdit.Image")));
-            this.btnEdit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnEdit.Location = new System.Drawing.Point(612, 321);
-            this.btnEdit.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new System.Drawing.Size(194, 33);
-            this.btnEdit.TabIndex = 5;
-            this.btnEdit.Text = "&Edit_";
-            this.btnEdit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnEdit.UseVisualStyleBackColor = true;
-            this.btnEdit.Click += new System.EventHandler(this.OnBtnEdit_Click);
-            // 
-            // btnAdd
-            // 
-            this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnAdd.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnAdd.Image")));
-            this.btnAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAdd.Location = new System.Drawing.Point(412, 321);
-            this.btnAdd.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(194, 33);
-            this.btnAdd.TabIndex = 4;
-            this.btnAdd.Text = "&Add_";
-            this.btnAdd.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAdd.UseVisualStyleBackColor = true;
-            this.btnAdd.Click += new System.EventHandler(this.OnBtnAdd_Click);
-            // 
-            // btnRefresh
-            // 
-            this.btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnRefresh.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRefresh.Image = ((System.Drawing.Image)(resources.GetObject("btnRefresh.Image")));
-            this.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnRefresh.Location = new System.Drawing.Point(211, 321);
-            this.btnRefresh.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(194, 33);
-            this.btnRefresh.TabIndex = 3;
-            this.btnRefresh.Text = "&Update_";
-            this.btnRefresh.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnRefresh.UseVisualStyleBackColor = true;
-            this.btnRefresh.Click += new System.EventHandler(this.OnBtnRefresh_Click);
+            this.btnClearLogger.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnClearLogger.Enabled = false;
+            this.btnClearLogger.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnClearLogger.Image = ((System.Drawing.Image)(resources.GetObject("btnClearLogger.Image")));
+            this.btnClearLogger.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnClearLogger.Location = new System.Drawing.Point(958, 334);
+            this.btnClearLogger.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btnClearLogger.Name = "btnClearLogger";
+            this.btnClearLogger.Size = new System.Drawing.Size(185, 30);
+            this.btnClearLogger.TabIndex = 11;
+            this.btnClearLogger.Text = "&Clear_";
+            this.btnClearLogger.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnClearLogger.UseVisualStyleBackColor = true;
+            this.btnClearLogger.Visible = false;
             // 
             // grpBoxShareDetails
             // 
             this.grpBoxShareDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grpBoxShareDetails.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.grpBoxShareDetails.Controls.Add(this.tabCtrlDetails);
+            this.grpBoxShareDetails.Controls.Add(this.tblLayPnlShareDetailsTabControls);
             this.grpBoxShareDetails.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpBoxShareDetails.Location = new System.Drawing.Point(7, 401);
+            this.grpBoxShareDetails.Location = new System.Drawing.Point(5, 424);
             this.grpBoxShareDetails.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.grpBoxShareDetails.Name = "grpBoxShareDetails";
             this.grpBoxShareDetails.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.grpBoxShareDetails.Size = new System.Drawing.Size(1219, 178);
+            this.grpBoxShareDetails.Size = new System.Drawing.Size(1225, 168);
             this.grpBoxShareDetails.TabIndex = 4;
             this.grpBoxShareDetails.TabStop = false;
             this.grpBoxShareDetails.Text = "Share details_";
             // 
+            // tblLayPnlShareDetailsTabControls
+            // 
+            this.tblLayPnlShareDetailsTabControls.ColumnCount = 1;
+            this.tblLayPnlShareDetailsTabControls.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tblLayPnlShareDetailsTabControls.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tblLayPnlShareDetailsTabControls.Controls.Add(this.tabCtrlDetails, 0, 0);
+            this.tblLayPnlShareDetailsTabControls.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tblLayPnlShareDetailsTabControls.Location = new System.Drawing.Point(3, 19);
+            this.tblLayPnlShareDetailsTabControls.Margin = new System.Windows.Forms.Padding(3, 3, 3, 5);
+            this.tblLayPnlShareDetailsTabControls.Name = "tblLayPnlShareDetailsTabControls";
+            this.tblLayPnlShareDetailsTabControls.RowCount = 1;
+            this.tblLayPnlShareDetailsTabControls.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tblLayPnlShareDetailsTabControls.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 145F));
+            this.tblLayPnlShareDetailsTabControls.Size = new System.Drawing.Size(1219, 145);
+            this.tblLayPnlShareDetailsTabControls.TabIndex = 0;
+            // 
             // tabCtrlDetails
             // 
-            this.tabCtrlDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabCtrlDetails.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
             this.tabCtrlDetails.Controls.Add(this.tabPgDetailsFinalValue);
             this.tabCtrlDetails.Controls.Add(this.tabPgDetailsMarketValue);
             this.tabCtrlDetails.Controls.Add(this.tabPgProfitLoss);
             this.tabCtrlDetails.Controls.Add(this.tabPgDividends);
             this.tabCtrlDetails.Controls.Add(this.tabPgCosts);
-            this.tabCtrlDetails.Location = new System.Drawing.Point(10, 20);
-            this.tabCtrlDetails.Margin = new System.Windows.Forms.Padding(0);
+            this.tabCtrlDetails.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabCtrlDetails.Location = new System.Drawing.Point(3, 0);
+            this.tabCtrlDetails.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
             this.tabCtrlDetails.Name = "tabCtrlDetails";
             this.tabCtrlDetails.SelectedIndex = 0;
-            this.tabCtrlDetails.Size = new System.Drawing.Size(1197, 148);
+            this.tabCtrlDetails.Size = new System.Drawing.Size(1213, 142);
             this.tabCtrlDetails.TabIndex = 10;
             this.tabCtrlDetails.SelectedIndexChanged += new System.EventHandler(this.TabCtrlDetails_SelectedIndexChanged);
             // 
             // tabPgDetailsFinalValue
             // 
             this.tabPgDetailsFinalValue.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsFinalValueDateValue);
-            this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsFinalValueDate);
-            this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsFinalValueCostsValue);
-            this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsFinalValueDividendValue);
-            this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsFinaValueCurPrice);
-            this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsFinalValueCost);
-            this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsPurchase);
-            this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsFinalValueDividend);
-            this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsFinalValueVolume);
-            this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsFinalValueDiffSumPrevValue);
-            this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsFinalValueTotalSum);
-            this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsFinalValueDiffSumPrev);
-            this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsFinalValuePerformance);
-            this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsFinalValueDiffPerformancePrevValue);
-            this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsFinalValueTotalPerformanceValue);
-            this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsFinalValueDiffPerformancePrev);
-            this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsFinalValueVolumeValue);
-            this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsFinalValueCurPriceValue);
-            this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsFinalValuePurchaseValue);
-            this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsFinalValueTotalSumValue);
-            this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsFinalValueTotalProfitValue);
-            this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsFinalValuePrevPrice);
-            this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsFinalVinalTotalProfit);
-            this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsFinalValuePrevPriceValue);
+            this.tabPgDetailsFinalValue.Controls.Add(this.tblLayPnlFinaleValueShareDetails);
             this.tabPgDetailsFinalValue.Location = new System.Drawing.Point(4, 26);
             this.tabPgDetailsFinalValue.Margin = new System.Windows.Forms.Padding(0);
             this.tabPgDetailsFinalValue.Name = "tabPgDetailsFinalValue";
-            this.tabPgDetailsFinalValue.Size = new System.Drawing.Size(1189, 118);
+            this.tabPgDetailsFinalValue.Size = new System.Drawing.Size(1205, 112);
             this.tabPgDetailsFinalValue.TabIndex = 0;
             this.tabPgDetailsFinalValue.Text = "DetailsFinalValue_";
             // 
-            // lblDetailsFinalValueDateValue
+            // tblLayPnlFinaleValueShareDetails
             // 
-            this.lblDetailsFinalValueDateValue.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsFinalValueDateValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsFinalValueDateValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsFinalValueDateValue.Location = new System.Drawing.Point(199, 9);
-            this.lblDetailsFinalValueDateValue.Name = "lblDetailsFinalValueDateValue";
-            this.lblDetailsFinalValueDateValue.Size = new System.Drawing.Size(184, 21);
-            this.lblDetailsFinalValueDateValue.TabIndex = 36;
-            this.lblDetailsFinalValueDateValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblDetailsFinalValueDate
-            // 
-            this.lblDetailsFinalValueDate.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsFinalValueDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsFinalValueDate.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsFinalValueDate.Location = new System.Drawing.Point(8, 9);
-            this.lblDetailsFinalValueDate.Name = "lblDetailsFinalValueDate";
-            this.lblDetailsFinalValueDate.Size = new System.Drawing.Size(187, 21);
-            this.lblDetailsFinalValueDate.TabIndex = 35;
-            this.lblDetailsFinalValueDate.Text = "Date_";
-            this.lblDetailsFinalValueDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblDetailsFinalValueCostsValue
-            // 
-            this.lblDetailsFinalValueCostsValue.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsFinalValueCostsValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsFinalValueCostsValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsFinalValueCostsValue.Location = new System.Drawing.Point(240, 86);
-            this.lblDetailsFinalValueCostsValue.Name = "lblDetailsFinalValueCostsValue";
-            this.lblDetailsFinalValueCostsValue.Size = new System.Drawing.Size(143, 21);
-            this.lblDetailsFinalValueCostsValue.TabIndex = 34;
-            this.lblDetailsFinalValueCostsValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblDetailsFinalValueDividendValue
-            // 
-            this.lblDetailsFinalValueDividendValue.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsFinalValueDividendValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsFinalValueDividendValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsFinalValueDividendValue.Location = new System.Drawing.Point(240, 60);
-            this.lblDetailsFinalValueDividendValue.Name = "lblDetailsFinalValueDividendValue";
-            this.lblDetailsFinalValueDividendValue.Size = new System.Drawing.Size(143, 21);
-            this.lblDetailsFinalValueDividendValue.TabIndex = 33;
-            this.lblDetailsFinalValueDividendValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblDetailsFinaValueCurPrice
-            // 
-            this.lblDetailsFinaValueCurPrice.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsFinaValueCurPrice.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsFinaValueCurPrice.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsFinaValueCurPrice.Location = new System.Drawing.Point(404, 9);
-            this.lblDetailsFinaValueCurPrice.Name = "lblDetailsFinaValueCurPrice";
-            this.lblDetailsFinaValueCurPrice.Size = new System.Drawing.Size(228, 21);
-            this.lblDetailsFinaValueCurPrice.TabIndex = 2;
-            this.lblDetailsFinaValueCurPrice.Text = "CurPrice_";
-            this.lblDetailsFinaValueCurPrice.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.tblLayPnlFinaleValueShareDetails.ColumnCount = 6;
+            this.tblLayPnlFinaleValueShareDetails.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 210F));
+            this.tblLayPnlFinaleValueShareDetails.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tblLayPnlFinaleValueShareDetails.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 210F));
+            this.tblLayPnlFinaleValueShareDetails.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tblLayPnlFinaleValueShareDetails.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 210F));
+            this.tblLayPnlFinaleValueShareDetails.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueCost, 0, 3);
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueDividend, 0, 2);
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueVolume, 0, 1);
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueDate, 0, 0);
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueDateValue, 1, 0);
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueDividendValue, 1, 2);
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueTotalSum, 4, 3);
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueCostsValue, 1, 3);
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValuePrevPrice, 2, 3);
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueDiffSumPrev, 2, 2);
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsPurchase, 4, 0);
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinaValueCurPrice, 2, 0);
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueDiffPerformancePrev, 2, 1);
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalVinalTotalProfit, 4, 2);
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValuePerformance, 4, 1);
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValuePrevPriceValue, 3, 3);
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueTotalSumValue, 5, 3);
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueTotalPerformanceValue, 5, 1);
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueTotalProfitValue, 5, 2);
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueDiffSumPrevValue, 3, 2);
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValuePurchaseValue, 5, 0);
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueDiffPerformancePrevValue, 3, 1);
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueCurPriceValue, 3, 0);
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueVolumeValue, 1, 1);
+            this.tblLayPnlFinaleValueShareDetails.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tblLayPnlFinaleValueShareDetails.Location = new System.Drawing.Point(0, 0);
+            this.tblLayPnlFinaleValueShareDetails.Name = "tblLayPnlFinaleValueShareDetails";
+            this.tblLayPnlFinaleValueShareDetails.RowCount = 4;
+            this.tblLayPnlFinaleValueShareDetails.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.tblLayPnlFinaleValueShareDetails.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.tblLayPnlFinaleValueShareDetails.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.tblLayPnlFinaleValueShareDetails.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.tblLayPnlFinaleValueShareDetails.Size = new System.Drawing.Size(1205, 112);
+            this.tblLayPnlFinaleValueShareDetails.TabIndex = 0;
             // 
             // lblDetailsFinalValueCost
             // 
             this.lblDetailsFinalValueCost.BackColor = System.Drawing.Color.LightGray;
             this.lblDetailsFinalValueCost.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsFinalValueCost.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsFinalValueCost.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsFinalValueCost.Location = new System.Drawing.Point(8, 86);
+            this.lblDetailsFinalValueCost.Location = new System.Drawing.Point(3, 87);
+            this.lblDetailsFinalValueCost.Margin = new System.Windows.Forms.Padding(3);
             this.lblDetailsFinalValueCost.Name = "lblDetailsFinalValueCost";
-            this.lblDetailsFinalValueCost.Size = new System.Drawing.Size(228, 21);
+            this.lblDetailsFinalValueCost.Size = new System.Drawing.Size(204, 22);
             this.lblDetailsFinalValueCost.TabIndex = 32;
             this.lblDetailsFinalValueCost.Text = "TotalCost_";
             this.lblDetailsFinalValueCost.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblDetailsPurchase
-            // 
-            this.lblDetailsPurchase.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsPurchase.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsPurchase.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsPurchase.Location = new System.Drawing.Point(799, 9);
-            this.lblDetailsPurchase.Name = "lblDetailsPurchase";
-            this.lblDetailsPurchase.Size = new System.Drawing.Size(228, 21);
-            this.lblDetailsPurchase.TabIndex = 4;
-            this.lblDetailsPurchase.Text = "Purchase_";
-            this.lblDetailsPurchase.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblDetailsFinalValueDividend
             // 
             this.lblDetailsFinalValueDividend.BackColor = System.Drawing.Color.LightGray;
             this.lblDetailsFinalValueDividend.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsFinalValueDividend.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsFinalValueDividend.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsFinalValueDividend.Location = new System.Drawing.Point(8, 60);
+            this.lblDetailsFinalValueDividend.Location = new System.Drawing.Point(3, 59);
+            this.lblDetailsFinalValueDividend.Margin = new System.Windows.Forms.Padding(3);
             this.lblDetailsFinalValueDividend.Name = "lblDetailsFinalValueDividend";
-            this.lblDetailsFinalValueDividend.Size = new System.Drawing.Size(228, 21);
+            this.lblDetailsFinalValueDividend.Size = new System.Drawing.Size(204, 22);
             this.lblDetailsFinalValueDividend.TabIndex = 31;
             this.lblDetailsFinalValueDividend.Text = "TotalDividend_";
             this.lblDetailsFinalValueDividend.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -676,452 +678,517 @@ namespace SharePortfolioManager
             // 
             this.lblDetailsFinalValueVolume.BackColor = System.Drawing.Color.LightGray;
             this.lblDetailsFinalValueVolume.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsFinalValueVolume.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsFinalValueVolume.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsFinalValueVolume.Location = new System.Drawing.Point(8, 34);
+            this.lblDetailsFinalValueVolume.Location = new System.Drawing.Point(3, 31);
+            this.lblDetailsFinalValueVolume.Margin = new System.Windows.Forms.Padding(3);
             this.lblDetailsFinalValueVolume.Name = "lblDetailsFinalValueVolume";
-            this.lblDetailsFinalValueVolume.Size = new System.Drawing.Size(228, 21);
+            this.lblDetailsFinalValueVolume.Size = new System.Drawing.Size(204, 22);
             this.lblDetailsFinalValueVolume.TabIndex = 6;
             this.lblDetailsFinalValueVolume.Text = "Volume_";
             this.lblDetailsFinalValueVolume.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // lblDetailsFinalValueDiffSumPrevValue
+            // lblDetailsFinalValueDate
             // 
-            this.lblDetailsFinalValueDiffSumPrevValue.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsFinalValueDiffSumPrevValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsFinalValueDiffSumPrevValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsFinalValueDiffSumPrevValue.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.lblDetailsFinalValueDiffSumPrevValue.Location = new System.Drawing.Point(636, 60);
-            this.lblDetailsFinalValueDiffSumPrevValue.Name = "lblDetailsFinalValueDiffSumPrevValue";
-            this.lblDetailsFinalValueDiffSumPrevValue.Size = new System.Drawing.Size(143, 21);
-            this.lblDetailsFinalValueDiffSumPrevValue.TabIndex = 30;
-            this.lblDetailsFinalValueDiffSumPrevValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDetailsFinalValueDate.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsFinalValueDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsFinalValueDate.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsFinalValueDate.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsFinalValueDate.Location = new System.Drawing.Point(3, 3);
+            this.lblDetailsFinalValueDate.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsFinalValueDate.Name = "lblDetailsFinalValueDate";
+            this.lblDetailsFinalValueDate.Size = new System.Drawing.Size(204, 22);
+            this.lblDetailsFinalValueDate.TabIndex = 35;
+            this.lblDetailsFinalValueDate.Text = "Date_";
+            this.lblDetailsFinalValueDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblDetailsFinalValueDateValue
+            // 
+            this.lblDetailsFinalValueDateValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsFinalValueDateValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsFinalValueDateValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsFinalValueDateValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsFinalValueDateValue.Location = new System.Drawing.Point(213, 3);
+            this.lblDetailsFinalValueDateValue.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsFinalValueDateValue.Name = "lblDetailsFinalValueDateValue";
+            this.lblDetailsFinalValueDateValue.Size = new System.Drawing.Size(185, 22);
+            this.lblDetailsFinalValueDateValue.TabIndex = 36;
+            this.lblDetailsFinalValueDateValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblDetailsFinalValueDividendValue
+            // 
+            this.lblDetailsFinalValueDividendValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsFinalValueDividendValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsFinalValueDividendValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsFinalValueDividendValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsFinalValueDividendValue.Location = new System.Drawing.Point(213, 59);
+            this.lblDetailsFinalValueDividendValue.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsFinalValueDividendValue.Name = "lblDetailsFinalValueDividendValue";
+            this.lblDetailsFinalValueDividendValue.Size = new System.Drawing.Size(185, 22);
+            this.lblDetailsFinalValueDividendValue.TabIndex = 33;
+            this.lblDetailsFinalValueDividendValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblDetailsFinalValueTotalSum
             // 
             this.lblDetailsFinalValueTotalSum.BackColor = System.Drawing.Color.LightGray;
             this.lblDetailsFinalValueTotalSum.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsFinalValueTotalSum.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsFinalValueTotalSum.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsFinalValueTotalSum.Location = new System.Drawing.Point(799, 86);
+            this.lblDetailsFinalValueTotalSum.Location = new System.Drawing.Point(805, 87);
+            this.lblDetailsFinalValueTotalSum.Margin = new System.Windows.Forms.Padding(3);
             this.lblDetailsFinalValueTotalSum.Name = "lblDetailsFinalValueTotalSum";
-            this.lblDetailsFinalValueTotalSum.Size = new System.Drawing.Size(228, 21);
+            this.lblDetailsFinalValueTotalSum.Size = new System.Drawing.Size(204, 22);
             this.lblDetailsFinalValueTotalSum.TabIndex = 7;
             this.lblDetailsFinalValueTotalSum.Text = "TotalSum_";
             this.lblDetailsFinalValueTotalSum.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // lblDetailsFinalValueDiffSumPrev
+            // lblDetailsFinalValueCostsValue
             // 
-            this.lblDetailsFinalValueDiffSumPrev.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsFinalValueDiffSumPrev.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsFinalValueDiffSumPrev.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsFinalValueDiffSumPrev.Location = new System.Drawing.Point(404, 60);
-            this.lblDetailsFinalValueDiffSumPrev.Name = "lblDetailsFinalValueDiffSumPrev";
-            this.lblDetailsFinalValueDiffSumPrev.Size = new System.Drawing.Size(228, 21);
-            this.lblDetailsFinalValueDiffSumPrev.TabIndex = 29;
-            this.lblDetailsFinalValueDiffSumPrev.Text = "DiffSumPrev_";
-            this.lblDetailsFinalValueDiffSumPrev.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblDetailsFinalValuePerformance
-            // 
-            this.lblDetailsFinalValuePerformance.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsFinalValuePerformance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsFinalValuePerformance.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsFinalValuePerformance.Location = new System.Drawing.Point(799, 34);
-            this.lblDetailsFinalValuePerformance.Name = "lblDetailsFinalValuePerformance";
-            this.lblDetailsFinalValuePerformance.Size = new System.Drawing.Size(228, 22);
-            this.lblDetailsFinalValuePerformance.TabIndex = 8;
-            this.lblDetailsFinalValuePerformance.Text = "TotalPerformance_";
-            this.lblDetailsFinalValuePerformance.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblDetailsFinalValueDiffPerformancePrevValue
-            // 
-            this.lblDetailsFinalValueDiffPerformancePrevValue.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsFinalValueDiffPerformancePrevValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsFinalValueDiffPerformancePrevValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsFinalValueDiffPerformancePrevValue.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.lblDetailsFinalValueDiffPerformancePrevValue.Location = new System.Drawing.Point(636, 34);
-            this.lblDetailsFinalValueDiffPerformancePrevValue.Name = "lblDetailsFinalValueDiffPerformancePrevValue";
-            this.lblDetailsFinalValueDiffPerformancePrevValue.Size = new System.Drawing.Size(143, 21);
-            this.lblDetailsFinalValueDiffPerformancePrevValue.TabIndex = 28;
-            this.lblDetailsFinalValueDiffPerformancePrevValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblDetailsFinalValueTotalPerformanceValue
-            // 
-            this.lblDetailsFinalValueTotalPerformanceValue.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsFinalValueTotalPerformanceValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsFinalValueTotalPerformanceValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsFinalValueTotalPerformanceValue.Location = new System.Drawing.Point(1032, 34);
-            this.lblDetailsFinalValueTotalPerformanceValue.Name = "lblDetailsFinalValueTotalPerformanceValue";
-            this.lblDetailsFinalValueTotalPerformanceValue.Size = new System.Drawing.Size(143, 22);
-            this.lblDetailsFinalValueTotalPerformanceValue.TabIndex = 11;
-            this.lblDetailsFinalValueTotalPerformanceValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblDetailsFinalValueDiffPerformancePrev
-            // 
-            this.lblDetailsFinalValueDiffPerformancePrev.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsFinalValueDiffPerformancePrev.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsFinalValueDiffPerformancePrev.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsFinalValueDiffPerformancePrev.Location = new System.Drawing.Point(404, 34);
-            this.lblDetailsFinalValueDiffPerformancePrev.Name = "lblDetailsFinalValueDiffPerformancePrev";
-            this.lblDetailsFinalValueDiffPerformancePrev.Size = new System.Drawing.Size(228, 21);
-            this.lblDetailsFinalValueDiffPerformancePrev.TabIndex = 26;
-            this.lblDetailsFinalValueDiffPerformancePrev.Text = "DiffPerformancePrev_";
-            this.lblDetailsFinalValueDiffPerformancePrev.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblDetailsFinalValueVolumeValue
-            // 
-            this.lblDetailsFinalValueVolumeValue.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsFinalValueVolumeValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsFinalValueVolumeValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsFinalValueVolumeValue.Location = new System.Drawing.Point(240, 34);
-            this.lblDetailsFinalValueVolumeValue.Name = "lblDetailsFinalValueVolumeValue";
-            this.lblDetailsFinalValueVolumeValue.Size = new System.Drawing.Size(143, 21);
-            this.lblDetailsFinalValueVolumeValue.TabIndex = 24;
-            this.lblDetailsFinalValueVolumeValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblDetailsFinalValueCurPriceValue
-            // 
-            this.lblDetailsFinalValueCurPriceValue.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsFinalValueCurPriceValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsFinalValueCurPriceValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsFinalValueCurPriceValue.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.lblDetailsFinalValueCurPriceValue.Location = new System.Drawing.Point(636, 9);
-            this.lblDetailsFinalValueCurPriceValue.Name = "lblDetailsFinalValueCurPriceValue";
-            this.lblDetailsFinalValueCurPriceValue.Size = new System.Drawing.Size(143, 21);
-            this.lblDetailsFinalValueCurPriceValue.TabIndex = 13;
-            this.lblDetailsFinalValueCurPriceValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblDetailsFinalValuePurchaseValue
-            // 
-            this.lblDetailsFinalValuePurchaseValue.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsFinalValuePurchaseValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsFinalValuePurchaseValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsFinalValuePurchaseValue.Location = new System.Drawing.Point(1032, 9);
-            this.lblDetailsFinalValuePurchaseValue.Name = "lblDetailsFinalValuePurchaseValue";
-            this.lblDetailsFinalValuePurchaseValue.Size = new System.Drawing.Size(143, 21);
-            this.lblDetailsFinalValuePurchaseValue.TabIndex = 23;
-            this.lblDetailsFinalValuePurchaseValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblDetailsFinalValueTotalSumValue
-            // 
-            this.lblDetailsFinalValueTotalSumValue.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsFinalValueTotalSumValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsFinalValueTotalSumValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsFinalValueTotalSumValue.Location = new System.Drawing.Point(1032, 86);
-            this.lblDetailsFinalValueTotalSumValue.Name = "lblDetailsFinalValueTotalSumValue";
-            this.lblDetailsFinalValueTotalSumValue.Size = new System.Drawing.Size(143, 21);
-            this.lblDetailsFinalValueTotalSumValue.TabIndex = 16;
-            this.lblDetailsFinalValueTotalSumValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblDetailsFinalValueTotalProfitValue
-            // 
-            this.lblDetailsFinalValueTotalProfitValue.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsFinalValueTotalProfitValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsFinalValueTotalProfitValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsFinalValueTotalProfitValue.Location = new System.Drawing.Point(1032, 60);
-            this.lblDetailsFinalValueTotalProfitValue.Name = "lblDetailsFinalValueTotalProfitValue";
-            this.lblDetailsFinalValueTotalProfitValue.Size = new System.Drawing.Size(143, 21);
-            this.lblDetailsFinalValueTotalProfitValue.TabIndex = 22;
-            this.lblDetailsFinalValueTotalProfitValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDetailsFinalValueCostsValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsFinalValueCostsValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsFinalValueCostsValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsFinalValueCostsValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsFinalValueCostsValue.Location = new System.Drawing.Point(213, 87);
+            this.lblDetailsFinalValueCostsValue.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsFinalValueCostsValue.Name = "lblDetailsFinalValueCostsValue";
+            this.lblDetailsFinalValueCostsValue.Size = new System.Drawing.Size(185, 22);
+            this.lblDetailsFinalValueCostsValue.TabIndex = 34;
+            this.lblDetailsFinalValueCostsValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblDetailsFinalValuePrevPrice
             // 
             this.lblDetailsFinalValuePrevPrice.BackColor = System.Drawing.Color.LightGray;
             this.lblDetailsFinalValuePrevPrice.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsFinalValuePrevPrice.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsFinalValuePrevPrice.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsFinalValuePrevPrice.Location = new System.Drawing.Point(404, 86);
+            this.lblDetailsFinalValuePrevPrice.Location = new System.Drawing.Point(404, 87);
+            this.lblDetailsFinalValuePrevPrice.Margin = new System.Windows.Forms.Padding(3);
             this.lblDetailsFinalValuePrevPrice.Name = "lblDetailsFinalValuePrevPrice";
-            this.lblDetailsFinalValuePrevPrice.Size = new System.Drawing.Size(228, 21);
+            this.lblDetailsFinalValuePrevPrice.Size = new System.Drawing.Size(204, 22);
             this.lblDetailsFinalValuePrevPrice.TabIndex = 17;
             this.lblDetailsFinalValuePrevPrice.Text = "PrevPrice_";
             this.lblDetailsFinalValuePrevPrice.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblDetailsFinalValueDiffSumPrev
+            // 
+            this.lblDetailsFinalValueDiffSumPrev.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsFinalValueDiffSumPrev.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsFinalValueDiffSumPrev.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsFinalValueDiffSumPrev.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsFinalValueDiffSumPrev.Location = new System.Drawing.Point(404, 59);
+            this.lblDetailsFinalValueDiffSumPrev.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsFinalValueDiffSumPrev.Name = "lblDetailsFinalValueDiffSumPrev";
+            this.lblDetailsFinalValueDiffSumPrev.Size = new System.Drawing.Size(204, 22);
+            this.lblDetailsFinalValueDiffSumPrev.TabIndex = 29;
+            this.lblDetailsFinalValueDiffSumPrev.Text = "DiffSumPrev_";
+            this.lblDetailsFinalValueDiffSumPrev.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblDetailsPurchase
+            // 
+            this.lblDetailsPurchase.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsPurchase.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsPurchase.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsPurchase.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsPurchase.Location = new System.Drawing.Point(805, 3);
+            this.lblDetailsPurchase.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsPurchase.Name = "lblDetailsPurchase";
+            this.lblDetailsPurchase.Size = new System.Drawing.Size(204, 22);
+            this.lblDetailsPurchase.TabIndex = 4;
+            this.lblDetailsPurchase.Text = "Purchase_";
+            this.lblDetailsPurchase.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblDetailsFinaValueCurPrice
+            // 
+            this.lblDetailsFinaValueCurPrice.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsFinaValueCurPrice.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsFinaValueCurPrice.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsFinaValueCurPrice.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsFinaValueCurPrice.Location = new System.Drawing.Point(404, 3);
+            this.lblDetailsFinaValueCurPrice.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsFinaValueCurPrice.Name = "lblDetailsFinaValueCurPrice";
+            this.lblDetailsFinaValueCurPrice.Size = new System.Drawing.Size(204, 22);
+            this.lblDetailsFinaValueCurPrice.TabIndex = 2;
+            this.lblDetailsFinaValueCurPrice.Text = "CurPrice_";
+            this.lblDetailsFinaValueCurPrice.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblDetailsFinalValueDiffPerformancePrev
+            // 
+            this.lblDetailsFinalValueDiffPerformancePrev.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsFinalValueDiffPerformancePrev.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsFinalValueDiffPerformancePrev.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsFinalValueDiffPerformancePrev.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsFinalValueDiffPerformancePrev.Location = new System.Drawing.Point(404, 31);
+            this.lblDetailsFinalValueDiffPerformancePrev.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsFinalValueDiffPerformancePrev.Name = "lblDetailsFinalValueDiffPerformancePrev";
+            this.lblDetailsFinalValueDiffPerformancePrev.Size = new System.Drawing.Size(204, 22);
+            this.lblDetailsFinalValueDiffPerformancePrev.TabIndex = 26;
+            this.lblDetailsFinalValueDiffPerformancePrev.Text = "DiffPerformancePrev_";
+            this.lblDetailsFinalValueDiffPerformancePrev.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblDetailsFinalVinalTotalProfit
             // 
             this.lblDetailsFinalVinalTotalProfit.BackColor = System.Drawing.Color.LightGray;
             this.lblDetailsFinalVinalTotalProfit.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsFinalVinalTotalProfit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsFinalVinalTotalProfit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsFinalVinalTotalProfit.Location = new System.Drawing.Point(799, 60);
+            this.lblDetailsFinalVinalTotalProfit.Location = new System.Drawing.Point(805, 59);
+            this.lblDetailsFinalVinalTotalProfit.Margin = new System.Windows.Forms.Padding(3);
             this.lblDetailsFinalVinalTotalProfit.Name = "lblDetailsFinalVinalTotalProfit";
-            this.lblDetailsFinalVinalTotalProfit.Size = new System.Drawing.Size(228, 21);
+            this.lblDetailsFinalVinalTotalProfit.Size = new System.Drawing.Size(204, 22);
             this.lblDetailsFinalVinalTotalProfit.TabIndex = 21;
             this.lblDetailsFinalVinalTotalProfit.Text = "TotalProfit_";
             this.lblDetailsFinalVinalTotalProfit.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblDetailsFinalValuePerformance
+            // 
+            this.lblDetailsFinalValuePerformance.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsFinalValuePerformance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsFinalValuePerformance.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsFinalValuePerformance.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsFinalValuePerformance.Location = new System.Drawing.Point(805, 31);
+            this.lblDetailsFinalValuePerformance.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsFinalValuePerformance.Name = "lblDetailsFinalValuePerformance";
+            this.lblDetailsFinalValuePerformance.Size = new System.Drawing.Size(204, 22);
+            this.lblDetailsFinalValuePerformance.TabIndex = 8;
+            this.lblDetailsFinalValuePerformance.Text = "TotalPerformance_";
+            this.lblDetailsFinalValuePerformance.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblDetailsFinalValuePrevPriceValue
             // 
             this.lblDetailsFinalValuePrevPriceValue.BackColor = System.Drawing.Color.LightGray;
             this.lblDetailsFinalValuePrevPriceValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsFinalValuePrevPriceValue.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsFinalValuePrevPriceValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDetailsFinalValuePrevPriceValue.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.lblDetailsFinalValuePrevPriceValue.Location = new System.Drawing.Point(636, 86);
+            this.lblDetailsFinalValuePrevPriceValue.Location = new System.Drawing.Point(614, 87);
+            this.lblDetailsFinalValuePrevPriceValue.Margin = new System.Windows.Forms.Padding(3);
             this.lblDetailsFinalValuePrevPriceValue.Name = "lblDetailsFinalValuePrevPriceValue";
-            this.lblDetailsFinalValuePrevPriceValue.Size = new System.Drawing.Size(143, 21);
+            this.lblDetailsFinalValuePrevPriceValue.Size = new System.Drawing.Size(185, 22);
             this.lblDetailsFinalValuePrevPriceValue.TabIndex = 20;
             this.lblDetailsFinalValuePrevPriceValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblDetailsFinalValueTotalSumValue
+            // 
+            this.lblDetailsFinalValueTotalSumValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsFinalValueTotalSumValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsFinalValueTotalSumValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsFinalValueTotalSumValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsFinalValueTotalSumValue.Location = new System.Drawing.Point(1015, 87);
+            this.lblDetailsFinalValueTotalSumValue.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsFinalValueTotalSumValue.Name = "lblDetailsFinalValueTotalSumValue";
+            this.lblDetailsFinalValueTotalSumValue.Size = new System.Drawing.Size(187, 22);
+            this.lblDetailsFinalValueTotalSumValue.TabIndex = 16;
+            this.lblDetailsFinalValueTotalSumValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblDetailsFinalValueTotalPerformanceValue
+            // 
+            this.lblDetailsFinalValueTotalPerformanceValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsFinalValueTotalPerformanceValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsFinalValueTotalPerformanceValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsFinalValueTotalPerformanceValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsFinalValueTotalPerformanceValue.Location = new System.Drawing.Point(1015, 31);
+            this.lblDetailsFinalValueTotalPerformanceValue.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsFinalValueTotalPerformanceValue.Name = "lblDetailsFinalValueTotalPerformanceValue";
+            this.lblDetailsFinalValueTotalPerformanceValue.Size = new System.Drawing.Size(187, 22);
+            this.lblDetailsFinalValueTotalPerformanceValue.TabIndex = 11;
+            this.lblDetailsFinalValueTotalPerformanceValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblDetailsFinalValueTotalProfitValue
+            // 
+            this.lblDetailsFinalValueTotalProfitValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsFinalValueTotalProfitValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsFinalValueTotalProfitValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsFinalValueTotalProfitValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsFinalValueTotalProfitValue.Location = new System.Drawing.Point(1015, 59);
+            this.lblDetailsFinalValueTotalProfitValue.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsFinalValueTotalProfitValue.Name = "lblDetailsFinalValueTotalProfitValue";
+            this.lblDetailsFinalValueTotalProfitValue.Size = new System.Drawing.Size(187, 22);
+            this.lblDetailsFinalValueTotalProfitValue.TabIndex = 22;
+            this.lblDetailsFinalValueTotalProfitValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblDetailsFinalValueDiffSumPrevValue
+            // 
+            this.lblDetailsFinalValueDiffSumPrevValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsFinalValueDiffSumPrevValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsFinalValueDiffSumPrevValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsFinalValueDiffSumPrevValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsFinalValueDiffSumPrevValue.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDetailsFinalValueDiffSumPrevValue.Location = new System.Drawing.Point(614, 59);
+            this.lblDetailsFinalValueDiffSumPrevValue.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsFinalValueDiffSumPrevValue.Name = "lblDetailsFinalValueDiffSumPrevValue";
+            this.lblDetailsFinalValueDiffSumPrevValue.Size = new System.Drawing.Size(185, 22);
+            this.lblDetailsFinalValueDiffSumPrevValue.TabIndex = 30;
+            this.lblDetailsFinalValueDiffSumPrevValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblDetailsFinalValuePurchaseValue
+            // 
+            this.lblDetailsFinalValuePurchaseValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsFinalValuePurchaseValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsFinalValuePurchaseValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsFinalValuePurchaseValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsFinalValuePurchaseValue.Location = new System.Drawing.Point(1015, 3);
+            this.lblDetailsFinalValuePurchaseValue.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsFinalValuePurchaseValue.Name = "lblDetailsFinalValuePurchaseValue";
+            this.lblDetailsFinalValuePurchaseValue.Size = new System.Drawing.Size(187, 22);
+            this.lblDetailsFinalValuePurchaseValue.TabIndex = 23;
+            this.lblDetailsFinalValuePurchaseValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblDetailsFinalValueDiffPerformancePrevValue
+            // 
+            this.lblDetailsFinalValueDiffPerformancePrevValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsFinalValueDiffPerformancePrevValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsFinalValueDiffPerformancePrevValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsFinalValueDiffPerformancePrevValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsFinalValueDiffPerformancePrevValue.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDetailsFinalValueDiffPerformancePrevValue.Location = new System.Drawing.Point(614, 31);
+            this.lblDetailsFinalValueDiffPerformancePrevValue.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsFinalValueDiffPerformancePrevValue.Name = "lblDetailsFinalValueDiffPerformancePrevValue";
+            this.lblDetailsFinalValueDiffPerformancePrevValue.Size = new System.Drawing.Size(185, 22);
+            this.lblDetailsFinalValueDiffPerformancePrevValue.TabIndex = 28;
+            this.lblDetailsFinalValueDiffPerformancePrevValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblDetailsFinalValueCurPriceValue
+            // 
+            this.lblDetailsFinalValueCurPriceValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsFinalValueCurPriceValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsFinalValueCurPriceValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsFinalValueCurPriceValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsFinalValueCurPriceValue.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDetailsFinalValueCurPriceValue.Location = new System.Drawing.Point(614, 3);
+            this.lblDetailsFinalValueCurPriceValue.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsFinalValueCurPriceValue.Name = "lblDetailsFinalValueCurPriceValue";
+            this.lblDetailsFinalValueCurPriceValue.Size = new System.Drawing.Size(185, 22);
+            this.lblDetailsFinalValueCurPriceValue.TabIndex = 13;
+            this.lblDetailsFinalValueCurPriceValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblDetailsFinalValueVolumeValue
+            // 
+            this.lblDetailsFinalValueVolumeValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsFinalValueVolumeValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsFinalValueVolumeValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsFinalValueVolumeValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsFinalValueVolumeValue.Location = new System.Drawing.Point(213, 31);
+            this.lblDetailsFinalValueVolumeValue.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsFinalValueVolumeValue.Name = "lblDetailsFinalValueVolumeValue";
+            this.lblDetailsFinalValueVolumeValue.Size = new System.Drawing.Size(185, 22);
+            this.lblDetailsFinalValueVolumeValue.TabIndex = 24;
+            this.lblDetailsFinalValueVolumeValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // tabPgDetailsMarketValue
             // 
             this.tabPgDetailsMarketValue.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValueDateValue);
-            this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValueDate);
-            this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValueCostValue);
-            this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValueDividendValue);
-            this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValueCurPrice);
-            this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValueCost);
-            this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValuePurchase);
-            this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValueDividend);
-            this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValueVolume);
-            this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValueDiffSumPrevValue);
-            this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValueTotalSum);
-            this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValueDiffSumPrev);
-            this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValueTotalPerformance);
-            this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValueDiffPerformancePrevValue);
-            this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValueTotalPerformanceValue);
-            this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValueDiffPerformancePrev);
-            this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValueVolumeValue);
-            this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValueCurPriceValue);
-            this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValuePurchaseValue);
-            this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValueTotalSumValue);
-            this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValueTotalProfitValue);
-            this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValuePrevPrice);
-            this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValueTotalProfit);
-            this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValuePrevPriceValue);
+            this.tabPgDetailsMarketValue.Controls.Add(this.tblLayPnlMarketValueShareDetails);
             this.tabPgDetailsMarketValue.Location = new System.Drawing.Point(4, 26);
             this.tabPgDetailsMarketValue.Name = "tabPgDetailsMarketValue";
-            this.tabPgDetailsMarketValue.Size = new System.Drawing.Size(1189, 118);
+            this.tabPgDetailsMarketValue.Size = new System.Drawing.Size(1205, 112);
             this.tabPgDetailsMarketValue.TabIndex = 3;
             this.tabPgDetailsMarketValue.Text = "DetailsMarketValue_";
+            // 
+            // tblLayPnlMarketValueShareDetails
+            // 
+            this.tblLayPnlMarketValueShareDetails.ColumnCount = 6;
+            this.tblLayPnlMarketValueShareDetails.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 210F));
+            this.tblLayPnlMarketValueShareDetails.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tblLayPnlMarketValueShareDetails.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 210F));
+            this.tblLayPnlMarketValueShareDetails.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tblLayPnlMarketValueShareDetails.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 210F));
+            this.tblLayPnlMarketValueShareDetails.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueDateValue, 1, 0);
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueCostValue, 1, 3);
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueCost, 0, 3);
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueDate, 0, 0);
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueCurPrice, 2, 0);
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValuePrevPriceValue, 3, 3);
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValuePrevPrice, 2, 3);
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueDividendValue, 1, 2);
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueTotalProfit, 4, 2);
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueCurPriceValue, 3, 0);
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueTotalSum, 4, 3);
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueTotalSumValue, 5, 3);
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueTotalProfitValue, 5, 2);
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValuePurchase, 4, 0);
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValuePurchaseValue, 5, 0);
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueVolume, 0, 1);
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueVolumeValue, 1, 1);
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueDiffSumPrevValue, 3, 2);
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueDiffPerformancePrev, 2, 1);
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueDividend, 0, 2);
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueDiffSumPrev, 2, 2);
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueDiffPerformancePrevValue, 3, 1);
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueTotalPerformance, 4, 1);
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueTotalPerformanceValue, 5, 1);
+            this.tblLayPnlMarketValueShareDetails.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tblLayPnlMarketValueShareDetails.Location = new System.Drawing.Point(0, 0);
+            this.tblLayPnlMarketValueShareDetails.Name = "tblLayPnlMarketValueShareDetails";
+            this.tblLayPnlMarketValueShareDetails.RowCount = 4;
+            this.tblLayPnlMarketValueShareDetails.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.tblLayPnlMarketValueShareDetails.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.tblLayPnlMarketValueShareDetails.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.tblLayPnlMarketValueShareDetails.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.tblLayPnlMarketValueShareDetails.Size = new System.Drawing.Size(1205, 112);
+            this.tblLayPnlMarketValueShareDetails.TabIndex = 0;
             // 
             // lblDetailsMarketValueDateValue
             // 
             this.lblDetailsMarketValueDateValue.BackColor = System.Drawing.Color.LightGray;
             this.lblDetailsMarketValueDateValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValueDateValue.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsMarketValueDateValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsMarketValueDateValue.Location = new System.Drawing.Point(199, 9);
+            this.lblDetailsMarketValueDateValue.Location = new System.Drawing.Point(213, 3);
+            this.lblDetailsMarketValueDateValue.Margin = new System.Windows.Forms.Padding(3);
             this.lblDetailsMarketValueDateValue.Name = "lblDetailsMarketValueDateValue";
-            this.lblDetailsMarketValueDateValue.Size = new System.Drawing.Size(184, 21);
+            this.lblDetailsMarketValueDateValue.Size = new System.Drawing.Size(185, 22);
             this.lblDetailsMarketValueDateValue.TabIndex = 60;
             this.lblDetailsMarketValueDateValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblDetailsMarketValueDate
-            // 
-            this.lblDetailsMarketValueDate.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsMarketValueDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsMarketValueDate.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsMarketValueDate.Location = new System.Drawing.Point(8, 9);
-            this.lblDetailsMarketValueDate.Name = "lblDetailsMarketValueDate";
-            this.lblDetailsMarketValueDate.Size = new System.Drawing.Size(187, 21);
-            this.lblDetailsMarketValueDate.TabIndex = 59;
-            this.lblDetailsMarketValueDate.Text = "Date_";
-            this.lblDetailsMarketValueDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblDetailsMarketValueCostValue
             // 
             this.lblDetailsMarketValueCostValue.BackColor = System.Drawing.Color.LightGray;
             this.lblDetailsMarketValueCostValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValueCostValue.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsMarketValueCostValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsMarketValueCostValue.Location = new System.Drawing.Point(240, 86);
+            this.lblDetailsMarketValueCostValue.Location = new System.Drawing.Point(213, 87);
+            this.lblDetailsMarketValueCostValue.Margin = new System.Windows.Forms.Padding(3);
             this.lblDetailsMarketValueCostValue.Name = "lblDetailsMarketValueCostValue";
-            this.lblDetailsMarketValueCostValue.Size = new System.Drawing.Size(143, 21);
+            this.lblDetailsMarketValueCostValue.Size = new System.Drawing.Size(185, 22);
             this.lblDetailsMarketValueCostValue.TabIndex = 58;
             this.lblDetailsMarketValueCostValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblDetailsMarketValueDividendValue
-            // 
-            this.lblDetailsMarketValueDividendValue.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsMarketValueDividendValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsMarketValueDividendValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsMarketValueDividendValue.Location = new System.Drawing.Point(240, 60);
-            this.lblDetailsMarketValueDividendValue.Name = "lblDetailsMarketValueDividendValue";
-            this.lblDetailsMarketValueDividendValue.Size = new System.Drawing.Size(143, 21);
-            this.lblDetailsMarketValueDividendValue.TabIndex = 57;
-            this.lblDetailsMarketValueDividendValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblDetailsMarketValueCurPrice
-            // 
-            this.lblDetailsMarketValueCurPrice.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsMarketValueCurPrice.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsMarketValueCurPrice.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsMarketValueCurPrice.Location = new System.Drawing.Point(404, 9);
-            this.lblDetailsMarketValueCurPrice.Name = "lblDetailsMarketValueCurPrice";
-            this.lblDetailsMarketValueCurPrice.Size = new System.Drawing.Size(228, 21);
-            this.lblDetailsMarketValueCurPrice.TabIndex = 37;
-            this.lblDetailsMarketValueCurPrice.Text = "CurPrice_";
-            this.lblDetailsMarketValueCurPrice.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblDetailsMarketValueCost
             // 
             this.lblDetailsMarketValueCost.BackColor = System.Drawing.Color.LightGray;
             this.lblDetailsMarketValueCost.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValueCost.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsMarketValueCost.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsMarketValueCost.Location = new System.Drawing.Point(8, 86);
+            this.lblDetailsMarketValueCost.Location = new System.Drawing.Point(3, 87);
+            this.lblDetailsMarketValueCost.Margin = new System.Windows.Forms.Padding(3);
             this.lblDetailsMarketValueCost.Name = "lblDetailsMarketValueCost";
-            this.lblDetailsMarketValueCost.Size = new System.Drawing.Size(228, 21);
+            this.lblDetailsMarketValueCost.Size = new System.Drawing.Size(204, 22);
             this.lblDetailsMarketValueCost.TabIndex = 56;
             this.lblDetailsMarketValueCost.Text = "TotalCost_";
             this.lblDetailsMarketValueCost.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // lblDetailsMarketValuePurchase
+            // lblDetailsMarketValueDate
             // 
-            this.lblDetailsMarketValuePurchase.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsMarketValuePurchase.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsMarketValuePurchase.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsMarketValuePurchase.Location = new System.Drawing.Point(799, 9);
-            this.lblDetailsMarketValuePurchase.Name = "lblDetailsMarketValuePurchase";
-            this.lblDetailsMarketValuePurchase.Size = new System.Drawing.Size(228, 21);
-            this.lblDetailsMarketValuePurchase.TabIndex = 38;
-            this.lblDetailsMarketValuePurchase.Text = "Purchase_";
-            this.lblDetailsMarketValuePurchase.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDetailsMarketValueDate.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsMarketValueDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValueDate.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsMarketValueDate.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsMarketValueDate.Location = new System.Drawing.Point(3, 3);
+            this.lblDetailsMarketValueDate.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsMarketValueDate.Name = "lblDetailsMarketValueDate";
+            this.lblDetailsMarketValueDate.Size = new System.Drawing.Size(204, 22);
+            this.lblDetailsMarketValueDate.TabIndex = 59;
+            this.lblDetailsMarketValueDate.Text = "Date_";
+            this.lblDetailsMarketValueDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // lblDetailsMarketValueDividend
+            // lblDetailsMarketValueCurPrice
             // 
-            this.lblDetailsMarketValueDividend.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsMarketValueDividend.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsMarketValueDividend.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsMarketValueDividend.Location = new System.Drawing.Point(8, 60);
-            this.lblDetailsMarketValueDividend.Name = "lblDetailsMarketValueDividend";
-            this.lblDetailsMarketValueDividend.Size = new System.Drawing.Size(228, 21);
-            this.lblDetailsMarketValueDividend.TabIndex = 55;
-            this.lblDetailsMarketValueDividend.Text = "TotalDividend_";
-            this.lblDetailsMarketValueDividend.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDetailsMarketValueCurPrice.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsMarketValueCurPrice.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValueCurPrice.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsMarketValueCurPrice.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsMarketValueCurPrice.Location = new System.Drawing.Point(404, 3);
+            this.lblDetailsMarketValueCurPrice.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsMarketValueCurPrice.Name = "lblDetailsMarketValueCurPrice";
+            this.lblDetailsMarketValueCurPrice.Size = new System.Drawing.Size(204, 22);
+            this.lblDetailsMarketValueCurPrice.TabIndex = 37;
+            this.lblDetailsMarketValueCurPrice.Text = "CurPrice_";
+            this.lblDetailsMarketValueCurPrice.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // lblDetailsMarketValueVolume
+            // lblDetailsMarketValuePrevPriceValue
             // 
-            this.lblDetailsMarketValueVolume.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsMarketValueVolume.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsMarketValueVolume.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsMarketValueVolume.Location = new System.Drawing.Point(8, 34);
-            this.lblDetailsMarketValueVolume.Name = "lblDetailsMarketValueVolume";
-            this.lblDetailsMarketValueVolume.Size = new System.Drawing.Size(228, 21);
-            this.lblDetailsMarketValueVolume.TabIndex = 39;
-            this.lblDetailsMarketValueVolume.Text = "Volume_";
-            this.lblDetailsMarketValueVolume.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDetailsMarketValuePrevPriceValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsMarketValuePrevPriceValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValuePrevPriceValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsMarketValuePrevPriceValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsMarketValuePrevPriceValue.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDetailsMarketValuePrevPriceValue.Location = new System.Drawing.Point(614, 87);
+            this.lblDetailsMarketValuePrevPriceValue.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsMarketValuePrevPriceValue.Name = "lblDetailsMarketValuePrevPriceValue";
+            this.lblDetailsMarketValuePrevPriceValue.Size = new System.Drawing.Size(185, 22);
+            this.lblDetailsMarketValuePrevPriceValue.TabIndex = 46;
+            this.lblDetailsMarketValuePrevPriceValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // lblDetailsMarketValueDiffSumPrevValue
+            // lblDetailsMarketValuePrevPrice
             // 
-            this.lblDetailsMarketValueDiffSumPrevValue.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsMarketValueDiffSumPrevValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsMarketValueDiffSumPrevValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsMarketValueDiffSumPrevValue.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.lblDetailsMarketValueDiffSumPrevValue.Location = new System.Drawing.Point(636, 60);
-            this.lblDetailsMarketValueDiffSumPrevValue.Name = "lblDetailsMarketValueDiffSumPrevValue";
-            this.lblDetailsMarketValueDiffSumPrevValue.Size = new System.Drawing.Size(143, 21);
-            this.lblDetailsMarketValueDiffSumPrevValue.TabIndex = 54;
-            this.lblDetailsMarketValueDiffSumPrevValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDetailsMarketValuePrevPrice.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsMarketValuePrevPrice.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValuePrevPrice.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsMarketValuePrevPrice.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsMarketValuePrevPrice.Location = new System.Drawing.Point(404, 87);
+            this.lblDetailsMarketValuePrevPrice.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsMarketValuePrevPrice.Name = "lblDetailsMarketValuePrevPrice";
+            this.lblDetailsMarketValuePrevPrice.Size = new System.Drawing.Size(204, 22);
+            this.lblDetailsMarketValuePrevPrice.TabIndex = 45;
+            this.lblDetailsMarketValuePrevPrice.Text = "PrevPrice_";
+            this.lblDetailsMarketValuePrevPrice.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // lblDetailsMarketValueTotalSum
+            // lblDetailsMarketValueDividendValue
             // 
-            this.lblDetailsMarketValueTotalSum.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsMarketValueTotalSum.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsMarketValueTotalSum.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsMarketValueTotalSum.Location = new System.Drawing.Point(799, 86);
-            this.lblDetailsMarketValueTotalSum.Name = "lblDetailsMarketValueTotalSum";
-            this.lblDetailsMarketValueTotalSum.Size = new System.Drawing.Size(228, 21);
-            this.lblDetailsMarketValueTotalSum.TabIndex = 40;
-            this.lblDetailsMarketValueTotalSum.Text = "TotalSum_";
-            this.lblDetailsMarketValueTotalSum.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDetailsMarketValueDividendValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsMarketValueDividendValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValueDividendValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsMarketValueDividendValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsMarketValueDividendValue.Location = new System.Drawing.Point(213, 59);
+            this.lblDetailsMarketValueDividendValue.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsMarketValueDividendValue.Name = "lblDetailsMarketValueDividendValue";
+            this.lblDetailsMarketValueDividendValue.Size = new System.Drawing.Size(185, 22);
+            this.lblDetailsMarketValueDividendValue.TabIndex = 57;
+            this.lblDetailsMarketValueDividendValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // lblDetailsMarketValueDiffSumPrev
+            // lblDetailsMarketValueTotalProfit
             // 
-            this.lblDetailsMarketValueDiffSumPrev.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsMarketValueDiffSumPrev.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsMarketValueDiffSumPrev.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsMarketValueDiffSumPrev.Location = new System.Drawing.Point(404, 60);
-            this.lblDetailsMarketValueDiffSumPrev.Name = "lblDetailsMarketValueDiffSumPrev";
-            this.lblDetailsMarketValueDiffSumPrev.Size = new System.Drawing.Size(228, 21);
-            this.lblDetailsMarketValueDiffSumPrev.TabIndex = 53;
-            this.lblDetailsMarketValueDiffSumPrev.Text = "DiffSumPrev_";
-            this.lblDetailsMarketValueDiffSumPrev.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblDetailsMarketValueTotalPerformance
-            // 
-            this.lblDetailsMarketValueTotalPerformance.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsMarketValueTotalPerformance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsMarketValueTotalPerformance.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsMarketValueTotalPerformance.Location = new System.Drawing.Point(799, 34);
-            this.lblDetailsMarketValueTotalPerformance.Name = "lblDetailsMarketValueTotalPerformance";
-            this.lblDetailsMarketValueTotalPerformance.Size = new System.Drawing.Size(228, 22);
-            this.lblDetailsMarketValueTotalPerformance.TabIndex = 41;
-            this.lblDetailsMarketValueTotalPerformance.Text = "TotalPerformance_";
-            this.lblDetailsMarketValueTotalPerformance.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblDetailsMarketValueDiffPerformancePrevValue
-            // 
-            this.lblDetailsMarketValueDiffPerformancePrevValue.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsMarketValueDiffPerformancePrevValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsMarketValueDiffPerformancePrevValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsMarketValueDiffPerformancePrevValue.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.lblDetailsMarketValueDiffPerformancePrevValue.Location = new System.Drawing.Point(636, 34);
-            this.lblDetailsMarketValueDiffPerformancePrevValue.Name = "lblDetailsMarketValueDiffPerformancePrevValue";
-            this.lblDetailsMarketValueDiffPerformancePrevValue.Size = new System.Drawing.Size(143, 21);
-            this.lblDetailsMarketValueDiffPerformancePrevValue.TabIndex = 52;
-            this.lblDetailsMarketValueDiffPerformancePrevValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblDetailsMarketValueTotalPerformanceValue
-            // 
-            this.lblDetailsMarketValueTotalPerformanceValue.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsMarketValueTotalPerformanceValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsMarketValueTotalPerformanceValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsMarketValueTotalPerformanceValue.Location = new System.Drawing.Point(1032, 34);
-            this.lblDetailsMarketValueTotalPerformanceValue.Name = "lblDetailsMarketValueTotalPerformanceValue";
-            this.lblDetailsMarketValueTotalPerformanceValue.Size = new System.Drawing.Size(143, 22);
-            this.lblDetailsMarketValueTotalPerformanceValue.TabIndex = 42;
-            this.lblDetailsMarketValueTotalPerformanceValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblDetailsMarketValueDiffPerformancePrev
-            // 
-            this.lblDetailsMarketValueDiffPerformancePrev.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsMarketValueDiffPerformancePrev.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsMarketValueDiffPerformancePrev.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsMarketValueDiffPerformancePrev.Location = new System.Drawing.Point(404, 34);
-            this.lblDetailsMarketValueDiffPerformancePrev.Name = "lblDetailsMarketValueDiffPerformancePrev";
-            this.lblDetailsMarketValueDiffPerformancePrev.Size = new System.Drawing.Size(228, 21);
-            this.lblDetailsMarketValueDiffPerformancePrev.TabIndex = 51;
-            this.lblDetailsMarketValueDiffPerformancePrev.Text = "DiffPerformancePrev_";
-            this.lblDetailsMarketValueDiffPerformancePrev.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // lblDetailsMarketValueVolumeValue
-            // 
-            this.lblDetailsMarketValueVolumeValue.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsMarketValueVolumeValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsMarketValueVolumeValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsMarketValueVolumeValue.Location = new System.Drawing.Point(240, 34);
-            this.lblDetailsMarketValueVolumeValue.Name = "lblDetailsMarketValueVolumeValue";
-            this.lblDetailsMarketValueVolumeValue.Size = new System.Drawing.Size(143, 21);
-            this.lblDetailsMarketValueVolumeValue.TabIndex = 50;
-            this.lblDetailsMarketValueVolumeValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDetailsMarketValueTotalProfit.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsMarketValueTotalProfit.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValueTotalProfit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsMarketValueTotalProfit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsMarketValueTotalProfit.Location = new System.Drawing.Point(805, 59);
+            this.lblDetailsMarketValueTotalProfit.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsMarketValueTotalProfit.Name = "lblDetailsMarketValueTotalProfit";
+            this.lblDetailsMarketValueTotalProfit.Size = new System.Drawing.Size(204, 22);
+            this.lblDetailsMarketValueTotalProfit.TabIndex = 47;
+            this.lblDetailsMarketValueTotalProfit.Text = "TotalProfit_";
+            this.lblDetailsMarketValueTotalProfit.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblDetailsMarketValueCurPriceValue
             // 
             this.lblDetailsMarketValueCurPriceValue.BackColor = System.Drawing.Color.LightGray;
             this.lblDetailsMarketValueCurPriceValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValueCurPriceValue.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsMarketValueCurPriceValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDetailsMarketValueCurPriceValue.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.lblDetailsMarketValueCurPriceValue.Location = new System.Drawing.Point(636, 9);
+            this.lblDetailsMarketValueCurPriceValue.Location = new System.Drawing.Point(614, 3);
+            this.lblDetailsMarketValueCurPriceValue.Margin = new System.Windows.Forms.Padding(3);
             this.lblDetailsMarketValueCurPriceValue.Name = "lblDetailsMarketValueCurPriceValue";
-            this.lblDetailsMarketValueCurPriceValue.Size = new System.Drawing.Size(143, 21);
+            this.lblDetailsMarketValueCurPriceValue.Size = new System.Drawing.Size(185, 22);
             this.lblDetailsMarketValueCurPriceValue.TabIndex = 43;
             this.lblDetailsMarketValueCurPriceValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // lblDetailsMarketValuePurchaseValue
+            // lblDetailsMarketValueTotalSum
             // 
-            this.lblDetailsMarketValuePurchaseValue.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsMarketValuePurchaseValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsMarketValuePurchaseValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsMarketValuePurchaseValue.Location = new System.Drawing.Point(1032, 9);
-            this.lblDetailsMarketValuePurchaseValue.Name = "lblDetailsMarketValuePurchaseValue";
-            this.lblDetailsMarketValuePurchaseValue.Size = new System.Drawing.Size(143, 21);
-            this.lblDetailsMarketValuePurchaseValue.TabIndex = 49;
-            this.lblDetailsMarketValuePurchaseValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDetailsMarketValueTotalSum.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsMarketValueTotalSum.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValueTotalSum.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsMarketValueTotalSum.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsMarketValueTotalSum.Location = new System.Drawing.Point(805, 87);
+            this.lblDetailsMarketValueTotalSum.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsMarketValueTotalSum.Name = "lblDetailsMarketValueTotalSum";
+            this.lblDetailsMarketValueTotalSum.Size = new System.Drawing.Size(204, 22);
+            this.lblDetailsMarketValueTotalSum.TabIndex = 40;
+            this.lblDetailsMarketValueTotalSum.Text = "TotalSum_";
+            this.lblDetailsMarketValueTotalSum.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblDetailsMarketValueTotalSumValue
             // 
             this.lblDetailsMarketValueTotalSumValue.BackColor = System.Drawing.Color.LightGray;
             this.lblDetailsMarketValueTotalSumValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValueTotalSumValue.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsMarketValueTotalSumValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsMarketValueTotalSumValue.Location = new System.Drawing.Point(1032, 86);
+            this.lblDetailsMarketValueTotalSumValue.Location = new System.Drawing.Point(1015, 87);
+            this.lblDetailsMarketValueTotalSumValue.Margin = new System.Windows.Forms.Padding(3);
             this.lblDetailsMarketValueTotalSumValue.Name = "lblDetailsMarketValueTotalSumValue";
-            this.lblDetailsMarketValueTotalSumValue.Size = new System.Drawing.Size(143, 21);
+            this.lblDetailsMarketValueTotalSumValue.Size = new System.Drawing.Size(187, 22);
             this.lblDetailsMarketValueTotalSumValue.TabIndex = 44;
             this.lblDetailsMarketValueTotalSumValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -1129,48 +1196,165 @@ namespace SharePortfolioManager
             // 
             this.lblDetailsMarketValueTotalProfitValue.BackColor = System.Drawing.Color.LightGray;
             this.lblDetailsMarketValueTotalProfitValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValueTotalProfitValue.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsMarketValueTotalProfitValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsMarketValueTotalProfitValue.Location = new System.Drawing.Point(1032, 60);
+            this.lblDetailsMarketValueTotalProfitValue.Location = new System.Drawing.Point(1015, 59);
+            this.lblDetailsMarketValueTotalProfitValue.Margin = new System.Windows.Forms.Padding(3);
             this.lblDetailsMarketValueTotalProfitValue.Name = "lblDetailsMarketValueTotalProfitValue";
-            this.lblDetailsMarketValueTotalProfitValue.Size = new System.Drawing.Size(143, 21);
+            this.lblDetailsMarketValueTotalProfitValue.Size = new System.Drawing.Size(187, 22);
             this.lblDetailsMarketValueTotalProfitValue.TabIndex = 48;
             this.lblDetailsMarketValueTotalProfitValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // lblDetailsMarketValuePrevPrice
+            // lblDetailsMarketValuePurchase
             // 
-            this.lblDetailsMarketValuePrevPrice.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsMarketValuePrevPrice.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsMarketValuePrevPrice.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsMarketValuePrevPrice.Location = new System.Drawing.Point(404, 86);
-            this.lblDetailsMarketValuePrevPrice.Name = "lblDetailsMarketValuePrevPrice";
-            this.lblDetailsMarketValuePrevPrice.Size = new System.Drawing.Size(228, 21);
-            this.lblDetailsMarketValuePrevPrice.TabIndex = 45;
-            this.lblDetailsMarketValuePrevPrice.Text = "PrevPrice_";
-            this.lblDetailsMarketValuePrevPrice.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDetailsMarketValuePurchase.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsMarketValuePurchase.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValuePurchase.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsMarketValuePurchase.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsMarketValuePurchase.Location = new System.Drawing.Point(805, 3);
+            this.lblDetailsMarketValuePurchase.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsMarketValuePurchase.Name = "lblDetailsMarketValuePurchase";
+            this.lblDetailsMarketValuePurchase.Size = new System.Drawing.Size(204, 22);
+            this.lblDetailsMarketValuePurchase.TabIndex = 38;
+            this.lblDetailsMarketValuePurchase.Text = "Purchase_";
+            this.lblDetailsMarketValuePurchase.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // lblDetailsMarketValueTotalProfit
+            // lblDetailsMarketValuePurchaseValue
             // 
-            this.lblDetailsMarketValueTotalProfit.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsMarketValueTotalProfit.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsMarketValueTotalProfit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsMarketValueTotalProfit.Location = new System.Drawing.Point(799, 60);
-            this.lblDetailsMarketValueTotalProfit.Name = "lblDetailsMarketValueTotalProfit";
-            this.lblDetailsMarketValueTotalProfit.Size = new System.Drawing.Size(228, 21);
-            this.lblDetailsMarketValueTotalProfit.TabIndex = 47;
-            this.lblDetailsMarketValueTotalProfit.Text = "TotalProfit_";
-            this.lblDetailsMarketValueTotalProfit.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDetailsMarketValuePurchaseValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsMarketValuePurchaseValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValuePurchaseValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsMarketValuePurchaseValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsMarketValuePurchaseValue.Location = new System.Drawing.Point(1015, 3);
+            this.lblDetailsMarketValuePurchaseValue.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsMarketValuePurchaseValue.Name = "lblDetailsMarketValuePurchaseValue";
+            this.lblDetailsMarketValuePurchaseValue.Size = new System.Drawing.Size(187, 22);
+            this.lblDetailsMarketValuePurchaseValue.TabIndex = 49;
+            this.lblDetailsMarketValuePurchaseValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // lblDetailsMarketValuePrevPriceValue
+            // lblDetailsMarketValueVolume
             // 
-            this.lblDetailsMarketValuePrevPriceValue.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsMarketValuePrevPriceValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsMarketValuePrevPriceValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsMarketValuePrevPriceValue.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.lblDetailsMarketValuePrevPriceValue.Location = new System.Drawing.Point(636, 86);
-            this.lblDetailsMarketValuePrevPriceValue.Name = "lblDetailsMarketValuePrevPriceValue";
-            this.lblDetailsMarketValuePrevPriceValue.Size = new System.Drawing.Size(143, 21);
-            this.lblDetailsMarketValuePrevPriceValue.TabIndex = 46;
-            this.lblDetailsMarketValuePrevPriceValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDetailsMarketValueVolume.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsMarketValueVolume.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValueVolume.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsMarketValueVolume.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsMarketValueVolume.Location = new System.Drawing.Point(3, 31);
+            this.lblDetailsMarketValueVolume.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsMarketValueVolume.Name = "lblDetailsMarketValueVolume";
+            this.lblDetailsMarketValueVolume.Size = new System.Drawing.Size(204, 22);
+            this.lblDetailsMarketValueVolume.TabIndex = 39;
+            this.lblDetailsMarketValueVolume.Text = "Volume_";
+            this.lblDetailsMarketValueVolume.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblDetailsMarketValueVolumeValue
+            // 
+            this.lblDetailsMarketValueVolumeValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsMarketValueVolumeValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValueVolumeValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsMarketValueVolumeValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsMarketValueVolumeValue.Location = new System.Drawing.Point(213, 31);
+            this.lblDetailsMarketValueVolumeValue.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsMarketValueVolumeValue.Name = "lblDetailsMarketValueVolumeValue";
+            this.lblDetailsMarketValueVolumeValue.Size = new System.Drawing.Size(185, 22);
+            this.lblDetailsMarketValueVolumeValue.TabIndex = 50;
+            this.lblDetailsMarketValueVolumeValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblDetailsMarketValueDiffSumPrevValue
+            // 
+            this.lblDetailsMarketValueDiffSumPrevValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsMarketValueDiffSumPrevValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValueDiffSumPrevValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsMarketValueDiffSumPrevValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsMarketValueDiffSumPrevValue.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDetailsMarketValueDiffSumPrevValue.Location = new System.Drawing.Point(614, 59);
+            this.lblDetailsMarketValueDiffSumPrevValue.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsMarketValueDiffSumPrevValue.Name = "lblDetailsMarketValueDiffSumPrevValue";
+            this.lblDetailsMarketValueDiffSumPrevValue.Size = new System.Drawing.Size(185, 22);
+            this.lblDetailsMarketValueDiffSumPrevValue.TabIndex = 54;
+            this.lblDetailsMarketValueDiffSumPrevValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblDetailsMarketValueDiffPerformancePrev
+            // 
+            this.lblDetailsMarketValueDiffPerformancePrev.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsMarketValueDiffPerformancePrev.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValueDiffPerformancePrev.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsMarketValueDiffPerformancePrev.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsMarketValueDiffPerformancePrev.Location = new System.Drawing.Point(404, 31);
+            this.lblDetailsMarketValueDiffPerformancePrev.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsMarketValueDiffPerformancePrev.Name = "lblDetailsMarketValueDiffPerformancePrev";
+            this.lblDetailsMarketValueDiffPerformancePrev.Size = new System.Drawing.Size(204, 22);
+            this.lblDetailsMarketValueDiffPerformancePrev.TabIndex = 51;
+            this.lblDetailsMarketValueDiffPerformancePrev.Text = "DiffPerformancePrev_";
+            this.lblDetailsMarketValueDiffPerformancePrev.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblDetailsMarketValueDividend
+            // 
+            this.lblDetailsMarketValueDividend.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsMarketValueDividend.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValueDividend.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsMarketValueDividend.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsMarketValueDividend.Location = new System.Drawing.Point(3, 59);
+            this.lblDetailsMarketValueDividend.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsMarketValueDividend.Name = "lblDetailsMarketValueDividend";
+            this.lblDetailsMarketValueDividend.Size = new System.Drawing.Size(204, 22);
+            this.lblDetailsMarketValueDividend.TabIndex = 55;
+            this.lblDetailsMarketValueDividend.Text = "TotalDividend_";
+            this.lblDetailsMarketValueDividend.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblDetailsMarketValueDiffSumPrev
+            // 
+            this.lblDetailsMarketValueDiffSumPrev.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsMarketValueDiffSumPrev.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValueDiffSumPrev.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsMarketValueDiffSumPrev.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsMarketValueDiffSumPrev.Location = new System.Drawing.Point(404, 59);
+            this.lblDetailsMarketValueDiffSumPrev.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsMarketValueDiffSumPrev.Name = "lblDetailsMarketValueDiffSumPrev";
+            this.lblDetailsMarketValueDiffSumPrev.Size = new System.Drawing.Size(204, 22);
+            this.lblDetailsMarketValueDiffSumPrev.TabIndex = 53;
+            this.lblDetailsMarketValueDiffSumPrev.Text = "DiffSumPrev_";
+            this.lblDetailsMarketValueDiffSumPrev.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblDetailsMarketValueDiffPerformancePrevValue
+            // 
+            this.lblDetailsMarketValueDiffPerformancePrevValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsMarketValueDiffPerformancePrevValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValueDiffPerformancePrevValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsMarketValueDiffPerformancePrevValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsMarketValueDiffPerformancePrevValue.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDetailsMarketValueDiffPerformancePrevValue.Location = new System.Drawing.Point(614, 31);
+            this.lblDetailsMarketValueDiffPerformancePrevValue.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsMarketValueDiffPerformancePrevValue.Name = "lblDetailsMarketValueDiffPerformancePrevValue";
+            this.lblDetailsMarketValueDiffPerformancePrevValue.Size = new System.Drawing.Size(185, 22);
+            this.lblDetailsMarketValueDiffPerformancePrevValue.TabIndex = 52;
+            this.lblDetailsMarketValueDiffPerformancePrevValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblDetailsMarketValueTotalPerformance
+            // 
+            this.lblDetailsMarketValueTotalPerformance.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsMarketValueTotalPerformance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValueTotalPerformance.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsMarketValueTotalPerformance.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsMarketValueTotalPerformance.Location = new System.Drawing.Point(805, 31);
+            this.lblDetailsMarketValueTotalPerformance.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsMarketValueTotalPerformance.Name = "lblDetailsMarketValueTotalPerformance";
+            this.lblDetailsMarketValueTotalPerformance.Size = new System.Drawing.Size(204, 22);
+            this.lblDetailsMarketValueTotalPerformance.TabIndex = 41;
+            this.lblDetailsMarketValueTotalPerformance.Text = "TotalPerformance_";
+            this.lblDetailsMarketValueTotalPerformance.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblDetailsMarketValueTotalPerformanceValue
+            // 
+            this.lblDetailsMarketValueTotalPerformanceValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsMarketValueTotalPerformanceValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValueTotalPerformanceValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsMarketValueTotalPerformanceValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsMarketValueTotalPerformanceValue.Location = new System.Drawing.Point(1015, 31);
+            this.lblDetailsMarketValueTotalPerformanceValue.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDetailsMarketValueTotalPerformanceValue.Name = "lblDetailsMarketValueTotalPerformanceValue";
+            this.lblDetailsMarketValueTotalPerformanceValue.Size = new System.Drawing.Size(187, 22);
+            this.lblDetailsMarketValueTotalPerformanceValue.TabIndex = 42;
+            this.lblDetailsMarketValueTotalPerformanceValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // tabPgProfitLoss
             // 
@@ -1181,7 +1365,7 @@ namespace SharePortfolioManager
             this.tabPgProfitLoss.Location = new System.Drawing.Point(4, 26);
             this.tabPgProfitLoss.Margin = new System.Windows.Forms.Padding(0);
             this.tabPgProfitLoss.Name = "tabPgProfitLoss";
-            this.tabPgProfitLoss.Size = new System.Drawing.Size(1189, 118);
+            this.tabPgProfitLoss.Size = new System.Drawing.Size(1205, 112);
             this.tabPgProfitLoss.TabIndex = 4;
             this.tabPgProfitLoss.Text = "ProfitLoss_";
             // 
@@ -1192,7 +1376,7 @@ namespace SharePortfolioManager
             this.tabCtrlProfitLoss.Location = new System.Drawing.Point(0, 0);
             this.tabCtrlProfitLoss.Name = "tabCtrlProfitLoss";
             this.tabCtrlProfitLoss.SelectedIndex = 0;
-            this.tabCtrlProfitLoss.Size = new System.Drawing.Size(1189, 118);
+            this.tabCtrlProfitLoss.Size = new System.Drawing.Size(1205, 112);
             this.tabCtrlProfitLoss.TabIndex = 0;
             this.tabCtrlProfitLoss.SelectedIndexChanged += new System.EventHandler(this.TabCtrlProfitLoss_SelectedIndexChanged);
             // 
@@ -1205,7 +1389,7 @@ namespace SharePortfolioManager
             this.tabPgDividends.Location = new System.Drawing.Point(4, 26);
             this.tabPgDividends.Margin = new System.Windows.Forms.Padding(0);
             this.tabPgDividends.Name = "tabPgDividends";
-            this.tabPgDividends.Size = new System.Drawing.Size(1189, 118);
+            this.tabPgDividends.Size = new System.Drawing.Size(1205, 112);
             this.tabPgDividends.TabIndex = 1;
             this.tabPgDividends.Text = "Dividends_";
             // 
@@ -1216,7 +1400,7 @@ namespace SharePortfolioManager
             this.tabCtrlDividends.Location = new System.Drawing.Point(0, 0);
             this.tabCtrlDividends.Name = "tabCtrlDividends";
             this.tabCtrlDividends.SelectedIndex = 0;
-            this.tabCtrlDividends.Size = new System.Drawing.Size(1189, 118);
+            this.tabCtrlDividends.Size = new System.Drawing.Size(1205, 112);
             this.tabCtrlDividends.TabIndex = 0;
             this.tabCtrlDividends.SelectedIndexChanged += new System.EventHandler(this.TabCtrlDividends_SelectedIndexChanged);
             // 
@@ -1229,7 +1413,7 @@ namespace SharePortfolioManager
             this.tabPgCosts.Location = new System.Drawing.Point(4, 26);
             this.tabPgCosts.Margin = new System.Windows.Forms.Padding(0);
             this.tabPgCosts.Name = "tabPgCosts";
-            this.tabPgCosts.Size = new System.Drawing.Size(1189, 118);
+            this.tabPgCosts.Size = new System.Drawing.Size(1205, 112);
             this.tabPgCosts.TabIndex = 2;
             this.tabPgCosts.Text = "Costs_";
             // 
@@ -1240,7 +1424,7 @@ namespace SharePortfolioManager
             this.tabCtrlCosts.Location = new System.Drawing.Point(0, 0);
             this.tabCtrlCosts.Name = "tabCtrlCosts";
             this.tabCtrlCosts.SelectedIndex = 0;
-            this.tabCtrlCosts.Size = new System.Drawing.Size(1189, 118);
+            this.tabCtrlCosts.Size = new System.Drawing.Size(1205, 112);
             this.tabCtrlCosts.TabIndex = 0;
             this.tabCtrlCosts.SelectedIndexChanged += new System.EventHandler(this.TabCtrlCosts_SelectedIndexChanged);
             // 
@@ -1249,78 +1433,107 @@ namespace SharePortfolioManager
             this.grpBoxStatusMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grpBoxStatusMessage.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.grpBoxStatusMessage.Controls.Add(this.rchTxtBoxStateMessage);
+            this.grpBoxStatusMessage.Controls.Add(this.tblLayPnlStatusMessages);
             this.grpBoxStatusMessage.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpBoxStatusMessage.Location = new System.Drawing.Point(7, 587);
+            this.grpBoxStatusMessage.Location = new System.Drawing.Point(5, 597);
             this.grpBoxStatusMessage.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.grpBoxStatusMessage.Name = "grpBoxStatusMessage";
             this.grpBoxStatusMessage.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.grpBoxStatusMessage.Size = new System.Drawing.Size(768, 108);
+            this.grpBoxStatusMessage.Size = new System.Drawing.Size(770, 108);
             this.grpBoxStatusMessage.TabIndex = 5;
             this.grpBoxStatusMessage.TabStop = false;
             this.grpBoxStatusMessage.Text = "Status message_";
             // 
+            // tblLayPnlStatusMessages
+            // 
+            this.tblLayPnlStatusMessages.ColumnCount = 1;
+            this.tblLayPnlStatusMessages.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tblLayPnlStatusMessages.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tblLayPnlStatusMessages.Controls.Add(this.rchTxtBoxStateMessage, 0, 0);
+            this.tblLayPnlStatusMessages.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tblLayPnlStatusMessages.Location = new System.Drawing.Point(3, 20);
+            this.tblLayPnlStatusMessages.Name = "tblLayPnlStatusMessages";
+            this.tblLayPnlStatusMessages.RowCount = 1;
+            this.tblLayPnlStatusMessages.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tblLayPnlStatusMessages.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 84F));
+            this.tblLayPnlStatusMessages.Size = new System.Drawing.Size(764, 84);
+            this.tblLayPnlStatusMessages.TabIndex = 0;
+            // 
             // rchTxtBoxStateMessage
             // 
-            this.rchTxtBoxStateMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.rchTxtBoxStateMessage.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.rchTxtBoxStateMessage.Location = new System.Drawing.Point(10, 23);
+            this.rchTxtBoxStateMessage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rchTxtBoxStateMessage.Location = new System.Drawing.Point(3, 3);
             this.rchTxtBoxStateMessage.Name = "rchTxtBoxStateMessage";
             this.rchTxtBoxStateMessage.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
             this.rchTxtBoxStateMessage.ShowSelectionMargin = true;
-            this.rchTxtBoxStateMessage.Size = new System.Drawing.Size(746, 75);
+            this.rchTxtBoxStateMessage.Size = new System.Drawing.Size(758, 78);
             this.rchTxtBoxStateMessage.TabIndex = 0;
             this.rchTxtBoxStateMessage.Text = "";
             // 
             // lblWebParserState
             // 
-            this.lblWebParserState.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblWebParserState.BackColor = System.Drawing.Color.Transparent;
+            this.lblWebParserState.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblWebParserState.Font = new System.Drawing.Font("Trebuchet MS", 9.75F);
-            this.lblWebParserState.Location = new System.Drawing.Point(15, 43);
+            this.lblWebParserState.Location = new System.Drawing.Point(3, 28);
+            this.lblWebParserState.Margin = new System.Windows.Forms.Padding(3);
             this.lblWebParserState.Name = "lblWebParserState";
-            this.lblWebParserState.Size = new System.Drawing.Size(411, 18);
+            this.lblWebParserState.Size = new System.Drawing.Size(437, 19);
             this.lblWebParserState.TabIndex = 1;
             this.lblWebParserState.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // progressBarWebParser
             // 
-            this.progressBarWebParser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBarWebParser.Location = new System.Drawing.Point(15, 67);
+            this.progressBarWebParser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.progressBarWebParser.Location = new System.Drawing.Point(3, 54);
             this.progressBarWebParser.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.progressBarWebParser.Name = "progressBarWebParser";
-            this.progressBarWebParser.Size = new System.Drawing.Size(411, 33);
+            this.progressBarWebParser.Size = new System.Drawing.Size(437, 26);
             this.progressBarWebParser.TabIndex = 0;
             // 
             // grpBoxUpdateState
             // 
             this.grpBoxUpdateState.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.grpBoxUpdateState.Controls.Add(this.lblWebParserState);
-            this.grpBoxUpdateState.Controls.Add(this.lblShareNameWebParser);
-            this.grpBoxUpdateState.Controls.Add(this.progressBarWebParser);
+            this.grpBoxUpdateState.Controls.Add(this.tblLayPnlUpdateState);
             this.grpBoxUpdateState.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpBoxUpdateState.Location = new System.Drawing.Point(787, 587);
+            this.grpBoxUpdateState.Location = new System.Drawing.Point(781, 597);
             this.grpBoxUpdateState.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.grpBoxUpdateState.Name = "grpBoxUpdateState";
             this.grpBoxUpdateState.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.grpBoxUpdateState.Size = new System.Drawing.Size(439, 108);
+            this.grpBoxUpdateState.Size = new System.Drawing.Size(449, 108);
             this.grpBoxUpdateState.TabIndex = 6;
             this.grpBoxUpdateState.TabStop = false;
             this.grpBoxUpdateState.Text = "Update state_";
             // 
+            // tblLayPnlUpdateState
+            // 
+            this.tblLayPnlUpdateState.ColumnCount = 1;
+            this.tblLayPnlUpdateState.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tblLayPnlUpdateState.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tblLayPnlUpdateState.Controls.Add(this.progressBarWebParser, 0, 2);
+            this.tblLayPnlUpdateState.Controls.Add(this.lblShareNameWebParser, 0, 0);
+            this.tblLayPnlUpdateState.Controls.Add(this.lblWebParserState, 0, 1);
+            this.tblLayPnlUpdateState.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tblLayPnlUpdateState.Location = new System.Drawing.Point(3, 20);
+            this.tblLayPnlUpdateState.Name = "tblLayPnlUpdateState";
+            this.tblLayPnlUpdateState.RowCount = 3;
+            this.tblLayPnlUpdateState.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.tblLayPnlUpdateState.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.tblLayPnlUpdateState.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.tblLayPnlUpdateState.Size = new System.Drawing.Size(443, 84);
+            this.tblLayPnlUpdateState.TabIndex = 2;
+            // 
             // lblShareNameWebParser
             // 
-            this.lblShareNameWebParser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblShareNameWebParser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblShareNameWebParser.Font = new System.Drawing.Font("Trebuchet MS", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblShareNameWebParser.Location = new System.Drawing.Point(15, 22);
+            this.lblShareNameWebParser.Location = new System.Drawing.Point(3, 3);
+            this.lblShareNameWebParser.Margin = new System.Windows.Forms.Padding(3);
             this.lblShareNameWebParser.Name = "lblShareNameWebParser";
-            this.lblShareNameWebParser.Size = new System.Drawing.Size(411, 18);
+            this.lblShareNameWebParser.Size = new System.Drawing.Size(437, 19);
             this.lblShareNameWebParser.TabIndex = 1;
+            this.lblShareNameWebParser.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // timerStatusMessageClear
             // 
@@ -1371,6 +1584,7 @@ namespace SharePortfolioManager
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.grpBoxSharePortfolio.ResumeLayout(false);
+            this.tblLayPnlShareOverviews.ResumeLayout(false);
             this.tabCtrlShareOverviews.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvPortfolioFinalValue)).EndInit();
@@ -1379,14 +1593,19 @@ namespace SharePortfolioManager
             ((System.ComponentModel.ISupportInitialize)(this.dgvPortfolioMarketValue)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPortfolioFooterMarketValue)).EndInit();
             this.grpBoxShareDetails.ResumeLayout(false);
+            this.tblLayPnlShareDetailsTabControls.ResumeLayout(false);
             this.tabCtrlDetails.ResumeLayout(false);
             this.tabPgDetailsFinalValue.ResumeLayout(false);
+            this.tblLayPnlFinaleValueShareDetails.ResumeLayout(false);
             this.tabPgDetailsMarketValue.ResumeLayout(false);
+            this.tblLayPnlMarketValueShareDetails.ResumeLayout(false);
             this.tabPgProfitLoss.ResumeLayout(false);
             this.tabPgDividends.ResumeLayout(false);
             this.tabPgCosts.ResumeLayout(false);
             this.grpBoxStatusMessage.ResumeLayout(false);
+            this.tblLayPnlStatusMessages.ResumeLayout(false);
             this.grpBoxUpdateState.ResumeLayout(false);
+            this.tblLayPnlUpdateState.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1405,7 +1624,6 @@ namespace SharePortfolioManager
         private Button btnDelete;
         private Button btnEdit;
         private Button btnAdd;
-        private Label lblDetailsFinaValueCurPrice;
         private Label lblDetailsFinalValuePerformance;
         private Label lblDetailsFinalValueTotalSum;
         private Label lblDetailsFinalValueVolume;
@@ -1414,17 +1632,11 @@ namespace SharePortfolioManager
         private Label lblDetailsFinalValueCurPriceValue;
         private Label lblDetailsFinalValueTotalSumValue;
         private Button btnRefreshAll;
-        private Label lblDetailsFinalValuePrevPrice;
-        private Label lblDetailsFinalValuePrevPriceValue;
         private DataGridView dgvPortfolioFinalValue;
         private Label lblDetailsFinalVinalTotalProfit;
         private Label lblDetailsFinalValueTotalProfitValue;
         private Label lblDetailsFinalValuePurchaseValue;
         private Label lblDetailsFinalValueVolumeValue;
-        private Label lblDetailsFinalValueDiffPerformancePrevValue;
-        private Label lblDetailsFinalValueDiffPerformancePrev;
-        private Label lblDetailsFinalValueDiffSumPrevValue;
-        private Label lblDetailsFinalValueDiffSumPrev;
         private ToolStripMenuItem settingsToolStripMenuItem;
         private ToolStripMenuItem languageToolStripMenuItem;
         private GroupBox grpBoxStatusMessage;
@@ -1437,10 +1649,7 @@ namespace SharePortfolioManager
         private Label lblDetailsFinalValueCostsValue;
         private Label lblDetailsFinalValueDividendValue;
         private TabControl tabCtrlDetails;
-        private TabPage tabPgDetailsFinalValue;
         private TabPage tabPgCosts;
-        private Label lblDetailsFinalValueDateValue;
-        private Label lblDetailsFinalValueDate;
         private TabPage tabPgDetailsMarketValue;
         private Label lblDetailsMarketValueDateValue;
         private Label lblDetailsMarketValueDate;
@@ -1474,7 +1683,6 @@ namespace SharePortfolioManager
         private RichTextBox rchTxtBoxStateMessage;
         private Label lblWebParserState;
         private ToolStripMenuItem loggerToolStripMenuItem;
-        private Button btnCancelRefresh;
         private Button btnClearLogger;
         private TabPage tabPgProfitLoss;
         private ToolStripMenuItem newToolStripMenuItem;
@@ -1488,6 +1696,22 @@ namespace SharePortfolioManager
         private DataGridView dgvPortfolioMarketValue;
         private DataGridView dgvPortfolioFooterMarketValue;
         private Label lblShareDetailsWithOutDividendCostSharePriceCurrentValue;
+        private TabPage tabPgDetailsFinalValue;
+        private TableLayoutPanel tblLayPnlFinaleValueShareDetails;
+        private Label lblDetailsFinalValueDate;
+        private Label lblDetailsFinalValueDateValue;
+        private Label lblDetailsFinalValuePrevPrice;
+        private Label lblDetailsFinalValueDiffSumPrev;
+        private Label lblDetailsFinaValueCurPrice;
+        private Label lblDetailsFinalValueDiffPerformancePrev;
+        private Label lblDetailsFinalValuePrevPriceValue;
+        private Label lblDetailsFinalValueDiffSumPrevValue;
+        private Label lblDetailsFinalValueDiffPerformancePrevValue;
+        private TableLayoutPanel tblLayPnlMarketValueShareDetails;
+        private TableLayoutPanel tblLayPnlShareOverviews;
+        private TableLayoutPanel tblLayPnlShareDetailsTabControls;
+        private TableLayoutPanel tblLayPnlStatusMessages;
+        private TableLayoutPanel tblLayPnlUpdateState;
     }
 }
 

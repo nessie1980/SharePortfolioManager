@@ -2280,7 +2280,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         //        }
 
         #endregion Methods
-
     }
 }
 

@@ -104,6 +104,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             _model.WebSite = _view.WebSite;
             _model.CultureInfo = _view.CultureInfo;
             _model.DividendPayoutInterval = _view.DividendPayoutInterval;
+            _model.ShareType = _view.ShareType;
             _model.Document = _view.Document;
 
             CalculateMarketValueAndFinalValue();
@@ -163,6 +164,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                             null,
                             _model.CultureInfo,
                             0,
+                            0,
                             _model.Document
                             ));
 
@@ -184,6 +186,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                             _model.ImageList,
                             null,
                             _model.CultureInfo,
+                            0,
                             0,
                             _model.Document
                             ));
@@ -211,6 +214,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                             null,
                             _model.CultureInfo,
                             _model.DividendPayoutInterval,
+                            _model.ShareType,
                             _model.Document
                             ));
 
@@ -232,6 +236,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                             null,
                             _model.CultureInfo,
                             _model.DividendPayoutInterval,
+                            _model.ShareType,
                             _model.Document
                             ));
 

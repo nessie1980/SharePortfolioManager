@@ -34,21 +34,24 @@
             this.lblApplicationVersionValue = new System.Windows.Forms.Label();
             this.lblWebParserDllVersionValue = new System.Windows.Forms.Label();
             this.grpBoxVersions = new System.Windows.Forms.GroupBox();
+            this.tblLayPnlButton = new System.Windows.Forms.TableLayoutPanel();
+            this.tblLayPnlVersions = new System.Windows.Forms.TableLayoutPanel();
             this.lblLoggerDllVersionValue = new System.Windows.Forms.Label();
             this.lblLoggerDllVersion = new System.Windows.Forms.Label();
             this.lblLanguageDllVersionValue = new System.Windows.Forms.Label();
             this.lblLanguageDllVersion = new System.Windows.Forms.Label();
             this.grpBoxVersions.SuspendLayout();
+            this.tblLayPnlButton.SuspendLayout();
+            this.tblLayPnlVersions.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnOk
             // 
-            this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnOk.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnOk.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOk.Location = new System.Drawing.Point(115, 149);
+            this.btnOk.Location = new System.Drawing.Point(148, 3);
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(94, 31);
+            this.btnOk.Size = new System.Drawing.Size(165, 29);
             this.btnOk.TabIndex = 0;
             this.btnOk.Text = "_Ok";
             this.btnOk.UseVisualStyleBackColor = true;
@@ -58,10 +61,12 @@
             // 
             this.lblApplicationVersion.BackColor = System.Drawing.Color.LightGray;
             this.lblApplicationVersion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblApplicationVersion.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblApplicationVersion.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblApplicationVersion.Location = new System.Drawing.Point(10, 22);
+            this.lblApplicationVersion.Location = new System.Drawing.Point(3, 3);
+            this.lblApplicationVersion.Margin = new System.Windows.Forms.Padding(3);
             this.lblApplicationVersion.Name = "lblApplicationVersion";
-            this.lblApplicationVersion.Size = new System.Drawing.Size(203, 23);
+            this.lblApplicationVersion.Size = new System.Drawing.Size(199, 22);
             this.lblApplicationVersion.TabIndex = 2;
             this.lblApplicationVersion.Text = "_Application version:";
             this.lblApplicationVersion.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -70,10 +75,12 @@
             // 
             this.lblWebParserDllVersion.BackColor = System.Drawing.Color.LightGray;
             this.lblWebParserDllVersion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblWebParserDllVersion.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblWebParserDllVersion.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWebParserDllVersion.Location = new System.Drawing.Point(10, 49);
+            this.lblWebParserDllVersion.Location = new System.Drawing.Point(3, 31);
+            this.lblWebParserDllVersion.Margin = new System.Windows.Forms.Padding(3);
             this.lblWebParserDllVersion.Name = "lblWebParserDllVersion";
-            this.lblWebParserDllVersion.Size = new System.Drawing.Size(203, 23);
+            this.lblWebParserDllVersion.Size = new System.Drawing.Size(199, 22);
             this.lblWebParserDllVersion.TabIndex = 3;
             this.lblWebParserDllVersion.Text = "_Webparser dll:";
             this.lblWebParserDllVersion.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -82,10 +89,12 @@
             // 
             this.lblApplicationVersionValue.BackColor = System.Drawing.Color.LightGray;
             this.lblApplicationVersionValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblApplicationVersionValue.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblApplicationVersionValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblApplicationVersionValue.Location = new System.Drawing.Point(217, 22);
+            this.lblApplicationVersionValue.Location = new System.Drawing.Point(208, 3);
+            this.lblApplicationVersionValue.Margin = new System.Windows.Forms.Padding(3);
             this.lblApplicationVersionValue.Name = "lblApplicationVersionValue";
-            this.lblApplicationVersionValue.Size = new System.Drawing.Size(79, 23);
+            this.lblApplicationVersionValue.Size = new System.Drawing.Size(105, 22);
             this.lblApplicationVersionValue.TabIndex = 4;
             this.lblApplicationVersionValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -93,10 +102,12 @@
             // 
             this.lblWebParserDllVersionValue.BackColor = System.Drawing.Color.LightGray;
             this.lblWebParserDllVersionValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblWebParserDllVersionValue.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblWebParserDllVersionValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWebParserDllVersionValue.Location = new System.Drawing.Point(217, 49);
+            this.lblWebParserDllVersionValue.Location = new System.Drawing.Point(208, 31);
+            this.lblWebParserDllVersionValue.Margin = new System.Windows.Forms.Padding(3);
             this.lblWebParserDllVersionValue.Name = "lblWebParserDllVersionValue";
-            this.lblWebParserDllVersionValue.Size = new System.Drawing.Size(79, 23);
+            this.lblWebParserDllVersionValue.Size = new System.Drawing.Size(105, 22);
             this.lblWebParserDllVersionValue.TabIndex = 5;
             this.lblWebParserDllVersionValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -104,30 +115,65 @@
             // 
             this.grpBoxVersions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.grpBoxVersions.Controls.Add(this.lblLoggerDllVersionValue);
-            this.grpBoxVersions.Controls.Add(this.lblLoggerDllVersion);
-            this.grpBoxVersions.Controls.Add(this.lblLanguageDllVersionValue);
-            this.grpBoxVersions.Controls.Add(this.lblLanguageDllVersion);
-            this.grpBoxVersions.Controls.Add(this.lblApplicationVersion);
-            this.grpBoxVersions.Controls.Add(this.lblWebParserDllVersionValue);
-            this.grpBoxVersions.Controls.Add(this.lblApplicationVersionValue);
-            this.grpBoxVersions.Controls.Add(this.lblWebParserDllVersion);
+            this.grpBoxVersions.Controls.Add(this.tblLayPnlButton);
+            this.grpBoxVersions.Controls.Add(this.tblLayPnlVersions);
             this.grpBoxVersions.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpBoxVersions.Location = new System.Drawing.Point(12, 8);
+            this.grpBoxVersions.Location = new System.Drawing.Point(5, 5);
             this.grpBoxVersions.Name = "grpBoxVersions";
-            this.grpBoxVersions.Size = new System.Drawing.Size(306, 135);
+            this.grpBoxVersions.Size = new System.Drawing.Size(322, 170);
             this.grpBoxVersions.TabIndex = 6;
             this.grpBoxVersions.TabStop = false;
             this.grpBoxVersions.Text = "_grpBoxVersions";
+            // 
+            // tblLayPnlButton
+            // 
+            this.tblLayPnlButton.ColumnCount = 2;
+            this.tblLayPnlButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tblLayPnlButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 171F));
+            this.tblLayPnlButton.Controls.Add(this.btnOk, 1, 0);
+            this.tblLayPnlButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tblLayPnlButton.Location = new System.Drawing.Point(3, 131);
+            this.tblLayPnlButton.Name = "tblLayPnlButton";
+            this.tblLayPnlButton.RowCount = 1;
+            this.tblLayPnlButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tblLayPnlButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tblLayPnlButton.Size = new System.Drawing.Size(316, 35);
+            this.tblLayPnlButton.TabIndex = 1;
+            // 
+            // tblLayPnlVersions
+            // 
+            this.tblLayPnlVersions.ColumnCount = 2;
+            this.tblLayPnlVersions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65F));
+            this.tblLayPnlVersions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
+            this.tblLayPnlVersions.Controls.Add(this.lblLoggerDllVersionValue, 1, 3);
+            this.tblLayPnlVersions.Controls.Add(this.lblApplicationVersion, 0, 0);
+            this.tblLayPnlVersions.Controls.Add(this.lblApplicationVersionValue, 1, 0);
+            this.tblLayPnlVersions.Controls.Add(this.lblLoggerDllVersion, 0, 3);
+            this.tblLayPnlVersions.Controls.Add(this.lblWebParserDllVersion, 0, 1);
+            this.tblLayPnlVersions.Controls.Add(this.lblWebParserDllVersionValue, 1, 1);
+            this.tblLayPnlVersions.Controls.Add(this.lblLanguageDllVersionValue, 1, 2);
+            this.tblLayPnlVersions.Controls.Add(this.lblLanguageDllVersion, 0, 2);
+            this.tblLayPnlVersions.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tblLayPnlVersions.Location = new System.Drawing.Point(3, 19);
+            this.tblLayPnlVersions.Name = "tblLayPnlVersions";
+            this.tblLayPnlVersions.RowCount = 4;
+            this.tblLayPnlVersions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.tblLayPnlVersions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.tblLayPnlVersions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.tblLayPnlVersions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.tblLayPnlVersions.Size = new System.Drawing.Size(316, 112);
+            this.tblLayPnlVersions.TabIndex = 0;
             // 
             // lblLoggerDllVersionValue
             // 
             this.lblLoggerDllVersionValue.BackColor = System.Drawing.Color.LightGray;
             this.lblLoggerDllVersionValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblLoggerDllVersionValue.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblLoggerDllVersionValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLoggerDllVersionValue.Location = new System.Drawing.Point(217, 103);
+            this.lblLoggerDllVersionValue.Location = new System.Drawing.Point(208, 87);
+            this.lblLoggerDllVersionValue.Margin = new System.Windows.Forms.Padding(3);
             this.lblLoggerDllVersionValue.Name = "lblLoggerDllVersionValue";
-            this.lblLoggerDllVersionValue.Size = new System.Drawing.Size(79, 23);
+            this.lblLoggerDllVersionValue.Size = new System.Drawing.Size(105, 22);
             this.lblLoggerDllVersionValue.TabIndex = 9;
             this.lblLoggerDllVersionValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -135,10 +181,12 @@
             // 
             this.lblLoggerDllVersion.BackColor = System.Drawing.Color.LightGray;
             this.lblLoggerDllVersion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblLoggerDllVersion.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblLoggerDllVersion.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLoggerDllVersion.Location = new System.Drawing.Point(10, 103);
+            this.lblLoggerDllVersion.Location = new System.Drawing.Point(3, 87);
+            this.lblLoggerDllVersion.Margin = new System.Windows.Forms.Padding(3);
             this.lblLoggerDllVersion.Name = "lblLoggerDllVersion";
-            this.lblLoggerDllVersion.Size = new System.Drawing.Size(203, 23);
+            this.lblLoggerDllVersion.Size = new System.Drawing.Size(199, 22);
             this.lblLoggerDllVersion.TabIndex = 8;
             this.lblLoggerDllVersion.Text = "_Logger dll:";
             this.lblLoggerDllVersion.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -147,10 +195,12 @@
             // 
             this.lblLanguageDllVersionValue.BackColor = System.Drawing.Color.LightGray;
             this.lblLanguageDllVersionValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblLanguageDllVersionValue.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblLanguageDllVersionValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLanguageDllVersionValue.Location = new System.Drawing.Point(217, 76);
+            this.lblLanguageDllVersionValue.Location = new System.Drawing.Point(208, 59);
+            this.lblLanguageDllVersionValue.Margin = new System.Windows.Forms.Padding(3);
             this.lblLanguageDllVersionValue.Name = "lblLanguageDllVersionValue";
-            this.lblLanguageDllVersionValue.Size = new System.Drawing.Size(79, 23);
+            this.lblLanguageDllVersionValue.Size = new System.Drawing.Size(105, 22);
             this.lblLanguageDllVersionValue.TabIndex = 7;
             this.lblLanguageDllVersionValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -158,10 +208,12 @@
             // 
             this.lblLanguageDllVersion.BackColor = System.Drawing.Color.LightGray;
             this.lblLanguageDllVersion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblLanguageDllVersion.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblLanguageDllVersion.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLanguageDllVersion.Location = new System.Drawing.Point(10, 76);
+            this.lblLanguageDllVersion.Location = new System.Drawing.Point(3, 59);
+            this.lblLanguageDllVersion.Margin = new System.Windows.Forms.Padding(3);
             this.lblLanguageDllVersion.Name = "lblLanguageDllVersion";
-            this.lblLanguageDllVersion.Size = new System.Drawing.Size(203, 23);
+            this.lblLanguageDllVersion.Size = new System.Drawing.Size(199, 22);
             this.lblLanguageDllVersion.TabIndex = 6;
             this.lblLanguageDllVersion.Text = "_Language dll:";
             this.lblLanguageDllVersion.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -171,10 +223,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.ClientSize = new System.Drawing.Size(330, 185);
+            this.ClientSize = new System.Drawing.Size(330, 178);
             this.ControlBox = false;
             this.Controls.Add(this.grpBoxVersions);
-            this.Controls.Add(this.btnOk);
             this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -187,6 +238,8 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmAbout_FormClosing);
             this.Load += new System.EventHandler(this.FrmAbout_Load);
             this.grpBoxVersions.ResumeLayout(false);
+            this.tblLayPnlButton.ResumeLayout(false);
+            this.tblLayPnlVersions.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -203,5 +256,7 @@
         private System.Windows.Forms.Label lblLanguageDllVersionValue;
         private System.Windows.Forms.Label lblLoggerDllVersionValue;
         private System.Windows.Forms.Label lblLoggerDllVersion;
+        private System.Windows.Forms.TableLayoutPanel tblLayPnlButton;
+        public System.Windows.Forms.TableLayoutPanel tblLayPnlVersions;
     }
 }

@@ -810,21 +810,16 @@ namespace SharePortfolioManager
         /// <param name="regexList">RegEx list for the share</param>
         /// <param name="cultureInfo">Culture of the share</param>
         /// <param name="dividendPayoutInterval">Interval of the dividend payout</param>
+        /// <param name="shareType">Type of the share</param>
         /// <param name="document">Document of the first buy</param>
-        /// <param name="taxAtSourceFlag">General flag if a tax at source must be paid</param>
-        /// <param name="taxAtSourcePercentage">General value for the tax at source</param>
-        /// <param name="capitalGainsTaxFlag">General flag if a capital gains tax must be paid </param>
-        /// <param name="capitalGainsTaxPercentage">General value for the capital gains tax</param>
-        /// <param name="solidarityTaxFlag">General flag if a solidarity tax must be paid </param>
-        /// <param name="solidarityTaxPercentage">General value for the solidarity tax</param>
         public ShareObjectMarketValue(
             string wkn, string addDateTime, string name,
             DateTime lastUpdateInternet, DateTime lastUpdateShareDate, DateTime lastUpdateShareTime,
             decimal price, decimal volume, decimal reduction, decimal costs, decimal purchaseValue,
             string webSite, List<Image> imageListForDayBeforePerformance, RegExList regexList, CultureInfo cultureInfo,
-            int dividendPayoutInterval, string document) : base(wkn, addDateTime, name, lastUpdateInternet, lastUpdateShareDate, lastUpdateShareTime,
+            int dividendPayoutInterval, int shareType, string document) : base(wkn, addDateTime, name, lastUpdateInternet, lastUpdateShareDate, lastUpdateShareTime,
                                                                 price, volume, reduction, costs, purchaseValue,
-                                                                webSite, imageListForDayBeforePerformance, regexList, cultureInfo,
+                                                                webSite, imageListForDayBeforePerformance, regexList, cultureInfo, shareType,
                                                                 document)
         {
         }
@@ -1088,12 +1083,15 @@ namespace SharePortfolioManager
                                     case 6:
                                         nodeElement.ChildNodes[i].InnerXml = shareObject.CultureInfoAsStr;
                                         break;
+                                    case 7:
+                                        nodeElement.ChildNodes[i].InnerXml = shareObject.ShareType.ToString();
+                                        break;
 
                                     #endregion General
 
                                     #region Buys
 
-                                    case 7:
+                                    case 8:
                                         // Remove old buys
                                         nodeElement.ChildNodes[i].RemoveAll();
                                         foreach (var buyElementYear in shareObject.AllBuyEntries.GetAllBuysOfTheShare())
@@ -1112,7 +1110,7 @@ namespace SharePortfolioManager
 
                                     #region Sales
 
-                                    case 8:
+                                    case 9:
                                         // Remove old sales
                                         nodeElement.ChildNodes[i].RemoveAll();
                                         foreach (var saleElementYear in shareObject.AllSaleEntries.GetAllSalesOfTheShare())
@@ -1134,7 +1132,7 @@ namespace SharePortfolioManager
 
                                     #region Costs
 
-                                    case 9:
+                                    case 10:
                                         // Remove old costs
                                         nodeElement.ChildNodes[i].RemoveAll();
                                         foreach (var costElementYear in shareObject.AllCostsEntries.GetAllCostsOfTheShare())
@@ -1227,6 +1225,13 @@ namespace SharePortfolioManager
                     XmlText Culture = xmlPortfolio.CreateTextNode(shareObject.CultureInfo.Name);
                     newShareNode.AppendChild(newCulture);
                     newShareNode.LastChild.AppendChild(Culture);
+
+                    // Add child nodes (share type)
+                    XmlElement newShareType = xmlPortfolio.CreateElement("ShareType");
+                    // Add child inner text
+                    XmlText ShareType = xmlPortfolio.CreateTextNode(shareObject.ShareType.ToString());
+                    newShareNode.AppendChild(newShareType);
+                    newShareNode.LastChild.AppendChild(ShareType);
 
                     #endregion General
 

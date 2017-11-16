@@ -41,7 +41,7 @@ namespace SharePortfolioManager
         /// <summary>
         /// Flag if the object is already disposed
         /// </summary>
-        private bool _bDisposed = false;
+        private bool _bDisposed;
 
         /// <summary>
         /// Stores the current share value with dividends, costs, profits and loss (final value)
@@ -65,7 +65,7 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores the total costs of the share
         /// </summary>
-        private decimal _costsValueTotal = 0;
+        private decimal _costsValueTotal;
 
         /// <summary>
         /// Stores the cost pays of the share
@@ -1179,25 +1179,18 @@ namespace SharePortfolioManager
         /// <param name="regexList">RegEx list for the share</param>
         /// <param name="cultureInfo">Culture of the share</param>
         /// <param name="dividendPayoutInterval">Interval of the dividend payout</param>
+        /// <param name="shareType">Type of the share</param>
         /// <param name="document">Document of the first buy</param>
-        /// <param name="taxAtSourceFlag">General flag if a tax at source must be paid</param>
-        /// <param name="taxAtSourcePercentage">General value for the tax at source</param>
-        /// <param name="capitalGainsTaxFlag">General flag if a capital gains tax must be paid </param>
-        /// <param name="capitalGainsTaxPercentage">General value for the capital gains tax</param>
-        /// <param name="solidarityTaxFlag">General flag if a solidarity tax must be paid </param>
-        /// <param name="solidarityTaxPercentage">General value for the solidarity tax</param>
         public ShareObjectFinalValue(
             string wkn, string addDateTime, string name,
             DateTime lastUpdateInternet, DateTime lastUpdateShareDate, DateTime lastUpdateShareTime,
             decimal price, decimal volume, decimal reduction, decimal costs, decimal purchaseValue,
             string webSite, List<Image> imageListForDayBeforePerformance, RegExList regexList, CultureInfo cultureInfo,
-            int dividendPayoutInterval, string document) : base(wkn, addDateTime, name, lastUpdateInternet, lastUpdateShareDate, lastUpdateShareTime,
+            int dividendPayoutInterval, int shareType, string document) : base(wkn, addDateTime, name, lastUpdateInternet, lastUpdateShareDate, lastUpdateShareTime,
                                                                 price, volume, reduction, costs, purchaseValue,
-                                                                webSite, imageListForDayBeforePerformance, regexList, cultureInfo,
+                                                                webSite, imageListForDayBeforePerformance, regexList, cultureInfo, shareType,
                                                                 document)
         {
-            Console.WriteLine("dividendPayoutInterval: {0}", dividendPayoutInterval);
-
             DividendPayoutInterval = dividendPayoutInterval;
         }
 
@@ -1573,274 +1566,356 @@ namespace SharePortfolioManager
             try
             {
                 // Update existing share
-                var nodeListShares = xmlPortfolio.SelectNodes(string.Format("/Portfolio/Share [@WKN = \"{0}\"]", shareObject.Wkn));
-                foreach (XmlNode nodeElement in nodeListShares)
+                var nodeListShares = xmlPortfolio.SelectNodes(string.Format("/Portfolio/Share [@WKN = \"{0}\"]",
+                    shareObject.Wkn));
+                if (nodeListShares != null)
                 {
-                    if (nodeElement != null)
+                    foreach (XmlNode nodeElement in nodeListShares)
                     {
-                        if (nodeElement.HasChildNodes && nodeElement.ChildNodes.Count == shareObject.ShareObjectTagCount)
+                        if (nodeElement != null)
                         {
-                            nodeElement.Attributes["WKN"].InnerText = shareObject.Wkn;
-                            nodeElement.Attributes["Name"].InnerText = shareObject.NameAsStr;
-
-                            for (int i = 0; i < nodeElement.ChildNodes.Count; i++)
+                            if (nodeElement.HasChildNodes &&
+                                nodeElement.ChildNodes.Count == shareObject.ShareObjectTagCount)
                             {
-                                switch (i)
+                                nodeElement.Attributes["WKN"].InnerText = shareObject.Wkn;
+                                nodeElement.Attributes["Name"].InnerText = shareObject.NameAsStr;
+
+                                for (int i = 0; i < nodeElement.ChildNodes.Count; i++)
                                 {
-                                    #region General
-                                    case 0:
-                                        nodeElement.ChildNodes[i].InnerText = string.Format(@"{0} {1}", shareObject.LastUpdateInternet.ToShortDateString(), shareObject.LastUpdateInternet.ToShortTimeString());
-                                        break;
-                                    case 1:
-                                        nodeElement.ChildNodes[i].InnerText = string.Format(@"{0} {1}", shareObject.LastUpdateDate.ToShortDateString(), shareObject.LastUpdateDate.ToShortTimeString());
-                                        break;
-                                    case 2:
-                                        nodeElement.ChildNodes[i].InnerText = string.Format(@"{0} {1}", shareObject.LastUpdateTime.ToShortDateString(), shareObject.LastUpdateTime.ToShortTimeString());
-                                        break;
-                                    case 3:
-                                        nodeElement.ChildNodes[i].InnerText = shareObject.CurPriceAsStr;
-                                        break;
-                                    case 4:
-                                        nodeElement.ChildNodes[i].InnerText = shareObject.PrevDayPriceAsStr;
-                                        break;
-                                    case 5:
-                                        nodeElement.ChildNodes[i].InnerText = shareObject.WebSite;
-                                        break;
-                                    case 6:
-                                        nodeElement.ChildNodes[i].InnerXml = shareObject.CultureInfoAsStr;
-                                        break;
+                                    switch (i)
+                                    {
+                                        #region General
 
-                                    #endregion General
+                                        case 0:
+                                            nodeElement.ChildNodes[i].InnerText = string.Format(@"{0} {1}",
+                                                shareObject.LastUpdateInternet.ToShortDateString(),
+                                                shareObject.LastUpdateInternet.ToShortTimeString());
+                                            break;
+                                        case 1:
+                                            nodeElement.ChildNodes[i].InnerText = string.Format(@"{0} {1}",
+                                                shareObject.LastUpdateDate.ToShortDateString(),
+                                                shareObject.LastUpdateDate.ToShortTimeString());
+                                            break;
+                                        case 2:
+                                            nodeElement.ChildNodes[i].InnerText = string.Format(@"{0} {1}",
+                                                shareObject.LastUpdateTime.ToShortDateString(),
+                                                shareObject.LastUpdateTime.ToShortTimeString());
+                                            break;
+                                        case 3:
+                                            nodeElement.ChildNodes[i].InnerText = shareObject.CurPriceAsStr;
+                                            break;
+                                        case 4:
+                                            nodeElement.ChildNodes[i].InnerText = shareObject.PrevDayPriceAsStr;
+                                            break;
+                                        case 5:
+                                            nodeElement.ChildNodes[i].InnerText = shareObject.WebSite;
+                                            break;
+                                        case 6:
+                                            nodeElement.ChildNodes[i].InnerXml = shareObject.CultureInfoAsStr;
+                                            break;
+                                        case 7:
+                                            nodeElement.ChildNodes[i].InnerXml = shareObject.ShareType.ToString();
+                                            break;
 
-                                    #region Buys
+                                        #endregion General
 
-                                    case 7:
-                                        // Remove old buys
-                                        nodeElement.ChildNodes[i].RemoveAll();
-                                        foreach (var buyElementYear in shareObject.AllBuyEntries.GetAllBuysOfTheShare())
-                                        {
-                                            XmlElement newBuyElement = xmlPortfolio.CreateElement(shareObject.BuyTagNamePre);
-                                            newBuyElement.SetAttribute(shareObject.BuyDateAttrName, buyElementYear.DateAsStr);
-                                            newBuyElement.SetAttribute(shareObject.BuyVolumeAttrName, buyElementYear.VolumeAsStr);
-                                            newBuyElement.SetAttribute(shareObject.BuyPriceAttrName, buyElementYear.SharePriceAsStr);
-                                            newBuyElement.SetAttribute(shareObject.BuyReductionAttrName, buyElementYear.ReductionAsStr);
-                                            newBuyElement.SetAttribute(shareObject.BuyDocumentAttrName, buyElementYear.Document);
-                                            nodeElement.ChildNodes[i].AppendChild(newBuyElement);
-                                        }
-                                        break;
+                                        #region Buys
 
-                                    #endregion Buys
-
-                                    #region Sales
-
-                                    case 8:
-                                        // Remove old sales
-                                        nodeElement.ChildNodes[i].RemoveAll();
-                                        foreach (var saleElementYear in shareObject.AllSaleEntries.GetAllSalesOfTheShare())
-                                        {
-                                            XmlElement newSaleElement = xmlPortfolio.CreateElement(shareObject.SaleTagNamePre);
-                                            newSaleElement.SetAttribute(shareObject.SaleDateAttrName, saleElementYear.DateAsStr);
-                                            newSaleElement.SetAttribute(shareObject.SaleVolumeAttrName, saleElementYear.VolumeAsStr);
-                                            newSaleElement.SetAttribute(shareObject.SaleBuyPriceAttrName, saleElementYear.BuyPriceAsStr);
-                                            newSaleElement.SetAttribute(shareObject.SalePriceAttrName, saleElementYear.SalePriceAsStr);
-                                            newSaleElement.SetAttribute(shareObject.SaleTaxAtSourceAttrName, saleElementYear.TaxAtSourceAsStr);
-                                            newSaleElement.SetAttribute(shareObject.SaleCapitalGainsTaxAttrName, saleElementYear.CapitalGainsTaxAsStr);
-                                            newSaleElement.SetAttribute(shareObject.SaleSolidarityTaxAttrName, saleElementYear.SolidarityTaxAsStr);
-                                            newSaleElement.SetAttribute(shareObject.SaleDocumentAttrName, saleElementYear.Document);
-                                            nodeElement.ChildNodes[i].AppendChild(newSaleElement);
-                                        }
-                                        break;
-
-                                    #endregion Sales
-
-                                    #region Costs
-
-                                    case 9:
-                                        // Remove old costs
-                                        nodeElement.ChildNodes[i].RemoveAll();
-                                        // Remove old costs
-                                        nodeElement.ChildNodes[i].RemoveAll();
-                                        foreach (var costElementYear in shareObject.AllCostsEntries.GetAllCostsOfTheShare())
-                                        {
-                                            XmlElement newCostElement = xmlPortfolio.CreateElement(shareObject.CostsTagNamePre);
-                                            newCostElement.SetAttribute(shareObject.CostsBuyPartAttrName, costElementYear.CostOfABuyAsStr);
-                                            newCostElement.SetAttribute(shareObject.CostsSalePartAttrName, costElementYear.CostOfASaleAsStr);
-                                            newCostElement.SetAttribute(shareObject.CostsDateAttrName, costElementYear.CostDateAsStr);
-                                            newCostElement.SetAttribute(shareObject.CostsValueAttrName, costElementYear.CostValueAsStr);
-                                            newCostElement.SetAttribute(shareObject.BuyDocumentAttrName, costElementYear.CostDocument);
-                                            nodeElement.ChildNodes[i].AppendChild(newCostElement);
-                                        }
-                                        break;
-
-                                    #endregion Costs
-
-                                    #region Dividends
-
-                                    case 10:
-                                        // Remove old dividends
-                                        nodeElement.ChildNodes[i].RemoveAll();
-                                        ((XmlElement)nodeElement.ChildNodes[i]).SetAttribute(shareObject.DividendPayoutIntervalAttrName, shareObject.DividendPayoutIntervalAsStr);
-
-                                        foreach (var dividendObject in shareObject.AllDividendEntries.GetAllDividendsOfTheShare())
-                                        {
-                                            XmlElement newDividendElement = xmlPortfolio.CreateElement(shareObject.DividendTagName);
-                                            newDividendElement.SetAttribute(shareObject.DividendDateAttrName, dividendObject.DateTimeStr);
-                                            newDividendElement.SetAttribute(shareObject.DividendRateAttrName, dividendObject.Rate);
-                                            newDividendElement.SetAttribute(shareObject.DividendVolumeAttrName, dividendObject.Volume);
-
-                                            newDividendElement.SetAttribute(shareObject.DividendTaxAtSourceAttrName, dividendObject.TaxAtSource);
-                                            newDividendElement.SetAttribute(shareObject.DividendCapitalGainsTaxAttrName, dividendObject.CapitalGainsTax);
-                                            newDividendElement.SetAttribute(shareObject.DividendSolidarityTaxAttrName, dividendObject.SolidarityTax);
-
-                                            newDividendElement.SetAttribute(shareObject.DividendPriceAttrName, dividendObject.Price);
-                                            newDividendElement.SetAttribute(shareObject.DividendDocumentAttrName, dividendObject.Document);
-
-                                            // Foreign currency information
-                                            XmlElement newForeignCurrencyElement = xmlPortfolio.CreateElement(shareObject.DividendTagNameForeignCu);
-
-                                            newForeignCurrencyElement.SetAttribute(shareObject.DividendForeignCuFlagAttrName, dividendObject.EnableFCStr);
-
-                                            if (dividendObject.EnableFC == CheckState.Checked)
+                                        case 8:
+                                            // Remove old buys
+                                            nodeElement.ChildNodes[i].RemoveAll();
+                                            foreach (var buyElementYear in shareObject.AllBuyEntries
+                                                .GetAllBuysOfTheShare())
                                             {
-                                                newForeignCurrencyElement.SetAttribute(shareObject.DividendExchangeRatioAttrName, dividendObject.ExchangeRatio);
-                                                newForeignCurrencyElement.SetAttribute(shareObject.DividendNameAttrName, dividendObject.CultureInfoFC.Name);
+                                                XmlElement newBuyElement =
+                                                    xmlPortfolio.CreateElement(shareObject.BuyTagNamePre);
+                                                newBuyElement.SetAttribute(shareObject.BuyDateAttrName,
+                                                    buyElementYear.DateAsStr);
+                                                newBuyElement.SetAttribute(shareObject.BuyVolumeAttrName,
+                                                    buyElementYear.VolumeAsStr);
+                                                newBuyElement.SetAttribute(shareObject.BuyPriceAttrName,
+                                                    buyElementYear.SharePriceAsStr);
+                                                newBuyElement.SetAttribute(shareObject.BuyReductionAttrName,
+                                                    buyElementYear.ReductionAsStr);
+                                                newBuyElement.SetAttribute(shareObject.BuyDocumentAttrName,
+                                                    buyElementYear.Document);
+                                                nodeElement.ChildNodes[i].AppendChild(newBuyElement);
                                             }
-                                            else
+                                            break;
+
+                                        #endregion Buys
+
+                                        #region Sales
+
+                                        case 9:
+                                            // Remove old sales
+                                            nodeElement.ChildNodes[i].RemoveAll();
+                                            foreach (var saleElementYear in shareObject.AllSaleEntries
+                                                .GetAllSalesOfTheShare())
                                             {
-                                                newForeignCurrencyElement.SetAttribute(shareObject.DividendExchangeRatioAttrName, 0.ToString());
-                                                newForeignCurrencyElement.SetAttribute(shareObject.DividendNameAttrName, dividendObject.DividendCultureInfo.Name);
-
+                                                XmlElement newSaleElement =
+                                                    xmlPortfolio.CreateElement(shareObject.SaleTagNamePre);
+                                                newSaleElement.SetAttribute(shareObject.SaleDateAttrName,
+                                                    saleElementYear.DateAsStr);
+                                                newSaleElement.SetAttribute(shareObject.SaleVolumeAttrName,
+                                                    saleElementYear.VolumeAsStr);
+                                                newSaleElement.SetAttribute(shareObject.SaleBuyPriceAttrName,
+                                                    saleElementYear.BuyPriceAsStr);
+                                                newSaleElement.SetAttribute(shareObject.SalePriceAttrName,
+                                                    saleElementYear.SalePriceAsStr);
+                                                newSaleElement.SetAttribute(shareObject.SaleTaxAtSourceAttrName,
+                                                    saleElementYear.TaxAtSourceAsStr);
+                                                newSaleElement.SetAttribute(shareObject.SaleCapitalGainsTaxAttrName,
+                                                    saleElementYear.CapitalGainsTaxAsStr);
+                                                newSaleElement.SetAttribute(shareObject.SaleSolidarityTaxAttrName,
+                                                    saleElementYear.SolidarityTaxAsStr);
+                                                newSaleElement.SetAttribute(shareObject.SaleDocumentAttrName,
+                                                    saleElementYear.Document);
+                                                nodeElement.ChildNodes[i].AppendChild(newSaleElement);
                                             }
-                                            newDividendElement.AppendChild(newForeignCurrencyElement);
+                                            break;
 
-                                            nodeElement.ChildNodes[i].AppendChild(newDividendElement);
-                                        }
-                                        break;
+                                        #endregion Sales
 
-                                    #endregion Dividends
+                                        #region Costs
 
-                                    default:
-                                        break;
+                                        case 10:
+                                            // Remove old costs
+                                            nodeElement.ChildNodes[i].RemoveAll();
+                                            // Remove old costs
+                                            nodeElement.ChildNodes[i].RemoveAll();
+                                            foreach (var costElementYear in shareObject.AllCostsEntries
+                                                .GetAllCostsOfTheShare())
+                                            {
+                                                XmlElement newCostElement =
+                                                    xmlPortfolio.CreateElement(shareObject.CostsTagNamePre);
+                                                newCostElement.SetAttribute(shareObject.CostsBuyPartAttrName,
+                                                    costElementYear.CostOfABuyAsStr);
+                                                newCostElement.SetAttribute(shareObject.CostsSalePartAttrName,
+                                                    costElementYear.CostOfASaleAsStr);
+                                                newCostElement.SetAttribute(shareObject.CostsDateAttrName,
+                                                    costElementYear.CostDateAsStr);
+                                                newCostElement.SetAttribute(shareObject.CostsValueAttrName,
+                                                    costElementYear.CostValueAsStr);
+                                                newCostElement.SetAttribute(shareObject.BuyDocumentAttrName,
+                                                    costElementYear.CostDocument);
+                                                nodeElement.ChildNodes[i].AppendChild(newCostElement);
+                                            }
+                                            break;
+
+                                        #endregion Costs
+
+                                        #region Dividends
+
+                                        case 11:
+                                            // Remove old dividends
+                                            nodeElement.ChildNodes[i].RemoveAll();
+                                            ((XmlElement) nodeElement.ChildNodes[i]).SetAttribute(
+                                                shareObject.DividendPayoutIntervalAttrName,
+                                                shareObject.DividendPayoutIntervalAsStr);
+
+                                            foreach (var dividendObject in shareObject.AllDividendEntries
+                                                .GetAllDividendsOfTheShare())
+                                            {
+                                                XmlElement newDividendElement =
+                                                    xmlPortfolio.CreateElement(shareObject.DividendTagName);
+                                                newDividendElement.SetAttribute(shareObject.DividendDateAttrName,
+                                                    dividendObject.DateTimeStr);
+                                                newDividendElement.SetAttribute(shareObject.DividendRateAttrName,
+                                                    dividendObject.Rate);
+                                                newDividendElement.SetAttribute(shareObject.DividendVolumeAttrName,
+                                                    dividendObject.Volume);
+
+                                                newDividendElement.SetAttribute(shareObject.DividendTaxAtSourceAttrName,
+                                                    dividendObject.TaxAtSource);
+                                                newDividendElement.SetAttribute(
+                                                    shareObject.DividendCapitalGainsTaxAttrName,
+                                                    dividendObject.CapitalGainsTax);
+                                                newDividendElement.SetAttribute(
+                                                    shareObject.DividendSolidarityTaxAttrName,
+                                                    dividendObject.SolidarityTax);
+
+                                                newDividendElement.SetAttribute(shareObject.DividendPriceAttrName,
+                                                    dividendObject.Price);
+                                                newDividendElement.SetAttribute(shareObject.DividendDocumentAttrName,
+                                                    dividendObject.Document);
+
+                                                // Foreign currency information
+                                                XmlElement newForeignCurrencyElement =
+                                                    xmlPortfolio.CreateElement(shareObject.DividendTagNameForeignCu);
+
+                                                newForeignCurrencyElement.SetAttribute(
+                                                    shareObject.DividendForeignCuFlagAttrName,
+                                                    dividendObject.EnableFCStr);
+
+                                                if (dividendObject.EnableFC == CheckState.Checked)
+                                                {
+                                                    newForeignCurrencyElement.SetAttribute(
+                                                        shareObject.DividendExchangeRatioAttrName,
+                                                        dividendObject.ExchangeRatio);
+                                                    newForeignCurrencyElement.SetAttribute(
+                                                        shareObject.DividendNameAttrName,
+                                                        dividendObject.CultureInfoFC.Name);
+                                                }
+                                                else
+                                                {
+                                                    newForeignCurrencyElement.SetAttribute(
+                                                        shareObject.DividendExchangeRatioAttrName, 0.ToString());
+                                                    newForeignCurrencyElement.SetAttribute(
+                                                        shareObject.DividendNameAttrName,
+                                                        dividendObject.DividendCultureInfo.Name);
+                                                }
+                                                newDividendElement.AppendChild(newForeignCurrencyElement);
+
+                                                nodeElement.ChildNodes[i].AppendChild(newDividendElement);
+                                            }
+                                            break;
+
+                                        #endregion Dividends
+
+                                        default:
+                                            break;
+                                    }
                                 }
                             }
                         }
                     }
+
+                    // Add a new share
+                    if (nodeListShares.Count == 0)
+                    {
+                        #region General
+
+                        // Get root element
+                        XmlNode rootPortfolio = xmlPortfolio.SelectSingleNode("Portfolio");
+
+                        // Add new share
+                        XmlNode newShareNode = xmlPortfolio.CreateNode(XmlNodeType.Element, "Share", null);
+
+                        // Add attributes (WKN)
+                        XmlAttribute xmlAttributeWkn = xmlPortfolio.CreateAttribute("WKN");
+                        xmlAttributeWkn.Value = shareObject.WknAsStr;
+                        newShareNode.Attributes.Append(xmlAttributeWkn);
+
+                        // Add attributes (ShareName)
+                        XmlAttribute xmlAttributeShareName = xmlPortfolio.CreateAttribute("Name");
+                        xmlAttributeShareName.Value = shareObject.NameAsStr;
+                        newShareNode.Attributes.Append(xmlAttributeShareName);
+
+                        // Add child nodes (last update Internet)
+                        XmlElement newLastUpdateInternet = xmlPortfolio.CreateElement("LastUpdateInternet");
+                        // Add child inner text
+                        XmlText lastUpdateInternetValue = xmlPortfolio.CreateTextNode(
+                            shareObject.LastUpdateInternet.ToShortDateString() + " " +
+                            shareObject.LastUpdateInternet.ToShortTimeString());
+                        newShareNode.AppendChild(newLastUpdateInternet);
+                        newShareNode.LastChild.AppendChild(lastUpdateInternetValue);
+
+                        // Add child nodes (last update date)
+                        XmlElement newLastUpdateDate = xmlPortfolio.CreateElement("LastUpdateShareDate");
+                        // Add child inner text
+                        XmlText lastUpdateValueDate = xmlPortfolio.CreateTextNode(
+                            shareObject.LastUpdateDate.ToShortDateString() + " " +
+                            shareObject.LastUpdateDate.ToShortTimeString());
+                        newShareNode.AppendChild(newLastUpdateDate);
+                        newShareNode.LastChild.AppendChild(lastUpdateValueDate);
+
+                        // Add child nodes (last update time)
+                        XmlElement newLastUpdateTime = xmlPortfolio.CreateElement("LastUpdateTime");
+                        // Add child inner text
+                        XmlText lastUpdateValueTime = xmlPortfolio.CreateTextNode(
+                            shareObject.LastUpdateTime.ToShortDateString() + " " +
+                            shareObject.LastUpdateTime.ToShortTimeString());
+                        newShareNode.AppendChild(newLastUpdateTime);
+                        newShareNode.LastChild.AppendChild(lastUpdateValueTime);
+
+                        // Add child nodes (share price)
+                        XmlElement newSharePrice = xmlPortfolio.CreateElement("SharePrice");
+                        // Add child inner text
+                        XmlText sharePrice = xmlPortfolio.CreateTextNode(shareObject.CurPriceAsStr);
+                        newShareNode.AppendChild(newSharePrice);
+                        newShareNode.LastChild.AppendChild(sharePrice);
+
+                        // Add child nodes (share price before)
+                        XmlElement newSharePriceBefore = xmlPortfolio.CreateElement("SharePriceBefore");
+                        // Add child inner text
+                        XmlText sharePriceBefore = xmlPortfolio.CreateTextNode(shareObject.PrevDayPriceAsStr);
+                        newShareNode.AppendChild(newSharePriceBefore);
+                        newShareNode.LastChild.AppendChild(sharePriceBefore);
+
+                        // Add child nodes (website)
+                        XmlElement newWebsite = xmlPortfolio.CreateElement("WebSite");
+                        // Add child inner text
+                        XmlText webSite = xmlPortfolio.CreateTextNode(shareObject.WebSite);
+                        newShareNode.AppendChild(newWebsite);
+                        newShareNode.LastChild.AppendChild(webSite);
+
+                        // Add child nodes (culture)
+                        XmlElement newCulture = xmlPortfolio.CreateElement("Culture");
+                        // Add child inner text
+                        XmlText culture = xmlPortfolio.CreateTextNode(shareObject.CultureInfo.Name);
+                        newShareNode.AppendChild(newCulture);
+                        newShareNode.LastChild.AppendChild(culture);
+
+                        // Add child nodes (share type)
+                        XmlElement newShareType = xmlPortfolio.CreateElement("ShareType");
+                        // Add child inner text
+                        XmlText shareType = xmlPortfolio.CreateTextNode(shareObject.ShareType.ToString());
+                        newShareNode.AppendChild(newShareType);
+                        newShareNode.LastChild.AppendChild(shareType);
+
+                        #endregion General
+
+                        #region Buys / Sales / Costs / Dividends
+
+                        // Add child nodes (buys)
+                        XmlElement newBuys = xmlPortfolio.CreateElement("Buys");
+                        newShareNode.AppendChild(newBuys);
+                        foreach (var buyElementYear in shareObject.AllBuyEntries.GetAllBuysOfTheShare())
+                        {
+                            XmlElement newBuyElement = xmlPortfolio.CreateElement(shareObject.BuyTagNamePre);
+                            newBuyElement.SetAttribute(shareObject.BuyDateAttrName, buyElementYear.DateAsStr);
+                            newBuyElement.SetAttribute(shareObject.BuyVolumeAttrName, buyElementYear.VolumeAsStr);
+                            newBuyElement.SetAttribute(shareObject.BuyPriceAttrName, buyElementYear.SharePriceAsStr);
+                            newBuyElement.SetAttribute(shareObject.BuyReductionAttrName, buyElementYear.ReductionAsStr);
+                            newBuyElement.SetAttribute(shareObject.BuyDocumentAttrName, buyElementYear.Document);
+                            newBuys.AppendChild(newBuyElement);
+                        }
+
+                        // Add child nodes (sales)
+                        XmlElement newSales = xmlPortfolio.CreateElement("Sales");
+                        newShareNode.AppendChild(newSales);
+
+                        // Add child nodes (costs)
+                        XmlElement newCosts = xmlPortfolio.CreateElement("Costs");
+                        newShareNode.AppendChild(newCosts);
+                        foreach (var costElementYear in shareObject.AllCostsEntries.GetAllCostsOfTheShare())
+                        {
+                            XmlElement newCostElement = xmlPortfolio.CreateElement(shareObject.CostsTagNamePre);
+                            newCostElement.SetAttribute(shareObject.CostsBuyPartAttrName,
+                                costElementYear.CostOfABuyAsStr);
+                            newCostElement.SetAttribute(shareObject.CostsDateAttrName, costElementYear.CostDateAsStr);
+                            newCostElement.SetAttribute(shareObject.CostsValueAttrName, costElementYear.CostValueAsStr);
+                            newCostElement.SetAttribute(shareObject.BuyDocumentAttrName, costElementYear.CostDocument);
+                            newCosts.AppendChild(newCostElement);
+                        }
+
+                        // Add child nodes (dividend)
+                        XmlElement newDividend = xmlPortfolio.CreateElement("Dividends");
+                        newDividend.SetAttribute(shareObject.DividendPayoutIntervalAttrName,
+                            shareObject.DividendPayoutIntervalAsStr);
+                        newShareNode.AppendChild(newDividend);
+
+                        #endregion Buys / Sales / Costs / Dividends
+
+                        // Add share name to XML
+                        rootPortfolio.AppendChild(newShareNode);
+                    }
                 }
-
-                // Add a new share
-                if (nodeListShares.Count == 0)
+                else
                 {
-                    #region General
-
-                    // Get root element
-                    XmlNode rootPortfolio = xmlPortfolio.SelectSingleNode("Portfolio");
-
-                    // Add new share
-                    XmlNode newShareNode = xmlPortfolio.CreateNode(XmlNodeType.Element, "Share", null);
-
-                    // Add attributes (WKN)
-                    XmlAttribute xmlAttributeWKN = xmlPortfolio.CreateAttribute("WKN");
-                    xmlAttributeWKN.Value = shareObject.WknAsStr;
-                    newShareNode.Attributes.Append(xmlAttributeWKN);
-
-                    // Add attributes (ShareName)
-                    XmlAttribute xmlAttributeShareName = xmlPortfolio.CreateAttribute("Name");
-                    xmlAttributeShareName.Value = shareObject.NameAsStr;
-                    newShareNode.Attributes.Append(xmlAttributeShareName);
-
-                    // Add child nodes (last update Internet)
-                    XmlElement newLastUpdateInternet = xmlPortfolio.CreateElement("LastUpdateInternet");
-                    // Add child inner text
-                    XmlText lastUpdateInternetValue = xmlPortfolio.CreateTextNode(shareObject.LastUpdateInternet.ToShortDateString() + " " + shareObject.LastUpdateInternet.ToShortTimeString());
-                    newShareNode.AppendChild(newLastUpdateInternet);
-                    newShareNode.LastChild.AppendChild(lastUpdateInternetValue);
-
-                    // Add child nodes (last update date)
-                    XmlElement newLastUpdateDate = xmlPortfolio.CreateElement("LastUpdateShareDate");
-                    // Add child inner text
-                    XmlText lastUpdateValueDate = xmlPortfolio.CreateTextNode(shareObject.LastUpdateDate.ToShortDateString() + " " + shareObject.LastUpdateDate.ToShortTimeString());
-                    newShareNode.AppendChild(newLastUpdateDate);
-                    newShareNode.LastChild.AppendChild(lastUpdateValueDate);
-
-                    // Add child nodes (last update time)
-                    XmlElement newLastUpdateTime = xmlPortfolio.CreateElement("LastUpdateTime");
-                    // Add child inner text
-                    XmlText lastUpdateValueTime = xmlPortfolio.CreateTextNode(shareObject.LastUpdateTime.ToShortDateString() + " " + shareObject.LastUpdateTime.ToShortTimeString());
-                    newShareNode.AppendChild(newLastUpdateTime);
-                    newShareNode.LastChild.AppendChild(lastUpdateValueTime);
-
-                    // Add child nodes (share price)
-                    XmlElement newSharePrice = xmlPortfolio.CreateElement("SharePrice");
-                    // Add child inner text
-                    XmlText SharePrice = xmlPortfolio.CreateTextNode(shareObject.CurPriceAsStr);
-                    newShareNode.AppendChild(newSharePrice);
-                    newShareNode.LastChild.AppendChild(SharePrice);
-
-                    // Add child nodes (share price before)
-                    XmlElement newSharePriceBefore = xmlPortfolio.CreateElement("SharePriceBefore");
-                    // Add child inner text
-                    XmlText SharePriceBefore = xmlPortfolio.CreateTextNode(shareObject.PrevDayPriceAsStr);
-                    newShareNode.AppendChild(newSharePriceBefore);
-                    newShareNode.LastChild.AppendChild(SharePriceBefore);
-
-                    // Add child nodes (website)
-                    XmlElement newWebsite = xmlPortfolio.CreateElement("WebSite");
-                    // Add child inner text
-                    XmlText WebSite = xmlPortfolio.CreateTextNode(shareObject.WebSite);
-                    newShareNode.AppendChild(newWebsite);
-                    newShareNode.LastChild.AppendChild(WebSite);
-
-                    // Add child nodes (culture)
-                    XmlElement newCulture = xmlPortfolio.CreateElement("Culture");
-                    // Add child inner text
-                    XmlText Culture = xmlPortfolio.CreateTextNode(shareObject.CultureInfo.Name);
-                    newShareNode.AppendChild(newCulture);
-                    newShareNode.LastChild.AppendChild(Culture);
-
-                    #endregion General
-
-                    #region Buys / Sales / Costs / Dividends
-
-                    // Add child nodes (buys)
-                    XmlElement newBuys = xmlPortfolio.CreateElement("Buys");
-                    newShareNode.AppendChild(newBuys);
-                    foreach (var buyElementYear in shareObject.AllBuyEntries.GetAllBuysOfTheShare())
-                    {
-                        XmlElement newBuyElement = xmlPortfolio.CreateElement(shareObject.BuyTagNamePre);
-                        newBuyElement.SetAttribute(shareObject.BuyDateAttrName, buyElementYear.DateAsStr);
-                        newBuyElement.SetAttribute(shareObject.BuyVolumeAttrName, buyElementYear.VolumeAsStr);
-                        newBuyElement.SetAttribute(shareObject.BuyPriceAttrName, buyElementYear.SharePriceAsStr);
-                        newBuyElement.SetAttribute(shareObject.BuyReductionAttrName, buyElementYear.ReductionAsStr);
-                        newBuyElement.SetAttribute(shareObject.BuyDocumentAttrName, buyElementYear.Document);
-                        newBuys.AppendChild(newBuyElement);
-                    }
-
-                    // Add child nodes (sales)
-                    XmlElement newSales = xmlPortfolio.CreateElement("Sales");
-                    newShareNode.AppendChild(newSales);
-
-                    // Add child nodes (costs)
-                    XmlElement newCosts = xmlPortfolio.CreateElement("Costs");
-                    newShareNode.AppendChild(newCosts);
-                    foreach (var costElementYear in shareObject.AllCostsEntries.GetAllCostsOfTheShare())
-                    {
-                        XmlElement newCostElement = xmlPortfolio.CreateElement(shareObject.CostsTagNamePre);
-                        newCostElement.SetAttribute(shareObject.CostsBuyPartAttrName, costElementYear.CostOfABuyAsStr);
-                        newCostElement.SetAttribute(shareObject.CostsDateAttrName, costElementYear.CostDateAsStr);
-                        newCostElement.SetAttribute(shareObject.CostsValueAttrName, costElementYear.CostValueAsStr);
-                        newCostElement.SetAttribute(shareObject.BuyDocumentAttrName, costElementYear.CostDocument);
-                        newCosts.AppendChild(newCostElement);
-                    }
-
-                    // Add child nodes (dividend)
-                    XmlElement newDividend = xmlPortfolio.CreateElement("Dividends");
-                    newDividend.SetAttribute(shareObject.DividendPayoutIntervalAttrName, shareObject.DividendPayoutIntervalAsStr);
-                    newShareNode.AppendChild(newDividend);
-
-                    #endregion Buys / Sales / Costs / Dividends
-
-                    // Add share name to XML
-                    rootPortfolio.AppendChild(newShareNode);
+                    exception = null;
+                    return false;
                 }
 
                 // Close reader for saving
@@ -1932,7 +2007,7 @@ namespace SharePortfolioManager
             }
 
             // Free any unmanaged objects here.
-            Console.WriteLine("ShareObjectFinalValue destructor...");
+            Console.WriteLine(@"ShareObjectFinalValue destructor...");
             if (PurchaseValue > decimal.MinValue / 2)
                 PortfolioPurchaseValue -= PurchaseValue;
             if (FinalValue > decimal.MinValue / 2)

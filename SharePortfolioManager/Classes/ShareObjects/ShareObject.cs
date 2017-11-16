@@ -51,7 +51,7 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores the count of the share object tags in the XML
         /// </summary>
-        private const short _ShareObjectTagCount = 11;
+        private const short _ShareObjectTagCount = 12;
 
         /// <summary>
         /// Stores the WKN of a share
@@ -152,6 +152,11 @@ namespace SharePortfolioManager
         /// Stores the currency unit of the share
         /// </summary>
         private string _currencyUnit;
+
+        /// <summary>
+        /// Stores the type of the share
+        /// </summary>
+        private int _shareType;
 
         #endregion General variables
 
@@ -431,6 +436,13 @@ namespace SharePortfolioManager
         public string CurrencyUnit
         {
             get { return _currencyUnit; }
+        }
+
+        [Browsable(false)]
+        public int ShareType
+        {
+            get { return _shareType; }
+            set { _shareType = value; }
         }
 
         #endregion General properties
@@ -997,19 +1009,14 @@ namespace SharePortfolioManager
         /// <param name="imageListForDayBeforePerformance">Images for the performance indication</param>
         /// <param name="regexList">RegEx list for the share</param>
         /// <param name="cultureInfo">Culture of the share</param>
+        /// <param name="shareType">Type of the share</param>
         /// <param name="document">Document of the first buy</param>
-        /// <param name="taxAtSourceFlag">General flag if a tax at source must be paid</param>
-        /// <param name="taxAtSourcePercentage">General value for the tax at source</param>
-        /// <param name="capitalGainsTaxFlag">General flag if a capital gains tax must be paid </param>
-        /// <param name="capitalGainsTaxPercentage">General value for the capital gains tax</param>
-        /// <param name="solidarityTaxFlag">General flag if a solidarity tax must be paid </param>
-        /// <param name="solidarityTaxPercentage">General value for the solidarity tax</param>
         public ShareObject(
             string wkn, string addDateTime, string name,
             DateTime lastUpdateInternet, DateTime lastUpdateShareDate, DateTime lastUpdateShareTime,
             decimal price, decimal volume, decimal reduction, decimal costs, decimal purchaseValue,
             string webSite, List<Image> imageListForDayBeforePerformance, RegExList regexList, CultureInfo cultureInfo,
-            string document)
+            int shareType, string document)
         {
 #if DEBUG_SHAREOBJECT
             Console.WriteLine("");
@@ -1041,6 +1048,7 @@ namespace SharePortfolioManager
             ImagePrevDayPerformance = ImageListPrevDayPerformance[0];
             RegexList = regexList;
             CultureInfo = cultureInfo;
+            ShareType = shareType;
 
             AddBuy(AddDateTime, volume, price, reduction, costs, document);
 

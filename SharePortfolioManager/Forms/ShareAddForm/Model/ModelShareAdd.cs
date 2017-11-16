@@ -65,6 +65,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Model
         string WebSite { get; set; }
         CultureInfo CultureInfo { get; set; }
         int DividendPayoutInterval { get; set; }
+        int ShareType { get; set; }
         string Document { get; set; }
     }
 
@@ -108,6 +109,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Model
         string _webSite;
         CultureInfo _cultureInfo;
         int _dividendPayoutInterval;
+        int _shareType;
         string _document;
 
         #endregion Fields
@@ -483,6 +485,17 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Model
                 if (_dividendPayoutInterval == value)
                     return;
                 _dividendPayoutInterval = value;
+            }
+        }
+
+        public int ShareType
+        {
+            get { return _shareType; }
+            set
+            {
+                if (_shareType == value)
+                    return;
+                _shareType = value;
             }
         }
 

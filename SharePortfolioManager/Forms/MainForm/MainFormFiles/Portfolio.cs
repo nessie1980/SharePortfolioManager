@@ -336,12 +336,18 @@ namespace SharePortfolioManager
                                                 ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].CultureInfo =
                                                     new CultureInfo(nodeElement.ChildNodes[i].InnerXml);
                                                 break;
+                                            case 7:
+                                                    ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].ShareType =
+                                                    Convert.ToInt16(nodeElement.ChildNodes[i].InnerText);
+                                                ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].ShareType =
+                                                    Convert.ToInt16(nodeElement.ChildNodes[i].InnerText);
+                                                break;
 
                                             #endregion General
 
                                             #region Buys
 
-                                            case 7:
+                                            case 8:
                                                 foreach (XmlElement nodeList in nodeElement.ChildNodes[i].ChildNodes)
                                                 {
                                                     // Check if the node has the right count of attributes
@@ -383,7 +389,7 @@ namespace SharePortfolioManager
 
                                             #region Sales
 
-                                            case 8:
+                                            case 9:
                                                 foreach (XmlElement nodeList in nodeElement.ChildNodes[i].ChildNodes)
                                                 {
                                                     // Check if the node has the right count of attributes
@@ -441,7 +447,7 @@ namespace SharePortfolioManager
 
                                             #region Costs
 
-                                            case 9:
+                                            case 10:
                                                 foreach (XmlElement nodeList in nodeElement.ChildNodes[i].ChildNodes)
                                                 {
                                                     // Check if the node has the right count of attributes
@@ -571,7 +577,7 @@ namespace SharePortfolioManager
 
                                             #region Dividends
 
-                                            case 10:
+                                            case 11:
                                                 // Read dividend payout interval
                                                 if (nodeElement.ChildNodes[i].Attributes != null)
                                                 {

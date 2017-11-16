@@ -77,7 +77,7 @@ namespace SharePortfolioManager
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Image = Resources.black_cancel;
+            this.btnCancel.Image = global::SharePortfolioManager.Properties.Resources.black_cancel;
             this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnCancel.Location = new System.Drawing.Point(559, 299);
             this.btnCancel.Name = "btnCancel";
@@ -92,7 +92,7 @@ namespace SharePortfolioManager
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSave.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnSave.Image = Resources.black_save;
+            this.btnSave.Image = global::SharePortfolioManager.Properties.Resources.black_save;
             this.btnSave.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSave.Location = new System.Drawing.Point(387, 299);
             this.btnSave.Name = "btnSave";

@@ -265,8 +265,8 @@ namespace SharePortfolioManager
                 lblVolume.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Volume", LanguageName);
                 lblWebSite.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/WebSite", LanguageName);
                 lblCultureInfo.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/CultureInfo", LanguageName);
-                lblDividendPayoutInterval.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/PayoutInterval", LanguageName);
 
+                lblDividendPayoutInterval.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/PayoutInterval", LanguageName);
                 cbxDividendPayoutInterval.Items.Add(
                     Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item0",
                         LanguageName));
@@ -280,8 +280,24 @@ namespace SharePortfolioManager
                     Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item3",
                         LanguageName));
 
+                lblShareType.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/ShareType", LanguageName);
+                cbxShareType.Items.Add(
+                    Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/ComboBoxItemsShareType/Item0",
+                        LanguageName));
+                cbxShareType.Items.Add(
+                    Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/ComboBoxItemsShareType/Item1",
+                        LanguageName));
+                cbxShareType.Items.Add(
+                    Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/ComboBoxItemsShareType/Item2",
+                        LanguageName));
+                cbxShareType.Items.Add(
+                    Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/ComboBoxItemsShareType/Item3",
+                        LanguageName));
+
                 // Select the payout interval for the dividend
                 cbxDividendPayoutInterval.SelectedIndex = ShareObjectFinalValue.DividendPayoutInterval;
+                // Select the type of the share
+                cbxShareType.SelectedIndex = ShareObjectFinalValue.ShareType;
 
                 #endregion GroupBox General
 
@@ -574,9 +590,9 @@ namespace SharePortfolioManager
                     ShareObjectMarketValue.Name = txtBoxName.Text;
                     ShareObjectMarketValue.Volume = volume;
                     ShareObjectMarketValue.PurchaseValue = purchase;
-                    //ShareObjectMarketValue.SalePurchaseValueTotal = ShareObjectFinalValue.
                     ShareObjectMarketValue.WebSite = txtBoxWebSite.Text;
                     ShareObjectMarketValue.CultureInfo = cultureInfo;
+                    ShareObjectMarketValue.ShareType = cbxShareType.SelectedIndex;
 
                     // Final value share
                     ShareObjectFinalValue.Wkn = lblWknValue.Text;
@@ -586,6 +602,7 @@ namespace SharePortfolioManager
                     ShareObjectFinalValue.WebSite = txtBoxWebSite.Text;
                     ShareObjectFinalValue.CultureInfo = cultureInfo;
                     ShareObjectFinalValue.DividendPayoutInterval = cbxDividendPayoutInterval.SelectedIndex;
+                    ShareObjectFinalValue.ShareType = cbxShareType.SelectedIndex;
                 }
             }
             catch (Exception ex)
