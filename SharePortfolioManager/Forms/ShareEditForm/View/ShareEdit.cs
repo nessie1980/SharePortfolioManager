@@ -267,32 +267,11 @@ namespace SharePortfolioManager
                 lblCultureInfo.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/CultureInfo", LanguageName);
 
                 lblDividendPayoutInterval.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/PayoutInterval", LanguageName);
-                cbxDividendPayoutInterval.Items.Add(
-                    Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item0",
-                        LanguageName));
-                cbxDividendPayoutInterval.Items.Add(
-                    Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item1",
-                        LanguageName));
-                cbxDividendPayoutInterval.Items.Add(
-                    Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item2",
-                        LanguageName));
-                cbxDividendPayoutInterval.Items.Add(
-                    Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item3",
-                        LanguageName));
-
+                // Add dividend payout interval values
+                cbxDividendPayoutInterval.Items.AddRange(Helper.GetComboBoxItmes(@"/ComboBoxItemsPayout/*", LanguageName, Language));
                 lblShareType.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/ShareType", LanguageName);
-                cbxShareType.Items.Add(
-                    Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/ComboBoxItemsShareType/Item0",
-                        LanguageName));
-                cbxShareType.Items.Add(
-                    Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/ComboBoxItemsShareType/Item1",
-                        LanguageName));
-                cbxShareType.Items.Add(
-                    Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/ComboBoxItemsShareType/Item2",
-                        LanguageName));
-                cbxShareType.Items.Add(
-                    Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/ComboBoxItemsShareType/Item3",
-                        LanguageName));
+                // Add share type values
+                cbxShareType.Items.AddRange(Helper.GetComboBoxItmes(@"/ComboBoxItemsShareType/*", LanguageName, Language));
 
                 // Select the payout interval for the dividend
                 cbxDividendPayoutInterval.SelectedIndex = ShareObjectFinalValue.DividendPayoutInterval;

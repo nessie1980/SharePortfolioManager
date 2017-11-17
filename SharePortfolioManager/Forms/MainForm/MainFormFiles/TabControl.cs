@@ -212,9 +212,12 @@ namespace SharePortfolioManager
                     if (ShareObjectMarketValue.LastUpdateInternet == DateTime.MinValue)
                     {
                         grpBoxShareDetails.Text = ShareObjectMarketValue.Name + @" ( " +
-                                                  Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/ShareWKN",
+                                                  Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/ShareType",
                                                       LanguageName) +
-                                                  @": " + ShareObjectMarketValue.Wkn + @" / " +
+                                                  @" " +
+                                                  Helper.GetComboBoxItmes(@" / ComboBoxItemsShareType/*", LanguageName,
+                                                      Language)[ShareObjectMarketValue.ShareType] +
+                                                  @" / " +
                                                   Language.GetLanguageTextByXPath(
                                                       @"/MainForm/GrpBoxDetails/ShareUpdate",
                                                       LanguageName) + @" " +
@@ -225,9 +228,12 @@ namespace SharePortfolioManager
                     else
                     {
                         grpBoxShareDetails.Text = ShareObjectMarketValue.Name + @" ( " +
-                                                  Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/ShareWKN",
+                                                  Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/ShareType",
                                                       LanguageName) +
-                                                  @": " + ShareObjectMarketValue.Wkn + @" / " +
+                                                  @" " +
+                                                  Helper.GetComboBoxItmes(@" / ComboBoxItemsShareType/*", LanguageName,
+                                                      Language)[ShareObjectMarketValue.ShareType] +
+                                                  @" / " +
                                                   Language.GetLanguageTextByXPath(
                                                       @"/MainForm/GrpBoxDetails/ShareUpdate",
                                                       LanguageName) + @" " +
@@ -383,9 +389,12 @@ namespace SharePortfolioManager
                     if (ShareObjectFinalValue.LastUpdateInternet == DateTime.MinValue)
                     {
                         grpBoxShareDetails.Text = ShareObjectFinalValue.Name + @" ( " +
-                                                  Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/ShareWKN",
+                                                  Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/ShareType",
                                                       LanguageName) +
-                                                  @": " + ShareObjectFinalValue.Wkn + @" / " +
+                                                  @" " +
+                                                  Helper.GetComboBoxItmes(@" / ComboBoxItemsShareType/*", LanguageName,
+                                                      Language)[ShareObjectFinalValue.ShareType] +
+                                                  @" / " +
                                                   Language.GetLanguageTextByXPath(
                                                       @"/MainForm/GrpBoxDetails/ShareUpdate",
                                                       LanguageName) + @" " +
@@ -396,9 +405,12 @@ namespace SharePortfolioManager
                     else
                     {
                         grpBoxShareDetails.Text = ShareObjectFinalValue.Name + @" ( " +
-                                                  Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/ShareWKN",
+                                                  Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/ShareType",
                                                       LanguageName) +
-                                                  @": " + ShareObjectFinalValue.Wkn + @" / " +
+                                                  @" " +
+                                                  Helper.GetComboBoxItmes(@" / ComboBoxItemsShareType/*", LanguageName,
+                                                      Language)[ShareObjectFinalValue.ShareType] +
+                                                  @" / " +
                                                   Language.GetLanguageTextByXPath(
                                                       @"/MainForm/GrpBoxDetails/ShareUpdate",
                                                       LanguageName) + @" " +

@@ -28,7 +28,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Xml;
 using System.Reflection;
 using Logging;
 using LanguageHandler;
@@ -159,7 +158,7 @@ namespace SharePortfolioManager.Classes
         /// This function returns the version of the application
         /// </summary>
         /// <returns>Version of the application</returns>
-        static public Version GetApplicationVersion()
+        public static Version GetApplicationVersion()
         {
             Assembly assApp = typeof(FrmMain).Assembly;
             AssemblyName assAppName = assApp.GetName();
@@ -939,6 +938,15 @@ namespace SharePortfolioManager.Classes
         }
 
         #endregion URL checker
+
+        #region Get combo box items
+
+        public static string[] GetComboBoxItmes(string xPath, string languageName, Language language)
+        {
+            return language.GetLanguageTextListByXPath(xPath, languageName).ToArray();
+        }
+
+        #endregion  Get combo box items
 
         #endregion Methods
     }

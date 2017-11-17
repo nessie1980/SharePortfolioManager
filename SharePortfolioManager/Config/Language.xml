@@ -11,6 +11,21 @@
 		<PieceUnit text="pcs." />
 		<PercentageUnit text="%" />
 		
+		<!-- Combo box items for the dividend payout intervals -->
+		<ComboBoxItemsPayout>
+			<Item0 text="none" />
+			<Item1 text="annual" />
+			<Item2 text="semiannual" />
+			<Item3 text="quarterly" />
+		</ComboBoxItemsPayout>				
+
+		<!-- Combo box items for the share type -->
+		<ComboBoxItemsShareType>
+			<Item0 text="Share" />
+			<Item1 text="Fond" />
+			<Item2 text="ETF" />
+		</ComboBoxItemsShareType>				
+
 		<!-- Logger -->
 		<Logger>
 			<!-- States -->
@@ -157,7 +172,7 @@
 			<!-- GroupBox details -->
 			<GrpBoxDetails>
 				<Caption text="Share details" /> <!-- only a place holder -->
-				<ShareWKN text="WKN" />
+				<ShareType text="Type:" />
 				<ShareUpdate text="Last update:" />
 				<ShareUpdateNotDone text="-" />
 
@@ -371,21 +386,6 @@
 					<ShareType text="Type:" />
 					<Document text="Document:" />
 				</Labels>
-
-				<!-- Combo box items for the dividend payout intervals -->
-				<ComboBoxItemsPayout>
-					<Item0 text="none" />
-					<Item1 text="annual" />
-					<Item2 text="semiannual" />
-					<Item3 text="quarterly" />
-				</ComboBoxItemsPayout>
-
-				<!-- Combo box items for the share type -->
-				<ComboBoxItemsShareType>
-					<Item0 text="Share" />
-					<Item1 text="Fond" />
-					<Item2 text="ETF" />
-				</ComboBoxItemsShareType>				
 			</GrpBoxGeneral>
 			
 			<!-- Open file dialog -->
@@ -446,21 +446,6 @@
 					<PayoutInterval text="Dividend payout interval:" />
 					<ShareType text="Type:" />
 				</Labels>
-				
-				<!-- Combo box items for the dividend payout intervals -->
-				<ComboBoxItemsPayout>
-					<Item0 text="none" />
-					<Item1 text="annual" />
-					<Item2 text="semiannual" />
-					<Item3 text="quarterly" />
-				</ComboBoxItemsPayout>				
-
-				<!-- Combo box items for the share type -->
-				<ComboBoxItemsShareType>
-					<Item0 text="Share" />
-					<Item1 text="Fond" />
-					<Item2 text="ETF" />
-				</ComboBoxItemsShareType>				
 			</GrpBoxGeneral>
 
 			<!-- Group box with the earings and expenditure infos of the share -->
@@ -1055,6 +1040,21 @@
 		<PieceUnit text="stk." />
 		<PercentageUnit text="%" />
 
+		<!-- Combo box items for the dividend payout intervals -->
+		<ComboBoxItemsPayout>
+			<Item0 text="keine" />
+			<Item1 text="jährlich" />
+			<Item2 text="halbjährlich" />
+			<Item3 text="vierteljährlich" />
+		</ComboBoxItemsPayout>
+
+		<!-- Combo box items for the share type -->
+		<ComboBoxItemsShareType>
+			<Item0 text="Aktie" />
+			<Item1 text="Fond" />
+			<Item2 text="ETF" />
+		</ComboBoxItemsShareType>				
+
 		<!-- Logger -->
 		<Logger>
 			<!-- States -->
@@ -1201,7 +1201,7 @@
 			<!-- GroupBox details -->
 			<GrpBoxDetails>
 				<Caption text="Aktien- Details" /> <!-- only a place holder -->
-				<ShareWKN text="WKN" />
+				<ShareType text="Typ:" />
 				<ShareUpdate text="Letzte Aktualisierung:" />
 				<ShareUpdateNotDone text="-" />
 
@@ -1415,21 +1415,6 @@
 					<ShareType text="Typ:" />
 					<Document text="Dokument:" />
 				</Labels>
-				
-				<!-- Combo box items for the dividend payout intervals -->
-				<ComboBoxItemsPayout>
-					<Item0 text="keine" />
-					<Item1 text="jährlich" />
-					<Item2 text="halbjährlich" />
-					<Item3 text="vierteljährlich" />
-				</ComboBoxItemsPayout>
-
-				<!-- Combo box items for the share type -->
-				<ComboBoxItemsShareType>
-					<Item0 text="Aktie" />
-					<Item1 text="Fond" />
-					<Item2 text="ETF" />
-				</ComboBoxItemsShareType>				
 			</GrpBoxGeneral>
 			
 			<!-- Open file dialog -->
@@ -1490,21 +1475,6 @@
 					<PayoutInterval text="Dividendenauszahlungs- Interval:" />
 					<ShareType text="Typ:" />
 				</Labels>
-				
-				<!-- Combo box items for the dividend payout intervals -->
-				<ComboBoxItemsPayout>
-					<Item0 text="keine" />
-					<Item1 text="jährlich" />
-					<Item2 text="halbjährlich" />
-					<Item3 text="vierteljährlich" />
-				</ComboBoxItemsPayout>
-
-				<!-- Combo box items for the share type -->
-				<ComboBoxItemsShareType>
-					<Item0 text="Aktie" />
-					<Item1 text="Fond" />
-					<Item2 text="ETF" />
-				</ComboBoxItemsShareType>				
 			</GrpBoxGeneral>
 			
 			<!-- Group box with the earings and expenditure infos of the share -->

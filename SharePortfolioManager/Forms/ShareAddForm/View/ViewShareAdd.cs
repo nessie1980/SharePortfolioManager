@@ -690,33 +690,13 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 lblReductionUnit.Text = new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol;
                 lblFinalValue.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/FinalValue", LanguageName);
                 lblFinalValueUnit.Text = new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol;
-                lblDividendPayoutInterval.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/PayoutInterval", LanguageName);
-                cbxDividendPayoutInterval.Items.Add(
-                    Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item0",
-                        LanguageName));
-                cbxDividendPayoutInterval.Items.Add(
-                    Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item1",
-                        LanguageName));
-                cbxDividendPayoutInterval.Items.Add(
-                    Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item2",
-                        LanguageName));
-                cbxDividendPayoutInterval.Items.Add(
-                    Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/ComboBoxItemsPayout/Item3",
-                        LanguageName));
 
+                lblDividendPayoutInterval.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/PayoutInterval", LanguageName);
+                // Add dividend payout interval values
+                cbxDividendPayoutInterval.Items.AddRange(Helper.GetComboBoxItmes(@"/ComboBoxItemsPayout/*", LanguageName, Language));
                 lblShareType.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/ShareType", LanguageName);
-                cbxShareType.Items.Add(
-                    Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/ComboBoxItemsShareType/Item0",
-                        LanguageName));
-                cbxShareType.Items.Add(
-                    Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/ComboBoxItemsShareType/Item1",
-                        LanguageName));
-                cbxShareType.Items.Add(
-                    Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/ComboBoxItemsShareType/Item2",
-                        LanguageName));
-                cbxShareType.Items.Add(
-                    Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/ComboBoxItemsShareType/Item3",
-                        LanguageName));
+                // Add share type values
+                cbxShareType.Items.AddRange(Helper.GetComboBoxItmes(@"/ComboBoxItemsShareType/*", LanguageName, Language));
 
                 lblWebSite.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/WebSite", LanguageName);
                 lblCultureInfo.Text =
