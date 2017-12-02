@@ -1298,12 +1298,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 // Advanced configuration DataGridView buys
                 DataGridViewCellStyle styleOverviewOfYears = dataGridViewBuysOverviewOfAYears.ColumnHeadersDefaultCellStyle;
                 styleOverviewOfYears.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                styleOverviewOfYears.Font = new Font("Trebuchet MS", 10, FontStyle.Bold);
 
                 dataGridViewBuysOverviewOfAYears.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
                 dataGridViewBuysOverviewOfAYears.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
                 dataGridViewBuysOverviewOfAYears.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-
 
                 dataGridViewBuysOverviewOfAYears.RowHeadersVisible = false;
                 dataGridViewBuysOverviewOfAYears.RowsDefaultCellStyle.BackColor = Color.White;
@@ -1387,7 +1385,6 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                         // Advanced configuration DataGridView buys
                         DataGridViewCellStyle style = dataGridViewBuysOfAYear.ColumnHeadersDefaultCellStyle;
                         style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                        style.Font = new Font("Trebuchet MS", 10, FontStyle.Bold);
 
                         dataGridViewBuysOfAYear.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
                         dataGridViewBuysOfAYear.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
@@ -1977,6 +1974,5 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         #endregion Data grid view
 
         #endregion Methods
-
     }
 }

@@ -99,9 +99,10 @@
             // 
             this.btnAddSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnAddSave.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAddSave.Location = new System.Drawing.Point(138, 3);
+            this.btnAddSave.Location = new System.Drawing.Point(100, 1);
+            this.btnAddSave.Margin = new System.Windows.Forms.Padding(1);
             this.btnAddSave.Name = "btnAddSave";
-            this.btnAddSave.Size = new System.Drawing.Size(165, 33);
+            this.btnAddSave.Size = new System.Drawing.Size(178, 34);
             this.btnAddSave.TabIndex = 16;
             this.btnAddSave.Text = "_Add/Save";
             this.btnAddSave.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -117,7 +118,7 @@
             this.grpBoxAddDividend.Controls.Add(this.statusStrip1);
             this.grpBoxAddDividend.Location = new System.Drawing.Point(5, 5);
             this.grpBoxAddDividend.Name = "grpBoxAddDividend";
-            this.grpBoxAddDividend.Size = new System.Drawing.Size(825, 478);
+            this.grpBoxAddDividend.Size = new System.Drawing.Size(825, 416);
             this.grpBoxAddDividend.TabIndex = 2;
             this.grpBoxAddDividend.TabStop = false;
             this.grpBoxAddDividend.Text = "_grpBoxAddDividend";
@@ -126,20 +127,20 @@
             // 
             this.tblLayPnlDividendButtons.ColumnCount = 5;
             this.tblLayPnlDividendButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblLayPnlDividendButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 171F));
-            this.tblLayPnlDividendButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 171F));
-            this.tblLayPnlDividendButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 171F));
-            this.tblLayPnlDividendButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 171F));
+            this.tblLayPnlDividendButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
+            this.tblLayPnlDividendButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
+            this.tblLayPnlDividendButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
+            this.tblLayPnlDividendButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
             this.tblLayPnlDividendButtons.Controls.Add(this.btnReset, 3, 0);
             this.tblLayPnlDividendButtons.Controls.Add(this.btnDelete, 2, 0);
             this.tblLayPnlDividendButtons.Controls.Add(this.btnAddSave, 1, 0);
             this.tblLayPnlDividendButtons.Controls.Add(this.btnCancel, 4, 0);
             this.tblLayPnlDividendButtons.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tblLayPnlDividendButtons.Location = new System.Drawing.Point(3, 411);
+            this.tblLayPnlDividendButtons.Location = new System.Drawing.Point(3, 354);
             this.tblLayPnlDividendButtons.Name = "tblLayPnlDividendButtons";
             this.tblLayPnlDividendButtons.RowCount = 1;
             this.tblLayPnlDividendButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblLayPnlDividendButtons.Size = new System.Drawing.Size(819, 39);
+            this.tblLayPnlDividendButtons.Size = new System.Drawing.Size(819, 36);
             this.tblLayPnlDividendButtons.TabIndex = 21;
             // 
             // btnReset
@@ -147,9 +148,10 @@
             this.btnReset.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnReset.Enabled = false;
             this.btnReset.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnReset.Location = new System.Drawing.Point(480, 3);
+            this.btnReset.Location = new System.Drawing.Point(460, 1);
+            this.btnReset.Margin = new System.Windows.Forms.Padding(1);
             this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(165, 33);
+            this.btnReset.Size = new System.Drawing.Size(178, 34);
             this.btnReset.TabIndex = 18;
             this.btnReset.Text = "_Reset";
             this.btnReset.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -161,9 +163,10 @@
             this.btnDelete.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnDelete.Enabled = false;
             this.btnDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDelete.Location = new System.Drawing.Point(309, 3);
+            this.btnDelete.Location = new System.Drawing.Point(280, 1);
+            this.btnDelete.Margin = new System.Windows.Forms.Padding(1);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(165, 33);
+            this.btnDelete.Size = new System.Drawing.Size(178, 34);
             this.btnDelete.TabIndex = 17;
             this.btnDelete.Text = "_Delete";
             this.btnDelete.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -174,9 +177,10 @@
             // 
             this.btnCancel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCancel.Location = new System.Drawing.Point(651, 3);
+            this.btnCancel.Location = new System.Drawing.Point(640, 1);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(1);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(165, 33);
+            this.btnCancel.Size = new System.Drawing.Size(178, 34);
             this.btnCancel.TabIndex = 19;
             this.btnCancel.Text = "_Cancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -234,24 +238,25 @@
             this.tblLayPnlDividendInput.Controls.Add(this.lblTaxUnit, 4, 9);
             this.tblLayPnlDividendInput.Controls.Add(this.lblPayoutAfterTaxUnit, 4, 10);
             this.tblLayPnlDividendInput.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tblLayPnlDividendInput.Location = new System.Drawing.Point(3, 19);
+            this.tblLayPnlDividendInput.Location = new System.Drawing.Point(3, 18);
+            this.tblLayPnlDividendInput.Margin = new System.Windows.Forms.Padding(1);
             this.tblLayPnlDividendInput.Name = "tblLayPnlDividendInput";
             this.tblLayPnlDividendInput.RowCount = 14;
-            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tblLayPnlDividendInput.Size = new System.Drawing.Size(819, 392);
+            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlDividendInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlDividendInput.Size = new System.Drawing.Size(819, 336);
             this.tblLayPnlDividendInput.TabIndex = 20;
             // 
             // lblDate
@@ -259,10 +264,11 @@
             this.lblDate.BackColor = System.Drawing.Color.LightGray;
             this.lblDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblDate.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblDate.Location = new System.Drawing.Point(3, 3);
-            this.lblDate.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDate.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDate.Location = new System.Drawing.Point(1, 1);
+            this.lblDate.Margin = new System.Windows.Forms.Padding(1);
             this.lblDate.Name = "lblDate";
-            this.lblDate.Size = new System.Drawing.Size(294, 22);
+            this.lblDate.Size = new System.Drawing.Size(298, 22);
             this.lblDate.TabIndex = 2;
             this.lblDate.Text = "_addDate";
             this.lblDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -272,11 +278,13 @@
             this.datePickerDate.CustomFormat = "";
             this.datePickerDate.Dock = System.Windows.Forms.DockStyle.Fill;
             this.datePickerDate.DropDownAlign = System.Windows.Forms.LeftRightAlignment.Right;
+            this.datePickerDate.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.datePickerDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.datePickerDate.Location = new System.Drawing.Point(303, 3);
+            this.datePickerDate.Location = new System.Drawing.Point(301, 1);
+            this.datePickerDate.Margin = new System.Windows.Forms.Padding(1);
             this.datePickerDate.MinDate = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
             this.datePickerDate.Name = "datePickerDate";
-            this.datePickerDate.Size = new System.Drawing.Size(177, 23);
+            this.datePickerDate.Size = new System.Drawing.Size(181, 22);
             this.datePickerDate.TabIndex = 0;
             this.datePickerDate.ValueChanged += new System.EventHandler(this.OnDatePickerDate_ValueChanged);
             this.datePickerDate.Leave += new System.EventHandler(this.OnDatePickerDate_Leave);
@@ -284,11 +292,11 @@
             // lblCapitalGainsTaxUnit
             // 
             this.lblCapitalGainsTaxUnit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblCapitalGainsTaxUnit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCapitalGainsTaxUnit.Location = new System.Drawing.Point(745, 199);
+            this.lblCapitalGainsTaxUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCapitalGainsTaxUnit.Location = new System.Drawing.Point(745, 171);
             this.lblCapitalGainsTaxUnit.Margin = new System.Windows.Forms.Padding(3);
             this.lblCapitalGainsTaxUnit.Name = "lblCapitalGainsTaxUnit";
-            this.lblCapitalGainsTaxUnit.Size = new System.Drawing.Size(71, 22);
+            this.lblCapitalGainsTaxUnit.Size = new System.Drawing.Size(71, 18);
             this.lblCapitalGainsTaxUnit.TabIndex = 56;
             this.lblCapitalGainsTaxUnit.Text = "_lblCapitalGainsTaxUnit";
             this.lblCapitalGainsTaxUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -299,20 +307,22 @@
             this.tblLayPnlDividendInput.SetColumnSpan(this.txtBoxTax, 3);
             this.txtBoxTax.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtBoxTax.Enabled = false;
-            this.txtBoxTax.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxTax.Location = new System.Drawing.Point(303, 255);
+            this.txtBoxTax.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxTax.Location = new System.Drawing.Point(301, 217);
+            this.txtBoxTax.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxTax.Name = "txtBoxTax";
-            this.txtBoxTax.Size = new System.Drawing.Size(436, 23);
+            this.txtBoxTax.Size = new System.Drawing.Size(440, 22);
             this.txtBoxTax.TabIndex = 12;
             // 
             // btnAddDocumentBrowse
             // 
             this.btnAddDocumentBrowse.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnAddDocumentBrowse.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAddDocumentBrowse.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAddDocumentBrowse.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAddDocumentBrowse.Location = new System.Drawing.Point(745, 367);
+            this.btnAddDocumentBrowse.Location = new System.Drawing.Point(743, 313);
+            this.btnAddDocumentBrowse.Margin = new System.Windows.Forms.Padding(1);
             this.btnAddDocumentBrowse.Name = "btnAddDocumentBrowse";
-            this.btnAddDocumentBrowse.Size = new System.Drawing.Size(71, 22);
+            this.btnAddDocumentBrowse.Size = new System.Drawing.Size(75, 22);
             this.btnAddDocumentBrowse.TabIndex = 15;
             this.btnAddDocumentBrowse.Text = "...";
             this.btnAddDocumentBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -322,11 +332,13 @@
             // datePickerTime
             // 
             this.datePickerTime.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.datePickerTime.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.datePickerTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.datePickerTime.Location = new System.Drawing.Point(562, 3);
+            this.datePickerTime.Location = new System.Drawing.Point(560, 1);
+            this.datePickerTime.Margin = new System.Windows.Forms.Padding(1);
             this.datePickerTime.Name = "datePickerTime";
             this.datePickerTime.ShowUpDown = true;
-            this.datePickerTime.Size = new System.Drawing.Size(177, 23);
+            this.datePickerTime.Size = new System.Drawing.Size(181, 22);
             this.datePickerTime.TabIndex = 1;
             this.datePickerTime.ValueChanged += new System.EventHandler(this.OnDatePickerTime_ValueChanged);
             this.datePickerTime.Leave += new System.EventHandler(this.OnDatePickerTime_Leave);
@@ -335,9 +347,9 @@
             // 
             this.chkBoxEnableFC.AutoSize = true;
             this.chkBoxEnableFC.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chkBoxEnableFC.Location = new System.Drawing.Point(303, 31);
+            this.chkBoxEnableFC.Location = new System.Drawing.Point(303, 27);
             this.chkBoxEnableFC.Name = "chkBoxEnableFC";
-            this.chkBoxEnableFC.Size = new System.Drawing.Size(177, 22);
+            this.chkBoxEnableFC.Size = new System.Drawing.Size(177, 18);
             this.chkBoxEnableFC.TabIndex = 2;
             this.chkBoxEnableFC.UseVisualStyleBackColor = true;
             this.chkBoxEnableFC.CheckedChanged += new System.EventHandler(this.ChkBoxAddDividendForeignCurrency_CheckedChanged);
@@ -347,10 +359,11 @@
             this.lblDividendExchangeRatio.BackColor = System.Drawing.Color.LightGray;
             this.lblDividendExchangeRatio.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblDividendExchangeRatio.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblDividendExchangeRatio.Location = new System.Drawing.Point(3, 59);
-            this.lblDividendExchangeRatio.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDividendExchangeRatio.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDividendExchangeRatio.Location = new System.Drawing.Point(1, 49);
+            this.lblDividendExchangeRatio.Margin = new System.Windows.Forms.Padding(1);
             this.lblDividendExchangeRatio.Name = "lblDividendExchangeRatio";
-            this.lblDividendExchangeRatio.Size = new System.Drawing.Size(294, 22);
+            this.lblDividendExchangeRatio.Size = new System.Drawing.Size(298, 22);
             this.lblDividendExchangeRatio.TabIndex = 31;
             this.lblDividendExchangeRatio.Text = "_addExchangeRatio";
             this.lblDividendExchangeRatio.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -360,10 +373,11 @@
             this.lblSolidarityTax.BackColor = System.Drawing.Color.LightGray;
             this.lblSolidarityTax.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblSolidarityTax.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblSolidarityTax.Location = new System.Drawing.Point(3, 227);
-            this.lblSolidarityTax.Margin = new System.Windows.Forms.Padding(3);
+            this.lblSolidarityTax.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSolidarityTax.Location = new System.Drawing.Point(1, 193);
+            this.lblSolidarityTax.Margin = new System.Windows.Forms.Padding(1);
             this.lblSolidarityTax.Name = "lblSolidarityTax";
-            this.lblSolidarityTax.Size = new System.Drawing.Size(294, 22);
+            this.lblSolidarityTax.Size = new System.Drawing.Size(298, 22);
             this.lblSolidarityTax.TabIndex = 58;
             this.lblSolidarityTax.Text = "_addSolidarityTax";
             this.lblSolidarityTax.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -373,10 +387,11 @@
             this.lblCapitalGainsTax.BackColor = System.Drawing.Color.LightGray;
             this.lblCapitalGainsTax.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblCapitalGainsTax.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblCapitalGainsTax.Location = new System.Drawing.Point(3, 199);
-            this.lblCapitalGainsTax.Margin = new System.Windows.Forms.Padding(3);
+            this.lblCapitalGainsTax.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCapitalGainsTax.Location = new System.Drawing.Point(1, 169);
+            this.lblCapitalGainsTax.Margin = new System.Windows.Forms.Padding(1);
             this.lblCapitalGainsTax.Name = "lblCapitalGainsTax";
-            this.lblCapitalGainsTax.Size = new System.Drawing.Size(294, 22);
+            this.lblCapitalGainsTax.Size = new System.Drawing.Size(298, 22);
             this.lblCapitalGainsTax.TabIndex = 55;
             this.lblCapitalGainsTax.Text = "_addCapitalGainsTax";
             this.lblCapitalGainsTax.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -386,10 +401,11 @@
             this.lblEnableForeignCurrency.BackColor = System.Drawing.Color.LightGray;
             this.lblEnableForeignCurrency.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblEnableForeignCurrency.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblEnableForeignCurrency.Location = new System.Drawing.Point(3, 31);
-            this.lblEnableForeignCurrency.Margin = new System.Windows.Forms.Padding(3);
+            this.lblEnableForeignCurrency.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEnableForeignCurrency.Location = new System.Drawing.Point(1, 25);
+            this.lblEnableForeignCurrency.Margin = new System.Windows.Forms.Padding(1);
             this.lblEnableForeignCurrency.Name = "lblEnableForeignCurrency";
-            this.lblEnableForeignCurrency.Size = new System.Drawing.Size(294, 22);
+            this.lblEnableForeignCurrency.Size = new System.Drawing.Size(298, 22);
             this.lblEnableForeignCurrency.TabIndex = 30;
             this.lblEnableForeignCurrency.Text = "_addEnableFC";
             this.lblEnableForeignCurrency.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -399,10 +415,11 @@
             this.lblTaxAtSource.BackColor = System.Drawing.Color.LightGray;
             this.lblTaxAtSource.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblTaxAtSource.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblTaxAtSource.Location = new System.Drawing.Point(3, 171);
-            this.lblTaxAtSource.Margin = new System.Windows.Forms.Padding(3);
+            this.lblTaxAtSource.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTaxAtSource.Location = new System.Drawing.Point(1, 145);
+            this.lblTaxAtSource.Margin = new System.Windows.Forms.Padding(1);
             this.lblTaxAtSource.Name = "lblTaxAtSource";
-            this.lblTaxAtSource.Size = new System.Drawing.Size(294, 22);
+            this.lblTaxAtSource.Size = new System.Drawing.Size(298, 22);
             this.lblTaxAtSource.TabIndex = 52;
             this.lblTaxAtSource.Text = "_addTaxAtSource";
             this.lblTaxAtSource.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -412,10 +429,11 @@
             this.lblPayout.BackColor = System.Drawing.Color.LightGray;
             this.lblPayout.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblPayout.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblPayout.Location = new System.Drawing.Point(3, 143);
-            this.lblPayout.Margin = new System.Windows.Forms.Padding(3);
+            this.lblPayout.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPayout.Location = new System.Drawing.Point(1, 121);
+            this.lblPayout.Margin = new System.Windows.Forms.Padding(1);
             this.lblPayout.Name = "lblPayout";
-            this.lblPayout.Size = new System.Drawing.Size(294, 22);
+            this.lblPayout.Size = new System.Drawing.Size(298, 22);
             this.lblPayout.TabIndex = 20;
             this.lblPayout.Text = "_addPayout";
             this.lblPayout.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -425,10 +443,11 @@
             this.lblVolume.BackColor = System.Drawing.Color.LightGray;
             this.lblVolume.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblVolume.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblVolume.Location = new System.Drawing.Point(3, 115);
-            this.lblVolume.Margin = new System.Windows.Forms.Padding(3);
+            this.lblVolume.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVolume.Location = new System.Drawing.Point(1, 97);
+            this.lblVolume.Margin = new System.Windows.Forms.Padding(1);
             this.lblVolume.Name = "lblVolume";
-            this.lblVolume.Size = new System.Drawing.Size(294, 22);
+            this.lblVolume.Size = new System.Drawing.Size(298, 22);
             this.lblVolume.TabIndex = 5;
             this.lblVolume.Text = "_addVolume";
             this.lblVolume.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -438,10 +457,11 @@
             this.lblDividendRate.BackColor = System.Drawing.Color.LightGray;
             this.lblDividendRate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblDividendRate.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblDividendRate.Location = new System.Drawing.Point(3, 87);
-            this.lblDividendRate.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDividendRate.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDividendRate.Location = new System.Drawing.Point(1, 73);
+            this.lblDividendRate.Margin = new System.Windows.Forms.Padding(1);
             this.lblDividendRate.Name = "lblDividendRate";
-            this.lblDividendRate.Size = new System.Drawing.Size(294, 22);
+            this.lblDividendRate.Size = new System.Drawing.Size(298, 22);
             this.lblDividendRate.TabIndex = 3;
             this.lblDividendRate.Text = "_addDividendRate";
             this.lblDividendRate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -451,10 +471,11 @@
             this.txtBoxSolidarityTax.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tblLayPnlDividendInput.SetColumnSpan(this.txtBoxSolidarityTax, 3);
             this.txtBoxSolidarityTax.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtBoxSolidarityTax.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxSolidarityTax.Location = new System.Drawing.Point(303, 227);
+            this.txtBoxSolidarityTax.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxSolidarityTax.Location = new System.Drawing.Point(301, 193);
+            this.txtBoxSolidarityTax.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxSolidarityTax.Name = "txtBoxSolidarityTax";
-            this.txtBoxSolidarityTax.Size = new System.Drawing.Size(436, 23);
+            this.txtBoxSolidarityTax.Size = new System.Drawing.Size(440, 22);
             this.txtBoxSolidarityTax.TabIndex = 11;
             this.txtBoxSolidarityTax.TextChanged += new System.EventHandler(this.txtBoxSolidarityTax_TextChanged);
             this.txtBoxSolidarityTax.Leave += new System.EventHandler(this.txtBoxSolidarityTax_Leave);
@@ -464,10 +485,11 @@
             this.txtBoxCapitalGainsTax.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tblLayPnlDividendInput.SetColumnSpan(this.txtBoxCapitalGainsTax, 3);
             this.txtBoxCapitalGainsTax.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtBoxCapitalGainsTax.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxCapitalGainsTax.Location = new System.Drawing.Point(303, 199);
+            this.txtBoxCapitalGainsTax.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxCapitalGainsTax.Location = new System.Drawing.Point(301, 169);
+            this.txtBoxCapitalGainsTax.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxCapitalGainsTax.Name = "txtBoxCapitalGainsTax";
-            this.txtBoxCapitalGainsTax.Size = new System.Drawing.Size(436, 23);
+            this.txtBoxCapitalGainsTax.Size = new System.Drawing.Size(440, 22);
             this.txtBoxCapitalGainsTax.TabIndex = 10;
             this.txtBoxCapitalGainsTax.TextChanged += new System.EventHandler(this.txtBoxCapitalGainsTax_TextChanged);
             this.txtBoxCapitalGainsTax.Leave += new System.EventHandler(this.txtBoxCapitalGainsTax_Leave);
@@ -477,10 +499,11 @@
             this.txtBoxTaxAtSource.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tblLayPnlDividendInput.SetColumnSpan(this.txtBoxTaxAtSource, 3);
             this.txtBoxTaxAtSource.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtBoxTaxAtSource.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxTaxAtSource.Location = new System.Drawing.Point(303, 171);
+            this.txtBoxTaxAtSource.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxTaxAtSource.Location = new System.Drawing.Point(301, 145);
+            this.txtBoxTaxAtSource.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxTaxAtSource.Name = "txtBoxTaxAtSource";
-            this.txtBoxTaxAtSource.Size = new System.Drawing.Size(436, 23);
+            this.txtBoxTaxAtSource.Size = new System.Drawing.Size(440, 22);
             this.txtBoxTaxAtSource.TabIndex = 9;
             this.txtBoxTaxAtSource.TextChanged += new System.EventHandler(this.txtBoxTaxAtSource_TextChanged);
             this.txtBoxTaxAtSource.Leave += new System.EventHandler(this.txtBoxTaxAtSource_Leave);
@@ -490,11 +513,12 @@
             this.txtBoxPayout.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtBoxPayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtBoxPayout.Enabled = false;
-            this.txtBoxPayout.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxPayout.Location = new System.Drawing.Point(303, 143);
+            this.txtBoxPayout.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxPayout.Location = new System.Drawing.Point(301, 121);
+            this.txtBoxPayout.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxPayout.Name = "txtBoxPayout";
             this.txtBoxPayout.ReadOnly = true;
-            this.txtBoxPayout.Size = new System.Drawing.Size(177, 23);
+            this.txtBoxPayout.Size = new System.Drawing.Size(181, 22);
             this.txtBoxPayout.TabIndex = 7;
             // 
             // txtBoxVolume
@@ -502,10 +526,11 @@
             this.txtBoxVolume.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tblLayPnlDividendInput.SetColumnSpan(this.txtBoxVolume, 3);
             this.txtBoxVolume.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtBoxVolume.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxVolume.Location = new System.Drawing.Point(303, 115);
+            this.txtBoxVolume.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxVolume.Location = new System.Drawing.Point(301, 97);
+            this.txtBoxVolume.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxVolume.Name = "txtBoxVolume";
-            this.txtBoxVolume.Size = new System.Drawing.Size(436, 23);
+            this.txtBoxVolume.Size = new System.Drawing.Size(440, 22);
             this.txtBoxVolume.TabIndex = 6;
             this.txtBoxVolume.TextChanged += new System.EventHandler(this.TxtBoxAddVolume_TextChanged);
             this.txtBoxVolume.Leave += new System.EventHandler(this.txtBoxVolume_Leave);
@@ -514,11 +539,12 @@
             // 
             this.txtBoxRate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tblLayPnlDividendInput.SetColumnSpan(this.txtBoxRate, 3);
-            this.txtBoxRate.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtBoxRate.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxRate.Location = new System.Drawing.Point(303, 87);
+            this.txtBoxRate.Dock = System.Windows.Forms.DockStyle.Top;
+            this.txtBoxRate.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxRate.Location = new System.Drawing.Point(301, 73);
+            this.txtBoxRate.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxRate.Name = "txtBoxRate";
-            this.txtBoxRate.Size = new System.Drawing.Size(436, 23);
+            this.txtBoxRate.Size = new System.Drawing.Size(440, 22);
             this.txtBoxRate.TabIndex = 5;
             this.txtBoxRate.TextChanged += new System.EventHandler(this.TxtBoxAddDividendRate_TextChanged);
             this.txtBoxRate.Leave += new System.EventHandler(this.txtBoxRate_Leave);
@@ -528,11 +554,12 @@
             this.txtBoxExchangeRatio.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtBoxExchangeRatio.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtBoxExchangeRatio.Enabled = false;
-            this.txtBoxExchangeRatio.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxExchangeRatio.Location = new System.Drawing.Point(303, 59);
+            this.txtBoxExchangeRatio.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxExchangeRatio.Location = new System.Drawing.Point(301, 49);
+            this.txtBoxExchangeRatio.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxExchangeRatio.Name = "txtBoxExchangeRatio";
             this.txtBoxExchangeRatio.ReadOnly = true;
-            this.txtBoxExchangeRatio.Size = new System.Drawing.Size(177, 23);
+            this.txtBoxExchangeRatio.Size = new System.Drawing.Size(181, 22);
             this.txtBoxExchangeRatio.TabIndex = 3;
             this.txtBoxExchangeRatio.TextChanged += new System.EventHandler(this.TxtBoxAddDividendExchangeRatio_TextChanged);
             this.txtBoxExchangeRatio.Leave += new System.EventHandler(this.txtBoxExchangeRatio_Leave);
@@ -543,22 +570,24 @@
             this.cbxBoxDividendFCUnit.DropDownHeight = 100;
             this.cbxBoxDividendFCUnit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxBoxDividendFCUnit.Enabled = false;
+            this.cbxBoxDividendFCUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbxBoxDividendFCUnit.FormattingEnabled = true;
             this.cbxBoxDividendFCUnit.IntegralHeight = false;
-            this.cbxBoxDividendFCUnit.Location = new System.Drawing.Point(562, 59);
+            this.cbxBoxDividendFCUnit.Location = new System.Drawing.Point(560, 49);
+            this.cbxBoxDividendFCUnit.Margin = new System.Windows.Forms.Padding(1);
             this.cbxBoxDividendFCUnit.Name = "cbxBoxDividendFCUnit";
-            this.cbxBoxDividendFCUnit.Size = new System.Drawing.Size(177, 23);
+            this.cbxBoxDividendFCUnit.Size = new System.Drawing.Size(181, 22);
             this.cbxBoxDividendFCUnit.TabIndex = 4;
             this.cbxBoxDividendFCUnit.SelectedIndexChanged += new System.EventHandler(this.CbxBoxAddDividendForeignCurrency_SelectedIndexChanged);
             // 
             // lblTaxAtSourceUnit
             // 
             this.lblTaxAtSourceUnit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblTaxAtSourceUnit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTaxAtSourceUnit.Location = new System.Drawing.Point(745, 171);
-            this.lblTaxAtSourceUnit.Margin = new System.Windows.Forms.Padding(3);
+            this.lblTaxAtSourceUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTaxAtSourceUnit.Location = new System.Drawing.Point(743, 145);
+            this.lblTaxAtSourceUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblTaxAtSourceUnit.Name = "lblTaxAtSourceUnit";
-            this.lblTaxAtSourceUnit.Size = new System.Drawing.Size(71, 22);
+            this.lblTaxAtSourceUnit.Size = new System.Drawing.Size(75, 22);
             this.lblTaxAtSourceUnit.TabIndex = 53;
             this.lblTaxAtSourceUnit.Text = "_lblTaxAtSourceUnit";
             this.lblTaxAtSourceUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -566,11 +595,11 @@
             // lblPayoutUnit
             // 
             this.lblPayoutUnit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblPayoutUnit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPayoutUnit.Location = new System.Drawing.Point(486, 143);
-            this.lblPayoutUnit.Margin = new System.Windows.Forms.Padding(3);
+            this.lblPayoutUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPayoutUnit.Location = new System.Drawing.Point(484, 121);
+            this.lblPayoutUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblPayoutUnit.Name = "lblPayoutUnit";
-            this.lblPayoutUnit.Size = new System.Drawing.Size(70, 22);
+            this.lblPayoutUnit.Size = new System.Drawing.Size(74, 22);
             this.lblPayoutUnit.TabIndex = 22;
             this.lblPayoutUnit.Text = "_lblPayoutUnit";
             this.lblPayoutUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -580,21 +609,22 @@
             this.txtBoxPayoutFC.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtBoxPayoutFC.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtBoxPayoutFC.Enabled = false;
-            this.txtBoxPayoutFC.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxPayoutFC.Location = new System.Drawing.Point(562, 143);
+            this.txtBoxPayoutFC.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxPayoutFC.Location = new System.Drawing.Point(560, 121);
+            this.txtBoxPayoutFC.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxPayoutFC.Name = "txtBoxPayoutFC";
             this.txtBoxPayoutFC.ReadOnly = true;
-            this.txtBoxPayoutFC.Size = new System.Drawing.Size(177, 23);
+            this.txtBoxPayoutFC.Size = new System.Drawing.Size(181, 22);
             this.txtBoxPayoutFC.TabIndex = 8;
             // 
             // lblVolumeUnit
             // 
             this.lblVolumeUnit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblVolumeUnit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVolumeUnit.Location = new System.Drawing.Point(745, 115);
-            this.lblVolumeUnit.Margin = new System.Windows.Forms.Padding(3);
+            this.lblVolumeUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVolumeUnit.Location = new System.Drawing.Point(743, 97);
+            this.lblVolumeUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblVolumeUnit.Name = "lblVolumeUnit";
-            this.lblVolumeUnit.Size = new System.Drawing.Size(71, 22);
+            this.lblVolumeUnit.Size = new System.Drawing.Size(75, 22);
             this.lblVolumeUnit.TabIndex = 14;
             this.lblVolumeUnit.Text = "_lblVolumeUnit";
             this.lblVolumeUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -602,11 +632,11 @@
             // lblPayoutFCUnit
             // 
             this.lblPayoutFCUnit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblPayoutFCUnit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPayoutFCUnit.Location = new System.Drawing.Point(745, 143);
-            this.lblPayoutFCUnit.Margin = new System.Windows.Forms.Padding(3);
+            this.lblPayoutFCUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPayoutFCUnit.Location = new System.Drawing.Point(743, 121);
+            this.lblPayoutFCUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblPayoutFCUnit.Name = "lblPayoutFCUnit";
-            this.lblPayoutFCUnit.Size = new System.Drawing.Size(71, 22);
+            this.lblPayoutFCUnit.Size = new System.Drawing.Size(75, 22);
             this.lblPayoutFCUnit.TabIndex = 49;
             this.lblPayoutFCUnit.Text = "_lblPayoutFCUnit";
             this.lblPayoutFCUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -614,11 +644,11 @@
             // lblSolidarityTaxUnit
             // 
             this.lblSolidarityTaxUnit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblSolidarityTaxUnit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSolidarityTaxUnit.Location = new System.Drawing.Point(745, 227);
-            this.lblSolidarityTaxUnit.Margin = new System.Windows.Forms.Padding(3);
+            this.lblSolidarityTaxUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSolidarityTaxUnit.Location = new System.Drawing.Point(743, 193);
+            this.lblSolidarityTaxUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblSolidarityTaxUnit.Name = "lblSolidarityTaxUnit";
-            this.lblSolidarityTaxUnit.Size = new System.Drawing.Size(71, 22);
+            this.lblSolidarityTaxUnit.Size = new System.Drawing.Size(75, 22);
             this.lblSolidarityTaxUnit.TabIndex = 59;
             this.lblSolidarityTaxUnit.Text = "_lblSolidarityTaxUnit";
             this.lblSolidarityTaxUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -626,11 +656,11 @@
             // lblDividendRateUnit
             // 
             this.lblDividendRateUnit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblDividendRateUnit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDividendRateUnit.Location = new System.Drawing.Point(745, 87);
-            this.lblDividendRateUnit.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDividendRateUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDividendRateUnit.Location = new System.Drawing.Point(743, 73);
+            this.lblDividendRateUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblDividendRateUnit.Name = "lblDividendRateUnit";
-            this.lblDividendRateUnit.Size = new System.Drawing.Size(71, 22);
+            this.lblDividendRateUnit.Size = new System.Drawing.Size(75, 22);
             this.lblDividendRateUnit.TabIndex = 12;
             this.lblDividendRateUnit.Text = "_lblDividendUnit";
             this.lblDividendRateUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -640,10 +670,11 @@
             this.lblAddDocument.BackColor = System.Drawing.Color.LightGray;
             this.lblAddDocument.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblAddDocument.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblAddDocument.Location = new System.Drawing.Point(3, 367);
-            this.lblAddDocument.Margin = new System.Windows.Forms.Padding(3);
+            this.lblAddDocument.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddDocument.Location = new System.Drawing.Point(1, 313);
+            this.lblAddDocument.Margin = new System.Windows.Forms.Padding(1);
             this.lblAddDocument.Name = "lblAddDocument";
-            this.lblAddDocument.Size = new System.Drawing.Size(294, 22);
+            this.lblAddDocument.Size = new System.Drawing.Size(298, 22);
             this.lblAddDocument.TabIndex = 25;
             this.lblAddDocument.Text = "_addDocument";
             this.lblAddDocument.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -654,10 +685,11 @@
             this.txtBoxDocument.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tblLayPnlDividendInput.SetColumnSpan(this.txtBoxDocument, 3);
             this.txtBoxDocument.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtBoxDocument.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxDocument.Location = new System.Drawing.Point(303, 367);
+            this.txtBoxDocument.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxDocument.Location = new System.Drawing.Point(301, 313);
+            this.txtBoxDocument.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxDocument.Name = "txtBoxDocument";
-            this.txtBoxDocument.Size = new System.Drawing.Size(436, 23);
+            this.txtBoxDocument.Size = new System.Drawing.Size(440, 22);
             this.txtBoxDocument.TabIndex = 14;
             this.txtBoxDocument.TextChanged += new System.EventHandler(this.txtBoxDocument_TextChanged);
             this.txtBoxDocument.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragDrop);
@@ -669,10 +701,11 @@
             this.lblAddPrice.BackColor = System.Drawing.Color.LightGray;
             this.lblAddPrice.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblAddPrice.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblAddPrice.Location = new System.Drawing.Point(3, 339);
-            this.lblAddPrice.Margin = new System.Windows.Forms.Padding(3);
+            this.lblAddPrice.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddPrice.Location = new System.Drawing.Point(1, 289);
+            this.lblAddPrice.Margin = new System.Windows.Forms.Padding(1);
             this.lblAddPrice.Name = "lblAddPrice";
-            this.lblAddPrice.Size = new System.Drawing.Size(294, 22);
+            this.lblAddPrice.Size = new System.Drawing.Size(298, 22);
             this.lblAddPrice.TabIndex = 4;
             this.lblAddPrice.Text = "_addPrice";
             this.lblAddPrice.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -682,10 +715,11 @@
             this.txtBoxPrice.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tblLayPnlDividendInput.SetColumnSpan(this.txtBoxPrice, 3);
             this.txtBoxPrice.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtBoxPrice.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxPrice.Location = new System.Drawing.Point(303, 339);
+            this.txtBoxPrice.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxPrice.Location = new System.Drawing.Point(301, 289);
+            this.txtBoxPrice.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxPrice.Name = "txtBoxPrice";
-            this.txtBoxPrice.Size = new System.Drawing.Size(436, 23);
+            this.txtBoxPrice.Size = new System.Drawing.Size(440, 22);
             this.txtBoxPrice.TabIndex = 13;
             this.txtBoxPrice.TextChanged += new System.EventHandler(this.txtBoxPrice_TextChanged);
             this.txtBoxPrice.Leave += new System.EventHandler(this.txtBoxPrice_Leave);
@@ -695,10 +729,11 @@
             this.lblAddYield.BackColor = System.Drawing.Color.LightGray;
             this.lblAddYield.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblAddYield.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblAddYield.Location = new System.Drawing.Point(3, 311);
-            this.lblAddYield.Margin = new System.Windows.Forms.Padding(3);
+            this.lblAddYield.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddYield.Location = new System.Drawing.Point(1, 265);
+            this.lblAddYield.Margin = new System.Windows.Forms.Padding(1);
             this.lblAddYield.Name = "lblAddYield";
-            this.lblAddYield.Size = new System.Drawing.Size(294, 22);
+            this.lblAddYield.Size = new System.Drawing.Size(298, 22);
             this.lblAddYield.TabIndex = 17;
             this.lblAddYield.Text = "_addYield";
             this.lblAddYield.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -709,21 +744,22 @@
             this.tblLayPnlDividendInput.SetColumnSpan(this.txtBoxYield, 3);
             this.txtBoxYield.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtBoxYield.Enabled = false;
-            this.txtBoxYield.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxYield.Location = new System.Drawing.Point(303, 311);
+            this.txtBoxYield.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxYield.Location = new System.Drawing.Point(301, 265);
+            this.txtBoxYield.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxYield.Name = "txtBoxYield";
             this.txtBoxYield.ReadOnly = true;
-            this.txtBoxYield.Size = new System.Drawing.Size(436, 23);
+            this.txtBoxYield.Size = new System.Drawing.Size(440, 22);
             this.txtBoxYield.TabIndex = 11;
             // 
             // lblPriceUnit
             // 
             this.lblPriceUnit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblPriceUnit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPriceUnit.Location = new System.Drawing.Point(745, 339);
-            this.lblPriceUnit.Margin = new System.Windows.Forms.Padding(3);
+            this.lblPriceUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPriceUnit.Location = new System.Drawing.Point(743, 289);
+            this.lblPriceUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblPriceUnit.Name = "lblPriceUnit";
-            this.lblPriceUnit.Size = new System.Drawing.Size(71, 22);
+            this.lblPriceUnit.Size = new System.Drawing.Size(75, 22);
             this.lblPriceUnit.TabIndex = 13;
             this.lblPriceUnit.Text = "_lblPriceUnit";
             this.lblPriceUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -731,10 +767,11 @@
             // lblYieldUnit
             // 
             this.lblYieldUnit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblYieldUnit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblYieldUnit.Location = new System.Drawing.Point(745, 308);
+            this.lblYieldUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblYieldUnit.Location = new System.Drawing.Point(743, 265);
+            this.lblYieldUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblYieldUnit.Name = "lblYieldUnit";
-            this.lblYieldUnit.Size = new System.Drawing.Size(71, 28);
+            this.lblYieldUnit.Size = new System.Drawing.Size(75, 22);
             this.lblYieldUnit.TabIndex = 19;
             this.lblYieldUnit.Text = "_lblYieldUnit";
             this.lblYieldUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -744,10 +781,11 @@
             this.lblAddPayoutAfterTax.BackColor = System.Drawing.Color.LightGray;
             this.lblAddPayoutAfterTax.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblAddPayoutAfterTax.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblAddPayoutAfterTax.Location = new System.Drawing.Point(3, 283);
-            this.lblAddPayoutAfterTax.Margin = new System.Windows.Forms.Padding(3);
+            this.lblAddPayoutAfterTax.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddPayoutAfterTax.Location = new System.Drawing.Point(1, 241);
+            this.lblAddPayoutAfterTax.Margin = new System.Windows.Forms.Padding(1);
             this.lblAddPayoutAfterTax.Name = "lblAddPayoutAfterTax";
-            this.lblAddPayoutAfterTax.Size = new System.Drawing.Size(294, 22);
+            this.lblAddPayoutAfterTax.Size = new System.Drawing.Size(298, 22);
             this.lblAddPayoutAfterTax.TabIndex = 38;
             this.lblAddPayoutAfterTax.Text = "_addPayoutAfterTax";
             this.lblAddPayoutAfterTax.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -758,20 +796,21 @@
             this.tblLayPnlDividendInput.SetColumnSpan(this.txtBoxPayoutAfterTax, 3);
             this.txtBoxPayoutAfterTax.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtBoxPayoutAfterTax.Enabled = false;
-            this.txtBoxPayoutAfterTax.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxPayoutAfterTax.Location = new System.Drawing.Point(303, 283);
+            this.txtBoxPayoutAfterTax.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxPayoutAfterTax.Location = new System.Drawing.Point(301, 241);
+            this.txtBoxPayoutAfterTax.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxPayoutAfterTax.Name = "txtBoxPayoutAfterTax";
             this.txtBoxPayoutAfterTax.ReadOnly = true;
-            this.txtBoxPayoutAfterTax.Size = new System.Drawing.Size(436, 23);
+            this.txtBoxPayoutAfterTax.Size = new System.Drawing.Size(440, 22);
             this.txtBoxPayoutAfterTax.TabIndex = 10;
             // 
             // lblTaxUnit
             // 
             this.lblTaxUnit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblTaxUnit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTaxUnit.Location = new System.Drawing.Point(745, 252);
+            this.lblTaxUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTaxUnit.Location = new System.Drawing.Point(745, 216);
             this.lblTaxUnit.Name = "lblTaxUnit";
-            this.lblTaxUnit.Size = new System.Drawing.Size(71, 28);
+            this.lblTaxUnit.Size = new System.Drawing.Size(71, 24);
             this.lblTaxUnit.TabIndex = 48;
             this.lblTaxUnit.Text = "_lblTaxUnit";
             this.lblTaxUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -779,10 +818,11 @@
             // lblPayoutAfterTaxUnit
             // 
             this.lblPayoutAfterTaxUnit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblPayoutAfterTaxUnit.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPayoutAfterTaxUnit.Location = new System.Drawing.Point(745, 280);
+            this.lblPayoutAfterTaxUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPayoutAfterTaxUnit.Location = new System.Drawing.Point(743, 241);
+            this.lblPayoutAfterTaxUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblPayoutAfterTaxUnit.Name = "lblPayoutAfterTaxUnit";
-            this.lblPayoutAfterTaxUnit.Size = new System.Drawing.Size(71, 28);
+            this.lblPayoutAfterTaxUnit.Size = new System.Drawing.Size(75, 22);
             this.lblPayoutAfterTaxUnit.TabIndex = 40;
             this.lblPayoutAfterTaxUnit.Text = "_lblPayoutAfterTaxUnit";
             this.lblPayoutAfterTaxUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -792,7 +832,7 @@
             this.statusStrip1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelMessage});
-            this.statusStrip1.Location = new System.Drawing.Point(3, 453);
+            this.statusStrip1.Location = new System.Drawing.Point(3, 391);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(819, 22);
             this.statusStrip1.TabIndex = 11;
@@ -809,9 +849,9 @@
             // 
             this.lblAddTax.BackColor = System.Drawing.Color.LightGray;
             this.lblAddTax.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblAddTax.Location = new System.Drawing.Point(17, 162);
+            this.lblAddTax.Location = new System.Drawing.Point(17, 151);
             this.lblAddTax.Name = "lblAddTax";
-            this.lblAddTax.Size = new System.Drawing.Size(300, 23);
+            this.lblAddTax.Size = new System.Drawing.Size(300, 22);
             this.lblAddTax.TabIndex = 47;
             this.lblAddTax.Text = "_addTax";
             this.lblAddTax.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -823,12 +863,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grpBoxDividends.Controls.Add(this.tblLayPnlOverviewTabControl);
             this.grpBoxDividends.Controls.Add(this.lblAddTax);
-            this.grpBoxDividends.Location = new System.Drawing.Point(5, 489);
+            this.grpBoxDividends.Location = new System.Drawing.Point(5, 427);
             this.grpBoxDividends.Name = "grpBoxDividends";
-            this.grpBoxDividends.Size = new System.Drawing.Size(824, 162);
+            this.grpBoxDividends.Size = new System.Drawing.Size(824, 180);
             this.grpBoxDividends.TabIndex = 3;
             this.grpBoxDividends.TabStop = false;
-            this.grpBoxDividends.Text = "_dividends";
+            this.grpBoxDividends.Text = "_grpBoxDividends";
             // 
             // tblLayPnlOverviewTabControl
             // 
@@ -837,12 +877,12 @@
             this.tblLayPnlOverviewTabControl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tblLayPnlOverviewTabControl.Controls.Add(this.tabCtrlDividends, 0, 0);
             this.tblLayPnlOverviewTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tblLayPnlOverviewTabControl.Location = new System.Drawing.Point(3, 19);
+            this.tblLayPnlOverviewTabControl.Location = new System.Drawing.Point(3, 18);
             this.tblLayPnlOverviewTabControl.Name = "tblLayPnlOverviewTabControl";
             this.tblLayPnlOverviewTabControl.RowCount = 1;
             this.tblLayPnlOverviewTabControl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblLayPnlOverviewTabControl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 143F));
-            this.tblLayPnlOverviewTabControl.Size = new System.Drawing.Size(818, 140);
+            this.tblLayPnlOverviewTabControl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 131F));
+            this.tblLayPnlOverviewTabControl.Size = new System.Drawing.Size(818, 159);
             this.tblLayPnlOverviewTabControl.TabIndex = 48;
             // 
             // tabCtrlDividends
@@ -852,7 +892,7 @@
             this.tabCtrlDividends.Location = new System.Drawing.Point(3, 3);
             this.tabCtrlDividends.Name = "tabCtrlDividends";
             this.tabCtrlDividends.SelectedIndex = 0;
-            this.tabCtrlDividends.Size = new System.Drawing.Size(812, 134);
+            this.tabCtrlDividends.Size = new System.Drawing.Size(812, 153);
             this.tabCtrlDividends.TabIndex = 0;
             this.tabCtrlDividends.SelectedIndexChanged += new System.EventHandler(this.tabCtrlDividends_SelectedIndexChanged);
             this.tabCtrlDividends.MouseEnter += new System.EventHandler(this.tabCtrlDividends_MouseEnter);
@@ -904,20 +944,20 @@
             // 
             // ViewDividendEdit
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.ClientSize = new System.Drawing.Size(834, 652);
+            this.ClientSize = new System.Drawing.Size(834, 609);
             this.ControlBox = false;
             this.Controls.Add(this.grpBoxDividends);
             this.Controls.Add(this.grpBoxAddDividend);
-            this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(900, 725);
+            this.MaximumSize = new System.Drawing.Size(900, 679);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(800, 650);
+            this.MinimumSize = new System.Drawing.Size(800, 609);
             this.Name = "ViewDividendEdit";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

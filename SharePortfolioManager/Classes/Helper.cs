@@ -489,7 +489,7 @@ namespace SharePortfolioManager.Classes
         /// <param name="strUnit">String with the given unit</param>
         /// <param name="cultureInfo">Culture info for the formatting</param>
         /// <returns></returns>
-        static public string FormatDouble(double dblValue, int iPrecision, bool bFixed, int iFixedPrecision = 0, bool bUnit = false, string strUnit = "", CultureInfo cultureInfo = null)
+        public static string FormatDouble(double dblValue, int iPrecision, bool bFixed, int iFixedPrecision = 0, bool bUnit = false, string strUnit = "", CultureInfo cultureInfo = null)
         {
             string strFormatString = "";
             string strResult = "";
@@ -581,7 +581,7 @@ namespace SharePortfolioManager.Classes
         /// <param name="strUnit">String with the given unit</param>
         /// <param name="cultureInfo">Culture info for the formatting</param>
         /// <returns></returns>
-        static public string FormatDecimal(decimal decValue, int iPrecision, bool bFixed, int iFixedPrecision = 0, bool bUnit = false, string strUnit = "", CultureInfo cultureInfo = null)
+        public static string FormatDecimal(decimal decValue, int iPrecision, bool bFixed, int iFixedPrecision = 0, bool bUnit = false, string strUnit = "", CultureInfo cultureInfo = null)
         {
             string strFormatString = "";
             string strResult = "";

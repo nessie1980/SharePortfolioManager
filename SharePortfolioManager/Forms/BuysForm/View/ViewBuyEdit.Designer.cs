@@ -82,7 +82,7 @@
             this.grpBoxAdd.Controls.Add(this.statusStrip1);
             this.grpBoxAdd.Location = new System.Drawing.Point(5, 5);
             this.grpBoxAdd.Name = "grpBoxAdd";
-            this.grpBoxAdd.Size = new System.Drawing.Size(825, 310);
+            this.grpBoxAdd.Size = new System.Drawing.Size(825, 269);
             this.grpBoxAdd.TabIndex = 15;
             this.grpBoxAdd.TabStop = false;
             this.grpBoxAdd.Text = "_grpBoxAdd";
@@ -91,30 +91,33 @@
             // 
             this.tblLayPnlBuyButtons.ColumnCount = 5;
             this.tblLayPnlBuyButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblLayPnlBuyButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 171F));
-            this.tblLayPnlBuyButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 171F));
-            this.tblLayPnlBuyButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 171F));
-            this.tblLayPnlBuyButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 171F));
+            this.tblLayPnlBuyButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
+            this.tblLayPnlBuyButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
+            this.tblLayPnlBuyButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
+            this.tblLayPnlBuyButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
             this.tblLayPnlBuyButtons.Controls.Add(this.btnReset, 3, 0);
             this.tblLayPnlBuyButtons.Controls.Add(this.btnDelete, 2, 0);
             this.tblLayPnlBuyButtons.Controls.Add(this.btnAddSave, 1, 0);
             this.tblLayPnlBuyButtons.Controls.Add(this.btnCancel, 4, 0);
             this.tblLayPnlBuyButtons.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tblLayPnlBuyButtons.Location = new System.Drawing.Point(3, 243);
+            this.tblLayPnlBuyButtons.Location = new System.Drawing.Point(3, 210);
+            this.tblLayPnlBuyButtons.Margin = new System.Windows.Forms.Padding(1);
             this.tblLayPnlBuyButtons.Name = "tblLayPnlBuyButtons";
             this.tblLayPnlBuyButtons.RowCount = 1;
             this.tblLayPnlBuyButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblLayPnlBuyButtons.Size = new System.Drawing.Size(819, 39);
+            this.tblLayPnlBuyButtons.Size = new System.Drawing.Size(819, 33);
             this.tblLayPnlBuyButtons.TabIndex = 16;
             // 
             // btnReset
             // 
             this.btnReset.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnReset.Enabled = false;
+            this.btnReset.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnReset.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnReset.Location = new System.Drawing.Point(480, 3);
+            this.btnReset.Location = new System.Drawing.Point(460, 1);
+            this.btnReset.Margin = new System.Windows.Forms.Padding(1);
             this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(165, 33);
+            this.btnReset.Size = new System.Drawing.Size(178, 31);
             this.btnReset.TabIndex = 10;
             this.btnReset.Text = "_Reset";
             this.btnReset.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -125,10 +128,12 @@
             // 
             this.btnDelete.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnDelete.Enabled = false;
+            this.btnDelete.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDelete.Location = new System.Drawing.Point(309, 3);
+            this.btnDelete.Location = new System.Drawing.Point(280, 1);
+            this.btnDelete.Margin = new System.Windows.Forms.Padding(1);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(165, 33);
+            this.btnDelete.Size = new System.Drawing.Size(178, 31);
             this.btnDelete.TabIndex = 9;
             this.btnDelete.Text = "_Delete";
             this.btnDelete.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -138,10 +143,12 @@
             // btnAddSave
             // 
             this.btnAddSave.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnAddSave.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAddSave.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAddSave.Location = new System.Drawing.Point(138, 3);
+            this.btnAddSave.Location = new System.Drawing.Point(100, 1);
+            this.btnAddSave.Margin = new System.Windows.Forms.Padding(1);
             this.btnAddSave.Name = "btnAddSave";
-            this.btnAddSave.Size = new System.Drawing.Size(165, 33);
+            this.btnAddSave.Size = new System.Drawing.Size(178, 31);
             this.btnAddSave.TabIndex = 8;
             this.btnAddSave.Text = "_Add/Save";
             this.btnAddSave.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -151,10 +158,12 @@
             // btnCancel
             // 
             this.btnCancel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnCancel.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCancel.Location = new System.Drawing.Point(651, 3);
+            this.btnCancel.Location = new System.Drawing.Point(640, 1);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(1);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(165, 33);
+            this.btnCancel.Size = new System.Drawing.Size(178, 31);
             this.btnCancel.TabIndex = 11;
             this.btnCancel.Text = "_Cancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -193,19 +202,20 @@
             this.tblLayPnlBuynput.Controls.Add(this.lblFinalValue, 0, 6);
             this.tblLayPnlBuynput.Controls.Add(this.txtBoxPrice, 1, 2);
             this.tblLayPnlBuynput.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tblLayPnlBuynput.Location = new System.Drawing.Point(3, 19);
+            this.tblLayPnlBuynput.Location = new System.Drawing.Point(3, 18);
+            this.tblLayPnlBuynput.Margin = new System.Windows.Forms.Padding(1);
             this.tblLayPnlBuynput.Name = "tblLayPnlBuynput";
             this.tblLayPnlBuynput.Padding = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.tblLayPnlBuynput.RowCount = 8;
-            this.tblLayPnlBuynput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tblLayPnlBuynput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tblLayPnlBuynput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tblLayPnlBuynput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tblLayPnlBuynput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tblLayPnlBuynput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tblLayPnlBuynput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tblLayPnlBuynput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tblLayPnlBuynput.Size = new System.Drawing.Size(819, 224);
+            this.tblLayPnlBuynput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlBuynput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlBuynput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlBuynput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlBuynput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlBuynput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlBuynput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlBuynput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlBuynput.Size = new System.Drawing.Size(819, 192);
             this.tblLayPnlBuynput.TabIndex = 15;
             // 
             // lblDocument
@@ -213,11 +223,11 @@
             this.lblDocument.BackColor = System.Drawing.Color.LightGray;
             this.lblDocument.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblDocument.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblDocument.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDocument.Location = new System.Drawing.Point(6, 199);
-            this.lblDocument.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDocument.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDocument.Location = new System.Drawing.Point(4, 169);
+            this.lblDocument.Margin = new System.Windows.Forms.Padding(1);
             this.lblDocument.Name = "lblDocument";
-            this.lblDocument.Size = new System.Drawing.Size(244, 22);
+            this.lblDocument.Size = new System.Drawing.Size(248, 22);
             this.lblDocument.TabIndex = 19;
             this.lblDocument.Text = "lblDocument";
             this.lblDocument.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -225,10 +235,11 @@
             // lblAddReductionUnit
             // 
             this.lblAddReductionUnit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblAddReductionUnit.Location = new System.Drawing.Point(742, 143);
-            this.lblAddReductionUnit.Margin = new System.Windows.Forms.Padding(3);
+            this.lblAddReductionUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddReductionUnit.Location = new System.Drawing.Point(740, 121);
+            this.lblAddReductionUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblAddReductionUnit.Name = "lblAddReductionUnit";
-            this.lblAddReductionUnit.Size = new System.Drawing.Size(71, 22);
+            this.lblAddReductionUnit.Size = new System.Drawing.Size(75, 22);
             this.lblAddReductionUnit.TabIndex = 23;
             this.lblAddReductionUnit.Text = "_lblReductionUnit";
             this.lblAddReductionUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -236,10 +247,11 @@
             // lblAddMarketValueUnit
             // 
             this.lblAddMarketValueUnit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblAddMarketValueUnit.Location = new System.Drawing.Point(742, 87);
-            this.lblAddMarketValueUnit.Margin = new System.Windows.Forms.Padding(3);
+            this.lblAddMarketValueUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddMarketValueUnit.Location = new System.Drawing.Point(740, 73);
+            this.lblAddMarketValueUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblAddMarketValueUnit.Name = "lblAddMarketValueUnit";
-            this.lblAddMarketValueUnit.Size = new System.Drawing.Size(71, 22);
+            this.lblAddMarketValueUnit.Size = new System.Drawing.Size(75, 22);
             this.lblAddMarketValueUnit.TabIndex = 28;
             this.lblAddMarketValueUnit.Text = "_lblMarketValueUnit";
             this.lblAddMarketValueUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -247,11 +259,12 @@
             // btnDocumentBrowse
             // 
             this.btnDocumentBrowse.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnDocumentBrowse.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDocumentBrowse.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDocumentBrowse.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDocumentBrowse.Location = new System.Drawing.Point(742, 199);
+            this.btnDocumentBrowse.Location = new System.Drawing.Point(740, 169);
+            this.btnDocumentBrowse.Margin = new System.Windows.Forms.Padding(1);
             this.btnDocumentBrowse.Name = "btnDocumentBrowse";
-            this.btnDocumentBrowse.Size = new System.Drawing.Size(71, 22);
+            this.btnDocumentBrowse.Size = new System.Drawing.Size(75, 22);
             this.btnDocumentBrowse.TabIndex = 7;
             this.btnDocumentBrowse.Text = "...";
             this.btnDocumentBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -265,10 +278,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtBoxDocument.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tblLayPnlBuynput.SetColumnSpan(this.txtBoxDocument, 2);
-            this.txtBoxDocument.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxDocument.Location = new System.Drawing.Point(256, 199);
+            this.txtBoxDocument.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxDocument.Location = new System.Drawing.Point(254, 169);
+            this.txtBoxDocument.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxDocument.Name = "txtBoxDocument";
-            this.txtBoxDocument.Size = new System.Drawing.Size(480, 23);
+            this.txtBoxDocument.Size = new System.Drawing.Size(484, 22);
             this.txtBoxDocument.TabIndex = 6;
             this.txtBoxDocument.TextChanged += new System.EventHandler(this.OnTxtBoxDocument_TextChanged);
             this.txtBoxDocument.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragDrop);
@@ -278,10 +292,11 @@
             // lblAddCostsUnit
             // 
             this.lblAddCostsUnit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblAddCostsUnit.Location = new System.Drawing.Point(742, 115);
-            this.lblAddCostsUnit.Margin = new System.Windows.Forms.Padding(3);
+            this.lblAddCostsUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddCostsUnit.Location = new System.Drawing.Point(740, 97);
+            this.lblAddCostsUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblAddCostsUnit.Name = "lblAddCostsUnit";
-            this.lblAddCostsUnit.Size = new System.Drawing.Size(71, 22);
+            this.lblAddCostsUnit.Size = new System.Drawing.Size(75, 22);
             this.lblAddCostsUnit.TabIndex = 22;
             this.lblAddCostsUnit.Text = "_lblCostsUnit";
             this.lblAddCostsUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -289,10 +304,11 @@
             // lblAddFinalValueUnit
             // 
             this.lblAddFinalValueUnit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblAddFinalValueUnit.Location = new System.Drawing.Point(742, 171);
-            this.lblAddFinalValueUnit.Margin = new System.Windows.Forms.Padding(3);
+            this.lblAddFinalValueUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddFinalValueUnit.Location = new System.Drawing.Point(740, 145);
+            this.lblAddFinalValueUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblAddFinalValueUnit.Name = "lblAddFinalValueUnit";
-            this.lblAddFinalValueUnit.Size = new System.Drawing.Size(71, 22);
+            this.lblAddFinalValueUnit.Size = new System.Drawing.Size(75, 22);
             this.lblAddFinalValueUnit.TabIndex = 21;
             this.lblAddFinalValueUnit.Text = "_lblFinalValueUnit";
             this.lblAddFinalValueUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -302,10 +318,11 @@
             this.lblDate.BackColor = System.Drawing.Color.LightGray;
             this.lblDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblDate.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblDate.Location = new System.Drawing.Point(6, 3);
-            this.lblDate.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDate.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDate.Location = new System.Drawing.Point(4, 1);
+            this.lblDate.Margin = new System.Windows.Forms.Padding(1);
             this.lblDate.Name = "lblDate";
-            this.lblDate.Size = new System.Drawing.Size(244, 22);
+            this.lblDate.Size = new System.Drawing.Size(248, 22);
             this.lblDate.TabIndex = 13;
             this.lblDate.Text = "_addDate";
             this.lblDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -316,11 +333,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtBoxMarketValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tblLayPnlBuynput.SetColumnSpan(this.txtBoxMarketValue, 2);
-            this.txtBoxMarketValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxMarketValue.Location = new System.Drawing.Point(256, 87);
+            this.txtBoxMarketValue.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxMarketValue.Location = new System.Drawing.Point(254, 73);
+            this.txtBoxMarketValue.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxMarketValue.Name = "txtBoxMarketValue";
             this.txtBoxMarketValue.ReadOnly = true;
-            this.txtBoxMarketValue.Size = new System.Drawing.Size(480, 23);
+            this.txtBoxMarketValue.Size = new System.Drawing.Size(484, 22);
             this.txtBoxMarketValue.TabIndex = 12;
             this.txtBoxMarketValue.TabStop = false;
             this.txtBoxMarketValue.Text = "-";
@@ -328,10 +346,11 @@
             // lblAddVolumeUnit
             // 
             this.lblAddVolumeUnit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblAddVolumeUnit.Location = new System.Drawing.Point(742, 31);
-            this.lblAddVolumeUnit.Margin = new System.Windows.Forms.Padding(3);
+            this.lblAddVolumeUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddVolumeUnit.Location = new System.Drawing.Point(740, 25);
+            this.lblAddVolumeUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblAddVolumeUnit.Name = "lblAddVolumeUnit";
-            this.lblAddVolumeUnit.Size = new System.Drawing.Size(71, 22);
+            this.lblAddVolumeUnit.Size = new System.Drawing.Size(75, 22);
             this.lblAddVolumeUnit.TabIndex = 20;
             this.lblAddVolumeUnit.Text = "_lblVolumeUnit";
             this.lblAddVolumeUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -342,10 +361,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtBoxReduction.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tblLayPnlBuynput.SetColumnSpan(this.txtBoxReduction, 2);
-            this.txtBoxReduction.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxReduction.Location = new System.Drawing.Point(256, 143);
+            this.txtBoxReduction.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxReduction.Location = new System.Drawing.Point(254, 121);
+            this.txtBoxReduction.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxReduction.Name = "txtBoxReduction";
-            this.txtBoxReduction.Size = new System.Drawing.Size(480, 23);
+            this.txtBoxReduction.Size = new System.Drawing.Size(484, 22);
             this.txtBoxReduction.TabIndex = 5;
             this.txtBoxReduction.TextChanged += new System.EventHandler(this.OnTxtBoxReduction_TextChanged);
             this.txtBoxReduction.Leave += new System.EventHandler(this.OnTxtBoxReduction_Leave);
@@ -356,11 +376,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.datePickerDate.CustomFormat = "";
             this.datePickerDate.DropDownAlign = System.Windows.Forms.LeftRightAlignment.Right;
+            this.datePickerDate.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.datePickerDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.datePickerDate.Location = new System.Drawing.Point(256, 3);
+            this.datePickerDate.Location = new System.Drawing.Point(254, 1);
+            this.datePickerDate.Margin = new System.Windows.Forms.Padding(1);
             this.datePickerDate.MinDate = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
             this.datePickerDate.Name = "datePickerDate";
-            this.datePickerDate.Size = new System.Drawing.Size(237, 23);
+            this.datePickerDate.Size = new System.Drawing.Size(241, 22);
             this.datePickerDate.TabIndex = 0;
             this.datePickerDate.ValueChanged += new System.EventHandler(this.OnDatePickerDate_ValueChanged);
             this.datePickerDate.Leave += new System.EventHandler(this.OnDatePickerDate_Leave);
@@ -370,11 +392,11 @@
             this.lblMarketValue.BackColor = System.Drawing.Color.LightGray;
             this.lblMarketValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblMarketValue.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblMarketValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMarketValue.Location = new System.Drawing.Point(6, 87);
-            this.lblMarketValue.Margin = new System.Windows.Forms.Padding(3);
+            this.lblMarketValue.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMarketValue.Location = new System.Drawing.Point(4, 73);
+            this.lblMarketValue.Margin = new System.Windows.Forms.Padding(1);
             this.lblMarketValue.Name = "lblMarketValue";
-            this.lblMarketValue.Size = new System.Drawing.Size(244, 22);
+            this.lblMarketValue.Size = new System.Drawing.Size(248, 22);
             this.lblMarketValue.TabIndex = 27;
             this.lblMarketValue.Text = "_addMarketValue";
             this.lblMarketValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -382,10 +404,11 @@
             // lblAddPriceUnit
             // 
             this.lblAddPriceUnit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblAddPriceUnit.Location = new System.Drawing.Point(742, 59);
-            this.lblAddPriceUnit.Margin = new System.Windows.Forms.Padding(3);
+            this.lblAddPriceUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddPriceUnit.Location = new System.Drawing.Point(740, 49);
+            this.lblAddPriceUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblAddPriceUnit.Name = "lblAddPriceUnit";
-            this.lblAddPriceUnit.Size = new System.Drawing.Size(71, 22);
+            this.lblAddPriceUnit.Size = new System.Drawing.Size(75, 22);
             this.lblAddPriceUnit.TabIndex = 24;
             this.lblAddPriceUnit.Text = "_lbPriceUnit";
             this.lblAddPriceUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -393,11 +416,13 @@
             // datePickerTime
             // 
             this.datePickerTime.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.datePickerTime.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.datePickerTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.datePickerTime.Location = new System.Drawing.Point(499, 3);
+            this.datePickerTime.Location = new System.Drawing.Point(497, 1);
+            this.datePickerTime.Margin = new System.Windows.Forms.Padding(1);
             this.datePickerTime.Name = "datePickerTime";
             this.datePickerTime.ShowUpDown = true;
-            this.datePickerTime.Size = new System.Drawing.Size(237, 23);
+            this.datePickerTime.Size = new System.Drawing.Size(241, 22);
             this.datePickerTime.TabIndex = 1;
             this.datePickerTime.ValueChanged += new System.EventHandler(this.OnDatePickerTime_ValueChanged);
             this.datePickerTime.Leave += new System.EventHandler(this.OnDatePickerTime_Leave);
@@ -408,10 +433,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtBoxVolume.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tblLayPnlBuynput.SetColumnSpan(this.txtBoxVolume, 2);
-            this.txtBoxVolume.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxVolume.Location = new System.Drawing.Point(256, 31);
+            this.txtBoxVolume.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxVolume.Location = new System.Drawing.Point(254, 25);
+            this.txtBoxVolume.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxVolume.Name = "txtBoxVolume";
-            this.txtBoxVolume.Size = new System.Drawing.Size(480, 23);
+            this.txtBoxVolume.Size = new System.Drawing.Size(484, 22);
             this.txtBoxVolume.TabIndex = 2;
             this.txtBoxVolume.TextChanged += new System.EventHandler(this.OnTxtBoxAddVolume_TextChanged);
             this.txtBoxVolume.Leave += new System.EventHandler(this.OnTxtBoxVolume_Leave);
@@ -422,11 +448,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtBoxFinalValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tblLayPnlBuynput.SetColumnSpan(this.txtBoxFinalValue, 2);
-            this.txtBoxFinalValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxFinalValue.Location = new System.Drawing.Point(256, 171);
+            this.txtBoxFinalValue.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxFinalValue.Location = new System.Drawing.Point(254, 145);
+            this.txtBoxFinalValue.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxFinalValue.Name = "txtBoxFinalValue";
             this.txtBoxFinalValue.ReadOnly = true;
-            this.txtBoxFinalValue.Size = new System.Drawing.Size(480, 23);
+            this.txtBoxFinalValue.Size = new System.Drawing.Size(484, 22);
             this.txtBoxFinalValue.TabIndex = 13;
             this.txtBoxFinalValue.TabStop = false;
             this.txtBoxFinalValue.Text = "-";
@@ -437,10 +464,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtBoxCosts.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tblLayPnlBuynput.SetColumnSpan(this.txtBoxCosts, 2);
-            this.txtBoxCosts.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxCosts.Location = new System.Drawing.Point(256, 115);
+            this.txtBoxCosts.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxCosts.Location = new System.Drawing.Point(254, 97);
+            this.txtBoxCosts.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxCosts.Name = "txtBoxCosts";
-            this.txtBoxCosts.Size = new System.Drawing.Size(480, 23);
+            this.txtBoxCosts.Size = new System.Drawing.Size(484, 22);
             this.txtBoxCosts.TabIndex = 4;
             this.txtBoxCosts.TextChanged += new System.EventHandler(this.OnTxtBoxCosts_TextChanged);
             this.txtBoxCosts.Leave += new System.EventHandler(this.OnTxtBoxCosts_Leave);
@@ -450,10 +478,11 @@
             this.lblVolume.BackColor = System.Drawing.Color.LightGray;
             this.lblVolume.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblVolume.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblVolume.Location = new System.Drawing.Point(6, 31);
-            this.lblVolume.Margin = new System.Windows.Forms.Padding(3);
+            this.lblVolume.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVolume.Location = new System.Drawing.Point(4, 25);
+            this.lblVolume.Margin = new System.Windows.Forms.Padding(1);
             this.lblVolume.Name = "lblVolume";
-            this.lblVolume.Size = new System.Drawing.Size(244, 22);
+            this.lblVolume.Size = new System.Drawing.Size(248, 22);
             this.lblVolume.TabIndex = 14;
             this.lblVolume.Text = "_addVolume";
             this.lblVolume.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -463,11 +492,11 @@
             this.lblReduction.BackColor = System.Drawing.Color.LightGray;
             this.lblReduction.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblReduction.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblReduction.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblReduction.Location = new System.Drawing.Point(6, 143);
-            this.lblReduction.Margin = new System.Windows.Forms.Padding(3);
+            this.lblReduction.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblReduction.Location = new System.Drawing.Point(4, 121);
+            this.lblReduction.Margin = new System.Windows.Forms.Padding(1);
             this.lblReduction.Name = "lblReduction";
-            this.lblReduction.Size = new System.Drawing.Size(244, 22);
+            this.lblReduction.Size = new System.Drawing.Size(248, 22);
             this.lblReduction.TabIndex = 17;
             this.lblReduction.Text = "_addReduction";
             this.lblReduction.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -477,11 +506,11 @@
             this.lblBuyPrice.BackColor = System.Drawing.Color.LightGray;
             this.lblBuyPrice.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblBuyPrice.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblBuyPrice.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBuyPrice.Location = new System.Drawing.Point(6, 59);
-            this.lblBuyPrice.Margin = new System.Windows.Forms.Padding(3);
+            this.lblBuyPrice.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBuyPrice.Location = new System.Drawing.Point(4, 49);
+            this.lblBuyPrice.Margin = new System.Windows.Forms.Padding(1);
             this.lblBuyPrice.Name = "lblBuyPrice";
-            this.lblBuyPrice.Size = new System.Drawing.Size(244, 22);
+            this.lblBuyPrice.Size = new System.Drawing.Size(248, 22);
             this.lblBuyPrice.TabIndex = 18;
             this.lblBuyPrice.Text = "_addBuyPrice";
             this.lblBuyPrice.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -491,10 +520,11 @@
             this.lblCosts.BackColor = System.Drawing.Color.LightGray;
             this.lblCosts.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblCosts.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblCosts.Location = new System.Drawing.Point(6, 115);
-            this.lblCosts.Margin = new System.Windows.Forms.Padding(3);
+            this.lblCosts.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCosts.Location = new System.Drawing.Point(4, 97);
+            this.lblCosts.Margin = new System.Windows.Forms.Padding(1);
             this.lblCosts.Name = "lblCosts";
-            this.lblCosts.Size = new System.Drawing.Size(244, 22);
+            this.lblCosts.Size = new System.Drawing.Size(248, 22);
             this.lblCosts.TabIndex = 16;
             this.lblCosts.Text = "_addCosts";
             this.lblCosts.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -504,10 +534,11 @@
             this.lblFinalValue.BackColor = System.Drawing.Color.LightGray;
             this.lblFinalValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblFinalValue.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblFinalValue.Location = new System.Drawing.Point(6, 171);
-            this.lblFinalValue.Margin = new System.Windows.Forms.Padding(3);
+            this.lblFinalValue.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFinalValue.Location = new System.Drawing.Point(4, 145);
+            this.lblFinalValue.Margin = new System.Windows.Forms.Padding(1);
             this.lblFinalValue.Name = "lblFinalValue";
-            this.lblFinalValue.Size = new System.Drawing.Size(244, 22);
+            this.lblFinalValue.Size = new System.Drawing.Size(248, 22);
             this.lblFinalValue.TabIndex = 15;
             this.lblFinalValue.Text = "_addFinalValue";
             this.lblFinalValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -518,10 +549,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtBoxPrice.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tblLayPnlBuynput.SetColumnSpan(this.txtBoxPrice, 2);
-            this.txtBoxPrice.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxPrice.Location = new System.Drawing.Point(256, 59);
+            this.txtBoxPrice.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxPrice.Location = new System.Drawing.Point(254, 49);
+            this.txtBoxPrice.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxPrice.Name = "txtBoxPrice";
-            this.txtBoxPrice.Size = new System.Drawing.Size(480, 23);
+            this.txtBoxPrice.Size = new System.Drawing.Size(484, 22);
             this.txtBoxPrice.TabIndex = 3;
             this.txtBoxPrice.TextChanged += new System.EventHandler(this.OnTxtBoxPrice_TextChanged);
             this.txtBoxPrice.Leave += new System.EventHandler(this.OnTxtBoxPrice_Leave);
@@ -531,7 +563,7 @@
             this.statusStrip1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelMessageBuyEdit});
-            this.statusStrip1.Location = new System.Drawing.Point(3, 285);
+            this.statusStrip1.Location = new System.Drawing.Point(3, 244);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(819, 22);
             this.statusStrip1.TabIndex = 14;
@@ -550,9 +582,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grpBoxOverview.Controls.Add(this.tblLayPnlOverviewTabControl);
-            this.grpBoxOverview.Location = new System.Drawing.Point(5, 321);
+            this.grpBoxOverview.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grpBoxOverview.Location = new System.Drawing.Point(5, 280);
             this.grpBoxOverview.Name = "grpBoxOverview";
-            this.grpBoxOverview.Size = new System.Drawing.Size(825, 162);
+            this.grpBoxOverview.Size = new System.Drawing.Size(825, 170);
             this.grpBoxOverview.TabIndex = 16;
             this.grpBoxOverview.TabStop = false;
             this.grpBoxOverview.Text = "_grpBoxOverview";
@@ -563,11 +596,11 @@
             this.tblLayPnlOverviewTabControl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblLayPnlOverviewTabControl.Controls.Add(this.tabCtrlBuys, 0, 0);
             this.tblLayPnlOverviewTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tblLayPnlOverviewTabControl.Location = new System.Drawing.Point(3, 19);
+            this.tblLayPnlOverviewTabControl.Location = new System.Drawing.Point(3, 18);
             this.tblLayPnlOverviewTabControl.Name = "tblLayPnlOverviewTabControl";
             this.tblLayPnlOverviewTabControl.RowCount = 1;
             this.tblLayPnlOverviewTabControl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblLayPnlOverviewTabControl.Size = new System.Drawing.Size(819, 140);
+            this.tblLayPnlOverviewTabControl.Size = new System.Drawing.Size(819, 149);
             this.tblLayPnlOverviewTabControl.TabIndex = 0;
             // 
             // tabCtrlBuys
@@ -577,7 +610,7 @@
             this.tabCtrlBuys.Location = new System.Drawing.Point(3, 3);
             this.tabCtrlBuys.Name = "tabCtrlBuys";
             this.tabCtrlBuys.SelectedIndex = 0;
-            this.tabCtrlBuys.Size = new System.Drawing.Size(813, 134);
+            this.tabCtrlBuys.Size = new System.Drawing.Size(813, 143);
             this.tabCtrlBuys.TabIndex = 0;
             this.tabCtrlBuys.TabStop = false;
             this.tabCtrlBuys.SelectedIndexChanged += new System.EventHandler(this.tabCtrlBuys_SelectedIndexChanged);
@@ -597,20 +630,20 @@
             // 
             // ViewBuyEdit
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.ClientSize = new System.Drawing.Size(834, 484);
+            this.ClientSize = new System.Drawing.Size(834, 453);
             this.ControlBox = false;
             this.Controls.Add(this.grpBoxOverview);
             this.Controls.Add(this.grpBoxAdd);
-            this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(900, 600);
+            this.MaximumSize = new System.Drawing.Size(900, 563);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(800, 500);
+            this.MinimumSize = new System.Drawing.Size(800, 469);
             this.Name = "ViewBuyEdit";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

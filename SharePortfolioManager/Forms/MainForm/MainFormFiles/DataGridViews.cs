@@ -158,8 +158,6 @@ namespace SharePortfolioManager
                 // Advanced configuration DataGridView share portfolio
                 DataGridViewCellStyle styleMarketValue = dgvPortfolioMarketValue.ColumnHeadersDefaultCellStyle;
                 styleMarketValue.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                styleMarketValue.Font = new Font("Consolas", 9, FontStyle.Bold);
-
 
                 dgvPortfolioMarketValue.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
                 dgvPortfolioMarketValue.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
@@ -181,7 +179,6 @@ namespace SharePortfolioManager
                 // Advanced configuration DataGridView share portfolio
                 DataGridViewCellStyle styleFinaleValue = dgvPortfolioFinalValue.ColumnHeadersDefaultCellStyle;
                 styleFinaleValue.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                styleFinaleValue.Font = new Font("Consolas", 9, FontStyle.Bold);
 
                 dgvPortfolioFinalValue.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
                 dgvPortfolioFinalValue.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
