@@ -38,9 +38,9 @@
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnCancel.Location = new System.Drawing.Point(294, 3);
+            this.btnCancel.Location = new System.Drawing.Point(285, 3);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(165, 33);
+            this.btnCancel.Size = new System.Drawing.Size(174, 30);
             this.btnCancel.TabIndex = 2;
             this.btnCancel.Text = "_Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -49,9 +49,9 @@
             // btnOk
             // 
             this.btnOk.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnOk.Location = new System.Drawing.Point(123, 3);
+            this.btnOk.Location = new System.Drawing.Point(105, 3);
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(165, 33);
+            this.btnOk.Size = new System.Drawing.Size(174, 30);
             this.btnOk.TabIndex = 1;
             this.btnOk.Text = "_Ok";
             this.btnOk.UseVisualStyleBackColor = true;
@@ -61,27 +61,26 @@
             // 
             this.tblLayPnlOnwMessageBox.ColumnCount = 3;
             this.tblLayPnlOnwMessageBox.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblLayPnlOnwMessageBox.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 171F));
-            this.tblLayPnlOnwMessageBox.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 171F));
+            this.tblLayPnlOnwMessageBox.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
+            this.tblLayPnlOnwMessageBox.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
             this.tblLayPnlOnwMessageBox.Controls.Add(this.btnOk, 1, 0);
             this.tblLayPnlOnwMessageBox.Controls.Add(this.btnCancel, 2, 0);
             this.tblLayPnlOnwMessageBox.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tblLayPnlOnwMessageBox.Location = new System.Drawing.Point(0, 170);
+            this.tblLayPnlOnwMessageBox.Location = new System.Drawing.Point(0, 159);
             this.tblLayPnlOnwMessageBox.Name = "tblLayPnlOnwMessageBox";
             this.tblLayPnlOnwMessageBox.RowCount = 1;
             this.tblLayPnlOnwMessageBox.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblLayPnlOnwMessageBox.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tblLayPnlOnwMessageBox.Size = new System.Drawing.Size(462, 39);
+            this.tblLayPnlOnwMessageBox.Size = new System.Drawing.Size(462, 36);
             this.tblLayPnlOnwMessageBox.TabIndex = 3;
             // 
             // OwnMessageBox
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.ClientSize = new System.Drawing.Size(462, 209);
+            this.ClientSize = new System.Drawing.Size(462, 195);
             this.Controls.Add(this.tblLayPnlOnwMessageBox);
-            this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "OwnMessageBox";

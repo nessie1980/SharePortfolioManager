@@ -1038,7 +1038,6 @@ namespace SharePortfolioManager.Forms.CostsForm.View
                 // Advanced configuration DataGridView costs
                 DataGridViewCellStyle styleOverviewOfYears = dataGridViewCostsOverviewOfAYears.ColumnHeadersDefaultCellStyle;
                 styleOverviewOfYears.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                styleOverviewOfYears.Font = new Font("Trebuchet MS", 10, FontStyle.Bold);
 
                 dataGridViewCostsOverviewOfAYears.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
                 dataGridViewCostsOverviewOfAYears.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
@@ -1127,7 +1126,6 @@ namespace SharePortfolioManager.Forms.CostsForm.View
                         // Advanced configuration DataGridView costs
                         DataGridViewCellStyle style = dataGridViewCostsOfAYear.ColumnHeadersDefaultCellStyle;
                         style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                        style.Font = new Font("Trebuchet MS", 10, FontStyle.Bold);
 
                         dataGridViewCostsOfAYear.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
                         dataGridViewCostsOfAYear.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;

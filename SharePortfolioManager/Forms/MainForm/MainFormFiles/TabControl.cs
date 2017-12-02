@@ -299,21 +299,6 @@ namespace SharePortfolioManager
                     lblDetailsMarketValueTotalSumValue.Text =
                         ShareObjectMarketValue.MarketValueAsStrUnit;
 
-                    lblDetailsMarketValueDiffPerformancePrevValue.Font = new Font("Trebuchet MS", 10,
-                        FontStyle.Bold);
-                    lblDetailsMarketValueDiffPerformancePrevValue.Font = new Font("Trebuchet MS", 10,
-                        FontStyle.Bold);
-                    lblDetailsMarketValueDiffSumPrevValue.Font = new Font("Trebuchet MS", 10, FontStyle.Bold);
-                    lblDetailsMarketValueDiffSumPrevValue.Font = new Font("Trebuchet MS", 10,
-                        FontStyle.Bold);
-                    lblDetailsMarketValueTotalPerformanceValue.Font = new Font("Trebuchet MS", 10,
-                        FontStyle.Bold);
-                    lblDetailsMarketValueTotalPerformanceValue.Font = new Font("Trebuchet MS", 10,
-                        FontStyle.Bold);
-                    lblDetailsMarketValueTotalProfitValue.Font = new Font("Trebuchet MS", 10, FontStyle.Bold);
-                    lblDetailsMarketValueTotalProfitValue.Font = new Font("Trebuchet MS", 10,
-                        FontStyle.Bold);
-
                     // Format performance value
                     if (ShareObjectMarketValue.PerformanceValue >= 0)
                     {
@@ -479,21 +464,6 @@ namespace SharePortfolioManager
                     lblDetailsFinalValueTotalSumValue.Text =
                         ShareObjectFinalValue.FinalValueAsStrUnit;
 
-                    lblDetailsFinalValueDiffPerformancePrevValue.Font = new Font("Trebuchet MS", 10,
-                        FontStyle.Bold);
-                    lblDetailsMarketValueDiffPerformancePrevValue.Font = new Font("Trebuchet MS", 10,
-                        FontStyle.Bold);
-                    lblDetailsFinalValueDiffSumPrevValue.Font = new Font("Trebuchet MS", 10, FontStyle.Bold);
-                    lblDetailsMarketValueDiffSumPrevValue.Font = new Font("Trebuchet MS", 10,
-                        FontStyle.Bold);
-                    lblDetailsFinalValueTotalPerformanceValue.Font = new Font("Trebuchet MS", 10,
-                        FontStyle.Bold);
-                    lblDetailsMarketValueTotalPerformanceValue.Font = new Font("Trebuchet MS", 10,
-                        FontStyle.Bold);
-                    lblDetailsFinalValueTotalProfitValue.Font = new Font("Trebuchet MS", 10, FontStyle.Bold);
-                    lblDetailsMarketValueTotalProfitValue.Font = new Font("Trebuchet MS", 10,
-                        FontStyle.Bold);
-
                     // Format performance value
                     if (ShareObjectFinalValue.PerformanceValue >= 0)
                     {
@@ -651,7 +621,6 @@ namespace SharePortfolioManager
                         DataGridViewCellStyle styleOverviewOfYears =
                             dataGridViewProfitLossOverviewOfAYears.ColumnHeadersDefaultCellStyle;
                         styleOverviewOfYears.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                        styleOverviewOfYears.Font = new Font("Trebuchet MS", 10, FontStyle.Bold);
 
                         dataGridViewProfitLossOverviewOfAYears.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
                         dataGridViewProfitLossOverviewOfAYears.ColumnHeadersBorderStyle =
@@ -721,7 +690,6 @@ namespace SharePortfolioManager
                                 // Advanced configuration DataGridView profit or loss
                                 DataGridViewCellStyle style = dataGridViewProfitLossOfAYear.ColumnHeadersDefaultCellStyle;
                                 style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                                style.Font = new Font("Trebuchet MS", 10, FontStyle.Bold);
 
                                 dataGridViewProfitLossOfAYear.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
                                 dataGridViewProfitLossOfAYear.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
@@ -1160,7 +1128,6 @@ namespace SharePortfolioManager
                         DataGridViewCellStyle styleOverviewOfYears =
                             dataGridViewDividendsOverviewOfAYears.ColumnHeadersDefaultCellStyle;
                         styleOverviewOfYears.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                        styleOverviewOfYears.Font = new Font("Trebuchet MS", 10, FontStyle.Bold);
 
                         dataGridViewDividendsOverviewOfAYears.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
                         dataGridViewDividendsOverviewOfAYears.ColumnHeadersBorderStyle =
@@ -1231,7 +1198,6 @@ namespace SharePortfolioManager
                                 // Advanced configuration DataGridView dividends
                                 DataGridViewCellStyle style = dataGridViewDividendsOfAYear.ColumnHeadersDefaultCellStyle;
                                 style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                                style.Font = new Font("Trebuchet MS", 10, FontStyle.Bold);
 
                                 dataGridViewDividendsOfAYear.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
                                 dataGridViewDividendsOfAYear.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
@@ -1586,7 +1552,6 @@ namespace SharePortfolioManager
                         DataGridViewCellStyle styleOverviewOfYears =
                             dataGridViewCostsOverviewOfAYears.ColumnHeadersDefaultCellStyle;
                         styleOverviewOfYears.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                        styleOverviewOfYears.Font = new Font("Trebuchet MS", 10, FontStyle.Bold);
 
                         dataGridViewCostsOverviewOfAYears.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
                         dataGridViewCostsOverviewOfAYears.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
@@ -1650,7 +1615,6 @@ namespace SharePortfolioManager
                                 // Advanced configuration DataGridView costs
                                 DataGridViewCellStyle style = dataGridViewCostsOfAYear.ColumnHeadersDefaultCellStyle;
                                 style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                                style.Font = new Font("Trebuchet MS", 10, FontStyle.Bold);
 
                                 dataGridViewCostsOfAYear.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
                                 dataGridViewCostsOfAYear.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;

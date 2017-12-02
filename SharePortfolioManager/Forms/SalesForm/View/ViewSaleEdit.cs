@@ -936,7 +936,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 #region Image configuration
 
                 // Load button images
-                btnAddSave.Image = Resources.black_save;
+                btnAddSave.Image = Resources.black_add;
                 btnDelete.Image = Resources.black_delete;
                 btnReset.Image = Resources.black_cancel;
                 btnCancel.Image = Resources.black_cancel;
@@ -1493,7 +1493,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 // Advanced configuration DataGridView buys
                 DataGridViewCellStyle styleOverviewOfYears = dataGridViewSalesOverviewOfAYears.ColumnHeadersDefaultCellStyle;
                 styleOverviewOfYears.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                styleOverviewOfYears.Font = new Font("Trebuchet MS", 10, FontStyle.Bold);
 
                 dataGridViewSalesOverviewOfAYears.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
                 dataGridViewSalesOverviewOfAYears.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
@@ -1562,7 +1561,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         // Advanced configuration DataGridView buys
                         DataGridViewCellStyle style = dataGridViewSalesOfAYear.ColumnHeadersDefaultCellStyle;
                         style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                        style.Font = new Font("Trebuchet MS", 10, FontStyle.Bold);
 
                         dataGridViewSalesOfAYear.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
                         dataGridViewSalesOfAYear.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;

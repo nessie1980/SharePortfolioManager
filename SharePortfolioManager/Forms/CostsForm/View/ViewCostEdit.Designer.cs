@@ -66,9 +66,10 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grpBoxOverview.Controls.Add(this.tblLayPnlOverviewTabControl);
-            this.grpBoxOverview.Location = new System.Drawing.Point(5, 181);
+            this.grpBoxOverview.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grpBoxOverview.Location = new System.Drawing.Point(5, 160);
             this.grpBoxOverview.Name = "grpBoxOverview";
-            this.grpBoxOverview.Size = new System.Drawing.Size(825, 162);
+            this.grpBoxOverview.Size = new System.Drawing.Size(825, 183);
             this.grpBoxOverview.TabIndex = 5;
             this.grpBoxOverview.TabStop = false;
             this.grpBoxOverview.Text = "_costs";
@@ -80,22 +81,23 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             this.tblLayPnlOverviewTabControl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tblLayPnlOverviewTabControl.Controls.Add(this.tabCtrlCosts, 0, 0);
             this.tblLayPnlOverviewTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tblLayPnlOverviewTabControl.Location = new System.Drawing.Point(3, 19);
+            this.tblLayPnlOverviewTabControl.Location = new System.Drawing.Point(3, 18);
             this.tblLayPnlOverviewTabControl.Name = "tblLayPnlOverviewTabControl";
             this.tblLayPnlOverviewTabControl.RowCount = 1;
             this.tblLayPnlOverviewTabControl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblLayPnlOverviewTabControl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 143F));
-            this.tblLayPnlOverviewTabControl.Size = new System.Drawing.Size(819, 140);
+            this.tblLayPnlOverviewTabControl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 162F));
+            this.tblLayPnlOverviewTabControl.Size = new System.Drawing.Size(819, 162);
             this.tblLayPnlOverviewTabControl.TabIndex = 0;
             // 
             // tabCtrlCosts
             // 
             this.tabCtrlCosts.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
             this.tabCtrlCosts.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabCtrlCosts.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabCtrlCosts.Location = new System.Drawing.Point(3, 3);
             this.tabCtrlCosts.Name = "tabCtrlCosts";
             this.tabCtrlCosts.SelectedIndex = 0;
-            this.tabCtrlCosts.Size = new System.Drawing.Size(813, 134);
+            this.tabCtrlCosts.Size = new System.Drawing.Size(813, 156);
             this.tabCtrlCosts.TabIndex = 0;
             this.tabCtrlCosts.SelectedIndexChanged += new System.EventHandler(this.tabCtrlCosts_SelectedIndexChanged);
             this.tabCtrlCosts.MouseEnter += new System.EventHandler(this.tabCtrlCosts_MouseEnter);
@@ -108,9 +110,10 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             this.grpBoxAdd.Controls.Add(this.tblLayPnlCostsButtons);
             this.grpBoxAdd.Controls.Add(this.tblLayPnlCostsInput);
             this.grpBoxAdd.Controls.Add(this.statusStrip1);
+            this.grpBoxAdd.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grpBoxAdd.Location = new System.Drawing.Point(5, 5);
             this.grpBoxAdd.Name = "grpBoxAdd";
-            this.grpBoxAdd.Size = new System.Drawing.Size(825, 170);
+            this.grpBoxAdd.Size = new System.Drawing.Size(825, 149);
             this.grpBoxAdd.TabIndex = 4;
             this.grpBoxAdd.TabStop = false;
             this.grpBoxAdd.Text = "_grpBoxAddCosts";
@@ -119,29 +122,31 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             // 
             this.tblLayPnlCostsButtons.ColumnCount = 5;
             this.tblLayPnlCostsButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblLayPnlCostsButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 171F));
-            this.tblLayPnlCostsButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 171F));
-            this.tblLayPnlCostsButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 171F));
-            this.tblLayPnlCostsButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 171F));
+            this.tblLayPnlCostsButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
+            this.tblLayPnlCostsButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
+            this.tblLayPnlCostsButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
+            this.tblLayPnlCostsButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
             this.tblLayPnlCostsButtons.Controls.Add(this.btnAddSave, 1, 0);
             this.tblLayPnlCostsButtons.Controls.Add(this.btnDelete, 2, 0);
             this.tblLayPnlCostsButtons.Controls.Add(this.btnCancel, 4, 0);
             this.tblLayPnlCostsButtons.Controls.Add(this.btnReset, 3, 0);
             this.tblLayPnlCostsButtons.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tblLayPnlCostsButtons.Location = new System.Drawing.Point(3, 103);
+            this.tblLayPnlCostsButtons.Location = new System.Drawing.Point(3, 90);
             this.tblLayPnlCostsButtons.Name = "tblLayPnlCostsButtons";
             this.tblLayPnlCostsButtons.RowCount = 1;
             this.tblLayPnlCostsButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblLayPnlCostsButtons.Size = new System.Drawing.Size(819, 39);
+            this.tblLayPnlCostsButtons.Size = new System.Drawing.Size(819, 33);
             this.tblLayPnlCostsButtons.TabIndex = 13;
             // 
             // btnAddSave
             // 
             this.btnAddSave.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnAddSave.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAddSave.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAddSave.Location = new System.Drawing.Point(138, 3);
+            this.btnAddSave.Location = new System.Drawing.Point(100, 1);
+            this.btnAddSave.Margin = new System.Windows.Forms.Padding(1);
             this.btnAddSave.Name = "btnAddSave";
-            this.btnAddSave.Size = new System.Drawing.Size(165, 33);
+            this.btnAddSave.Size = new System.Drawing.Size(178, 31);
             this.btnAddSave.TabIndex = 3;
             this.btnAddSave.Text = "_Add/Save";
             this.btnAddSave.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -152,10 +157,12 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             // 
             this.btnDelete.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnDelete.Enabled = false;
+            this.btnDelete.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDelete.Location = new System.Drawing.Point(309, 3);
+            this.btnDelete.Location = new System.Drawing.Point(280, 1);
+            this.btnDelete.Margin = new System.Windows.Forms.Padding(1);
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(165, 33);
+            this.btnDelete.Size = new System.Drawing.Size(178, 31);
             this.btnDelete.TabIndex = 4;
             this.btnDelete.Text = "_Delete";
             this.btnDelete.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -165,10 +172,12 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             // btnCancel
             // 
             this.btnCancel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnCancel.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCancel.Location = new System.Drawing.Point(651, 3);
+            this.btnCancel.Location = new System.Drawing.Point(640, 1);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(1);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(165, 33);
+            this.btnCancel.Size = new System.Drawing.Size(178, 31);
             this.btnCancel.TabIndex = 6;
             this.btnCancel.Text = "_Cancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -179,10 +188,12 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             // 
             this.btnReset.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnReset.Enabled = false;
+            this.btnReset.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnReset.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnReset.Location = new System.Drawing.Point(480, 3);
+            this.btnReset.Location = new System.Drawing.Point(460, 1);
+            this.btnReset.Margin = new System.Windows.Forms.Padding(1);
             this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(165, 33);
+            this.btnReset.Size = new System.Drawing.Size(178, 31);
             this.btnReset.TabIndex = 5;
             this.btnReset.Text = "_Reset";
             this.btnReset.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -206,23 +217,25 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             this.tblLayPnlCostsInput.Controls.Add(this.txtBoxCosts, 1, 1);
             this.tblLayPnlCostsInput.Controls.Add(this.lblAddCostsUnit, 3, 1);
             this.tblLayPnlCostsInput.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tblLayPnlCostsInput.Location = new System.Drawing.Point(3, 19);
+            this.tblLayPnlCostsInput.Location = new System.Drawing.Point(3, 18);
+            this.tblLayPnlCostsInput.Margin = new System.Windows.Forms.Padding(1);
             this.tblLayPnlCostsInput.Name = "tblLayPnlCostsInput";
             this.tblLayPnlCostsInput.RowCount = 3;
-            this.tblLayPnlCostsInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tblLayPnlCostsInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tblLayPnlCostsInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tblLayPnlCostsInput.Size = new System.Drawing.Size(819, 84);
+            this.tblLayPnlCostsInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlCostsInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlCostsInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlCostsInput.Size = new System.Drawing.Size(819, 72);
             this.tblLayPnlCostsInput.TabIndex = 12;
             // 
             // btnDocumentBrowse
             // 
             this.btnDocumentBrowse.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnDocumentBrowse.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDocumentBrowse.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDocumentBrowse.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDocumentBrowse.Location = new System.Drawing.Point(745, 59);
+            this.btnDocumentBrowse.Location = new System.Drawing.Point(743, 49);
+            this.btnDocumentBrowse.Margin = new System.Windows.Forms.Padding(1);
             this.btnDocumentBrowse.Name = "btnDocumentBrowse";
-            this.btnDocumentBrowse.Size = new System.Drawing.Size(71, 22);
+            this.btnDocumentBrowse.Size = new System.Drawing.Size(75, 22);
             this.btnDocumentBrowse.TabIndex = 7;
             this.btnDocumentBrowse.Text = "...";
             this.btnDocumentBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -234,10 +247,11 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             this.lblDate.BackColor = System.Drawing.Color.LightGray;
             this.lblDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblDate.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblDate.Location = new System.Drawing.Point(3, 3);
-            this.lblDate.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDate.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDate.Location = new System.Drawing.Point(1, 1);
+            this.lblDate.Margin = new System.Windows.Forms.Padding(1);
             this.lblDate.Name = "lblDate";
-            this.lblDate.Size = new System.Drawing.Size(244, 22);
+            this.lblDate.Size = new System.Drawing.Size(248, 22);
             this.lblDate.TabIndex = 2;
             this.lblDate.Text = "_addDate";
             this.lblDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -247,10 +261,11 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             this.lblCosts.BackColor = System.Drawing.Color.LightGray;
             this.lblCosts.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblCosts.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblCosts.Location = new System.Drawing.Point(3, 31);
-            this.lblCosts.Margin = new System.Windows.Forms.Padding(3);
+            this.lblCosts.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCosts.Location = new System.Drawing.Point(1, 25);
+            this.lblCosts.Margin = new System.Windows.Forms.Padding(1);
             this.lblCosts.Name = "lblCosts";
-            this.lblCosts.Size = new System.Drawing.Size(244, 22);
+            this.lblCosts.Size = new System.Drawing.Size(248, 22);
             this.lblCosts.TabIndex = 3;
             this.lblCosts.Text = "_addCostValue";
             this.lblCosts.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -261,10 +276,11 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             this.txtBoxDocument.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tblLayPnlCostsInput.SetColumnSpan(this.txtBoxDocument, 2);
             this.txtBoxDocument.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtBoxDocument.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxDocument.Location = new System.Drawing.Point(253, 59);
+            this.txtBoxDocument.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxDocument.Location = new System.Drawing.Point(251, 49);
+            this.txtBoxDocument.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxDocument.Name = "txtBoxDocument";
-            this.txtBoxDocument.Size = new System.Drawing.Size(486, 23);
+            this.txtBoxDocument.Size = new System.Drawing.Size(490, 22);
             this.txtBoxDocument.TabIndex = 2;
             this.txtBoxDocument.TextChanged += new System.EventHandler(this.OnTxtBoxDocument_TextChanged);
             this.txtBoxDocument.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragDrop);
@@ -276,10 +292,11 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             this.lblDocument.BackColor = System.Drawing.Color.LightGray;
             this.lblDocument.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblDocument.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblDocument.Location = new System.Drawing.Point(3, 59);
-            this.lblDocument.Margin = new System.Windows.Forms.Padding(3);
+            this.lblDocument.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDocument.Location = new System.Drawing.Point(1, 49);
+            this.lblDocument.Margin = new System.Windows.Forms.Padding(1);
             this.lblDocument.Name = "lblDocument";
-            this.lblDocument.Size = new System.Drawing.Size(244, 22);
+            this.lblDocument.Size = new System.Drawing.Size(248, 22);
             this.lblDocument.TabIndex = 19;
             this.lblDocument.Text = "_addCostDoc";
             this.lblDocument.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -289,10 +306,12 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             this.datePickerDate.CustomFormat = "";
             this.datePickerDate.Dock = System.Windows.Forms.DockStyle.Fill;
             this.datePickerDate.DropDownAlign = System.Windows.Forms.LeftRightAlignment.Right;
+            this.datePickerDate.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.datePickerDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.datePickerDate.Location = new System.Drawing.Point(253, 3);
+            this.datePickerDate.Location = new System.Drawing.Point(251, 1);
+            this.datePickerDate.Margin = new System.Windows.Forms.Padding(1);
             this.datePickerDate.Name = "datePickerDate";
-            this.datePickerDate.Size = new System.Drawing.Size(240, 23);
+            this.datePickerDate.Size = new System.Drawing.Size(244, 22);
             this.datePickerDate.TabIndex = 10;
             this.datePickerDate.ValueChanged += new System.EventHandler(this.OnDatePickerDate_ValueChanged);
             this.datePickerDate.Leave += new System.EventHandler(this.OnDatePickerDate_Leave);
@@ -300,11 +319,13 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             // datePickerTime
             // 
             this.datePickerTime.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.datePickerTime.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.datePickerTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.datePickerTime.Location = new System.Drawing.Point(499, 3);
+            this.datePickerTime.Location = new System.Drawing.Point(497, 1);
+            this.datePickerTime.Margin = new System.Windows.Forms.Padding(1);
             this.datePickerTime.Name = "datePickerTime";
             this.datePickerTime.ShowUpDown = true;
-            this.datePickerTime.Size = new System.Drawing.Size(240, 23);
+            this.datePickerTime.Size = new System.Drawing.Size(244, 22);
             this.datePickerTime.TabIndex = 18;
             this.datePickerTime.ValueChanged += new System.EventHandler(this.OnDatePickerTime_ValueChanged);
             this.datePickerTime.Leave += new System.EventHandler(this.datePickerTime_Leave);
@@ -314,10 +335,11 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             this.txtBoxCosts.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tblLayPnlCostsInput.SetColumnSpan(this.txtBoxCosts, 2);
             this.txtBoxCosts.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtBoxCosts.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxCosts.Location = new System.Drawing.Point(253, 31);
+            this.txtBoxCosts.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxCosts.Location = new System.Drawing.Point(251, 25);
+            this.txtBoxCosts.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxCosts.Name = "txtBoxCosts";
-            this.txtBoxCosts.Size = new System.Drawing.Size(486, 23);
+            this.txtBoxCosts.Size = new System.Drawing.Size(490, 22);
             this.txtBoxCosts.TabIndex = 0;
             this.txtBoxCosts.TextChanged += new System.EventHandler(this.OnTxtBoxCosts_TextChanged);
             this.txtBoxCosts.Leave += new System.EventHandler(this.OnTxtBoxCosts_Leave);
@@ -325,10 +347,11 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             // lblAddCostsUnit
             // 
             this.lblAddCostsUnit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblAddCostsUnit.Location = new System.Drawing.Point(745, 31);
-            this.lblAddCostsUnit.Margin = new System.Windows.Forms.Padding(3);
+            this.lblAddCostsUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddCostsUnit.Location = new System.Drawing.Point(743, 25);
+            this.lblAddCostsUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblAddCostsUnit.Name = "lblAddCostsUnit";
-            this.lblAddCostsUnit.Size = new System.Drawing.Size(71, 22);
+            this.lblAddCostsUnit.Size = new System.Drawing.Size(75, 22);
             this.lblAddCostsUnit.TabIndex = 12;
             this.lblAddCostsUnit.Text = "_lblCostUnit";
             this.lblAddCostsUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -338,7 +361,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             this.statusStrip1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelMessageCostEdit});
-            this.statusStrip1.Location = new System.Drawing.Point(3, 145);
+            this.statusStrip1.Location = new System.Drawing.Point(3, 124);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(819, 22);
             this.statusStrip1.TabIndex = 11;
