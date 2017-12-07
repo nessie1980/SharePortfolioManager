@@ -6,6 +6,7 @@
 		<PosY>0</PosY>
 		<Height>0</Height>
 		<Width>0</Width>
+		<State>Normal</State>
 	</Window>
 	<Language>English</Language>
 	<StatusMessageClear>3000</StatusMessageClear>

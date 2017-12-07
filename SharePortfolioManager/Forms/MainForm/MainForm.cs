@@ -49,6 +49,11 @@ namespace SharePortfolioManager
         private Size _myWindowSize;
 
         /// <summary>
+        /// Stores the state of the application window
+        /// </summary>
+        private FormWindowState _myWindowState;
+
+        /// <summary>
         /// Stores the loaded language setting
         /// </summary>
         private string _languageName = @"English";
@@ -320,6 +325,12 @@ namespace SharePortfolioManager
         {
             get { return _myWindowSize; }
             set { _myWindowSize = value; }
+        }
+
+        public FormWindowState MyWindowState
+        {
+            get { return _myWindowState; }
+            set { _myWindowState = value; }
         }
 
         public string LanguageName
@@ -658,6 +669,8 @@ namespace SharePortfolioManager
 
             try
             {
+                notifyIcon.ContextMenuStrip = menuStrip1.ContextMenuStrip;
+
                 #region Set controls names for the "enable / disable" list
 
                 EnableDisableControlNames.Add("menuStrip1");
@@ -743,7 +756,7 @@ namespace SharePortfolioManager
                 #region Read shares from XML
 
                 Text = Language.GetLanguageTextByXPath(@"/Application/Name", LanguageName)
-                    + @" - " + Language.GetLanguageTextByXPath(@"/Application/Version", LanguageName) + ": " + Helper.GetApplicationVersion().ToString();
+                       + @" " + Helper.GetApplicationVersion();
 
                 // Only load portfolio if a portfolio is set in the settings
                 if (PortfolioFileName != "")
@@ -926,6 +939,12 @@ namespace SharePortfolioManager
             }
         }
 
+        public sealed override string Text
+        {
+            get { return base.Text; }
+            set { base.Text = value; }
+        }
+
         #endregion MainForm initialization
 
         #region MainForm load
@@ -939,6 +958,7 @@ namespace SharePortfolioManager
         {
             Location = MyWindowPosition;
             Size = MyWindowSize;
+            WindowState = MyWindowState;
         }
 
         #endregion MainForm load
@@ -974,6 +994,12 @@ namespace SharePortfolioManager
                         nodeWidth.InnerXml = Size.Width.ToString();
                     if (nodeHeigth != null)
                         nodeHeigth.InnerXml = Size.Height.ToString();
+
+                    // Save window state
+                    var nodeWindowState = Settings.SelectSingleNode("/Settings/Window/State");
+
+                    if (nodeWindowState != null)
+                        nodeWindowState.InnerXml = this.WindowState.ToString();
 
                     // Close reader for saving
                     ReaderSettings.Close();

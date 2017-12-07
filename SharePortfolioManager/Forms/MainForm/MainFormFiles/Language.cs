@@ -192,14 +192,14 @@ namespace SharePortfolioManager
                 #region Application name
 
                 Text = Language.GetLanguageTextByXPath(@"/Application/Name", LanguageName)
-                    + @" " + Helper.GetApplicationVersion().ToString();
+                    + @" " + Helper.GetApplicationVersion();
 
                 notifyIcon.Text = Language.GetLanguageTextByXPath(@"/Application/Name", LanguageName)
-                    + @" " + Helper.GetApplicationVersion().ToString();
+                    + @" " + Helper.GetApplicationVersion();
 
                 if (PortfolioFileName != "")
                 {
-                    Text += @" (" + Path.GetFileName(PortfolioFileName) + @")";
+                    Text += @" - (" + PortfolioFileName + @")";
                 }
 
                 #endregion Application name

@@ -69,7 +69,7 @@ namespace SharePortfolioManager
 
                 #endregion Portfolio
 
-                #region Position and size
+                #region Position / Size / State
 
                 // Read last application window position and window size
                 // Default values
@@ -136,7 +136,32 @@ namespace SharePortfolioManager
                 // Set size
                 MyWindowSize = new Size(iWidth, iHeigth);
 
-                #endregion Position and size
+                // Read state
+                XmlNode nodeWindowState = Settings.SelectSingleNode("/Settings/Window/State");
+
+                // Set right window state
+                if (nodeWindowState != null)
+                {
+                    switch (nodeWindowState.InnerXml)
+                    {
+                        case "Normal":
+                            WindowState = FormWindowState.Normal;
+                            break;
+                        case "Minimized":
+                            WindowState = FormWindowState.Minimized;
+                            break;
+                        case "Maximized":
+                            WindowState = FormWindowState.Maximized;
+                            break;
+                        default:
+                            WindowState = FormWindowState.Normal;
+                            break;
+                    }
+                }
+                else
+                    loadSettings = false;
+
+                #endregion Position / Size / State
 
                 #region Language
 

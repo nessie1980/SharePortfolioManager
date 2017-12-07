@@ -108,7 +108,7 @@ namespace SharePortfolioManager
                     // Set application title with portfolio file name
                     if (PortfolioFileName != "")
                         Text = Language.GetLanguageTextByXPath(@"/Application/Name", LanguageName)
-                            + @" " + Helper.GetApplicationVersion().ToString() + @" (" + Path.GetFileName(PortfolioFileName) + @")";
+                            + @" " + Helper.GetApplicationVersion() + @" - (" + PortfolioFileName + @")";
 
                     // Enable controls
                     Helper.EnableDisableControls(true, this, EnableDisableControlNames);
