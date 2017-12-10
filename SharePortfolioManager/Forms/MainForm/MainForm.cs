@@ -29,6 +29,8 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
+using SharePortfolioManager.Properties;
 
 namespace SharePortfolioManager
 {
@@ -39,19 +41,34 @@ namespace SharePortfolioManager
         #region Form
 
         /// <summary>
-        /// Stores the position of the application window (start position)
+        /// Stores the flag if the form is shown or still loading
         /// </summary>
-        private Point _myWindowPosition;
+        private bool _formIsShown;
 
         /// <summary>
-        /// Stores the size of the application window
+        /// Stores the position of the application window in the "Normal" window state
         /// </summary>
-        private Size _myWindowSize;
+        private Point _normalWindowPosition;
 
         /// <summary>
-        /// Stores the state of the application window
+        /// Stores the size of the application window in the "Normal" window state
+        /// </summary>
+        private Size _normalWindowSize;
+
+        /// <summary>
+        /// Stores the state of the application window but not the minimized window state
         /// </summary>
         private FormWindowState _myWindowState;
+
+        /// <summary>
+        /// Stores the notify icon of the application
+        /// </summary>
+        private NotifyIcon _notifyIcon;
+
+        /// <summary>
+        /// Stores the context menu for the notify icon
+        /// </summary>
+        private ContextMenuStrip _notifyContextMenuStríp;
 
         /// <summary>
         /// Stores the loaded language setting
@@ -315,16 +332,22 @@ namespace SharePortfolioManager
 
         #region Form
 
-        public Point MyWindowPosition
+        public sealed override string Text
         {
-            get { return _myWindowPosition; }
-            set { _myWindowPosition = value; }
+            get { return base.Text; }
+            set { base.Text = value; }
         }
 
-        public Size MyWindowSize
+        public Point NormalWindowPosition
         {
-            get { return _myWindowSize; }
-            set { _myWindowSize = value; }
+            get { return _normalWindowPosition; }
+            set { _normalWindowPosition = value; }
+        }
+
+        public Size NormalWindowSize
+        {
+            get { return _normalWindowSize; }
+            set { _normalWindowSize = value; }
         }
 
         public FormWindowState MyWindowState
@@ -669,8 +692,6 @@ namespace SharePortfolioManager
 
             try
             {
-                notifyIcon.ContextMenuStrip = menuStrip1.ContextMenuStrip;
-
                 #region Set controls names for the "enable / disable" list
 
                 EnableDisableControlNames.Add("menuStrip1");
@@ -700,6 +721,12 @@ namespace SharePortfolioManager
                 LoadLanguage();
 
                 #endregion Load language
+
+                #region Create notify icon
+
+                CreateNotifyIcon();
+
+                #endregion Create notify icon
 
                 #region Logger
 
@@ -939,29 +966,20 @@ namespace SharePortfolioManager
             }
         }
 
-        public sealed override string Text
-        {
-            get { return base.Text; }
-            set { base.Text = value; }
-        }
-
         #endregion MainForm initialization
 
-        #region MainForm load
+        #region MainForm shown
 
-        /// <summary>
-        /// This function sets the window position and the window size of the MainForm
-        /// </summary>
-        /// <param name="sender">MainForm</param>
-        /// <param name="e">EventArgs</param>
-        private void MainForm_Load(object sender, EventArgs e)
+        private void FrmMain_Shown(object sender, EventArgs e)
         {
-            Location = MyWindowPosition;
-            Size = MyWindowSize;
+            _formIsShown = true;
+
+            Size = NormalWindowSize;
+            Location = NormalWindowPosition;
             WindowState = MyWindowState;
         }
 
-        #endregion MainForm load
+        #endregion MainForm shown
 
         #region MainForm closing
 
@@ -980,26 +998,26 @@ namespace SharePortfolioManager
                     // Save current window position
                     var nodePosX = Settings.SelectSingleNode("/Settings/Window/PosX");
                     var nodePosY = Settings.SelectSingleNode("/Settings/Window/PosY");
-                    
+
                     if (nodePosX != null)
-                        nodePosX.InnerXml = Location.X.ToString();
+                        nodePosX.InnerXml = NormalWindowPosition.X.ToString();
                     if (nodePosY != null)
-                        nodePosY.InnerXml = Location.Y.ToString();
+                        nodePosY.InnerXml = NormalWindowPosition.Y.ToString();
 
                     // Save current window size
                     var nodeWidth = Settings.SelectSingleNode("/Settings/Window/Width");
                     var nodeHeigth = Settings.SelectSingleNode("/Settings/Window/Height");
-                    
+
                     if (nodeWidth != null)
-                        nodeWidth.InnerXml = Size.Width.ToString();
+                        nodeWidth.InnerXml = NormalWindowSize.Width.ToString();
                     if (nodeHeigth != null)
-                        nodeHeigth.InnerXml = Size.Height.ToString();
+                        nodeHeigth.InnerXml = NormalWindowSize.Height.ToString();
 
                     // Save window state
                     var nodeWindowState = Settings.SelectSingleNode("/Settings/Window/State");
 
                     if (nodeWindowState != null)
-                        nodeWindowState.InnerXml = this.WindowState.ToString();
+                        nodeWindowState.InnerXml = MyWindowState.ToString();
 
                     // Close reader for saving
                     ReaderSettings.Close();
@@ -1028,34 +1046,129 @@ namespace SharePortfolioManager
         // Here we check if the user minimized window, we hide the form
         private void FrmMain_Resize(object sender, EventArgs e)
         {
-            if (this.WindowState == FormWindowState.Minimized)
+            if (!_formIsShown) return;
+
+            switch (WindowState)
             {
-                this.ShowInTaskbar = false;
-                this.Hide();
+                case FormWindowState.Minimized:
+                    ShowInTaskbar = false;
+                    Hide();
+                    break;
+                case FormWindowState.Maximized:
+                    MyWindowState = FormWindowState.Maximized;
+                    break;
+                case FormWindowState.Normal:
+                    MyWindowState = FormWindowState.Normal;
+                    NormalWindowSize = Size;
+                    NormalWindowPosition = Location;
+                    break;
+                default:
+                    MyWindowState = FormWindowState.Maximized;
+                    break;
             }
         }
 
         #endregion MainFrom resize
+
+        #region MainForm location changed
+
+        private void FrmMain_LocationChanged(object sender, EventArgs e)
+        {
+            if (!_formIsShown) return;
+
+            if (WindowState == FormWindowState.Normal)
+                NormalWindowPosition = Location;
+        }
+
+        #endregion MainForm location changed
 
         #region MainFrom visibility changed
 
         // When the form is hidden, we show notify icon and when the form is visible we hide it
         private void FrmMain_VisibleChanged(object sender, EventArgs e)
         {
-            this.notifyIcon.Visible = !this.Visible;
+            this._notifyIcon.Visible = !this.Visible;
         }
 
         #endregion MainForm visibility changed
 
         #region NotifyIcon
 
+        /// <summary>
+        /// This function creates the notify icon for the application
+        /// </summary>
+        private void CreateNotifyIcon()
+        {
+            _notifyIcon = new NotifyIcon
+            {
+                Visible = true,
+                Icon = Resources.SPM
+            };
+
+            _notifyIcon.DoubleClick += NotifyIcon_DoubleClick;
+
+            // Create sub menu for the notify icon
+            CreateNotifyIconContextMenu();
+        }
+
+        /// <summary>
+        /// This function creates the context menu for the notify icon
+        /// </summary>
+        private void CreateNotifyIconContextMenu()
+        {
+            _notifyContextMenuStríp = new ContextMenuStrip();
+            _notifyContextMenuStríp.Items.Add(
+                Language.GetLanguageTextByXPath(@"/NotifyIcon/Show", LanguageName),
+                Resources.black_show, Show_Click);
+            _notifyContextMenuStríp.Items.Add(
+                Language.GetLanguageTextByXPath(@"/NotifyIcon/Exit", LanguageName),
+                Resources.black_exit, Exit_Click);
+
+            //_notifyContextMenuStríp.MenuItems.Add(0,
+            //    new MenuItem(Language.GetLanguageTextByXPath(@"/NotifyIcon/Show",
+            //        LanguageName), Show_Click));
+            //_notifyContextMenuStríp.MenuItems.Add(1,
+            //    new MenuItem(Language.GetLanguageTextByXPath(@"/NotifyIcon/Exit",
+            //        LanguageName), (Exit_Click)));
+
+            // Set created context menu to the notify icon
+            _notifyIcon.ContextMenuStrip = _notifyContextMenuStríp;
+        }
+
         // When click on notify icon, we bring the form to front
-        private void NotifyIcon_Click(object sender, EventArgs e)
+        private void NotifyIcon_DoubleClick(object sender, EventArgs e)
         {
             this.ShowInTaskbar = true;
             this.WindowState = FormWindowState.Minimized;
             this.Show();
-            this.WindowState = FormWindowState.Normal;
+            this.WindowState = MyWindowState;
+
+            this.Activate();
+        }
+
+        /// <summary>
+        /// This function shows the application via the notify icon if it is minimized
+        /// </summary>
+        /// <param name="sender">Notify icon</param>
+        /// <param name="e">EventArgs</param>
+        protected void Show_Click(object sender, System.EventArgs e)
+        {
+            this.ShowInTaskbar = true;
+            this.WindowState = FormWindowState.Minimized;
+            this.Show();
+            this.WindowState = MyWindowState;
+
+            this.Activate();
+        }
+
+        /// <summary>
+        /// This function close the application via the notify icon
+        /// </summary>
+        /// <param name="sender">Notify icon</param>
+        /// <param name="e">EventArgs</param>
+        protected void Exit_Click(object sender, System.EventArgs e)
+        {
+            Close();
         }
 
         #endregion NotifyIcon
@@ -1083,5 +1196,6 @@ namespace SharePortfolioManager
         }
 
         #endregion Timer
+
     }
 }

@@ -154,4 +154,19 @@
   <data name="SPM" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SPM.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="black_exit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\black_exit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="black_logger" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\black_logger.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="black_new" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\black_new.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="black_open" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\black_open.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="black_show" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\black_show.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

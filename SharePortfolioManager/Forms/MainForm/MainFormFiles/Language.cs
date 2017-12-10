@@ -194,15 +194,29 @@ namespace SharePortfolioManager
                 Text = Language.GetLanguageTextByXPath(@"/Application/Name", LanguageName)
                     + @" " + Helper.GetApplicationVersion();
 
-                notifyIcon.Text = Language.GetLanguageTextByXPath(@"/Application/Name", LanguageName)
-                    + @" " + Helper.GetApplicationVersion();
-
                 if (PortfolioFileName != "")
                 {
                     Text += @" - (" + PortfolioFileName + @")";
                 }
 
                 #endregion Application name
+
+                #region Notify icon
+
+                _notifyIcon.Text = Language.GetLanguageTextByXPath(@"/Application/Name", LanguageName)
+                                   + @" " + Helper.GetApplicationVersion();
+
+                if (_notifyContextMenuStríp != null)
+                {
+                    if (_notifyContextMenuStríp.Items[0] != null)
+                        _notifyContextMenuStríp.Items[0].Text =
+                            Language.GetLanguageTextByXPath(@"/NotifyIcon/Show", LanguageName);
+                    if (_notifyContextMenuStríp.Items[1] != null)
+                        _notifyContextMenuStríp.Items[1].Text =
+                            Language.GetLanguageTextByXPath(@"/NotifyIcon/Exit", LanguageName);
+                }
+
+                #endregion Notify icon
 
                 #region Menu
 

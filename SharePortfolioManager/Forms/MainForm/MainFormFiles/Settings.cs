@@ -100,7 +100,7 @@ namespace SharePortfolioManager
                     loadSettings = false;
 
                 // Set position
-                MyWindowPosition = new Point(iPosX, iPosY);
+                NormalWindowPosition = new Point(iPosX, iPosY);
 
                 // Read size
                 XmlNode nodeWidth = Settings.SelectSingleNode("/Settings/Window/Width");
@@ -134,7 +134,7 @@ namespace SharePortfolioManager
                     loadSettings = false;
 
                 // Set size
-                MyWindowSize = new Size(iWidth, iHeigth);
+                NormalWindowSize = new Size(iWidth, iHeigth);
 
                 // Read state
                 XmlNode nodeWindowState = Settings.SelectSingleNode("/Settings/Window/State");
@@ -145,16 +145,16 @@ namespace SharePortfolioManager
                     switch (nodeWindowState.InnerXml)
                     {
                         case "Normal":
-                            WindowState = FormWindowState.Normal;
+                            MyWindowState = FormWindowState.Normal;
                             break;
                         case "Minimized":
-                            WindowState = FormWindowState.Minimized;
+                            MyWindowState = FormWindowState.Minimized;
                             break;
                         case "Maximized":
-                            WindowState = FormWindowState.Maximized;
+                            MyWindowState = FormWindowState.Maximized;
                             break;
                         default:
-                            WindowState = FormWindowState.Normal;
+                            MyWindowState = FormWindowState.Normal;
                             break;
                     }
                 }

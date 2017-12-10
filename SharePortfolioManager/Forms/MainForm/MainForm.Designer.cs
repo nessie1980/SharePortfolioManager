@@ -130,7 +130,6 @@ namespace SharePortfolioManager
             this.tblLayPnlUpdateState = new System.Windows.Forms.TableLayoutPanel();
             this.lblShareNameWebParser = new System.Windows.Forms.Label();
             this.timerStatusMessageClear = new System.Windows.Forms.Timer(this.components);
-            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.lblShareDetailsWithOutDividendCostSharePriceCurrentValue = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.grpBoxSharePortfolio.SuspendLayout();
@@ -186,6 +185,7 @@ namespace SharePortfolioManager
             // 
             // newToolStripMenuItem
             // 
+            this.newToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.black_new;
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.newToolStripMenuItem.Text = "New_";
@@ -193,6 +193,7 @@ namespace SharePortfolioManager
             // 
             // openToolStripMenuItem
             // 
+            this.openToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.black_open;
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.openToolStripMenuItem.Text = "Open_";
@@ -200,6 +201,7 @@ namespace SharePortfolioManager
             // 
             // saveAsToolStripMenuItem
             // 
+            this.saveAsToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.black_save;
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.saveAsToolStripMenuItem.Text = "SaveAs_";
@@ -211,6 +213,7 @@ namespace SharePortfolioManager
             // 
             // exitToolStripMenuItem
             // 
+            this.exitToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.black_exit;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.exitToolStripMenuItem.Text = "&Quit_";
@@ -228,13 +231,14 @@ namespace SharePortfolioManager
             // languageToolStripMenuItem
             // 
             this.languageToolStripMenuItem.Name = "languageToolStripMenuItem";
-            this.languageToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.languageToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.languageToolStripMenuItem.Text = "_Language";
             // 
             // loggerToolStripMenuItem
             // 
+            this.loggerToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.black_logger;
             this.loggerToolStripMenuItem.Name = "loggerToolStripMenuItem";
-            this.loggerToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.loggerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.loggerToolStripMenuItem.Text = "_Logger";
             this.loggerToolStripMenuItem.Click += new System.EventHandler(this.loggerToolStripMenuItem_Click);
             // 
@@ -1543,13 +1547,6 @@ namespace SharePortfolioManager
             this.timerStatusMessageClear.Interval = 2000;
             this.timerStatusMessageClear.Tick += new System.EventHandler(this.TimerStatusMessageDelete_Tick);
             // 
-            // notifyIcon
-            // 
-            this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
-            this.notifyIcon.Text = "SharePortfolioManagment";
-            this.notifyIcon.Visible = true;
-            this.notifyIcon.Click += new System.EventHandler(this.NotifyIcon_Click);
-            // 
             // lblShareDetailsWithOutDividendCostSharePriceCurrentValue
             // 
             this.lblShareDetailsWithOutDividendCostSharePriceCurrentValue.BackColor = System.Drawing.Color.LightGray;
@@ -1581,7 +1578,8 @@ namespace SharePortfolioManager
             this.Name = "FrmMain";
             this.Text = "Share administration_";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
-            this.Load += new System.EventHandler(this.MainForm_Load);
+            this.Shown += new System.EventHandler(this.FrmMain_Shown);
+            this.LocationChanged += new System.EventHandler(this.FrmMain_LocationChanged);
             this.VisibleChanged += new System.EventHandler(this.FrmMain_VisibleChanged);
             this.Resize += new System.EventHandler(this.FrmMain_Resize);
             this.menuStrip1.ResumeLayout(false);
@@ -1692,7 +1690,6 @@ namespace SharePortfolioManager
         private ToolStripMenuItem saveAsToolStripMenuItem;
         private ToolStripMenuItem openToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator1;
-        private NotifyIcon notifyIcon;
         private TabControl tabCtrlShareOverviews;
         private TabPage tabPgFinalValue;
         private TabPage tabPgMarketValue;

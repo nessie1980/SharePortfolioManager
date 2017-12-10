@@ -7,6 +7,12 @@
 			<Version text="Version" />
 		</Application>
 		
+		<!-- Notify icon -->
+		<NotifyIcon>
+			<Show text="Show" />
+			<Exit text="Exit" />
+		</NotifyIcon>
+		
 		<!-- Units -->
 		<PieceUnit text="pcs." />
 		<PercentageUnit text="%" />
@@ -1036,6 +1042,12 @@
 			<Version text="Version" />
 		</Application>
 		
+		<!-- Notify icon -->
+		<NotifyIcon>
+			<Show text="Anzeigen" />
+			<Exit text="Beenden" />
+		</NotifyIcon>
+
 		<!-- Units -->
 		<PieceUnit text="stk." />
 		<PercentageUnit text="%" />

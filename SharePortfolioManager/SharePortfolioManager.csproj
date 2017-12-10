@@ -344,6 +344,21 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\black_exit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\black_show.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\black_new.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\black_open.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\black_logger.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>REM Copy settings files if they do not exist already
