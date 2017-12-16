@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.25914.0
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Share-Portfolio-Management", "SharePortfolioManager\SharePortfolioManager.csproj", "{980070CD-8810-4D87-AF37-75483D1C3E15}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharePortfolioManager", "SharePortfolioManager\SharePortfolioManager.csproj", "{980070CD-8810-4D87-AF37-75483D1C3E15}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,6 +11,14 @@ Global
 		Debug_Language|x86 = Debug_Language|x86
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x86 = Debug|x86
+		Release_Build|Any CPU = Release_Build|Any CPU
+		Release_Build|x86 = Release_Build|x86
+		Release_Major|Any CPU = Release_Major|Any CPU
+		Release_Major|x86 = Release_Major|x86
+		Release_Minor|Any CPU = Release_Minor|Any CPU
+		Release_Minor|x86 = Release_Minor|x86
+		Release_Revision|Any CPU = Release_Revision|Any CPU
+		Release_Revision|x86 = Release_Revision|x86
 		Release_Tracing|Any CPU = Release_Tracing|Any CPU
 		Release_Tracing|x86 = Release_Tracing|x86
 		Release|Any CPU = Release|Any CPU
@@ -25,6 +33,22 @@ Global
 		{980070CD-8810-4D87-AF37-75483D1C3E15}.Debug|Any CPU.Build.0 = Debug|x86
 		{980070CD-8810-4D87-AF37-75483D1C3E15}.Debug|x86.ActiveCfg = Debug|x86
 		{980070CD-8810-4D87-AF37-75483D1C3E15}.Debug|x86.Build.0 = Debug|x86
+		{980070CD-8810-4D87-AF37-75483D1C3E15}.Release_Build|Any CPU.ActiveCfg = Release_Build|x86
+		{980070CD-8810-4D87-AF37-75483D1C3E15}.Release_Build|Any CPU.Build.0 = Release_Build|x86
+		{980070CD-8810-4D87-AF37-75483D1C3E15}.Release_Build|x86.ActiveCfg = Release|x86
+		{980070CD-8810-4D87-AF37-75483D1C3E15}.Release_Build|x86.Build.0 = Release|x86
+		{980070CD-8810-4D87-AF37-75483D1C3E15}.Release_Major|Any CPU.ActiveCfg = Release_Major|x86
+		{980070CD-8810-4D87-AF37-75483D1C3E15}.Release_Major|Any CPU.Build.0 = Release_Major|x86
+		{980070CD-8810-4D87-AF37-75483D1C3E15}.Release_Major|x86.ActiveCfg = Release|x86
+		{980070CD-8810-4D87-AF37-75483D1C3E15}.Release_Major|x86.Build.0 = Release|x86
+		{980070CD-8810-4D87-AF37-75483D1C3E15}.Release_Minor|Any CPU.ActiveCfg = Release_Minor|x86
+		{980070CD-8810-4D87-AF37-75483D1C3E15}.Release_Minor|Any CPU.Build.0 = Release_Minor|x86
+		{980070CD-8810-4D87-AF37-75483D1C3E15}.Release_Minor|x86.ActiveCfg = Release|x86
+		{980070CD-8810-4D87-AF37-75483D1C3E15}.Release_Minor|x86.Build.0 = Release|x86
+		{980070CD-8810-4D87-AF37-75483D1C3E15}.Release_Revision|Any CPU.ActiveCfg = Release_Revision|x86
+		{980070CD-8810-4D87-AF37-75483D1C3E15}.Release_Revision|Any CPU.Build.0 = Release_Revision|x86
+		{980070CD-8810-4D87-AF37-75483D1C3E15}.Release_Revision|x86.ActiveCfg = Release|x86
+		{980070CD-8810-4D87-AF37-75483D1C3E15}.Release_Revision|x86.Build.0 = Release|x86
 		{980070CD-8810-4D87-AF37-75483D1C3E15}.Release_Tracing|Any CPU.ActiveCfg = Release_Tracing|x86
 		{980070CD-8810-4D87-AF37-75483D1C3E15}.Release_Tracing|x86.ActiveCfg = Release_Tracing|x86
 		{980070CD-8810-4D87-AF37-75483D1C3E15}.Release_Tracing|x86.Build.0 = Release_Tracing|x86
@@ -35,5 +59,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8D0DC95A-9F24-42F2-AC42-9F8AFBB125C9}
 	EndGlobalSection
 EndGlobal

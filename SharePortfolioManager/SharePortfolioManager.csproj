@@ -25,8 +25,11 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>0.1.2.0</ApplicationVersion>
+    <ProductName>SharePortfolioManager</ProductName>
+    <PublisherName>Thomas Barth</PublisherName>
+    <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>0.1.2.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -47,14 +50,15 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>DEBUG</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\SharePortfolioManager.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release_Tracing|x86'">
-    <OutputPath>bin\Release_Tracing\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -90,13 +94,57 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug_Language|x86'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Debug_Language\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;DEBUG_LANGUAGE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release_Revision|x86'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <DocumentationFile>bin\Release\SharePortfolioManager.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release_Build|x86'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <DocumentationFile>bin\Release\SharePortfolioManager.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release_Minor|x86'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <DocumentationFile>bin\Release\SharePortfolioManager.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release_Major|x86'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <DocumentationFile>bin\Release\SharePortfolioManager.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LanguageHandler, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
@@ -359,39 +407,44 @@
   <ItemGroup>
     <None Include="Resources\black_logger.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="BuildTools\AssemblyInfoUpdater.exe" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>REM Copy settings files if they do not exist already
+    <PreBuildEvent>REM Update Revision number
 
+echo "$(ConfigurationName)"
 
+if "$(ConfigurationName)" == "Release_Revision"  (
+$(ProjectDir)\BuildTools\AssemblyInfoUpdater.exe REVISION $(ProjectDir)Properties\AssemblyInfo.cs
+)
 
+if "$(ConfigurationName)" == "Release_Build" (
+$(ProjectDir)\BuildTools\AssemblyInfoUpdater.exe BUILD $(ProjectDir)Properties\AssemblyInfo.cs
+)
+
+if "$(ConfigurationName)" == "Release_Minor" (
+$(ProjectDir)\BuildTools\AssemblyInfoUpdater.exe MINOR $(ProjectDir)Properties\AssemblyInfo.cs
+)
+
+if "$(ConfigurationName)" == "Release_Major" (
+$(ProjectDir)\BuildTools\AssemblyInfoUpdater.exe MAJOR $(ProjectDir)Properties\AssemblyInfo.cs
+)
+
+REM Copy settings files if they do not exist already
 ECHO Copy settings
-
-
-
 ECHO.
-
-
-
 XCOPY "$(ProjectDir)Config\Settings.xml" "$(TargetDir)\Settings\" /Y /D
-
-
 XCOPY "$(ProjectDir)Config\WebSites.xml" "$(TargetDir)\Settings\" /Y /D
-
-
 XCOPY "$(ProjectDir)Config\Language.xml" "$(TargetDir)\Settings\" /Y /D
 
-
 ECHO Copy DLLs
-
-
-
 ECHO.
 
 
 
 XCOPY "$(ProjectDir)DLLs\*.*" "$(TargetDir)" /Y /D
-
 </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
