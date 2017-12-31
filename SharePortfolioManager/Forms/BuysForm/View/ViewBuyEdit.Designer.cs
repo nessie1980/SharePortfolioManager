@@ -614,8 +614,8 @@
             this.tabCtrlBuys.TabIndex = 0;
             this.tabCtrlBuys.TabStop = false;
             this.tabCtrlBuys.SelectedIndexChanged += new System.EventHandler(this.tabCtrlBuys_SelectedIndexChanged);
-            this.tabCtrlBuys.MouseEnter += new System.EventHandler(this.tabCtrlBuys_MouseEnter);
-            this.tabCtrlBuys.MouseLeave += new System.EventHandler(this.tabCtrlBuys_MouseLeave);
+            this.tabCtrlBuys.MouseEnter += new System.EventHandler(this.TabCtrlBuys_MouseEnter);
+            this.tabCtrlBuys.MouseLeave += new System.EventHandler(this.TabCtrlBuys_MouseLeave);
             // 
             // lblPurchaseValue
             // 

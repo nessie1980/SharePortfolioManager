@@ -25,6 +25,7 @@ using System;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
+using SharePortfolioManager.Classes.ShareObjects;
 using WebParser;
 
 namespace SharePortfolioManager
@@ -89,7 +90,7 @@ namespace SharePortfolioManager
                         // Start the asynchronous operation of the WebParser
                         WebParser.WebSite = ShareObjectMarketValue.WebSite;
                         WebParser.RegexList = ShareObjectMarketValue.RegexList;
-                        WebParser.EncodingType = ShareObjectMarketValue.EncodingType;
+                        WebParser.EncodingType = ShareObjectMarketValue.WebSiteEncodingType;
                         WebParser.StartParsing();
                     }
                     else
@@ -106,7 +107,7 @@ namespace SharePortfolioManager
                         // Start the asynchronous operation of the WebParser
                         WebParser.WebSite = ShareObjectFinalValue.WebSite;
                         WebParser.RegexList = ShareObjectFinalValue.RegexList;
-                        WebParser.EncodingType = ShareObjectFinalValue.EncodingType;
+                        WebParser.EncodingType = ShareObjectFinalValue.WebSiteEncodingType;
                         WebParser.StartParsing();
                     }
                 }
@@ -174,7 +175,7 @@ namespace SharePortfolioManager
                             // Start the asynchronous operation.
                             WebParser.WebSite = ShareObjectListMarketValue[dgvPortfolioMarketValue.SelectedCells[0].RowIndex].WebSite;
                             WebParser.RegexList = ShareObjectListMarketValue[dgvPortfolioMarketValue.SelectedCells[0].RowIndex].RegexList;
-                            WebParser.EncodingType = ShareObjectListMarketValue[dgvPortfolioMarketValue.SelectedCells[0].RowIndex].EncodingType;
+                            WebParser.EncodingType = ShareObjectListMarketValue[dgvPortfolioMarketValue.SelectedCells[0].RowIndex].WebSiteEncodingType;
                             WebParser.StartParsing();
                         }
                         else
@@ -182,7 +183,7 @@ namespace SharePortfolioManager
                             // Start the asynchronous operation.
                             WebParser.WebSite = ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedCells[0].RowIndex].WebSite;
                             WebParser.RegexList = ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedCells[0].RowIndex].RegexList;
-                            WebParser.EncodingType = ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedCells[0].RowIndex].EncodingType;
+                            WebParser.EncodingType = ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedCells[0].RowIndex].WebSiteEncodingType;
                             WebParser.StartParsing();
                         }
                     }
@@ -236,9 +237,9 @@ namespace SharePortfolioManager
         /// <param name="e">ProgressChangedEventArgs</param>
         private void WebParser_UpdateGUI(object sender, OnWebParserUpdateEventArgs e)
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
-                this.Invoke(new Action(() => WebParser_UpdateGUI(sender, e)));
+                Invoke(new Action(() => WebParser_UpdateGUI(sender, e)));
             }
             else
             {
@@ -363,7 +364,7 @@ namespace SharePortfolioManager
                                             // Start the asynchronous parsing operation.
                                             WebParser.WebSite = ShareObjectMarketValue.WebSite;
                                             WebParser.RegexList = ShareObjectMarketValue.RegexList;
-                                            WebParser.EncodingType = ShareObjectMarketValue.EncodingType;
+                                            WebParser.EncodingType = ShareObjectMarketValue.WebSiteEncodingType;
                                             WebParser.StartParsing();
                                         }
                                         else
@@ -380,7 +381,7 @@ namespace SharePortfolioManager
                                             // Start the asynchronous parsing operation.
                                             WebParser.WebSite = ShareObjectFinalValue.WebSite;
                                             WebParser.RegexList = ShareObjectFinalValue.RegexList;
-                                            WebParser.EncodingType = ShareObjectFinalValue.EncodingType;
+                                            WebParser.EncodingType = ShareObjectFinalValue.WebSiteEncodingType;
                                             WebParser.StartParsing();
                                         }
                                     }

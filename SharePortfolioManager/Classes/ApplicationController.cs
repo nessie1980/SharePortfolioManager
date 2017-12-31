@@ -29,12 +29,13 @@ namespace SharePortfolioManager.Classes
     {
         #region Variables
 
-        private Form mainForm;
+        private readonly Form _mainForm;
 
         #endregion Variables
 
         #region Methods
 
+        /// <inheritdoc />
         /// <summary>
         /// This is the constructor
         /// </summary>
@@ -43,9 +44,9 @@ namespace SharePortfolioManager.Classes
         {
             // We keep a reference to the MainForm 
             // to run and also use it when we need to bring to the front
-            mainForm = form;
-            this.IsSingleInstance = true;
-            this.StartupNextInstance += ThisStartupNextInstance;
+            _mainForm = form;
+            IsSingleInstance = true;
+            StartupNextInstance += ThisStartupNextInstance;
         }
 
         /// <summary>
@@ -53,22 +54,21 @@ namespace SharePortfolioManager.Classes
         /// </summary>
         /// <param name="sender">ApplicationController</param>
         /// <param name="e">StartupNextInstanceEventArgs </param>
-        void ThisStartupNextInstance(object sender, StartupNextInstanceEventArgs e)
+        private void ThisStartupNextInstance(object sender, StartupNextInstanceEventArgs e)
         {
             // Check if the MainFrom is minimized so restore the window
-            if (mainForm.WindowState == FormWindowState.Minimized)
-            {
-                //Here we bring application to the front
-                e.BringToForeground = true;
-                mainForm.ShowInTaskbar = true;
-                mainForm.Show();
-                mainForm.WindowState = FormWindowState.Normal;
-            }
+            if (_mainForm.WindowState != FormWindowState.Minimized) return;
+
+            //Here we bring application to the front
+            e.BringToForeground = true;
+            _mainForm.ShowInTaskbar = true;
+            _mainForm.Show();
+            _mainForm.WindowState = FormWindowState.Normal;
         }
 
         protected override void OnCreateMainForm()
         {
-            this.MainForm = mainForm;
+            MainForm = _mainForm;
         }
 
         #endregion Methods

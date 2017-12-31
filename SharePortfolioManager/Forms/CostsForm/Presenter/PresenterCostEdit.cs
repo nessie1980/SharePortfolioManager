@@ -27,15 +27,15 @@ using System.IO;
 
 namespace SharePortfolioManager.Forms.CostsForm.Presenter
 {
-    class PresenterCostEdit
+    internal class PresenterCostEdit
     {
         private readonly IModelCostEdit _model;
         private readonly IViewCostEdit _view;
 
         public PresenterCostEdit(IViewCostEdit view, IModelCostEdit model)
         {
-            this._view = view;
-            this._model = model;
+            _view = view;
+            _model = model;
 
             view.PropertyChanged += OnViewChange;
             view.FormatInputValues += OnViewFormatInputValues;
@@ -93,15 +93,8 @@ namespace SharePortfolioManager.Forms.CostsForm.Presenter
             // Check the input values
             if (!CheckInputValues(_model.UpdateCost))
             {
-                string strDateTime = _model.Date + " " + _model.Time;
-                if (_model.ShareObjectFinalValue.AddCost(false, false, strDateTime, _model.CostsDec, _model.Document))
-                {
-                    _model.ErrorCode = CostErrorCode.AddSuccessful;
-                }
-                else
-                {
-                    _model.ErrorCode = CostErrorCode.AddFailed;
-                }
+                var strDateTime = _model.Date + " " + _model.Time;
+                _model.ErrorCode = _model.ShareObjectFinalValue.AddCost(false, false, strDateTime, _model.CostsDec, _model.Document) ? CostErrorCode.AddSuccessful : CostErrorCode.AddFailed;
             }
 
             UpdateViewWithModel();
@@ -114,7 +107,7 @@ namespace SharePortfolioManager.Forms.CostsForm.Presenter
             // Check the input values
             if (!CheckInputValues(_model.UpdateCost))
             {
-                string strDateTime = _model.Date + " " + _model.Time;
+                var strDateTime = _model.Date + " " + _model.Time;
 
                 if (_model.ShareObjectFinalValue.RemoveCost(_model.SelectedDate) && _model.ShareObjectFinalValue.AddCost(_model.PartOfABuy, _model.PartOfASale, strDateTime, _model.CostsDec, _model.Document))
                 {
@@ -136,14 +129,7 @@ namespace SharePortfolioManager.Forms.CostsForm.Presenter
         private void OnDeleteCost(object sender, EventArgs e)
         {
             // Delete the cost of the selected date
-            if (_model.ShareObjectFinalValue.RemoveCost(_model.SelectedDate))
-            {
-               _model.ErrorCode = CostErrorCode.DeleteSuccessful;
-            }
-            else
-            {
-                _model.ErrorCode = CostErrorCode.DeleteFailed;
-            }
+            _model.ErrorCode = _model.ShareObjectFinalValue.RemoveCost(_model.SelectedDate) ? CostErrorCode.DeleteSuccessful : CostErrorCode.DeleteFailed;
 
             // Update error code
             _view.ErrorCode = _model.ErrorCode;
@@ -158,18 +144,15 @@ namespace SharePortfolioManager.Forms.CostsForm.Presenter
         /// </summary>
         /// <param name="bFlagEdit">Flag if a cost should be add (true) or edit (false)</param>
         /// <returns>Flag if the input values are correct or not</returns>
-        bool CheckInputValues(bool bFlagEdit)
+        private bool CheckInputValues(bool bFlagEdit)
         {
             try
             {
-                bool bErrorFlag = false;
+                var bErrorFlag = false;
 
-                if (bFlagEdit)
-                    _model.ErrorCode = CostErrorCode.EditSuccessful;
-                else
-                    _model.ErrorCode = CostErrorCode.AddSuccessful;
+                _model.ErrorCode = bFlagEdit ? CostErrorCode.EditSuccessful : CostErrorCode.AddSuccessful;
 
-                string strDate = _model.Date + " " + _model.Time;
+                var strDate = _model.Date + " " + _model.Time;
 
                 // Check if a cost with the given date and time already exists
                 foreach (var costObject in _model.ShareObjectFinalValue.AllCostsEntries.GetAllCostsOfTheShare())
@@ -178,35 +161,29 @@ namespace SharePortfolioManager.Forms.CostsForm.Presenter
                     if (!bFlagEdit)
                     {
                         // By an Add all dates must be checked
-                        if (costObject.CostDate == strDate)
-                        {
-                            _model.ErrorCode = CostErrorCode.DateExists;
-                            bErrorFlag = true;
-                            break;
-                        }
+                        if (costObject.CostDate != strDate) continue;
+
+                        _model.ErrorCode = CostErrorCode.DateExists;
+                        bErrorFlag = true;
+                        break;
                     }
-                    else
-                    {
-                        // By an Edit all costs without the edit entry date and time must be checked
-                        if (costObject.CostDate == strDate
-                            && _model.SelectedDate != null
-                            && costObject.CostDate != _model.SelectedDate)
-                        {
-                            _model.ErrorCode = CostErrorCode.DateExists;
-                            bErrorFlag = true;
-                            break;
-                        }
-                    }
+
+                    // By an Edit all costs without the edit entry date and time must be checked
+                    if (costObject.CostDate != strDate || _model.SelectedDate == null ||
+                        costObject.CostDate == _model.SelectedDate) continue;
+
+                    _model.ErrorCode = CostErrorCode.DateExists;
+                    bErrorFlag = true;
+                    break;
                 }
 
                 // Costs input check
-                decimal decCosts = 0;
                 if (_model.Costs == @"" && bErrorFlag == false)
                 {
                     _model.ErrorCode = CostErrorCode.CostsEmpty;
                     bErrorFlag = true;
                 }
-                else if (!decimal.TryParse(_model.Costs, out decCosts) && bErrorFlag == false)
+                else if (!decimal.TryParse(_model.Costs, out var decCosts) && bErrorFlag == false)
                 {
                     _model.ErrorCode = CostErrorCode.CostsWrongFormat;
                     bErrorFlag = true;

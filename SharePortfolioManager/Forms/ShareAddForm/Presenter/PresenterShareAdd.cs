@@ -27,6 +27,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
 {
@@ -37,8 +38,8 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
 
         public PresenterShareAdd(IViewShareAdd view, IModelShareAdd model)
         {
-            this._view = view;
-            this._model = model;
+            _view = view;
+            _model = model;
 
             view.PropertyChanged += OnViewCchange;
             view.ShareAdd += OnShareAdd;
@@ -122,7 +123,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             try
             {
                 Helper.CalcBuyValues(_model.Volumedec, _model.SharePricedec, _model.Costsdec,
-                    _model.Reductiondec, out decimal decMarketValue, out decimal decPurchaseValue, out decimal decFinalValue);
+                    _model.Reductiondec, out var decMarketValue, out var decPurchaseValue, out var decFinalValue);
 
                 _model.MarketValuedec = decMarketValue;
                 _model.FinalValuedec = decFinalValue;
@@ -130,7 +131,8 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show("CalculateMarketValueAndFinalValue()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                var message = $"CalculateMarketValueAndFinalValue()\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 _model.MarketValuedec = 0;
@@ -143,53 +145,54 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             // Check the input values
             if (!CheckInputValues())
             {
-                string strDateTime = _model.Date + " " + _model.Time;
+                var strDateTime = _model.Date + " " + _model.Time;
 
                 // Create a temporary share object with the new values of the new share object market value
-                List<ShareObjectMarketValue> tempShareObjectMarketValue = new List<ShareObjectMarketValue>();
-                tempShareObjectMarketValue.Add(new ShareObjectMarketValue(
-                            _model.Wkn,
-                            strDateTime,
-                            _model.Name,
-                            DateTime.MinValue,
-                            DateTime.MinValue,
-                            DateTime.MinValue,
-                            0,
-                            _model.Volumedec,
-                            _model.Reductiondec,
-                            _model.Costsdec,
-                            _model.MarketValuedec,
-                            _model.WebSite,
-                            _model.ImageList,
-                            null,
-                            _model.CultureInfo,
-                            0,
-                            0,
-                            _model.Document
-                            ));
+                var tempShareObjectMarketValue = new List<ShareObjectMarketValue>
+                {
+                    new ShareObjectMarketValue(
+                        _model.Wkn,
+                        strDateTime,
+                        _model.Name,
+                        DateTime.MinValue,
+                        DateTime.MinValue,
+                        DateTime.MinValue,
+                        0,
+                        _model.Volumedec,
+                        _model.Reductiondec,
+                        _model.Costsdec,
+                        _model.WebSite,
+                        _model.ImageList,
+                        null,
+                        _model.CultureInfo,
+                        0,
+                        _model.Document
+                    )
+                };
 
                 // Create a temporary share object with the new values of the new share object final value
-                List<ShareObjectFinalValue> tempShareObjectFinalValue = new List<ShareObjectFinalValue>();
-                tempShareObjectFinalValue.Add(new ShareObjectFinalValue(
-                            _model.Wkn,
-                            strDateTime,
-                            _model.Name,
-                            DateTime.MinValue,
-                            DateTime.MinValue,
-                            DateTime.MinValue,
-                            0,
-                            _model.Volumedec,
-                            _model.Reductiondec,
-                            _model.Costsdec,
-                            _model.MarketValuedec,
-                            _model.WebSite,
-                            _model.ImageList,
-                            null,
-                            _model.CultureInfo,
-                            0,
-                            0,
-                            _model.Document
-                            ));
+                var tempShareObjectFinalValue = new List<ShareObjectFinalValue>
+                {
+                    new ShareObjectFinalValue(
+                        _model.Wkn,
+                        strDateTime,
+                        _model.Name,
+                        DateTime.MinValue,
+                        DateTime.MinValue,
+                        DateTime.MinValue,
+                        0,
+                        _model.Volumedec,
+                        _model.Reductiondec,
+                        _model.Costsdec,
+                        _model.WebSite,
+                        _model.ImageList,
+                        null,
+                        _model.CultureInfo,
+                        0,
+                        0,
+                        _model.Document
+                    )
+                };
 
                 // Check if for the given shares a website configuration exists
                 if (tempShareObjectMarketValue[0].SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList) &&
@@ -208,12 +211,10 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                             _model.Volumedec,
                             _model.Reductiondec,
                             _model.Costsdec,
-                            _model.MarketValuedec,
                             _model.WebSite,
                             _model.ImageList,
                             null,
                             _model.CultureInfo,
-                            _model.DividendPayoutInterval,
                             _model.ShareType,
                             _model.Document
                             ));
@@ -230,7 +231,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                             _model.Volumedec,
                             _model.Reductiondec,
                             _model.Costsdec,
-                            _model.MarketValuedec,
                             _model.WebSite,
                             _model.ImageList,
                             null,
@@ -280,8 +280,8 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
         /// <returns>Flag if the input values are correct or not</returns>
         private bool CheckInputValues()
         {
-            bool bErrorFlag = false;
-            string decodedUrl = _model.WebSite;
+            var bErrorFlag = false;
+            var decodedUrl = _model.WebSite;
 
             _model.ErrorCode = ShareAddErrorCode.AddSuccessful;
 
@@ -297,12 +297,11 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             {
                 foreach (var shareObjectMarketValue in _model.ShareObjectListMarketValue)
                 {
-                    if (shareObjectMarketValue.Wkn == _model.Wkn)
-                    {
-                        _model.ErrorCode = ShareAddErrorCode.WknExists;
-                        bErrorFlag = true;
-                        break;
-                    }
+                    if (shareObjectMarketValue.Wkn != _model.Wkn) continue;
+
+                    _model.ErrorCode = ShareAddErrorCode.WknExists;
+                    bErrorFlag = true;
+                    break;
                 }
             }
 
@@ -311,12 +310,11 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             {
                 foreach (var shareObjectFinalValue in _model.ShareObjectListFinalValue)
                 {
-                    if (shareObjectFinalValue.Wkn == _model.Wkn)
-                    {
-                        _model.ErrorCode = ShareAddErrorCode.WknExists;
-                        bErrorFlag = true;
-                        break;
-                    }
+                    if (shareObjectFinalValue.Wkn != _model.Wkn) continue;
+
+                    _model.ErrorCode = ShareAddErrorCode.WknExists;
+                    bErrorFlag = true;
+                    break;
                 }
             }
 
@@ -332,12 +330,11 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                 // Check if a market value share with the given share name already exists
                 foreach (var shareObjectMarketValue in _model.ShareObjectListMarketValue)
                 {
-                    if (shareObjectMarketValue.Name == _model.Name)
-                    {
-                        _model.ErrorCode = ShareAddErrorCode.NameExists;
-                        bErrorFlag = true;
-                        break;
-                    }
+                    if (shareObjectMarketValue.Name != _model.Name) continue;
+
+                    _model.ErrorCode = ShareAddErrorCode.NameExists;
+                    bErrorFlag = true;
+                    break;
                 }
             }
 
@@ -346,23 +343,21 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                 // Check if a final value share with the given share name already exists
                 foreach (var shareObjectFinalValue in _model.ShareObjectListFinalValue)
                 {
-                    if (shareObjectFinalValue.Name == _model.Name)
-                    {
-                        _model.ErrorCode = ShareAddErrorCode.NameExists;
-                        bErrorFlag = true;
-                        break;
-                    }
+                    if (shareObjectFinalValue.Name != _model.Name) continue;
+
+                    _model.ErrorCode = ShareAddErrorCode.NameExists;
+                    bErrorFlag = true;
+                    break;
                 }
             }
 
             // Check if a correct volume for the add is given
-            decimal decVolume = -1;
             if (_model.Volume == @"" && bErrorFlag == false)
             {
                 _model.ErrorCode = ShareAddErrorCode.VolumeEmpty;
                 bErrorFlag = true;
             }
-            else if (!decimal.TryParse(_model.Volume, out decVolume) && bErrorFlag == false)
+            else if (!decimal.TryParse(_model.Volume, out var decVolume) && bErrorFlag == false)
             {
                 _model.ErrorCode = ShareAddErrorCode.VolumeWrongFormat;
                 bErrorFlag = true;
@@ -376,13 +371,12 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                 _model.Volumedec = decVolume;
 
             // Check if a correct price for the buy is given
-            decimal decPrice = -1;
             if (_model.SharePrice == @"" && bErrorFlag == false)
             {
                 _model.ErrorCode = ShareAddErrorCode.SharePriceEmpty;
                 bErrorFlag = true;
             }
-            else if (!decimal.TryParse(_model.SharePrice, out decPrice) && bErrorFlag == false)
+            else if (!decimal.TryParse(_model.SharePrice, out var decPrice) && bErrorFlag == false)
             {
                 _model.ErrorCode = ShareAddErrorCode.SharePriceWrongFormat;
                 bErrorFlag = true;
@@ -398,36 +392,34 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             // Costs input check
             if (_model.Costs != "" && bErrorFlag == false)
             {
-                decimal decCosts = 0;
-                if (!decimal.TryParse(_model.Costs, out decCosts) && bErrorFlag == false)
+                if (!decimal.TryParse(_model.Costs, out var decCosts))
                 {
                     _model.ErrorCode = ShareAddErrorCode.CostsWrongFormat;
                     bErrorFlag = true;
                 }
-                else if (decCosts < 0 && bErrorFlag == false)
+                else if (decCosts < 0)
                 {
                     _model.ErrorCode = ShareAddErrorCode.CostsWrongValue;
                     bErrorFlag = true;
                 }
-                else if (bErrorFlag == false)
+                else
                     _model.Costsdec = decCosts;
             }
 
             // Reduction input check
             if (_model.Reduction != "" && bErrorFlag == false)
             {
-                decimal decReduction = 0;
-                if (!decimal.TryParse(_model.Reduction, out decReduction) && bErrorFlag == false)
+                if (!decimal.TryParse(_model.Reduction, out var decReduction))
                 {
                     _model.ErrorCode = ShareAddErrorCode.ReductionWrongFormat;
                     bErrorFlag = true;
                 }
-                else if (decReduction < 0 && bErrorFlag == false)
+                else if (decReduction < 0)
                 {
                     _model.ErrorCode = ShareAddErrorCode.ReductionWrongValue;
                     bErrorFlag = true;
                 }
-                else if (bErrorFlag == false)
+                else
                     _model.Reductiondec = decReduction;
             }
 
@@ -450,12 +442,12 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                 // Check if a market value share with the given WKN number already exists
                 foreach (var shareObjectMarketValue in _model.ShareObjectListMarketValue)
                 {
-                    if (shareObjectMarketValue.WebSite == _model.WebSite && shareObjectMarketValue != _model.ShareObjectMarketValue)
-                    {
-                        _model.ErrorCode = ShareAddErrorCode.WebSiteExists;
-                        bErrorFlag = true;
-                        break;
-                    }
+                    if (shareObjectMarketValue.WebSite != _model.WebSite ||
+                        shareObjectMarketValue == _model.ShareObjectMarketValue) continue;
+
+                    _model.ErrorCode = ShareAddErrorCode.WebSiteExists;
+                    bErrorFlag = true;
+                    break;
                 }
 
                 if (bErrorFlag == false)
@@ -463,27 +455,26 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                     // Check if a final value share with the given WKN number already exists
                     foreach (var shareObjectFinalValue in _model.ShareObjectListFinalValue)
                     {
-                        if (shareObjectFinalValue.WebSite == _model.WebSite && shareObjectFinalValue != _model.ShareObjectFinalValue)
-                        {
-                            _model.ErrorCode = ShareAddErrorCode.WebSiteExists;
-                            bErrorFlag = true;
-                            break;
-                        }
+                        if (shareObjectFinalValue.WebSite != _model.WebSite ||
+                            shareObjectFinalValue == _model.ShareObjectFinalValue) continue;
+
+                        _model.ErrorCode = ShareAddErrorCode.WebSiteExists;
+                        bErrorFlag = true;
+                        break;
                     }
                 }
             }
+
             // Check document input
-            else if (_model.Document != @"" && !Directory.Exists(Path.GetDirectoryName(_model.Document)) && bErrorFlag == false)
+            else if (_model.Document != @"" && !Directory.Exists(Path.GetDirectoryName(_model.Document)))
             {
                 _model.ErrorCode = ShareAddErrorCode.DocumentDirectoryDoesNotExists;
-                bErrorFlag = true;
             }
 
             // Check document input
-            else if (_model.Document != @"" && !File.Exists(_model.Document) && bErrorFlag == false)
+            else if (_model.Document != @"" && !File.Exists(_model.Document))
             {
                 _model.ErrorCode = ShareAddErrorCode.DocumentFileDoesNotExists;
-                bErrorFlag = true;
             }
 
             _model.WebSite = decodedUrl;

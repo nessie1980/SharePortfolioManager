@@ -121,9 +121,9 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.tabCtrlSales.SelectedIndex = 0;
             this.tabCtrlSales.Size = new System.Drawing.Size(813, 147);
             this.tabCtrlSales.TabIndex = 0;
-            this.tabCtrlSales.SelectedIndexChanged += new System.EventHandler(this.tabCtrlSales_SelectedIndexChanged);
-            this.tabCtrlSales.MouseEnter += new System.EventHandler(this.tabCtrlSales_MouseEnter);
-            this.tabCtrlSales.MouseLeave += new System.EventHandler(this.tabCtrlSales_MouseLeave);
+            this.tabCtrlSales.SelectedIndexChanged += new System.EventHandler(this.TabCtrlSales_SelectedIndexChanged);
+            this.tabCtrlSales.MouseEnter += new System.EventHandler(this.TabCtrlSales_MouseEnter);
+            this.tabCtrlSales.MouseLeave += new System.EventHandler(this.TabCtrlSales_MouseLeave);
             // 
             // btnDelete
             // 

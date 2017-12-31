@@ -20,7 +20,6 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using SharePortfolioManager.Classes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,8 +29,13 @@ using System.Windows.Forms;
 using System.Xml;
 using WebParser;
 
-namespace SharePortfolioManager
+namespace SharePortfolioManager.Classes.ShareObjects
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// This class stores the final value of the share portfolio.
+    /// It includes the dividends and costs.
+    /// </summary>
     public class ShareObjectFinalValue : ShareObject
     {
         #region Variables
@@ -39,229 +43,56 @@ namespace SharePortfolioManager
         #region General variables
 
         /// <summary>
-        /// Flag if the object is already disposed
-        /// </summary>
-        private bool _bDisposed;
-
-        /// <summary>
         /// Stores the current share value with dividends, costs, profits and loss (final value)
         /// </summary>
         private decimal _finalValue = decimal.MinValue / 2;
-
-        /// <summary>
-        /// Stores the performance of the share with dividends, costs, profits and loss
-        /// </summary>
-        private decimal _performanceValue = decimal.MinValue / 2;
-
-        /// <summary>
-        /// Stores the profit or loss of the share with dividends, costs, profits and loss
-        /// </summary>
-        private decimal _profitLossValue = decimal.MinValue / 2;
 
         #endregion General variables
 
         #region Costs variables
 
-        /// <summary>
-        /// Stores the total costs of the share
-        /// </summary>
-        private decimal _costsValueTotal;
-
-        /// <summary>
-        /// Stores the cost pays of the share
-        /// </summary>
-        private AllCostsOfTheShare _allCostsEntries = new AllCostsOfTheShare();
-
         #endregion Costs variables
-
-        #region Costs XML variables
-
-        /// <summary>
-        /// Stores the tag name prefix of a cost entry
-        /// </summary>
-        private const string _costsTagNamePre = "Cost";
-
-        /// <summary>
-        /// Stores the attribute name for the flag if the cost is a part of a buy
-        /// </summary>
-        private const string _costsBuyPartAttrName = "BuyPart";
-
-        /// <summary>
-        /// Stores the attribute name for the flag if the cost is a part of a sale
-        /// </summary>
-        private const string _costsSalePartAttrName = "SalePart";
-
-        /// <summary>
-        /// Stores the attribute name for the date 
-        /// </summary>
-        private const string _costsDateAttrName = "Date";
-
-        /// <summary>
-        /// Stores the attribute name for the value
-        /// </summary>
-        private const string _costsValueAttrName = "Value";
-
-        /// <summary>
-        /// Stores the XML attribute name for the document of a cost
-        /// </summary>
-        private const string _costsDocumentAttrName = "Doc";
-
-        /// <summary>
-        /// Stores the attribute count for the costs
-        /// </summary>
-        private const short _costsAttrCount = 5;
-
-        #endregion Costs XML variables
 
         #region Dividends variables
 
-        /// <summary>
-        /// Stores the payout interval of the dividend
-        /// </summary>
-        private int _dividendPayoutInterval;
-
-        /// <summary>
-        /// Stores the total dividend value of the share
-        /// </summary>
-        private decimal _dividendValueTotal = 0;
-
-        /// <summary>
-        /// Stores the total dividend of the share minus the taxes
-        /// </summary>
-        private decimal _dividendValueTotalWithTaxes = 0;
-
-        /// <summary>
-        /// Stores the dividend payouts of the share
-        /// </summary>
-        private AllDividendsOfTheShare _allDividendEntries = new AllDividendsOfTheShare();
-
         #endregion Dividend values
-
-        #region Dividends XML variables
-
-        /// <summary>
-        /// Stores the XML tag name of a dividend entry
-        /// </summary>
-        private const string _dividendTagName = "Dividend";
-
-        /// <summary>
-        /// Stores the XML attribute name for the dividend payout interval
-        /// </summary>
-        private const string _dividendPayoutIntervalAttrName = "PayoutInterval";
-
-        /// <summary>
-        /// Stores the XML attribute name for the dividend pay date
-        /// </summary>
-        private const string _dividendDateAttrName = "Date";
-
-        /// <summary>
-        /// Stores the XML attribute name for the dividend pay for one share
-        /// </summary>
-        private const string _dividendRateAttrName = "Rate";
-
-        /// <summary>
-        /// Stores the XML attribute name for the share volume at the pay date
-        /// </summary>
-        private const string _dividendVolumeAttrName = "Volume";
-
-        /// <summary>
-        /// Stores the XML attribute name for the dividend tax at source value
-        /// </summary>
-        private const string _dividendTaxAtSourceAttrName = "TaxAtSource";
-
-        /// <summary>
-        /// Stores the XML attribute name for the dividend capital gains tax value
-        /// </summary>
-        private const string _dividendCapitalGainsTaxAttrName = "CapitalGainsTax";
-
-        /// <summary>
-        /// Stores the XML attribute name for the dividend capital gains tax value
-        /// </summary>
-        private const string _dividendSolidarityTaxAttrName = "SolidarityTax";
-
-        /// <summary>
-        /// Stores the XML attribute name for the share price at the pay date
-        /// </summary>
-        private const string _dividendPriceAttrName = "Price";
-
-        /// <summary>
-        /// Stores the XML attribute name for the document of a dividend
-        /// </summary>
-        private const string _dividendDocumentAttrName = "Doc";
-
-        /// <summary>
-        /// Stores the XML tag name of the foreign currency information
-        /// </summary>
-        private const string _dividendTagNameForeignCu = "ForeignCurrency";
-
-        /// <summary>
-        /// Stores the XML attribute name for the flag if the dividend is paid in a foreign currency
-        /// </summary>
-        private const string _dividendForeignCuFlagAttrName = "Flag";
-
-        /// <summary>
-        /// Stores the XML attribute name for the factor of the foreign currency
-        /// </summary>
-        private const string _dividendExchangeRatioAttrName = "ExchangeRatio";
-
-        /// <summary>
-        /// Stores the XML attribute name for the name of the foreign currency
-        /// </summary>
-        private const string _dividendNameAttrName = "FCName";
-
-        /// <summary>
-        /// Stores the attribute count for the foreign currency information
-        /// </summary>
-        private const short _dividendAttrCountForeignCu = 3;
-
-        /// <summary>
-        /// Stores the attribute count for the dividend
-        /// </summary>
-        private const short _dividendAttrCount = 9;
-
-        /// <summary>
-        /// Stores the child node count for the dividend
-        /// </summary>
-        private const short _dividendChildNodeCount = 1;
-
-        #endregion Dividends XML variables
 
         #region Portfolio value variables
 
         /// <summary>
         /// Stores the value of the portfolio (all shares) without dividends, costs, profits and loss (market value)
         /// </summary>
-        static private decimal _portfolioPurchaseValue = 0;
+        private static decimal _portfolioPurchaseValue;
 
         /// <summary>
         /// Stores the purchase of sales of the portfolio (all shares)
         /// </summary>
-        static private decimal _portfolioSalePurchaseValue = 0;
+        private static decimal _portfolioSalePurchaseValue;
 
         /// <summary>
         /// Stores the current value of the portfolio (all shares) with dividends, costs, profits and loss (final value)
         /// </summary>
-        static private decimal _portfolioFinalValue = 0;
+        private static decimal _portfolioFinalValue;
 
         /// <summary>
         /// Stores the costs of the portfolio (all shares)
         /// </summary>
-        static private decimal _portfolioCosts = 0;
+        private static decimal _portfolioCosts;
 
         /// <summary>
         /// Stores the dividends of the portfolio (all shares)
         /// </summary>
-        static private decimal _portfolioDividend = 0;
+        private static decimal _portfolioDividend;
 
         /// <summary>
         /// Stores the performance of the portfolio (all shares) with dividends, costs, profits and loss
         /// </summary>
-        static private decimal _portfolioPerformanceValue = 0;
+        private static decimal _portfolioPerformanceValue;
 
         /// <summary>
         /// Stores the profit or lose of the portfolio (all shares) with dividends, costs, profits and loss
         /// </summary>
-        static private decimal _portfolioProfitLossValue = 0;
+        private static decimal _portfolioProfitLossValue;
 
         #endregion Portfolio value variables
 
@@ -271,160 +102,176 @@ namespace SharePortfolioManager
 
         #region General properties
 
+        /// <summary>
+        /// Flag if the object is disposed
+        /// </summary>
         [Browsable(false)]
-        public bool Disposed
-        {
-            get { return _bDisposed; }
-            internal set { _bDisposed = value; }
-        }
+        public new bool Disposed { get; internal set; }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Current share volume
+        /// </summary>
         [Browsable(false)]
         public override decimal Volume
         {
-            get { return base.Volume; }
+            get => base.Volume;
             set
             {
                 // Set the new share volume
-                if (value != base.Volume)
-                {
-                    base.Volume = value;
+                if (value == base.Volume) return;
 
-                    // Recalculate the performance to the previous day
-                    CalculatePrevDayPerformance();
+                base.Volume = value;
 
-                    // Recalculate the profit or loss to the previous day
-                    CalculatePrevDayProfitLoss();
+                // Recalculate the performance to the previous day
+                CalculatePrevDayPerformance();
 
-                    // Recalculate the total sum of the share
-                    CalculateFinalValue();
+                // Recalculate the profit or loss to the previous day
+                CalculatePrevDayProfitLoss();
 
-                    // Recalculate the profit or loss of the share
-                    CalculateProfitLoss();
+                // Recalculate the total sum of the share
+                CalculateFinalValue();
 
-                    // Recalculate the appreciation
-                    CalculatePerformance();
-                }
+                // Recalculate the profit or loss of the share
+                CalculateProfitLoss();
+
+                // Recalculate the appreciation
+                CalculatePerformance();
             }
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Current price of the share. Will be updated via the Internet
+        /// </summary>
         [Browsable(false)]
         public override decimal CurPrice
         {
-            get { return base.CurPrice; }
+            get => base.CurPrice;
             set
             {
                 // Set the new share price
-                if (value != base.CurPrice)
-                {
-                    base.CurPrice = value;
+                if (value == base.CurPrice) return;
 
-                    // Recalculate the performance to the previous day
-                    CalculatePrevDayPerformance();
+                base.CurPrice = value;
 
-                    // Recalculate the profit or loss to the previous day
-                    CalculatePrevDayProfitLoss();
+                // Recalculate the performance to the previous day
+                CalculatePrevDayPerformance();
 
-                    // Recalculate the total sum of the share
-                    CalculateFinalValue();
+                // Recalculate the profit or loss to the previous day
+                CalculatePrevDayProfitLoss();
 
-                    // Recalculate the profit or loss of the share
-                    CalculateProfitLoss();
+                // Recalculate the total sum of the share
+                CalculateFinalValue();
 
-                    // Recalculate the appreciation
-                    CalculatePerformance();
-                }
+                // Recalculate the profit or loss of the share
+                CalculateProfitLoss();
+
+                // Recalculate the appreciation
+                CalculatePerformance();
             }
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Previous day price of the share. Will be updated via the Internet
+        /// </summary>
         [Browsable(false)]
         public override decimal PrevDayPrice
         {
-            get { return base.PrevDayPrice; }
+            get => base.PrevDayPrice;
             set
             {
                 // Set the previous day share price
-                if (value != base.PrevDayPrice)
-                {
-                    base.PrevDayPrice = value;
+                if (value == base.PrevDayPrice) return;
 
-                    // Recalculate the performance to the previous day
-                    CalculatePrevDayPerformance();
+                base.PrevDayPrice = value;
 
-                    // Recalculate the profit or loss to the previous day
-                    CalculatePrevDayProfitLoss();
+                // Recalculate the performance to the previous day
+                CalculatePrevDayPerformance();
 
-                    // Recalculate the total sum of the share
-                    CalculateFinalValue();
+                // Recalculate the profit or loss to the previous day
+                CalculatePrevDayProfitLoss();
 
-                    // Recalculate the profit or loss of the share
-                    CalculateProfitLoss();
+                // Recalculate the total sum of the share
+                CalculateFinalValue();
 
-                    // Recalculate the appreciation
-                    CalculatePerformance();
-                }
+                // Recalculate the profit or loss of the share
+                CalculateProfitLoss();
+
+                // Recalculate the appreciation
+                CalculatePerformance();
             }
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Purchase value of the current share volume
+        /// </summary>
         [Browsable(false)]
         public override decimal PurchaseValue
         {
-            get { return base.PurchaseValue; }
+            get => base.PurchaseValue;
             set
             {
                 // Set the new purchase value
-                if (value != base.PurchaseValue)
-                {
-                    // Recalculate portfolio purchase value
-                    if (base.PurchaseValue > decimal.MinValue / 2)
-                        PortfolioPurchaseValue -= base.PurchaseValue;
-                    PortfolioPurchaseValue += value;
+                if (value == base.PurchaseValue) return;
 
-                    base.PurchaseValue = value;
+                // Recalculate portfolio purchase value
+                if (base.PurchaseValue > decimal.MinValue / 2)
+                    PortfolioPurchaseValue -= base.PurchaseValue;
+                PortfolioPurchaseValue += value;
 
-                    // Recalculate the total sum of the share
-                    CalculateFinalValue();
+                base.PurchaseValue = value;
 
-                    // Recalculate the profit or loss of the share
-                    CalculateProfitLoss();
+                // Recalculate the total sum of the share
+                CalculateFinalValue();
 
-                    // Recalculate the appreciation
-                    CalculatePerformance();
-                }
+                // Recalculate the profit or loss of the share
+                CalculateProfitLoss();
+
+                // Recalculate the appreciation
+                CalculatePerformance();
             }
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Total sale value of the share
+        /// </summary>
         [Browsable(false)]
         public override decimal SalePurchaseValueTotal
         {
-            get { return base.SalePurchaseValueTotal; }
+            get => base.SalePurchaseValueTotal;
             set
             {
                 // Set the new purchase value
-                if (value != base.SalePurchaseValueTotal)
-                {
-                    // Recalculate portfolio purchase value
-                    if (base.SalePurchaseValueTotal > decimal.MinValue / 2)
-                        PortfolioSalePurchaseValue -= base.SalePurchaseValueTotal;
-                    PortfolioSalePurchaseValue += value;
+                if (value == base.SalePurchaseValueTotal) return;
 
-                    base.SalePurchaseValueTotal = value;
-                }
+                // Recalculate portfolio purchase value
+                if (base.SalePurchaseValueTotal > decimal.MinValue / 2)
+                    PortfolioSalePurchaseValue -= base.SalePurchaseValueTotal;
+                PortfolioSalePurchaseValue += value;
+
+                base.SalePurchaseValueTotal = value;
             }
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Stores the culture info of the share
+        /// </summary>
         [Browsable(false)]
         public override CultureInfo CultureInfo
         {
-            get { return base.CultureInfo; }
+            get => base.CultureInfo;
             set
             {
                 base.CultureInfo = value;
 
                 // Set culture info to the lists
-                if (AllCostsEntries != null)
-                    AllCostsEntries.SetCultureInfo(base.CultureInfo);
-                if (AllDividendEntries != null)
-                    AllDividendEntries.SetCultureInfo(base.CultureInfo);
+                AllCostsEntries?.SetCultureInfo(base.CultureInfo);
+                AllDividendEntries?.SetCultureInfo(base.CultureInfo);
             }
         }
 
@@ -432,277 +279,95 @@ namespace SharePortfolioManager
 
         #region Costs properties
 
+        /// <summary>
+        /// Cost value of the final value of the share volume
+        /// </summary>
         [Browsable(false)]
-        public decimal CostsValueTotal
-        {
-            get { return _costsValueTotal; }
-            internal set
-            {
-                _costsValueTotal = value;
-            }
-        }
+        public decimal CostsValueTotal { get; internal set; }
 
+        /// <summary>
+        /// Cost value of the final value of the share volume as string
+        /// </summary>
         [Browsable(false)]
-        public string CostsValueTotalAsStr
-        {
-            get
-            {
-                return Helper.FormatDecimal(CostsValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-            }
-        }
+        public string CostsValueTotalAsStr => Helper.FormatDecimal(CostsValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
 
+        /// <summary>
+        /// Cost value of the final value of the share volume as string with unit
+        /// </summary>
         [Browsable(false)]
-        public string CostsValueAsStrUnit
-        {
-            get
-            {
-                return Helper.FormatDecimal(CostsValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-            }
-        }
+        public string CostsValueAsStrUnit => Helper.FormatDecimal(CostsValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
 
+        /// <summary>
+        /// List of all costs of this share
+        /// </summary>
         [Browsable(false)]
-        public AllCostsOfTheShare AllCostsEntries
-        {
-            get { return _allCostsEntries; }
-            set { _allCostsEntries = value; }
-        }
+        public AllCostsOfTheShare AllCostsEntries { get; set; } = new AllCostsOfTheShare();
 
         #endregion Costs properties
 
-        #region Costs XML properties
-
-        [Browsable(false)]
-        public string CostsTagNamePre
-        {
-            get { return _costsTagNamePre; }
-        }
-
-        [Browsable(false)]
-        public string CostsBuyPartAttrName
-        {
-            get { return _costsBuyPartAttrName; }
-        }
-
-        [Browsable(false)]
-        public string CostsSalePartAttrName
-        {
-            get { return _costsSalePartAttrName; }
-        }
-
-        [Browsable(false)]
-        public string CostsDateAttrName
-        {
-            get { return _costsDateAttrName; }
-        }
-
-        [Browsable(false)]
-        public string CostsValueAttrName
-        {
-            get { return _costsValueAttrName; }
-        }
-
-        [Browsable(false)]
-        public string CostsDocumentAttrName
-        {
-            get { return _costsDocumentAttrName; }
-        }
-
-        [Browsable(false)]
-        public short CostsAttrCount
-        {
-            get { return _costsAttrCount; }
-        }
-
-        #endregion Costs XML properties
-
         #region Dividends properties
 
+        /// <summary>
+        /// Dividend value of the final value of the share volume
+        /// </summary>
         [Browsable(false)]
-        public decimal DividendValueTotal
-        {
-            get { return _dividendValueTotal; }
-            internal set
-            {
-                _dividendValueTotal = value;
-            }
-        }
+        public decimal DividendValueTotal { get; internal set; }
 
+        /// <summary>
+        /// Dividend value of the final value of the share volume as string
+        /// </summary>
         [Browsable(false)]
-        public string DividendValueTotalAsStr
-        {
-            get
-            {
-                return Helper.FormatDecimal(DividendValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-            }
-        }
+        public string DividendValueTotalAsStr => Helper.FormatDecimal(DividendValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
 
+        /// <summary>
+        /// Dividend value of the final value of the share volume as string with unit
+        /// </summary>
         [Browsable(false)]
-        public string DividendValueTotalAsStrUnit
-        {
-            get
-            {
-                return Helper.FormatDecimal(DividendValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-            }
-        }
+        public string DividendValueTotalAsStrUnit => Helper.FormatDecimal(DividendValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
 
+        /// <summary>
+        /// Dividend value minus taxes of the final value of the share volume
+        /// </summary>
         [Browsable(false)]
-        public decimal DividendValueTotalWithTaxes
-        {
-            get { return _dividendValueTotalWithTaxes; }
-            internal set
-            {
-                _dividendValueTotalWithTaxes = value;
-            }
-        }
+        public decimal DividendValueTotalWithTaxes { get; internal set; }
 
+        /// <summary>
+        /// Dividend value minus taxes of the final value of the share volume as string
+        /// </summary>
         [Browsable(false)]
-        public string DividendValueTotalWithTaxesAsStr
-        {
-            get
-            {
-                return Helper.FormatDecimal(DividendValueTotalWithTaxes, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-            }
-        }
+        public string DividendValueTotalWithTaxesAsStr => Helper.FormatDecimal(DividendValueTotalWithTaxes, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
 
+        /// <summary>
+        /// Dividend value minus taxes of the final value of the share volume as string with unit
+        /// </summary>
         [Browsable(false)]
-        public string DividendValueTotalWithTaxesAsStrUnit
-        {
-            get
-            {
-                return Helper.FormatDecimal(DividendValueTotalWithTaxes, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-            }
-        }
+        public string DividendValueTotalWithTaxesAsStrUnit => Helper.FormatDecimal(DividendValueTotalWithTaxes, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
 
+        /// <summary>
+        ///  Dividend payout interval
+        /// </summary>
         [Browsable(false)]
-        public int DividendPayoutInterval
-        {
-            get { return _dividendPayoutInterval; }
-            set { _dividendPayoutInterval = value; }
-        }
+        public int DividendPayoutInterval { get; set; }
 
+        /// <summary>
+        ///  Dividend payout interval as string
+        /// </summary>
         [Browsable(false)]
-        public string DividendPayoutIntervalAsStr
-        {
-            get { return DividendPayoutInterval.ToString(); }
-        }
+        public string DividendPayoutIntervalAsStr => DividendPayoutInterval.ToString();
 
+        /// <summary>
+        /// List of all dividends of this share
+        /// </summary>
         [Browsable(false)]
-        public AllDividendsOfTheShare AllDividendEntries
-        {
-            get { return _allDividendEntries; }
-            set { _allDividendEntries = value; }
-        }
+        public AllDividendsOfTheShare AllDividendEntries { get; set; } = new AllDividendsOfTheShare();
 
         #endregion Dividend properties
 
-        #region Dividend XML properties
-
-        [Browsable(false)]
-        public string DividendTagName
-        {
-            get { return _dividendTagName; }
-        }
-
-        [Browsable(false)]
-        public string DividendPayoutIntervalAttrName
-        {
-            get { return _dividendPayoutIntervalAttrName; }
-        }
-
-        [Browsable(false)]
-        public string DividendDateAttrName
-        {
-            get { return _dividendDateAttrName; }
-        }
-
-        [Browsable(false)]
-        public string DividendRateAttrName
-        {
-            get { return _dividendRateAttrName; }
-        }
-
-        [Browsable(false)]
-        public string DividendVolumeAttrName
-        {
-            get { return _dividendVolumeAttrName; }
-        }
-
-        [Browsable(false)]
-        public string DividendTaxAtSourceAttrName
-        {
-            get { return _dividendTaxAtSourceAttrName; }
-        }
-
-        [Browsable(false)]
-        public string DividendCapitalGainsTaxAttrName
-        {
-            get { return _dividendCapitalGainsTaxAttrName; }
-        }
-
-        [Browsable(false)]
-        public string DividendSolidarityTaxAttrName
-        {
-            get { return _dividendSolidarityTaxAttrName; }
-        }
-
-        [Browsable(false)]
-        public string DividendPriceAttrName
-        {
-            get { return _dividendPriceAttrName; }
-        }
-
-        [Browsable(false)]
-        public string DividendDocumentAttrName
-        {
-            get { return _dividendDocumentAttrName; }
-        }
-
-        [Browsable(false)]
-        public string DividendTagNameForeignCu
-        {
-            get { return _dividendTagNameForeignCu; }
-        }
-
-        [Browsable(false)]
-        public string DividendForeignCuFlagAttrName
-        {
-            get { return _dividendForeignCuFlagAttrName; }
-        }
-
-        [Browsable(false)]
-        public string DividendNameAttrName
-        {
-            get { return _dividendNameAttrName; }
-        }
-
-        [Browsable(false)]
-        public string DividendExchangeRatioAttrName
-        {
-            get { return _dividendExchangeRatioAttrName; }
-        }
-
-        [Browsable(false)]
-        public short DividendAttrCountForeignCu
-        {
-            get { return _dividendAttrCountForeignCu; }
-        }
-
-        [Browsable(false)]
-        public short DividendAttrCount
-        {
-            get { return _dividendAttrCount; }
-        }
-
-        [Browsable(false)]
-        public short DividendChildNodeCount
-        {
-            get { return _dividendChildNodeCount; }
-        }
-
-        #endregion Dividend XML properties
-
         #region Costs and dividends with taxes
 
+        /// <summary>
+        /// Costs and dividends minus taxes of this share as string with unit and a line break
+        /// </summary>
         [Browsable(false)]
         public string CostsDividendWithTaxesAsStrUnit
         {
@@ -718,107 +383,89 @@ namespace SharePortfolioManager
 
         #region Final value properties
 
+        /// <summary>
+        /// Current final value of the share volume
+        /// </summary>
         [Browsable(false)]
         public decimal FinalValue
         {
-            get { return _finalValue; }
+            get => _finalValue;
             set
             {
-                if (value != _finalValue)
-                {
+                if (value == _finalValue) return;
+
 #if DEBUG_SHAREOBJECT
                     Console.WriteLine(@"");
                     Console.WriteLine(@"_finalValue: {0}", _finalValue);
                     Console.WriteLine(@"PortfolioFinalValue: {0}", PortfolioFinalValue);
 #endif
-                    // Recalculate the total sum of all shares
-                    // by subtracting the old total share value and then add the new value
-                    if (_finalValue > decimal.MinValue / 2)
-                        PortfolioFinalValue -= _finalValue;
-                    PortfolioFinalValue += value;
+                // Recalculate the total sum of all shares
+                // by subtracting the old total share value and then add the new value
+                if (_finalValue > decimal.MinValue / 2)
+                    PortfolioFinalValue -= _finalValue;
+                PortfolioFinalValue += value;
 
-                    // Set the total share volume
-                    _finalValue = value;
+                // Set the total share volume
+                _finalValue = value;
 
 #if DEBUG_SHAREOBJECT
                     Console.WriteLine(@"_finalValue: {0}", _finalValue);
                     Console.WriteLine(@"PortfolioFinalValue: {0}", PortfolioFinalValue);
 #endif
-                }
             }
         }
 
+        /// <summary>
+        /// Current final value of the share volume as string
+        /// </summary>
         [Browsable(false)]
-        public string FinalValueAsStr
-        {
-            get
-            {
-                return Helper.FormatDecimal(FinalValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-            }
-        }
+        public string FinalValueAsStr => Helper.FormatDecimal(FinalValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
 
+        /// <summary>
+        /// Current final value of the share volume as string with unit
+        /// </summary>
         [Browsable(false)]
-        public string FinalValueAsStrUnit
-        {
-            get
-            {
-                return Helper.FormatDecimal(FinalValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-            }
-        }
+        public string FinalValueAsStrUnit => Helper.FormatDecimal(FinalValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
 
+        /// <summary>
+        /// Performance value of the final value of the share volume
+        /// </summary>
         [Browsable(false)]
-        public decimal PerformanceValue
-        {
-            get { return _performanceValue; }
-            internal set { _performanceValue = value; }
-        }
+        public decimal PerformanceValue { get; internal set; } = decimal.MinValue / 2;
 
+        /// <summary>
+        /// Performance value of the final value of the share volume as string
+        /// </summary>
         [Browsable(false)]
-        public string PerformanceValueAsStr
-        {
-            get
-            {
-                return Helper.FormatDecimal(PerformanceValue, Helper.Currencythreelength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-            }
-        }
+        public string PerformanceValueAsStr => Helper.FormatDecimal(PerformanceValue, Helper.Currencythreelength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
 
+        /// <summary>
+        /// Performance value of the final value of the share volume as string with string
+        /// </summary>
         [Browsable(false)]
-        public string PerformanceValueAsStrUnit
-        {
-            get
-            {
-                return Helper.FormatDecimal(PerformanceValue, Helper.Percentagethreelength, true, Helper.Percentagenonefixlength, true, PercentageUnit, CultureInfo);
-            }
-        }
+        public string PerformanceValueAsStrUnit => Helper.FormatDecimal(PerformanceValue, Helper.Percentagethreelength, true, Helper.Percentagenonefixlength, true, PercentageUnit, CultureInfo);
 
+        /// <summary>
+        /// Profit or loss value of the final value of the share volume
+        /// </summary>
         [Browsable(false)]
-        public decimal ProfitLossValue
-        {
-            get { return _profitLossValue; }
-            internal set
-            {
-                _profitLossValue = value;
-            }
-        }
+        public decimal ProfitLossValue { get; internal set; } = decimal.MinValue / 2;
 
+        /// <summary>
+        /// Profit or loss value of the final value of the share volume as string
+        /// </summary>
         [Browsable(false)]
-        public string ProfitLossValueAsStr
-        {
-            get
-            {
-                return Helper.FormatDecimal(ProfitLossValue, Helper.Currencythreelength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-            }
-        }
+        public string ProfitLossValueAsStr => Helper.FormatDecimal(ProfitLossValue, Helper.Currencythreelength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
 
+        /// <summary>
+        /// Profit or loss value of the final value of the share volume as string with unit
+        /// </summary>
         [Browsable(false)]
-        public string ProfitLossValueAsStrUnit
-        {
-            get
-            {
-                return Helper.FormatDecimal(ProfitLossValue, Helper.Currencythreelength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-            }
-        }
+        public string ProfitLossValueAsStrUnit => Helper.FormatDecimal(ProfitLossValue, Helper.Currencythreelength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
 
+        /// <summary>
+        /// Profit or loss and performance value of the final value of the share volume as sting with unit
+        /// </summary>
         [Browsable(false)]
         public string ProfitLossPerformanceValueAsStrUnit
         {
@@ -830,6 +477,9 @@ namespace SharePortfolioManager
             }
         }
 
+        /// <summary>
+        /// Purchase value and final value of the share volume as string with unit
+        /// </summary>
         [Browsable(false)]
         public string PurchaseValueFinalValueAsStrUnit
         {
@@ -845,130 +495,120 @@ namespace SharePortfolioManager
 
         #region Portfolio value properties
 
+        /// <summary>
+        /// Purchase value of the hole portfolio (all share in the portfolio)
+        /// </summary>
         [Browsable(false)]
         public decimal PortfolioPurchaseValue
         {
-            get { return _portfolioPurchaseValue; }
+            get => _portfolioPurchaseValue;
             internal set
             {
-                if (_portfolioPurchaseValue != value)
-                {
-                    _portfolioPurchaseValue = value;
+                if (_portfolioPurchaseValue == value) return;
 
-                    // Recalculate the performance of all shares
-                    CalculatePortfolioPerformance();
+                _portfolioPurchaseValue = value;
 
-                    // Recalculate the profit or lose of all shares
-                    CalculatePortfolioProfitLoss();
-                }
+                // Recalculate the performance of all shares
+                CalculatePortfolioPerformance();
+
+                // Recalculate the profit or lose of all shares
+                CalculatePortfolioProfitLoss();
             }
         }
 
+        /// <summary>
+        /// Purchase value of the hole portfolio (all share in the portfolio) as string
+        /// </summary>
         [Browsable(false)]
-        public string PortfolioPurchaseValueAsStr
-        {
-            get
-            {
-                return Helper.FormatDecimal(PortfolioPurchaseValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-            }
-        }
+        public string PortfolioPurchaseValueAsStr => Helper.FormatDecimal(PortfolioPurchaseValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
 
+        /// <summary>
+        /// Purchase value of the hole portfolio (all share in the portfolio) as string with unit
+        /// </summary>
         [Browsable(false)]
-        public string PortfolioPurchaseValueAsStrUnit
-        {
-            get
-            {
-                return Helper.FormatDecimal(PortfolioPurchaseValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-            }
-        }
+        public string PortfolioPurchaseValueAsStrUnit => Helper.FormatDecimal(PortfolioPurchaseValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
 
+        /// <summary>
+        /// The portfolio sale purchase value stores the
+        /// purchase value which has been sold again.
+        /// </summary>
         [Browsable(false)]
         public decimal PortfolioSalePurchaseValue
         {
-            get { return _portfolioSalePurchaseValue; }
+            get => _portfolioSalePurchaseValue;
             internal set
             {
-                if (_portfolioSalePurchaseValue != value)
-                {
-                    _portfolioSalePurchaseValue = value;
+                if (_portfolioSalePurchaseValue == value) return;
 
-                    // Recalculate the performance of all shares
-                    CalculatePortfolioPerformance();
+                _portfolioSalePurchaseValue = value;
 
-                    // Recalculate the profit or lose of all shares
-                    CalculatePortfolioProfitLoss();
-                }
+                // Recalculate the performance of all shares
+                CalculatePortfolioPerformance();
+
+                // Recalculate the profit or lose of all shares
+                CalculatePortfolioProfitLoss();
             }
         }
 
+        /// <summary>
+        /// Portfolio sale purchase value as string
+        /// </summary>
         [Browsable(false)]
-        public string PortfolioSalePurchaseValueAsStr
-        {
-            get
-            {
-                return Helper.FormatDecimal(PortfolioSalePurchaseValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-            }
-        }
+        public string PortfolioSalePurchaseValueAsStr => Helper.FormatDecimal(PortfolioSalePurchaseValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
 
+        /// <summary>
+        /// Portfolio sale purchase value as string with unit
+        /// </summary>
         [Browsable(false)]
-        public string PortfolioSaleValueAsStrUnit
-        {
-            get
-            {
-                return Helper.FormatDecimal(PortfolioSalePurchaseValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-            }
-        }
+        public string PortfolioSaleValueAsStrUnit => Helper.FormatDecimal(PortfolioSalePurchaseValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
 
+        /// <summary>
+        /// Costs of the hole portfolio
+        /// </summary>
         [Browsable(false)]
         public decimal PortfolioCosts
         {
-            get { return _portfolioCosts; }
-            internal set { _portfolioCosts = value; }
+            get => _portfolioCosts;
+            internal set => _portfolioCosts = value;
         }
 
+        /// <summary>
+        /// Costs of the portfolio as string
+        /// </summary>
         [Browsable(false)]
-        public string PortfolioCostsAsStr
-        {
-            get
-            {
-                return Helper.FormatDecimal(PortfolioCosts, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-            }
-        }
+        public string PortfolioCostsAsStr => Helper.FormatDecimal(PortfolioCosts, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
 
+        /// <summary>
+        /// Costs of the portfolio as string with unit
+        /// </summary>
         [Browsable(false)]
-        public string PortfolioCostsAsStrUnit
-        {
-            get
-            {
-                return Helper.FormatDecimal(PortfolioCosts, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-            }
-        }
+        public string PortfolioCostsAsStrUnit => Helper.FormatDecimal(PortfolioCosts, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
 
+        /// <summary>
+        /// Dividend of the hole portfolio
+        /// </summary>
         [Browsable(false)]
         public decimal PortfolioDividend
         {
-            get { return _portfolioDividend; }
-            internal set { _portfolioDividend = value; }
+            get => _portfolioDividend;
+            internal set => _portfolioDividend = value;
         }
 
+        /// <summary>
+        /// Dividend of the hole portfolio as string
+        /// </summary>
         [Browsable(false)]
-        public string PortfolioDividendAsStr
-        {
-            get
-            {
-                return Helper.FormatDecimal(PortfolioDividend, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-            }
-        }
+        public string PortfolioDividendAsStr => Helper.FormatDecimal(PortfolioDividend, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
 
+        /// <summary>
+        /// Dividend of the hole portfolio as string with unit
+        /// </summary>
         [Browsable(false)]
-        public string PortfolioDividendAsStrUnit
-        {
-            get
-            {
-                return Helper.FormatDecimal(PortfolioDividend, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-            }
-        }
+        public string PortfolioDividendAsStrUnit => Helper.FormatDecimal(PortfolioDividend, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
 
+        /// <summary>
+        /// Costs and dividend of the hole portfolio as string with unit and line break
+        /// </summary>
         [Browsable(false)]
         public string CostsDividendPortfolioValueAsStr
         {
@@ -980,56 +620,53 @@ namespace SharePortfolioManager
             }
         }
 
+        /// <summary>
+        /// Performance value of the hole portfolio
+        /// </summary>
         [Browsable(false)]
         public decimal PortfolioPerformanceValue
         {
-            get { return _portfolioPerformanceValue; }
-            internal set { _portfolioPerformanceValue = value; }
+            get => _portfolioPerformanceValue;
+            internal set => _portfolioPerformanceValue = value;
         }
 
+        /// <summary>
+        /// Performance value of the hole portfolio as string
+        /// </summary>
         [Browsable(false)]
-        public string PortfolioPerformanceValueAsStr
-        {
-            get
-            {
-                return Helper.FormatDecimal(PortfolioPerformanceValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-            }
-        }
+        public string PortfolioPerformanceValueAsStr => Helper.FormatDecimal(PortfolioPerformanceValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
 
+        /// <summary>
+        /// Performance value of the hole portfolio as string with unit
+        /// </summary>
         [Browsable(false)]
-        public string PortfolioPerformanceValueAsStrUnit
-        {
-            get
-            {
-                return Helper.FormatDecimal(PortfolioPerformanceValue, Helper.Percentagetwolength, true, Helper.Percentagenonefixlength, true, PercentageUnit, CultureInfo);
-            }
-        }
+        public string PortfolioPerformanceValueAsStrUnit => Helper.FormatDecimal(PortfolioPerformanceValue, Helper.Percentagetwolength, true, Helper.Percentagenonefixlength, true, PercentageUnit, CultureInfo);
 
+        /// <summary>
+        /// Profit or loss value of the hole portfolio
+        /// </summary>
         [Browsable(false)]
         public decimal PortfolioProfitLossValue
         {
-            get { return _portfolioProfitLossValue; }
-            internal set { _portfolioProfitLossValue = value; }
+            get => _portfolioProfitLossValue;
+            internal set => _portfolioProfitLossValue = value;
         }
 
+        /// <summary>
+        /// Profit or loss value of the hole portfolio as string
+        /// </summary>
         [Browsable(false)]
-        public string PortfolioProfitLossValueAsStr
-        {
-            get
-            {
-                return Helper.FormatDecimal(PortfolioProfitLossValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-            }
-        }
+        public string PortfolioProfitLossValueAsStr => Helper.FormatDecimal(PortfolioProfitLossValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
 
+        /// <summary>
+        /// Profit or loss value of the hole portfolio as string with unit
+        /// </summary>
         [Browsable(false)]
-        public string PortfolioProfitLossValueAsStrUnit
-        {
-            get
-            {
-                return Helper.FormatDecimal(PortfolioProfitLossValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-            }
-        }
+        public string PortfolioProfitLossValueAsStrUnit => Helper.FormatDecimal(PortfolioProfitLossValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
 
+        /// <summary>
+        /// Profit or loss value and performance of the hole portfolio as string with unit and a line break
+        /// </summary>
         [Browsable(false)]
         public string ProfitLossPerformancePortfolioValueAsStr
         {
@@ -1041,109 +678,108 @@ namespace SharePortfolioManager
             }
         }
 
+        /// <summary>
+        /// Final value of the hole portfolio
+        /// </summary>
         [Browsable(false)]
         public decimal PortfolioFinalValue
         {
-            get { return _portfolioFinalValue; }
+            get => _portfolioFinalValue;
             internal set
             {
-                if (_portfolioFinalValue != value)
-                {
-                    _portfolioFinalValue = value;
+                if (_portfolioFinalValue == value) return;
 
-                    // Recalculate the performance of all shares
-                    CalculatePortfolioPerformance();
+                _portfolioFinalValue = value;
 
-                    // Recalculate the profit or lose of all shares
-                    CalculatePortfolioProfitLoss();
-                }
+                // Recalculate the performance of all shares
+                CalculatePortfolioPerformance();
+
+                // Recalculate the profit or lose of all shares
+                CalculatePortfolioProfitLoss();
             }
         }
 
+        /// <summary>
+        /// Market value of the hole portfolio as string
+        /// </summary>
         [Browsable(false)]
-        public string PortfolioFinalValueAsStr
-        {
-            get
-            {
-                return Helper.FormatDecimal(PortfolioFinalValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-            }
-        }
+        public string PortfolioFinalValueAsStr => Helper.FormatDecimal(PortfolioFinalValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
 
+        /// <summary>
+        /// Market value of the hole portfolio as string with unit
+        /// </summary>
         [Browsable(false)]
-        public string PortfolioFinalValueAsStrUnit
-        {
-            get
-            {
-                return Helper.FormatDecimal(PortfolioFinalValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-            }
-        }
+        public string PortfolioFinalValueAsStrUnit => Helper.FormatDecimal(PortfolioFinalValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
 
         #endregion Portfolio value properties
 
         #region Data grid view properties
 
+        /// <summary>
+        /// WKN of the share as string for the DataGridView display
+        /// </summary>
         [Browsable(true)]
         [DisplayName(@"Wkn")]
-        public string DgvWkn
-        {
-            get { return WknAsStr; }
-        }
+        public string DgvWkn => WknAsStr;
 
+        /// <summary>
+        /// Name of the share as string for the DataGridView display
+        /// </summary>
         [Browsable(true)]
         [DisplayName(@"Name")]
-        public string DgvNameAsStr
-        {
-            get { return NameAsStr; }
-        }
+        public string DgvNameAsStr => NameAsStr;
 
+        /// <summary>
+        /// Volume of the share as string for the DataGridView display
+        /// </summary>
         [Browsable(true)]
         [DisplayName(@"Volume")]
-        public string DgvVolumeAsStr
-        {
-            get { return VolumeAsStr;  }
-        }
+        public string DgvVolumeAsStr => VolumeAsStr;
 
+        /// <summary>
+        /// Cost and dividend minus taxes of the share as string for the DataGridView display
+        /// </summary>
         [Browsable(true)]
         [DisplayName(@"CostsDividendWithTaxes")]
-        public string DgvCostsDividendWithTaxesAsStrUnit
-        {
-            get { return CostsDividendWithTaxesAsStrUnit;  } 
-        }
+        public string DgvCostsDividendWithTaxesAsStrUnit => CostsDividendWithTaxesAsStrUnit;
 
+        /// <summary>
+        /// Previous day price of the share as string for the DataGridView display
+        /// </summary>
         [Browsable(true)]
         [DisplayName(@"CurPrevPrice")]
-        public string DgvCurPrevPriceAsStrUnit
-        {
-            get { return CurPrevPriceAsStrUnit; }
-        }
+        public string DgvCurPrevPriceAsStrUnit => CurPrevPriceAsStrUnit;
 
+        /// <summary>
+        /// Difference between the current and the previous day of the share and the performance in percent
+        /// of the share as string for the DataGridView display
+        /// </summary>
         [Browsable(true)]
         [DisplayName(@"PrevDayPerformance")]
-        public string DgvPrevDayDifferencePerformanceAsStrUnit
-        {
-            get { return PrevDayDifferencePerformanceAsStrUnit; }
-        }
+        public string DgvPrevDayDifferencePerformanceAsStrUnit => PrevDayDifferencePerformanceAsStrUnit;
 
+        /// <summary>
+        /// Image which indicates the performance of the share to the previous day for the DataGridView display
+        /// </summary>
         [Browsable(true)]
         [DisplayName(@"")]
-        public Image DgvImagePrevDayPerformance
-        {
-            get { return ImagePrevDayPerformance; }
-        }
+        public Image DgvImagePrevDayPerformance => ImagePrevDayPerformance;
 
+        /// <summary>
+        /// Profit or loss and performance value of the market value of the share volume as sting with unit
+        /// for the DataGridView display
+        /// </summary>
         [Browsable(true)]
         [DisplayName(@"ProfitLossPerformanceFinalValue")]
-        public string DgvProfitLossPerformanceValueAsStrUnit
-        {
-            get { return ProfitLossPerformanceValueAsStrUnit; }
-        }
+        public string DgvProfitLossPerformanceValueAsStrUnit => ProfitLossPerformanceValueAsStrUnit;
 
+        /// <summary>
+        /// Purchase value and final value of the share volume as string with unit
+        /// for the DataGridView display
+        /// </summary>
         [Browsable(true)]
         [DisplayName(@"PurchaseValueFinalValue")]
-        public string DgvPurchaseValueFinalValueAsStrUnit
-        {
-            get { return PurchaseValueFinalValueAsStrUnit; }
-        }
+        public string DgvPurchaseValueFinalValueAsStrUnit => PurchaseValueFinalValueAsStrUnit;
 
         #endregion Data grid properties
 
@@ -1153,6 +789,7 @@ namespace SharePortfolioManager
 
         #region Constructors
 
+        /// <inheritdoc />
         /// <summary>
         /// Standard constructor
         /// </summary>
@@ -1160,6 +797,7 @@ namespace SharePortfolioManager
         {
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Constructor with parameters
         /// </summary>
@@ -1173,7 +811,6 @@ namespace SharePortfolioManager
         /// <param name="volume">Volume of the share</param>
         /// <param name="reduction">Reduction of the share</param>
         /// <param name="costs">Costs of the buy</param>
-        /// <param name="purchaseValue">PurchaseValue of the share</param>
         /// <param name="webSite">Website address of the share</param>
         /// <param name="imageListForDayBeforePerformance">Images for the performance indication</param>
         /// <param name="regexList">RegEx list for the share</param>
@@ -1184,12 +821,12 @@ namespace SharePortfolioManager
         public ShareObjectFinalValue(
             string wkn, string addDateTime, string name,
             DateTime lastUpdateInternet, DateTime lastUpdateShareDate, DateTime lastUpdateShareTime,
-            decimal price, decimal volume, decimal reduction, decimal costs, decimal purchaseValue,
+            decimal price, decimal volume, decimal reduction, decimal costs,
             string webSite, List<Image> imageListForDayBeforePerformance, RegExList regexList, CultureInfo cultureInfo,
-            int dividendPayoutInterval, int shareType, string document) : base(wkn, addDateTime, name, lastUpdateInternet, lastUpdateShareDate, lastUpdateShareTime,
-                                                                price, volume, reduction, costs, purchaseValue,
-                                                                webSite, imageListForDayBeforePerformance, regexList, cultureInfo, shareType,
-                                                                document)
+            int dividendPayoutInterval, int shareType, string document)
+            : base(wkn, addDateTime, name, lastUpdateInternet, lastUpdateShareDate, lastUpdateShareTime,
+                    price, volume, reduction, costs, webSite, imageListForDayBeforePerformance,
+                    regexList, cultureInfo, shareType, document)
         {
             DividendPayoutInterval = dividendPayoutInterval;
         }
@@ -1198,6 +835,7 @@ namespace SharePortfolioManager
 
         #region Destructor
 
+        /// <inheritdoc />
         /// <summary>
         /// Destructor
         /// </summary>
@@ -1287,7 +925,7 @@ namespace SharePortfolioManager
                 PortfolioCosts -= AllCostsEntries.CostValueTotal;
 
                 // Remove cost by date
-                if (!_allCostsEntries.RemoveCost(strDateTime))
+                if (!AllCostsEntries.RemoveCost(strDateTime))
                     return false;
 
                 // Set costs of the share
@@ -1329,8 +967,8 @@ namespace SharePortfolioManager
         /// <summary>
         /// This function adds the dividend payouts for the share to the dictionary
         /// </summary>
-        /// <param name="cultureInfoFC">CultureInfo of the share for the foreign currency</param>
-        /// <param name="csEnableFC">Flag if the payout is in a foreign currency</param>
+        /// <param name="cultureInfoFc">CultureInfo of the share for the foreign currency</param>
+        /// <param name="csEnableFc">Flag if the payout is in a foreign currency</param>
         /// <param name="decExchangeRatio">Exchange ratio for the foreign currency</param>
         /// <param name="strDate">Pay date of the new dividend list entry</param>
         /// <param name="decRate">Paid dividend of one share</param>
@@ -1341,7 +979,7 @@ namespace SharePortfolioManager
         /// <param name="decSharePrice">Share price at the pay date</param>
         /// <param name="strDoc">Document of the dividend</param>
         /// <returns>Flag if the add was successful</returns>  
-        public bool AddDividend(CultureInfo cultureInfoFC, CheckState csEnableFC, decimal decExchangeRatio, string strDate, decimal decRate, decimal decVolume,
+        public bool AddDividend(CultureInfo cultureInfoFc, CheckState csEnableFc, decimal decExchangeRatio, string strDate, decimal decRate, decimal decVolume,
             decimal decTaxAtSource, decimal decCapitalGainsTax, decimal decSolidarityTax, decimal decSharePrice, string strDoc = "")
         {
             try
@@ -1362,7 +1000,7 @@ namespace SharePortfolioManager
                 Console.WriteLine("decSharePrice: {0}", decSharePrice);
                 Console.WriteLine("strDoc: {0}", strDoc);
 #endif
-                if (!AllDividendEntries.AddDividend(cultureInfoFC, csEnableFC, decExchangeRatio, strDate, decRate, decVolume,
+                if (!AllDividendEntries.AddDividend(cultureInfoFc, csEnableFc, decExchangeRatio, strDate, decRate, decVolume,
                     decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decSharePrice, strDoc))
                     return false;
 
@@ -1419,7 +1057,7 @@ namespace SharePortfolioManager
                 PortfolioDividend -= DividendValueTotal;
 
                 // Remove dividend by date
-                if (!_allDividendEntries.RemoveDividend(strDateTime))
+                if (!AllDividendEntries.RemoveDividend(strDateTime))
                     return false;
 
                 // Set dividend of the share
@@ -1531,13 +1169,10 @@ namespace SharePortfolioManager
         /// </summary>
         private void CalculatePerformance()
         {
-            if (FinalValue > decimal.MinValue / 2
-                && PurchaseValue > decimal.MinValue / 2
-                )
-            {
-                if ((PurchaseValue + AllSaleEntries.SalePurchaseValueTotal) != 0)
-                    PerformanceValue = ( (FinalValue + AllSaleEntries.SalePurchaseValueTotal) * 100) / (PurchaseValue + AllSaleEntries.SalePurchaseValueTotal) - 100;
-            }
+            if (FinalValue <= decimal.MinValue / 2 || PurchaseValue <= decimal.MinValue / 2) return;
+
+            if ((PurchaseValue + AllSaleEntries.SalePurchaseValueTotal) != 0)
+                PerformanceValue = ( (FinalValue + AllSaleEntries.SalePurchaseValueTotal) * 100) / (PurchaseValue + AllSaleEntries.SalePurchaseValueTotal) - 100;
 
 #if DEBUG_SHAREOBJECT
             Console.WriteLine("");
@@ -1566,217 +1201,218 @@ namespace SharePortfolioManager
             try
             {
                 // Update existing share
-                var nodeListShares = xmlPortfolio.SelectNodes(string.Format("/Portfolio/Share [@WKN = \"{0}\"]",
-                    shareObject.Wkn));
+                var nodeListShares = xmlPortfolio.SelectNodes($"/Portfolio/Share [@WKN = \"{shareObject.Wkn}\"]");
                 if (nodeListShares != null)
                 {
                     foreach (XmlNode nodeElement in nodeListShares)
                     {
-                        if (nodeElement != null)
+                        if (!nodeElement.HasChildNodes || nodeElement.ChildNodes.Count != ShareObjectTagCount)
                         {
-                            if (nodeElement.HasChildNodes &&
-                                nodeElement.ChildNodes.Count == shareObject.ShareObjectTagCount)
+                            exception = null;
+                            return false;
+                        }
+
+                        nodeElement.Attributes["WKN"].InnerText = shareObject.Wkn;
+                        nodeElement.Attributes["Name"].InnerText = shareObject.NameAsStr;
+
+                        for (var i = 0; i < nodeElement.ChildNodes.Count; i++)
+                        {
+                            switch (i)
                             {
-                                nodeElement.Attributes["WKN"].InnerText = shareObject.Wkn;
-                                nodeElement.Attributes["Name"].InnerText = shareObject.NameAsStr;
+                                #region General
 
-                                for (int i = 0; i < nodeElement.ChildNodes.Count; i++)
-                                {
-                                    switch (i)
+                                case 0:
+                                    nodeElement.ChildNodes[i].InnerText =
+                                        $@"{shareObject.LastUpdateInternet.ToShortDateString()} {
+                                            shareObject.LastUpdateInternet.ToShortTimeString()
+                                        }";
+                                    break;
+                                case 1:
+                                    nodeElement.ChildNodes[i].InnerText =
+                                        $@"{shareObject.LastUpdateDate.ToShortDateString()} {
+                                            shareObject.LastUpdateDate.ToShortTimeString()
+                                        }";
+                                    break;
+                                case 2:
+                                    nodeElement.ChildNodes[i].InnerText =
+                                        $@"{shareObject.LastUpdateTime.ToShortDateString()} {
+                                            shareObject.LastUpdateTime.ToShortTimeString()
+                                        }";
+                                    break;
+                                case 3:
+                                    nodeElement.ChildNodes[i].InnerText = shareObject.CurPriceAsStr;
+                                    break;
+                                case 4:
+                                    nodeElement.ChildNodes[i].InnerText = shareObject.PrevDayPriceAsStr;
+                                    break;
+                                case 5:
+                                    nodeElement.ChildNodes[i].InnerText = shareObject.WebSite;
+                                    break;
+                                case 6:
+                                    nodeElement.ChildNodes[i].InnerXml = shareObject.CultureInfoAsStr;
+                                    break;
+                                case 7:
+                                    nodeElement.ChildNodes[i].InnerXml = shareObject.ShareType.ToString();
+                                    break;
+
+                                #endregion General
+
+                                #region Buys
+
+                                case 8:
+                                    // Remove old buys
+                                    nodeElement.ChildNodes[i].RemoveAll();
+                                    foreach (var buyElementYear in shareObject.AllBuyEntries
+                                        .GetAllBuysOfTheShare())
                                     {
-                                        #region General
-
-                                        case 0:
-                                            nodeElement.ChildNodes[i].InnerText = string.Format(@"{0} {1}",
-                                                shareObject.LastUpdateInternet.ToShortDateString(),
-                                                shareObject.LastUpdateInternet.ToShortTimeString());
-                                            break;
-                                        case 1:
-                                            nodeElement.ChildNodes[i].InnerText = string.Format(@"{0} {1}",
-                                                shareObject.LastUpdateDate.ToShortDateString(),
-                                                shareObject.LastUpdateDate.ToShortTimeString());
-                                            break;
-                                        case 2:
-                                            nodeElement.ChildNodes[i].InnerText = string.Format(@"{0} {1}",
-                                                shareObject.LastUpdateTime.ToShortDateString(),
-                                                shareObject.LastUpdateTime.ToShortTimeString());
-                                            break;
-                                        case 3:
-                                            nodeElement.ChildNodes[i].InnerText = shareObject.CurPriceAsStr;
-                                            break;
-                                        case 4:
-                                            nodeElement.ChildNodes[i].InnerText = shareObject.PrevDayPriceAsStr;
-                                            break;
-                                        case 5:
-                                            nodeElement.ChildNodes[i].InnerText = shareObject.WebSite;
-                                            break;
-                                        case 6:
-                                            nodeElement.ChildNodes[i].InnerXml = shareObject.CultureInfoAsStr;
-                                            break;
-                                        case 7:
-                                            nodeElement.ChildNodes[i].InnerXml = shareObject.ShareType.ToString();
-                                            break;
-
-                                        #endregion General
-
-                                        #region Buys
-
-                                        case 8:
-                                            // Remove old buys
-                                            nodeElement.ChildNodes[i].RemoveAll();
-                                            foreach (var buyElementYear in shareObject.AllBuyEntries
-                                                .GetAllBuysOfTheShare())
-                                            {
-                                                XmlElement newBuyElement =
-                                                    xmlPortfolio.CreateElement(shareObject.BuyTagNamePre);
-                                                newBuyElement.SetAttribute(shareObject.BuyDateAttrName,
-                                                    buyElementYear.DateAsStr);
-                                                newBuyElement.SetAttribute(shareObject.BuyVolumeAttrName,
-                                                    buyElementYear.VolumeAsStr);
-                                                newBuyElement.SetAttribute(shareObject.BuyPriceAttrName,
-                                                    buyElementYear.SharePriceAsStr);
-                                                newBuyElement.SetAttribute(shareObject.BuyReductionAttrName,
-                                                    buyElementYear.ReductionAsStr);
-                                                newBuyElement.SetAttribute(shareObject.BuyDocumentAttrName,
-                                                    buyElementYear.Document);
-                                                nodeElement.ChildNodes[i].AppendChild(newBuyElement);
-                                            }
-                                            break;
-
-                                        #endregion Buys
-
-                                        #region Sales
-
-                                        case 9:
-                                            // Remove old sales
-                                            nodeElement.ChildNodes[i].RemoveAll();
-                                            foreach (var saleElementYear in shareObject.AllSaleEntries
-                                                .GetAllSalesOfTheShare())
-                                            {
-                                                XmlElement newSaleElement =
-                                                    xmlPortfolio.CreateElement(shareObject.SaleTagNamePre);
-                                                newSaleElement.SetAttribute(shareObject.SaleDateAttrName,
-                                                    saleElementYear.DateAsStr);
-                                                newSaleElement.SetAttribute(shareObject.SaleVolumeAttrName,
-                                                    saleElementYear.VolumeAsStr);
-                                                newSaleElement.SetAttribute(shareObject.SaleBuyPriceAttrName,
-                                                    saleElementYear.BuyPriceAsStr);
-                                                newSaleElement.SetAttribute(shareObject.SalePriceAttrName,
-                                                    saleElementYear.SalePriceAsStr);
-                                                newSaleElement.SetAttribute(shareObject.SaleTaxAtSourceAttrName,
-                                                    saleElementYear.TaxAtSourceAsStr);
-                                                newSaleElement.SetAttribute(shareObject.SaleCapitalGainsTaxAttrName,
-                                                    saleElementYear.CapitalGainsTaxAsStr);
-                                                newSaleElement.SetAttribute(shareObject.SaleSolidarityTaxAttrName,
-                                                    saleElementYear.SolidarityTaxAsStr);
-                                                newSaleElement.SetAttribute(shareObject.SaleDocumentAttrName,
-                                                    saleElementYear.Document);
-                                                nodeElement.ChildNodes[i].AppendChild(newSaleElement);
-                                            }
-                                            break;
-
-                                        #endregion Sales
-
-                                        #region Costs
-
-                                        case 10:
-                                            // Remove old costs
-                                            nodeElement.ChildNodes[i].RemoveAll();
-                                            // Remove old costs
-                                            nodeElement.ChildNodes[i].RemoveAll();
-                                            foreach (var costElementYear in shareObject.AllCostsEntries
-                                                .GetAllCostsOfTheShare())
-                                            {
-                                                XmlElement newCostElement =
-                                                    xmlPortfolio.CreateElement(shareObject.CostsTagNamePre);
-                                                newCostElement.SetAttribute(shareObject.CostsBuyPartAttrName,
-                                                    costElementYear.CostOfABuyAsStr);
-                                                newCostElement.SetAttribute(shareObject.CostsSalePartAttrName,
-                                                    costElementYear.CostOfASaleAsStr);
-                                                newCostElement.SetAttribute(shareObject.CostsDateAttrName,
-                                                    costElementYear.CostDateAsStr);
-                                                newCostElement.SetAttribute(shareObject.CostsValueAttrName,
-                                                    costElementYear.CostValueAsStr);
-                                                newCostElement.SetAttribute(shareObject.BuyDocumentAttrName,
-                                                    costElementYear.CostDocument);
-                                                nodeElement.ChildNodes[i].AppendChild(newCostElement);
-                                            }
-                                            break;
-
-                                        #endregion Costs
-
-                                        #region Dividends
-
-                                        case 11:
-                                            // Remove old dividends
-                                            nodeElement.ChildNodes[i].RemoveAll();
-                                            ((XmlElement) nodeElement.ChildNodes[i]).SetAttribute(
-                                                shareObject.DividendPayoutIntervalAttrName,
-                                                shareObject.DividendPayoutIntervalAsStr);
-
-                                            foreach (var dividendObject in shareObject.AllDividendEntries
-                                                .GetAllDividendsOfTheShare())
-                                            {
-                                                XmlElement newDividendElement =
-                                                    xmlPortfolio.CreateElement(shareObject.DividendTagName);
-                                                newDividendElement.SetAttribute(shareObject.DividendDateAttrName,
-                                                    dividendObject.DateTimeStr);
-                                                newDividendElement.SetAttribute(shareObject.DividendRateAttrName,
-                                                    dividendObject.Rate);
-                                                newDividendElement.SetAttribute(shareObject.DividendVolumeAttrName,
-                                                    dividendObject.Volume);
-
-                                                newDividendElement.SetAttribute(shareObject.DividendTaxAtSourceAttrName,
-                                                    dividendObject.TaxAtSource);
-                                                newDividendElement.SetAttribute(
-                                                    shareObject.DividendCapitalGainsTaxAttrName,
-                                                    dividendObject.CapitalGainsTax);
-                                                newDividendElement.SetAttribute(
-                                                    shareObject.DividendSolidarityTaxAttrName,
-                                                    dividendObject.SolidarityTax);
-
-                                                newDividendElement.SetAttribute(shareObject.DividendPriceAttrName,
-                                                    dividendObject.Price);
-                                                newDividendElement.SetAttribute(shareObject.DividendDocumentAttrName,
-                                                    dividendObject.Document);
-
-                                                // Foreign currency information
-                                                XmlElement newForeignCurrencyElement =
-                                                    xmlPortfolio.CreateElement(shareObject.DividendTagNameForeignCu);
-
-                                                newForeignCurrencyElement.SetAttribute(
-                                                    shareObject.DividendForeignCuFlagAttrName,
-                                                    dividendObject.EnableFCStr);
-
-                                                if (dividendObject.EnableFC == CheckState.Checked)
-                                                {
-                                                    newForeignCurrencyElement.SetAttribute(
-                                                        shareObject.DividendExchangeRatioAttrName,
-                                                        dividendObject.ExchangeRatio);
-                                                    newForeignCurrencyElement.SetAttribute(
-                                                        shareObject.DividendNameAttrName,
-                                                        dividendObject.CultureInfoFC.Name);
-                                                }
-                                                else
-                                                {
-                                                    newForeignCurrencyElement.SetAttribute(
-                                                        shareObject.DividendExchangeRatioAttrName, 0.ToString());
-                                                    newForeignCurrencyElement.SetAttribute(
-                                                        shareObject.DividendNameAttrName,
-                                                        dividendObject.DividendCultureInfo.Name);
-                                                }
-                                                newDividendElement.AppendChild(newForeignCurrencyElement);
-
-                                                nodeElement.ChildNodes[i].AppendChild(newDividendElement);
-                                            }
-                                            break;
-
-                                        #endregion Dividends
-
-                                        default:
-                                            break;
+                                        var newBuyElement =
+                                            xmlPortfolio.CreateElement(BuyTagNamePre);
+                                        newBuyElement.SetAttribute(BuyDateAttrName,
+                                            buyElementYear.DateAsStr);
+                                        newBuyElement.SetAttribute(BuyVolumeAttrName,
+                                            buyElementYear.VolumeAsStr);
+                                        newBuyElement.SetAttribute(BuyPriceAttrName,
+                                            buyElementYear.SharePriceAsStr);
+                                        newBuyElement.SetAttribute(BuyReductionAttrName,
+                                            buyElementYear.ReductionAsStr);
+                                        newBuyElement.SetAttribute(BuyDocumentAttrName,
+                                            buyElementYear.Document);
+                                        nodeElement.ChildNodes[i].AppendChild(newBuyElement);
                                     }
-                                }
+                                    break;
+
+                                #endregion Buys
+
+                                #region Sales
+
+                                case 9:
+                                    // Remove old sales
+                                    nodeElement.ChildNodes[i].RemoveAll();
+                                    foreach (var saleElementYear in shareObject.AllSaleEntries
+                                        .GetAllSalesOfTheShare())
+                                    {
+                                        var newSaleElement =
+                                            xmlPortfolio.CreateElement(SaleTagNamePre);
+                                        newSaleElement.SetAttribute(SaleDateAttrName,
+                                            saleElementYear.DateAsStr);
+                                        newSaleElement.SetAttribute(SaleVolumeAttrName,
+                                            saleElementYear.VolumeAsStr);
+                                        newSaleElement.SetAttribute(SaleBuyPriceAttrName,
+                                            saleElementYear.BuyPriceAsStr);
+                                        newSaleElement.SetAttribute(SaleSalePriceAttrName,
+                                            saleElementYear.SalePriceAsStr);
+                                        newSaleElement.SetAttribute(SaleTaxAtSourceAttrName,
+                                            saleElementYear.TaxAtSourceAsStr);
+                                        newSaleElement.SetAttribute(SaleCapitalGainsTaxAttrName,
+                                            saleElementYear.CapitalGainsTaxAsStr);
+                                        newSaleElement.SetAttribute(SaleSolidarityTaxAttrName,
+                                            saleElementYear.SolidarityTaxAsStr);
+                                        newSaleElement.SetAttribute(SaleDocumentAttrName,
+                                            saleElementYear.Document);
+                                        nodeElement.ChildNodes[i].AppendChild(newSaleElement);
+                                    }
+                                    break;
+
+                                #endregion Sales
+
+                                #region Costs
+
+                                case 10:
+                                    // Remove old costs
+                                    nodeElement.ChildNodes[i].RemoveAll();
+                                    // Remove old costs
+                                    nodeElement.ChildNodes[i].RemoveAll();
+                                    foreach (var costElementYear in shareObject.AllCostsEntries
+                                        .GetAllCostsOfTheShare())
+                                    {
+                                        var newCostElement =
+                                            xmlPortfolio.CreateElement(CostsTagNamePre);
+                                        newCostElement.SetAttribute(CostsBuyPartAttrName,
+                                            costElementYear.CostOfABuyAsStr);
+                                        newCostElement.SetAttribute(CostsSalePartAttrName,
+                                            costElementYear.CostOfASaleAsStr);
+                                        newCostElement.SetAttribute(CostsDateAttrName,
+                                            costElementYear.CostDateAsStr);
+                                        newCostElement.SetAttribute(CostsValueAttrName,
+                                            costElementYear.CostValueAsStr);
+                                        newCostElement.SetAttribute(CostsDocumentAttrName,
+                                            costElementYear.CostDocument);
+                                        nodeElement.ChildNodes[i].AppendChild(newCostElement);
+                                    }
+                                    break;
+
+                                #endregion Costs
+
+                                #region Dividends
+
+                                case 11:
+                                    // Remove old dividends
+                                    nodeElement.ChildNodes[i].RemoveAll();
+                                    ((XmlElement) nodeElement.ChildNodes[i]).SetAttribute(
+                                        DividendPayoutIntervalAttrName,
+                                        shareObject.DividendPayoutIntervalAsStr);
+
+                                    foreach (var dividendObject in shareObject.AllDividendEntries
+                                        .GetAllDividendsOfTheShare())
+                                    {
+                                        var newDividendElement =
+                                            xmlPortfolio.CreateElement(DividendTagName);
+                                        newDividendElement.SetAttribute(DividendDateAttrName,
+                                            dividendObject.DateTimeStr);
+                                        newDividendElement.SetAttribute(DividendRateAttrName,
+                                            dividendObject.Rate);
+                                        newDividendElement.SetAttribute(DividendVolumeAttrName,
+                                            dividendObject.Volume);
+
+                                        newDividendElement.SetAttribute(DividendTaxAtSourceAttrName,
+                                            dividendObject.TaxAtSource);
+                                        newDividendElement.SetAttribute(
+                                            DividendCapitalGainsTaxAttrName,
+                                            dividendObject.CapitalGainsTax);
+                                        newDividendElement.SetAttribute(
+                                            DividendSolidarityTaxAttrName,
+                                            dividendObject.SolidarityTax);
+
+                                        newDividendElement.SetAttribute(DividendPriceAttrName,
+                                            dividendObject.Price);
+                                        newDividendElement.SetAttribute(DividendDocumentAttrName,
+                                            dividendObject.Document);
+
+                                        // Foreign currency information
+                                        XmlElement newForeignCurrencyElement =
+                                            xmlPortfolio.CreateElement(DividendTagNameForeignCu);
+
+                                        newForeignCurrencyElement.SetAttribute(
+                                            DividendForeignCuFlagAttrName,
+                                            dividendObject.EnableFcStr);
+
+                                        if (dividendObject.EnableFc == CheckState.Checked)
+                                        {
+                                            newForeignCurrencyElement.SetAttribute(
+                                                DividendExchangeRatioAttrName,
+                                                dividendObject.ExchangeRatio);
+                                            newForeignCurrencyElement.SetAttribute(
+                                                DividendNameAttrName,
+                                                dividendObject.CultureInfoFc.Name);
+                                        }
+                                        else
+                                        {
+                                            newForeignCurrencyElement.SetAttribute(
+                                                DividendExchangeRatioAttrName, 0.ToString());
+                                            newForeignCurrencyElement.SetAttribute(
+                                                DividendNameAttrName,
+                                                dividendObject.DividendCultureInfo.Name);
+                                        }
+                                        newDividendElement.AppendChild(newForeignCurrencyElement);
+
+                                        nodeElement.ChildNodes[i].AppendChild(newDividendElement);
+                                    }
+                                    break;
+
+                                #endregion Dividends
+
+                                default:
+                                    break;
                             }
                         }
                     }
@@ -1787,80 +1423,80 @@ namespace SharePortfolioManager
                         #region General
 
                         // Get root element
-                        XmlNode rootPortfolio = xmlPortfolio.SelectSingleNode("Portfolio");
+                        var rootPortfolio = xmlPortfolio.SelectSingleNode("Portfolio");
 
                         // Add new share
-                        XmlNode newShareNode = xmlPortfolio.CreateNode(XmlNodeType.Element, "Share", null);
+                        var newShareNode = xmlPortfolio.CreateNode(XmlNodeType.Element, "Share", null);
 
                         // Add attributes (WKN)
-                        XmlAttribute xmlAttributeWkn = xmlPortfolio.CreateAttribute("WKN");
+                        var xmlAttributeWkn = xmlPortfolio.CreateAttribute("WKN");
                         xmlAttributeWkn.Value = shareObject.WknAsStr;
                         newShareNode.Attributes.Append(xmlAttributeWkn);
 
                         // Add attributes (ShareName)
-                        XmlAttribute xmlAttributeShareName = xmlPortfolio.CreateAttribute("Name");
+                        var xmlAttributeShareName = xmlPortfolio.CreateAttribute("Name");
                         xmlAttributeShareName.Value = shareObject.NameAsStr;
                         newShareNode.Attributes.Append(xmlAttributeShareName);
 
                         // Add child nodes (last update Internet)
-                        XmlElement newLastUpdateInternet = xmlPortfolio.CreateElement("LastUpdateInternet");
+                        var newLastUpdateInternet = xmlPortfolio.CreateElement("LastUpdateInternet");
                         // Add child inner text
-                        XmlText lastUpdateInternetValue = xmlPortfolio.CreateTextNode(
+                        var lastUpdateInternetValue = xmlPortfolio.CreateTextNode(
                             shareObject.LastUpdateInternet.ToShortDateString() + " " +
                             shareObject.LastUpdateInternet.ToShortTimeString());
                         newShareNode.AppendChild(newLastUpdateInternet);
                         newShareNode.LastChild.AppendChild(lastUpdateInternetValue);
 
                         // Add child nodes (last update date)
-                        XmlElement newLastUpdateDate = xmlPortfolio.CreateElement("LastUpdateShareDate");
+                        var newLastUpdateDate = xmlPortfolio.CreateElement("LastUpdateShareDate");
                         // Add child inner text
-                        XmlText lastUpdateValueDate = xmlPortfolio.CreateTextNode(
+                        var lastUpdateValueDate = xmlPortfolio.CreateTextNode(
                             shareObject.LastUpdateDate.ToShortDateString() + " " +
                             shareObject.LastUpdateDate.ToShortTimeString());
                         newShareNode.AppendChild(newLastUpdateDate);
                         newShareNode.LastChild.AppendChild(lastUpdateValueDate);
 
                         // Add child nodes (last update time)
-                        XmlElement newLastUpdateTime = xmlPortfolio.CreateElement("LastUpdateTime");
+                        var newLastUpdateTime = xmlPortfolio.CreateElement("LastUpdateTime");
                         // Add child inner text
-                        XmlText lastUpdateValueTime = xmlPortfolio.CreateTextNode(
+                        var lastUpdateValueTime = xmlPortfolio.CreateTextNode(
                             shareObject.LastUpdateTime.ToShortDateString() + " " +
                             shareObject.LastUpdateTime.ToShortTimeString());
                         newShareNode.AppendChild(newLastUpdateTime);
                         newShareNode.LastChild.AppendChild(lastUpdateValueTime);
 
                         // Add child nodes (share price)
-                        XmlElement newSharePrice = xmlPortfolio.CreateElement("SharePrice");
+                        var newSharePrice = xmlPortfolio.CreateElement("SharePrice");
                         // Add child inner text
-                        XmlText sharePrice = xmlPortfolio.CreateTextNode(shareObject.CurPriceAsStr);
+                        var sharePrice = xmlPortfolio.CreateTextNode(shareObject.CurPriceAsStr);
                         newShareNode.AppendChild(newSharePrice);
                         newShareNode.LastChild.AppendChild(sharePrice);
 
                         // Add child nodes (share price before)
-                        XmlElement newSharePriceBefore = xmlPortfolio.CreateElement("SharePriceBefore");
+                        var newSharePriceBefore = xmlPortfolio.CreateElement("SharePriceBefore");
                         // Add child inner text
-                        XmlText sharePriceBefore = xmlPortfolio.CreateTextNode(shareObject.PrevDayPriceAsStr);
+                        var sharePriceBefore = xmlPortfolio.CreateTextNode(shareObject.PrevDayPriceAsStr);
                         newShareNode.AppendChild(newSharePriceBefore);
                         newShareNode.LastChild.AppendChild(sharePriceBefore);
 
                         // Add child nodes (website)
-                        XmlElement newWebsite = xmlPortfolio.CreateElement("WebSite");
+                        var newWebsite = xmlPortfolio.CreateElement("WebSite");
                         // Add child inner text
-                        XmlText webSite = xmlPortfolio.CreateTextNode(shareObject.WebSite);
+                        var webSite = xmlPortfolio.CreateTextNode(shareObject.WebSite);
                         newShareNode.AppendChild(newWebsite);
                         newShareNode.LastChild.AppendChild(webSite);
 
                         // Add child nodes (culture)
-                        XmlElement newCulture = xmlPortfolio.CreateElement("Culture");
+                        var newCulture = xmlPortfolio.CreateElement("Culture");
                         // Add child inner text
-                        XmlText culture = xmlPortfolio.CreateTextNode(shareObject.CultureInfo.Name);
+                        var culture = xmlPortfolio.CreateTextNode(shareObject.CultureInfo.Name);
                         newShareNode.AppendChild(newCulture);
                         newShareNode.LastChild.AppendChild(culture);
 
                         // Add child nodes (share type)
-                        XmlElement newShareType = xmlPortfolio.CreateElement("ShareType");
+                        var newShareType = xmlPortfolio.CreateElement("ShareType");
                         // Add child inner text
-                        XmlText shareType = xmlPortfolio.CreateTextNode(shareObject.ShareType.ToString());
+                        var shareType = xmlPortfolio.CreateTextNode(shareObject.ShareType.ToString());
                         newShareNode.AppendChild(newShareType);
                         newShareNode.LastChild.AppendChild(shareType);
 
@@ -1869,40 +1505,40 @@ namespace SharePortfolioManager
                         #region Buys / Sales / Costs / Dividends
 
                         // Add child nodes (buys)
-                        XmlElement newBuys = xmlPortfolio.CreateElement("Buys");
+                        var newBuys = xmlPortfolio.CreateElement("Buys");
                         newShareNode.AppendChild(newBuys);
                         foreach (var buyElementYear in shareObject.AllBuyEntries.GetAllBuysOfTheShare())
                         {
-                            XmlElement newBuyElement = xmlPortfolio.CreateElement(shareObject.BuyTagNamePre);
-                            newBuyElement.SetAttribute(shareObject.BuyDateAttrName, buyElementYear.DateAsStr);
-                            newBuyElement.SetAttribute(shareObject.BuyVolumeAttrName, buyElementYear.VolumeAsStr);
-                            newBuyElement.SetAttribute(shareObject.BuyPriceAttrName, buyElementYear.SharePriceAsStr);
-                            newBuyElement.SetAttribute(shareObject.BuyReductionAttrName, buyElementYear.ReductionAsStr);
-                            newBuyElement.SetAttribute(shareObject.BuyDocumentAttrName, buyElementYear.Document);
+                            var newBuyElement = xmlPortfolio.CreateElement(BuyTagNamePre);
+                            newBuyElement.SetAttribute(BuyDateAttrName, buyElementYear.DateAsStr);
+                            newBuyElement.SetAttribute(BuyVolumeAttrName, buyElementYear.VolumeAsStr);
+                            newBuyElement.SetAttribute(BuyPriceAttrName, buyElementYear.SharePriceAsStr);
+                            newBuyElement.SetAttribute(BuyReductionAttrName, buyElementYear.ReductionAsStr);
+                            newBuyElement.SetAttribute(BuyDocumentAttrName, buyElementYear.Document);
                             newBuys.AppendChild(newBuyElement);
                         }
 
                         // Add child nodes (sales)
-                        XmlElement newSales = xmlPortfolio.CreateElement("Sales");
+                        var newSales = xmlPortfolio.CreateElement("Sales");
                         newShareNode.AppendChild(newSales);
 
                         // Add child nodes (costs)
-                        XmlElement newCosts = xmlPortfolio.CreateElement("Costs");
+                        var newCosts = xmlPortfolio.CreateElement("Costs");
                         newShareNode.AppendChild(newCosts);
                         foreach (var costElementYear in shareObject.AllCostsEntries.GetAllCostsOfTheShare())
                         {
-                            XmlElement newCostElement = xmlPortfolio.CreateElement(shareObject.CostsTagNamePre);
-                            newCostElement.SetAttribute(shareObject.CostsBuyPartAttrName,
+                            var newCostElement = xmlPortfolio.CreateElement(CostsTagNamePre);
+                            newCostElement.SetAttribute(CostsBuyPartAttrName,
                                 costElementYear.CostOfABuyAsStr);
-                            newCostElement.SetAttribute(shareObject.CostsDateAttrName, costElementYear.CostDateAsStr);
-                            newCostElement.SetAttribute(shareObject.CostsValueAttrName, costElementYear.CostValueAsStr);
-                            newCostElement.SetAttribute(shareObject.BuyDocumentAttrName, costElementYear.CostDocument);
+                            newCostElement.SetAttribute(CostsDateAttrName, costElementYear.CostDateAsStr);
+                            newCostElement.SetAttribute(CostsValueAttrName, costElementYear.CostValueAsStr);
+                            newCostElement.SetAttribute(BuyDocumentAttrName, costElementYear.CostDocument);
                             newCosts.AppendChild(newCostElement);
                         }
 
                         // Add child nodes (dividend)
-                        XmlElement newDividend = xmlPortfolio.CreateElement("Dividends");
-                        newDividend.SetAttribute(shareObject.DividendPayoutIntervalAttrName,
+                        var newDividend = xmlPortfolio.CreateElement("Dividends");
+                        newDividend.SetAttribute(DividendPayoutIntervalAttrName,
                             shareObject.DividendPayoutIntervalAsStr);
                         newShareNode.AppendChild(newDividend);
 
@@ -1980,8 +1616,10 @@ namespace SharePortfolioManager
         /// <summary>
         /// This function resets the portfolio values of the share objects
         /// </summary>
-        static public void PortfolioValuesReset()
+        public static void PortfolioValuesReset()
         {
+            _portfolioPurchaseValue = 0;
+            _portfolioSalePurchaseValue = 0;
             _portfolioFinalValue = 0;
             _portfolioCosts = 0;
             _portfolioDividend = 0;
@@ -1991,6 +1629,7 @@ namespace SharePortfolioManager
 
         #endregion Portfolio methods
 
+        /// <inheritdoc />
         /// <summary>
         /// Protected implementation of Dispose pattern.
         /// </summary>
@@ -2007,7 +1646,11 @@ namespace SharePortfolioManager
             }
 
             // Free any unmanaged objects here.
+
+#if SHAREOBJECT_DEBUG
             Console.WriteLine(@"ShareObjectFinalValue destructor...");
+#endif
+
             if (PurchaseValue > decimal.MinValue / 2)
                 PortfolioPurchaseValue -= PurchaseValue;
             if (FinalValue > decimal.MinValue / 2)
@@ -2023,6 +1666,6 @@ namespace SharePortfolioManager
             base.Dispose(bDisposing);
         }
 
-        #endregion Methods
+#endregion Methods
     }
 }

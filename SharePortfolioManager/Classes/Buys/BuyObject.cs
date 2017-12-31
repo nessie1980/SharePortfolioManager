@@ -25,22 +25,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager
 {
     public class BuyObject
     {
         #region Variables
-
-        /// <summary>
-        /// Stores the culture info of the buy
-        /// </summary>
-        private CultureInfo _buyCultureInfo;
-
-        /// <summary>
-        /// Stores the date string of the buy date
-        /// </summary>
-        private string _date;
 
         /// <summary>
         /// Stores the buy volume
@@ -62,55 +53,24 @@ namespace SharePortfolioManager
         /// </summary>
         private decimal _costs = -1;
 
-        /// <summary>
-        /// Stores the value of the bought shares without reduction and costs
-        /// </summary>
-        private decimal _marketValue = -1;
-
-        /// <summary>
-        /// Stores the value of the bought shares with reduction
-        /// </summary>
-        private decimal _marketValueReduction = -1;
-
-        /// <summary>
-        /// Stores the buy market value minus reduction and plus costs
-        /// </summary>
-        private decimal _marketValueReductionCosts = -1;
-
-        /// <summary>
-        /// Stores the document of the buy
-        /// </summary>
-        private string _document = "";
-
         #endregion Variables
 
         #region Properties
 
         [Browsable(false)]
-        public CultureInfo BuyCultureInfo
-        {
-            get { return _buyCultureInfo; }
-            internal set { _buyCultureInfo = value; }
-        }
+        public CultureInfo BuyCultureInfo { get; internal set; }
 
         [Browsable(false)]
-        public string Date
-        {
-            get { return _date; }
-            internal set { _date = value; }
-        }
+        public string Date { get; internal set; }
 
         [Browsable(true)]
         [DisplayName(@"Date")]
-        public string DateAsStr
-        {
-            get { return _date; }
-        }
+        public string DateAsStr => Date;
 
         [Browsable(false)]
         public decimal Volume
         {
-            get { return _volume; }
+            get => _volume;
             internal set
             {
                 if (_volume == value)
@@ -124,21 +84,15 @@ namespace SharePortfolioManager
 
         [Browsable(true)]
         [DisplayName(@"Volume")]
-        public string VolumeAsStr
-        {
-            get { return Helper.FormatDecimal(Volume, Helper.Volumefivelength, false, Helper.Volumetwofixlength, false, @"", BuyCultureInfo); }
-        }
+        public string VolumeAsStr => Helper.FormatDecimal(Volume, Helper.Volumefivelength, false, Helper.Volumetwofixlength, false, @"", BuyCultureInfo);
 
         [Browsable(false)]
-        public string VolumeAsStrUnit
-        {
-            get { return Helper.FormatDecimal(Volume, Helper.Volumefivelength, false, Helper.Volumetwofixlength, true, ShareObject.PieceUnit, BuyCultureInfo); }
-        }
+        public string VolumeAsStrUnit => Helper.FormatDecimal(Volume, Helper.Volumefivelength, false, Helper.Volumetwofixlength, true, ShareObject.PieceUnit, BuyCultureInfo);
 
         [Browsable(false)]
         public decimal SharePrice
         {
-            get { return _sharePrice; }
+            get => _sharePrice;
             internal set
             {
                 if (_sharePrice == value)
@@ -152,21 +106,15 @@ namespace SharePortfolioManager
 
         [Browsable(true)]
         [DisplayName(@"Price")]
-        public string SharePriceAsStr
-        {
-            get { return Helper.FormatDecimal(SharePrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo); }
-        }
+        public string SharePriceAsStr => Helper.FormatDecimal(SharePrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
 
         [Browsable(false)]
-        public string SharePriceAsStrUnit
-        {
-            get { return Helper.FormatDecimal(SharePrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo); }
-        }
+        public string SharePriceAsStrUnit => Helper.FormatDecimal(SharePrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
 
         [Browsable(false)]
         public decimal Reduction
         {
-            get { return _reduction; }
+            get => _reduction;
             internal set
             {
                 if (_reduction == value)
@@ -179,21 +127,15 @@ namespace SharePortfolioManager
         }
 
         [Browsable(false)]
-        public string ReductionAsStr
-        {
-            get { return Helper.FormatDecimal(Reduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo); }
-        }
+        public string ReductionAsStr => Helper.FormatDecimal(Reduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
 
         [Browsable(false)]
-        public string ReductionAsStrUnit
-        {
-            get { return Helper.FormatDecimal(Reduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo); }
-        }
+        public string ReductionAsStrUnit => Helper.FormatDecimal(Reduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
 
         [Browsable(false)]
         public decimal Costs
         {
-            get { return _costs; }
+            get => _costs;
             internal set
             {
                 if (_costs == value)
@@ -206,100 +148,45 @@ namespace SharePortfolioManager
         }
 
         [Browsable(false)]
-        public string CostsAsStr
-        {
-            get { return Helper.FormatDecimal(Costs, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo); }
-        }
+        public string CostsAsStr => Helper.FormatDecimal(Costs, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
 
         [Browsable(false)]
-        public string CostsAsStrUnit
-        {
-            get { return Helper.FormatDecimal(Costs, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo); }
-        }
+        public string CostsAsStrUnit => Helper.FormatDecimal(Costs, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
 
         [Browsable(false)]
-        public decimal MarketValue
-        {
-            get { return _marketValue; }
-            internal set
-            {
-                _marketValue = value;
-            }
-        }
+        public decimal MarketValue { get; internal set; } = -1;
 
         [Browsable(true)]
         [DisplayName(@"Value")]
-        public string MarketValueAsStr
-        {
-            get { return Helper.FormatDecimal(MarketValue, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo); }
-        }
+        public string MarketValueAsStr => Helper.FormatDecimal(MarketValue, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
 
         [Browsable(false)]
-        public string MarketValueAsStrUnit
-        {
-            get { return Helper.FormatDecimal(MarketValue, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo); }
-        }
+        public string MarketValueAsStrUnit => Helper.FormatDecimal(MarketValue, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
 
         [Browsable(false)]
-        public decimal MarketValueReduction
-        {
-            get { return _marketValueReduction; }
-            internal set
-            {
-                _marketValueReduction = value;
-            }
-        }
+        public decimal MarketValueReduction { get; internal set; } = -1;
 
         [Browsable(false)]
-        public string MarketValueReductionAsStr
-        {
-            get { return Helper.FormatDecimal(MarketValueReduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo); }
-        }
+        public string MarketValueReductionAsStr => Helper.FormatDecimal(MarketValueReduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
 
         [Browsable(false)]
-        public string MarketValueReductionAsStrUnit
-        {
-            get { return Helper.FormatDecimal(MarketValueReduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo); }
-        }
+        public string MarketValueReductionAsStrUnit => Helper.FormatDecimal(MarketValueReduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
 
         [Browsable(false)]
-        public decimal MarketValueReductionCosts
-        {
-            get { return _marketValueReductionCosts; }
-            internal set
-            {
-                _marketValueReductionCosts = value;
-            }
-        }
+        public decimal MarketValueReductionCosts { get; internal set; } = -1;
 
         [Browsable(false)]
-        public string MarketValueReductionCostsAsStr
-        {
-            get { return Helper.FormatDecimal(MarketValueReductionCosts, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo); }
-        }
+        public string MarketValueReductionCostsAsStr => Helper.FormatDecimal(MarketValueReductionCosts, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
 
         [Browsable(false)]
-        public string MarketValueReductionCostsAsStrUnit
-        {
-            get { return Helper.FormatDecimal(MarketValueReductionCosts, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo); }
-        }
+        public string MarketValueReductionCostsAsStrUnit => Helper.FormatDecimal(MarketValueReductionCosts, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
 
         [Browsable(false)]
-        public string Document
-        {
-            get { return _document; }
-            internal set
-            {
-                _document = value;
-            }
-        }
+        public string Document { get; internal set; }
 
         [Browsable(true)]
         [DisplayName(@"Document")]
-        public string DocumentAsStr
-        {
-            get { return Helper.GetFileName(Document); }
-        }
+        public string DocumentAsStr => Helper.GetFileName(Document);
 
         #endregion Properties
 
@@ -345,12 +232,8 @@ namespace SharePortfolioManager
         /// </summary>
         private void CalculateMarketValueAndMarketValueReduction()
         {
-            decimal decMarketValue = 0;
-            decimal decMarketValueReduction = 0;
-            decimal decMarketValueReductionCosts = 0;
-
             Helper.CalcBuyValues( Volume, SharePrice, Costs,
-                Reduction, out decMarketValue, out decMarketValueReduction, out decMarketValueReductionCosts);
+                Reduction, out var decMarketValue, out var decMarketValueReduction, out var decMarketValueReductionCosts);
 
             MarketValue = decMarketValue;
             MarketValueReduction = decMarketValueReduction;
@@ -360,6 +243,7 @@ namespace SharePortfolioManager
         #endregion Methods
     }
 
+    /// <inheritdoc />
     /// <summary>
     /// This is the comparer class for the BuyObject.
     /// It is used for the sort for the buys lists.
@@ -370,6 +254,9 @@ namespace SharePortfolioManager
 
         public int Compare(BuyObject object1, BuyObject object2)
         {
+            if (object1 == null) return 0;
+            if (object2 == null) return 0;
+
             return DateTime.Compare(Convert.ToDateTime(object1.Date), Convert.ToDateTime(object2.Date));
         }
 

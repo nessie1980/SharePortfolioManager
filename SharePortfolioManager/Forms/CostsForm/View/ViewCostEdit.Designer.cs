@@ -99,9 +99,9 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             this.tabCtrlCosts.SelectedIndex = 0;
             this.tabCtrlCosts.Size = new System.Drawing.Size(813, 156);
             this.tabCtrlCosts.TabIndex = 0;
-            this.tabCtrlCosts.SelectedIndexChanged += new System.EventHandler(this.tabCtrlCosts_SelectedIndexChanged);
-            this.tabCtrlCosts.MouseEnter += new System.EventHandler(this.tabCtrlCosts_MouseEnter);
-            this.tabCtrlCosts.MouseLeave += new System.EventHandler(this.tabCtrlCosts_MouseLeave);
+            this.tabCtrlCosts.SelectedIndexChanged += new System.EventHandler(this.TabCtrlCosts_SelectedIndexChanged);
+            this.tabCtrlCosts.MouseEnter += new System.EventHandler(this.TabCtrlCosts_MouseEnter);
+            this.tabCtrlCosts.MouseLeave += new System.EventHandler(this.TabCtrlCosts_MouseLeave);
             // 
             // grpBoxAdd
             // 

@@ -31,6 +31,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Threading;
 using System.Windows.Forms;
+using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager.Forms.ShareAddForm.View
 {
@@ -61,6 +62,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         WebSiteRegexNotFound
     };
 
+    /// <inheritdoc />
     /// <summary>
     /// Interface of the ShareAdd view
     /// </summary>
@@ -104,135 +106,59 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
     {
         #region Fields
 
-        /// <summary>
-        /// Stores the parent window
-        /// </summary>
-        private FrmMain _parentWindow;
-
-        /// <summary>
-        /// Stores the logger
-        /// </summary>
-        private Logger _logger;
-
-        /// <summary>
-        /// Stores the language file
-        /// </summary>
-        private Language _language;
-
-        /// <summary>
-        /// Stores language
-        /// </summary>
-        private String _languageName;
-
-        /// <summary>
-        /// Stores the RegEx list
-        /// </summary>
-        private List<WebSiteRegex> _webSiteRegexList;
-
-        /// <summary>
-        /// Flag if the form should be closed
-        /// </summary>
-        private bool _stopFomClosing;
-
-        /// <summary>
-        /// Stores the current error code of the form
-        /// </summary>
-        private ShareAddErrorCode _errorCode;
-
         #endregion Fields
 
         #region Properties
 
-        public FrmMain ParentWindow
-        {
-            get { return _parentWindow; }
-            set { _parentWindow = value; }
-        }
+        public FrmMain ParentWindow { get; set; }
 
-        public Logger Logger
-        {
-            get { return _logger; }
-            set { _logger = value; }
-        }
+        public Logger Logger { get; set; }
 
-        public Language Language
-        {
-            get { return _language; }
-            set { _language = value; }
-        }
+        public Language Language { get; set; }
 
-        public string LanguageName
-        {
-            get { return _languageName; }
-            set { _languageName = value; }
-        }
+        public string LanguageName { get; set; }
 
-        public bool StopFomClosingFlag
-        {
-            get { return _stopFomClosing; }
-            set { _stopFomClosing = value; }
-        }
+        public bool StopFomClosingFlag { get; set; }
 
         #endregion Properties
 
         #region IViewMember
 
-        new
-
-        DialogResult ShowDialog
-        {
-            get
-            {
-                return base.ShowDialog();
-            }
-        }
-
-        public ShareAddErrorCode ErrorCode
-        {
-            get { return _errorCode; }
-            set { _errorCode = value; }
-        }
+        public ShareAddErrorCode ErrorCode { get; set; }
 
         public ShareObjectMarketValue ShareObjectMarketValue
         {
-            get { return ParentWindow.ShareObjectMarketValue; }
-            set { ParentWindow.ShareObjectMarketValue = value; }
+            get => ParentWindow.ShareObjectMarketValue;
+            set => ParentWindow.ShareObjectMarketValue = value;
         }
 
         public List<ShareObjectMarketValue> ShareObjectListMarketValue
         {
-            get { return ParentWindow.ShareObjectListMarketValue; }
-            set { ParentWindow.ShareObjectListMarketValue = value; }
+            get => ParentWindow.ShareObjectListMarketValue;
+            set => ParentWindow.ShareObjectListMarketValue = value;
         }
 
         public ShareObjectFinalValue ShareObjectFinalValue
         {
-            get { return ParentWindow.ShareObjectFinalValue; }
-            set { ParentWindow.ShareObjectFinalValue = value; }
+            get => ParentWindow.ShareObjectFinalValue;
+            set => ParentWindow.ShareObjectFinalValue = value;
         }
 
         public List<ShareObjectFinalValue> ShareObjectListFinalValue
         {
-            get { return ParentWindow.ShareObjectListFinalValue; }
-            set { ParentWindow.ShareObjectListFinalValue = value; }
+            get => ParentWindow.ShareObjectListFinalValue;
+            set => ParentWindow.ShareObjectListFinalValue = value;
         }
 
-        public List<Image> ImageList
-        {
-            get { return ParentWindow.ImageList; }
-        }
+        public List<Image> ImageList => ParentWindow.ImageList;
 
-        public List<WebSiteRegex> WebSiteRegexList
-        {
-            get { return _webSiteRegexList; }
-            set { _webSiteRegexList = value; }
-        }
+        public List<WebSiteRegex> WebSiteRegexList { get; set; }
 
         #region Input values
 
         public string Wkn
         {
-            get { return txtBoxWkn.Text; }
+            get => txtBoxWkn.Text;
             set
             {
                 if (txtBoxWkn.Text == value)
@@ -243,7 +169,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
         public string Date
         {
-            get { return datePickerDate.Text; }
+            get => datePickerDate.Text;
             set
             {
                 if (datePickerDate.Text == value)
@@ -254,7 +180,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
         public string Time
         {
-            get { return datePickerTime.Text; }
+            get => datePickerTime.Text;
             set
             {
                 if (datePickerTime.Text == value)
@@ -265,7 +191,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
         public string ShareName
         {
-            get { return txtBoxName.Text; }
+            get => txtBoxName.Text;
             set
             {
                 if (txtBoxName.Text == value)
@@ -276,7 +202,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
         public string Volume
         {
-            get { return txtBoxVolume.Text; }
+            get => txtBoxVolume.Text;
             set
             {
                 if (txtBoxVolume.Text == value)
@@ -287,7 +213,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
         public string SharePrice
         {
-            get { return txtBoxSharePrice.Text; }
+            get => txtBoxSharePrice.Text;
             set
             {
                 if (txtBoxSharePrice.Text == value)
@@ -298,7 +224,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
         public string MarketValue
         {
-            get { return txtBoxMarketValue.Text; }
+            get => txtBoxMarketValue.Text;
             set
             {
                 if (txtBoxMarketValue.Text == value)
@@ -309,7 +235,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
         public string Costs
         {
-            get { return txtBoxCosts.Text; }
+            get => txtBoxCosts.Text;
             set
             {
                 if (txtBoxCosts.Text == value)
@@ -320,7 +246,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
         public string Reduction
         {
-            get { return txtBoxReduction.Text; }
+            get => txtBoxReduction.Text;
             set
             {
                 if (txtBoxReduction.Text == value)
@@ -331,7 +257,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
         public string GrandTotal
         {
-            get { return txtBoxFinalValue.Text; }
+            get => txtBoxFinalValue.Text;
             set
             {
                 if (txtBoxFinalValue.Text == value)
@@ -342,7 +268,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
         public string WebSite
         {
-            get { return txtBoxWebSite.Text; }
+            get => txtBoxWebSite.Text;
             set
             {
                 if (txtBoxWebSite.Text == value)
@@ -355,14 +281,14 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         {
             get
             {
-                string cultureName = cboBoxCultureInfo.SelectedItem.ToString();
+                var cultureName = cboBoxCultureInfo.SelectedItem.ToString();
                 return Helper.GetCultureByName(cultureName);
             }
         }
 
         public int DividendPayoutInterval
         {
-            get { return cbxDividendPayoutInterval.SelectedIndex; }
+            get => cbxDividendPayoutInterval.SelectedIndex;
             set
             {
                 if (cbxDividendPayoutInterval.SelectedIndex == value)
@@ -373,7 +299,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
         public int ShareType
         {
-            get { return cbxShareType.SelectedIndex; }
+            get => cbxShareType.SelectedIndex;
             set
             {
                 if (cbxShareType.SelectedIndex == value)
@@ -384,7 +310,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
         public string Document
         {
-            get { return txtBoxDocument.Text; }
+            get => txtBoxDocument.Text;
             set
             {
                 if (txtBoxDocument.Text == value)
@@ -399,14 +325,14 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         public void AddFinish()
         {
             // Set messages
-            string strMessage = @"";
-            Color clrMessage = Color.Black;
-            FrmMain.EStateLevels stateLevel = FrmMain.EStateLevels.Info;
+            var strMessage = @"";
+            var clrMessage = Color.Black;
+            var stateLevel = FrmMain.EStateLevels.Info;
 
             StopFomClosingFlag = true;
 
             // Enable controls
-            this.Enabled = true;
+            Enabled = true;
 
             switch (ErrorCode)
             {
@@ -628,6 +554,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
         #region Form
 
+        /// <inheritdoc />
         /// <summary>
         /// Constructor
         /// </summary>
@@ -710,10 +637,10 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
                 #region Get culture info
 
-                List<string> list = new List<string>();
-                foreach (CultureInfo ci in CultureInfo.GetCultures(CultureTypes.AllCultures))
+                var list = new List<string>();
+                foreach (var ci in CultureInfo.GetCultures(CultureTypes.AllCultures))
                 {
-                    list.Add(string.Format("{0}", ci.Name));
+                    list.Add($"{ci.Name}");
                 }
 
                 list.Sort();
@@ -724,7 +651,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                         cboBoxCultureInfo.Items.Add(value);
                 }
 
-                CultureInfo cultureInfo = CultureInfo.CurrentCulture;
+                var cultureInfo = CultureInfo.CurrentCulture;
 
                 cboBoxCultureInfo.SelectedIndex = cboBoxCultureInfo.FindStringExact(cultureInfo.Name);
 
@@ -743,7 +670,8 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show("FrmShareAdd_Load()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                var message = $"FrmShareAdd_Load()\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
@@ -779,13 +707,14 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         {
             try
             {
-                string strFilter = "pdf (*.pdf)|*.pdf|txt (*.txt)|.txt|doc (*.doc)|.doc|docx (*.docx)|.docx";
+                const string strFilter = "pdf (*.pdf)|*.pdf|txt (*.txt)|.txt|doc (*.doc)|.doc|docx (*.docx)|.docx";
                 txtBoxDocument.Text = Helper.SetDocument(Language.GetLanguageTextByXPath(@"/AddFormShare/OpenFileDialog/Title", LanguageName), strFilter, txtBoxDocument.Text);
             }
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show("btnShareDocumentBrowse_Click()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                var message = $"btnShareDocumentBrowse_Click()\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
@@ -806,15 +735,15 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
             try
             {
                 // Disable controls
-                this.Enabled = false;
+                Enabled = false;
 
-                if (ShareAdd != null)
-                    ShareAdd(this, new EventArgs());
+                ShareAdd?.Invoke(this, new EventArgs());
             }
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show("btnSave_Click()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                var message = $"btnSave_Click()\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 StopFomClosingFlag = true;
@@ -825,7 +754,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                     Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
 
                 // Enable controls
-                this.Enabled = true;
+                Enabled = true;
             }
         }
 
@@ -844,16 +773,14 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
         #region Date / Time
 
-        private void datePickerDate_ValueChanged(object sender, EventArgs e)
+        private void DatePickerDate_ValueChanged(object sender, EventArgs e)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("Date"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Date"));
         }
 
-        private void datePickerTime_ValueChanged(object sender, EventArgs e)
+        private void DatePickerTime_ValueChanged(object sender, EventArgs e)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("Time"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Time"));
         }
 
         #endregion Date / Time
@@ -862,80 +789,67 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
         private void OnTxtBoxWkn_TextChanged(object sender, EventArgs e)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("Wkn"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Wkn"));
         }
 
         private void OnTxtBoxName_TextChanged(object sender, EventArgs e)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("Name"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Name"));
         }
 
         private void OnTxtBoxVolume_TextChanged(object sender, EventArgs e)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("Volume"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Volume"));
         }
 
         private void OnTxtBoxVolume_Leave(object sender, EventArgs e)
         {
-            if (FormatInputValues != null)
-                FormatInputValues(this, new EventArgs());
+            FormatInputValues?.Invoke(this, new EventArgs());
         }
 
         private void OnTxtBoxSharePrice_TextChanged(object sender, EventArgs e)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("SharePrice"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SharePrice"));
         }
 
         private void OnTxtBoxSharePrice_Leave(object sender, EventArgs e)
         {
-            if (FormatInputValues != null)
-                FormatInputValues(this, new EventArgs());
+            FormatInputValues?.Invoke(this, new EventArgs());
         }
 
         private void OnTxtBoxCosts_TextChanged(object sender, EventArgs e)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("Costs"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Costs"));
         }
 
         private void OnTxtBoxCosts_Leave(object sender, EventArgs e)
         {
-            if (FormatInputValues != null)
-                FormatInputValues(this, new EventArgs());
+            FormatInputValues?.Invoke(this, new EventArgs());
         }
 
         private void OnTxtBoxReduction_TextChanged(object sender, EventArgs e)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("Reduction"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Reduction"));
         }
 
         private void OnTxtBoxReduction_Leave(object sender, EventArgs e)
         {
-            if (FormatInputValues != null)
-                FormatInputValues(this, new EventArgs());
+            FormatInputValues?.Invoke(this, new EventArgs());
         }
 
         private void OnTxtBoxWebSite_TextChanged(object sender, EventArgs e)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("WebSite"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WebSite"));
         }
 
         private void OnTxtBoxDocument_TextChanged(object sender, EventArgs e)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("Document"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Document"));
         }
 
         private void OnTxtBoxDocument_Leave(object sender, EventArgs e)
         {
-            if (FormatInputValues != null)
-                FormatInputValues(this, new EventArgs());
+            FormatInputValues?.Invoke(this, new EventArgs());
         }
 
         private void OnTxtBoxDocument_DragDrop(object sender, DragEventArgs e)
@@ -945,13 +859,12 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
         private void OnTxtBoxDocument_DragEnter(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
+
+            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            foreach (var filePath in files)
             {
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                foreach (string filePath in files)
-                {
-                    txtBoxDocument.Text = filePath.ToString();
-                }
+                txtBoxDocument.Text = filePath;
             }
         }
 
@@ -959,25 +872,22 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
         #region ComboBoxes
 
-        private void cboBoxCultureInfo_SelectedIndexChanged(object sender, EventArgs e)
+        private void CboBoxCultureInfo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("CultureInfo"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CultureInfo"));
         }
 
-        private void cbxDividendPayoutInterval_SelectedIndexChanged(object sender, EventArgs e)
+        private void CbxDividendPayoutInterval_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("DividendPayoutInterval"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DividendPayoutInterval"));
         }
 
-        private void cbxShareType_SelectedIndexChanged(object sender, EventArgs e)
+        private void CbxShareType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs("ShareType"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ShareType"));
         }
 
-        #endregion Comboboxes
+        #endregion ComboBoxes
 
     }
 }

@@ -20,7 +20,6 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using SharePortfolioManager.Classes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,8 +29,16 @@ using System.Text;
 using System.Threading;
 using WebParser;
 
-namespace SharePortfolioManager
+namespace SharePortfolioManager.Classes.ShareObjects
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// This class is the base class of a share.
+    /// The class stores the following things:
+    /// - general information of the share
+    /// - all buys of a share
+    /// - all sales of a share
+    /// </summary>
     public class ShareObject : IDisposable
     {
         #region Variables
@@ -39,157 +46,37 @@ namespace SharePortfolioManager
         #region General variables
 
         /// <summary>
-        /// Flag if the object is already disposed
-        /// </summary>
-        private bool _bDisposed = false;
-
-        /// <summary>
         /// Counter of the created share objects
         /// </summary>
-        static private int _iObjectCounter = 0;
+        private static int _iObjectCounter;
 
         /// <summary>
         /// Stores the count of the share object tags in the XML
         /// </summary>
-        private const short _ShareObjectTagCount = 12;
-
-        /// <summary>
-        /// Stores the WKN of a share
-        /// </summary>
-        private string _wkn;
-
-        /// <summary>
-        /// Stores the add date and time of a share
-        /// </summary>
-        private string _addDateTime;
-
-        /// <summary>
-        /// Stores the name of the share
-        /// </summary>
-        private string _name;
-
-        /// <summary>
-        /// Stores the date of the last update from the Internet
-        /// </summary>
-        private DateTime _lastUpdateInternet;
-
-        /// <summary>
-        /// Stores the date of the last update of the share
-        /// </summary>
-        private DateTime _lastUpdateDate;
-
-        /// <summary>
-        /// Stores the time of the last update of the share
-        /// </summary>
-        private DateTime _lastUpdateTime;
-
-        /// <summary>
-        /// Stores the current price of one share
-        /// </summary>
-        private decimal _curPrice = decimal.MinValue / 2;
-
-        /// <summary>
-        /// Stores the previous day price of one share
-        /// </summary>
-        private decimal _prevDayPrice = decimal.MinValue / 2;
-
-        /// <summary>
-        /// Stores the volume of the shares
-        /// </summary>
-        private decimal _volume = decimal.MinValue / 2;
-
-        /// <summary>
-        /// Stores the profit or loss to the previous day of a share
-        /// </summary>
-        private decimal _prevDayProfitLoss = decimal.MinValue / 2;
-
-        /// <summary>
-        /// Stores the performance of the share to the previous day
-        /// </summary>
-        private decimal _prevDayPerformance = decimal.MinValue / 2;
-
-        /// <summary>
-        /// Stores the difference of the share to the previous day
-        /// </summary>
-        private decimal _prevDayDifference = decimal.MinValue / 2;
-
-        /// <summary>
-        /// Stores the image for the previous day performance visualization
-        /// </summary>
-        private Image _imagePrevDayPerformance = null;
+        internal const short ShareObjectTagCount = 12;
 
         /// <summary>
         /// Stores a list of images for the previous day performance visualization
         /// </summary>
-        private List<Image> _imageListPrevDayPerformance = null;
+        private List<Image> _imageListPrevDayPerformance;
 
-        /// <summary>
-        /// Stores the total share market value (buy and sales)
-        /// </summary>
-        private decimal _purchaseValue = decimal.MinValue / 2;
-        
         /// <summary>
         /// Stores the website link of the share
         /// </summary>
         private string _webSite;
 
         /// <summary>
-        /// Stores the encoding type for the content
-        /// </summary>
-        private string _encodingType = Encoding.Default.ToString();
-
-        /// <summary>
-        /// Stores the RegEx object for the share
-        /// </summary>
-        private RegExList _regexList;
-
-        /// <summary>
         /// Stores the culture info of the share
         /// </summary>
         private CultureInfo _cultureInfo;
-
-        /// <summary>
-        /// Stores the currency unit of the share
-        /// </summary>
-        private string _currencyUnit;
-
-        /// <summary>
-        /// Stores the type of the share
-        /// </summary>
-        private int _shareType;
 
         #endregion General variables
 
         #region Value units variables
 
-        /// <summary>
-        /// Stores the value unit for percentage values
-        /// </summary>
-        static private string _percentageUnit = @"%";
-
-        /// <summary>
-        /// Stores the value unit for piece values
-        /// </summary>
-        static private string _pieceUnit = @"stk.";
-
         #endregion Value units variables
 
         #region Buy variables
-
-        /// <summary>
-        /// Stores the total buy value of the share without reduction and costs
-        /// </summary>
-        private decimal _buyMarketValueTotal = 0;
-
-        /// <summary>
-        /// Stores the average buy price of all buys
-        /// </summary>
-        private decimal _averageBuyPrice = 0;
-
-        /// <summary>
-        /// Stores the buys of the share
-        /// </summary>
-        private AllBuysOfTheShare _allBuyEntries = new AllBuysOfTheShare();
 
         #endregion Buy variables
 
@@ -198,51 +85,41 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores the XML tag name prefix of a buy entry
         /// </summary>
-        private const string _buyTagNamePre = "Buy";
+        internal const string BuyTagNamePre = "Buy";
 
         /// <summary>
         /// Stores the XML attribute name for the buy date
         /// </summary>
-        private const string _buyDateAttrName = "Date";
+        internal const string BuyDateAttrName = "Date";
 
         /// <summary>
         /// Stores the XML attribute name for the volume of a buy
         /// </summary>
-        private const string _buyVolumeAttrName = "Volume";
+        internal const string BuyVolumeAttrName = "Volume";
 
         /// <summary>
         /// Stores the XML attribute name for the reduction of a buy
         /// </summary>
-        private const string _buyReductionAttrName = "Reduction";
+        internal const string BuyReductionAttrName = "Reduction";
 
         /// <summary>
         /// Stores the XML attribute name for buy price of a share of a buy
         /// </summary>
-        private const string _buyPriceAttrName = "Price";
+        internal const string BuyPriceAttrName = "Price";
 
         /// <summary>
         /// Stores the XML attribute name for the document of a buy
         /// </summary>
-        private const string _buyDocumentAttrName = "Doc";
+        internal const string BuyDocumentAttrName = "Doc";
 
         /// <summary>
         /// Stores the attribute count for the dividend
         /// </summary>
-        private const short _buyAttrCount = 5;
+        internal const short BuyAttrCount = 5;
 
         #endregion Buy XML variables
 
         #region Sale variables
-
-        /// <summary>
-        /// Stores the purchase value of the sale of the share
-        /// </summary>
-        private decimal _salePurchaseValueTotal = decimal.MinValue / 2;
-
-        /// <summary>
-        /// Stores the sales of the share
-        /// </summary>
-        private AllSalesOfTheShare _allSaleEntries = new AllSalesOfTheShare();
 
         #endregion Sale variables
 
@@ -251,54 +128,186 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores the XML tag name prefix of a sale entry
         /// </summary>
-        private const string _saleTagNamePre = "Sale";
+        internal const string SaleTagNamePre = "Sale";
 
         /// <summary>
         /// Stores the XML attribute name for the sale date
         /// </summary>
-        private const string _saleDateAttrName = "Date";
+        internal const string SaleDateAttrName = "Date";
 
         /// <summary>
         /// Stores the XML attribute name for the volume of a sale
         /// </summary>
-        private const string _saleVolumeAttrName = "Volume";
+        internal const string SaleVolumeAttrName = "Volume";
 
         /// <summary>
         /// Stores the XML attribute name for the buy price of one share of a sale
         /// </summary>
-        private const string _saleBuyPriceAttrName = "BuyPrice";
+        internal const string SaleBuyPriceAttrName = "BuyPrice";
 
         /// <summary>
         /// Stores the XML attribute name for the sale price of one share of a sale
         /// </summary>
-        private const string _saleSalePriceAttrName = "SalePrice";
+        internal const string SaleSalePriceAttrName = "SalePrice";
 
         /// <summary>
         /// Stores the XML attribute name for the tax at source of a sale
         /// </summary>
-        private const string _saleTaxAtSourceAttrName = "TaxAtSource";
+        internal const string SaleTaxAtSourceAttrName = "TaxAtSource";
 
         /// <summary>
         /// Stores the XML attribute name for the capital gains tax of a sale
         /// </summary>
-        private const string _saleCapitalGainsTaxAttrName = "CapitalGainsTax";
+        internal const string SaleCapitalGainsTaxAttrName = "CapitalGainsTax";
 
         /// <summary>
         /// Stores the XML attribute name for the solidarity tax of a sale
         /// </summary>
-        private const string _saleSolidarityTaxAttrName = "SolidarityTax";
+        internal const string SaleSolidarityTaxAttrName = "SolidarityTax";
 
         /// <summary>
         /// Stores the XML attribute name for the document of a sale
         /// </summary>
-        private const string _saleDocumentAttrName = "Doc";
+        internal const string SaleDocumentAttrName = "Doc";
 
         /// <summary>
         /// Stores the attribute count for the dividend
         /// </summary>
-        private const short _saleAttrCount = 8;
+        internal const short SaleAttrCount = 8;
 
         #endregion Sale XML variables
+
+        #region Dividends XML variables
+
+        /// <summary>
+        /// Stores the XML attribute name for the dividend payout interval
+        /// </summary>
+        internal const string DividendPayoutIntervalAttrName = "PayoutInterval";
+
+        #endregion Dividends XML variables
+
+        #region Costs XML variables
+
+        /// <summary>
+        /// Stores the tag name prefix of a cost entry
+        /// </summary>
+        internal const string CostsTagNamePre = "Cost";
+
+        /// <summary>
+        /// Stores the attribute name for the flag if the cost is a part of a buy
+        /// </summary>
+        internal const string CostsBuyPartAttrName = "BuyPart";
+
+        /// <summary>
+        /// Stores the attribute name for the flag if the cost is a part of a sale
+        /// </summary>
+        internal const string CostsSalePartAttrName = "SalePart";
+
+        /// <summary>
+        /// Stores the attribute name for the date 
+        /// </summary>
+        internal const string CostsDateAttrName = "Date";
+
+        /// <summary>
+        /// Stores the attribute name for the value
+        /// </summary>
+        internal const string CostsValueAttrName = "Value";
+
+        /// <summary>
+        /// Stores the XML attribute name for the document of a cost
+        /// </summary>
+        internal const string CostsDocumentAttrName = "Doc";
+
+        /// <summary>
+        /// Stores the attribute count for the costs
+        /// </summary>
+        internal const short CostsAttrCount = 5;
+
+        #endregion Costs XML variables
+
+        #region Dividends XML variables
+
+        /// <summary>
+        /// Stores the XML tag name of a dividend entry
+        /// </summary>
+        internal const string DividendTagName = "Dividend";
+
+        /// <summary>
+        /// Stores the XML attribute name for the dividend pay date
+        /// </summary>
+        internal const string DividendDateAttrName = "Date";
+
+        /// <summary>
+        /// Stores the XML attribute name for the dividend pay for one share
+        /// </summary>
+        internal const string DividendRateAttrName = "Rate";
+
+        /// <summary>
+        /// Stores the XML attribute name for the share volume at the pay date
+        /// </summary>
+        internal const string DividendVolumeAttrName = "Volume";
+
+        /// <summary>
+        /// Stores the XML attribute name for the dividend tax at source value
+        /// </summary>
+        internal const string DividendTaxAtSourceAttrName = "TaxAtSource";
+
+        /// <summary>
+        /// Stores the XML attribute name for the dividend capital gains tax value
+        /// </summary>
+        internal const string DividendCapitalGainsTaxAttrName = "CapitalGainsTax";
+
+        /// <summary>
+        /// Stores the XML attribute name for the dividend capital gains tax value
+        /// </summary>
+        internal const string DividendSolidarityTaxAttrName = "SolidarityTax";
+
+        /// <summary>
+        /// Stores the XML attribute name for the share price at the pay date
+        /// </summary>
+        internal const string DividendPriceAttrName = "Price";
+
+        /// <summary>
+        /// Stores the XML attribute name for the document of a dividend
+        /// </summary>
+        internal const string DividendDocumentAttrName = "Doc";
+
+        /// <summary>
+        /// Stores the XML tag name of the foreign currency information
+        /// </summary>
+        internal const string DividendTagNameForeignCu = "ForeignCurrency";
+
+        /// <summary>
+        /// Stores the XML attribute name for the flag if the dividend is paid in a foreign currency
+        /// </summary>
+        internal const string DividendForeignCuFlagAttrName = "Flag";
+
+        /// <summary>
+        /// Stores the XML attribute name for the factor of the foreign currency
+        /// </summary>
+        internal const string DividendExchangeRatioAttrName = "ExchangeRatio";
+
+        /// <summary>
+        /// Stores the XML attribute name for the name of the foreign currency
+        /// </summary>
+        internal const string DividendNameAttrName = "FCName";
+
+        /// <summary>
+        /// Stores the attribute count for the foreign currency information
+        /// </summary>
+        internal const short DividendAttrCountForeignCu = 3;
+
+        /// <summary>
+        /// Stores the attribute count for the dividend
+        /// </summary>
+        internal const short DividendAttrCount = 9;
+
+        /// <summary>
+        /// Stores the child node count for the dividend
+        /// </summary>
+        internal const short DividendChildNodeCount = 1;
+
+        #endregion Dividends XML variables
 
         #endregion Variables
 
@@ -306,83 +315,73 @@ namespace SharePortfolioManager
 
         #region General properties
 
+        /// <summary>
+        /// Flag if the object is disposed
+        /// </summary>
         [Browsable(false)]
-        public bool Disposed
-        {
-            get { return _bDisposed; }
-            internal set { _bDisposed = value; }
-        }
+        public bool Disposed { get; internal set; }
 
+        /// <summary>
+        /// Counter of the created objects
+        /// </summary>
         [Browsable(false)]
-        static public int ObjectCounter
-        {
-            get { return _iObjectCounter / 2; } // Divided by two because FinalValue and MarketValue
-        }
+        public static int ObjectCounter => _iObjectCounter / 2;
 
+        /// <summary>
+        /// WKN of the share
+        /// </summary>
         [Browsable(false)]
-        public short ShareObjectTagCount
-        {
-            get { return _ShareObjectTagCount; }
-        }
+        public string Wkn { get; set; }
 
+        /// <summary>
+        /// WKN of the share as string
+        /// </summary>
         [Browsable(false)]
-        public string Wkn
-        {
-            get { return _wkn; }
-            set { _wkn = value; }
-        }
+        public string WknAsStr => Wkn;
 
+        /// <summary>
+        /// DateTime of a buy add
+        /// </summary>
         [Browsable(false)]
-        public string WknAsStr
-        {
-            get { return _wkn; }
-        }
+        public string AddDateTime { get; set; }
 
+        /// <summary>
+        /// Name of the share
+        /// </summary>
         [Browsable(false)]
-        public string AddDateTime
-        {
-            get { return _addDateTime; }
-            set { _addDateTime = value; }
-        }
+        public string Name { get; set; }
 
+        /// <summary>
+        /// Name of the share as string
+        /// </summary>
         [Browsable(false)]
-        public string Name
-        {
-            get { return _name; }
-            set { _name = value; }
-        }
+        public string NameAsStr => Name;
 
+        /// <summary>
+        /// DateTime of the last share update via Internet
+        /// </summary>
         [Browsable(false)]
-        public string NameAsStr
-        {
-            get { return _name; }
-        }
+        public DateTime LastUpdateInternet { get; set; }
 
+        /// <summary>
+        /// Date of the last update share of the parsed Internet side
+        /// </summary>
         [Browsable(false)]
-        public DateTime LastUpdateInternet
-        {
-            get { return _lastUpdateInternet; }
-            set { _lastUpdateInternet = value; }
-        }
+        public DateTime LastUpdateDate { get; set; }
 
+        /// <summary>
+        /// Time of the last update share of the parsed Internet side
+        /// </summary>
         [Browsable(false)]
-        public DateTime LastUpdateDate
-        {
-            get { return _lastUpdateDate; }
-            set { _lastUpdateDate = value; }
-        }
+        public DateTime LastUpdateTime { get; set; }
 
-        [Browsable(false)]
-        public DateTime LastUpdateTime
-        {
-            get { return _lastUpdateTime; }
-            set { _lastUpdateTime = value; }
-        }
-
+        /// <summary>
+        /// Website for the share update value parsing
+        /// </summary>
         [Browsable(false)]
         public string WebSite
         {
-            get { return _webSite; }
+            get => _webSite;
             set
             {
                 // Check if "http://" is in front of the website
@@ -392,397 +391,212 @@ namespace SharePortfolioManager
             }
         }
 
+        /// <summary>
+        /// Encoding type for the website
+        /// </summary>
         [Browsable(false)]
-        public string EncodingType
-        {
-            get { return _encodingType; }
-            set { _encodingType = value; }
-        }
+        public string WebSiteEncodingType { get; set; } = Encoding.Default.ToString();
 
+        /// <summary>
+        /// Reg expression list for the website parsing of the share update values
+        /// </summary>
         [Browsable(false)]
-        public RegExList RegexList
-        {
-            get { return _regexList; }
-            set { _regexList = value; }
-        }
+        public RegExList RegexList { get; set; }
 
+        /// <summary>
+        /// Culture info for the share
+        /// </summary>
         [Browsable(false)]
         public virtual CultureInfo CultureInfo
         {
-            get { return _cultureInfo; }
+            get => _cultureInfo;
             set
             {
                 _cultureInfo = value;
 
                 // Set culture info to the lists
-                if (AllBuyEntries != null)
-                    AllBuyEntries.SetCultureInfo(_cultureInfo);
-                if (AllSaleEntries != null)
-                    AllSaleEntries.SetCultureInfo(_cultureInfo);
+                AllBuyEntries?.SetCultureInfo(_cultureInfo);
+                AllSaleEntries?.SetCultureInfo(_cultureInfo);
 
                 Thread.CurrentThread.CurrentCulture = CultureInfo;
-                _currencyUnit = new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol;
+                CurrencyUnit = new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol;
                 Thread.CurrentThread.CurrentCulture = CultureInfo.CurrentUICulture;
             }
         }
 
+        /// <summary>
+        /// Culture info as string
+        /// </summary>
         [Browsable(false)]
-        public string CultureInfoAsStr
-        {
-            get { return CultureInfo.ToString(); }
-        }
+        public string CultureInfoAsStr => CultureInfo.ToString();
 
+        /// <summary>
+        /// Currency unit of the share
+        /// </summary>
         [Browsable(false)]
-        public string CurrencyUnit
-        {
-            get { return _currencyUnit; }
-        }
+        public string CurrencyUnit { get; private set; }
 
+        /// <summary>
+        /// Type of the share (Fond, ETF....)
+        /// </summary>
         [Browsable(false)]
-        public int ShareType
-        {
-            get { return _shareType; }
-            set { _shareType = value; }
-        }
+        public int ShareType { get; set; }
 
         #endregion General properties
 
         #region Value units properties
 
+        /// <summary>
+        /// Unit for percentage values
+        /// </summary>
         [Browsable(false)]
-        public static string PercentageUnit
-        {
-            set { _percentageUnit = value; }
-            get { return _percentageUnit; }
-        }
+        public static string PercentageUnit { set; get; } = @"%";
 
+        /// <summary>
+        /// Unit for the piece values
+        /// </summary>
         [Browsable(false)]
-        public static string PieceUnit
-        {
-            set { _pieceUnit = value; }
-            get { return _pieceUnit; }
-        }
+        public static string PieceUnit { set; get; } = @"stk.";
 
         #endregion Value units properties
 
         #region Volume properties
 
+        /// <summary>
+        /// Current share volume
+        /// </summary>
         [Browsable(false)]
-        public virtual decimal Volume
-        {
-            get { return _volume; }
-            set
-            {
-                // Set the new share volume
-                if (value != _volume)
-                {
-                    _volume = value;
-                }
-            }
-        }
+        public virtual decimal Volume { get; set; } = decimal.MinValue / 2;
 
+        /// <summary>
+        /// Current share volume as string
+        /// </summary>
         [Browsable(false)]
-        public string VolumeAsStr
-        {
-            get
-            {
-                return Helper.FormatDecimal(_volume, Helper.Volumefivelength, true, Helper.Volumenonefixlength, false, @"", CultureInfo);
-            }
-        }
+        public string VolumeAsStr => Helper.FormatDecimal(Volume, Helper.Volumefivelength, true, Helper.Volumenonefixlength, false, @"", CultureInfo);
 
+        /// <summary>
+        /// Current share volume as string with unit
+        /// </summary>
         [Browsable(false)]
-        public string VolumeAsStrUnit
-        {
-            get
-            {
-                return Helper.FormatDecimal(_volume, Helper.Volumefivelength, true, Helper.Volumenonefixlength, true, PieceUnit, CultureInfo);
-            }
-        }
+        public string VolumeAsStrUnit => Helper.FormatDecimal(Volume, Helper.Volumefivelength, true, Helper.Volumenonefixlength, true, PieceUnit, CultureInfo);
 
         #endregion Volume properties
 
         #region Buy properties
 
+        /// <summary>
+        /// Total buy value of the share without reduction and costs
+        /// </summary>
         [Browsable(false)]
-        public decimal BuyMarketValueTotal
-        {
-            get { return _buyMarketValueTotal; }
-            internal set
-            {
-                _buyMarketValueTotal = value;
-            }
-        }
+        public decimal BuyMarketValueTotal { get; internal set; }
 
+        /// <summary>
+        /// Total buy value of the share without reduction and costs as string
+        /// </summary>
         [Browsable(false)]
-        public string BuyMarketValueTotalAsStr
-        {
-            get
-            {
-                return Helper.FormatDecimal(BuyMarketValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-            }
-        }
+        public string BuyMarketValueTotalAsStr => Helper.FormatDecimal(BuyMarketValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
 
+        /// <summary>
+        /// Total buy value of the share without reduction and costs as string with unit
+        /// </summary>
         [Browsable(false)]
-        public string BuyMarketValueTotalAsStrUnit
-        {
-            get
-            {
-                return Helper.FormatDecimal(BuyMarketValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-            }
-        }
+        public string BuyMarketValueTotalAsStrUnit => Helper.FormatDecimal(BuyMarketValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
 
+        /// <summary>
+        /// Average buy price of all buys
+        /// </summary>
         [Browsable(false)]
-        public decimal AverageBuyPrice
-        {
-            get { return _averageBuyPrice; }
-            internal set
-            {
-                _averageBuyPrice = value;
-            }
-        }
+        public decimal AverageBuyPrice { get; internal set; }
 
+        /// <summary>
+        /// Average buy price of all buys as string
+        /// </summary>
         [Browsable(false)]
-        public string AverageBuyPriceAsStr
-        {
-            get
-            {
-                return Helper.FormatDecimal(AverageBuyPrice, Helper.Currencyfivelength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-            }
-        }
+        public string AverageBuyPriceAsStr => Helper.FormatDecimal(AverageBuyPrice, Helper.Currencyfivelength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
 
+        /// <summary>
+        /// Average buy price of all buys as string with unit
+        /// </summary>
         [Browsable(false)]
-        public string AverageBuyPriceAsStrUnit
-        {
-            get
-            {
-                return Helper.FormatDecimal(AverageBuyPrice, Helper.Currencyfourlength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-            }
-        }
+        public string AverageBuyPriceAsStrUnit => Helper.FormatDecimal(AverageBuyPrice, Helper.Currencyfourlength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
 
+        /// <summary>
+        /// List of all buys of this share
+        /// </summary>
         [Browsable(false)]
-        public AllBuysOfTheShare AllBuyEntries
-        {
-            get { return _allBuyEntries; }
-            set { _allBuyEntries = value; }
-        }
+        public AllBuysOfTheShare AllBuyEntries { get; set; } = new AllBuysOfTheShare();
 
         #endregion Buy properties
 
-        #region Buy XML properties
-
-        [Browsable(false)]
-        public string BuyTagNamePre
-        {
-            get { return _buyTagNamePre; }
-        }
-
-        [Browsable(false)]
-        public string BuyDateAttrName
-        {
-            get { return _buyDateAttrName; }
-        }
-
-        [Browsable(false)]
-        public string BuyVolumeAttrName
-        {
-            get { return _buyVolumeAttrName; }
-        }
-
-        [Browsable(false)]
-        public string BuyPriceAttrName
-        {
-            get { return _buyPriceAttrName; }
-        }
-
-        [Browsable(false)]
-        public string BuyReductionAttrName
-        {
-            get { return _buyReductionAttrName; }
-        }
-
-        [Browsable(false)]
-        public string BuyDocumentAttrName
-        {
-            get { return _buyDocumentAttrName; }
-        }
-
-        [Browsable(false)]
-        public short BuyAttrCount
-        {
-            get { return _buyAttrCount; }
-        }
-
-        #endregion Buy XML properties
-
         #region Sales properties
 
+        /// <summary>
+        /// Total sale value of the share
+        /// </summary>
         [Browsable(false)]
-        public virtual decimal SalePurchaseValueTotal
-        {
-            get { return _salePurchaseValueTotal; }
-            set
-            {
-                _salePurchaseValueTotal = value;
-            }
-        }
+        public virtual decimal SalePurchaseValueTotal { get; set; } = decimal.MinValue / 2;
 
+        /// <summary>
+        /// Total sale value of the share as string
+        /// </summary>
         [Browsable(false)]
-        public string SalePurchaseValueTotalAsStr
-        {
-            get
-            {
-                return Helper.FormatDecimal(SalePurchaseValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-            }
-        }
+        public string SalePurchaseValueTotalAsStr => Helper.FormatDecimal(SalePurchaseValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
 
+        /// <summary>
+        /// Total sale value of the share as string with unit
+        /// </summary>
         [Browsable(false)]
-        public string SalePurchaseValueTotalAsStrUnit
-        {
-            get
-            {
-                return Helper.FormatDecimal(SalePurchaseValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-            }
-        }
+        public string SalePurchaseValueTotalAsStrUnit => Helper.FormatDecimal(SalePurchaseValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
 
+        /// <summary>
+        /// List of all sales of this share
+        /// </summary>
         [Browsable(false)]
-        public AllSalesOfTheShare AllSaleEntries
-        {
-            get { return _allSaleEntries; }
-            set { _allSaleEntries = value; }
-        }
+        public AllSalesOfTheShare AllSaleEntries { get; set; } = new AllSalesOfTheShare();
 
         #endregion Sales properties
 
-        #region Sale XML properties
-
-        [Browsable(false)]
-        public string SaleTagNamePre
-        {
-            get { return _saleTagNamePre; }
-        }
-
-        [Browsable(false)]
-        public string SaleDateAttrName
-        {
-            get { return _saleDateAttrName; }
-        }
-
-        [Browsable(false)]
-        public string SaleVolumeAttrName
-        {
-            get { return _saleVolumeAttrName; }
-        }
-
-        [Browsable(false)]
-        public string SaleBuyPriceAttrName
-        {
-            get { return _saleBuyPriceAttrName; }
-        }
-
-        [Browsable(false)]
-        public string SalePriceAttrName
-        {
-            get { return _saleSalePriceAttrName; }
-        }
-
-        [Browsable(false)]
-        public string SaleTaxAtSourceAttrName
-        {
-            get { return _saleTaxAtSourceAttrName; }
-        }
-
-        [Browsable(false)]
-        public string SaleCapitalGainsTaxAttrName
-        {
-            get { return _saleCapitalGainsTaxAttrName; }
-        }
-
-        [Browsable(false)]
-        public string SaleSolidarityTaxAttrName
-        {
-            get { return _saleSolidarityTaxAttrName; }
-        }
-
-        [Browsable(false)]
-        public string SaleDocumentAttrName
-        {
-            get { return _saleDocumentAttrName; }
-        }
-
-        [Browsable(false)]
-        public short SaleAttrCount
-        {
-            get { return _saleAttrCount; }
-        }
-
-        #endregion Sale XML properties
-
         #region Price properties
 
+        /// <summary>
+        /// Current price of the share. Will be updated via the Internet
+        /// </summary>
         [Browsable(false)]
-        public virtual decimal CurPrice
-        {
-            get { return _curPrice; }
-            set
-            {
-                // Set the new price
-                if (value != _curPrice)
-                {
-                    _curPrice = value;
-                }
-            }
-        }
+        public virtual decimal CurPrice { get; set; } = decimal.MinValue / 2;
 
+        /// <summary>
+        /// Current price of the share as string
+        /// </summary>
         [Browsable(false)]
-        public string CurPriceAsStr
-        {
-            get
-            {
-                return Helper.FormatDecimal(CurPrice, Helper.Currencyfourlength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-            }
-        }
+        public string CurPriceAsStr => Helper.FormatDecimal(CurPrice, Helper.Currencyfourlength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
 
+        /// <summary>
+        /// Current price of the share as string with unit
+        /// </summary>
         [Browsable(false)]
-        public string CurPriceAsStrUnit
-        {
-            get
-            {
-                return Helper.FormatDecimal(CurPrice, Helper.Currencyfourlength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-            }
-        }
+        public string CurPriceAsStrUnit => Helper.FormatDecimal(CurPrice, Helper.Currencyfourlength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
 
+        /// <summary>
+        /// Previous day price of the share. Will be updated via the Internet
+        /// </summary>
         [Browsable(false)]
-        public virtual decimal PrevDayPrice
-        {
-            get { return _prevDayPrice; }
-            set
-            {
-                // Set new price day before
-                if (value != _prevDayPrice)
-                {
-                    _prevDayPrice = value;
-                }
-            }
-        }
+        public virtual decimal PrevDayPrice { get; set; } = decimal.MinValue / 2;
 
+        /// <summary>
+        /// Previous day price of the share as string
+        /// </summary>
         [Browsable(false)]
-        public string PrevDayPriceAsStr
-        {
-            get
-            {
-                return Helper.FormatDecimal(PrevDayPrice, Helper.Currencyfourlength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-            }
-        }
+        public string PrevDayPriceAsStr => Helper.FormatDecimal(PrevDayPrice, Helper.Currencyfourlength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
 
+        /// <summary>
+        /// Previous day price of the share as string with unit
+        /// </summary>
         [Browsable(false)]
-        public string PrevDayPriceAsStrUnit
-        {
-            get
-            {
-                return Helper.FormatDecimal(PrevDayPrice, Helper.Currencyfourlength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-            }
-        }
+        public string PrevDayPriceAsStrUnit => Helper.FormatDecimal(PrevDayPrice, Helper.Currencyfourlength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
 
+        /// <summary>
+        /// Current and previous day price of the share as string with unit and a line break
+        /// </summary>
         [Browsable(false)]
         public string CurPrevPriceAsStrUnit
         {
@@ -798,91 +612,45 @@ namespace SharePortfolioManager
 
         #region Performance properties
 
+        /// <summary>
+        /// Price difference between the current and the previous day of the share
+        /// </summary>
         [Browsable(false)]
-        public decimal PrevDayProfitLoss
-        {
-            get { return _prevDayProfitLoss; }
-            internal set
-            {
-                if (_prevDayProfitLoss != value)
-                    _prevDayProfitLoss = value;
-            }
-        }
+        public decimal PrevDayDifference { get; internal set; } = decimal.MinValue / 2;
 
+        /// <summary>
+        /// Price difference between the current and the previous day of the share as string
+        /// </summary>
         [Browsable(false)]
-        public string PrevDayProfitLossAsStr
-        {
-            get
-            {
-                return Helper.FormatDecimal(PrevDayProfitLoss, Helper.Currencythreelength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-            }
-        }
+        public string PrevDayDifferenceAsStr => Helper.FormatDecimal(PrevDayDifference, Helper.Currencyfourlength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
 
+        /// <summary>
+        /// Price difference between the current and the previous day of the share as string with unit
+        /// </summary>
         [Browsable(false)]
-        public string PrevDayProfitLossAsStrUnit
-        {
-            get
-            {
-                return Helper.FormatDecimal(PrevDayProfitLoss, Helper.Percentagethreelength, true, Helper.Percentagenonefixlength, true, @"", CultureInfo);
-            }
-        }
+        public string PrevDayDifferenceAsStrUnit => Helper.FormatDecimal(PrevDayDifference, Helper.Currencyfourlength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
 
+        /// <summary>
+        /// Performance in percent to the previous day of the share
+        /// </summary>
         [Browsable(false)]
-        public decimal PrevDayPerformance
-        {
-            get { return _prevDayPerformance; }
-            internal set
-            {
-                _prevDayPerformance = value;
-            }
-        }
+        public decimal PrevDayPerformance { get; internal set; } = decimal.MinValue / 2;
 
+        /// <summary>
+        /// Performance in percent to the previous day of the share as string
+        /// </summary>
         [Browsable(false)]
-        public string PrevDayPerformanceAsStr
-        {
-            get
-            {
-                return Helper.FormatDecimal(PrevDayPerformance, Helper.Currencythreelength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-            }
-        }
+        public string PrevDayPerformanceAsStr => Helper.FormatDecimal(PrevDayPerformance, Helper.Currencythreelength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
 
+        /// <summary>
+        /// Performance in percent to the previous day of the share as string with unit
+        /// </summary>
         [Browsable(false)]
-        public string PrevDayPerformanceAsStrUnit
-        {
-            get
-            {
-                return Helper.FormatDecimal(PrevDayPerformance, Helper.Percentagethreelength, true, Helper.Percentagenonefixlength, true, PercentageUnit, CultureInfo);
-            }
-        }
+        public string PrevDayPerformanceAsStrUnit => Helper.FormatDecimal(PrevDayPerformance, Helper.Percentagethreelength, true, Helper.Percentagenonefixlength, true, PercentageUnit, CultureInfo);
 
-        [Browsable(false)]
-        public decimal PrevDayDifference
-        {
-            get { return _prevDayDifference; }
-            internal set
-            {
-                _prevDayDifference = value;
-            }
-        }
-
-        [Browsable(false)]
-        public string PrevDayDifferenceAsStr
-        {
-            get
-            {
-                return Helper.FormatDecimal(PrevDayDifference, Helper.Currencyfourlength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-            }
-        }
-
-        [Browsable(false)]
-        public string PrevDayDifferenceAsStrUnit
-        {
-            get
-            {
-                return Helper.FormatDecimal(PrevDayDifference, Helper.Currencyfourlength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-            }
-        }
-
+        /// <summary>
+        /// Difference between the current and the previous day of the share and the performance in percent as string
+        /// </summary>
         [Browsable(false)]
         public string PrevDayDifferencePerformanceAsStrUnit
         {
@@ -894,17 +662,37 @@ namespace SharePortfolioManager
             }
         }
 
+        /// <summary>
+        /// Profit or loss to the previous day of the hole share volume
+        /// </summary>
         [Browsable(false)]
-        public Image ImagePrevDayPerformance
-        {
-            get { return _imagePrevDayPerformance; }
-            internal set { _imagePrevDayPerformance = value; }
-        }
+        public decimal PrevDayProfitLoss { get; internal set; } = decimal.MinValue / 2;
 
+        /// <summary>
+        /// Profit or loss to the previous day of the hole share volume as string
+        /// </summary>
+        [Browsable(false)]
+        public string PrevDayProfitLossAsStr => Helper.FormatDecimal(PrevDayProfitLoss, Helper.Currencythreelength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
+
+        /// <summary>
+        /// Profit or loss to the previous day of the hole share volume as string with unit
+        /// </summary>
+        [Browsable(false)]
+        public string PrevDayProfitLossAsStrUnit => Helper.FormatDecimal(PrevDayProfitLoss, Helper.Percentagethreelength, true, Helper.Percentagenonefixlength, true, @"", CultureInfo);
+
+        /// <summary>
+        /// Image which indicates the performance of the share to the previous day 
+        /// </summary>
+        [Browsable(false)]
+        public Image ImagePrevDayPerformance { get; internal set; }
+
+        /// <summary>
+        /// List with the possible images for the performance to the previous day of a share
+        /// </summary>
         [Browsable(false)]
         public List<Image> ImageListPrevDayPerformance
         {
-            get { return _imageListPrevDayPerformance; }
+            get => _imageListPrevDayPerformance;
             set
             {
                 if (_imageListPrevDayPerformance == null)
@@ -923,41 +711,24 @@ namespace SharePortfolioManager
         #endregion Performance properties
 
         #region Purchase properties
-
+        
+        /// <summary>
+        /// Purchase value of the current share volume
+        /// </summary>
         [Browsable(false)]
-        public virtual decimal PurchaseValue
-        {
-            get { return _purchaseValue; }
-            set
-            {
-                if (value != _purchaseValue)
-                {
-                    _purchaseValue = value;
-#if DEBUG_SHAREOBJECT
-                    Console.WriteLine(@"");
-                    Console.WriteLine(@"_purchaseValue: {0}", _purchaseValue);
-#endif
-                }
-            }
-        }
+        public virtual decimal PurchaseValue { get; set; } = decimal.MinValue / 2;
 
+        /// <summary>
+        /// Purchase value of the current share volume as string
+        /// </summary>
         [Browsable(false)]
-        public string PurchaseValueAsStr
-        {
-            get
-            {
-                return Helper.FormatDecimal(PurchaseValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-            }
-        }
+        public string PurchaseValueAsStr => Helper.FormatDecimal(PurchaseValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
 
+        /// <summary>
+        /// Purchase value of the current share volume as string with unit
+        /// </summary>
         [Browsable(false)]
-        public string PurchaseValueAsStrUnit
-        {
-            get
-            {
-                return Helper.FormatDecimal(PurchaseValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-            }
-        }
+        public string PurchaseValueAsStrUnit => Helper.FormatDecimal(PurchaseValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
 
         #endregion Purchase properties
         
@@ -979,7 +750,7 @@ namespace SharePortfolioManager
             Console.WriteLine("pieceUnit: {0}", pieceUnit);
 #endif
             _imageListPrevDayPerformance = imageList;
-            _imagePrevDayPerformance = _imageListPrevDayPerformance[0];
+            ImagePrevDayPerformance = _imageListPrevDayPerformance[0];
 
             PercentageUnit = percentageUnit;
             PieceUnit = pieceUnit;
@@ -1004,7 +775,6 @@ namespace SharePortfolioManager
         /// <param name="volume">Volume of the share</param>
         /// <param name="reduction">Reduction of the share</param>
         /// <param name="costs">Costs of the buy</param>
-        /// <param name="purchaseValue">PurchaseValue of the share</param>
         /// <param name="webSite">Website address of the share</param>
         /// <param name="imageListForDayBeforePerformance">Images for the performance indication</param>
         /// <param name="regexList">RegEx list for the share</param>
@@ -1014,8 +784,9 @@ namespace SharePortfolioManager
         public ShareObject(
             string wkn, string addDateTime, string name,
             DateTime lastUpdateInternet, DateTime lastUpdateShareDate, DateTime lastUpdateShareTime,
-            decimal price, decimal volume, decimal reduction, decimal costs, decimal purchaseValue,
-            string webSite, List<Image> imageListForDayBeforePerformance, RegExList regexList, CultureInfo cultureInfo,
+            decimal price, decimal volume, decimal reduction, decimal costs,
+            string webSite, List<Image> imageListForDayBeforePerformance,
+            RegExList regexList, CultureInfo cultureInfo,
             int shareType, string document)
         {
 #if DEBUG_SHAREOBJECT
@@ -1151,7 +922,7 @@ namespace SharePortfolioManager
                 Console.WriteLine("strDateTime: {0}", strDateTime);
 #endif
                 // Get BuyObject by date and time and add the sale PurchaseValue and value to the share
-                BuyObject buyObject = AllBuyEntries.GetBuyObjectByDateTime(strDateTime);
+                var buyObject = AllBuyEntries.GetBuyObjectByDateTime(strDateTime);
                 if (buyObject != null)
                 {
                     Volume -= buyObject.Volume;
@@ -1170,7 +941,7 @@ namespace SharePortfolioManager
                     Console.WriteLine("BuyValueTotal: {0}", BuyMarketValueTotal);
 #endif
                     // Remove buy by date and time
-                    if (!_allBuyEntries.RemoveBuy(strDateTime))
+                    if (!AllBuyEntries.RemoveBuy(strDateTime))
                         return false;
                 }
                 else
@@ -1249,14 +1020,14 @@ namespace SharePortfolioManager
                     }
                 }
 
-//#if DEBUG_SHAREOBJECT
-                Console.WriteLine("Volume: {0}", Volume);
-                Console.WriteLine("PurchaseValue: {0}", PurchaseValueAsStr);
-                Console.WriteLine("SalePurchaseValueTotal: {0}", SalePurchaseValueTotalAsStr);
-//#endif
+#if DEBUG_SHAREOBJECT
+                Console.WriteLine(@"Volume: {0}", Volume);
+                Console.WriteLine(@"PurchaseValue: {0}", PurchaseValueAsStr);
+                Console.WriteLine(@"SalePurchaseValueTotal: {0}", SalePurchaseValueTotalAsStr);
+#endif
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }
@@ -1277,7 +1048,7 @@ namespace SharePortfolioManager
                 Console.WriteLine("strDateTime: {0}", strDateTime);
 #endif
                 // Get SaleObject by date and time and add the sale deposit and value to the share
-                SaleObject saleObject = AllSaleEntries.GetSaleObjectByDateTime(strDateTime);
+                var saleObject = AllSaleEntries.GetSaleObjectByDateTime(strDateTime);
                 if (saleObject != null)
                 {
                     Volume += saleObject.Volume;
@@ -1292,7 +1063,7 @@ namespace SharePortfolioManager
                         AverageBuyPrice = 0;
 
                     // Remove sale by date and time
-                    if (!_allSaleEntries.RemoveSale(strDateTime))
+                    if (!AllSaleEntries.RemoveSale(strDateTime))
                     return false;
 
 #if DEBUG_SHAREOBJECT
@@ -1317,7 +1088,7 @@ namespace SharePortfolioManager
         #region Performance methods
 
         /// <summary>
-        /// This function calculates the profit or loss to the previous day
+        /// This function calculates the profit or loss to the previous day of the hole share volume
         /// </summary>
         public void CalculatePrevDayProfitLoss()
         {
@@ -1353,20 +1124,19 @@ namespace SharePortfolioManager
                 PrevDayDifference = CurPrice - PrevDayPrice;
             }
 
-            if (ImageListPrevDayPerformance != null && ImageListPrevDayPerformance.Count > 0)
-            {
-                if (PrevDayPerformance < 0)
-                {
-                    ImagePrevDayPerformance = ImageListPrevDayPerformance[1];
-                }
-                else if (PrevDayPerformance == 0)
-                {
-                    ImagePrevDayPerformance = ImageListPrevDayPerformance[2];
+            if (ImageListPrevDayPerformance == null || ImageListPrevDayPerformance.Count <= 0) return;
 
-                }
-                else
-                    ImagePrevDayPerformance = ImageListPrevDayPerformance[3];
+            if (PrevDayPerformance < 0)
+            {
+                ImagePrevDayPerformance = ImageListPrevDayPerformance[1];
             }
+            else if (PrevDayPerformance == 0)
+            {
+                ImagePrevDayPerformance = ImageListPrevDayPerformance[2];
+
+            }
+            else
+                ImagePrevDayPerformance = ImageListPrevDayPerformance[3];
 
 #if DEBUG_SHAREOBJECT
             Console.WriteLine("");
@@ -1389,25 +1159,25 @@ namespace SharePortfolioManager
         public bool SetWebSiteRegexListAndEncoding(List<WebSiteRegex> webSiteRegexList)
         {
             // Flag if the website of the current share exists in the website configuration list
-            bool bRegexFound = false;
+            var bRegexFound = false;
 
             // Loop through the given website configuration list
             foreach (var webSiteRegexElement in webSiteRegexList)
             {
                 // Check if the current share object use the current website configuration
-                if (WebSite.Contains(webSiteRegexElement.WebSiteName))
-                {
-                    // Set the website configuration to the share object
-                    RegexList = webSiteRegexElement.WebSiteRegexList;
-                    EncodingType = webSiteRegexElement.WebSiteEncodingType;
-                    bRegexFound = true;
-                    break;
-                }
+                if (!WebSite.Contains(webSiteRegexElement.WebSiteName)) continue;
+
+                // Set the website configuration to the share object
+                RegexList = webSiteRegexElement.WebSiteRegexList;
+                WebSiteEncodingType = webSiteRegexElement.WebSiteEncodingType;
+                bRegexFound = true;
+                break;
             }
 
             return bRegexFound;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Public implementation of Dispose pattern callable by consumers.
         /// </summary>
@@ -1441,27 +1211,46 @@ namespace SharePortfolioManager
         #endregion Methods
     }
 
-    public class ShareObjectListComparer : IComparer<ShareObject>
+    /// <inheritdoc />
+    /// <summary>
+    /// This class is a comparer class which compares to share objects.
+    /// </summary>
+    internal class ShareObjectListComparer : IComparer<ShareObject>
     {
         public int Compare(ShareObject object1, ShareObject object2)
         {
-            return string.Compare(object1.NameAsStr, object2.NameAsStr);
+            if (object1 == null) return 0;
+            if (object2 == null) return 0;
+
+            return string.CompareOrdinal(object1.NameAsStr, object2.NameAsStr);
         }
     }
 
+    /// <summary>
+    /// Search object class for the share object.
+    /// </summary>
     public class ShareObjectSearch
     {
         #region Variables
 
-        private string _searchString;
+        private readonly string _searchString;
 
         #endregion Variables
 
+        /// <summary>
+        /// Constructor with the given search string
+        /// </summary>
+        /// <param name="searchString"></param>
         public ShareObjectSearch(string searchString)
         {
             _searchString = searchString;
         }
 
+        /// <summary>
+        /// Comparer for the share object WKN
+        /// </summary>
+        /// <param name="shareObject"></param>
+        /// <returns></returns>
         public bool Compare(ShareObject shareObject)
         {
             return shareObject.Wkn == _searchString;

@@ -25,6 +25,8 @@ using Logging;
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Forms.BuysForm.View;
 using System.Collections.Generic;
+using System.Globalization;
+using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager.Forms.BuysForm.Model
 {
@@ -67,6 +69,7 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
         string Document { get; set; }
     }
 
+    /// <inheritdoc />
     /// <summary>
     /// Model class of the BuyEdit
     /// </summary>
@@ -74,119 +77,56 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
     {
         #region Fields
 
-        bool _updateView;
-        bool _updateViewFormatted;
-        bool _updateBuy;
-
-        BuyErrorCode _errorCode;
-        string _selectedDate;
-
-        ShareObjectMarketValue _shareObjectMarketValue;
-        ShareObjectFinalValue _shareObjectFinalValue;
-        List<WebSiteRegex> _webSiteRegexList;
-
-        Logger _logger;
-        Language _language;
-        string _languageName;
-
-        string _date;
-        string _time;
-        string _volume;
-        decimal _volumeDec;
-        string _marketValue;
-        decimal _marketValueDec;
-        string _reduction;
-        decimal _reductionDec;
-        string _purchaseValue;
-        decimal _purchaseValueDec;
-        string _costs;
-        decimal _costsDec;
-        string _finalValue;
-        decimal _finalValueDec;
-        string _sharePrice;
-        decimal _sharePriceDec;
-        string _document;
+        private string _date;
+        private string _time;
+        private string _volume;
+        private decimal _volumeDec;
+        private string _marketValue;
+        private decimal _marketValueDec;
+        private string _reduction;
+        private decimal _reductionDec;
+        private string _purchaseValue;
+        private decimal _purchaseValueDec;
+        private string _costs;
+        private decimal _costsDec;
+        private string _finalValue;
+        private decimal _finalValueDec;
+        private string _sharePrice;
+        private decimal _sharePriceDec;
+        private string _document;
 
         #endregion Fields
 
         #region IModel members
 
-        public bool UpdateView
-        {
-            get { return _updateView; }
-            set { _updateView = value; }
-        }
+        public bool UpdateView { get; set; }
 
-        public bool UpdateViewFormatted
-        {
-            get { return _updateViewFormatted; }
-            set { _updateViewFormatted = value; }
-        }
-  
-        public bool UpdateBuy
-        {
-            get { return _updateBuy; }
-            set { _updateBuy = value; }
-        }
+        public bool UpdateViewFormatted { get; set; }
 
-        public BuyErrorCode ErrorCode
-        {
-            get { return _errorCode; }
+        public bool UpdateBuy { get; set; }
 
-            set
-            {
-                _errorCode = value;
-            }
-        }
+        public BuyErrorCode ErrorCode { get; set; }
 
-        public string SelectedDate
-        {
-            get { return _selectedDate; }
-            set { _selectedDate = value; }
-        }
+        public string SelectedDate { get; set; }
 
-        public ShareObjectMarketValue ShareObjectMarketValue
-        {
-            get { return _shareObjectMarketValue; }
-            set { _shareObjectMarketValue = value; }
-        }
+        public ShareObjectMarketValue ShareObjectMarketValue { get; set; }
 
-        public ShareObjectFinalValue ShareObjectFinalValue
-        {
-            get { return _shareObjectFinalValue; }
-            set { _shareObjectFinalValue = value; }
-        }
+        public ShareObjectFinalValue ShareObjectFinalValue { get; set; }
 
-        public List<WebSiteRegex> WebSiteRegexList
-        {
-            get { return _webSiteRegexList; }
-            set { _webSiteRegexList = value; }
-        }
+        public List<WebSiteRegex> WebSiteRegexList { get; set; }
 
-        public Logger Logger
-        {
-            get { return _logger; }
-            set { _logger = value; }
-        }
+        public Logger Logger { get; set; }
 
-        public Language Language
-        {
-            get { return _language; }
-            set { _language = value; }
-        }
+        public Language Language { get; set; }
 
-        public string LanguageName
-        {
-            get { return _languageName; }
-            set { _languageName = value; }
-        }
+        public string LanguageName { get; set; }
 
         public string Date
         {
-            get { return _date; }
+            get => _date;
             set
             {
-                if (_date == value)
+                if (_date != null && _date == value)
                     return;
 
                 _date = value;
@@ -195,10 +135,10 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
 
         public string Time 
         {
-            get { return _time; }
+            get => _time;
             set
             {
-                if (_time == value)
+                if (_time != null && _time == value)
                     return;
 
                 _time = value;
@@ -212,14 +152,10 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
                 if (UpdateViewFormatted)
                 {
                     // Only return the value if the volume is greater than '0'
-                    if (_volumeDec > 0)
-                        return Helper.FormatDecimal(_volumeDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength);
-                    return @"";
+                    return _volumeDec <= 0 ? @"" : Helper.FormatDecimal(_volumeDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength);
                 }
-                else
-                {
-                    return _volume;
-                }
+
+                return _volume;
             }
             set
             {
@@ -235,7 +171,7 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
 
         public decimal VolumeDec
         {
-            get { return _volumeDec; }
+            get => _volumeDec;
             set
             {
                 if (_volumeDec == value)
@@ -246,13 +182,7 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
 
         public string MarketValue
         {
-            get
-            {
-                // Only return the value if the value is greater than '0'
-                if (_marketValueDec > 0)
-                    return Helper.FormatDecimal(_marketValueDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
-                return @"";
-            }
+            get => _marketValueDec > 0 ? Helper.FormatDecimal(_marketValueDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : @"";
 
             set
             {
@@ -268,14 +198,14 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
 
         public decimal MarketValueDec
         {
-            get { return _marketValueDec; }
+            get => _marketValueDec;
             set
             {
                 if (_marketValueDec == value)
                     return;
                 _marketValueDec = value;
 
-                MarketValue = _marketValueDec.ToString();
+                MarketValue = _marketValueDec.ToString("G");
 
                 UpdateView = true;
             }
@@ -288,14 +218,10 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
                 if (UpdateViewFormatted)
                 {
                     // Only return the value if the reduction is greater than '0'
-                    if (_reductionDec > 0)
-                        return Helper.FormatDecimal(_reductionDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
-                    return @"";
+                    return _reductionDec > 0 ? Helper.FormatDecimal(_reductionDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : @"";
                 }
-                else
-                {
-                    return _reduction;
-                }
+
+                return _reduction;
             }
             set
             {
@@ -311,26 +237,20 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
 
         public decimal ReductionDec
         {
-            get { return _reductionDec; }
+            get => _reductionDec;
             set
             {
                 if (_reductionDec == value)
                     return;
                 _reductionDec = value;
 
-                Reduction = _reductionDec.ToString();
+                Reduction = _reductionDec.ToString(CultureInfo.CurrentCulture);
             }
         }
 
         public string PurchaseValue
         {
-            get
-            {
-                // Only return the value if the value is greater than '0'
-                if (PurchaseValueDec > 0)
-                    return Helper.FormatDecimal(PurchaseValueDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
-                return @"";
-            }
+            get => PurchaseValueDec > 0 ? Helper.FormatDecimal(PurchaseValueDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : @"";
 
             set
             {
@@ -346,14 +266,14 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
 
         public decimal PurchaseValueDec
         {
-            get { return _purchaseValueDec; }
+            get => _purchaseValueDec;
             set
             {
                 if (_purchaseValueDec == value)
                     return;
                 _purchaseValueDec = value;
 
-                PurchaseValue = _purchaseValueDec.ToString();
+                PurchaseValue = _purchaseValueDec.ToString(CultureInfo.CurrentCulture);
             }
         }
 
@@ -364,14 +284,10 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
                 if (UpdateViewFormatted)
                 {
                     // Only return the value if the costs is greater than '0'
-                    if (_costsDec > 0)
-                        return Helper.FormatDecimal(_costsDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
-                    return @"";
+                    return _costsDec > 0 ? Helper.FormatDecimal(_costsDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : @"";
                 }
-                else
-                {
-                    return _costs;
-                }
+
+                return _costs;
             }
             set
             {
@@ -387,26 +303,20 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
 
         public decimal CostsDec
         {
-            get { return _costsDec; }
+            get => _costsDec;
             set
             {
                 if (_costsDec == value)
                     return;
                 _costsDec = value;
 
-                Costs = _costsDec.ToString();
+                Costs = _costsDec.ToString("G");
             }
         }
 
         public string FinalValue
         {
-            get
-            {
-                // Only return the value if the value is greater than '0'
-                if (_finalValueDec > 0)
-                    return Helper.FormatDecimal(_finalValueDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
-                return @"";
-            }
+            get => _finalValueDec > 0 ? Helper.FormatDecimal(_finalValueDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : @"";
 
             set
             {
@@ -422,7 +332,7 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
 
         public decimal FinalValueDec
         {
-            get { return _finalValueDec; }
+            get => _finalValueDec;
             set
             {
                 if (_finalValueDec == value)
@@ -438,14 +348,10 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
                 if (UpdateViewFormatted)
                 {
                     // Only return the value if the share price is greater than '0'
-                    if (_sharePriceDec > 0)
-                        return Helper.FormatDecimal(_sharePriceDec, Helper.Currencysixlength, true, Helper.Currencytwofixlength);
-                    return @"";
+                    return _sharePriceDec > 0 ? Helper.FormatDecimal(_sharePriceDec, Helper.Currencysixlength, true, Helper.Currencytwofixlength) : @"";
                 }
-                else
-                {
-                    return _sharePrice;
-                }
+
+                return _sharePrice;
             }
             set
             {
@@ -461,23 +367,23 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
 
         public decimal SharePricedec
         {
-            get { return _sharePriceDec; }
+            get => _sharePriceDec;
             set
             {
                 if (_sharePriceDec == value)
                     return;
                 _sharePriceDec = value;
 
-                SharePrice = _sharePriceDec.ToString();
+                SharePrice = _sharePriceDec.ToString("G");
             }
         }
 
         public string Document
         {
-            get { return _document; }
+            get => _document;
             set
             {
-                if (_document == value)
+                if (_document != null && _document == value)
                     return;
                 _document = value;
             }

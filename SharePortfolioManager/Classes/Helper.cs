@@ -28,7 +28,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Reflection;
 using Logging;
 using LanguageHandler;
 using System.Runtime.CompilerServices;
@@ -37,7 +36,7 @@ using System.Net;
 
 namespace SharePortfolioManager.Classes
 {
-    static class Helper
+    internal static class Helper
     {
         #region Constants formatting
 
@@ -123,23 +122,19 @@ namespace SharePortfolioManager.Classes
 
         #region Variables
 
-        /// <summary>
-        /// Stores the list of the names and the corresponding culture info and currency symbol
-        /// </summary>
-        static private IEnumerable<KeyValuePair<string, CultureInformation>> _listNameCultureInfoCurrencySymbol;
-
         #endregion Variables
 
         #region Properties
 
-        static public IEnumerable<KeyValuePair<string, CultureInformation>> ListNameCultureInfoCurrencySymbol
+        public static IEnumerable<KeyValuePair<string, CultureInformation>> ListNameCultureInfoCurrencySymbol
         {
-            get { return _listNameCultureInfoCurrencySymbol; }
+            get;
+            private set;
         }
 
-        static public Dictionary<string, CultureInformation> DictionaryListNameCultureInfoCurrencySymbol
+        public static Dictionary<string, CultureInformation> DictionaryListNameCultureInfoCurrencySymbol
         {
-            get { return _listNameCultureInfoCurrencySymbol.ToDictionary(x => x.Key, x => x.Value); }
+            get { return ListNameCultureInfoCurrencySymbol.ToDictionary(x => x.Key, x => x.Value); }
         }
 
         #endregion Properties
@@ -160,9 +155,9 @@ namespace SharePortfolioManager.Classes
         /// <returns>Version of the application</returns>
         public static Version GetApplicationVersion()
         {
-            Assembly assApp = typeof(FrmMain).Assembly;
-            AssemblyName assAppName = assApp.GetName();
-            Version verApp = assAppName.Version;
+            var assApp = typeof(FrmMain).Assembly;
+            var assAppName = assApp.GetName();
+            var verApp = assAppName.Version;
 
             return verApp;
         }
@@ -193,14 +188,11 @@ namespace SharePortfolioManager.Classes
         /// <param name="stateLevel">Level of the state (e.g. Info)</param>
         /// <param name="componentLevel">Level of the component (e.g. Application)</param>
         /// <returns>Flag if the add was successful</returns>
-        static public bool AddStatusMessage(object showObject, string stateMessage, Language xmlLanguage, string strLanguage, Color color, Logger logger, int stateLevel, int componentLevel)
+        public static bool AddStatusMessage(object showObject, string stateMessage, Language xmlLanguage, string language, Color color, Logger logger, int stateLevel, int componentLevel)
         {
             try
             {
-                string stateMessageError = "";
-
-                // Get type of the given show object
-                var type = showObject.GetType();
+                var stateMessageError = "";
 
                 // Check if the given logger is initialized
                 if (logger != null && logger.InitState == Logger.EInitState.Initialized)
@@ -216,17 +208,17 @@ namespace SharePortfolioManager.Classes
                     catch (LoggerException ex)
                     {
                         if (ex.LoggerState == Logger.ELoggerState.CleanUpLogFilesFailed)
-                            stateMessageError = xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerStateMessages/CleanUpLogFilesFailed", strLanguage);
+                            stateMessageError = xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerStateMessages/CleanUpLogFilesFailed", language);
                     }   
                 }
 
                 // RichTextBox
-                if (showObject.GetType() == typeof(RichTextBox))
+                if (logger != null && showObject.GetType() == typeof(RichTextBox))
                 {
-                    RichTextBox castControl = (RichTextBox)showObject;
+                    var castControl = (RichTextBox)showObject;
 
                     // Create a temporary rich text box with no word wrap
-                    RichTextBox tempControl = castControl;
+                    var tempControl = castControl;
                     tempControl.WordWrap = false;
 
                     // Add time stamp
@@ -236,17 +228,11 @@ namespace SharePortfolioManager.Classes
                     if (stateMessageError != "")
                         stateMessage += string.Format(Timefullformat, DateTime.Now) + @" " + stateMessageError + "\n";
 
-                    // Get length of the state message
-                    int lengthStateMessage = stateMessage.Length;
-
-                    // Remove line break at the end
-                    //tempControl.Text = tempControl.Text.TrimEnd('\n');
-
                     // Check if the maximum of lines is reached and delete last line
-                    if (tempControl.Lines.Any() && tempControl.Lines.Count() > logger.LoggerSize)
+                    if (tempControl.Lines.Any() && tempControl.Lines.Length > logger.LoggerSize)
                     {
-                        tempControl.SelectionStart = tempControl.GetFirstCharIndexFromLine(tempControl.Lines.Count() - 2);
-                        tempControl.SelectionLength = tempControl.Lines[tempControl.Lines.Count() - 2].Length + 1;
+                        tempControl.SelectionStart = tempControl.GetFirstCharIndexFromLine(tempControl.Lines.Length - 2);
+                        tempControl.SelectionLength = tempControl.Lines[tempControl.Lines.Length - 2].Length + 1;
                         tempControl.SelectedText = string.Empty;
                     }
 
@@ -257,7 +243,6 @@ namespace SharePortfolioManager.Classes
                     tempControl.SelectedText = stateMessage;
 
                     tempControl.WordWrap = true;
-                    castControl = tempControl;
 
                     return true;
                 }
@@ -265,10 +250,10 @@ namespace SharePortfolioManager.Classes
                 // Label
                 if (showObject.GetType() == typeof(Label))
                 {
-                    Label castControl = (Label)showObject;
+                    var castControl = (Label)showObject;
 
                     // Set color
-                    Color oldColor = castControl.ForeColor;
+                    var oldColor = castControl.ForeColor;
                     castControl.ForeColor = color;
 
                     // Check if the logger add failed
@@ -286,10 +271,10 @@ namespace SharePortfolioManager.Classes
                 // ToolStripStatusLabel
                 if (showObject.GetType() == typeof(ToolStripStatusLabel))
                 {
-                    ToolStripStatusLabel castControl = (ToolStripStatusLabel)showObject;
+                    var castControl = (ToolStripStatusLabel)showObject;
 
                     // Set color
-                    Color oldColor = castControl.ForeColor;
+                    var oldColor = castControl.ForeColor;
                     castControl.ForeColor = color;
 
                     // Check if the logger add failed
@@ -298,6 +283,8 @@ namespace SharePortfolioManager.Classes
                     
                     // Set state message
                     castControl.Text = stateMessage;
+                    // Reset color
+                    castControl.ForeColor = oldColor;
 
                     return true;
                 }
@@ -307,7 +294,8 @@ namespace SharePortfolioManager.Classes
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show("AddStatusMessage()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                var message = $"AddStatusMessage()\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 #endif
                 return false;
             }
@@ -329,19 +317,16 @@ namespace SharePortfolioManager.Classes
         /// <param name="flag">true = enable / false = disable</param>
         /// <param name="givenControl">Control for the start</param>
         /// <param name="listControlNames">List with the control names which should be enabled or disabled</param>
-        static public void EnableDisableControls(bool flag, Control givenControl, List<string> listControlNames)
+        public static void EnableDisableControls(bool flag, Control givenControl, List<string> listControlNames)
         {
             try
             {
                 foreach (var control in givenControl.Controls)
                 {
-                    Control castControl = null;
-                    var type = control.GetType();
-
                     // GroupBox
                     if (control.GetType() == typeof(GroupBox))
                     {
-                        castControl = (GroupBox)control;
+                        var castControl = (GroupBox)control;
 
                         if (listControlNames.Contains(castControl.Name))
                             castControl.Enabled = flag;
@@ -354,7 +339,7 @@ namespace SharePortfolioManager.Classes
                     // Button
                     if (control.GetType() == typeof(Button))
                     {
-                        castControl = (Button)control;
+                        var castControl = (Button)control;
 
                         if (listControlNames.Contains(castControl.Name))
                         {
@@ -369,7 +354,7 @@ namespace SharePortfolioManager.Classes
                     // MenuStrip
                     if (control.GetType() == typeof(MenuStrip))
                     {
-                        castControl = (MenuStrip)control;
+                        var castControl = (MenuStrip)control;
 
                         if (listControlNames.Contains(castControl.Name))
                         {
@@ -384,7 +369,7 @@ namespace SharePortfolioManager.Classes
                     // DataGridView
                     if (control.GetType() == typeof(DataGridView))
                     {
-                        castControl = (DataGridView)control;
+                        var castControl = (DataGridView)control;
 
                         if (listControlNames.Contains(castControl.Name))
                         {
@@ -399,7 +384,7 @@ namespace SharePortfolioManager.Classes
                     // TabControl
                     if (control.GetType() == typeof(TabControl))
                     {
-                        castControl = (TabControl)control;
+                        var castControl = (TabControl)control;
 
                         if (listControlNames.Contains(castControl.Name))
                         {
@@ -416,7 +401,8 @@ namespace SharePortfolioManager.Classes
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show("EnableDisableControls()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                var message = $"EnableDisableControls()\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 #endif
             }
         }
@@ -429,48 +415,48 @@ namespace SharePortfolioManager.Classes
         /// This function scrolls in the given DataGridView to the given index.
         /// The row with the given index would be the last seen row in the DataGridView.
         /// </summary>
-        /// <param name="DataGridView">DataGridView</param>
+        /// <param name="dataGridView">DataGridView</param>
         /// <param name="index">Index of the row where to scroll</param>
+        /// <param name="lastDisplayedRowIndex">Index of the last displayed row of the data grid view</param>
         /// <param name="bAllowScrollUp">Flag if a scroll to the top is allowed</param>
-        static public void ScrollDgvToIndex(DataGridView DataGridView, int index, int lastDisplayedRowIndex, bool bAllowScrollUp = false)
+        public static void ScrollDgvToIndex(DataGridView dataGridView, int index, int lastDisplayedRowIndex, bool bAllowScrollUp = false)
         {
             // Check if DataGridView is valid
-            if (DataGridView != null && DataGridView.RowCount > 0)
+            if (dataGridView == null || dataGridView.RowCount <= 0) return;
+
+            // Check if index is valid
+            if (index < 0 || index >= dataGridView.RowCount) return;
+
+            // Check if the row is already in the displayed area of the DataGridView
+            var iDisplayedRows = dataGridView.DisplayedRowCount(false);
+
+            if (dataGridView.FirstDisplayedCell == null) return;
+
+            var iFirstDisplayedRowIndex = 0;
+
+            if (lastDisplayedRowIndex < dataGridView.RowCount)
+                iFirstDisplayedRowIndex = lastDisplayedRowIndex;
+
+#if DEBUG
+            Console.WriteLine(@"iFirstDisplayedRowIndex_1: {0}", iFirstDisplayedRowIndex);
+            Console.WriteLine(@"iDisplayedRows_1: {0}", iDisplayedRows);
+#endif
+
+            if (bAllowScrollUp && index <= iFirstDisplayedRowIndex)
             {
-                // Check if index is valid
-                if (index >= 0 && index < DataGridView.RowCount)
-                {
-                    // Check if the row is already in the displayed area of the DataGridView
-                    int iDisplayedRows = DataGridView.DisplayedRowCount(false);
-
-                    if (DataGridView.FirstDisplayedCell != null)
-                    {
-                        int iFirstDisplayedRowIndex = 0;
-
-                        if (lastDisplayedRowIndex < DataGridView.RowCount)
-                            iFirstDisplayedRowIndex = lastDisplayedRowIndex;
-
-                        Console.WriteLine("iFirstDisplayedRowIndex_1: {0}", iFirstDisplayedRowIndex);
-                        Console.WriteLine("iDisplayedRows_1: {0}", iDisplayedRows);
-
-                        if (bAllowScrollUp && index <= iFirstDisplayedRowIndex)
-                        {
-                            DataGridView.FirstDisplayedScrollingRowIndex = index;
-                            lastDisplayedRowIndex = index;
-                        }
-                        else if (index + 1 > iFirstDisplayedRowIndex + iDisplayedRows && iDisplayedRows > 0)
-                        {
-                            if (iDisplayedRows < index + 1)
-                                DataGridView.FirstDisplayedScrollingRowIndex = index - (iDisplayedRows - 1);
-                        }
-                        else
-                            DataGridView.FirstDisplayedScrollingRowIndex = lastDisplayedRowIndex;
-
-                        Console.WriteLine("iFirstDisplayedRowIndex_2: {0}", iFirstDisplayedRowIndex);
-                        Console.WriteLine("iDisplayedRows_2: {0}", iDisplayedRows);
-                    }
-                }
+                dataGridView.FirstDisplayedScrollingRowIndex = index;
+//                lastDisplayedRowIndex = index;
             }
+            else if (index + 1 > iFirstDisplayedRowIndex + iDisplayedRows && iDisplayedRows > 0)
+            {
+                if (iDisplayedRows < index + 1)
+                    dataGridView.FirstDisplayedScrollingRowIndex = index - (iDisplayedRows - 1);
+            }
+            else
+                dataGridView.FirstDisplayedScrollingRowIndex = lastDisplayedRowIndex;
+
+            Console.WriteLine(@"iFirstDisplayedRowIndex_2: {0}", iFirstDisplayedRowIndex);
+            Console.WriteLine(@"iDisplayedRows_2: {0}", iDisplayedRows);
         }
 
         #endregion Scroll DataGridView to given index
@@ -488,12 +474,10 @@ namespace SharePortfolioManager.Classes
         /// <param name="bUnit">Flag if a unit should be set</param>
         /// <param name="strUnit">String with the given unit</param>
         /// <param name="cultureInfo">Culture info for the formatting</param>
-        /// <returns></returns>
+        /// <returns>Formatted string value of the given double</returns>
         public static string FormatDouble(double dblValue, int iPrecision, bool bFixed, int iFixedPrecision = 0, bool bUnit = false, string strUnit = "", CultureInfo cultureInfo = null)
         {
-            string strFormatString = "";
-            string strResult = "";
-            int iNoFixedPrecision = 0;
+            var strFormatString = "";
 
             // Check if the given precision is greater than the maximum
             if (iPrecision > Maxprecision)
@@ -504,14 +488,14 @@ namespace SharePortfolioManager.Classes
                 iFixedPrecision = iPrecision;
 
             // Calculate no fixed precision value
-            iNoFixedPrecision = iPrecision - iFixedPrecision - 1;
+            var iNoFixedPrecision = iPrecision - iFixedPrecision - 1;
 
             if (iPrecision > 0)
             {
                 // Create format string
                 if (bFixed)
                 {
-                    for (int i = 1; i <= iPrecision; i++)
+                    for (var i = 1; i <= iPrecision; i++)
                     {
                         if (i == 1)
                             strFormatString = strFormatString + "0.0";
@@ -521,7 +505,7 @@ namespace SharePortfolioManager.Classes
                 }
                 else
                 {
-                    for (int i = 1; i <= iPrecision; i++)
+                    for (var i = 1; i <= iPrecision; i++)
                     {
                         if (i > iNoFixedPrecision)
                         {
@@ -546,10 +530,7 @@ namespace SharePortfolioManager.Classes
             }
 
             // Format with the given culture info
-            if (cultureInfo != null)
-                strResult = dblValue.ToString(strFormatString, cultureInfo);
-            else
-                strResult = dblValue.ToString(strFormatString);
+            var strResult = cultureInfo != null ? dblValue.ToString(strFormatString, cultureInfo) : dblValue.ToString(strFormatString);
 
             // Check if a unit is given or should be set
             if (!bUnit)
@@ -562,7 +543,7 @@ namespace SharePortfolioManager.Classes
                 if (cultureInfo == null)
                     return strResult;
 
-                RegionInfo ri = new RegionInfo(cultureInfo.LCID);
+                var ri = new RegionInfo(cultureInfo.LCID);
                 strResult = strResult + " " + ri.CurrencySymbol;
             }
 
@@ -580,12 +561,10 @@ namespace SharePortfolioManager.Classes
         /// <param name="bUnit">Flag if a unit should be set</param>
         /// <param name="strUnit">String with the given unit</param>
         /// <param name="cultureInfo">Culture info for the formatting</param>
-        /// <returns></returns>
+        /// <returns>Formatted string of the given decimal</returns>
         public static string FormatDecimal(decimal decValue, int iPrecision, bool bFixed, int iFixedPrecision = 0, bool bUnit = false, string strUnit = "", CultureInfo cultureInfo = null)
         {
-            string strFormatString = "";
-            string strResult = "";
-            int iNoFixedPrecision = 0;
+            var strFormatString = "";
 
             // Check if the given precision is greater than the maximum
             if (iPrecision > Maxprecision)
@@ -596,14 +575,14 @@ namespace SharePortfolioManager.Classes
                 iFixedPrecision = iPrecision;
 
             // Calculate no fixed precision value
-            iNoFixedPrecision = iPrecision - iFixedPrecision - 1;
+            var iNoFixedPrecision = iPrecision - iFixedPrecision - 1;
 
             if (iPrecision > 0)
             {
                 // Create format string
                 if (bFixed)
                 {
-                    for (int i = 1; i <= iPrecision; i++)
+                    for (var i = 1; i <= iPrecision; i++)
                     {
                         if (i == 1)
                             strFormatString = strFormatString + "0.0";
@@ -613,7 +592,7 @@ namespace SharePortfolioManager.Classes
                 }
                 else
                 {
-                    for (int i = 1; i <= iPrecision; i++)
+                    for (var i = 1; i <= iPrecision; i++)
                     {
                         if (i > iNoFixedPrecision)
                         {
@@ -638,10 +617,7 @@ namespace SharePortfolioManager.Classes
             }
 
             // Format with the given culture info
-            if (cultureInfo != null)
-                strResult = decValue.ToString(strFormatString, cultureInfo);
-            else
-                strResult = decValue.ToString(strFormatString);
+            var strResult = cultureInfo != null ? decValue.ToString(strFormatString, cultureInfo) : decValue.ToString(strFormatString);
 
             // Check if a unit is given or should be set
             if (!bUnit)
@@ -654,7 +630,7 @@ namespace SharePortfolioManager.Classes
                 if (cultureInfo == null)
                     return strResult;
 
-                RegionInfo ri = new RegionInfo(cultureInfo.LCID);
+                var ri = new RegionInfo(cultureInfo.LCID);
                 strResult = strResult + " " + ri.CurrencySymbol;
             }
 
@@ -670,9 +646,9 @@ namespace SharePortfolioManager.Classes
         /// </summary>
         /// <param name="strRegexOptions">The RegEx options string. Options must be separated by ","</param>
         /// <returns>List with the RegexOptions</returns>
-        static public List<RegexOptions> GetRegexOptions(string strRegexOptions)
+        public static List<RegexOptions> GetRegexOptions(string strRegexOptions)
             {
-                List<RegexOptions> regexOptionsList = new List<RegexOptions>();
+                var regexOptionsList = new List<RegexOptions>();
 
                 // Remove white space
                 strRegexOptions = strRegexOptions.Replace(" ", "");
@@ -710,13 +686,13 @@ namespace SharePortfolioManager.Classes
                         case "Singleline":
                             regexOptionsList.Add(RegexOptions.Singleline);
                             break;
+                        default:
+                            regexOptionsList.Add(RegexOptions.Singleline);
+                            break;
                     }
                 }
 
-                if (regexOptionsList.Count > 0)
-                    return regexOptionsList;
-
-                return null;
+                return regexOptionsList.Count > 0 ? regexOptionsList : null;
             }
 
         #endregion Get RegEx options
@@ -727,23 +703,21 @@ namespace SharePortfolioManager.Classes
         /// This function show a open file dialog
         /// and returns the chosen file
         /// </summary>
-        /// <param name="xmlLanguage"></param>
-        /// <param name="strLanguage"></param>
-        /// <param name="strTitleLanguagePath"></param>
-        /// <param name="strFilter"></param>
-        /// <param name="strCurrentDocument"></param>
+        /// <param name="strTitle">Title for the open file dialog</param>
+        /// <param name="strFilter">Filter for the open file dialog</param>
+        /// <param name="strCurrentDocument">Given current document</param>
         /// <returns></returns>
-        static public string SetDocument(string strTitle, string strFilter, string strCurrentDocument)
+        public static string SetDocument(string strTitle, string strFilter, string strCurrentDocument)
         {
             // Open file dialog
-            OpenFileDialog openFileDlg = null;
+            OpenFileDialog openFileDlg;
 
             // Save old document
-            string strOldDocument = strCurrentDocument;
+            var strOldDocument = strCurrentDocument;
 
             if (strCurrentDocument != "")
             {
-                openFileDlg = new OpenFileDialog()
+                openFileDlg = new OpenFileDialog
                 {
                     Title = strTitle,
                     ValidateNames = true,
@@ -757,7 +731,7 @@ namespace SharePortfolioManager.Classes
             }
             else
             {
-                openFileDlg = new OpenFileDialog()
+                openFileDlg = new OpenFileDialog
                 {
                     Title = strTitle,
                     ValidateNames = true,
@@ -768,12 +742,9 @@ namespace SharePortfolioManager.Classes
                 };
             }
 
-            DialogResult dlgResult = openFileDlg.ShowDialog();
+            var dlgResult = openFileDlg.ShowDialog();
 
-            if (dlgResult == DialogResult.OK)
-                strCurrentDocument = openFileDlg.FileName;
-            else
-                strCurrentDocument = strOldDocument;
+            strCurrentDocument = dlgResult == DialogResult.OK ? openFileDlg.FileName : strOldDocument;
 
             return strCurrentDocument;
         }
@@ -786,18 +757,16 @@ namespace SharePortfolioManager.Classes
         /// This function show a open file dialog
         /// and returns the chosen file
         /// </summary>
-        /// <param name="xmlLanguage"></param>
-        /// <param name="strLanguage"></param>
-        /// <param name="strTitleLanguagePath"></param>
-        /// <param name="strFilter"></param>
-        /// <param name="strCurrentPortfolio"></param>
-        /// <returns></returns>
-        static public string LoadPortfolio(string strTitle, string strFilter, string strCurrentPortfolio)
+        /// <param name="strTitle">Title for the open file dialog</param>
+        /// <param name="strFilter">Filter for the open file dialog</param>
+        /// <param name="strCurrentPortfolio">Current loaded portfolio file</param>
+        /// <returns>Chosen portfolio file</returns>
+        public static string LoadPortfolio(string strTitle, string strFilter, string strCurrentPortfolio)
         {
             // Save old portfolio file name
-            string strOldPortfolioName = strCurrentPortfolio;
+            var strOldPortfolioName = strCurrentPortfolio;
 
-            OpenFileDialog openFileDlg = new OpenFileDialog()
+            var openFileDlg = new OpenFileDialog
             {
                 Title = strTitle,
                 ValidateNames = true,
@@ -807,12 +776,9 @@ namespace SharePortfolioManager.Classes
                 RestoreDirectory = true,
                 Filter = strFilter
             };
-            DialogResult dlgResult = openFileDlg.ShowDialog();
+            var dlgResult = openFileDlg.ShowDialog();
 
-            if (dlgResult == DialogResult.OK)
-                strCurrentPortfolio = openFileDlg.FileName;
-            else
-                strCurrentPortfolio = strOldPortfolioName;
+            strCurrentPortfolio = dlgResult == DialogResult.OK ? openFileDlg.FileName : strOldPortfolioName;
 
             return strCurrentPortfolio;
         }
@@ -827,7 +793,7 @@ namespace SharePortfolioManager.Classes
         /// <returns>String with the file name</returns>
         public static string GetFileName(string strPath)
         {
-            if (Path.GetFileName(strPath) != null && Path.GetFileName(strPath) != String.Empty)
+            if (Path.GetFileName(strPath) != null && Path.GetFileName(strPath) != string.Empty)
                 return Path.GetFileName(strPath);
 
             return @"-";
@@ -844,25 +810,25 @@ namespace SharePortfolioManager.Classes
         /// <returns>IEnumberable with a KeyValuePair list</returns>
         public static void CreateNameCultureInfoCurrencySymbolList()
         {
-            _listNameCultureInfoCurrencySymbol = CultureInfo
+            ListNameCultureInfoCurrencySymbol = CultureInfo
             .GetCultures(CultureTypes.AllCultures)
             .Where(c => !c.IsNeutralCulture)
             .Select(culture =>
             {
                 try
                 {
-                    return new KeyValuePair<String, CultureInformation>(culture.Name, new CultureInformation(culture, new RegionInfo(culture.LCID).CurrencySymbol));
+                    return new KeyValuePair<string, CultureInformation>(culture.Name, new CultureInformation(culture, new RegionInfo(culture.LCID).CurrencySymbol));
                 }
                 catch
                 {
-                    return new KeyValuePair<String, CultureInformation>(null, null);
+                    return new KeyValuePair<string, CultureInformation>(null, null);
                 }
             })
             .Where(ci => ci.Key != null)
             .OrderBy(ci => ci.Key)
             .ToDictionary(x => x.Key, x => x.Value);
 
-            _listNameCultureInfoCurrencySymbol.OrderBy(ci => ci.Key);
+            ListNameCultureInfoCurrencySymbol = ListNameCultureInfoCurrencySymbol.OrderBy(ci => ci.Key);
         }
 
         #endregion Get currency list
@@ -871,7 +837,7 @@ namespace SharePortfolioManager.Classes
 
         public static CultureInfo GetCultureByName(string name)
         {
-            CultureInfo[] cultures = CultureInfo.GetCultures(CultureTypes.AllCultures & ~CultureTypes.NeutralCultures);
+            var cultures = CultureInfo.GetCultures(CultureTypes.AllCultures & ~CultureTypes.NeutralCultures);
             foreach (var temp in cultures)
             {
                 if (temp.Name == name)
@@ -885,7 +851,7 @@ namespace SharePortfolioManager.Classes
 
         #region Calculate market value, market value minus reduction and market value minus reduction and plus costs
 
-        static public void CalcBuyValues(decimal decVolume, decimal decSharePrice, decimal decCosts, decimal decReduction, out decimal decMarketValue, out decimal decMarketValueReduction, out decimal decMarketValueReductionCosts)
+        public static void CalcBuyValues(decimal decVolume, decimal decSharePrice, decimal decCosts, decimal decReduction, out decimal decMarketValue, out decimal decMarketValueReduction, out decimal decMarketValueReductionCosts)
         {
             if (decVolume > 0 && decSharePrice > 0)
             {
@@ -905,11 +871,12 @@ namespace SharePortfolioManager.Classes
                 decMarketValueReductionCosts = 0;
             }
         }
+
         #endregion  Calculate market value, market value minus reduction and market value minus reduction and plus costs
 
         #region URL checker
 
-        static public bool UrlChecker(ref string url, int timeout)
+        public static bool UrlChecker(ref string url, int timeout)
         {
             if (string.IsNullOrEmpty(url))
             {
@@ -919,8 +886,8 @@ namespace SharePortfolioManager.Classes
             HttpWebResponse response;
             try
             {
-                Uri urlCheck = new Uri(url);
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlCheck);
+                var urlCheck = new Uri(url);
+                var request = (HttpWebRequest)WebRequest.Create(urlCheck);
                 request.Timeout = timeout;
                 request.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9.0.13) Gecko/2009073022 Firefox/3.0.13";
 
@@ -931,17 +898,14 @@ namespace SharePortfolioManager.Classes
                 return false; //could not connect to the inter net (maybe) 
             }
 
-            if (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Found)
-                return true;
-            else
-                return false;
+            return response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Found;
         }
 
         #endregion URL checker
 
         #region Get combo box items
 
-        public static string[] GetComboBoxItmes(string xPath, string languageName, Language language)
+        public static object[] GetComboBoxItmes(string xPath, string languageName, Language language)
         {
             return language.GetLanguageTextListByXPath(xPath, languageName).ToArray();
         }
@@ -954,48 +918,24 @@ namespace SharePortfolioManager.Classes
     // This class stores the informations of a culture info
     public class CultureInformation
     {
-        private string _currencySymbol;
-        private CultureInfo _cultureInfo;
+        public string CurrencySymbol { get; set; }
 
-        public string CurrencySymbol
-        {
-            get { return _currencySymbol; }
-            set { _currencySymbol = value; }
-        }
-
-        public CultureInfo CultureInfo
-        {
-            get { return _cultureInfo; }
-            set { _cultureInfo = value; }
-        }
+        public CultureInfo CultureInfo { get; set; }
 
         public CultureInformation(string currencySymbol)
         {
-            _currencySymbol = currencySymbol;
+            CurrencySymbol = currencySymbol;
         }
 
         public CultureInformation(CultureInfo cultureInfo)
         {
-            _cultureInfo = cultureInfo;
+            CultureInfo = cultureInfo;
         }
 
         public CultureInformation(CultureInfo cultureInfo, string currencySymbol)
         {
-            _currencySymbol = currencySymbol;
-            _cultureInfo = cultureInfo;
+            CurrencySymbol = currencySymbol;
+            CultureInfo = cultureInfo;
         }
     }
-
-    //class CultureInformationTest <String, CultureInformation>
-    //{
-    //    public string _cultureISOCurrencySymbol;
-    //    public CultureInformation _cultureInformation;
-
-    //    public CultureInformationTest(string cultureISOCurrencySymbol, CultureInformation cultureInformation)
-    //    {
-    //        _cultureISOCurrencySymbol = cultureISOCurrencySymbol;
-    //        _cultureInformation = cultureInformation;
-    //    }
-
-    //}
 }

@@ -291,7 +291,7 @@
             this.cboBoxCultureInfo.Name = "cboBoxCultureInfo";
             this.cboBoxCultureInfo.Size = new System.Drawing.Size(530, 22);
             this.cboBoxCultureInfo.TabIndex = 9;
-            this.cboBoxCultureInfo.SelectedIndexChanged += new System.EventHandler(this.cboBoxCultureInfo_SelectedIndexChanged);
+            this.cboBoxCultureInfo.SelectedIndexChanged += new System.EventHandler(this.CboBoxCultureInfo_SelectedIndexChanged);
             // 
             // lblVolumeUnit
             // 
@@ -389,7 +389,7 @@
             this.datePickerDate.ShowUpDown = true;
             this.datePickerDate.Size = new System.Drawing.Size(264, 22);
             this.datePickerDate.TabIndex = 1;
-            this.datePickerDate.ValueChanged += new System.EventHandler(this.datePickerDate_ValueChanged);
+            this.datePickerDate.ValueChanged += new System.EventHandler(this.DatePickerDate_ValueChanged);
             // 
             // datePickerTime
             // 
@@ -402,7 +402,7 @@
             this.datePickerTime.ShowUpDown = true;
             this.datePickerTime.Size = new System.Drawing.Size(264, 22);
             this.datePickerTime.TabIndex = 2;
-            this.datePickerTime.ValueChanged += new System.EventHandler(this.datePickerTime_ValueChanged);
+            this.datePickerTime.ValueChanged += new System.EventHandler(this.DatePickerTime_ValueChanged);
             // 
             // grpBoxGeneral
             // 
@@ -513,7 +513,7 @@
             this.cbxShareType.Name = "cbxShareType";
             this.cbxShareType.Size = new System.Drawing.Size(530, 22);
             this.cbxShareType.TabIndex = 44;
-            this.cbxShareType.SelectedIndexChanged += new System.EventHandler(this.cbxShareType_SelectedIndexChanged);
+            this.cbxShareType.SelectedIndexChanged += new System.EventHandler(this.CbxShareType_SelectedIndexChanged);
             // 
             // lblShareType
             // 
@@ -566,7 +566,7 @@
             this.cbxDividendPayoutInterval.Name = "cbxDividendPayoutInterval";
             this.cbxDividendPayoutInterval.Size = new System.Drawing.Size(530, 22);
             this.cbxDividendPayoutInterval.TabIndex = 10;
-            this.cbxDividendPayoutInterval.SelectedIndexChanged += new System.EventHandler(this.cbxDividendPayoutInterval_SelectedIndexChanged);
+            this.cbxDividendPayoutInterval.SelectedIndexChanged += new System.EventHandler(this.CbxDividendPayoutInterval_SelectedIndexChanged);
             // 
             // lblFinalValue
             // 

@@ -29,15 +29,15 @@ using System.Windows.Forms;
 
 namespace SharePortfolioManager.Forms.BuysForm.Presenter
 {
-    public class PresenterBuyEdit  
+    internal class PresenterBuyEdit  
     {
         private readonly IModelBuyEdit _model;
         private readonly IViewBuyEdit _view;
 
         public PresenterBuyEdit(IViewBuyEdit view, IModelBuyEdit model)
         {
-            this._view = view;
-            this._model = model;
+            _view = view;
+            _model = model;
 
             view.PropertyChanged += OnViewChange;
             view.FormatInputValues += OnViewFormatInputValues;
@@ -108,8 +108,8 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
             // Check the input values
             if (!CheckInputValues(_model.UpdateBuy))
             {
-                bool bErrorFlag = false;
-                string strDateTime = _model.Date + " " + _model.Time;
+                var bErrorFlag = false;
+                var strDateTime = _model.Date + " " + _model.Time;
 
                 // Cost entry if the costs value is not 0
                 if (_model.CostsDec > 0)
@@ -136,11 +136,11 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
             // Check the input values
             if (!CheckInputValues(_model.UpdateBuy))
             {
-                string strDateTime = _model.Date + " " + _model.Time;
+                var strDateTime = _model.Date + " " + _model.Time;
 
                 if (_model.ShareObjectFinalValue.RemoveBuy(_model.SelectedDate) && _model.ShareObjectFinalValue.AddBuy(strDateTime, _model.VolumeDec, _model.SharePricedec, _model.ReductionDec, _model.CostsDec, _model.Document))
                 {
-                    bool bFlagCostEdit = true;
+                    var bFlagCostEdit = true;
 
                     // Check if an old cost entry must be deleted
                     if (_model.ShareObjectFinalValue.AllCostsEntries.GetCostObjectByDateTime(strDateTime) != null)
@@ -180,14 +180,7 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
                     // Check if a cost object exists
                     if (_model.ShareObjectFinalValue.AllCostsEntries.GetCostObjectByDateTime(_model.SelectedDate) != null)
                     {
-                        if (_model.ShareObjectFinalValue.RemoveCost(_model.SelectedDate))
-                        {
-                            _model.ErrorCode = BuyErrorCode.DeleteSuccessful;
-                        }
-                        else
-                        {
-                            _model.ErrorCode = BuyErrorCode.DeleteFailed;
-                        }
+                        _model.ErrorCode = _model.ShareObjectFinalValue.RemoveCost(_model.SelectedDate) ? BuyErrorCode.DeleteSuccessful : BuyErrorCode.DeleteFailed;
                     }
                     else
                     {
@@ -227,7 +220,8 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show("OnDocumentBrowse()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                var message = $"OnDocumentBrowse()\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 _model.ErrorCode = BuyErrorCode.DocumentBrowseFailed;
@@ -243,12 +237,8 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
         {
             try
             {
-                decimal decMarketValue = 0;
-                decimal decPurchaseValue = 0;
-                decimal decFinalValue = 0;
-
                 Helper.CalcBuyValues(_model.VolumeDec, _model.SharePricedec, _model.CostsDec,
-                    _model.ReductionDec, out decMarketValue, out decPurchaseValue, out decFinalValue);
+                    _model.ReductionDec, out var decMarketValue, out var decPurchaseValue, out var decFinalValue);
 
                 _model.MarketValueDec = decMarketValue;
                 _model.PurchaseValueDec = decPurchaseValue;
@@ -257,7 +247,8 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show("CalculateMarketValueAndFinalValue()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                var message = $"CalculateMarketValueAndFinalValue()\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 _model.MarketValueDec = 0;
@@ -272,18 +263,15 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
         /// </summary>
         /// <param name="bFlagEdit">Flag if a buy should be add (true) or edit (false)</param>
         /// <returns>Flag if the input values are correct or not</returns>
-        bool CheckInputValues(bool bFlagEdit)
+        private bool CheckInputValues(bool bFlagEdit)
         {
             try
             {
-                bool bErrorFlag = false;
+                var bErrorFlag = false;
 
-                if (bFlagEdit)
-                    _model.ErrorCode = BuyErrorCode.EditSuccessful;
-                else
-                    _model.ErrorCode = BuyErrorCode.AddSuccessful;
+                _model.ErrorCode = bFlagEdit ? BuyErrorCode.EditSuccessful : BuyErrorCode.AddSuccessful;
 
-                string strDate = _model.Date + " " + _model.Time;
+                var strDate = _model.Date + " " + _model.Time;
 
                 // Check if a buy with the given date and time already exists
                 foreach (var buyObject in _model.ShareObjectFinalValue.AllBuyEntries.GetAllBuysOfTheShare())
@@ -292,35 +280,29 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
                     if (!bFlagEdit)
                     {
                         // By an Add all dates must be checked
-                        if (buyObject.Date == strDate)
-                        {
-                            _model.ErrorCode = BuyErrorCode.DateExists;
-                            bErrorFlag = true;
-                            break;
-                        }
+                        if (buyObject.Date != strDate) continue;
+
+                        _model.ErrorCode = BuyErrorCode.DateExists;
+                        bErrorFlag = true;
+                        break;
                     }
-                    else
-                    {
-                        // By an Edit all buys without the edit entry date and time must be checked
-                        if (buyObject.Date == strDate
-                            && _model.SelectedDate != null
-                            && buyObject.Date != _model.SelectedDate)
-                        {
-                            _model.ErrorCode = BuyErrorCode.DateExists;
-                            bErrorFlag = true;
-                            break;
-                        }
-                    }
+
+                    // By an Edit all buys without the edit entry date and time must be checked
+                    if (buyObject.Date != strDate || _model.SelectedDate == null ||
+                        buyObject.Date == _model.SelectedDate) continue;
+
+                    _model.ErrorCode = BuyErrorCode.DateExists;
+                    bErrorFlag = true;
+                    break;
                 }
 
                 // Check if a correct volume for the buy is given
-                decimal decVolume = -1;
                 if (_model.Volume == @"" && bErrorFlag == false)
                 {
                     _model.ErrorCode = BuyErrorCode.VolumeEmpty;
                     bErrorFlag = true;
                 }
-                else if (!decimal.TryParse(_model.Volume, out decVolume) && bErrorFlag == false)
+                else if (!decimal.TryParse(_model.Volume, out var decVolume) && bErrorFlag == false)
                 {
                     _model.ErrorCode = BuyErrorCode.VolumeWrongFormat;
                     bErrorFlag = true;
@@ -334,13 +316,12 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
                     _model.VolumeDec = decVolume;
 
                 // Check if a correct price for the buy is given
-                decimal decPrice = -1;
                 if (_model.SharePrice == @"" && bErrorFlag == false)
                 {
                     _model.ErrorCode = BuyErrorCode.SharePricEmpty;
                     bErrorFlag = true;
                 }
-                else if (!decimal.TryParse(_model.SharePrice, out decPrice) && bErrorFlag == false)
+                else if (!decimal.TryParse(_model.SharePrice, out var decPrice) && bErrorFlag == false)
                 {
                     _model.ErrorCode = BuyErrorCode.SharePriceWrongFormat;
                     bErrorFlag = true;
@@ -356,36 +337,34 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
                 // Costs input check
                 if (_model.Costs != "" && bErrorFlag == false)
                 {
-                    decimal decCosts = 0;
-                    if (!decimal.TryParse(_model.Costs, out decCosts) && bErrorFlag == false)
+                    if (!decimal.TryParse(_model.Costs, out var decCosts))
                     {
                         _model.ErrorCode = BuyErrorCode.CostsWrongFormat;
                         bErrorFlag = true;
                     }
-                    else if (decCosts < 0 && bErrorFlag == false)
+                    else if (decCosts < 0)
                     {
                         _model.ErrorCode = BuyErrorCode.CostsWrongValue;
                         bErrorFlag = true;
                     }
-                    else if (bErrorFlag == false)
+                    else
                         _model.CostsDec = decCosts;
                 }
 
                 // Reduction input check
                 if (_model.Reduction != "" && bErrorFlag == false)
                 {
-                    decimal decReduction = 0;
-                    if (!decimal.TryParse(_model.Reduction, out decReduction) && bErrorFlag == false)
+                    if (!decimal.TryParse(_model.Reduction, out var decReduction))
                     {
                         _model.ErrorCode = BuyErrorCode.ReductionWrongFormat;
                         bErrorFlag = true;
                     }
-                    else if (decReduction < 0 && bErrorFlag == false)
+                    else if (decReduction < 0)
                     {
                         _model.ErrorCode = BuyErrorCode.ReductionWrongValue;
                         bErrorFlag = true;
                     }
-                    else if (bErrorFlag == false)
+                    else
                         _model.ReductionDec = decReduction;
                 }
 
