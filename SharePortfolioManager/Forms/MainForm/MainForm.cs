@@ -30,6 +30,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
+using SharePortfolioManager.Classes.ShareObjects;
 using SharePortfolioManager.Properties;
 
 namespace SharePortfolioManager
@@ -1087,7 +1088,7 @@ namespace SharePortfolioManager
         // When the form is hidden, we show notify icon and when the form is visible we hide it
         private void FrmMain_VisibleChanged(object sender, EventArgs e)
         {
-            this._notifyIcon.Visible = !this.Visible;
+            _notifyIcon.Visible = !Visible;
         }
 
         #endregion MainForm visibility changed
@@ -1138,12 +1139,12 @@ namespace SharePortfolioManager
         // When click on notify icon, we bring the form to front
         private void NotifyIcon_DoubleClick(object sender, EventArgs e)
         {
-            this.ShowInTaskbar = true;
-            this.WindowState = FormWindowState.Minimized;
-            this.Show();
-            this.WindowState = MyWindowState;
+            ShowInTaskbar = true;
+            WindowState = FormWindowState.Minimized;
+            Show();
+            WindowState = MyWindowState;
 
-            this.Activate();
+            Activate();
         }
 
         /// <summary>
@@ -1151,14 +1152,14 @@ namespace SharePortfolioManager
         /// </summary>
         /// <param name="sender">Notify icon</param>
         /// <param name="e">EventArgs</param>
-        protected void Show_Click(object sender, System.EventArgs e)
+        protected void Show_Click(object sender, EventArgs e)
         {
-            this.ShowInTaskbar = true;
-            this.WindowState = FormWindowState.Minimized;
-            this.Show();
-            this.WindowState = MyWindowState;
+            ShowInTaskbar = true;
+            WindowState = FormWindowState.Minimized;
+            Show();
+            WindowState = MyWindowState;
 
-            this.Activate();
+            Activate();
         }
 
         /// <summary>
@@ -1166,7 +1167,7 @@ namespace SharePortfolioManager
         /// </summary>
         /// <param name="sender">Notify icon</param>
         /// <param name="e">EventArgs</param>
-        protected void Exit_Click(object sender, System.EventArgs e)
+        protected void Exit_Click(object sender, EventArgs e)
         {
             Close();
         }

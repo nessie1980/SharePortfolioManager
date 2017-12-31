@@ -22,7 +22,6 @@
 
 using LanguageHandler;
 using System;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace SharePortfolioManager
@@ -32,19 +31,14 @@ namespace SharePortfolioManager
         #region Variables
 
         /// <summary>
-        /// Stores the parent window
-        /// </summary>
-        private FrmMain _parentWindow;
-
-        /// <summary>
         /// Stores the language file
         /// </summary>
-        private Language XmlLanguage;
+        private readonly Language _xmlLanguage;
 
         /// <summary>
         /// Stores language
         /// </summary>
-        private String _strLanguage;
+        private readonly string _strLanguage;
 
         /// <summary>
         /// Flag if the form should be closed
@@ -55,15 +49,15 @@ namespace SharePortfolioManager
 
         #region Form
 
+        /// <inheritdoc />
         /// <summary>
         /// Constructor
         /// </summary>
-        public FrmAbout(FrmMain parentWindow, Language xmlLanguage, String strLanguage)
+        public FrmAbout(Language xmlLanguage, string strLanguage)
         {
             InitializeComponent();
 
-            _parentWindow = parentWindow;
-            XmlLanguage = xmlLanguage;
+            _xmlLanguage = xmlLanguage;
             _strLanguage = strLanguage;
             _stopFomClosing = false;
         }
@@ -72,38 +66,38 @@ namespace SharePortfolioManager
         {
             #region Language configuration
 
-            Text = XmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Caption", _strLanguage);
-            grpBoxVersions.Text = XmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/Version", _strLanguage);
-            lblApplicationVersion.Text = XmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/ApplicationVersion", _strLanguage);
-            lblWebParserDllVersion.Text = XmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/WebParserDLLVersion", _strLanguage);
-            lblLanguageDllVersion.Text = XmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/LanguageDLLVersion", _strLanguage);
-            lblLoggerDllVersion.Text = XmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/LoggerDLLVersion", _strLanguage);
+            Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Caption", _strLanguage);
+            grpBoxVersions.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/Version", _strLanguage);
+            lblApplicationVersion.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/ApplicationVersion", _strLanguage);
+            lblWebParserDllVersion.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/WebParserDLLVersion", _strLanguage);
+            lblLanguageDllVersion.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/LanguageDLLVersion", _strLanguage);
+            lblLoggerDllVersion.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/LoggerDLLVersion", _strLanguage);
 
-            btnOk.Text = XmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Buttons/Ok", _strLanguage);
+            btnOk.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Buttons/Ok", _strLanguage);
 
             #endregion Language configuration
 
-            Assembly assApp = typeof(FrmMain).Assembly;
-            AssemblyName assAppName = assApp.GetName();
-            Version verApp = assAppName.Version;
+            var assApp = typeof(FrmMain).Assembly;
+            var assAppName = assApp.GetName();
+            var verApp = assAppName.Version;
 
             lblApplicationVersionValue.Text = verApp.ToString();
 
-            Assembly assWebParser = typeof(WebParser.WebParser).Assembly;
-            AssemblyName assWebParserName = assWebParser.GetName();
-            Version verWebParser = assWebParserName.Version;
+            var assWebParser = typeof(WebParser.WebParser).Assembly;
+            var assWebParserName = assWebParser.GetName();
+            var verWebParser = assWebParserName.Version;
 
             lblWebParserDllVersionValue.Text = verWebParser.ToString();
 
-            Assembly assLanguage = typeof(LanguageHandler.Language).Assembly;
-            AssemblyName assLanguageName = assLanguage.GetName();
-            Version verLanguage = assLanguageName.Version;
+            var assLanguage = typeof(Language).Assembly;
+            var assLanguageName = assLanguage.GetName();
+            var verLanguage = assLanguageName.Version;
 
             lblLanguageDllVersionValue.Text = verLanguage.ToString();
 
-            Assembly assLogger = typeof(Logging.Logger).Assembly;
-            AssemblyName assLoggerName = assLogger.GetName();
-            Version verLogger = assLoggerName.Version;
+            var assLogger = typeof(Logging.Logger).Assembly;
+            var assLoggerName = assLogger.GetName();
+            var verLogger = assLoggerName.Version;
 
             lblLoggerDllVersionValue.Text = verLogger.ToString();
         }

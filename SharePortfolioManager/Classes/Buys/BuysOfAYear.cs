@@ -24,131 +24,45 @@ using SharePortfolioManager.Classes;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager
 {
     public class BuysYearOfTheShare
     {
-        #region Variables
-
-        /// <summary>
-        /// Stores the culture info of the share
-        /// </summary>
-        private CultureInfo _buyCultureInfo;
-
-        /// <summary>
-        /// Stores the bought value in a year without reductions and costs
-        /// </summary>
-        private decimal _buyMarketValueYear = -1;
-
-        /// <summary>
-        /// Stores the bought value in a year with reduction (market value - reduction)
-        /// </summary>
-        private decimal _buyMarketValueReductionYear = -1;
-
-        /// <summary>
-        /// Stores the bought value in a year with costs (market value - reduction + costs)
-        /// </summary>
-        private decimal _buyMarketValueReductionCostsYear = -1;
-
-        /// <summary>
-        /// Stores the bought volume in a year
-        /// </summary>
-        private decimal _buyVolumeYear = -1;
-
-        /// <summary>
-        /// Stores the single buys of a year
-        /// </summary>
-        private List<BuyObject> _buyListYear = new List<BuyObject>();
-
-        #endregion Variables
-        
         #region Properties
 
-        public CultureInfo BuyCultureInfo
-        {
-            get { return _buyCultureInfo; }
-            internal set { _buyCultureInfo = value; }
-        }
+        public CultureInfo BuyCultureInfo { get; internal set; }
 
-        public decimal BuyMarketValueYear
-        {
-            get { return _buyMarketValueYear; }
-            internal set { _buyMarketValueYear = value; }
-        }
+        public decimal BuyMarketValueYear { get; internal set; } = -1;
 
-        public string BuyMarketValueYearAsStr
-        {
-            get { return Helper.FormatDecimal(BuyMarketValueYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo); }
-        }
+        public string BuyMarketValueYearAsStr => Helper.FormatDecimal(BuyMarketValueYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
 
-        public string BuyMarketValueYearAsStrUnit
-        {
-            get { return Helper.FormatDecimal(BuyMarketValueYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo); }
-        }
+        public string BuyMarketValueYearAsStrUnit => Helper.FormatDecimal(BuyMarketValueYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
 
-        public decimal BuyMarketValueReductionYear
-        {
-            get { return _buyMarketValueReductionYear; }
-            internal set { _buyMarketValueReductionYear = value; }
-        }
+        public decimal BuyMarketValueReductionYear { get; internal set; } = -1;
 
-        public string BuyMarketValueReductionYearAsStr
-        {
-            get { return Helper.FormatDecimal(BuyMarketValueReductionYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo); }
-        }
+        public string BuyMarketValueReductionYearAsStr => Helper.FormatDecimal(BuyMarketValueReductionYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
 
-        public string BuyMarketValueReductionYearAsStrUnit
-        {
-            get { return Helper.FormatDecimal(BuyMarketValueReductionYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo); }
-        }
+        public string BuyMarketValueReductionYearAsStrUnit => Helper.FormatDecimal(BuyMarketValueReductionYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
 
-        public decimal BuyMarketValueReductionCostsYear
-        {
-            get { return _buyMarketValueReductionCostsYear; }
-            internal set { _buyMarketValueReductionCostsYear = value; }
-        }
+        public decimal BuyMarketValueReductionCostsYear { get; internal set; } = -1;
 
-        public string BuyMarketValueReductionCostsYearAsStr
-        {
-            get { return Helper.FormatDecimal(BuyMarketValueReductionCostsYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo); }
-        }
+        public string BuyMarketValueReductionCostsYearAsStr => Helper.FormatDecimal(BuyMarketValueReductionCostsYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
 
-        public string BuyMarketValueReductionCostsYearAsStrUnit
-        {
-            get { return Helper.FormatDecimal(BuyMarketValueReductionCostsYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo); }
-        }
+        public string BuyMarketValueReductionCostsYearAsStrUnit => Helper.FormatDecimal(BuyMarketValueReductionCostsYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
 
-        public decimal BuyVolumeYear
-        {
-            get { return _buyVolumeYear; }
-            internal set { _buyVolumeYear = value; }
-        }
+        public decimal BuyVolumeYear { get; internal set; } = -1;
 
-        public string BuyVolumeYearAsStr
-        {
-            get { return Helper.FormatDecimal(BuyVolumeYear, Helper.Volumefivelength, false, Helper.Volumetwofixlength, false, @"", BuyCultureInfo); }
-        }
+        public string BuyVolumeYearAsStr => Helper.FormatDecimal(BuyVolumeYear, Helper.Volumefivelength, false, Helper.Volumetwofixlength, false, @"", BuyCultureInfo);
 
-        public string BuyVolumeYearAsStrUnit
-        {
-            get { return Helper.FormatDecimal(BuyVolumeYear, Helper.Volumefivelength, false, Helper.Volumetwofixlength, true, ShareObject.PieceUnit, BuyCultureInfo); }
-        }
+        public string BuyVolumeYearAsStrUnit => Helper.FormatDecimal(BuyVolumeYear, Helper.Volumefivelength, false, Helper.Volumetwofixlength, true, ShareObject.PieceUnit, BuyCultureInfo);
 
-        public List<BuyObject> BuyListYear
-        {
-            get { return _buyListYear; }
-        }
+        public List<BuyObject> BuyListYear { get; } = new List<BuyObject>();
 
         #endregion Properties
 
         #region Methods
-
-        /// <summary>
-        /// Standard constructor
-        /// </summary>
-        public BuysYearOfTheShare()
-        { }
 
         /// <summary>
         /// This functions adds a new buy object to the year list with the given values
@@ -174,7 +88,7 @@ namespace SharePortfolioManager
                 BuyCultureInfo = cultureInfo;
 
                 // Create new BuyObject
-                BuyObject addObject = new BuyObject(cultureInfo, strDate, decVolume, decSharePrice, decReduction, decCosts, strDoc);
+                var addObject = new BuyObject(cultureInfo, strDate, decVolume, decSharePrice, decReduction, decCosts, strDoc);
 
                 // Add object to the list
                 BuyListYear.Add(addObject);
@@ -230,17 +144,16 @@ namespace SharePortfolioManager
             try
             {
                 // Search for the remove object
-                int iFoundIndex = -1;
-                foreach (BuyObject buyObject in BuyListYear)
+                var iFoundIndex = -1;
+                foreach (var buyObject in BuyListYear)
                 {
-                    if (buyObject.Date == buyDateTime)
-                    {
-                        iFoundIndex =  BuyListYear.IndexOf(buyObject);
-                        break;
-                    }
+                    if (buyObject.Date != buyDateTime) continue;
+
+                    iFoundIndex =  BuyListYear.IndexOf(buyObject);
+                    break;
                 }
                 // Save remove object
-                BuyObject removeObject = BuyListYear[iFoundIndex];
+                var removeObject = BuyListYear[iFoundIndex];
 
                 // Remove object from the list
                 BuyListYear.Remove(removeObject);
@@ -276,12 +189,15 @@ namespace SharePortfolioManager
     {
         public int Compare(BuysYearOfTheShare object1, BuysYearOfTheShare object2)
         {
+            if (object1 == null) return 0;
+            if (object2 == null) return 0;
+
             if (Convert.ToInt16(object2.BuyListYear) == Convert.ToInt16(object1.BuyListYear))
                 return 0;
-            else if (Convert.ToInt16(object2.BuyListYear) > Convert.ToInt16(object1.BuyListYear))
+            if (Convert.ToInt16(object2.BuyListYear) > Convert.ToInt16(object1.BuyListYear))
                 return 1;
-            else 
-                return -1;
+
+            return -1;
         }
     }
 }

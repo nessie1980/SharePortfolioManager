@@ -29,63 +29,21 @@ namespace SharePortfolioManager
 {
     public class CostYearOfTheShare
     {
-        #region Variables
-
-        /// <summary>
-        /// Stores the culture info of the share
-        /// </summary>
-        private CultureInfo _costCultureInfo;
-
-        /// <summary>
-        /// Stores the paid cost value in a year
-        /// </summary>
-        private decimal _costValueYear = -1;
-
-        /// <summary>
-        /// Stores the single paid costs of a year
-        /// </summary>
-        private List<CostObject> _costListYear = new List<CostObject>();
-
-        #endregion Variables
-
         #region Properties
 
-        public CultureInfo CostCultureInfo
-        {
-            get { return _costCultureInfo; }
-            internal set { _costCultureInfo = value; }
-        }
+        public CultureInfo CostCultureInfo { get; internal set; }
 
-        public decimal CostValueYear
-        {
-            get { return _costValueYear; }
-            internal set { _costValueYear = value; }
-        }
+        public decimal CostValueYear { get; internal set; } = -1;
 
-        public string CostValueYearAsStr
-        {
-            get { return Helper.FormatDecimal(_costValueYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", CostCultureInfo); }
-        }
+        public string CostValueYearAsStr => Helper.FormatDecimal(CostValueYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", CostCultureInfo);
 
-        public string CostValueYearWithUnitAsStr
-        {
-            get { return Helper.FormatDecimal(_costValueYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", CostCultureInfo); }
-        }
+        public string CostValueYearWithUnitAsStr => Helper.FormatDecimal(CostValueYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", CostCultureInfo);
 
-        public List<CostObject> CostListYear
-        {
-            get { return _costListYear; }
-        }
+        public List<CostObject> CostListYear { get; } = new List<CostObject>();
 
         #endregion Properties
 
         #region Methods
-
-        /// <summary>
-        /// Standard constructor
-        /// </summary>
-        public CostYearOfTheShare()
-        { }
 
         /// <summary>
         /// This functions adds a new cost object to the year list with the given values
@@ -109,7 +67,7 @@ namespace SharePortfolioManager
                 CostCultureInfo = cultureInfo;
 
                 // Create new CostObject
-                CostObject addObject = new CostObject(bCostOfABuy, bCostOfASale, cultureInfo, strDate, decValue, strDoc);
+                var addObject = new CostObject(bCostOfABuy, bCostOfASale, cultureInfo, strDate, decValue, strDoc);
 
                 // Add object to the list
                 CostListYear.Add(addObject);
@@ -147,17 +105,16 @@ namespace SharePortfolioManager
             try
             {
                 // Search for the remove object
-                int iFoundIndex = -1;
-                foreach (CostObject costObject in CostListYear)
+                var iFoundIndex = -1;
+                foreach (var costObject in CostListYear)
                 {
-                    if (costObject.CostDate == strDate)
-                    {
-                        iFoundIndex = CostListYear.IndexOf(costObject);
-                        break;
-                    }
+                    if (costObject.CostDate != strDate) continue;
+
+                    iFoundIndex = CostListYear.IndexOf(costObject);
+                    break;
                 }
                 // Save remove object
-                CostObject removeObject = CostListYear[iFoundIndex];
+                var removeObject = CostListYear[iFoundIndex];
 
                 // Remove object from the list
                 CostListYear.Remove(removeObject);
@@ -185,12 +142,15 @@ namespace SharePortfolioManager
     {
         public int Compare(CostYearOfTheShare object1, CostYearOfTheShare object2)
         {
+            if (object1 == null) return 0;
+            if (object2 == null) return 0;
+
             if (Convert.ToInt16(object2.CostListYear) == Convert.ToInt16(object1.CostListYear))
                 return 0;
-            else if (Convert.ToInt16(object2.CostListYear) > Convert.ToInt16(object1.CostListYear))
+            if (Convert.ToInt16(object2.CostListYear) > Convert.ToInt16(object1.CostListYear))
                 return 1;
-            else 
-                return -1;
+            
+            return -1;
         }
     }
 }

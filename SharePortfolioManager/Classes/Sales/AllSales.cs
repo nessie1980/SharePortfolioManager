@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager
 {
@@ -33,165 +34,57 @@ namespace SharePortfolioManager
         #region Variables
 
         /// <summary>
-        /// Stores the culture info of the share
-        /// </summary>
-        private CultureInfo _cultureInfo;
-
-        /// <summary>
-        /// Stores the total sale payout with costs of the share
-        /// </summary>
-        private decimal _salePayoutTotal = 0;
-
-        /// <summary>
-        /// Stores the total sale payout without costs of the share
-        /// </summary>
-        private decimal _salePayoutWithoutCostsTotal = 0;
-
-        /// <summary>
-        /// Stores the total sale volume of the share
-        /// </summary>
-        private decimal _saleVolumeTotal = 0;
-
-        /// <summary>
-        /// Stores the total sale purchase value of the share
-        /// </summary>
-        private decimal _salePurchaseValueTotal = 0;
-
-        /// <summary>
-        /// Stores the total sale profit or loss with costs of the share
-        /// </summary>
-        private decimal _saleProfitLossTotal = 0;
-
-        /// <summary>
-        /// Stores the total sale profit or loss without costs of the share
-        /// </summary>
-        private decimal _saleProfitLossWithoutCostsTotal = 0;
-
-        /// <summary>
         /// Stores the sales of a year of the share
         /// </summary>
-        private SortedDictionary<string, SalesYearOfTheShare> _allSalesOfTheShareDictionary = new SortedDictionary<string, SalesYearOfTheShare>();
+        private readonly SortedDictionary<string, SalesYearOfTheShare> _allSalesOfTheShareDictionary = new SortedDictionary<string, SalesYearOfTheShare>();
 
         #endregion Variables
 
         #region Properties
 
-        public CultureInfo SaleCultureInfo
-        {
-            get { return _cultureInfo; }
-            internal set { _cultureInfo = value; }
-        }
+        public CultureInfo SaleCultureInfo { get; internal set; }
 
-        public decimal SalePayoutTotal
-        {
-            get { return _salePayoutTotal; }
-            internal set { _salePayoutTotal = value; }
-        }
+        public decimal SalePayoutTotal { get; internal set; }
 
-        public string SalePayoutTotalAsStr
-        {
-            get { return Helper.FormatDecimal(_salePayoutTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
-        }
+        public string SalePayoutTotalAsStr => Helper.FormatDecimal(SalePayoutTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
 
-        public string SalePayoutTotalWithUnitAsStr
-        {
-            get { return Helper.FormatDecimal(_salePayoutTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo); }
-        }
+        public string SalePayoutTotalWithUnitAsStr => Helper.FormatDecimal(SalePayoutTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
 
-        public decimal SalePayoutWithoutCostsTotal
-        {
-            get { return _salePayoutWithoutCostsTotal; }
-            internal set { _salePayoutWithoutCostsTotal = value; }
-        }
+        public decimal SalePayoutWithoutCostsTotal { get; internal set; }
 
-        public string SalePayoutWithoutCostsTotalAsStr
-        {
-            get { return Helper.FormatDecimal(_salePayoutWithoutCostsTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
-        }
+        public string SalePayoutWithoutCostsTotalAsStr => Helper.FormatDecimal(SalePayoutWithoutCostsTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
 
-        public string SalePayoutWithoutCostsTotalWithUnitAsStr
-        {
-            get { return Helper.FormatDecimal(_salePayoutWithoutCostsTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo); }
-        }
+        public string SalePayoutWithoutCostsTotalWithUnitAsStr => Helper.FormatDecimal(SalePayoutWithoutCostsTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
 
-        public decimal SaleVolumeTotal
-        {
-            get { return _saleVolumeTotal; }
-            internal set { _saleVolumeTotal = value; }
-        }
+        public decimal SaleVolumeTotal { get; internal set; }
 
-        public string SaleVolumeTotalAsStr
-        {
-            get { return Helper.FormatDecimal(_saleVolumeTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
-        }
+        public string SaleVolumeTotalAsStr => Helper.FormatDecimal(SaleVolumeTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
 
-        public string SaleVolumeTotalWithUnitAsStr
-        {
-            get { return Helper.FormatDecimal(_saleVolumeTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, ShareObject.PieceUnit, SaleCultureInfo); }
-        }
+        public string SaleVolumeTotalWithUnitAsStr => Helper.FormatDecimal(SaleVolumeTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, ShareObject.PieceUnit, SaleCultureInfo);
 
-        public decimal SalePurchaseValueTotal
-        {
-            get { return _salePurchaseValueTotal; }
-            internal set { _salePurchaseValueTotal = value; }
-        }
+        public decimal SalePurchaseValueTotal { get; internal set; }
 
-        public string SalePurchaseValueTotalAsStr
-        {
-            get { return Helper.FormatDecimal(_salePurchaseValueTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
-        }
+        public string SalePurchaseValueTotalAsStr => Helper.FormatDecimal(SalePurchaseValueTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
 
-        public string SalePurchaseValueTotalWithUnitAsStr
-        {
-            get { return Helper.FormatDecimal(_salePurchaseValueTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, ShareObject.PieceUnit, SaleCultureInfo); }
-        }
+        public string SalePurchaseValueTotalWithUnitAsStr => Helper.FormatDecimal(SalePurchaseValueTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, ShareObject.PieceUnit, SaleCultureInfo);
 
-        public decimal SaleProfitLossTotal
-        {
-            get { return _saleProfitLossTotal; }
-            internal set { _saleProfitLossTotal = value; }
-        }
+        public decimal SaleProfitLossTotal { get; internal set; }
 
-        public string SaleProfitLossTotalAsStr
-        {
-            get { return Helper.FormatDecimal(_saleProfitLossTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
-        }
+        public string SaleProfitLossTotalAsStr => Helper.FormatDecimal(SaleProfitLossTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
 
-        public string SaleProfitLossTotalWithUnitAsStr
-        {
-            get { return Helper.FormatDecimal(_saleProfitLossTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo); }
-        }
+        public string SaleProfitLossTotalWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
 
-        public decimal SaleProfitLossTotalWithoutCosts
-        {
-            get { return _saleProfitLossWithoutCostsTotal; }
-            internal set { _saleProfitLossWithoutCostsTotal = value; }
-        }
+        public decimal SaleProfitLossTotalWithoutCosts { get; internal set; }
 
-        public string SaleProfitLossWithoutCostsTotalAsStr
-        {
-            get { return Helper.FormatDecimal(_saleProfitLossWithoutCostsTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo); }
-        }
+        public string SaleProfitLossWithoutCostsTotalAsStr => Helper.FormatDecimal(SaleProfitLossTotalWithoutCosts, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
 
-        public string SaleProfitLossTotalWithoutCostsWithUnitAsStr
-        {
-            get { return Helper.FormatDecimal(_saleProfitLossWithoutCostsTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo); }
-        }
+        public string SaleProfitLossTotalWithoutCostsWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossTotalWithoutCosts, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
 
-        public SortedDictionary<string, SalesYearOfTheShare> AllSalesOfTheShareDictionary
-        {
-            get { return _allSalesOfTheShareDictionary; }
-        }
+        public SortedDictionary<string, SalesYearOfTheShare> AllSalesOfTheShareDictionary => _allSalesOfTheShareDictionary;
 
         #endregion Properties
 
         #region Methods
-
-        /// <summary>
-        /// Standard constructor
-        /// </summary>
-        public AllSalesOfTheShare()
-        { }
 
         /// <summary>
         /// This function sets the culture info to the list
@@ -224,14 +117,12 @@ namespace SharePortfolioManager
             try
             {
                 // Get year of the date of the new sale
-                string year = "";
-                GetYearOfDate(strDate, out year);
+                GetYearOfDate(strDate, out var year);
                 if (year == null)
                     return false;
 
                 // Search if a sale for the given year already exists if not add it
-                SalesYearOfTheShare searchObject;
-                if (AllSalesOfTheShareDictionary.TryGetValue(year, out searchObject))
+                if (AllSalesOfTheShareDictionary.TryGetValue(year, out var searchObject))
                 {
                     if (!searchObject.AddSaleObject(SaleCultureInfo, strDate, decVolume, decBuyPrice, decSalePrice, decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decCosts, strDoc))
                         return false;
@@ -239,7 +130,7 @@ namespace SharePortfolioManager
                 else
                 {
                     // Add new year sale object for the sale with a new year
-                    SalesYearOfTheShare addObject = new SalesYearOfTheShare();
+                    var addObject = new SalesYearOfTheShare();
                     // Add sale with the new year to the sale year list
                     if (addObject.AddSaleObject(SaleCultureInfo, strDate, decVolume, decBuyPrice, decSalePrice, decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decCosts, strDoc))
                     {
@@ -299,14 +190,12 @@ namespace SharePortfolioManager
             try
             {
                 // Get year of the date of the sale which should be removed
-                string year = "";
-                GetYearOfDate(strDateTime, out year);
+                GetYearOfDate(strDateTime, out var year);
                 if (year == null)
                     return false;
 
                 // Search if the sale for the given year exists
-                SalesYearOfTheShare searchObject;
-                if (AllSalesOfTheShareDictionary.TryGetValue(year, out searchObject))
+                if (AllSalesOfTheShareDictionary.TryGetValue(year, out var searchObject))
                 {
                     if (!searchObject.RemoveSaleObject(strDateTime))
                         return false;
@@ -364,11 +253,11 @@ namespace SharePortfolioManager
         /// <returns>List of SaleObjects or a empty list if no SaleObjects exists</returns>
         public List<SaleObject> GetAllSalesOfTheShare()
         {
-            List<SaleObject> allSalesOfTheShare = new List<SaleObject>();
+            var allSalesOfTheShare = new List<SaleObject>();
 
-            foreach (SalesYearOfTheShare salesYearOfTheShareObject in AllSalesOfTheShareDictionary.Values)
+            foreach (var salesYearOfTheShareObject in AllSalesOfTheShareDictionary.Values)
             {
-                foreach (SaleObject saleObject in salesYearOfTheShareObject.SaleListYear)
+                foreach (var saleObject in salesYearOfTheShareObject.SaleListYear)
                 {
                     allSalesOfTheShare.Add(saleObject);
                 }
@@ -383,7 +272,7 @@ namespace SharePortfolioManager
         /// <returns>Dictionary with the years and the sales values with costs of the year or empty dictionary if no year exist.</returns>
         public Dictionary<string, string> GetAllSalesTotalValues()
         {
-            Dictionary<string, string> allSalesOfTheShare = new Dictionary<string, string>();
+            var allSalesOfTheShare = new Dictionary<string, string>();
 
             foreach (var key in AllSalesOfTheShareDictionary.Keys)
             {
@@ -399,7 +288,7 @@ namespace SharePortfolioManager
         /// <returns>Dictionary with the years and the sales values without costs of the year or empty dictionary if no year exist.</returns>
         public Dictionary<string, string> GetAllSalesWithoutCostsTotalValues()
         {
-            Dictionary<string, string> allSalesOfTheShare = new Dictionary<string, string>();
+            var allSalesOfTheShare = new Dictionary<string, string>();
 
             foreach (var key in AllSalesOfTheShareDictionary.Keys)
             {
@@ -415,7 +304,7 @@ namespace SharePortfolioManager
         /// <returns>Dictionary with the years and the profit / loss values with costs of the year or empty dictionary if no year exist.</returns>
         public Dictionary<string, string> GetAllProfitLossTotalValues()
         {
-            Dictionary<string, string> allProfitLossOfTheShare = new Dictionary<string, string>();
+            var allProfitLossOfTheShare = new Dictionary<string, string>();
 
             foreach (var key in AllSalesOfTheShareDictionary.Keys)
             {
@@ -431,7 +320,7 @@ namespace SharePortfolioManager
         /// <returns>Dictionary with the years and the profit / loss values of the year or empty dictionary if no year exist.</returns>
         public Dictionary<string, string> GetAllProfitLossWithoutCostsTotalValues()
         {
-            Dictionary<string, string> allProfitLossOfTheShare = new Dictionary<string, string>();
+            var allProfitLossOfTheShare = new Dictionary<string, string>();
 
             foreach (var key in AllSalesOfTheShareDictionary.Keys)
             {
@@ -447,20 +336,17 @@ namespace SharePortfolioManager
         /// <returns>SaleObject or null if the search failed</returns>
         public SaleObject GetSaleObjectByDateTime(string strDateTime)
         {
-            string strYear = @"";
-            GetYearOfDate(strDateTime, out strYear);
+            GetYearOfDate(strDateTime, out var year);
 
-            if (strYear != null)
+            if (year == null) return null;
+
+            if (!AllSalesOfTheShareDictionary.ContainsKey(year)) return null;
+
+            foreach (var saleObject in AllSalesOfTheShareDictionary[year].SaleListYear)
             {
-                if (AllSalesOfTheShareDictionary.ContainsKey(strYear))
+                if (saleObject.Date == strDateTime)
                 {
-                    foreach (var saleObject in AllSalesOfTheShareDictionary[strYear].SaleListYear)
-                    {
-                        if (saleObject.Date == strDateTime)
-                        {
-                            return saleObject;
-                        }
-                    }
+                    return saleObject;
                 }
             }
 
@@ -474,24 +360,17 @@ namespace SharePortfolioManager
         /// <returns></returns>
         public bool IsDateLastDate(string strDateTime)
         {
-            if (_allSalesOfTheShareDictionary.Count > 0)
+            if (_allSalesOfTheShareDictionary.Count <= 0) return true;
+
+            var lastYearEntries = _allSalesOfTheShareDictionary.Last().Value;
             {
-                SalesYearOfTheShare lastYearEntries = _allSalesOfTheShareDictionary.Last().Value;
-                {
-                    if (lastYearEntries.SaleListYear.Count > 0)
-                    {
-                        DateTime tempTimeDate = Convert.ToDateTime(lastYearEntries.SaleListYear.Last().Date);
-                        DateTime givenTimeDate = Convert.ToDateTime(strDateTime);
+                if (lastYearEntries.SaleListYear.Count <= 0) return true;
 
-                        if (givenTimeDate >= tempTimeDate)
-                            return true;
-                        else
-                            return false;
-                    }
-                }
+                var tempTimeDate = Convert.ToDateTime(lastYearEntries.SaleListYear.Last().Date);
+                var givenTimeDate = Convert.ToDateTime(strDateTime);
+
+                return givenTimeDate >= tempTimeDate;
             }
-
-            return true;
         }
 
         /// <summary>
@@ -499,17 +378,17 @@ namespace SharePortfolioManager
         /// </summary>
         /// <param name="date">Date string (DD.MM.YYYY)</param>
         /// <param name="year">Year of the given date or null if the split failed</param>
-        private void GetYearOfDate(string date, out string year)
+        private static void GetYearOfDate(string date, out string year)
         {
-            string[] dateTimeElements = date.Split('.');
+            var dateTimeElements = date.Split('.');
             if (dateTimeElements.Length != 3)
             {
                 year = null;
             }
             else
             {
-                string yearTime = dateTimeElements.Last();
-                string[] dateElements = yearTime.Split(' ');
+                var yearTime = dateTimeElements.Last();
+                var dateElements = yearTime.Split(' ');
                 year = dateElements.First();
             }
         }

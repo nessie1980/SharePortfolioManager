@@ -29,21 +29,22 @@ using System.Windows.Forms;
 
 namespace SharePortfolioManager.Forms.SalesForm.Presenter
 {
-    class PresenterSaleEdit
+    internal class PresenterSaleEdit
     {
         private readonly IModelSaleEdit _model;
         private readonly IViewSaleEdit _view;
 
         public PresenterSaleEdit(IViewSaleEdit view, IModelSaleEdit model)
         {
-            this._view = view;
-            this._model = model;
+            _view = view;
+            _model = model;
 
             view.PropertyChanged += OnViewChange;
             view.FormatInputValues += OnViewFormatInputValues;
             view.AddSale += OnAddSale;
             view.EditSale += OnEditSale;
             view.DeleteSale += OnDeleteSale;
+            view.DocumentBrowse += OnDocumentBrowse;
         }
 
         private void UpdateViewWithModel()
@@ -108,8 +109,8 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
             // Check the input values
             if (!CheckInputValues(_model.UpdateSale))
             {
-                bool bErrorFlag = false;
-                string strDateTime = _model.Date + " " + _model.Time;
+                var bErrorFlag = false;
+                var strDateTime = _model.Date + " " + _model.Time;
 
                 // Cost entry if the costs value is not 0
                 if (_model.CostsDec > 0)
@@ -137,12 +138,12 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
             // Check the input values
             if (!CheckInputValues(_model.UpdateSale))
             {
-                string strDateTime = _model.Date + " " + _model.Time;
+                var strDateTime = _model.Date + " " + _model.Time;
 
                 if (_model.ShareObjectFinalValue.RemoveSale(_model.SelectedDate) && _model.ShareObjectFinalValue.AddSale(strDateTime, _model.VolumeDec, _model.ShareObjectFinalValue.AverageBuyPrice, _model.SalePriceDec,
                     _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, _model.CostsDec, _model.Document))
                 {
-                    bool bFlagCostEdit = true;
+                    var bFlagCostEdit = true;
 
                     // Check if an old cost entry must be deleted
                     if (_model.ShareObjectFinalValue.AllCostsEntries.GetCostObjectByDateTime(strDateTime) != null)
@@ -182,14 +183,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                     // Check if a cost object exists
                     if (_model.ShareObjectFinalValue.AllCostsEntries.GetCostObjectByDateTime(_model.SelectedDate) != null)
                     {
-                        if (_model.ShareObjectFinalValue.RemoveCost(_model.SelectedDate))
-                        {
-                            _model.ErrorCode = SaleErrorCode.DeleteSuccessful;
-                        }
-                        else
-                        {
-                            _model.ErrorCode = SaleErrorCode.DeleteFailed;
-                        }
+                        _model.ErrorCode = _model.ShareObjectFinalValue.RemoveCost(_model.SelectedDate) ? SaleErrorCode.DeleteSuccessful : SaleErrorCode.DeleteFailed;
                     }
                     else
                     {
@@ -211,17 +205,42 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
         }
 
         /// <summary>
+        /// This function opens the document browse dialog and set the chosen document
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnDocumentBrowse(object sender, EventArgs e)
+        {
+            try
+            {
+                const string strFilter = "pdf (*.pdf)|*.pdf|txt (*.txt)|.txt|doc (*.doc)|.doc|docx (*.docx)|.docx";
+                _model.Document = Helper.SetDocument(_model.Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/OpenFileDialog/Title", _model.LanguageName), strFilter, _model.Document);
+
+                UpdateViewWithModel();
+
+                _view.DocumentBrowseFinish();
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                var message = $"OnDocumentBrowse()\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+#endif
+                _model.ErrorCode = SaleErrorCode.DocumentBrowseFailed;
+            }
+
+        }
+
+        /// <summary>
         /// This function calculates the profit or loss and the payout of the sale
         /// </summary>
         private void CalculateProfitLossAndPayout()
         {
             try
             {
-                decimal decProfitLoss = 0;
-                decimal decPayout = 0;
-
-                decProfitLoss = (_model.SalePriceDec - _model.ShareObjectFinalValue.AverageBuyPrice) * _model.VolumeDec;
-                decPayout = decProfitLoss - _model.TaxAtSourceDec - _model.CapitalGainsTaxDec - _model.SolidarityTaxDec - _model.CostsDec;
+                var decProfitLoss = (_model.SalePriceDec - _model.ShareObjectFinalValue.AverageBuyPrice) * _model.VolumeDec;
+                var decPayout = decProfitLoss - _model.TaxAtSourceDec - _model.CapitalGainsTaxDec - _model.SolidarityTaxDec - _model.CostsDec;
 
                 _model.ProfitLossDec = decProfitLoss;
                 _model.PayoutDec = decPayout;
@@ -229,7 +248,8 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show("CalculateProfitLossAndPayout()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                var message = $"CalculateProfitLossAndPayout()\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
             }
@@ -242,18 +262,15 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
         /// </summary>
         /// <param name="bFlagEdit">Flag if a sale should be add (true) or edit (false)</param>
         /// <returns>Flag if the input values are correct or not</returns>
-        bool CheckInputValues(bool bFlagEdit)
+        private bool CheckInputValues(bool bFlagEdit)
         {
             try
             {
-                bool bErrorFlag = false;
+                var bErrorFlag = false;
 
-                if (bFlagEdit)
-                    _model.ErrorCode = SaleErrorCode.EditSuccessful;
-                else
-                    _model.ErrorCode = SaleErrorCode.AddSuccessful;
+                _model.ErrorCode = bFlagEdit ? SaleErrorCode.EditSuccessful : SaleErrorCode.AddSuccessful;
 
-                string strDate = _model.Date + " " + _model.Time;
+                var strDate = _model.Date + " " + _model.Time;
 
                 // Check if a sale with the given date and time already exists
                 foreach (var saleObject in _model.ShareObjectFinalValue.AllSaleEntries.GetAllSalesOfTheShare())
@@ -262,35 +279,29 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                     if (!bFlagEdit)
                     {
                         // By an Add all dates must be checked
-                        if (saleObject.Date == strDate)
-                        {
-                            _model.ErrorCode = SaleErrorCode.DateExists;
-                            bErrorFlag = true;
-                            break;
-                        }
+                        if (saleObject.Date != strDate) continue;
+
+                        _model.ErrorCode = SaleErrorCode.DateExists;
+                        bErrorFlag = true;
+                        break;
                     }
-                    else
-                    {
-                        // By an Edit all sales without the edit entry date and time must be checked
-                        if (saleObject.Date == strDate
-                            && _model.SelectedDate != null
-                            && saleObject.Date != _model.SelectedDate)
-                        {
-                            _model.ErrorCode = SaleErrorCode.DateExists;
-                            bErrorFlag = true;
-                            break;
-                        }
-                    }
+
+                    // By an Edit all sales without the edit entry date and time must be checked
+                    if (saleObject.Date != strDate || _model.SelectedDate == null ||
+                        saleObject.Date == _model.SelectedDate) continue;
+
+                    _model.ErrorCode = SaleErrorCode.DateExists;
+                    bErrorFlag = true;
+                    break;
                 }
 
                 // Check if a correct volume for the sale is given
-                decimal decVolume = -1;
                 if (_model.Volume == @"" && bErrorFlag == false)
                 {
                     _model.ErrorCode = SaleErrorCode.VolumeEmpty;
                     bErrorFlag = true;
                 }
-                else if (!decimal.TryParse(_model.Volume, out decVolume) && bErrorFlag == false)
+                else if (!decimal.TryParse(_model.Volume, out var decVolume) && bErrorFlag == false)
                 {
                     _model.ErrorCode = SaleErrorCode.VolumeWrongFormat;
                     bErrorFlag = true;
@@ -321,13 +332,12 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                 }
 
                 // Check if a correct price for the sale is given
-                decimal decSalePrice = -1;
                 if (_model.SalePrice == @"" && bErrorFlag == false)
                 {
                     _model.ErrorCode = SaleErrorCode.SalePriceEmpty;
                     bErrorFlag = true;
                 }
-                else if (!decimal.TryParse(_model.SalePrice, out decSalePrice) && bErrorFlag == false)
+                else if (!decimal.TryParse(_model.SalePrice, out var decSalePrice) && bErrorFlag == false)
                 {
                     _model.ErrorCode = SaleErrorCode.SalePriceWrongFormat;
                     bErrorFlag = true;
@@ -343,18 +353,17 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                 // Costs input check
                 if (_model.Costs != "" && bErrorFlag == false)
                 {
-                    decimal decCosts = 0;
-                    if (!decimal.TryParse(_model.Costs, out decCosts) && bErrorFlag == false)
+                    if (!decimal.TryParse(_model.Costs, out var decCosts))
                     {
                         _model.ErrorCode = SaleErrorCode.CostsWrongFormat;
                         bErrorFlag = true;
                     }
-                    else if (decCosts < 0 && bErrorFlag == false)
+                    else if (decCosts < 0)
                     {
                         _model.ErrorCode = SaleErrorCode.CostsWrongValue;
                         bErrorFlag = true;
                     }
-                    else if (bErrorFlag == false)
+                    else
                         _model.CostsDec = decCosts;
                 }
 

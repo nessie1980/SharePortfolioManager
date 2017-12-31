@@ -272,7 +272,7 @@ namespace SharePortfolioManager
         {
             try
             {
-                FrmAbout frmAbout = new FrmAbout(this, Language, LanguageName);
+                FrmAbout frmAbout = new FrmAbout(Language, LanguageName);
                 frmAbout.ShowDialog();
             }
             catch (Exception ex)

@@ -41,6 +41,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using SharePortfolioManager.Classes.ShareObjects;
 using SharePortfolioManager.Forms.SalesForm.Model;
 using SharePortfolioManager.Forms.SalesForm.Presenter;
 
@@ -48,119 +49,35 @@ namespace SharePortfolioManager
 {
     public partial class FrmShareEdit : Form
     {
-        #region Variables
-
-        /// <summary>
-        /// Stores the parent window
-        /// </summary>
-        private FrmMain _parentWindow;
-
-        /// <summary>
-        /// Stores the logger
-        /// </summary>
-        private Logger _logger;
-
-        /// <summary>
-        /// Stores the language file
-        /// </summary>
-        private Language _language;
-
-        /// <summary>
-        /// Stores the language
-        /// </summary>
-        private string _languageName;
-
-        /// <summary>
-        /// Stores the WKN number of the share which should be edited
-        /// </summary>
-        private string _shareWkn;
-
-        /// <summary>
-        /// Stores if the share must be saved because the dividends has been modified
-        /// </summary>
-        private bool _bSave;
-
-        /// <summary>
-        /// Stores the market value share object which should be edited
-        /// </summary>
-        private ShareObjectMarketValue _shareObjectMarketValue;
-
-        /// <summary>
-        /// Stores the final value share object which should be edited
-        /// </summary>
-        private ShareObjectFinalValue _shareObjectFinalValue;
-
-        /// <summary>
-        /// Flag if the form should be closed
-        /// </summary>
-        private bool _stopFomClosing;
-
-        #endregion Variables
-
         #region Properties
 
-        public FrmMain ParentWindow
-        {
-            get { return _parentWindow; }
-            set { _parentWindow = value; }
-        }
+        public FrmMain ParentWindow { get; set; }
 
-        public Logger Logger
-        {
-            get { return _logger; }
-            set { _logger = value; }
-        }
+        public Logger Logger { get; set; }
 
-        public Language Language
-        {
-            get { return _language; }
-            set { _language = value; }
-        }
+        public Language Language { get; set; }
 
-        public string LanguageName
-        {
-            get { return _languageName; }
-            set { _languageName = value; }
-        }
+        public string LanguageName { get; set; }
 
-        public string ShareWkn
-        {
-            get { return _shareWkn; }
-            set { _shareWkn = value; }
-        }
+        public string ShareWkn { get; set; }
 
-        public bool Save
-        {
-            get { return _bSave; }
-            set { _bSave = value; }
-        }
+        public bool Save { get; set; }
 
-        public ShareObjectMarketValue ShareObjectMarketValue
-        {
-            get { return _shareObjectMarketValue; }
-            set { _shareObjectMarketValue = value; }
-        }
+        public ShareObjectMarketValue ShareObjectMarketValue { get; set; }
 
-        public ShareObjectFinalValue ShareObjectFinalValue
-        {
-            get { return _shareObjectFinalValue; }
-            set { _shareObjectFinalValue = value; }
-        }
+        public ShareObjectFinalValue ShareObjectFinalValue { get; set; }
 
-        public bool StopFomClosingFlag
-        {
-            get { return _stopFomClosing; }
-            set { _stopFomClosing = value; }
-        }
+        public bool StopFomClosingFlag { get; set; }
 
         #endregion Properties
 
         #region Form
 
+        /// <inheritdoc />
         /// <summary>
         /// Constructor
         /// </summary>
-        public FrmShareEdit(FrmMain parentWindow, Logger logger, Language xmlLanguage, String shareWkn, String language )
+        public FrmShareEdit(FrmMain parentWindow, Logger logger, Language xmlLanguage, string shareWkn, string language )
         {
             InitializeComponent();
 
@@ -204,18 +121,19 @@ namespace SharePortfolioManager
 
                     #region Get culture info
 
-                    List<string> list = new List<string>();
-                    foreach (CultureInfo ci in CultureInfo.GetCultures(CultureTypes.AllCultures))
+                    var list = new List<string>();
+                    foreach (var ci in CultureInfo.GetCultures(CultureTypes.AllCultures))
                     {
-                        string specName = "(none)";
                         try
                         {
-                            specName = CultureInfo.CreateSpecificCulture(ci.Name).Name;
+                            var specName = CultureInfo.CreateSpecificCulture(ci.Name).Name;
                         }
                         catch
-                        { }
+                        {
+                            // ignored
+                        }
 
-                        list.Add(string.Format("{0}", ci.Name));
+                        list.Add($"{ci.Name}");
                     }
 
                     list.Sort();
@@ -291,12 +209,7 @@ namespace SharePortfolioManager
                 btnShareSalesEdit.Text =
                     Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Buttons/Sales",
                     LanguageName);
-                if (ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotal < 0)
-                    lblProfitLoss.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Loss",
-                        LanguageName);
-                else
-                    lblProfitLoss.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Profit",
-                        LanguageName);
+                lblProfitLoss.Text = Language.GetLanguageTextByXPath(ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotal < 0 ? @"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Loss" : @"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Profit", LanguageName);
                 lblDividend.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Dividend",
                     LanguageName);
                 btnShareDividendsEdit.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Buttons/Dividend",
@@ -326,7 +239,8 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show("FrmShareEdit_Load()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                var message = $"FrmShareEdit_Load()\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
@@ -357,10 +271,7 @@ namespace SharePortfolioManager
 
             // Set the dialog result correct of saving or not saving the share
             // Share must be saved because a dividend has been added or deleted
-            if (Save)
-                DialogResult = DialogResult.OK;
-            else
-                DialogResult = DialogResult.Cancel;
+            DialogResult = Save ? DialogResult.OK : DialogResult.Cancel;
         }
 
         #endregion Form
@@ -383,7 +294,7 @@ namespace SharePortfolioManager
 
                 statusStrip1.ForeColor = Color.Red;
 
-                string decodedUrl = txtBoxWebSite.Text;
+                var decodedUrl = txtBoxWebSite.Text;
 
                 if (txtBoxName.Text == @"")
                 {
@@ -400,8 +311,28 @@ namespace SharePortfolioManager
                     // Check if a market value share with the given share name already exists
                     foreach (var shareObjectMarketValue in ParentWindow.ShareObjectListMarketValue)
                     {
-                        if (shareObjectMarketValue.Name == txtBoxName.Text && shareObjectMarketValue != ShareObjectMarketValue)
+                        if (shareObjectMarketValue.Name != txtBoxName.Text ||
+                            shareObjectMarketValue == ShareObjectMarketValue) continue;
+
+                        errorFlag = true;
+                        StopFomClosingFlag = true;
+                        txtBoxName.Focus();
+                        // Add status message
+                        Helper.AddStatusMessage(editShareStatusLabelMessage,
+                            Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/NameExists", LanguageName),
+                            Language, LanguageName,
+                            Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                        break;
+                    }
+
+                    if (errorFlag == false)
+                    {
+                        // Check if a market value share with the given share name already exists
+                        foreach (var shareObjectFinalValue in ParentWindow.ShareObjectListFinalValue)
                         {
+                            if (shareObjectFinalValue.Name != txtBoxName.Text ||
+                                shareObjectFinalValue == ShareObjectFinalValue) continue;
+
                             errorFlag = true;
                             StopFomClosingFlag = true;
                             txtBoxName.Focus();
@@ -411,26 +342,6 @@ namespace SharePortfolioManager
                                 Language, LanguageName,
                                 Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                             break;
-                        }
-                    }
-
-                    if (errorFlag == false)
-                    {
-                        // Check if a market value share with the given share name already exists
-                        foreach (var shareObjectFinalValue in ParentWindow.ShareObjectListFinalValue)
-                        {
-                            if (shareObjectFinalValue.Name == txtBoxName.Text && shareObjectFinalValue != ShareObjectFinalValue)
-                            {
-                                errorFlag = true;
-                                StopFomClosingFlag = true;
-                                txtBoxName.Focus();
-                                // Add status message
-                                Helper.AddStatusMessage(editShareStatusLabelMessage,
-                                    Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/NameExists", LanguageName),
-                                    Language, LanguageName,
-                                    Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-                                break;
-                            }
                         }
                     }
                 }
@@ -445,7 +356,7 @@ namespace SharePortfolioManager
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                     errorFlag = true;
                 }
-                else if (!Decimal.TryParse(lblPurchaseValue.Text, out purchase) && errorFlag == false)
+                else if (!decimal.TryParse(lblPurchaseValue.Text, out purchase) && errorFlag == false)
                 {
                     lblPurchaseValue.Focus();
                     // Add status message
@@ -520,8 +431,28 @@ namespace SharePortfolioManager
                     // Check if a market value share with the given WKN number already exists
                     foreach (var shareObjectMarketValue in ParentWindow.ShareObjectListMarketValue)
                     {
-                        if (shareObjectMarketValue.WebSite == txtBoxWebSite.Text && shareObjectMarketValue != ShareObjectMarketValue)
+                        if (shareObjectMarketValue.WebSite != txtBoxWebSite.Text ||
+                            shareObjectMarketValue == ShareObjectMarketValue) continue;
+
+                        errorFlag = true;
+                        StopFomClosingFlag = true;
+                        txtBoxWebSite.Focus();
+                        // Add status message
+                        Helper.AddStatusMessage(editShareStatusLabelMessage,
+                            Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteExists", LanguageName),
+                            Language, LanguageName,
+                            Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                        break;
+                    }
+
+                    if (errorFlag == false)
+                    {
+                        // Check if a final value share with the given WKN number already exists
+                        foreach (var shareObjectFinalValue in ParentWindow.ShareObjectListFinalValue)
                         {
+                            if (shareObjectFinalValue.WebSite != txtBoxWebSite.Text ||
+                                shareObjectFinalValue == ShareObjectFinalValue) continue;
+
                             errorFlag = true;
                             StopFomClosingFlag = true;
                             txtBoxWebSite.Focus();
@@ -533,61 +464,41 @@ namespace SharePortfolioManager
                             break;
                         }
                     }
-
-                    if (errorFlag == false)
-                    {
-                        // Check if a final value share with the given WKN number already exists
-                        foreach (var shareObjectFinalValue in ParentWindow.ShareObjectListFinalValue)
-                        {
-                            if (shareObjectFinalValue.WebSite == txtBoxWebSite.Text && shareObjectFinalValue != ShareObjectFinalValue)
-                            {
-                                errorFlag = true;
-                                StopFomClosingFlag = true;
-                                txtBoxWebSite.Focus();
-                                // Add status message
-                                Helper.AddStatusMessage(editShareStatusLabelMessage,
-                                    Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteExists", LanguageName),
-                                    Language, LanguageName,
-                                    Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-                                break;
-                            }
-                        }
-                    }
                 }
 
-                if (errorFlag == false)
-                {
-                    txtBoxWebSite.Text = decodedUrl;
+                if (errorFlag) return;
 
-                    StopFomClosingFlag = false;
-                    Save = true;
+                txtBoxWebSite.Text = decodedUrl;
 
-                    CultureInfo cultureInfo = new CultureInfo(cboBoxCultureInfo.GetItemText(cboBoxCultureInfo.SelectedItem));
+                StopFomClosingFlag = false;
+                Save = true;
 
-                    // Market value share
-                    ShareObjectMarketValue.Wkn = lblWknValue.Text;
-                    ShareObjectMarketValue.Name = txtBoxName.Text;
-                    ShareObjectMarketValue.Volume = volume;
-                    ShareObjectMarketValue.PurchaseValue = purchase;
-                    ShareObjectMarketValue.WebSite = txtBoxWebSite.Text;
-                    ShareObjectMarketValue.CultureInfo = cultureInfo;
-                    ShareObjectMarketValue.ShareType = cbxShareType.SelectedIndex;
+                var cultureInfo = new CultureInfo(cboBoxCultureInfo.GetItemText(cboBoxCultureInfo.SelectedItem));
 
-                    // Final value share
-                    ShareObjectFinalValue.Wkn = lblWknValue.Text;
-                    ShareObjectFinalValue.Name = txtBoxName.Text;
-                    ShareObjectFinalValue.Volume = volume;
-                    ShareObjectFinalValue.PurchaseValue = purchase;
-                    ShareObjectFinalValue.WebSite = txtBoxWebSite.Text;
-                    ShareObjectFinalValue.CultureInfo = cultureInfo;
-                    ShareObjectFinalValue.DividendPayoutInterval = cbxDividendPayoutInterval.SelectedIndex;
-                    ShareObjectFinalValue.ShareType = cbxShareType.SelectedIndex;
-                }
+                // Market value share
+                ShareObjectMarketValue.Wkn = lblWknValue.Text;
+                ShareObjectMarketValue.Name = txtBoxName.Text;
+                ShareObjectMarketValue.Volume = volume;
+                ShareObjectMarketValue.PurchaseValue = purchase;
+                ShareObjectMarketValue.WebSite = txtBoxWebSite.Text;
+                ShareObjectMarketValue.CultureInfo = cultureInfo;
+                ShareObjectMarketValue.ShareType = cbxShareType.SelectedIndex;
+
+                // Final value share
+                ShareObjectFinalValue.Wkn = lblWknValue.Text;
+                ShareObjectFinalValue.Name = txtBoxName.Text;
+                ShareObjectFinalValue.Volume = volume;
+                ShareObjectFinalValue.PurchaseValue = purchase;
+                ShareObjectFinalValue.WebSite = txtBoxWebSite.Text;
+                ShareObjectFinalValue.CultureInfo = cultureInfo;
+                ShareObjectFinalValue.DividendPayoutInterval = cbxDividendPayoutInterval.SelectedIndex;
+                ShareObjectFinalValue.ShareType = cbxShareType.SelectedIndex;
             }
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show("btnSave_Click()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                var message = $"btnSave_Click()\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 StopFomClosingFlag = true;
@@ -620,13 +531,10 @@ namespace SharePortfolioManager
         {
             IModelBuyEdit model = new ModelBuyEdit();
             IViewBuyEdit view = new ViewBuyEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, LanguageName);
-            PresenterBuyEdit presenterBuyEdit = new PresenterBuyEdit (view, model);
+            var presenterBuyEdit = new PresenterBuyEdit (view, model);
 
-            DialogResult dlgResult = view.ShowDialog();
-            if (dlgResult == DialogResult.OK)
-                Save = true;
-            else
-                Save = false;
+            var dlgResult = view.ShowDialog();
+            Save = dlgResult == DialogResult.OK;
 
             SetShareValuesToTextBoxes();
         }
@@ -640,13 +548,10 @@ namespace SharePortfolioManager
         {
             IModelSaleEdit model = new ModelSaleEdit();
             IViewSaleEdit view = new ViewSaleEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, LanguageName);
-            PresenterSaleEdit presenterSaleEdit = new PresenterSaleEdit(view, model);
+            var presenterSaleEdit = new PresenterSaleEdit(view, model);
 
-            DialogResult dlgResult = view.ShowDialog();
-            if (dlgResult == DialogResult.OK)
-                Save = true;
-            else
-                Save = false;
+            var dlgResult = view.ShowDialog();
+            Save = dlgResult == DialogResult.OK;
 
             SetShareValuesToTextBoxes();
         }
@@ -660,13 +565,10 @@ namespace SharePortfolioManager
         {
             IModelDividendEdit model = new ModelDividendEdit();
             IViewDividendEdit view = new ViewDividendEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, LanguageName);
-            PresenterDividendEdit presenterDividendEdit = new PresenterDividendEdit(view, model);
+            var presenterDividendEdit = new PresenterDividendEdit(view, model);
 
-            DialogResult dlgResult = view.ShowDialog();
-            if (dlgResult == DialogResult.OK)
-                Save = true;
-            else
-                Save = false;
+            var dlgResult = view.ShowDialog();
+            Save = dlgResult == DialogResult.OK;
 
             SetShareValuesToTextBoxes();
         }
@@ -680,13 +582,10 @@ namespace SharePortfolioManager
         {
             IModelCostEdit model = new ModelCostEdit();
             IViewCostEdit view = new ViewCostEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, LanguageName);
-            PresenterCostEdit presenterCostEdit = new PresenterCostEdit(view, model);
+            var presenterCostEdit = new PresenterCostEdit(view, model);
 
-            DialogResult dlgResult = view.ShowDialog();
-            if (dlgResult == DialogResult.OK)
-                Save = true;
-            else
-                Save = false;
+            var dlgResult = view.ShowDialog();
+            Save = dlgResult == DialogResult.OK;
 
             SetShareValuesToTextBoxes();
         }

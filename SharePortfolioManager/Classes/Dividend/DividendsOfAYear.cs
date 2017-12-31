@@ -30,77 +30,29 @@ namespace SharePortfolioManager
 {
     public class DividendYearOfTheShare
     {
-        #region Variables
-
-        /// <summary>
-        /// Stores the culture info of the share
-        /// </summary>
-        private CultureInfo _dividendCultureInfo;
-
-        /// <summary>
-        /// Stores the paid dividend value in a year
-        /// </summary>
-        private decimal _dividendValueYear = -1;
-
-        ///// <summary>
-        ///// Stores the percent value of the paid dividend in a year
-        ///// </summary>
-        //private decimal _dividendPercentValueYear = -1;
-
-        /// <summary>
-        /// Stores the single paid dividends of a year
-        /// </summary>
-        private List<DividendObject> _dividendListYear = new List<DividendObject>();
-
-        #endregion Variables
-        
         #region Properties
 
-        public CultureInfo DividendCultureInfo
-        {
-            get { return _dividendCultureInfo; }
-            internal set { _dividendCultureInfo = value; }
-        }
+        public CultureInfo DividendCultureInfo { get; internal set; }
 
-        public decimal DividendValueYear
-        {
-            get { return _dividendValueYear; }
-            internal set { _dividendValueYear = value; }
-        }
+        public decimal DividendValueYear { get; internal set; } = -1;
 
-        public string DividendValueYearAsStr
-        {
-            get { return Helper.FormatDecimal(_dividendValueYear, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", DividendCultureInfo); }
-        }
+        public string DividendValueYearAsStr => Helper.FormatDecimal(DividendValueYear, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", DividendCultureInfo);
 
-        public string DividendValueYearWithUnitAsStr
-        {
-            get { return Helper.FormatDecimal(_dividendValueYear, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", DividendCultureInfo); }
-        }
+        public string DividendValueYearWithUnitAsStr => Helper.FormatDecimal(DividendValueYear, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", DividendCultureInfo);
 
-        public List<DividendObject> DividendListYear
-        {
-            get { return _dividendListYear; }
-        }
+        public List<DividendObject> DividendListYear { get; } = new List<DividendObject>();
 
         #endregion Properties
 
         #region Methods
 
         /// <summary>
-        /// Standard constructor
-        /// </summary>
-        public DividendYearOfTheShare()
-        {
-        }
-
-        /// <summary>
         /// This functions adds a new dividend object to the year list with the given values
         /// It also recalculates the dividend value and the dividend percent value of the hole year
         /// </summary>
         /// <param name="cultureInfo">Culture info of the share</param>
-        /// <param name="cultureInfoFC">Culture info of the share for the foreign currency</param>
-        /// <param name="csEnableFC">Flag if the payout is in a foreign currency</param>
+        /// <param name="cultureInfoFc">Culture info of the share for the foreign currency</param>
+        /// <param name="csEnableFc">Flag if the payout is in a foreign currency</param>
         /// <param name="decExchangeRatio">Exchange ratio for the foreign currency</param>
         /// <param name="strDateTime">Pay date of the new dividend list entry</param>
         /// <param name="decRate">Paid dividend of one share</param>
@@ -111,7 +63,7 @@ namespace SharePortfolioManager
         /// <param name="decSharePrice">Share price at the pay date</param>
         /// <param name="strDoc">Document of the dividend</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddDividendObject(CultureInfo cultureInfo, CultureInfo cultureInfoFC, CheckState csEnableFC, decimal decExchangeRatio, string strDateTime, decimal decRate, decimal decVolume,
+        public bool AddDividendObject(CultureInfo cultureInfo, CultureInfo cultureInfoFc, CheckState csEnableFc, decimal decExchangeRatio, string strDateTime, decimal decRate, decimal decVolume,
             decimal decTaxAtSource, decimal decCapitalGainsTax, decimal decSolidarityTax, decimal decSharePrice, string strDoc = "")
         {
 #if DEBUG
@@ -123,7 +75,7 @@ namespace SharePortfolioManager
                 DividendCultureInfo = cultureInfo;
 
                 // Create new DividendObject
-                DividendObject addObject = new DividendObject(cultureInfo, cultureInfoFC, csEnableFC, decExchangeRatio, strDateTime, decRate, decVolume,
+                var addObject = new DividendObject(cultureInfo, cultureInfoFc, csEnableFc, decExchangeRatio, strDateTime, decRate, decVolume,
                     decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decSharePrice, strDoc);
 
                 // Add object to the list
@@ -162,32 +114,22 @@ namespace SharePortfolioManager
             try
             {
                 // Search for the remove object
-                int iFoundIndex = -1;
-                foreach (DividendObject dividendObject in DividendListYear)
+                var iFoundIndex = -1;
+                foreach (var dividendObject in DividendListYear)
                 {
-                    if (dividendObject.DateTime == strDate)
-                    {
-                        iFoundIndex =  DividendListYear.IndexOf(dividendObject);
-                        break;
-                    }
+                    if (dividendObject.DateTime != strDate) continue;
+
+                    iFoundIndex =  DividendListYear.IndexOf(dividendObject);
+                    break;
                 }
                 // Save remove object
-                DividendObject removeObject = DividendListYear[iFoundIndex];
+                var removeObject = DividendListYear[iFoundIndex];
 
                 // Remove object from the list
                 DividendListYear.Remove(removeObject);
 
                 // Calculate dividend value
                 DividendValueYear -= removeObject.PayoutWithTaxesDec;
-
-                //// Calculate dividend percent value
-                //decimal tempDividendPercentValueSum = 0;
-                //foreach (DividendObject dividendObject in DividendListYear)
-                //{
-                //    tempDividendPercentValueSum += dividendObject.DividendPercent;
-                //}
-                //DividendPercentValueYear = tempDividendPercentValueSum / DividendListYear.Count;
-
 #if DEBUG
                 Console.WriteLine(@"DividendValueYear: {0}", DividendValueYear);
                 Console.WriteLine(@"");
@@ -208,12 +150,15 @@ namespace SharePortfolioManager
     {
         public int Compare(DividendYearOfTheShare object1, DividendYearOfTheShare object2)
         {
+            if (object1 == null) return 0;
+            if (object2 == null) return 0;
+
             if (Convert.ToInt16(object2.DividendListYear) == Convert.ToInt16(object1.DividendListYear))
                 return 0;
-            else if (Convert.ToInt16(object2.DividendListYear) > Convert.ToInt16(object1.DividendListYear))
+            if (Convert.ToInt16(object2.DividendListYear) > Convert.ToInt16(object1.DividendListYear))
                 return 1;
-            else 
-                return -1;
+            
+            return -1;
         }
     }
 }

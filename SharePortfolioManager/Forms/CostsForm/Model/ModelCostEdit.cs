@@ -23,6 +23,8 @@
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Forms.CostsForm.View;
 using System.Collections.Generic;
+using System.Globalization;
+using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager.Forms.CostsForm.Model
 {
@@ -48,6 +50,7 @@ namespace SharePortfolioManager.Forms.CostsForm.Model
         string Document { get; set; }
     }
 
+    /// <inheritdoc />
     /// <summary>
     /// Model class of the CostEdit
     /// </summary>
@@ -55,98 +58,42 @@ namespace SharePortfolioManager.Forms.CostsForm.Model
     {
         #region Fields
 
-        bool _updateView;
-        bool _updateViewFormatted;
-        bool _updateCost;
-
-        ShareObjectMarketValue _shareObjectMarketValue;
-        ShareObjectFinalValue _shareObjectFinalValue;
-        List<WebSiteRegex> _webSiteRegexList;
-        CostErrorCode _errorCode;
-
-        string _selectedDate;
-        bool _partOfABuy;
-        bool _partOfASale;
-        string _date;
-        string _time;
-        string _costs;
-        decimal _costsDec;
-        string _document;
+        private string _date;
+        private string _time;
+        private string _costs;
+        private decimal _costsDec;
+        private string _document;
 
         #endregion Fields
 
         #region IModel members
 
-        public bool UpdateView
-        {
-            get { return _updateView; }
-            set { _updateView = value; }
-        }
+        public bool UpdateView { get; set; }
 
-        public bool UpdateViewFormatted
-        {
-            get { return _updateViewFormatted; }
-            set { _updateViewFormatted = value; }
-        }
+        public bool UpdateViewFormatted { get; set; }
 
-        public bool UpdateCost
-        {
-            get { return _updateCost; }
-            set { _updateCost = value; }
-        }
+        public bool UpdateCost { get; set; }
 
-        public ShareObjectMarketValue ShareObjectMarketValue
-        {
-            get { return _shareObjectMarketValue; }
-            set { _shareObjectMarketValue = value; }
-        }
+        public ShareObjectMarketValue ShareObjectMarketValue { get; set; }
 
-        public ShareObjectFinalValue ShareObjectFinalValue
-        {
-            get { return _shareObjectFinalValue; }
-            set { _shareObjectFinalValue = value; }
-        }
+        public ShareObjectFinalValue ShareObjectFinalValue { get; set; }
 
-        public List<WebSiteRegex> WebSiteRegexList
-        {
-            get { return _webSiteRegexList; }
-            set { _webSiteRegexList = value; }
-        }
+        public List<WebSiteRegex> WebSiteRegexList { get; set; }
 
-        public CostErrorCode ErrorCode
-        {
-            get { return _errorCode; }
+        public CostErrorCode ErrorCode { get; set; }
 
-            set
-            {
-                _errorCode = value;
-            }
-        }
+        public string SelectedDate { get; set; }
 
-        public string SelectedDate
-        {
-            get { return _selectedDate; }
-            set { _selectedDate = value; }
-        }
+        public bool PartOfABuy { get; set; }
 
-        public bool PartOfABuy
-        {
-            get { return _partOfABuy; }
-            set { _partOfABuy = value; }
-        }
-
-        public bool PartOfASale
-        {
-            get { return _partOfASale; }
-            set { _partOfASale = value; }
-        }
+        public bool PartOfASale { get; set; }
 
         public string Date
         {
-            get { return _date; }
+            get => _date;
             set
             {
-                if (_date == value)
+                if (_date != null && _date == value)
                     return;
 
                 _date = value;
@@ -155,10 +102,10 @@ namespace SharePortfolioManager.Forms.CostsForm.Model
 
         public string Time
         {
-            get { return _time; }
+            get => _time;
             set
             {
-                if (_time == value)
+                if (_time != null && _time == value)
                     return;
 
                 _time = value;
@@ -172,14 +119,10 @@ namespace SharePortfolioManager.Forms.CostsForm.Model
                 if (UpdateViewFormatted)
                 {
                     // Only return the value if the costs is greater than '0'
-                    if (_costsDec > 0)
-                        return Helper.FormatDecimal(_costsDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
-                    return @"";
+                    return _costsDec > 0 ? Helper.FormatDecimal(_costsDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : @"";
                 }
-                else
-                {
-                    return _costs;
-                }
+
+                return _costs;
             }
             set
             {
@@ -195,23 +138,23 @@ namespace SharePortfolioManager.Forms.CostsForm.Model
 
         public decimal CostsDec
         {
-            get { return _costsDec; }
+            get => _costsDec;
             set
             {
                 if (_costsDec == value)
                     return;
                 _costsDec = value;
 
-                Costs = _costsDec.ToString();
+                Costs = _costsDec.ToString("G");
             }
         }
 
         public string Document
         {
-            get { return _document; }
+            get => _document;
             set
             {
-                if (_document == value)
+                if (_document != null && _document == value)
                     return;
                 _document = value;
             }

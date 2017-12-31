@@ -477,8 +477,8 @@
             this.txtBoxSolidarityTax.Name = "txtBoxSolidarityTax";
             this.txtBoxSolidarityTax.Size = new System.Drawing.Size(440, 22);
             this.txtBoxSolidarityTax.TabIndex = 11;
-            this.txtBoxSolidarityTax.TextChanged += new System.EventHandler(this.txtBoxSolidarityTax_TextChanged);
-            this.txtBoxSolidarityTax.Leave += new System.EventHandler(this.txtBoxSolidarityTax_Leave);
+            this.txtBoxSolidarityTax.TextChanged += new System.EventHandler(this.TxtBoxSolidarityTax_TextChanged);
+            this.txtBoxSolidarityTax.Leave += new System.EventHandler(this.TxtBoxSolidarityTax_Leave);
             // 
             // txtBoxCapitalGainsTax
             // 
@@ -491,8 +491,8 @@
             this.txtBoxCapitalGainsTax.Name = "txtBoxCapitalGainsTax";
             this.txtBoxCapitalGainsTax.Size = new System.Drawing.Size(440, 22);
             this.txtBoxCapitalGainsTax.TabIndex = 10;
-            this.txtBoxCapitalGainsTax.TextChanged += new System.EventHandler(this.txtBoxCapitalGainsTax_TextChanged);
-            this.txtBoxCapitalGainsTax.Leave += new System.EventHandler(this.txtBoxCapitalGainsTax_Leave);
+            this.txtBoxCapitalGainsTax.TextChanged += new System.EventHandler(this.TxtBoxCapitalGainsTax_TextChanged);
+            this.txtBoxCapitalGainsTax.Leave += new System.EventHandler(this.TxtBoxCapitalGainsTax_Leave);
             // 
             // txtBoxTaxAtSource
             // 
@@ -505,8 +505,8 @@
             this.txtBoxTaxAtSource.Name = "txtBoxTaxAtSource";
             this.txtBoxTaxAtSource.Size = new System.Drawing.Size(440, 22);
             this.txtBoxTaxAtSource.TabIndex = 9;
-            this.txtBoxTaxAtSource.TextChanged += new System.EventHandler(this.txtBoxTaxAtSource_TextChanged);
-            this.txtBoxTaxAtSource.Leave += new System.EventHandler(this.txtBoxTaxAtSource_Leave);
+            this.txtBoxTaxAtSource.TextChanged += new System.EventHandler(this.TxtBoxTaxAtSource_TextChanged);
+            this.txtBoxTaxAtSource.Leave += new System.EventHandler(this.TxtBoxTaxAtSource_Leave);
             // 
             // txtBoxPayout
             // 
@@ -533,7 +533,7 @@
             this.txtBoxVolume.Size = new System.Drawing.Size(440, 22);
             this.txtBoxVolume.TabIndex = 6;
             this.txtBoxVolume.TextChanged += new System.EventHandler(this.TxtBoxAddVolume_TextChanged);
-            this.txtBoxVolume.Leave += new System.EventHandler(this.txtBoxVolume_Leave);
+            this.txtBoxVolume.Leave += new System.EventHandler(this.TxtBoxVolume_Leave);
             // 
             // txtBoxRate
             // 
@@ -547,7 +547,7 @@
             this.txtBoxRate.Size = new System.Drawing.Size(440, 22);
             this.txtBoxRate.TabIndex = 5;
             this.txtBoxRate.TextChanged += new System.EventHandler(this.TxtBoxAddDividendRate_TextChanged);
-            this.txtBoxRate.Leave += new System.EventHandler(this.txtBoxRate_Leave);
+            this.txtBoxRate.Leave += new System.EventHandler(this.TxtBoxRate_Leave);
             // 
             // txtBoxExchangeRatio
             // 
@@ -562,7 +562,7 @@
             this.txtBoxExchangeRatio.Size = new System.Drawing.Size(181, 22);
             this.txtBoxExchangeRatio.TabIndex = 3;
             this.txtBoxExchangeRatio.TextChanged += new System.EventHandler(this.TxtBoxAddDividendExchangeRatio_TextChanged);
-            this.txtBoxExchangeRatio.Leave += new System.EventHandler(this.txtBoxExchangeRatio_Leave);
+            this.txtBoxExchangeRatio.Leave += new System.EventHandler(this.TxtBoxExchangeRatio_Leave);
             // 
             // cbxBoxDividendFCUnit
             // 
@@ -691,10 +691,10 @@
             this.txtBoxDocument.Name = "txtBoxDocument";
             this.txtBoxDocument.Size = new System.Drawing.Size(440, 22);
             this.txtBoxDocument.TabIndex = 14;
-            this.txtBoxDocument.TextChanged += new System.EventHandler(this.txtBoxDocument_TextChanged);
+            this.txtBoxDocument.TextChanged += new System.EventHandler(this.TxtBoxDocument_TextChanged);
             this.txtBoxDocument.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragDrop);
             this.txtBoxDocument.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragEnter);
-            this.txtBoxDocument.Leave += new System.EventHandler(this.txtBoxDocument_Leave);
+            this.txtBoxDocument.Leave += new System.EventHandler(this.TxtBoxDocument_Leave);
             // 
             // lblAddPrice
             // 
@@ -721,8 +721,8 @@
             this.txtBoxPrice.Name = "txtBoxPrice";
             this.txtBoxPrice.Size = new System.Drawing.Size(440, 22);
             this.txtBoxPrice.TabIndex = 13;
-            this.txtBoxPrice.TextChanged += new System.EventHandler(this.txtBoxPrice_TextChanged);
-            this.txtBoxPrice.Leave += new System.EventHandler(this.txtBoxPrice_Leave);
+            this.txtBoxPrice.TextChanged += new System.EventHandler(this.TxtBoxPrice_TextChanged);
+            this.txtBoxPrice.Leave += new System.EventHandler(this.TxtBoxPrice_Leave);
             // 
             // lblAddYield
             // 
@@ -894,9 +894,9 @@
             this.tabCtrlDividends.SelectedIndex = 0;
             this.tabCtrlDividends.Size = new System.Drawing.Size(812, 153);
             this.tabCtrlDividends.TabIndex = 0;
-            this.tabCtrlDividends.SelectedIndexChanged += new System.EventHandler(this.tabCtrlDividends_SelectedIndexChanged);
+            this.tabCtrlDividends.SelectedIndexChanged += new System.EventHandler(this.TabCtrlDividends_SelectedIndexChanged);
             this.tabCtrlDividends.MouseEnter += new System.EventHandler(this.tabCtrlDividends_MouseEnter);
-            this.tabCtrlDividends.MouseLeave += new System.EventHandler(this.tabCtrlDividends_MouseLeave);
+            this.tabCtrlDividends.MouseLeave += new System.EventHandler(this.TabCtrlDividends_MouseLeave);
             // 
             // lblAddDate
             // 

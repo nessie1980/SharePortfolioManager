@@ -26,44 +26,13 @@ namespace SharePortfolioManager
 {
     public class WebSiteRegex
     {
-        #region Variables
-
-        /// <summary>
-        /// Stores the website link of the share
-        /// </summary>
-        private string _webSiteName;
-
-        /// <summary>
-        /// Stores the encoding of the website content
-        /// </summary>
-        private string _webSiteEncodingType;
-
-        /// <summary>
-        /// Stores the RegEx list for the website
-        /// </summary>
-        private RegExList _webSiteRegexList;
-
-        #endregion Variables
-
         #region Properties
 
-        public string WebSiteName
-        {
-            get { return _webSiteName; }
-            set { _webSiteName = value; }
-        }
+        public string WebSiteName { get; set; }
 
-        public string WebSiteEncodingType
-        {
-            get { return _webSiteEncodingType; }
-            set { _webSiteEncodingType = value; }
-        }
+        public string WebSiteEncodingType { get; set; }
 
-        public RegExList WebSiteRegexList
-        {
-            get { return _webSiteRegexList; }
-            set { _webSiteRegexList = value; }
-        }
+        public RegExList WebSiteRegexList { get; set; }
 
         #endregion Properties
 
@@ -74,8 +43,8 @@ namespace SharePortfolioManager
 
         public WebSiteRegex(string webSiteName, string webSiteEncodingType, RegExList webSiteRegexList)
         {
-            _webSiteName = webSiteName;
-            _webSiteEncodingType = webSiteEncodingType;
+            WebSiteName = webSiteName;
+            WebSiteEncodingType = webSiteEncodingType;
             WebSiteRegexList = webSiteRegexList;
         }
 

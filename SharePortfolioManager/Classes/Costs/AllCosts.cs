@@ -30,63 +30,21 @@ namespace SharePortfolioManager
 {
     public class AllCostsOfTheShare
     {
-        #region Variables
-
-        /// <summary>
-        /// Stores the culture info of the share
-        /// </summary>
-        private CultureInfo _costCultureInfo;
-
-        /// <summary>
-        /// Stores the total cost value of the share
-        /// </summary>
-        private decimal _costValueTotal = 0;
-
-        /// <summary>
-        /// Stores the costs of a year of the share
-        /// </summary>
-        private SortedDictionary<string, CostYearOfTheShare> _allCostsOfTheShareDictionary = new SortedDictionary<string, CostYearOfTheShare>();
-
-        #endregion Variables
-
         #region Properties
 
-        public CultureInfo CostCultureInfo
-        {
-            get { return _costCultureInfo; }
-            internal set { _costCultureInfo = value; }
-        }
+        public CultureInfo CostCultureInfo { get; internal set; }
 
-        public decimal CostValueTotal
-        {
-            get { return _costValueTotal; }
-            internal set { _costValueTotal = value; }
-        }
+        public decimal CostValueTotal { get; internal set; }
 
-        public string CostValueTotalAsStr
-        {
-            get { return Helper.FormatDecimal(_costValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CostCultureInfo); }
-        }
+        public string CostValueTotalAsStr => Helper.FormatDecimal(CostValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CostCultureInfo);
 
-        public string CostValueTotalWithUnitAsStr
-        {
-            get { return Helper.FormatDecimal(_costValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CostCultureInfo); }
-        }
+        public string CostValueTotalWithUnitAsStr => Helper.FormatDecimal(CostValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CostCultureInfo);
 
-        public SortedDictionary<string, CostYearOfTheShare> AllCostsOfTheShareDictionary
-        {
-            get { return _allCostsOfTheShareDictionary; }
-        }
+        public SortedDictionary<string, CostYearOfTheShare> AllCostsOfTheShareDictionary { get; } = new SortedDictionary<string, CostYearOfTheShare>();
 
         #endregion Properties
 
         #region Methods
-
-        /// <summary>
-        /// Standard constructor
-        /// </summary>
-        public AllCostsOfTheShare()
-        { }
 
         /// <summary>
         /// This function sets the culture info to the list
@@ -114,14 +72,12 @@ namespace SharePortfolioManager
             try
             {
                 // Get year of the date of the new cost
-                string year = "";
-                GetYearOfDate(strDateTime, out year);
+                GetYearOfDate(strDateTime, out var year);
                 if (year == null)
                     return false;
 
                 // Search if a cost for the given year already exists if not add it
-                CostYearOfTheShare searchObject;
-                if (AllCostsOfTheShareDictionary.TryGetValue(year, out searchObject))
+                if (AllCostsOfTheShareDictionary.TryGetValue(year, out var searchObject))
                 {
                     if (!searchObject.AddCostObject(bCostOfABuy, bCostOfASale, CostCultureInfo, strDateTime, decValue, strDoc))
                         return false;
@@ -129,7 +85,7 @@ namespace SharePortfolioManager
                 else
                 {
                     // Add new year cost object for the cost with a new year
-                    CostYearOfTheShare addObject = new CostYearOfTheShare();
+                    var addObject = new CostYearOfTheShare();
                     // Add cost with the new year to the cost year list
                     if (addObject.AddCostObject(bCostOfABuy, bCostOfASale, CostCultureInfo, strDateTime, decValue, strDoc))
                     {
@@ -173,24 +129,20 @@ namespace SharePortfolioManager
             try
             {
                 // Get year of the date of the new cost
-                string year = "";
-                GetYearOfDate(strDate, out year);
+                GetYearOfDate(strDate, out var year);
                 if (year == null)
                     return false;
 
                 // Search if a cost for the given year already exists if not no remove will be made
-                CostYearOfTheShare searchObject;
-                if (AllCostsOfTheShareDictionary.TryGetValue(year, out searchObject))
+                if (AllCostsOfTheShareDictionary.TryGetValue(year, out var searchObject))
                 {
                     if (!searchObject.RemoveCostObject(strDate))
                         return false;
-                    else
+
+                    if (searchObject.CostListYear.Count == 0)
                     {
-                        if (searchObject.CostListYear.Count == 0)
-                        {
-                            if (!AllCostsOfTheShareDictionary.Remove(year))
-                                return false;
-                        }
+                        if (!AllCostsOfTheShareDictionary.Remove(year))
+                            return false;
                     }
                 }
                 else
@@ -226,11 +178,11 @@ namespace SharePortfolioManager
         /// <returns>List of CostObjects or a empty list if no CostObjects exists</returns>
         public List<CostObject> GetAllCostsOfTheShare()
         {
-            List<CostObject> allCostsOfTheShare = new List<CostObject>();
+            var allCostsOfTheShare = new List<CostObject>();
 
-            foreach(CostYearOfTheShare costYearOfTheShareObject in AllCostsOfTheShareDictionary.Values)
+            foreach(var costYearOfTheShareObject in AllCostsOfTheShareDictionary.Values)
             {
-                foreach(CostObject costObject in costYearOfTheShareObject.CostListYear)
+                foreach(var costObject in costYearOfTheShareObject.CostListYear)
                 {
                     allCostsOfTheShare.Add(costObject);
                 }
@@ -245,7 +197,7 @@ namespace SharePortfolioManager
         /// <returns>Dictionary with the years and the costs values of the year or empty dictionary if no year exist.</returns>
         public Dictionary<string, string> GetAllCostsTotalValues()
         {
-            Dictionary<string, string> allCostsOfTheShare = new Dictionary<string, string>();
+            var allCostsOfTheShare = new Dictionary<string, string>();
 
             foreach (var key in AllCostsOfTheShareDictionary.Keys)
             {
@@ -261,20 +213,17 @@ namespace SharePortfolioManager
         /// <returns>CostObject or null if the search failed</returns>
         public CostObject GetCostObjectByDateTime(string strDateTime)
         {
-            string strYear = @"";
-            GetYearOfDate(strDateTime, out strYear);
+            GetYearOfDate(strDateTime, out var year);
 
-            if (strYear != null)
+            if (year == null) return null;
+
+            if (!AllCostsOfTheShareDictionary.ContainsKey(year)) return null;
+
+            foreach (var costObject in AllCostsOfTheShareDictionary[year].CostListYear)
             {
-                if (AllCostsOfTheShareDictionary.ContainsKey(strYear))
+                if (costObject.CostDate == strDateTime)
                 {
-                    foreach (var costObject in AllCostsOfTheShareDictionary[strYear].CostListYear)
-                    {
-                        if (costObject.CostDate == strDateTime)
-                        {
-                            return costObject;
-                        }
-                    }
+                    return costObject;
                 }
             }
 
@@ -285,18 +234,18 @@ namespace SharePortfolioManager
         /// This function tries to get the year of the given date string
         /// </summary>
         /// <param name="date">Date string (DD.MM.YYYY)</param>
-        /// <param name="strYear">Year of the given date or null if the split failed</param>
-        private void GetYearOfDate(string date, out string year)
+        /// <param name="year">Year of the given date or null if the split failed</param>
+        private static void GetYearOfDate(string date, out string year)
         {
-            string[] dateTimeElements = date.Split('.');
+            var dateTimeElements = date.Split('.');
             if (dateTimeElements.Length != 3)
             {
                 year = null;
             }
             else
             {
-                string yearTime = dateTimeElements.Last();
-                string[] dateElements = yearTime.Split(' ');
+                var yearTime = dateTimeElements.Last();
+                var dateElements = yearTime.Split(' ');
                 year = dateElements.First();
             }
         }

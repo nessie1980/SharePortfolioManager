@@ -30,122 +30,46 @@ namespace SharePortfolioManager
 {
     public class CostObject
     {
-        #region Variables
-
-        /// <summary>
-        /// Stores the culture info of the share
-        /// </summary>
-        private CultureInfo _costCultureInfo;
-
-        /// <summary>
-        /// Flag if the cost is part of a share buy
-        /// </summary>
-        private bool _costOfABuy;
-
-        /// <summary>
-        /// Flag if the cost is part of a share sale
-        /// </summary>
-        private bool _costOfASale;
-
-        /// <summary>
-        /// Stores the date string of the cost pay date
-        /// </summary>
-        private string _costDate;
-
-        /// <summary>
-        /// Stores the cost value
-        /// </summary>
-        private decimal _costValue = -1;
-
-        /// <summary>
-        /// Stores the document of the cost
-        /// </summary>
-        private string _costDocument;
-
-        #endregion Variables
-
         #region Properties
 
         [Browsable(false)]
-        public CultureInfo CostCultureInfo
-        {
-            get { return _costCultureInfo; }
-            internal set { _costCultureInfo = value; }
-        }
+        public CultureInfo CostCultureInfo { get; internal set; }
 
         [Browsable(false)]
-        public bool CostOfABuy
-        {
-            get { return _costOfABuy; }
-            set { _costOfABuy = value; }
-        }
+        public bool CostOfABuy { get; set; }
 
         [Browsable(false)]
-        public bool CostOfASale
-        {
-            get { return _costOfASale; }
-            set { _costOfASale = value; }
-        }
+        public bool CostOfASale { get; set; }
 
         [Browsable(false)]
-        public string CostOfABuyAsStr
-        {
-            get { return _costOfABuy.ToString(); }
-        }
+        public string CostOfABuyAsStr => CostOfABuy.ToString();
 
         [Browsable(false)]
-        public string CostOfASaleAsStr
-        {
-            get { return _costOfASale.ToString(); }
-        }
+        public string CostOfASaleAsStr => CostOfASale.ToString();
 
         [Browsable(false)]
-        public string CostDate
-        {
-            get { return _costDate; }
-            set { _costDate = value; }
-        }
+        public string CostDate { get; set; }
 
         [Browsable(true)]
         [DisplayName(@"Date")]
-        public string CostDateAsStr
-        {
-            get { return _costDate; }
-        }
+        public string CostDateAsStr => CostDate;
 
         [Browsable(false)]
-        public decimal CostValue
-        {
-            get { return _costValue; }
-            set { _costValue = value; }
-        }
+        public decimal CostValue { get; set; }
 
         [Browsable(true)]
         [DisplayName(@"Value")]
-        public string CostValueAsStr
-        {
-            get { return Helper.FormatDecimal(_costValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", CostCultureInfo); }
-        }
+        public string CostValueAsStr => Helper.FormatDecimal(CostValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", CostCultureInfo);
 
         [Browsable(false)]
-        public string CostValueWithUnitAsStr
-        {
-            get { return Helper.FormatDecimal(_costValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", CostCultureInfo); }
-        }
+        public string CostValueWithUnitAsStr => Helper.FormatDecimal(CostValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", CostCultureInfo);
 
         [Browsable(false)]
-        public string CostDocument
-        {
-            get { return _costDocument; }
-            set { _costDocument = value; }
-        }
+        public string CostDocument { get; set; }
 
         [Browsable(true)]
         [DisplayName(@"Document")]
-        public string CostDocumentFileName
-        {
-            get { return Helper.GetFileName(_costDocument); }
-        }
+        public string CostDocumentFileName => Helper.GetFileName(CostDocument);
 
         #endregion Properties
 
@@ -185,6 +109,7 @@ namespace SharePortfolioManager
         #endregion Methods
     }
 
+    /// <inheritdoc />
     /// <summary>
     /// This is the comparer class for the CostObject.
     /// It is used for the sort for the cost lists.
@@ -195,6 +120,9 @@ namespace SharePortfolioManager
 
         public int Compare(CostObject costObject1, CostObject costObject2)
         {
+            if (costObject1 == null) return 0;
+            if (costObject2 == null) return 0;
+
             return DateTime.Compare(Convert.ToDateTime(costObject1.CostDate), Convert.ToDateTime(costObject2.CostDate));
         }
 
