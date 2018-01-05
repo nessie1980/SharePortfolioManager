@@ -189,7 +189,7 @@ namespace SharePortfolioManager
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.newToolStripMenuItem.Text = "New_";
-            this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
+            this.newToolStripMenuItem.Click += new System.EventHandler(this.NewToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
@@ -197,7 +197,7 @@ namespace SharePortfolioManager
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.openToolStripMenuItem.Text = "Open_";
-            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
@@ -217,7 +217,7 @@ namespace SharePortfolioManager
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.exitToolStripMenuItem.Text = "&Quit_";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.beendenToolStripMenuItem_Click);
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.BeendenToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
@@ -240,7 +240,7 @@ namespace SharePortfolioManager
             this.loggerToolStripMenuItem.Name = "loggerToolStripMenuItem";
             this.loggerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.loggerToolStripMenuItem.Text = "_Logger";
-            this.loggerToolStripMenuItem.Click += new System.EventHandler(this.loggerToolStripMenuItem_Click);
+            this.loggerToolStripMenuItem.Click += new System.EventHandler(this.LoggerToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -256,7 +256,7 @@ namespace SharePortfolioManager
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.aboutToolStripMenuItem.Text = "&About_";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
             // 
             // grpBoxSharePortfolio
             // 
@@ -381,7 +381,7 @@ namespace SharePortfolioManager
             this.tabCtrlShareOverviews.Size = new System.Drawing.Size(1213, 360);
             this.tabCtrlShareOverviews.TabIndex = 12;
             this.tabCtrlShareOverviews.SelectedIndexChanged += new System.EventHandler(this.TabCtrlShareOverviews_SelectedIndexChanged);
-            this.tabCtrlShareOverviews.Enter += new System.EventHandler(this.tabCtrlShareOverviews_Enter);
+            this.tabCtrlShareOverviews.Enter += new System.EventHandler(this.TabCtrlShareOverviews_Enter);
             // 
             // tabPgFinalValue
             // 
@@ -414,12 +414,12 @@ namespace SharePortfolioManager
             this.dgvPortfolioFinalValue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvPortfolioFinalValue.Size = new System.Drawing.Size(1204, 256);
             this.dgvPortfolioFinalValue.TabIndex = 9;
-            this.dgvPortfolioFinalValue.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPortfolioFinalValue_CellDoubleClick);
+            this.dgvPortfolioFinalValue.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvPortfolioFinalValue_CellDoubleClick);
             this.dgvPortfolioFinalValue.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DgvPortfolioFinalValue_CellFormatting);
             this.dgvPortfolioFinalValue.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.DgvPortfolioFinalValue_CellPainting);
             this.dgvPortfolioFinalValue.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.DgvPortfolioFinalValue_DataBindingComplete);
             this.dgvPortfolioFinalValue.SelectionChanged += new System.EventHandler(this.DgvPortfolioFinalValue_SelectionChanged);
-            this.dgvPortfolioFinalValue.MouseEnter += new System.EventHandler(this.dgvPortfolioFinalValue_MouseEnter);
+            this.dgvPortfolioFinalValue.MouseEnter += new System.EventHandler(this.DgvPortfolioFinalValue_MouseEnter);
             this.dgvPortfolioFinalValue.Resize += new System.EventHandler(this.DgvPortfolioFinalValue_Resize);
             // 
             // dgvPortfolioFooterFinalValue
@@ -480,12 +480,12 @@ namespace SharePortfolioManager
             this.dgvPortfolioMarketValue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvPortfolioMarketValue.Size = new System.Drawing.Size(1204, 256);
             this.dgvPortfolioMarketValue.TabIndex = 11;
-            this.dgvPortfolioMarketValue.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPortfolioMarketValue_CellContentDoubleClick);
+            this.dgvPortfolioMarketValue.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvPortfolioMarketValue_CellContentDoubleClick);
             this.dgvPortfolioMarketValue.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DgvPortfolioMarketValue_CellFormatting);
             this.dgvPortfolioMarketValue.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.DgvPortfolioMarketValue_CellPainting);
             this.dgvPortfolioMarketValue.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.DgvPortfolioMarketValue_DataBindingComplete);
             this.dgvPortfolioMarketValue.SelectionChanged += new System.EventHandler(this.DgvPortfolioMarketValue_SelectionChanged);
-            this.dgvPortfolioMarketValue.MouseEnter += new System.EventHandler(this.dgvPortfolioMarketValue_MouseEnter);
+            this.dgvPortfolioMarketValue.MouseEnter += new System.EventHandler(this.DgvPortfolioMarketValue_MouseEnter);
             this.dgvPortfolioMarketValue.Resize += new System.EventHandler(this.DgvPortfolioMarketValue_Resize);
             // 
             // dgvPortfolioFooterMarketValue

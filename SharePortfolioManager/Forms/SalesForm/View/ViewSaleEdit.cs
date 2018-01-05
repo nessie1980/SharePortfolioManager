@@ -857,7 +857,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_SALE || DEBUG
                 var message = $"ShareSalesEdit_Load()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1194,7 +1194,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_SALE || DEBUG
                 var message = $"btnAdd_Click()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1241,7 +1241,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_SALE || DEBUG
                 var message = $"btnDelete_Click()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1294,7 +1294,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_SALE || DEBUG
                 var message = $"btnReset_Click()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1539,7 +1539,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_SALE || DEBUG
                 var message = $"ShowSales()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1611,7 +1611,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_SALE || DEBUG
                 var message = $"dataGridViewSalesOfAYear_DataBindingComplete()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1651,7 +1651,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_SALE || DEBUG
                 var message = $"DeselectRowsOfDataGridViews()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1679,7 +1679,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_SALE || DEBUG
                 var message = $"btnSaleDocumentBrowse_Click()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1772,7 +1772,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_SALE || DEBUG
                 var message = $"dataGridViewSalesOfYears_SelectionChanged()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1934,7 +1934,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_SALE || DEBUG
                 var message = $"dataGridViewSalesOfAYear_SelectionChanged()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -2058,7 +2058,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_SALE || DEBUG
                 var message = $"dataGridViewSalesOfAYear_CellContentdecimalClick()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -2120,7 +2120,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
 //            }
 //            catch (Exception ex)
 //            {
-//#if DEBUG
+//#if DEBUG_SALE || DEBUG
 //                var message = $"CalculatePrice()\n\n{ex.Message}";
 //                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
 //                    MessageBoxIcon.Error);

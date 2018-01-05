@@ -93,7 +93,7 @@ namespace SharePortfolioManager
             CostValue = decValue;
             CostDocument = strDoc;
 
-#if DEBUG
+#if DEBUG_COST
             Console.WriteLine(@"");
             Console.WriteLine(@"New CostObject created");
             Console.WriteLine(@"CostOfABuy: {0}", bCostOfABuy);

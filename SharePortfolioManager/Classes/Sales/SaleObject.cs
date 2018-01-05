@@ -335,7 +335,7 @@ namespace SharePortfolioManager
             Costs = decCosts;
             Document = strDoc;
 
-#if DEBUG
+#if DEBUG_SALE
             Console.WriteLine(@"");
             Console.WriteLine(@"New sale created");
             Console.WriteLine(@"Date: {0}", Date);
@@ -443,7 +443,7 @@ namespace SharePortfolioManager
             ProfitLoss = decProftiLoss;
             Document = strDoc;
 
-#if DEBUG
+#if DEBUG_SALE
             Console.WriteLine(@"");
             Console.WriteLine(@"New sale created");
             Console.WriteLine(@"Date: {0}", Date);

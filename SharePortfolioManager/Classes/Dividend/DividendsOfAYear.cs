@@ -66,7 +66,7 @@ namespace SharePortfolioManager
         public bool AddDividendObject(CultureInfo cultureInfo, CultureInfo cultureInfoFc, CheckState csEnableFc, decimal decExchangeRatio, string strDateTime, decimal decRate, decimal decVolume,
             decimal decTaxAtSource, decimal decCapitalGainsTax, decimal decSolidarityTax, decimal decSharePrice, string strDoc = "")
         {
-#if DEBUG
+#if DEBUG_DIVIDEND
             Console.WriteLine(@"AddDividendObject");
 #endif
             try
@@ -87,7 +87,7 @@ namespace SharePortfolioManager
                     DividendValueYear = 0;
 
                 DividendValueYear += addObject.PayoutWithTaxesDec;
-#if DEBUG
+#if DEBUG_DIVIDEND
                 Console.WriteLine(@"DividendValueYear: {0}", DividendValueYear);
                 Console.WriteLine(@"");
 #endif
@@ -108,7 +108,7 @@ namespace SharePortfolioManager
         /// <returns>Flag if the remove was successfully</returns>
         public bool RemoveDividendObject(string strDate)
         {
-#if DEBUG
+#if DEBUG_DIVIDEND
             Console.WriteLine(@"RemoveDividendObject");
 #endif
             try
@@ -130,7 +130,7 @@ namespace SharePortfolioManager
 
                 // Calculate dividend value
                 DividendValueYear -= removeObject.PayoutWithTaxesDec;
-#if DEBUG
+#if DEBUG_DIVIDEND
                 Console.WriteLine(@"DividendValueYear: {0}", DividendValueYear);
                 Console.WriteLine(@"");
 #endif

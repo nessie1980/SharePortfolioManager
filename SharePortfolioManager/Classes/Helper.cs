@@ -293,10 +293,8 @@ namespace SharePortfolioManager.Classes
             }
             catch (Exception ex)
             {
-#if DEBUG
                 var message = $"AddStatusMessage()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-#endif
                 return false;
             }
         }
@@ -400,10 +398,8 @@ namespace SharePortfolioManager.Classes
             }
             catch (Exception ex)
             {
-#if DEBUG
                 var message = $"EnableDisableControls()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-#endif
             }
         }
 
@@ -437,7 +433,7 @@ namespace SharePortfolioManager.Classes
             if (lastDisplayedRowIndex < dataGridView.RowCount)
                 iFirstDisplayedRowIndex = lastDisplayedRowIndex;
 
-#if DEBUG
+#if DEBUG_HELPER
             Console.WriteLine(@"iFirstDisplayedRowIndex_1: {0}", iFirstDisplayedRowIndex);
             Console.WriteLine(@"iDisplayedRows_1: {0}", iDisplayedRows);
 #endif
@@ -455,13 +451,15 @@ namespace SharePortfolioManager.Classes
             else
                 dataGridView.FirstDisplayedScrollingRowIndex = lastDisplayedRowIndex;
 
+#if DEBUG_HELPER
             Console.WriteLine(@"iFirstDisplayedRowIndex_2: {0}", iFirstDisplayedRowIndex);
             Console.WriteLine(@"iDisplayedRows_2: {0}", iDisplayedRows);
+#endif
         }
 
-        #endregion Scroll DataGridView to given index
+#endregion Scroll DataGridView to given index
 
-        #region Formatting functions
+#region Formatting functions
 
         /// <summary>
         /// This function formats the given decimal value
@@ -637,9 +635,9 @@ namespace SharePortfolioManager.Classes
             return strResult;
         }
 
-        #endregion Formatting functions
+#endregion Formatting functions
 
-        #region Get RegEx options
+#region Get RegEx options
 
         /// <summary>
         /// This function returns a list of "RegexOptions" of a given string
@@ -695,9 +693,9 @@ namespace SharePortfolioManager.Classes
                 return regexOptionsList.Count > 0 ? regexOptionsList : null;
             }
 
-        #endregion Get RegEx options
+#endregion Get RegEx options
 
-        #region Open file dialog for setting document
+#region Open file dialog for setting document
 
         /// <summary>
         /// This function show a open file dialog
@@ -749,9 +747,9 @@ namespace SharePortfolioManager.Classes
             return strCurrentDocument;
         }
 
-        #endregion Open file dialog for setting document
+#endregion Open file dialog for setting document
 
-        #region Open file dialog for loading portfolio
+#region Open file dialog for loading portfolio
 
         /// <summary>
         /// This function show a open file dialog
@@ -782,9 +780,9 @@ namespace SharePortfolioManager.Classes
 
             return strCurrentPortfolio;
         }
-        #endregion Open file dialog for loading portfolio
+#endregion Open file dialog for loading portfolio
 
-        #region Get file name of the given path
+#region Get file name of the given path
 
         /// <summary>
         /// This function return the file name of the given path
@@ -799,9 +797,9 @@ namespace SharePortfolioManager.Classes
             return @"-";
         }
 
-        #endregion Get file name of the given path
+#endregion Get file name of the given path
 
-        #region Get currency list
+#region Get currency list
 
         /// <summary>
         /// This function returns a list of all currency
@@ -831,9 +829,9 @@ namespace SharePortfolioManager.Classes
             ListNameCultureInfoCurrencySymbol = ListNameCultureInfoCurrencySymbol.OrderBy(ci => ci.Key);
         }
 
-        #endregion Get currency list
+#endregion Get currency list
 
-        #region Get culture info by name
+#region Get culture info by name
 
         public static CultureInfo GetCultureByName(string name)
         {
@@ -847,9 +845,9 @@ namespace SharePortfolioManager.Classes
             return null;
         }
 
-        #endregion Get culture info by name
+#endregion Get culture info by name
 
-        #region Calculate market value, market value minus reduction and market value minus reduction and plus costs
+#region Calculate market value, market value minus reduction and market value minus reduction and plus costs
 
         public static void CalcBuyValues(decimal decVolume, decimal decSharePrice, decimal decCosts, decimal decReduction, out decimal decMarketValue, out decimal decMarketValueReduction, out decimal decMarketValueReductionCosts)
         {
@@ -872,9 +870,9 @@ namespace SharePortfolioManager.Classes
             }
         }
 
-        #endregion  Calculate market value, market value minus reduction and market value minus reduction and plus costs
+#endregion  Calculate market value, market value minus reduction and market value minus reduction and plus costs
 
-        #region URL checker
+#region URL checker
 
         public static bool UrlChecker(ref string url, int timeout)
         {
@@ -901,18 +899,18 @@ namespace SharePortfolioManager.Classes
             return response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Found;
         }
 
-        #endregion URL checker
+#endregion URL checker
 
-        #region Get combo box items
+#region Get combo box items
 
         public static object[] GetComboBoxItmes(string xPath, string languageName, Language language)
         {
             return language.GetLanguageTextListByXPath(xPath, languageName).ToArray();
         }
 
-        #endregion  Get combo box items
+#endregion  Get combo box items
 
-        #endregion Methods
+#endregion Methods
     }
 
     // This class stores the informations of a culture info

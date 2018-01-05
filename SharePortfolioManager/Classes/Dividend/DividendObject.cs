@@ -666,7 +666,7 @@ namespace SharePortfolioManager
             PriceDec = decPrice;
             Document = strDoc;
 
-#if DEBUG
+#if DEBUG_DIVIDEND
             Console.WriteLine(@"");
             Console.WriteLine(@"New DividendObject created");
             Console.WriteLine(@"CultureInfo: {0}", DividendCultureInfo.Name);

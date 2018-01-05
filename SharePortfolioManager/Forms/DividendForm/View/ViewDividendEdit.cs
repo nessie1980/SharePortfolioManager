@@ -973,7 +973,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_DIVIDEND || DEBUG
                 var message = $"ShareDividendEdit_Load()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1320,7 +1320,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_DIVIDEND || DEBUG
                 var message = $"btnAdd_Click()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1383,7 +1383,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_DIVIDEND || DEBUG
                 var message = $"btnDividendDelete_Click()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1436,7 +1436,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_DIVIDEND || DEBUG
                 var message = $"btnReset_Click()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1769,7 +1769,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_DIVIDEND || DEBUG
                 var message = $"ShowDividends()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1849,7 +1849,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_DIVIDEND || DEBUG
                 var message = $"dataGridViewDividensOfAYear_DataBindingComplete()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1889,7 +1889,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_DIVIDEND || DEBUG
                 var message = $"DeselectRowsOfDataGridViews()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1992,7 +1992,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_DIVIDEND || DEBUG
                 var message = $"dataGridViewDividendsOfYears_SelectionChanged()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -2142,7 +2142,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_DIVIDEND || DEBUG
                 var message = $"dataGridViewDividendsOfAYear_SelectionChanged()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -2266,7 +2266,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_DIVIDEND || DEBUG
                 var message = $"dataGridViewDividendsOfAYear_CellContentdecimalClick()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);

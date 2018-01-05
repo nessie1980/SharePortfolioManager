@@ -238,7 +238,7 @@ namespace SharePortfolioManager
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_EDITSHARE || DEBUG
                 var message = $"FrmShareEdit_Load()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -496,7 +496,7 @@ namespace SharePortfolioManager
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_EDITSHARE || DEBUG
                 var message = $"btnSave_Click()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);

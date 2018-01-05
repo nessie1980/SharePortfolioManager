@@ -509,7 +509,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_COST || DEBUG
                 var message = $"ShareCostEdit_Load()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -687,7 +687,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_COST || DEBUG
                 var message = $"btnAdd_Click()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -733,7 +733,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_COST || DEBUG
                 var message = $"btnDelete_Click()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -786,7 +786,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_COST || DEBUG
                 var message = $"btnReset_Click()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -824,7 +824,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_COST || DEBUG
                 var message = $"btnCostsDocumentBrowse_Click()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1063,7 +1063,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_COST || DEBUG
                 var message = $"ShowCosts()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1120,7 +1120,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_COST || DEBUG
                 var message = $"dataGridViewCostsOfAYear_DataBindingComplete()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1159,7 +1159,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_COST || DEBUG
                 var message = $"DeselectRowsOfDataGridViews()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1252,7 +1252,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_COST || DEBUG
                 var message = $"dataGridViewCostsOfYears_SelectionChanged()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1410,7 +1410,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_COST || DEBUG
                 var message = $"dataGridViewCostsOfAYear_SelectionChanged()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1538,7 +1538,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_COST || DEBUG
                 var message = $"dataGridViewCostsOfAYear_CellContentdecimalClick()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);

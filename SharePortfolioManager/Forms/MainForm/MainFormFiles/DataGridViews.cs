@@ -35,7 +35,7 @@ namespace SharePortfolioManager
     {
         #region Column enums for dgvPortfolioMarketValue and dgvPortfolioFooterMarketValue
 
-        enum ColumnIndicesPortfolioMarketValue
+        private enum ColumnIndicesPortfolioMarketValue
         {
             EWknNumberColumnIndex = 0,
             EShareNameColumnIndex,
@@ -47,7 +47,7 @@ namespace SharePortfolioManager
             EShareSumColumnIndex
         }
 
-        enum ColumnIndicesPortfolioFooterMarketValue
+        private enum ColumnIndicesPortfolioFooterMarketValue
         {
             ELabelTotalColumnIndex = 0,
             EPerformanceColumnIndex,
@@ -58,7 +58,7 @@ namespace SharePortfolioManager
 
         #region Column enums for dgvPortfolioFinalValue and dgvPortfolioFooterFinalValue
 
-        enum ColumnIndicesPortfolioFinalValue
+        private enum ColumnIndicesPortfolioFinalValue
         {
             EWknNumberColumnIndex = 0,
             EShareNameColumnIndex,
@@ -71,7 +71,7 @@ namespace SharePortfolioManager
             EShareSumColumnIndex
         }
 
-        enum ColumnIndicesPortfolioFooterFinalValue
+        private enum ColumnIndicesPortfolioFooterFinalValue
         {
             ELabelCostsDividendIndex = 0,
             ECostsDividendIndex,
@@ -86,7 +86,7 @@ namespace SharePortfolioManager
 
         #region Column width for the dgvPortfolio and dgvPortfolioFooter
 
-        private const int WKNNumber = 70;
+        private const int WknNumber = 70;
         private const int SharePrice = 110;
         private const int ShareVolume = 125;
         private const int ShareCostsDividend = 100;
@@ -99,27 +99,9 @@ namespace SharePortfolioManager
 
         #region Data binding sources for the data grid views
 
-        /// <summary>
-        /// Stores the BindingSource for the dgvPortfolioMarketValue
-        /// </summary>
-        private readonly BindingSource _dgvPortfolioBindingSourceMarketValue = new BindingSource();
-
-        /// <summary>
-        /// Stores the BindingSource for the dgvPortfolioFinalValue
-        /// </summary>
-        private readonly BindingSource _dgvPortfolioBindingSourceFinalValue = new BindingSource();
-
         #endregion Data binding sources for the data grid views
 
         #region ImageList with the images for the performance visualization in the data gird views
-
-        private readonly List<Image> _imageList = new List<Image>
-        {
-            Resources.empty_arrow,
-            Resources.red_down_arrow,
-            Resources.gray_neutral_arrow,
-            Resources.green_up_arrow
-        };
 
         #endregion Images for the performance visualization in the data grid views
 
@@ -127,20 +109,18 @@ namespace SharePortfolioManager
 
         #region Properties
 
-        public BindingSource DgvPortfolioBindingSourceMarketValue
-        {
-            get { return _dgvPortfolioBindingSourceMarketValue; }
-        }
+        public BindingSource DgvPortfolioBindingSourceMarketValue { get; } = new BindingSource();
 
-        public BindingSource DgvPortfolioBindingSourceFinalValue
-        {
-            get { return _dgvPortfolioBindingSourceFinalValue; }
-        }
+        public BindingSource DgvPortfolioBindingSourceFinalValue { get; } = new BindingSource();
 
-        public List<Image> ImageList
+        public List<Image> ImageList { get; } = new List<Image>
         {
-            get { return _imageList; }
-        }
+            Resources.empty_arrow,
+            Resources.red_down_arrow,
+            Resources.gray_neutral_arrow,
+            Resources.green_up_arrow
+        };
+
         #endregion Properties
 
         #region Methods
@@ -157,7 +137,7 @@ namespace SharePortfolioManager
                 #region dgvProtfolioMarketValue
 
                 // Advanced configuration DataGridView share portfolio
-                DataGridViewCellStyle styleMarketValue = dgvPortfolioMarketValue.ColumnHeadersDefaultCellStyle;
+                var styleMarketValue = dgvPortfolioMarketValue.ColumnHeadersDefaultCellStyle;
                 styleMarketValue.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
                 dgvPortfolioMarketValue.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
@@ -178,7 +158,7 @@ namespace SharePortfolioManager
                 #region dgvProtfolioFinalValue
 
                 // Advanced configuration DataGridView share portfolio
-                DataGridViewCellStyle styleFinaleValue = dgvPortfolioFinalValue.ColumnHeadersDefaultCellStyle;
+                var styleFinaleValue = dgvPortfolioFinalValue.ColumnHeadersDefaultCellStyle;
                 styleFinaleValue.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
                 dgvPortfolioFinalValue.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
@@ -199,7 +179,8 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + ex.Message, @"Error",
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -227,9 +208,9 @@ namespace SharePortfolioManager
             {
                 #region dgvPortfolioFooterMarketValue
 
-                DataGridViewTextBoxColumn dgvscLabelTotalMarketValue = new DataGridViewTextBoxColumn();
-                DataGridViewTextBoxColumn dgvscPerformanceMarketValue = new DataGridViewTextBoxColumn();
-                DataGridViewTextBoxColumn dgvscTotalMarketValue = new DataGridViewTextBoxColumn();
+                var dgvscLabelTotalMarketValue = new DataGridViewTextBoxColumn();
+                var dgvscPerformanceMarketValue = new DataGridViewTextBoxColumn();
+                var dgvscTotalMarketValue = new DataGridViewTextBoxColumn();
 
                 dgvPortfolioFooterMarketValue.Columns.Add(dgvscLabelTotalMarketValue);
                 dgvPortfolioFooterMarketValue.Columns.Add(dgvscPerformanceMarketValue);
@@ -251,11 +232,11 @@ namespace SharePortfolioManager
 
                 #region dgvPortfolioFooterMarketValue
 
-                DataGridViewTextBoxColumn dgvscLabelCostDividendFinalValue = new DataGridViewTextBoxColumn();
-                DataGridViewTextBoxColumn dgvscCostsDividendFinalValue = new DataGridViewTextBoxColumn();
-                DataGridViewTextBoxColumn dgvscLabelTotalFinalValue = new DataGridViewTextBoxColumn();
-                DataGridViewTextBoxColumn dgvscPerformanceFinalValue = new DataGridViewTextBoxColumn();
-                DataGridViewTextBoxColumn dgvscTotalFinalValue = new DataGridViewTextBoxColumn();
+                var dgvscLabelCostDividendFinalValue = new DataGridViewTextBoxColumn();
+                var dgvscCostsDividendFinalValue = new DataGridViewTextBoxColumn();
+                var dgvscLabelTotalFinalValue = new DataGridViewTextBoxColumn();
+                var dgvscPerformanceFinalValue = new DataGridViewTextBoxColumn();
+                var dgvscTotalFinalValue = new DataGridViewTextBoxColumn();
 
                 dgvPortfolioFooterFinalValue.Columns.Add(dgvscLabelCostDividendFinalValue);
                 dgvPortfolioFooterFinalValue.Columns.Add(dgvscCostsDividendFinalValue);
@@ -280,7 +261,8 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + ex.Message, @"Error",
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -309,51 +291,45 @@ namespace SharePortfolioManager
         {
             try
             {
-                //ShareObjectMarketValue = null;
-                //ShareObjectFinalValue = null;
-
                 // Save current selected ShareObject via the selected WKN number
-                if (dgvPortfolioMarketValue.SelectedRows.Count == 1 &&
-                    dgvPortfolioMarketValue.SelectedRows[0].Cells.Count > 0 &&
-                    dgvPortfolioMarketValue.SelectedRows[0].Cells[0].Value != null &&
-                    AddFlagMarketValue == false)
+                if (dgvPortfolioMarketValue.SelectedRows.Count != 1 ||
+                    dgvPortfolioMarketValue.SelectedRows[0].Cells.Count <= 0 ||
+                    dgvPortfolioMarketValue.SelectedRows[0].Cells[0].Value == null ||
+                    AddFlagMarketValue) return;
+
+                // Get selected WKN number
+                var selectedWknNumber = dgvPortfolioMarketValue.SelectedRows[0].Cells[0].Value.ToString();
+
+                // Search for the selected ShareObject in the market value list
+                foreach (var shareObjectMarketValue in ShareObjectListMarketValue)
                 {
-                    // Get selected WKN number
-                    string selectedWKNNumber = dgvPortfolioMarketValue.SelectedRows[0].Cells[0].Value.ToString();
+                    if (shareObjectMarketValue.Wkn != selectedWknNumber) continue;
 
-                    // Search for the selected ShareObject in the market value list
-                    foreach (var shareObjectMarketValue in ShareObjectListMarketValue)
-                    {
-                        if (shareObjectMarketValue.Wkn == selectedWKNNumber)
-                        {
-                            ShareObjectMarketValue = shareObjectMarketValue;
-                            break;
-                        }
-                    }
-
-                    // Search for the selected ShareObject in the final value list
-                    foreach (var shareObjectFinalValue in ShareObjectListFinalValue)
-                    {
-                        if (shareObjectFinalValue.Wkn == selectedWKNNumber)
-                        {
-                            ShareObjectFinalValue = shareObjectFinalValue;
-                            break;
-                        }
-                    }
-
-                    if (ShareObjectMarketValue != null && ShareObjectFinalValue != null)
-                    {
-                        UpdateShareDetails(MarketValueOverviewTabSelected);
-                        UpdateProfitLossDetails(MarketValueOverviewTabSelected);
-                        UpdateDividendDetails(MarketValueOverviewTabSelected);
-                        UpdateCostsDetails(MarketValueOverviewTabSelected);
-                    }
+                    ShareObjectMarketValue = shareObjectMarketValue;
+                    break;
                 }
+
+                // Search for the selected ShareObject in the final value list
+                foreach (var shareObjectFinalValue in ShareObjectListFinalValue)
+                {
+                    if (shareObjectFinalValue.Wkn != selectedWknNumber) continue;
+
+                    ShareObjectFinalValue = shareObjectFinalValue;
+                    break;
+                }
+
+                if (ShareObjectMarketValue == null || ShareObjectFinalValue == null) return;
+
+                UpdateShareDetails(MarketValueOverviewTabSelected);
+                UpdateProfitLossDetails(MarketValueOverviewTabSelected);
+                UpdateDividendDetails(MarketValueOverviewTabSelected);
+                UpdateCostsDetails(MarketValueOverviewTabSelected);
             }
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + ex.Message, @"Error",
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -379,51 +355,44 @@ namespace SharePortfolioManager
         {
             try
             {
-                //ShareObjectMarketValue = null;
-                //ShareObjectFinalValue = null;
-
                 // Save current selected ShareObject via the selected WKN number
-                if (dgvPortfolioFinalValue.SelectedRows.Count == 1 &&
-                    dgvPortfolioFinalValue.SelectedRows[0].Cells.Count > 0 &&
-                    dgvPortfolioFinalValue.SelectedRows[0].Cells[0].Value != null &&
-                    AddFlagFinalValue == false)
+                if (dgvPortfolioFinalValue.SelectedRows.Count != 1 ||
+                    dgvPortfolioFinalValue.SelectedRows[0].Cells.Count <= 0 ||
+                    dgvPortfolioFinalValue.SelectedRows[0].Cells[0].Value == null || AddFlagFinalValue) return;
+
+                // Get selected WKN number
+                var selectedWknNumber = dgvPortfolioFinalValue.SelectedRows[0].Cells[0].Value.ToString();
+
+                // Search for the selected ShareObject in the final value list
+                foreach (var shareObjectFinalValue in ShareObjectListFinalValue)
                 {
-                    // Get selected WKN number
-                    string selectedWKNNumber = dgvPortfolioFinalValue.SelectedRows[0].Cells[0].Value.ToString();
+                    if (shareObjectFinalValue.Wkn != selectedWknNumber) continue;
 
-                    // Search for the selected ShareObject in the final value list
-                    foreach (var shareObjectFinalValue in ShareObjectListFinalValue)
-                    {
-                        if (shareObjectFinalValue.Wkn == selectedWKNNumber)
-                        {
-                            ShareObjectFinalValue = shareObjectFinalValue;
-                            break;
-                        }
-                    }
-
-                    // Search for the selected ShareObject in the market value list
-                    foreach (var shareObjectMarketValue in ShareObjectListMarketValue)
-                    {
-                        if (shareObjectMarketValue.Wkn == selectedWKNNumber)
-                        {
-                            ShareObjectMarketValue = shareObjectMarketValue;
-                            break;
-                        }
-                    }
-
-                    if (ShareObjectFinalValue != null && ShareObjectListMarketValue != null)
-                    {
-                        UpdateShareDetails(MarketValueOverviewTabSelected);
-                        UpdateProfitLossDetails(MarketValueOverviewTabSelected);
-                        UpdateDividendDetails(MarketValueOverviewTabSelected);
-                        UpdateCostsDetails(MarketValueOverviewTabSelected);
-                    }
+                    ShareObjectFinalValue = shareObjectFinalValue;
+                    break;
                 }
+
+                // Search for the selected ShareObject in the market value list
+                foreach (var shareObjectMarketValue in ShareObjectListMarketValue)
+                {
+                    if (shareObjectMarketValue.Wkn != selectedWknNumber) continue;
+
+                    ShareObjectMarketValue = shareObjectMarketValue;
+                    break;
+                }
+
+                if (ShareObjectFinalValue == null || ShareObjectListMarketValue == null) return;
+
+                UpdateShareDetails(MarketValueOverviewTabSelected);
+                UpdateProfitLossDetails(MarketValueOverviewTabSelected);
+                UpdateDividendDetails(MarketValueOverviewTabSelected);
+                UpdateCostsDetails(MarketValueOverviewTabSelected);
             }
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + ex.Message, @"Error",
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -518,13 +487,14 @@ namespace SharePortfolioManager
             {
                 #region dgvPortfolioFooterMarketValue
 
+                VScrollBar vScrollbarPortfolio;
+
                 if (dgvPortfolioFooterMarketValue.ColumnCount >= 3)
                 {
-                    var vScrollbarPortfolio = dgvPortfolioMarketValue.Controls.OfType<VScrollBar>().First();
-                    var vScrollbarWidth = 0;
+                    vScrollbarPortfolio = dgvPortfolioMarketValue.Controls.OfType<VScrollBar>().First();
                     if (vScrollbarPortfolio.Visible)
                     {
-                        vScrollbarWidth = vScrollbarPortfolio.Width;
+                        var vScrollbarWidth = vScrollbarPortfolio.Width;
                         dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ESumColumnIndex].Width = ShareSum + vScrollbarWidth;
                     }
                     else
@@ -538,33 +508,32 @@ namespace SharePortfolioManager
 
                 #region dgvPortfolioFooterFinalValue
 
-                if (dgvPortfolioFooterFinalValue.ColumnCount >= 5)
+                if (dgvPortfolioFooterFinalValue.ColumnCount < 5) return;
+
+                const int columnLabelTotalWidth = SharePrice + SharePerformanceDayBefore + ImagePerformance;
+
+                vScrollbarPortfolio = dgvPortfolioFinalValue.Controls.OfType<VScrollBar>().First();
+                if (vScrollbarPortfolio.Visible)
                 {
-                    var _columnLabelTotalWidth = SharePrice + SharePerformanceDayBefore + ImagePerformance;
-
-                    var vScrollbarPortfolio = dgvPortfolioFinalValue.Controls.OfType<VScrollBar>().First();
-                    var vScrollbarWidth = 0;
-                    if (vScrollbarPortfolio.Visible)
-                    {
-                        vScrollbarWidth = vScrollbarPortfolio.Width;
-                        dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ESumColumnIndex].Width = ShareSum + vScrollbarWidth;
-                    }
-                    else
-                    {
-                        dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ESumColumnIndex].Width =
-                            ShareSum;
-                    }
-
-                    dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ECostsDividendIndex].Width = ShareCostsDividend;
-                    dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelTotalColumnIndex].Width = _columnLabelTotalWidth;
+                    var vScrollbarWidth = vScrollbarPortfolio.Width;
+                    dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ESumColumnIndex].Width = ShareSum + vScrollbarWidth;
                 }
+                else
+                {
+                    dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ESumColumnIndex].Width =
+                        ShareSum;
+                }
+
+                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ECostsDividendIndex].Width = ShareCostsDividend;
+                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelTotalColumnIndex].Width = columnLabelTotalWidth;
 
                 #endregion dgvPortfolioFooterFinalValue
             }
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + ex.Message, @"Error",
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -578,53 +547,52 @@ namespace SharePortfolioManager
         /// <summary>
         /// This function add the shares to the DataGridView portfolio.
         /// </summary>
-        void AddSharesToDataGridViews()
+        private void AddSharesToDataGridViews()
         {
-            if (InitFlag)
+            if (!InitFlag) return;
+
+            try
             {
-                try
+                #region dgvPortfolioMarketValue
+
+                // Check if the share object list has items
+                if (ShareObjectListMarketValue != null && ShareObjectListMarketValue.Count > 0)
                 {
-                    #region dgvPortfolioMarketValue
-
-                    // Check if the share object list has items
-                    if (ShareObjectListMarketValue != null && ShareObjectListMarketValue.Count > 0)
-                    {
-                        DgvPortfolioBindingSourceMarketValue.ResetBindings(false);
-                        DgvPortfolioBindingSourceMarketValue.DataSource = ShareObjectListMarketValue;
-                        dgvPortfolioMarketValue.DataSource = DgvPortfolioBindingSourceMarketValue;
-                    }
-
-                    #endregion dgvPortfolioMarketValue
-
-                    #region dgvPortfolioFinalValue
-
-                    // Check if the share object list has items
-                    if (ShareObjectListFinalValue != null && ShareObjectListFinalValue.Count > 0)
-                    {
-                        DgvPortfolioBindingSourceFinalValue.ResetBindings(false);
-                        DgvPortfolioBindingSourceFinalValue.DataSource = ShareObjectListFinalValue;
-                        dgvPortfolioFinalValue.DataSource = DgvPortfolioBindingSourceFinalValue;
-                    }
-
-                    #endregion dgvPortfolioFinalValue
+                    DgvPortfolioBindingSourceMarketValue.ResetBindings(false);
+                    DgvPortfolioBindingSourceMarketValue.DataSource = ShareObjectListMarketValue;
+                    dgvPortfolioMarketValue.DataSource = DgvPortfolioBindingSourceMarketValue;
                 }
-                catch (Exception ex)
-                {
+
+                #endregion dgvPortfolioMarketValue
+
+                #region dgvPortfolioFinalValue
+
+                // Check if the share object list has items
+                if (ShareObjectListFinalValue == null || ShareObjectListFinalValue.Count <= 0) return;
+
+                DgvPortfolioBindingSourceFinalValue.ResetBindings(false);
+                DgvPortfolioBindingSourceFinalValue.DataSource = ShareObjectListFinalValue;
+                dgvPortfolioFinalValue.DataSource = DgvPortfolioBindingSourceFinalValue;
+
+                #endregion dgvPortfolioFinalValue
+            }
+            catch (Exception ex)
+            {
 #if DEBUG
-                    MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + ex.Message, @"Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
 #endif
-                    // Set initialization flag
-                    InitFlag = false;
+                // Set initialization flag
+                InitFlag = false;
 
-                    // Add status message
-                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        Language.GetLanguageTextByXPath(
-                            @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio_Error/DisplayFailed", LanguageName),
-                        Language, LanguageName,
-                        Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application);
-                }
+                // Add status message
+                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(
+                        @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio_Error/DisplayFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application);
             }
         }
 
@@ -633,136 +601,165 @@ namespace SharePortfolioManager
         /// </summary>
         private void AddShareFooters()
         {
-            if (InitFlag)
+            if (!InitFlag) return;
+
+            try
             {
-                try
+                // Clear footers
+                dgvPortfolioFooterMarketValue.Rows.Clear();
+                dgvPortfolioFooterFinalValue.Rows.Clear();
+
+                #region dgvPortfolioFooterMarketValue
+
+                // Check if the share object list has items
+                if (ShareObjectListMarketValue != null && ShareObject.ObjectCounter > 0 && dgvPortfolioMarketValue.Rows.Count > 0)
                 {
-                    // Clear footers
-                    dgvPortfolioFooterMarketValue.Rows.Clear();
-                    dgvPortfolioFooterFinalValue.Rows.Clear();
-
-                    #region dgvPortfolioFooterMarketValue
-
-                    // Check if the share object list has items
-                    if (ShareObjectListMarketValue != null && ShareObject.ObjectCounter > 0 && dgvPortfolioMarketValue.Rows.Count > 0)
+                    // Set row colors
+                    if (dgvPortfolioMarketValue.RowsDefaultCellStyle.BackColor == Color.LightGray && dgvPortfolioMarketValue.RowCount % 2 == 0)
                     {
-                        // Set row colors
-                        if (dgvPortfolioMarketValue.RowsDefaultCellStyle.BackColor == Color.LightGray && dgvPortfolioMarketValue.RowCount % 2 == 0)
-                        {
-                            dgvPortfolioFooterMarketValue.RowsDefaultCellStyle.BackColor = Color.LightGray;
-                            dgvPortfolioFooterMarketValue.AlternatingRowsDefaultCellStyle.BackColor = Color.White;
-                        }
-                        else
-                        {
-                            dgvPortfolioFooterMarketValue.RowsDefaultCellStyle.BackColor = Color.White;
-                            dgvPortfolioFooterMarketValue.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
-                        }
-
-                        // Create row content with final value of the market value portfolio
-                        object[] newFooterPurchaseValueOfAllShares = new object[]
-                        {
-                            string.Format(@"{0}", Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolioFooter/RowContent_TotalPurchaseValue", LanguageName)),
-                            @"",
-                            ShareObjectListMarketValue[0].PortfolioPurchaseValueAsStrUnit
-                        };
-
-                        // Create row content with total performance of the market value portfolio
-                        object[] newFooterDepotDevelopment = new object[]
-                        {
-                            string.Format(@"{0}", Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolioFooter/RowContent_TotalPerformance", LanguageName)),
-                            ShareObjectListMarketValue[0].ProfitLossPerformancePortfolioValueAsStr,
-                            @""
-                        };
-
-                        // Create row content with total market value of the market value portfolio
-                        object[] newFooterTotalDepotVolume = new object[]
-                        {
-                            string.Format(@"{0}", Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolioFooter/RowContent_TotalDepotValue", LanguageName)),
-                            @"",
-                            ShareObjectListMarketValue[0].PortfolioMarketValueAsStrUnit
-                        };
-
-                        // Add rows to the data grid view market value footer
-                        dgvPortfolioFooterMarketValue.Rows.Add(newFooterPurchaseValueOfAllShares);
-                        dgvPortfolioFooterMarketValue.Rows.Add(newFooterDepotDevelopment);
-                        dgvPortfolioFooterMarketValue.Rows.Add(newFooterTotalDepotVolume);
+                        dgvPortfolioFooterMarketValue.RowsDefaultCellStyle.BackColor = Color.LightGray;
+                        dgvPortfolioFooterMarketValue.AlternatingRowsDefaultCellStyle.BackColor = Color.White;
+                    }
+                    else
+                    {
+                        dgvPortfolioFooterMarketValue.RowsDefaultCellStyle.BackColor = Color.White;
+                        dgvPortfolioFooterMarketValue.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
                     }
 
-                    #endregion dgvPortfolioFooterMarketValue
-
-                    #region dgvPortfolioFooterFinalValue
-
-                    // Check if the share object list has items
-                    if (ShareObjectListFinalValue != null && ShareObject.ObjectCounter > 0 && dgvPortfolioFinalValue.Rows.Count > 0)
+                    // Create row content with final value of the market value portfolio
+                    var newFooterPurchaseValueOfAllShares = new object[]
                     {
-                        // Set row colors
-                        if (dgvPortfolioFinalValue.RowsDefaultCellStyle.BackColor == Color.LightGray && dgvPortfolioFinalValue.RowCount % 2 == 0)
-                        {
-                            dgvPortfolioFooterFinalValue.RowsDefaultCellStyle.BackColor = Color.LightGray;
-                            dgvPortfolioFooterFinalValue.AlternatingRowsDefaultCellStyle.BackColor = Color.White;
-                        }
-                        else
-                        {
-                            dgvPortfolioFooterFinalValue.RowsDefaultCellStyle.BackColor = Color.White;
-                            dgvPortfolioFooterFinalValue.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
-                        }
+                        $@"{
+                                Language.GetLanguageTextByXPath(
+                                    @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolioFooter/RowContent_TotalPurchaseValue",
+                                    LanguageName)
+                            }",
+                        @"",
+                        ShareObjectListMarketValue[0].PortfolioPurchaseValueAsStrUnit
+                    };
 
-                        // Create row content with final value of the final value portfolio
-                        object[] newFooterPurchaseFinalOfAllShares = new object[]
-                        {
-                            @"",
-                            @"",
-                            string.Format(@"{0}", Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalPurchaseValue", LanguageName)),
-                            @"",
-                            ShareObjectListFinalValue[0].PortfolioPurchaseValueAsStrUnit
-                        };
+                    // Create row content with total performance of the market value portfolio
+                    var newFooterDepotDevelopment = new object[]
+                    {
+                        $@"{
+                                Language.GetLanguageTextByXPath(
+                                    @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolioFooter/RowContent_TotalPerformance",
+                                    LanguageName)
+                            }",
+                        ShareObjectListMarketValue[0].ProfitLossPerformancePortfolioValueAsStr,
+                        @""
+                    };
 
-                        // Create row content with total performance of the final value portfolio
-                        object[] newFooterDepotDevelopment = new object[]
-                        {
-                            string.Format(@"{0}", Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalCostDividend", LanguageName)),
-                            ShareObjectListFinalValue[0].CostsDividendPortfolioValueAsStr,
-                            string.Format(@"{0}", Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalPerformance", LanguageName)),
-                            ShareObjectListFinalValue[0].ProfitLossPerformancePortfolioValueAsStr,
-                            @""
-                        };
+                    // Create row content with total market value of the market value portfolio
+                    var newFooterTotalDepotVolume = new object[]
+                    {
+                        $@"{
+                                Language.GetLanguageTextByXPath(
+                                    @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolioFooter/RowContent_TotalDepotValue",
+                                    LanguageName)
+                            }",
+                        @"",
+                        ShareObjectListMarketValue[0].PortfolioMarketValueAsStrUnit
+                    };
 
-                        // Create row content with total market value of the final value portfolio
-                        object[] newFooterTotalDepotVolume = new object[]
-                        {
-                            @"",
-                            @"",
-                            string.Format(@"{0}", Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalDepotValue", LanguageName)),
-                            @"",
-                            ShareObjectListFinalValue[0].PortfolioFinalValueAsStrUnit
-                        };
-
-                        // Add rows to the data grid view final value footer
-                        dgvPortfolioFooterFinalValue.Rows.Add(newFooterPurchaseFinalOfAllShares);
-                        dgvPortfolioFooterFinalValue.Rows.Add(newFooterDepotDevelopment);
-                        dgvPortfolioFooterFinalValue.Rows.Add(newFooterTotalDepotVolume);
-
-                    }
-
-                    #endregion dgvPortfolioFooterFinalValue
+                    // Add rows to the data grid view market value footer
+                    dgvPortfolioFooterMarketValue.Rows.Add(newFooterPurchaseValueOfAllShares);
+                    dgvPortfolioFooterMarketValue.Rows.Add(newFooterDepotDevelopment);
+                    dgvPortfolioFooterMarketValue.Rows.Add(newFooterTotalDepotVolume);
                 }
-                catch (Exception ex)
+
+                #endregion dgvPortfolioFooterMarketValue
+
+                #region dgvPortfolioFooterFinalValue
+
+                // Check if the share object list has items
+                if (ShareObjectListFinalValue == null || ShareObject.ObjectCounter <= 0 ||
+                    dgvPortfolioFinalValue.Rows.Count <= 0) return;
+
                 {
+                    // Set row colors
+                    if (dgvPortfolioFinalValue.RowsDefaultCellStyle.BackColor == Color.LightGray && dgvPortfolioFinalValue.RowCount % 2 == 0)
+                    {
+                        dgvPortfolioFooterFinalValue.RowsDefaultCellStyle.BackColor = Color.LightGray;
+                        dgvPortfolioFooterFinalValue.AlternatingRowsDefaultCellStyle.BackColor = Color.White;
+                    }
+                    else
+                    {
+                        dgvPortfolioFooterFinalValue.RowsDefaultCellStyle.BackColor = Color.White;
+                        dgvPortfolioFooterFinalValue.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
+                    }
+
+                    // Create row content with final value of the final value portfolio
+                    var newFooterPurchaseFinalOfAllShares = new object[]
+                    {
+                        @"",
+                        @"",
+                        $@"{
+                                Language.GetLanguageTextByXPath(
+                                    @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalPurchaseValue",
+                                    LanguageName)
+                            }",
+                        @"",
+                        ShareObjectListFinalValue[0].PortfolioPurchaseValueAsStrUnit
+                    };
+
+                    // Create row content with total performance of the final value portfolio
+                    var newFooterDepotDevelopment = new object[]
+                    {
+                        $@"{
+                                Language.GetLanguageTextByXPath(
+                                    @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalCostDividend",
+                                    LanguageName)
+                            }",
+                        ShareObjectListFinalValue[0].CostsDividendPortfolioValueAsStr,
+                        $@"{
+                                Language.GetLanguageTextByXPath(
+                                    @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalPerformance",
+                                    LanguageName)
+                            }",
+                        ShareObjectListFinalValue[0].ProfitLossPerformancePortfolioValueAsStr,
+                        @""
+                    };
+
+                    // Create row content with total market value of the final value portfolio
+                    var newFooterTotalDepotVolume = new object[]
+                    {
+                        @"",
+                        @"",
+                        $@"{
+                                Language.GetLanguageTextByXPath(
+                                    @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalDepotValue",
+                                    LanguageName)
+                            }",
+                        @"",
+                        ShareObjectListFinalValue[0].PortfolioFinalValueAsStrUnit
+                    };
+
+                    // Add rows to the data grid view final value footer
+                    dgvPortfolioFooterFinalValue.Rows.Add(newFooterPurchaseFinalOfAllShares);
+                    dgvPortfolioFooterFinalValue.Rows.Add(newFooterDepotDevelopment);
+                    dgvPortfolioFooterFinalValue.Rows.Add(newFooterTotalDepotVolume);
+                }
+
+                #endregion dgvPortfolioFooterFinalValue
+            }
+            catch (Exception ex)
+            {
 #if DEBUG
-                    MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + ex.Message, @"Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
 #endif
-                    // Set initialization flag
-                    InitFlag = false;
+                // Set initialization flag
+                InitFlag = false;
 
-                    // Add status message
-                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        Language.GetLanguageTextByXPath(
-                            @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter_Error/ConfigurationFailed", LanguageName),
-                        Language, LanguageName,
-                        Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application);
-                }
+                // Add status message
+                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(
+                        @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter_Error/ConfigurationFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application);
             }
         }
 
@@ -782,169 +779,169 @@ namespace SharePortfolioManager
                 // Set column headers and width
                 // and resize the data gird view market value
                 // At least do the row selection
-                if (dgvPortfolioMarketValue.Columns.Count == (int)ColumnIndicesPortfolioMarketValue.EShareSumColumnIndex + 1)
+                if (dgvPortfolioMarketValue.Columns.Count !=
+                    (int) ColumnIndicesPortfolioMarketValue.EShareSumColumnIndex + 1) return;
+
+                #region Captions
+
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EWknNumberColumnIndex].Name =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_WKN", LanguageName);
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EWknNumberColumnIndex].HeaderText =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_WKN", LanguageName);
+
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareNameColumnIndex].Name =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_Name", LanguageName);
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareNameColumnIndex].HeaderText =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_Name", LanguageName);
+
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareVolumeColumnIndex].Name =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_Volume", LanguageName);
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareVolumeColumnIndex].HeaderText =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_Volume", LanguageName);
+
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePriceColumnIndex].Name =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_Price", LanguageName);
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePriceColumnIndex].HeaderText =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_Price", LanguageName);
+
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePerformanceDayBeforeColumnIndex].HeaderText =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_PrevDay", LanguageName);
+
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EImagePerformanceColumnIndex].HeaderText = @"";
+
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePerformanceColumnIndex].Name =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_Performance", LanguageName);
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePerformanceColumnIndex].HeaderText =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_Performance", LanguageName);
+
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareSumColumnIndex].Name =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_PurchaseMarketValue", LanguageName);
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareSumColumnIndex].HeaderText =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_PurchaseMarketValue", LanguageName);
+
+                #endregion Captions
+
+                #region Width configuration
+
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EWknNumberColumnIndex].Width = WknNumber;
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePriceColumnIndex].Width = SharePrice;
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareVolumeColumnIndex].Width = ShareVolume;
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePerformanceDayBeforeColumnIndex].Width = SharePerformanceDayBefore;
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EImagePerformanceColumnIndex].Width = ImagePerformance;
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePerformanceColumnIndex].Width = SharePerformance;
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareSumColumnIndex].Width = ShareSum;
+
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareNameColumnIndex].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareNameColumnIndex].FillWeight = 10;
+
+                #endregion Width configuration
+
+                #region Alignment configuration
+
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EWknNumberColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareNameColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePriceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareVolumeColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePerformanceDayBeforeColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EImagePerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareSumColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+                #endregion Alignment configuration
+
+                #region Footer width configuration
+
+                dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.EPerformanceColumnIndex].Width = SharePerformance;
+                dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ESumColumnIndex].Width = ShareSum;
+                dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ELabelTotalColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.EPerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ESumColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+                dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ELabelTotalColumnIndex].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ELabelTotalColumnIndex].FillWeight = 10;
+
+                #endregion Footer width configuration
+
+                // Resize data grid view market value
+                OnResizeDataGridView();
+
+                if (AddFlagMarketValue == false && DeleteFlagMarketValue == false)
                 {
-                    #region Captions
-
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EWknNumberColumnIndex].Name =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_WKN", LanguageName);
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EWknNumberColumnIndex].HeaderText =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_WKN", LanguageName);
-
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareNameColumnIndex].Name =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_Name", LanguageName);
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareNameColumnIndex].HeaderText =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_Name", LanguageName);
-
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareVolumeColumnIndex].Name =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_Volume", LanguageName);
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareVolumeColumnIndex].HeaderText =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_Volume", LanguageName);
-
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePriceColumnIndex].Name =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_Price", LanguageName);
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePriceColumnIndex].HeaderText =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_Price", LanguageName);
-
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePerformanceDayBeforeColumnIndex].HeaderText =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_PrevDay", LanguageName);
-
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EImagePerformanceColumnIndex].HeaderText = @"";
-
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePerformanceColumnIndex].Name =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_Performance", LanguageName);
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePerformanceColumnIndex].HeaderText =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_Performance", LanguageName);
-
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareSumColumnIndex].Name =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_PurchaseMarketValue", LanguageName);
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareSumColumnIndex].HeaderText =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_PurchaseMarketValue", LanguageName);
-
-                    #endregion Captions
-
-                    #region Width configuration
-
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EWknNumberColumnIndex].Width = WKNNumber;
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePriceColumnIndex].Width = SharePrice;
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareVolumeColumnIndex].Width = ShareVolume;
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePerformanceDayBeforeColumnIndex].Width = SharePerformanceDayBefore;
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EImagePerformanceColumnIndex].Width = ImagePerformance;
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePerformanceColumnIndex].Width = SharePerformance;
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareSumColumnIndex].Width = ShareSum;
-
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareNameColumnIndex].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareNameColumnIndex].FillWeight = 10;
-
-                    #endregion Width configuration
-
-                    #region Alignment configuration
-
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EWknNumberColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareNameColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePriceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareVolumeColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePerformanceDayBeforeColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EImagePerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ESharePerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                    dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareSumColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-
-                    #endregion Alignment configuration
-
-                    #region Footer width configuration
-
-                    dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.EPerformanceColumnIndex].Width = SharePerformance;
-                    dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ESumColumnIndex].Width = ShareSum;
-                    dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ELabelTotalColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                    dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.EPerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                    dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ESumColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-
-                    dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ELabelTotalColumnIndex].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                    dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ELabelTotalColumnIndex].FillWeight = 10;
-
-                    #endregion Footer width configuration
-
-                    // Resize data grid view market value
-                    OnResizeDataGridView();
-
-                    if (AddFlagMarketValue == false && DeleteFlagMarketValue == false)
-                    {
-                        // Scroll to the selected row
-                        Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
-                    }
-
-                    // When a share has been added clear the data grid view market value selection
-                    // and select the last row. At least make an update of the added share
-                    if (AddFlagMarketValue == true)
-                    {
-                        // Reset flag
-                        AddFlagMarketValue = false;
-
-                        //if (dgvPortfolioMarketValue.Rows.Count > 1)
-                        //    dgvPortfolioMarketValue.ClearSelection();
-
-                        SelectedDataGridViewShareIndex = ShareObjectListMarketValue.IndexOf(ShareObjectMarketValue);
-                        dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
-
-                        // Scroll to the selected row
-                        Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
-
-                        if (dgvPortfolioMarketValue.RowCount == 1)
-                        {
-                            if (InitFlag == false)
-                                InitFlag = true;
-                            // Add data grid view footers
-                            AddShareFooters();
-                        }
-                        else
-                            // Refresh the footers
-                            RefreshFooters();
-
-                        // Update the new share
-                        //btnRefresh.PerformClick();
-                    }
-
-                    // Make an update of the footer
-                    if (EditFlagMarketValue == true)
-                    {
-                        // Reset flag
-                        EditFlagMarketValue = false;
-
-                        // Refresh the footers
-                        RefreshFooters();
-                    }
-
-                    // When a share has been deleted clear the DataGridView portfolio selection
-                    // and select the first row if rows still present.
-                    if (DeleteFlagMarketValue == true)
-                    {
-                        // Reset flag
-                        DeleteFlagMarketValue = false;
-
-                        dgvPortfolioMarketValue.ClearSelection();
-                        if (dgvPortfolioMarketValue.Rows.Count > 0)
-                        {
-                            SelectedDataGridViewShareIndex = 0;
-                            dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
-
-                            // Scroll to the selected row
-                            Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
-                        }
-                        else
-                        {
-                            // Clear portfolio footer
-                            dgvPortfolioFooterMarketValue.Rows.Clear();
-                        }
-
-                        // Refresh the footers
-                        RefreshFooters();
-                    }
+                    // Scroll to the selected row
+                    Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
                 }
+
+                // When a share has been added clear the data grid view market value selection
+                // and select the last row. At least make an update of the added share
+                if (AddFlagMarketValue)
+                {
+                    // Reset flag
+                    AddFlagMarketValue = false;
+
+                    //if (dgvPortfolioMarketValue.Rows.Count > 1)
+                    //    dgvPortfolioMarketValue.ClearSelection();
+
+                    SelectedDataGridViewShareIndex = ShareObjectListMarketValue.IndexOf(ShareObjectMarketValue);
+                    dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+
+                    // Scroll to the selected row
+                    Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
+
+                    if (dgvPortfolioMarketValue.RowCount == 1)
+                    {
+                        if (InitFlag == false)
+                            InitFlag = true;
+                        // Add data grid view footers
+                        AddShareFooters();
+                    }
+                    else
+                        // Refresh the footers
+                        RefreshFooters();
+
+                    // Update the new share
+                    //btnRefresh.PerformClick();
+                }
+
+                // Make an update of the footer
+                if (EditFlagMarketValue)
+                {
+                    // Reset flag
+                    EditFlagMarketValue = false;
+
+                    // Refresh the footers
+                    RefreshFooters();
+                }
+
+                // When a share has been deleted clear the DataGridView portfolio selection
+                // and select the first row if rows still present.
+                if (!DeleteFlagMarketValue) return;
+
+                // Reset flag
+                DeleteFlagMarketValue = false;
+
+                dgvPortfolioMarketValue.ClearSelection();
+                if (dgvPortfolioMarketValue.Rows.Count > 0)
+                {
+                    SelectedDataGridViewShareIndex = 0;
+                    dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+
+                    // Scroll to the selected row
+                    Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
+                }
+                else
+                {
+                    // Clear portfolio footer
+                    dgvPortfolioFooterMarketValue.Rows.Clear();
+                }
+
+                // Refresh the footers
+                RefreshFooters();
             }
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + ex.Message, @"Error",
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -973,180 +970,180 @@ namespace SharePortfolioManager
                 // Set column headers and width
                 // and resize the data grid view final value
                 // At least do the row selection
-                if (dgvPortfolioFinalValue.Columns.Count == (int)ColumnIndicesPortfolioFinalValue.EShareSumColumnIndex + 1)
-                {
-                    #region Captions
+                if (dgvPortfolioFinalValue.Columns.Count !=
+                    (int) ColumnIndicesPortfolioFinalValue.EShareSumColumnIndex + 1) return;
 
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EWknNumberColumnIndex].Name =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_WKN", LanguageName);
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EWknNumberColumnIndex].HeaderText =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_WKN", LanguageName);
+                #region Captions
 
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareNameColumnIndex].Name =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Name", LanguageName);
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareNameColumnIndex].HeaderText =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Name", LanguageName);
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EWknNumberColumnIndex].Name =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_WKN", LanguageName);
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EWknNumberColumnIndex].HeaderText =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_WKN", LanguageName);
 
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareVolumeColumnIndex].Name =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Volume", LanguageName);
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareVolumeColumnIndex].HeaderText =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Volume", LanguageName);
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareNameColumnIndex].Name =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Name", LanguageName);
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareNameColumnIndex].HeaderText =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Name", LanguageName);
 
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareCostsDividendColumnIndex].Name =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_CostsDividend", LanguageName);
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareCostsDividendColumnIndex].HeaderText =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_CostsDividend", LanguageName);
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareVolumeColumnIndex].Name =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Volume", LanguageName);
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareVolumeColumnIndex].HeaderText =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Volume", LanguageName);
 
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePriceColumnIndex].Name =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Price", LanguageName);
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePriceColumnIndex].HeaderText =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Price", LanguageName);
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareCostsDividendColumnIndex].Name =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_CostsDividend", LanguageName);
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareCostsDividendColumnIndex].HeaderText =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_CostsDividend", LanguageName);
 
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePerformanceDayBeforeColumnIndex].HeaderText =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_PrevDay", LanguageName);
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePriceColumnIndex].Name =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Price", LanguageName);
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePriceColumnIndex].HeaderText =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Price", LanguageName);
 
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EImagePerformanceColumnIndex].HeaderText = @"";
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePerformanceDayBeforeColumnIndex].HeaderText =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_PrevDay", LanguageName);
+
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EImagePerformanceColumnIndex].HeaderText = @"";
                     
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePerformanceColumnIndex].Name =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Performance", LanguageName);
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePerformanceColumnIndex].HeaderText =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Performance", LanguageName);
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePerformanceColumnIndex].Name =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Performance", LanguageName);
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePerformanceColumnIndex].HeaderText =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Performance", LanguageName);
 
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareSumColumnIndex].Name =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_PurchaseMarketValue", LanguageName);
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareSumColumnIndex].HeaderText =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_PurchaseMarketValue", LanguageName);
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareSumColumnIndex].Name =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_PurchaseMarketValue", LanguageName);
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareSumColumnIndex].HeaderText =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_PurchaseMarketValue", LanguageName);
 
-                    #endregion Captions
+                #endregion Captions
 
-                    #region Width configuration
+                #region Width configuration
 
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EWknNumberColumnIndex].Width = WKNNumber;
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePriceColumnIndex].Width = SharePrice;
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareVolumeColumnIndex].Width = ShareVolume;
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareCostsDividendColumnIndex].Width = ShareCostsDividend;
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePerformanceDayBeforeColumnIndex].Width = SharePerformanceDayBefore;
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EImagePerformanceColumnIndex].Width = ImagePerformance;
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePerformanceColumnIndex].Width = SharePerformance;
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareSumColumnIndex].Width = ShareSum;
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EWknNumberColumnIndex].Width = WknNumber;
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePriceColumnIndex].Width = SharePrice;
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareVolumeColumnIndex].Width = ShareVolume;
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareCostsDividendColumnIndex].Width = ShareCostsDividend;
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePerformanceDayBeforeColumnIndex].Width = SharePerformanceDayBefore;
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EImagePerformanceColumnIndex].Width = ImagePerformance;
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePerformanceColumnIndex].Width = SharePerformance;
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareSumColumnIndex].Width = ShareSum;
 
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareNameColumnIndex].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareNameColumnIndex].FillWeight = 10;
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareNameColumnIndex].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareNameColumnIndex].FillWeight = 10;
 
-                    #endregion With configuration
+                #endregion With configuration
 
-                    #region Alignment configuration
+                #region Alignment configuration
 
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EWknNumberColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareNameColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePriceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareVolumeColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePerformanceDayBeforeColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EImagePerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareCostsDividendColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                    dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareSumColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EWknNumberColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareNameColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePriceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareVolumeColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePerformanceDayBeforeColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EImagePerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareCostsDividendColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareSumColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
-                    #endregion Alignment configuration
+                #endregion Alignment configuration
 
-                    #region Footer configuration
+                #region Footer configuration
 
-                    dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ECostsDividendIndex].Width = ShareCostsDividend;
-                    dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.EPerformanceColumnIndex].Width = SharePerformance;
-                    dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ESumColumnIndex].Width = ShareSum;
+                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ECostsDividendIndex].Width = ShareCostsDividend;
+                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.EPerformanceColumnIndex].Width = SharePerformance;
+                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ESumColumnIndex].Width = ShareSum;
 
-                    dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelCostsDividendIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                    dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ECostsDividendIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                    dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelTotalColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                    dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.EPerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                    dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ESumColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelCostsDividendIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ECostsDividendIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelTotalColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.EPerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ESumColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
-                    dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelCostsDividendIndex].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                    dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelCostsDividendIndex].FillWeight = 10;
+                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelCostsDividendIndex].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelCostsDividendIndex].FillWeight = 10;
 
-                    #endregion Footer configuration
+                #endregion Footer configuration
 
-                    // Resize data grid view final value
-                    OnResizeDataGridView();
+                // Resize data grid view final value
+                OnResizeDataGridView();
 
-                    if (AddFlagFinalValue == false && DeleteFlagFinalValue == false)
-                    {
-                        // Scroll to the selected row
-                        Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
-                    }
-
-                    // When a share has been added clear the data grid view final value selection
-                    // and select the last row. At least make an update of the added share
-                    if (AddFlagFinalValue == true)
-                    {
-                        // Reset flag
-                        AddFlagFinalValue = false;
-
-                        //if (dgvPortfolioFinalValue.Rows.Count > 1)
-                        //    dgvPortfolioFinalValue.ClearSelection();
-
-                        SelectedDataGridViewShareIndex = ShareObjectListFinalValue.IndexOf(ShareObjectFinalValue);
-                        dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
-
-                        // Scroll to the selected row
-                        Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
-
-                        if (dgvPortfolioFinalValue.RowCount == 1)
-                        {
-                            if (InitFlag == false)
-                                InitFlag = true;
-                            // Add portfolio footers
-                            AddShareFooters();
-                        }
-                        else
-                            // Refresh the footers
-                            RefreshFooters();
-
-                        // Update the new share
-                        btnRefresh.PerformClick();
-                    }
-
-                    // Make an update of the footers
-                    if (EditFlagFinalValue == true)
-                    {
-                        // Reset flag
-                        EditFlagFinalValue = false;
-
-                        // Refresh the footers
-                        RefreshFooters();
-                    }
-
-                    // When a share has been deleted clear the data grid view final value selection
-                    // and select the first row if rows still present.
-                    if (DeleteFlagFinalValue == true)
-                    {
-                        // Reset flag
-                        DeleteFlagFinalValue = false;
-
-                        dgvPortfolioFinalValue.ClearSelection();
-                        if (dgvPortfolioFinalValue.Rows.Count > 0)
-                        {
-                            SelectedDataGridViewShareIndex = 0;
-                            dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
-
-                            // Scroll to the selected row
-                            Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
-                        }
-                        else
-                        {
-                            // Clear portfolio footer
-                            dgvPortfolioFooterFinalValue.Rows.Clear();
-                        }
-
-                        // Refresh the footers
-                        RefreshFooters();
-                    }
+                if (AddFlagFinalValue == false && DeleteFlagFinalValue == false)
+                {
+                    // Scroll to the selected row
+                    Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
                 }
+
+                // When a share has been added clear the data grid view final value selection
+                // and select the last row. At least make an update of the added share
+                if (AddFlagFinalValue)
+                {
+                    // Reset flag
+                    AddFlagFinalValue = false;
+
+                    //if (dgvPortfolioFinalValue.Rows.Count > 1)
+                    //    dgvPortfolioFinalValue.ClearSelection();
+
+                    SelectedDataGridViewShareIndex = ShareObjectListFinalValue.IndexOf(ShareObjectFinalValue);
+                    dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+
+                    // Scroll to the selected row
+                    Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
+
+                    if (dgvPortfolioFinalValue.RowCount == 1)
+                    {
+                        if (InitFlag == false)
+                            InitFlag = true;
+                        // Add portfolio footers
+                        AddShareFooters();
+                    }
+                    else
+                        // Refresh the footers
+                        RefreshFooters();
+
+                    // Update the new share
+                    btnRefresh.PerformClick();
+                }
+
+                // Make an update of the footers
+                if (EditFlagFinalValue)
+                {
+                    // Reset flag
+                    EditFlagFinalValue = false;
+
+                    // Refresh the footers
+                    RefreshFooters();
+                }
+
+                // When a share has been deleted clear the data grid view final value selection
+                // and select the first row if rows still present.
+                if (!DeleteFlagFinalValue) return;
+
+                // Reset flag
+                DeleteFlagFinalValue = false;
+
+                dgvPortfolioFinalValue.ClearSelection();
+                if (dgvPortfolioFinalValue.Rows.Count > 0)
+                {
+                    SelectedDataGridViewShareIndex = 0;
+                    dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+
+                    // Scroll to the selected row
+                    Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
+                }
+                else
+                {
+                    // Clear portfolio footer
+                    dgvPortfolioFooterFinalValue.Rows.Clear();
+                }
+
+                // Refresh the footers
+                RefreshFooters();
             }
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + ex.Message, @"Error",
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -1162,7 +1159,7 @@ namespace SharePortfolioManager
             }
         }
 
-        #endregion Databinding DataGridView portfolio
+        #endregion DataBinding DataGridView portfolio
 
         #region Cell formatting and painting for the data grid views and footers
 
@@ -1176,26 +1173,27 @@ namespace SharePortfolioManager
             try
             {
                 var splitString = e.Value.ToString().Split(' ');
-                if (e.ColumnIndex == (int)ColumnIndicesPortfolioMarketValue.ESharePerformanceDayBeforeColumnIndex || e.ColumnIndex == (int)ColumnIndicesPortfolioMarketValue.ESharePerformanceColumnIndex)
+                if (e.ColumnIndex != (int) ColumnIndicesPortfolioMarketValue.ESharePerformanceDayBeforeColumnIndex &&
+                    e.ColumnIndex != (int) ColumnIndicesPortfolioMarketValue.ESharePerformanceColumnIndex) return;
+
+                if (Convert.ToDecimal(splitString[0]) > 0)
                 {
-                    if ((Convert.ToDecimal(splitString[0])) > 0)
-                    {
-                        e.CellStyle.ForeColor = Color.Green;
-                    }
-                    else if ((Convert.ToDecimal(splitString[0])) == 0)
-                    {
-                        e.CellStyle.ForeColor = Color.Black;
-                    }
-                    else
-                    {
-                        e.CellStyle.ForeColor = Color.Red;
-                    }
+                    e.CellStyle.ForeColor = Color.Green;
+                }
+                else if (Convert.ToDecimal(splitString[0]) == 0)
+                {
+                    e.CellStyle.ForeColor = Color.Black;
+                }
+                else
+                {
+                    e.CellStyle.ForeColor = Color.Red;
                 }
             }
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + ex.Message, @"Error",
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -1221,26 +1219,27 @@ namespace SharePortfolioManager
             try
             {
                 var splitString = e.Value.ToString().Split(' ');
-                if (e.ColumnIndex == (int)ColumnIndicesPortfolioFinalValue.ESharePerformanceDayBeforeColumnIndex || e.ColumnIndex == (int)ColumnIndicesPortfolioFinalValue.ESharePerformanceColumnIndex)
+                if (e.ColumnIndex != (int) ColumnIndicesPortfolioFinalValue.ESharePerformanceDayBeforeColumnIndex &&
+                    e.ColumnIndex != (int) ColumnIndicesPortfolioFinalValue.ESharePerformanceColumnIndex) return;
+
+                if (Convert.ToDecimal(splitString[0]) > 0)
                 {
-                    if ((Convert.ToDecimal(splitString[0])) > 0)
-                    {
-                        e.CellStyle.ForeColor = Color.Green;
-                    }
-                    else if ((Convert.ToDecimal(splitString[0])) == 0)
-                    {
-                        e.CellStyle.ForeColor = Color.Black;
-                    }
-                    else
-                    {
-                        e.CellStyle.ForeColor = Color.Red;
-                    }
+                    e.CellStyle.ForeColor = Color.Green;
+                }
+                else if (Convert.ToDecimal(splitString[0]) == 0)
+                {
+                    e.CellStyle.ForeColor = Color.Black;
+                }
+                else
+                {
+                    e.CellStyle.ForeColor = Color.Red;
                 }
             }
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + ex.Message, @"Error",
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -1265,33 +1264,32 @@ namespace SharePortfolioManager
         {
             try
             {
-                if (e.RowIndex == 1)
-                {
-                    var splitString = e.Value.ToString().Split(' ');
+                if (e.RowIndex != 1) return;
 
-                    if (e.ColumnIndex == (int)ColumnIndicesPortfolioFooterMarketValue.EPerformanceColumnIndex)
-                    {
-                        // Remove '%' or 'invalid' from the cell value for converting it into a decimal
-                        // 'invalid' only appears when the 
-                        if ((Convert.ToDecimal(splitString[0])) > 0)
-                        {
-                            e.CellStyle.ForeColor = Color.Green;
-                        }
-                        else if ((Convert.ToDecimal(splitString[0])) == 0)
-                        {
-                            e.CellStyle.ForeColor = Color.Black;
-                        }
-                        else
-                        {
-                            e.CellStyle.ForeColor = Color.Red;
-                        }
-                    }
+                var splitString = e.Value.ToString().Split(' ');
+
+                if (e.ColumnIndex != (int) ColumnIndicesPortfolioFooterMarketValue.EPerformanceColumnIndex) return;
+
+                // Remove '%' or 'invalid' from the cell value for converting it into a decimal
+                // 'invalid' only appears when the 
+                if (Convert.ToDecimal(splitString[0]) > 0)
+                {
+                    e.CellStyle.ForeColor = Color.Green;
+                }
+                else if (Convert.ToDecimal(splitString[0]) == 0)
+                {
+                    e.CellStyle.ForeColor = Color.Black;
+                }
+                else
+                {
+                    e.CellStyle.ForeColor = Color.Red;
                 }
             }
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + ex.Message, @"Error",
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -1316,33 +1314,32 @@ namespace SharePortfolioManager
         {
             try
             {
-                if (e.RowIndex == 1)
-                {
-                    var splitString = e.Value.ToString().Split(' ');
+                if (e.RowIndex != 1) return;
 
-                    if (e.ColumnIndex == (int)ColumnIndicesPortfolioFooterFinalValue.EPerformanceColumnIndex)
-                    {
-                        // Remove '%' or 'invalid' from the cell value for converting it into a decimal
-                        // 'invalid' only appears when the 
-                        if ((Convert.ToDecimal(splitString[0])) > 0)
-                        {
-                            e.CellStyle.ForeColor = Color.Green;
-                        }
-                        else if ((Convert.ToDecimal(splitString[0])) == 0)
-                        {
-                            e.CellStyle.ForeColor = Color.Black;
-                        }
-                        else
-                        {
-                            e.CellStyle.ForeColor = Color.Red;
-                        }
-                    }
+                var splitString = e.Value.ToString().Split(' ');
+
+                if (e.ColumnIndex != (int) ColumnIndicesPortfolioFooterFinalValue.EPerformanceColumnIndex) return;
+
+                // Remove '%' or 'invalid' from the cell value for converting it into a decimal
+                // 'invalid' only appears when the 
+                if (Convert.ToDecimal(splitString[0]) > 0)
+                {
+                    e.CellStyle.ForeColor = Color.Green;
+                }
+                else if (Convert.ToDecimal(splitString[0]) == 0)
+                {
+                    e.CellStyle.ForeColor = Color.Black;
+                }
+                else
+                {
+                    e.CellStyle.ForeColor = Color.Red;
                 }
             }
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + ex.Message, @"Error",
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -1367,26 +1364,27 @@ namespace SharePortfolioManager
         {
             try
             {
-                if (e.ColumnIndex != (int)ColumnIndicesPortfolioMarketValue.ESharePerformanceDayBeforeColumnIndex && e.ColumnIndex < dgvPortfolioMarketValue.Columns.Count - 1)
-                {
-                    SolidBrush brush = new SolidBrush(dgvPortfolioMarketValue.ColumnHeadersDefaultCellStyle.BackColor);
-                    e.Graphics.FillRectangle(brush, e.CellBounds);
-                    brush.Dispose();
-                    e.Paint(e.CellBounds, DataGridViewPaintParts.All);
+                if (e.ColumnIndex == (int) ColumnIndicesPortfolioMarketValue.ESharePerformanceDayBeforeColumnIndex ||
+                    e.ColumnIndex >= dgvPortfolioMarketValue.Columns.Count - 1) return;
 
-                    ControlPaint.DrawBorder(e.Graphics, e.CellBounds, dgvPortfolioMarketValue.GridColor, 0, ButtonBorderStyle.None,
-                        dgvPortfolioMarketValue.GridColor, 0,
-                        ButtonBorderStyle.None, dgvPortfolioMarketValue.GridColor, 1,
-                        ButtonBorderStyle.Solid, dgvPortfolioMarketValue.GridColor, 1,
-                        ButtonBorderStyle.Solid);
+                var brush = new SolidBrush(dgvPortfolioMarketValue.ColumnHeadersDefaultCellStyle.BackColor);
+                e.Graphics.FillRectangle(brush, e.CellBounds);
+                brush.Dispose();
+                e.Paint(e.CellBounds, DataGridViewPaintParts.All);
 
-                    e.Handled = true;
-                }
+                ControlPaint.DrawBorder(e.Graphics, e.CellBounds, dgvPortfolioMarketValue.GridColor, 0, ButtonBorderStyle.None,
+                    dgvPortfolioMarketValue.GridColor, 0,
+                    ButtonBorderStyle.None, dgvPortfolioMarketValue.GridColor, 1,
+                    ButtonBorderStyle.Solid, dgvPortfolioMarketValue.GridColor, 1,
+                    ButtonBorderStyle.Solid);
+
+                e.Handled = true;
             }
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + ex.Message, @"Error",
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -1411,26 +1409,27 @@ namespace SharePortfolioManager
         {
             try
             {
-                if (e.ColumnIndex != (int)ColumnIndicesPortfolioFinalValue.ESharePerformanceDayBeforeColumnIndex && e.ColumnIndex < dgvPortfolioFinalValue.Columns.Count - 1)
-                {
-                    SolidBrush brush = new SolidBrush(dgvPortfolioFinalValue.ColumnHeadersDefaultCellStyle.BackColor);
-                    e.Graphics.FillRectangle(brush, e.CellBounds);
-                    brush.Dispose();
-                    e.Paint(e.CellBounds, DataGridViewPaintParts.All);
+                if (e.ColumnIndex == (int) ColumnIndicesPortfolioFinalValue.ESharePerformanceDayBeforeColumnIndex ||
+                    e.ColumnIndex >= dgvPortfolioFinalValue.Columns.Count - 1) return;
 
-                    ControlPaint.DrawBorder(e.Graphics, e.CellBounds, dgvPortfolioFinalValue.GridColor, 0, ButtonBorderStyle.None,
-                        dgvPortfolioFinalValue.GridColor, 0,
-                        ButtonBorderStyle.None, dgvPortfolioFinalValue.GridColor, 1,
-                        ButtonBorderStyle.Solid, dgvPortfolioFinalValue.GridColor, 1,
-                        ButtonBorderStyle.Solid);
+                var brush = new SolidBrush(dgvPortfolioFinalValue.ColumnHeadersDefaultCellStyle.BackColor);
+                e.Graphics.FillRectangle(brush, e.CellBounds);
+                brush.Dispose();
+                e.Paint(e.CellBounds, DataGridViewPaintParts.All);
 
-                    e.Handled = true;
-                }
+                ControlPaint.DrawBorder(e.Graphics, e.CellBounds, dgvPortfolioFinalValue.GridColor, 0, ButtonBorderStyle.None,
+                    dgvPortfolioFinalValue.GridColor, 0,
+                    ButtonBorderStyle.None, dgvPortfolioFinalValue.GridColor, 1,
+                    ButtonBorderStyle.Solid, dgvPortfolioFinalValue.GridColor, 1,
+                    ButtonBorderStyle.Solid);
+
+                e.Handled = true;
             }
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + ex.Message, @"Error",
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -1459,7 +1458,7 @@ namespace SharePortfolioManager
                 {
                     if (e.ColumnIndex < dgvPortfolioFooterMarketValue.Columns.Count - 1)
                     {
-                        SolidBrush brush =
+                        var brush =
                             new SolidBrush(dgvPortfolioFooterMarketValue.ColumnHeadersDefaultCellStyle.BackColor);
                         e.Graphics.FillRectangle(brush, e.CellBounds);
                         brush.Dispose();
@@ -1474,7 +1473,7 @@ namespace SharePortfolioManager
                     }
                     else
                     {
-                        SolidBrush brush =
+                        var brush =
                             new SolidBrush(dgvPortfolioFooterMarketValue.ColumnHeadersDefaultCellStyle.BackColor);
                         e.Graphics.FillRectangle(brush, e.CellBounds);
                         brush.Dispose();
@@ -1490,27 +1489,27 @@ namespace SharePortfolioManager
                 }
                 else
                 {
-                    if (e.ColumnIndex < dgvPortfolioFooterMarketValue.Columns.Count - 1)
-                    {
-                        SolidBrush brush =
-                            new SolidBrush(dgvPortfolioFooterMarketValue.ColumnHeadersDefaultCellStyle.BackColor);
-                        e.Graphics.FillRectangle(brush, e.CellBounds);
-                        brush.Dispose();
-                        e.Paint(e.CellBounds, DataGridViewPaintParts.All);
+                    if (e.ColumnIndex >= dgvPortfolioFooterMarketValue.Columns.Count - 1) return;
 
-                        ControlPaint.DrawBorder(e.Graphics, e.CellBounds, dgvPortfolioFooterMarketValue.GridColor, 0,
-                            ButtonBorderStyle.None, dgvPortfolioFooterMarketValue.GridColor, 0, ButtonBorderStyle.None,
-                            dgvPortfolioFooterMarketValue.GridColor, 1, ButtonBorderStyle.Solid,
-                            dgvPortfolioFooterMarketValue.GridColor, 1, ButtonBorderStyle.Solid);
+                    var brush =
+                        new SolidBrush(dgvPortfolioFooterMarketValue.ColumnHeadersDefaultCellStyle.BackColor);
+                    e.Graphics.FillRectangle(brush, e.CellBounds);
+                    brush.Dispose();
+                    e.Paint(e.CellBounds, DataGridViewPaintParts.All);
 
-                        e.Handled = true;
-                    }
+                    ControlPaint.DrawBorder(e.Graphics, e.CellBounds, dgvPortfolioFooterMarketValue.GridColor, 0,
+                        ButtonBorderStyle.None, dgvPortfolioFooterMarketValue.GridColor, 0, ButtonBorderStyle.None,
+                        dgvPortfolioFooterMarketValue.GridColor, 1, ButtonBorderStyle.Solid,
+                        dgvPortfolioFooterMarketValue.GridColor, 1, ButtonBorderStyle.Solid);
+
+                    e.Handled = true;
                 }
             }
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + ex.Message, @"Error",
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -1540,7 +1539,7 @@ namespace SharePortfolioManager
                 {
                     if (e.ColumnIndex < dgvPortfolioFooterFinalValue.Columns.Count - 1)
                     {
-                        SolidBrush brush =
+                        var brush =
                             new SolidBrush(dgvPortfolioFooterFinalValue.ColumnHeadersDefaultCellStyle.BackColor);
                         e.Graphics.FillRectangle(brush, e.CellBounds);
                         brush.Dispose();
@@ -1555,7 +1554,7 @@ namespace SharePortfolioManager
                     }
                     else
                     {
-                        SolidBrush brush =
+                        var brush =
                             new SolidBrush(dgvPortfolioFooterFinalValue.ColumnHeadersDefaultCellStyle.BackColor);
                         e.Graphics.FillRectangle(brush, e.CellBounds);
                         brush.Dispose();
@@ -1571,27 +1570,27 @@ namespace SharePortfolioManager
                 }
                 else
                 {
-                    if (e.ColumnIndex < dgvPortfolioFooterFinalValue.Columns.Count - 1)
-                    {
-                        SolidBrush brush =
-                            new SolidBrush(dgvPortfolioFooterFinalValue.ColumnHeadersDefaultCellStyle.BackColor);
-                        e.Graphics.FillRectangle(brush, e.CellBounds);
-                        brush.Dispose();
-                        e.Paint(e.CellBounds, DataGridViewPaintParts.All);
+                    if (e.ColumnIndex >= dgvPortfolioFooterFinalValue.Columns.Count - 1) return;
 
-                        ControlPaint.DrawBorder(e.Graphics, e.CellBounds, dgvPortfolioFooterFinalValue.GridColor, 0,
-                            ButtonBorderStyle.None, dgvPortfolioFooterFinalValue.GridColor, 0, ButtonBorderStyle.None,
-                            dgvPortfolioFooterFinalValue.GridColor, 1, ButtonBorderStyle.Solid,
-                            dgvPortfolioFooterFinalValue.GridColor, 1, ButtonBorderStyle.Solid);
+                    var brush =
+                        new SolidBrush(dgvPortfolioFooterFinalValue.ColumnHeadersDefaultCellStyle.BackColor);
+                    e.Graphics.FillRectangle(brush, e.CellBounds);
+                    brush.Dispose();
+                    e.Paint(e.CellBounds, DataGridViewPaintParts.All);
 
-                        e.Handled = true;
-                    }
+                    ControlPaint.DrawBorder(e.Graphics, e.CellBounds, dgvPortfolioFooterFinalValue.GridColor, 0,
+                        ButtonBorderStyle.None, dgvPortfolioFooterFinalValue.GridColor, 0, ButtonBorderStyle.None,
+                        dgvPortfolioFooterFinalValue.GridColor, 1, ButtonBorderStyle.Solid,
+                        dgvPortfolioFooterFinalValue.GridColor, 1, ButtonBorderStyle.Solid);
+
+                    e.Handled = true;
                 }
             }
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + ex.Message, @"Error",
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -1663,31 +1662,31 @@ namespace SharePortfolioManager
                     dgvPortfolioFooterFinalValue.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
                 }
 
-                if (dgvPortfolioFooterFinalValue.Rows.Count == 3)
-                {
-                    // Set deposit of all shares
-                    dgvPortfolioFooterFinalValue.Rows[0].Cells[
-                        (int)ColumnIndicesPortfolioFooterFinalValue.ESumColumnIndex].Value = ShareObjectListFinalValue[0].PortfolioPurchaseValueAsStrUnit;
+                if (dgvPortfolioFooterFinalValue.Rows.Count != 3) return;
 
-                    // Set costs and dividend of all shares
-                    dgvPortfolioFooterFinalValue.Rows[1].Cells[
-                        (int)ColumnIndicesPortfolioFooterFinalValue.ECostsDividendIndex].Value = ShareObjectListFinalValue[0].CostsDividendPortfolioValueAsStr;
+                // Set deposit of all shares
+                dgvPortfolioFooterFinalValue.Rows[0].Cells[
+                    (int)ColumnIndicesPortfolioFooterFinalValue.ESumColumnIndex].Value = ShareObjectListFinalValue[0].PortfolioPurchaseValueAsStrUnit;
 
-                    // Set performance of all shares
-                    dgvPortfolioFooterFinalValue.Rows[1].Cells[
-                        (int)ColumnIndicesPortfolioFooterFinalValue.EPerformanceColumnIndex].Value = ShareObjectListFinalValue[0].ProfitLossPerformancePortfolioValueAsStr;
+                // Set costs and dividend of all shares
+                dgvPortfolioFooterFinalValue.Rows[1].Cells[
+                    (int)ColumnIndicesPortfolioFooterFinalValue.ECostsDividendIndex].Value = ShareObjectListFinalValue[0].CostsDividendPortfolioValueAsStr;
 
-                    // Set value of the shares
-                    dgvPortfolioFooterFinalValue.Rows[2].Cells[
-                        (int)ColumnIndicesPortfolioFooterFinalValue.ESumColumnIndex].Value = ShareObjectListFinalValue[0].PortfolioFinalValueAsStrUnit;
-                }
+                // Set performance of all shares
+                dgvPortfolioFooterFinalValue.Rows[1].Cells[
+                    (int)ColumnIndicesPortfolioFooterFinalValue.EPerformanceColumnIndex].Value = ShareObjectListFinalValue[0].ProfitLossPerformancePortfolioValueAsStr;
+
+                // Set value of the shares
+                dgvPortfolioFooterFinalValue.Rows[2].Cells[
+                    (int)ColumnIndicesPortfolioFooterFinalValue.ESumColumnIndex].Value = ShareObjectListFinalValue[0].PortfolioFinalValueAsStrUnit;
 
                 #endregion dgvPortfolioFinalValue
             }
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + ex.Message, @"Error",
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -1712,7 +1711,7 @@ namespace SharePortfolioManager
         /// </summary>
         /// <param name="sender">Entered data grid view</param>
         /// <param name="e">EventArgs</param>
-        private void dgvPortfolioFinalValue_MouseEnter(object sender, EventArgs e)
+        private void DgvPortfolioFinalValue_MouseEnter(object sender, EventArgs e)
         {
             ((DataGridView)sender).Focus();
         }
@@ -1722,7 +1721,7 @@ namespace SharePortfolioManager
         /// </summary>
         /// <param name="sender">Entered data grid view</param>
         /// <param name="e">EventArgs</param>
-        private void dgvPortfolioMarketValue_MouseEnter(object sender, EventArgs e)
+        private void DgvPortfolioMarketValue_MouseEnter(object sender, EventArgs e)
         {
             ((DataGridView)sender).Focus();
         }
@@ -1731,17 +1730,16 @@ namespace SharePortfolioManager
 
         #region Data grid view cell double click
 
-        private void dgvPortfolioFinalValue_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void DgvPortfolioFinalValue_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
                 foreach(var shareobject in ShareObjectListFinalValue)
                 {
-                    if (shareobject.Wkn == dgvPortfolioFinalValue.Rows[e.RowIndex].Cells[0].Value.ToString())
-                    {
-                        System.Diagnostics.Process.Start(shareobject.WebSite);
-                        break;
-                    }
+                    if (shareobject.Wkn != dgvPortfolioFinalValue.Rows[e.RowIndex].Cells[0].Value.ToString()) continue;
+
+                    System.Diagnostics.Process.Start(shareobject.WebSite);
+                    break;
                 }
             }
             catch(System.ComponentModel.Win32Exception noBrowser)
@@ -1749,7 +1747,8 @@ namespace SharePortfolioManager
                 if (noBrowser.ErrorCode == -2147467259)
                 {
 #if DEBUG
-                    MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + noBrowser.Message, @"Error",
+                    var message = $"{Helper.GetMyMethodName()}\n\n{noBrowser.Message}";
+                    MessageBox.Show(message, @"Error",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
 #endif
@@ -1764,7 +1763,8 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + ex.Message, @"Error",
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -1777,17 +1777,16 @@ namespace SharePortfolioManager
             }
         }
 
-        private void dgvPortfolioMarketValue_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void DgvPortfolioMarketValue_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
                 foreach (var shareobject in ShareObjectListMarketValue)
                 {
-                    if (shareobject.Wkn == dgvPortfolioMarketValue.Rows[e.RowIndex].Cells[0].Value.ToString())
-                    {
-                        System.Diagnostics.Process.Start(shareobject.WebSite);
-                        break;
-                    }
+                    if (shareobject.Wkn != dgvPortfolioMarketValue.Rows[e.RowIndex].Cells[0].Value.ToString()) continue;
+
+                    System.Diagnostics.Process.Start(shareobject.WebSite);
+                    break;
                 }
             }
             catch (System.ComponentModel.Win32Exception noBrowser)
@@ -1795,7 +1794,8 @@ namespace SharePortfolioManager
                 if (noBrowser.ErrorCode == -2147467259)
                 {
 #if DEBUG
-                    MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + noBrowser.Message, @"Error",
+                    var message = $"{Helper.GetMyMethodName()}\n\n{noBrowser.Message}";
+                    MessageBox.Show(message, @"Error",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
 #endif
@@ -1810,7 +1810,8 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show(Helper.GetMyMethodName() + "\n\n" + ex.Message, @"Error",
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif

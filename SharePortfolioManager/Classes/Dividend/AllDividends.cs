@@ -74,7 +74,7 @@ namespace SharePortfolioManager
         public bool AddDividend(CultureInfo cultureInfoFc, CheckState csEnableFc, decimal decExchangeRatio, string strDateTime, decimal decRate, decimal decVolume,
             decimal decTaxAtSource, decimal decCapitalGainsTax, decimal decSolidarityTax, decimal decSharePrice, string strDoc = "")
         {
-#if DEBUG
+#if DEBUG_DIVIDEND
             Console.WriteLine(@"Add DividendYearOfTheShare");
 #endif
             try
@@ -115,7 +115,7 @@ namespace SharePortfolioManager
                 {
                     DividendValueTotalWithTaxes += calcObject.DividendValueYear;
                 }
-#if DEBUG
+#if DEBUG_DIVIDEND
                 Console.WriteLine(@"DividendValueTotalWithTaxes:{0}", DividendValueTotalWithTaxes);
 #endif
             }

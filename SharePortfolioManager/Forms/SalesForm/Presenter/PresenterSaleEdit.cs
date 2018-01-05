@@ -116,7 +116,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                 if (_model.CostsDec > 0)
                     bErrorFlag = !_model.ShareObjectFinalValue.AddCost(false, true, strDateTime, _model.CostsDec, _model.Document);
 
-                if (_model.ShareObjectFinalValue.AddSale(strDateTime, _model.VolumeDec, _model.ShareObjectFinalValue.AverageBuyPrice, _model.SalePriceDec,
+                if (_model.ShareObjectFinalValue.AddSale(strDateTime, _model.VolumeDec, _model.BuyPriceDec, _model.SalePriceDec,
                     _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, _model.CostsDec, _model.Document)
                     && bErrorFlag == false)
                 {
@@ -140,7 +140,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
             {
                 var strDateTime = _model.Date + " " + _model.Time;
 
-                if (_model.ShareObjectFinalValue.RemoveSale(_model.SelectedDate) && _model.ShareObjectFinalValue.AddSale(strDateTime, _model.VolumeDec, _model.ShareObjectFinalValue.AverageBuyPrice, _model.SalePriceDec,
+                if (_model.ShareObjectFinalValue.RemoveSale(_model.SelectedDate) && _model.ShareObjectFinalValue.AddSale(strDateTime, _model.VolumeDec, _model.BuyPriceDec, _model.SalePriceDec,
                     _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, _model.CostsDec, _model.Document))
                 {
                     var bFlagCostEdit = true;
@@ -222,7 +222,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_SALE
                 var message = $"OnDocumentBrowse()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -239,7 +239,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
         {
             try
             {
-                var decProfitLoss = (_model.SalePriceDec - _model.ShareObjectFinalValue.AverageBuyPrice) * _model.VolumeDec;
+                var decProfitLoss = (_model.SalePriceDec - _model.BuyPriceDec /*_model.ShareObjectFinalValue.AverageBuyPrice*/) * _model.VolumeDec;
                 var decPayout = decProfitLoss - _model.TaxAtSourceDec - _model.CapitalGainsTaxDec - _model.SolidarityTaxDec - _model.CostsDec;
 
                 _model.ProfitLossDec = decProfitLoss;
@@ -247,7 +247,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_SALE
                 var message = $"CalculateProfitLossAndPayout()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);

@@ -668,7 +668,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_ADDSHARE || DEBUG
                 var message = $"FrmShareAdd_Load()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -711,7 +711,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_ADDSHARE || DEBUG
                 var message = $"btnShareDocumentBrowse_Click()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -740,7 +740,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_ADDSHARE || DEBUG
                 var message = $"btnSave_Click()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);

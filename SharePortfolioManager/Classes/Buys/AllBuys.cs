@@ -97,7 +97,7 @@ namespace SharePortfolioManager
         /// <returns>Flag if the add was successful</returns>
         public bool AddBuy(string strDateTime, decimal decVolume, decimal decSharePrice, decimal decReduction, decimal decCosts, string strDoc = "")
         {
-#if DEBUG
+#if DEBUG_BUY
             Console.WriteLine(@"");
             Console.WriteLine(@"Add AllBuysOfTheShare");
 #endif
@@ -143,7 +143,7 @@ namespace SharePortfolioManager
                     BuyVolumeTotal += calcObject.BuyVolumeYear;
                 }
 
-#if DEBUG
+#if DEBUG_BUY
                 Console.WriteLine(@"MarketValueTotal:{0}", BuyMarketValueTotal);
                 Console.WriteLine(@"PurchaseValueTotal:{0}", BuyMarketValueReductionTotal);
                 Console.WriteLine(@"FinalValueTotal:{0}", BuyMarketValueReductionCostsTotal);
@@ -166,7 +166,7 @@ namespace SharePortfolioManager
         /// <returns></returns>
         public bool RemoveBuy(string strDateTime)
         {
-#if DEBUG
+#if DEBUG_BUY
             Console.WriteLine(@"Remove AllBuysOfTheShare");
 #endif
             try
@@ -209,7 +209,7 @@ namespace SharePortfolioManager
                     BuyVolumeTotal += calcObject.BuyVolumeYear;
                 }
 
-#if DEBUG
+#if DEBUG_BUY
                 Console.WriteLine(@"MarketValueTotal:{0}", BuyMarketValueTotal);
                 Console.WriteLine(@"MarketValueWithReduction:{0}", BuyMarketValueReductionTotal);
                 Console.WriteLine(@"FinalValueTotal:{0}", BuyMarketValueReductionCostsTotal);

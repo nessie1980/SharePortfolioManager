@@ -78,7 +78,7 @@ namespace SharePortfolioManager
         /// <returns>Flag if the add was successful</returns>
         public bool AddBuyObject(CultureInfo cultureInfo, string strDate, decimal decVolume, decimal decSharePrice, decimal decReduction, decimal decCosts, string strDoc = "")
         {
-#if DEBUG
+#if DEBUG_BUY
             Console.WriteLine(@"");
             Console.WriteLine(@"AddBuyObject");
 #endif
@@ -114,7 +114,7 @@ namespace SharePortfolioManager
                     BuyVolumeYear = 0;
                 BuyVolumeYear += addObject.Volume;
 
-#if DEBUG
+#if DEBUG_BUY
                 Console.WriteLine(@"MarketValueYear: {0}", BuyMarketValueYear);
                 Console.WriteLine(@"PurchaseValueYear: {0}", BuyMarketValueReductionYear);
                 Console.WriteLine(@"FinalValueYear: {0}", BuyMarketValueReductionCostsYear);
@@ -138,7 +138,7 @@ namespace SharePortfolioManager
         /// <returns>Flag if the remove was successfully</returns>
         public bool RemoveBuyObject(string buyDateTime)
         {
-#if DEBUG
+#if DEBUG_BUY
             Console.WriteLine(@"RemoveBuyObject");
 #endif
             try
@@ -167,7 +167,7 @@ namespace SharePortfolioManager
                 // Calculate buy volume
                 BuyVolumeYear -= removeObject.Volume;
 
-#if DEBUG
+#if DEBUG_BUY
                 Console.WriteLine(@"MarketValueYear: {0}", BuyMarketValueYear);
                 Console.WriteLine(@"FinalValueYear: {0}", BuyMarketValueReductionCostsYear);
                 Console.WriteLine(@"VolumeYear: {0}", BuyVolumeYear);

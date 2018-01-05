@@ -249,7 +249,7 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_DIVIDEND
                 var message = $"OnDocumentBrowse()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);

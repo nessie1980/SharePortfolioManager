@@ -58,7 +58,7 @@ namespace SharePortfolioManager
         /// <returns>Flag if the add was successful</returns>
         public bool AddCostObject(bool bCostOfABuy, bool bCostOfASale, CultureInfo cultureInfo, string strDate, decimal decValue, string strDoc = "")
         {
-#if DEBUG
+#if DEBUG_COST
             Console.WriteLine(@"AddCostObject");
 #endif
             try
@@ -78,7 +78,7 @@ namespace SharePortfolioManager
                     CostValueYear = 0;
                 CostValueYear += addObject.CostValue;
 
-#if DEBUG
+#if DEBUG_COST
                 Console.WriteLine(@"CostValueYear: {0}", CostValueYear);
                 Console.WriteLine(@"");
 #endif
@@ -99,7 +99,7 @@ namespace SharePortfolioManager
         /// <returns>Flag if the remove was successfully</returns>
         public bool RemoveCostObject(string strDate)
         {
-#if DEBUG
+#if DEBUG_COST
             Console.WriteLine(@"RemoveCostObject");
 #endif
             try
@@ -122,7 +122,7 @@ namespace SharePortfolioManager
                 // Calculate cost value
                 CostValueYear -= removeObject.CostValue;
 
-#if DEBUG
+#if DEBUG_COST
                 Console.WriteLine(@"CostValueYear: {0}", CostValueYear);
                 Console.WriteLine(@"");
 #endif

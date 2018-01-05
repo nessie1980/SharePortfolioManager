@@ -212,7 +212,7 @@ namespace SharePortfolioManager
             SharePrice = decSharePrice;
             Document = strDoc;
 
-#if DEBUG
+#if DEBUG_BUY
             Console.WriteLine(@"");
             Console.WriteLine(@"New buy created");
             Console.WriteLine(@"Date: {0}", Date);

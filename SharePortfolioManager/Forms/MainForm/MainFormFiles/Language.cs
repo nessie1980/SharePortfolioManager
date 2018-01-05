@@ -21,13 +21,11 @@
 //SOFTWARE.
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Classes;
-using System.IO;
 using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager
@@ -44,21 +42,20 @@ namespace SharePortfolioManager
         /// </summary>
         private void LoadLanguage()
         {
-
             // Check if the initialization was successfully so far
-            if (InitFlag)
-            {
-                try
-                {
-                    // Load language XML file
-                    _language = new Language(LanguageFileName);
+            if (!InitFlag) return;
 
-                    // Check if the language file has been loaded
-                    if (Language.InitFlag)
-                    {
-                        // ONLY in DEBUG mode
-                        // Check if an language key is not defined in the Language.XML file and then create a
-                        // a dialog with the undefined language keys
+            try
+            {
+                // Load language XML file
+                Language = new Language(LanguageFileName);
+
+                // Check if the language file has been loaded
+                if (Language.InitFlag)
+                {
+                    // ONLY in DEBUG mode
+                    // Check if an language key is not defined in the Language.XML file and then create a
+                    // a dialog with the undefined language keys
 #if DEBUG_LANGUAGE
                         string strProjectPath =
                             Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\"));
@@ -96,74 +93,59 @@ namespace SharePortfolioManager
                             invalidLanguageKeysDlg.ShowDialog();
                         }
 #endif
-                        #region Load logger language
+                    #region Load logger language
 
-                        // Add state names
-                        LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Start", LanguageName));
-                        LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Info", LanguageName));
-                        LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Warning", LanguageName));
-                        LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Error", LanguageName));
-                        LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/FatalError", LanguageName));
+                    // Add state names
+                    LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Start", LanguageName));
+                    LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Info", LanguageName));
+                    LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Warning", LanguageName));
+                    LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Error", LanguageName));
+                    LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/FatalError", LanguageName));
 
-                        // Add component names
-                        LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Application", LanguageName));
-                        LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/WebParser", LanguageName));
-                        LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/LanguageHandler", LanguageName));
-                        LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Logger", LanguageName));
+                    // Add component names
+                    LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Application", LanguageName));
+                    LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/WebParser", LanguageName));
+                    LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/LanguageHandler", LanguageName));
+                    LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Logger", LanguageName));
 
-                        #endregion Load logger language
+                    #endregion Load logger language
 
-                        #region Add language menu items for the available languages
+                    #region Add language menu items for the available languages
 
-                        // Get settings menu item
-                        ToolStripMenuItem tmiSettings =
-                            (ToolStripMenuItem)menuStrip1.Items["settingsToolStripMenuItem"];
-                        // Get language menu item
-                        ToolStripMenuItem tmiLanguage =
-                            (ToolStripMenuItem)tmiSettings.DropDownItems["languageToolStripMenuItem"];
-                        // Get possible languages and add them to the menu
-                        List<string> strLanguages = Language.GetAvailableLanguages();
-                        // Add available to the menu
-                        foreach (string strLanguage in strLanguages)
-                        {
-                            ToolStripMenuItem tmiLanguageAdd = new ToolStripMenuItem(strLanguage, null, languageClick,
-                                string.Format("languageToolStripMenuItem{0}", strLanguage));
-
-                            if (strLanguage == LanguageName)
-                                tmiLanguageAdd.Checked = true;
-
-                            tmiLanguage.DropDownItems.Add(tmiLanguageAdd);
-                        }
-
-                        #endregion Add language menu items for the available languages
-
-                        #region Set share object unit and percentage unit
-
-                        ShareObject.PercentageUnit = Language.GetLanguageTextByXPath(@"/PercentageUnit", LanguageName);
-                        ShareObject.PieceUnit = Language.GetLanguageTextByXPath(@"/PieceUnit", LanguageName);
-
-                        #endregion Set share object unit and percentage unit
-                    }
-                    else
+                    // Get settings menu item
+                    var tmiSettings =
+                        (ToolStripMenuItem)menuStrip1.Items["settingsToolStripMenuItem"];
+                    // Get language menu item
+                    var tmiLanguage =
+                        (ToolStripMenuItem)tmiSettings.DropDownItems["languageToolStripMenuItem"];
+                    // Get possible languages and add them to the menu
+                    var strLanguages = Language.GetAvailableLanguages();
+                    // Add available to the menu
+                    foreach (var strLanguage in strLanguages)
                     {
-#if DEBUG
-                        MessageBox.Show("LoadLanguage()\n\n" + Language.LastException.Message,
-                            @"Error", MessageBoxButtons.OK,
-                            MessageBoxIcon.Error);
-#endif
-                        // Set initialization flag
-                        InitFlag = false;
+                        var tmiLanguageAdd = new ToolStripMenuItem(strLanguage, null, LanguageClick,
+                            $"languageToolStripMenuItem{strLanguage}");
 
-                        // Add status message
-                        Helper.AddStatusMessage(rchTxtBoxStateMessage, @"Could not load '" + LanguageFileName + @"' file!",
-                            Language, LanguageName,
-                            Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                        if (strLanguage == LanguageName)
+                            tmiLanguageAdd.Checked = true;
+
+                        tmiLanguage.DropDownItems.Add(tmiLanguageAdd);
                     }
+
+                    #endregion Add language menu items for the available languages
+
+                    #region Set share object unit and percentage unit
+
+                    ShareObject.PercentageUnit = Language.GetLanguageTextByXPath(@"/PercentageUnit", LanguageName);
+                    ShareObject.PieceUnit = Language.GetLanguageTextByXPath(@"/PieceUnit", LanguageName);
+
+                    #endregion Set share object unit and percentage unit
                 }
-                catch (Exception ex)
+                else
                 {
 #if DEBUG
-                    MessageBox.Show("LoadLanguage()\n\n" + ex.Message,
+                    var message = $"{Helper.GetMyMethodName()}\n\n{Language.LastException.Message}";
+                    MessageBox.Show(message,
                         @"Error", MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
 #endif
@@ -176,7 +158,22 @@ namespace SharePortfolioManager
                         Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
                 }
             }
+            catch (Exception ex)
+            {
+#if DEBUG
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message,
+                    @"Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+#endif
+                // Set initialization flag
+                InitFlag = false;
 
+                // Add status message
+                Helper.AddStatusMessage(rchTxtBoxStateMessage, @"Could not load '" + LanguageFileName + @"' file!",
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+            }
         }
 
         #endregion Load language
@@ -195,9 +192,9 @@ namespace SharePortfolioManager
                 Text = Language.GetLanguageTextByXPath(@"/Application/Name", LanguageName)
                     + @" " + Helper.GetApplicationVersion();
 
-                if (PortfolioFileName != "")
+                if (_portfolioFileName != "")
                 {
-                    Text += @" - (" + PortfolioFileName + @")";
+                    Text += @" - (" + _portfolioFileName + @")";
                 }
 
                 #endregion Application name
@@ -276,15 +273,30 @@ namespace SharePortfolioManager
 
                 if (dgvPortfolioFooterFinalValue.RowCount > 0)
                 {
-                    dgvPortfolioFooterFinalValue.Rows[0].Cells[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelTotalColumnIndex].Value = string.Format(@"{0}",
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalPurchaseValue", LanguageName));
-                    dgvPortfolioFooterFinalValue.Rows[1].Cells[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelCostsDividendIndex].Value = string.Format(@"{0}",
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalCostDividend", LanguageName));
-                    dgvPortfolioFooterFinalValue.Rows[1].Cells[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelTotalColumnIndex].Value = string.Format(@"{0}",
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalPerformance",
-                            LanguageName));
-                    dgvPortfolioFooterFinalValue.Rows[2].Cells[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelTotalColumnIndex].Value = string.Format(@"{0}",
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalDepotValue", LanguageName));
+                    dgvPortfolioFooterFinalValue.Rows[0].Cells[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelTotalColumnIndex].Value =
+                        $@"{
+                            Language.GetLanguageTextByXPath(
+                                @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalPurchaseValue",
+                                LanguageName)
+                        }";
+                    dgvPortfolioFooterFinalValue.Rows[1].Cells[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelCostsDividendIndex].Value =
+                        $@"{
+                            Language.GetLanguageTextByXPath(
+                                @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalCostDividend",
+                                LanguageName)
+                        }";
+                    dgvPortfolioFooterFinalValue.Rows[1].Cells[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelTotalColumnIndex].Value =
+                        $@"{
+                            Language.GetLanguageTextByXPath(
+                                @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalPerformance",
+                                LanguageName)
+                        }";
+                    dgvPortfolioFooterFinalValue.Rows[2].Cells[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelTotalColumnIndex].Value =
+                        $@"{
+                            Language.GetLanguageTextByXPath(
+                                @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalDepotValue",
+                                LanguageName)
+                        }";
                 }
 
                 #endregion DataGirdView footer complete depot values
@@ -293,10 +305,16 @@ namespace SharePortfolioManager
                     Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/Caption", LanguageName);
 
                 #region  DataGirdView for the market values
-                #endregion DataGridView for the marekt values
+
+                // TODO
+
+                #endregion DataGridView for the market values
 
                 #region  DataGirdView footer market values
-                #endregion DataGridView footer marekt values
+
+                // TODO
+
+                #endregion DataGridView footer market values
 
                 #endregion TabControl overviews
 
@@ -322,9 +340,9 @@ namespace SharePortfolioManager
                 grpBoxShareDetails.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/Caption",
                     LanguageName);
 
-                if (tabCtrlDetails.TabPages[TabPageDetailsFinalValue] != null)
+                if (tabCtrlDetails.TabPages[_tabPageDetailsFinalValue] != null)
                 {
-                    tabCtrlDetails.TabPages[TabPageDetailsFinalValue].Text =
+                    tabCtrlDetails.TabPages[_tabPageDetailsFinalValue].Text =
                         Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Caption",
                             LanguageName);
                     lblDetailsFinalValueDate.Text =
@@ -365,9 +383,9 @@ namespace SharePortfolioManager
                             LanguageName);
                 }
 
-                if (tabCtrlDetails.TabPages[TabPageDetailsMarketValue] != null)
+                if (tabCtrlDetails.TabPages[_tabPageDetailsMarketValue] != null)
                 {
-                    tabCtrlDetails.TabPages[TabPageDetailsMarketValue].Text =
+                    tabCtrlDetails.TabPages[_tabPageDetailsMarketValue].Text =
                         Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Caption",
                             LanguageName);
                     lblDetailsMarketValueDate.Text =
@@ -408,13 +426,13 @@ namespace SharePortfolioManager
                             LanguageName);
                 }
 
-                if (tabCtrlDetails.TabPages[TabPageDetailsDividendValue] != null)
+                if (tabCtrlDetails.TabPages[_tabPageDetailsDividendValue] != null)
                 {
-                    tabCtrlDetails.TabPages[TabPageDetailsDividendValue].Text =
+                    tabCtrlDetails.TabPages[_tabPageDetailsDividendValue].Text =
                         Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/Caption", LanguageName);
-                    tabCtrlDetails.TabPages[TabPageDetailsCostsValue].Text =
+                    tabCtrlDetails.TabPages[_tabPageDetailsCostsValue].Text =
                         Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgCosts/Caption", LanguageName);
-                    tabCtrlDetails.TabPages[TabPageDetailsProfitLossValue].Text =
+                    tabCtrlDetails.TabPages[_tabPageDetailsProfitLossValue].Text =
                         Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Caption", LanguageName);
                 }
 
@@ -455,7 +473,7 @@ namespace SharePortfolioManager
                 LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/LanguageHandler", LanguageName));
                 LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Logger", LanguageName));
 
-                #endregion Looger language
+                #endregion Logger language
 
                 #region Set share object unit and percentage unit
 
@@ -467,7 +485,8 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show(ex.Message, @"Error - SetLanguage()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 #endif
                 if (Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadAllLanguageKeys", LanguageName) !=
                     Language.InvalidLanguageKeyValue)

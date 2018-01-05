@@ -130,7 +130,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_ADDSHARE || DEBUG
                 var message = $"CalculateMarketValueAndFinalValue()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);

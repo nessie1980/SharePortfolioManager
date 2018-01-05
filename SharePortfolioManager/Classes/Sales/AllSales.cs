@@ -111,7 +111,7 @@ namespace SharePortfolioManager
         public bool AddSale(string strDate, decimal decVolume, decimal decBuyPrice, decimal decSalePrice, decimal decTaxAtSource, decimal decCapitalGainsTax,
              decimal decSolidarityTax, decimal decCosts, string strDoc = "")
         {
-#if DEBUG
+#if DEBUG_SALE
             Console.WriteLine(@"Add AllSalesOfTheShare");
 #endif
             try
@@ -159,7 +159,7 @@ namespace SharePortfolioManager
                     SaleProfitLossTotal += calcObject.SaleProfitLossYear;
                     SaleProfitLossTotalWithoutCosts += calcObject.SaleProfitLossWithoutCostsYear;
                 }
-#if DEBUG
+#if DEBUG_SALE
                 Console.WriteLine(@"SalePayoutTotal:{0}", SalePayoutTotal);
                 Console.WriteLine(@"SalePayoutWithoutCostsTotal:{0}", SalePayoutWithoutCostsTotal);
                 Console.WriteLine(@"SaleVolumeTotal:{0}", SaleVolumeTotal);
@@ -184,7 +184,7 @@ namespace SharePortfolioManager
         /// <returns>Flag if the remove was successful</returns>
         public bool RemoveSale(string strDateTime)
         {
-#if DEBUG
+#if DEBUG_SALE
             Console.WriteLine(@"Remove AllSalesOfTheShare");
 #endif
             try
@@ -230,7 +230,7 @@ namespace SharePortfolioManager
                     SaleProfitLossTotalWithoutCosts += calcObject.SaleProfitLossWithoutCostsYear;
                 }
 
-#if DEBUG
+#if DEBUG_SALE
                 Console.WriteLine(@"SaleValueTotal:{0}", SalePayoutTotal);
                 Console.WriteLine(@"SalePayoutWithoutCostsYear:{0}", SalePayoutWithoutCostsTotal);
                 Console.WriteLine(@"SaleVolumeTotal:{0}", SaleVolumeTotal);

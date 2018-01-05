@@ -66,7 +66,7 @@ namespace SharePortfolioManager
         /// <returns>Flag if the add was successful</returns>
         public bool AddCost(bool bCostOfABuy, bool bCostOfASale, string strDateTime, decimal decValue, string strDoc = "")
         {
-#if DEBUG
+#if DEBUG_COST
             Console.WriteLine(@"Add CostYearOfTheShare");
 #endif
             try
@@ -104,7 +104,7 @@ namespace SharePortfolioManager
                 {
                     CostValueTotal += calcObject.CostValueYear;
                 }
-#if DEBUG
+#if DEBUG_COST
                 Console.WriteLine(@"CostValueTotal:{0}", CostValueTotal);
 #endif
             }
@@ -123,7 +123,7 @@ namespace SharePortfolioManager
         /// <returns></returns>
         public bool RemoveCost(string strDate)
         {
-#if DEBUG
+#if DEBUG_COST
             Console.WriteLine(@"Remove CostYearOfTheShare");
 #endif
             try
@@ -160,7 +160,7 @@ namespace SharePortfolioManager
                     CostValueTotal += calcObject.CostValueYear;
                 }
 
-#if DEBUG
+#if DEBUG_COST
                 Console.WriteLine(@"CostValueTotal:{0}", CostValueTotal);
 #endif
             }

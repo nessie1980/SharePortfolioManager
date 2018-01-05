@@ -735,7 +735,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_BUY || DEBUG
                 var message = $"ShareBuysEdit_Load()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -977,7 +977,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_BUY || DEBUG
                 var message = $"btnAdd_Click()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1024,7 +1024,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_BUY || DEBUG
                 var message = $"btnDelete_Click()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1077,7 +1077,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_BUY || DEBUG
                 var message = $"btnReset_Click()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1325,7 +1325,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_BUY || DEBUG
                 var message = $"ShowBuys()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1397,7 +1397,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_BUY || DEBUG
                 var message = $"dataGridViewBuysOfAYear_DataBindingComplete()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1436,7 +1436,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_BUY || DEBUG
                 var message = $"DeselectRowsOfDataGridViews()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1464,7 +1464,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_BUY || DEBUG
                 var message = $"btnBuyDocumentBrowse_Click()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1557,7 +1557,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_BUY || DEBUG
                 var message = $"dataGridViewBuysOfYears_SelectionChanged()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1727,7 +1727,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_BUY || DEBUG
                 var message = $"dataGridViewBuysOfAYear_SelectionChanged()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1855,7 +1855,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_BUY || DEBUG
                 var message = $"dataGridViewBuysOfAYear_CellContentdecimalClick()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);

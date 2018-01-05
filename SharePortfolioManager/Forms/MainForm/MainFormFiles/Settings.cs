@@ -43,7 +43,7 @@ namespace SharePortfolioManager
             try
             {
                 // Flag if the settings load was successful
-                bool loadSettings = true;
+                var loadSettings = true;
 
                 InitFlag = false;
 
@@ -64,8 +64,9 @@ namespace SharePortfolioManager
                 #region Portfolio
 
                 // Read position
-                XmlNode nodePortfolioFile = Settings.SelectSingleNode("/Settings/Portfolio");
-                PortfolioFileName = nodePortfolioFile.InnerXml;
+                var nodePortfolioFile = Settings.SelectSingleNode("/Settings/Portfolio");
+                if (nodePortfolioFile != null)
+                    _portfolioFileName = nodePortfolioFile.InnerXml;
 
                 #endregion Portfolio
 
@@ -73,19 +74,19 @@ namespace SharePortfolioManager
 
                 // Read last application window position and window size
                 // Default values
-                int iPosX = 0;
-                int iPosY = 0;
-                int iWidth = MinimumSize.Width;
-                int iHeigth = MinimumSize.Height;
+                var iPosX = 0;
+                var iPosY = 0;
+                var iWidth = MinimumSize.Width;
+                var iHeigth = MinimumSize.Height;
 
                 // Read position
-                XmlNode nodePosX = Settings.SelectSingleNode("/Settings/Window/PosX");
-                XmlNode nodePosY = Settings.SelectSingleNode("/Settings/Window/PosY");
+                var nodePosX = Settings.SelectSingleNode("/Settings/Window/PosX");
+                var nodePosY = Settings.SelectSingleNode("/Settings/Window/PosY");
 
                 // Convert to int values
                 if (nodePosX != null)
                 {
-                    if (!(Int32.TryParse(nodePosX.InnerXml, out iPosX)))
+                    if (!int.TryParse(nodePosX.InnerXml, out iPosX))
                         loadSettings = false;
                 }
                 else
@@ -93,7 +94,7 @@ namespace SharePortfolioManager
 
                 if (nodePosY != null)
                 {
-                    if (!(Int32.TryParse(nodePosY.InnerXml, out iPosY)))
+                    if (!int.TryParse(nodePosY.InnerXml, out iPosY))
                         loadSettings = false;
                 }
                 else
@@ -103,13 +104,13 @@ namespace SharePortfolioManager
                 NormalWindowPosition = new Point(iPosX, iPosY);
 
                 // Read size
-                XmlNode nodeWidth = Settings.SelectSingleNode("/Settings/Window/Width");
-                XmlNode nodeHeigth = Settings.SelectSingleNode("/Settings/Window/Height");
+                var nodeWidth = Settings.SelectSingleNode("/Settings/Window/Width");
+                var nodeHeigth = Settings.SelectSingleNode("/Settings/Window/Height");
 
                 // Convert to int values
                 if (nodeWidth != null)
                 {
-                    if (!(Int32.TryParse(nodeWidth.InnerXml, out iWidth)))
+                    if (!int.TryParse(nodeWidth.InnerXml, out iWidth))
                         loadSettings = false;
                     else
                     {
@@ -122,7 +123,7 @@ namespace SharePortfolioManager
 
                 if (nodeHeigth != null)
                 {
-                    if (!(Int32.TryParse(nodeHeigth.InnerXml, out iHeigth)))
+                    if (!int.TryParse(nodeHeigth.InnerXml, out iHeigth))
                         loadSettings = false;
                     else
                     {
@@ -137,7 +138,7 @@ namespace SharePortfolioManager
                 NormalWindowSize = new Size(iWidth, iHeigth);
 
                 // Read state
-                XmlNode nodeWindowState = Settings.SelectSingleNode("/Settings/Window/State");
+                var nodeWindowState = Settings.SelectSingleNode("/Settings/Window/State");
 
                 // Set right window state
                 if (nodeWindowState != null)
@@ -190,8 +191,7 @@ namespace SharePortfolioManager
                 var nodeStatusMessageClear = Settings.SelectSingleNode("/Settings/StatusMessageClear");
                 if (nodeStatusMessageClear != null)
                 {
-                    int iOutResult;
-                    if (Int32.TryParse(nodeStatusMessageClear.InnerText, out iOutResult))
+                    if (int.TryParse(nodeStatusMessageClear.InnerText, out var iOutResult))
                         StatusMessageClearTimerValue = iOutResult;
                     else
                         loadSettings = false;
@@ -207,12 +207,11 @@ namespace SharePortfolioManager
                 #region Logger stored log files
 
                 // Read the GUI entries size
-                var nodeGUIEntriesSize = Settings.SelectSingleNode("/Settings/Logger/GUIEntries");
-                if (nodeGUIEntriesSize != null)
+                var nodeGuiEntriesSize = Settings.SelectSingleNode("/Settings/Logger/GUIEntries");
+                if (nodeGuiEntriesSize != null)
                 {
-                    int iOutResult;
-                    if (Int32.TryParse(nodeGUIEntriesSize.InnerText, out iOutResult))
-                        LoggerGUIEntriesSize = iOutResult;
+                    if (int.TryParse(nodeGuiEntriesSize.InnerText, out var iOutResult))
+                        LoggerGuiEntriesSize = iOutResult;
                     else
                         loadSettings = false;
                 }
@@ -227,8 +226,7 @@ namespace SharePortfolioManager
                 var nodeLoggerLogToFileEnabled = Settings.SelectSingleNode("/Settings/Logger/LogToFileEnable");
                 if (nodeLoggerLogToFileEnabled != null)
                 {
-                    bool bOutResult;
-                    if (Boolean.TryParse(nodeLoggerLogToFileEnabled.InnerText, out bOutResult))
+                    if (bool.TryParse(nodeLoggerLogToFileEnabled.InnerText, out var bOutResult))
                         LoggerLogToFileEnabled = bOutResult;
                     else
                         loadSettings = false;
@@ -244,8 +242,7 @@ namespace SharePortfolioManager
                 var nodeStoredLogFiles = Settings.SelectSingleNode("/Settings/Logger/StoredLogFiles");
                 if (nodeStoredLogFiles != null)
                 {
-                    int iOutResult;
-                    if (Int32.TryParse(nodeStoredLogFiles.InnerText, out iOutResult))
+                    if (int.TryParse(nodeStoredLogFiles.InnerText, out var iOutResult))
                         LoggerStoredLogFiles = iOutResult;
                     else
                         loadSettings = false;
@@ -261,8 +258,7 @@ namespace SharePortfolioManager
                 var nodeLoggerCleanUpAtStartUpEnabled = Settings.SelectSingleNode("/Settings/Logger/LogCleanUpAtStartUpEnable");
                 if (nodeLoggerCleanUpAtStartUpEnabled != null)
                 {
-                    bool bOutResult;
-                    if (Boolean.TryParse(nodeLoggerCleanUpAtStartUpEnabled.InnerText, out bOutResult))
+                    if (bool.TryParse(nodeLoggerCleanUpAtStartUpEnabled.InnerText, out var bOutResult))
                         LoggerLogCleanUpAtStartUpEnabled = bOutResult;
                     else
                         loadSettings = false;
@@ -278,8 +274,7 @@ namespace SharePortfolioManager
                 var nodeLogComponents = Settings.SelectSingleNode("/Settings/Logger/LogComponents");
                 if (nodeLogComponents != null)
                 {
-                    int iOutResult;
-                    if (Int32.TryParse(nodeLogComponents.InnerText, out iOutResult))
+                    if (int.TryParse(nodeLogComponents.InnerText, out var iOutResult))
                         LoggerComponentLevel = iOutResult;
                     else
                         loadSettings = false;
@@ -295,8 +290,7 @@ namespace SharePortfolioManager
                 var nodeLogLevels = Settings.SelectSingleNode("/Settings/Logger/LogLevels");
                 if (nodeLogLevels != null)
                 {
-                    int iOutResult;
-                    if (Int32.TryParse(nodeLogLevels.InnerText, out iOutResult))
+                    if (int.TryParse(nodeLogLevels.InnerText, out var iOutResult))
                         LoggerStateLevel = iOutResult;
                     else
                         loadSettings = false;
@@ -308,8 +302,8 @@ namespace SharePortfolioManager
 
                 #region Logger colors
 
-                List<Color> loggerConsoleColorList = new List<Color>() {};
-                List<string> loggerConsoleColorListString = new List<string> {};
+                var loggerConsoleColorList = new List<Color>();
+                var loggerConsoleColorListString = new List<string>();
 
                 // Read the colors for the various logger levels
                 var nodeLogColors = Settings.SelectSingleNode("/Settings/Logger/LogColors");
@@ -325,16 +319,15 @@ namespace SharePortfolioManager
 
                 // Get color list from settings.
                 // Remove Control colors.
-                foreach (string colorName in loggerConsoleColorListString)
+                foreach (var colorName in loggerConsoleColorListString)
                 {
-                    foreach (string c in Enum.GetNames(typeof(KnownColor)).Where(
+                    foreach (var colors in Enum.GetNames(typeof(KnownColor)).Where(
                     item => !item.StartsWith("Control")).OrderBy(item => item))
                     {
-                        if (c == colorName)
-                        {
-                            loggerConsoleColorList.Add(Color.FromName(c));
-                            break;
-                        }
+                        if (colors != colorName) continue;
+
+                        loggerConsoleColorList.Add(Color.FromName(colors));
+                        break;
                     }
                 }
 
@@ -355,7 +348,8 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show("LoadSettings()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 // Set initialization flag
@@ -367,8 +361,7 @@ namespace SharePortfolioManager
                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
 
                 // Close reader
-                if (ReaderSettings != null)
-                    ReaderSettings.Close();
+                ReaderSettings?.Close();
             }
         }
 

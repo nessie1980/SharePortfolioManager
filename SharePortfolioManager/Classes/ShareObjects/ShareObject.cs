@@ -710,28 +710,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
         #endregion Performance properties
 
-        #region Purchase properties
-        
-        /// <summary>
-        /// Purchase value of the current share volume
-        /// </summary>
-        [Browsable(false)]
-        public virtual decimal PurchaseValue { get; set; } = decimal.MinValue / 2;
-
-        /// <summary>
-        /// Purchase value of the current share volume as string
-        /// </summary>
-        [Browsable(false)]
-        public string PurchaseValueAsStr => Helper.FormatDecimal(PurchaseValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-
-        /// <summary>
-        /// Purchase value of the current share volume as string with unit
-        /// </summary>
-        [Browsable(false)]
-        public string PurchaseValueAsStrUnit => Helper.FormatDecimal(PurchaseValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-
-        #endregion Purchase properties
-        
         #endregion Properties
 
         #region Methods
@@ -745,9 +723,9 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
 #if DEBUG_SHAREOBJECT
             Console.WriteLine("");
-            Console.WriteLine("ShareObject(ImageList)");
-            Console.WriteLine("percentageUnit: {0}", percentageUnit);
-            Console.WriteLine("pieceUnit: {0}", pieceUnit);
+            Console.WriteLine(@"ShareObject(ImageList)");
+            Console.WriteLine(@"percentageUnit: {0}", percentageUnit);
+            Console.WriteLine(@"pieceUnit: {0}", pieceUnit);
 #endif
             _imageListPrevDayPerformance = imageList;
             ImagePrevDayPerformance = _imageListPrevDayPerformance[0];
@@ -758,7 +736,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
             _iObjectCounter++;
 
 #if DEBUG_SHAREOBJECT
-            Console.WriteLine("ObjectCounter: {0}", ObjectCounter);
+            Console.WriteLine(@"ObjectCounter: {0}", ObjectCounter);
+            Console.WriteLine("");
 #endif
         }
 
@@ -772,40 +751,30 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="lastUpdateShareDate">Date of the last update on the Internet site of the share</param>
         /// <param name="lastUpdateShareTime">Time of the last update on the Internet site of the share</param>
         /// <param name="price">Current price of the share</param>
-        /// <param name="volume">Volume of the share</param>
-        /// <param name="reduction">Reduction of the share</param>
-        /// <param name="costs">Costs of the buy</param>
         /// <param name="webSite">Website address of the share</param>
         /// <param name="imageListForDayBeforePerformance">Images for the performance indication</param>
         /// <param name="regexList">RegEx list for the share</param>
         /// <param name="cultureInfo">Culture of the share</param>
         /// <param name="shareType">Type of the share</param>
-        /// <param name="document">Document of the first buy</param>
         public ShareObject(
             string wkn, string addDateTime, string name,
             DateTime lastUpdateInternet, DateTime lastUpdateShareDate, DateTime lastUpdateShareTime,
-            decimal price, decimal volume, decimal reduction, decimal costs,
-            string webSite, List<Image> imageListForDayBeforePerformance,
+            decimal price, string webSite, List<Image> imageListForDayBeforePerformance,
             RegExList regexList, CultureInfo cultureInfo,
-            int shareType, string document)
+            int shareType)
         {
 #if DEBUG_SHAREOBJECT
             Console.WriteLine("");
-            Console.WriteLine("ShareObject()");
-            Console.WriteLine("WKN: {0}", wkn);
-            Console.WriteLine("addDateTime: {0}", addDateTime);
-            Console.WriteLine("name: {0}", name);
-            Console.WriteLine("lastUpdateInternet: {0}", lastUpdateInternet);
-            Console.WriteLine("lastUpdateShareDate: {0}", lastUpdateShareDate);
-            Console.WriteLine("lastUpdateShareTime: {0}", lastUpdateShareTime);
-            Console.WriteLine("price: {0}", price);
-            Console.WriteLine("volume: {0}", volume);
-            Console.WriteLine("reduction: {0}", reduction);
-            Console.WriteLine("costs: {0}", costs);
-            Console.WriteLine("purchaseValue: {0}", purchaseValue);
-            Console.WriteLine("webSite: {0}", webSite);
-            Console.WriteLine("cultureInfo.Name: {0}", cultureInfo.Name);
-            Console.WriteLine("document: {0}", document);
+            Console.WriteLine(@"ShareObject()");
+            Console.WriteLine(@"WKN: {0}", wkn);
+            Console.WriteLine(@"addDateTime: {0}", addDateTime);
+            Console.WriteLine(@"name: {0}", name);
+            Console.WriteLine(@"lastUpdateInternet: {0}", lastUpdateInternet);
+            Console.WriteLine(@"lastUpdateShareDate: {0}", lastUpdateShareDate);
+            Console.WriteLine(@"lastUpdateShareTime: {0}", lastUpdateShareTime);
+            Console.WriteLine(@"price: {0}", price);
+            Console.WriteLine(@"webSite: {0}", webSite);
+            Console.WriteLine(@"cultureInfo.Name: {0}", cultureInfo.Name);
 #endif
             Wkn = wkn;
             AddDateTime = addDateTime;
@@ -821,12 +790,11 @@ namespace SharePortfolioManager.Classes.ShareObjects
             CultureInfo = cultureInfo;
             ShareType = shareType;
 
-            AddBuy(AddDateTime, volume, price, reduction, costs, document);
-
             _iObjectCounter++;
 
 #if DEBUG_SHAREOBJECT
-            Console.WriteLine("ObjectCounter: {0}", ObjectCounter);
+            Console.WriteLine(@"ObjectCounter: {0}", ObjectCounter);
+            Console.WriteLine("");
 #endif
         }
 
@@ -845,246 +813,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
         #endregion Destructor
 
-        #region Buy methods
-
-        /// <summary>
-        /// This function adds the buy for the share to the dictionary
-        /// </summary>
-        /// <param name="strDateTime">Date and time of the buy</param>
-        /// <param name="decVolume">Buy volume</param>
-        /// <param name="decPrice">Price for one share</param>
-        /// <param name="decReduction">Reduction of the buy</param>
-        /// <param name="decCosts">Costs of the buy</param>
-        /// <param name="strDoc">Document of the buy</param>
-        /// <returns>Flag if the add was successful</returns>
-        public bool AddBuy(string strDateTime, decimal decVolume, decimal decPrice, decimal decReduction, decimal decCosts, string strDoc = "")
-        {
-            try
-            {
-#if DEBUG_SHAREOBJECT
-                Console.WriteLine("");
-                Console.WriteLine("AddBuy()");
-                Console.WriteLine("strDateTime: {0}", strDateTime);
-                Console.WriteLine("decVolume: {0}", decVolume);
-                Console.WriteLine("decPrice: {0}", decPrice);
-                Console.WriteLine("decReduction: {0}", decReduction);
-                Console.WriteLine("decCosts: {0}", decCosts);
-                Console.WriteLine("strDoc: {0}", strDoc);
-#endif
-                if (!AllBuyEntries.AddBuy(strDateTime, decVolume, decPrice, decReduction, decCosts, strDoc))
-                    return false;
-
-                // Set buy value of the share
-                BuyMarketValueTotal = AllBuyEntries.BuyMarketValueTotal;
-
-                // Set new volume
-                if (Volume == decimal.MinValue / 2)
-                    Volume = 0;
-                Volume += decVolume;
-
-                // Recalculate MarketValue
-                if (PurchaseValue == decimal.MinValue / 2)
-                    PurchaseValue = 0;
-                PurchaseValue += AllBuyEntries.GetBuyObjectByDateTime(strDateTime).MarketValueReductionCosts;
-
-                // Recalculate buy price average
-                if (PurchaseValue > 0 && Volume > 0)
-                    AverageBuyPrice = PurchaseValue / Volume;
-                else
-                    AverageBuyPrice = 0;
-
-#if DEBUG_SHAREOBJECT
-                Console.WriteLine("Volume: {0}", Volume);
-                Console.WriteLine("PurchaseValue: {0}", PurchaseValue);
-                Console.WriteLine("BuyValueTotal: {0}", BuyMarketValueTotal);
-                Console.WriteLine("AverageBuyPrice: {0}", AverageBuyPrice);
-#endif
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// This function removes a buy for the share from the dictionary
-        /// </summary>
-        /// <param name="strDateTime">Date and time of the buy remove</param>
-        /// <returns>Flag if the remove was successful</returns>
-        public bool RemoveBuy(string strDateTime)
-        {
-            try
-            {
-#if DEBUG_SHAREOBJECT
-                Console.WriteLine("");
-                Console.WriteLine("RemoveBuy()");
-                Console.WriteLine("strDateTime: {0}", strDateTime);
-#endif
-                // Get BuyObject by date and time and add the sale PurchaseValue and value to the share
-                var buyObject = AllBuyEntries.GetBuyObjectByDateTime(strDateTime);
-                if (buyObject != null)
-                {
-                    Volume -= buyObject.Volume;
-                    PurchaseValue -= buyObject.MarketValueReductionCosts;
-                    BuyMarketValueTotal = AllBuyEntries.BuyMarketValueTotal;
-
-                    // Recalculate buy price average
-                    if (PurchaseValue > 0 && Volume > 0)
-                        AverageBuyPrice = PurchaseValue / Volume;
-                    else
-                        AverageBuyPrice = 0;
-
-#if DEBUG_SHAREOBJECT
-                    Console.WriteLine("Volume: {0}", Volume);
-                    Console.WriteLine("PurchaseValue: {0}", PurchaseValue);
-                    Console.WriteLine("BuyValueTotal: {0}", BuyMarketValueTotal);
-#endif
-                    // Remove buy by date and time
-                    if (!AllBuyEntries.RemoveBuy(strDateTime))
-                        return false;
-                }
-                else
-                    return false;
-
-                return true;
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return false;
-            }
-        }
-
-        #endregion Buy methods
-
-        #region Sale methods
-
-        /// <summary>
-        /// This function adds the sale for the share to the dictionary
-        /// </summary>
-        /// <param name="strDate">Date of the share sale</param>
-        /// <param name="decVolume">Volume of the sale</param>
-        /// <param name="decBuyPrice">Buy price of the share</param>
-        /// <param name="decSalePrice">Sale price of the share</param>
-        /// <param name="decTaxAtSource">Tax at source of the sale</param>
-        /// <param name="decCapitalGainsTax">Capital gains tax of the sale</param>
-        /// <param name="decSolidarityTax">Solidarity tax of the sale</param>
-        /// <param name="decCosts">Costs of the sale</param>
-        /// <param name="strDoc">Document of the sale</param>
-        /// <returns>Flag if the add was successful</returns>
-        public bool AddSale(string strDate, decimal decVolume, decimal decBuyPrice, decimal decSalePrice, decimal decTaxAtSource, decimal decCapitalGainsTax,
-             decimal decSolidarityTax, decimal decCosts, string strDoc = "")
-        {
-            try
-            {
-#if DEBUG_SHAREOBJECT
-                Console.WriteLine("");
-                Console.WriteLine("AddSale()");
-                Console.WriteLine("strDateTime: {0}", strDateTime);
-                Console.WriteLine("decVolume: {0}", decVolume);
-                Console.WriteLine("decBuyPrice: {0}", decBuyPrice);
-                Console.WriteLine("decSalePrice: {0}", decSalePrice);
-                Console.WriteLine("decTaxAtSource: {0}", decTaxAtSource);
-                Console.WriteLine("decCapitalGains: {0}", decCapitalGains);
-                Console.WriteLine("decSolidarityTax: {0}", decSolidarityTax);
-                Console.WriteLine("decCosts: {0}", decCosts);
-                Console.WriteLine("strDoc: {0}", strDoc);
-#endif
-                if (!AllSaleEntries.AddSale(strDate, decVolume, decBuyPrice, decSalePrice, decTaxAtSource, decCapitalGainsTax,
-                                            decSolidarityTax, decCosts, strDoc))
-                    return false;
-
-                // Set new volume
-                if (Volume == decimal.MinValue / 2)
-                    Volume = 0;
-                Volume -= decVolume;
-
-                // Recalculate PurchaseValue and SalePurchaseValueTotal
-                if (SalePurchaseValueTotal == decimal.MinValue / 2)
-                    SalePurchaseValueTotal = 0;
-
-                if (PurchaseValue == decimal.MinValue / 2)
-                    PurchaseValue = 0;
-                else
-                {
-                    if (Volume > 0 && PurchaseValue > 0)
-                    {
-                        SalePurchaseValueTotal += AverageBuyPrice * decVolume;
-                        PurchaseValue -= AverageBuyPrice * decVolume;
-                    }
-                    else
-                    {
-                        SalePurchaseValueTotal += PurchaseValue;
-                        PurchaseValue = 0;
-                    }
-                }
-
-#if DEBUG_SHAREOBJECT
-                Console.WriteLine(@"Volume: {0}", Volume);
-                Console.WriteLine(@"PurchaseValue: {0}", PurchaseValueAsStr);
-                Console.WriteLine(@"SalePurchaseValueTotal: {0}", SalePurchaseValueTotalAsStr);
-#endif
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// This function removes a sale for the share from the dictionary
-        /// </summary>
-        /// <param name="strDateTime">Date and time of the sale remove</param>
-        /// <returns>Flag if the remove was successful</returns>
-        public bool RemoveSale(string strDateTime)
-        {
-            try
-            {
-#if DEBUG_SHAREOBJECT
-                Console.WriteLine("");
-                Console.WriteLine("RemoveSale()");
-                Console.WriteLine("strDateTime: {0}", strDateTime);
-#endif
-                // Get SaleObject by date and time and add the sale deposit and value to the share
-                var saleObject = AllSaleEntries.GetSaleObjectByDateTime(strDateTime);
-                if (saleObject != null)
-                {
-                    Volume += saleObject.Volume;
-                    PurchaseValue += saleObject.PurchaseValue;
-                    SalePurchaseValueTotal -= saleObject.PurchaseValue;
-
-
-                    // Recalculate buy price average
-                    if (PurchaseValue > 0 && Volume > 0)
-                        AverageBuyPrice = PurchaseValue / Volume;
-                    else
-                        AverageBuyPrice = 0;
-
-                    // Remove sale by date and time
-                    if (!AllSaleEntries.RemoveSale(strDateTime))
-                    return false;
-
-#if DEBUG_SHAREOBJECT
-                Console.WriteLine("Volume: {0}", Volume);
-                Console.WriteLine("PurchaseValue: {0}", PurchaseValue);
-                Console.WriteLine("SalePurchaseValueTotal: {0}", SalePurchaseValueTotalAsStr);
-#endif
-                }
-                else
-                    return false;
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        #endregion Sale methods
-
         #region Performance methods
 
         /// <summary>
@@ -1102,11 +830,11 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
 #if DEBUG_SHAREOBJECT
             Console.WriteLine("");
-            Console.WriteLine("CalculateDayBeforeProfitLoss()");
-            Console.WriteLine("CurPrice: {0}", CurPrice);
-            Console.WriteLine("PrevDayPrice: {0}", PrevDayPrice);
-            Console.WriteLine("Volume: {0}", Volume);
-            Console.WriteLine("PrevDayProfitLoss: {0}", PrevDayProfitLoss);
+            Console.WriteLine(@"CalculateDayBeforeProfitLoss()");
+            Console.WriteLine(@"CurPrice: {0}", CurPrice);
+            Console.WriteLine(@"PrevDayPrice: {0}", PrevDayPrice);
+            Console.WriteLine(@"Volume: {0}", Volume);
+            Console.WriteLine(@"PrevDayProfitLoss: {0}", PrevDayProfitLoss);
             Console.WriteLine("");
 #endif
         }
@@ -1140,11 +868,11 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
 #if DEBUG_SHAREOBJECT
             Console.WriteLine("");
-            Console.WriteLine("CalculateDayBeforePerformance()");
-            Console.WriteLine("CurPrice: {0}", CurPrice);
-            Console.WriteLine("PrevDayPrice: {0}", PrevDayPrice);
-            Console.WriteLine("PrevDayPerformance: {0}", PrevDayPerformance);
-            Console.WriteLine("PrevDayDifference: {0}", PrevDayDifference);
+            Console.WriteLine(@"CalculateDayBeforePerformance()");
+            Console.WriteLine(@"CurPrice: {0}", CurPrice);
+            Console.WriteLine(@"PrevDayPrice: {0}", PrevDayPrice);
+            Console.WriteLine(@"PrevDayPerformance: {0}", PrevDayPerformance);
+            Console.WriteLine(@"PrevDayDifference: {0}", PrevDayDifference);
 #endif
         }
 

@@ -53,12 +53,12 @@ namespace SharePortfolioManager
                 SelectedDataGridViewShareIndex = 0;
 
                 // Start refresh
-                RefreshAll(sender, e);
+                RefreshAll();
             }
             else
             {
                 // Cancel update process
-                CancelWebParser(sender, e);
+                CancelWebParser();
             }
         }
 
@@ -72,20 +72,16 @@ namespace SharePortfolioManager
         {
             if (btnRefresh.Text == Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Refresh", LanguageName))
             {
-
                 // Set row index
-                if (MarketValueOverviewTabSelected)
-                    SelectedDataGridViewShareIndex = dgvPortfolioMarketValue.SelectedRows[0].Index;
-                else
-                    SelectedDataGridViewShareIndex = dgvPortfolioFinalValue.SelectedRows[0].Index;
+                SelectedDataGridViewShareIndex = MarketValueOverviewTabSelected ? dgvPortfolioMarketValue.SelectedRows[0].Index : dgvPortfolioFinalValue.SelectedRows[0].Index;
 
                 // Refresh share
-                Refresh(sender, e);
+                Refresh();
             }
             else
             {
                 // Cancel update process
-                CancelWebParser(sender, e);
+                CancelWebParser();
             }
         }
 
@@ -98,29 +94,47 @@ namespace SharePortfolioManager
         {
             try
             {
-                List<string> additionalButtons = new List<string>();
+                var additionalButtons = new List<string>();
 
                 // Create add share form
                 IModelShareAdd model = new ModelShareAdd();
                 IViewShareAdd view = new ViewShareAdd(this, Logger, Language, LanguageName, WebSiteRegexList);
-                PresenterShareAdd presenterBuyEdit = new PresenterShareAdd(view, model);
+                var presenterBuyEdit = new PresenterShareAdd(view, model);
 
-                if (view.ShowDialog() == DialogResult.OK)
+                if (view.ShowDialog() != DialogResult.OK) return;
+
+                // Set add flag to true for selecting the new added share in the DataGridView portfolio
+                AddFlagMarketValue = true;
+                AddFlagFinalValue = true;
+
+                // Save the share values only of the final value object to the XML (The market value object contains the same values)
+                if (ShareObjectFinalValue.SaveShareObject(ShareObjectFinalValue, ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio, _portfolioFileName, out var exception))
                 {
-                    // Set add flag to true for selecting the new added share in the DataGridView portfolio
-                    AddFlagMarketValue = true;
-                    AddFlagFinalValue = true;
+                    // Add status message
+                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                        Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/AddSaveSuccessful", LanguageName),
+                        Language, LanguageName,
+                        Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
 
-                    // Save the share values only of the final value object to the XML (The market value object contains the same values)
-                    Exception exception = null;
-                    if (ShareObjectFinalValue.SaveShareObject(ShareObjectFinalValue, ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio, PortfolioFileName, out exception))
+                    // Enable controls
+                    additionalButtons.Add("btnRefreshAll");
+                    additionalButtons.Add("btnRefresh");
+                    additionalButtons.Add("btnEdit");
+                    additionalButtons.Add("btnDelete");
+                    additionalButtons.Add("btnClearLogger");
+                    Helper.EnableDisableControls(true, this, additionalButtons);
+                }
+                else
+                {
+                    // Add status message
+                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                        Language.GetLanguageTextByXPath(@"/MainForm/Errors/AddSaveFailed", LanguageName),
+                        Language, LanguageName,
+                        Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
+
+                    // Enable buttons only if a share exists in the DataGridView
+                    if (dgvPortfolioFinalValue.RowCount > 0 && dgvPortfolioMarketValue.RowCount > 0)
                     {
-                        // Add status message
-                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                           Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/AddSaveSuccessful", LanguageName),
-                           Language, LanguageName,
-                           Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
-
                         // Enable controls
                         additionalButtons.Add("btnRefreshAll");
                         additionalButtons.Add("btnRefresh");
@@ -129,50 +143,31 @@ namespace SharePortfolioManager
                         additionalButtons.Add("btnClearLogger");
                         Helper.EnableDisableControls(true, this, additionalButtons);
                     }
-                    else
-                    {
-                        // Add status message
-                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                           Language.GetLanguageTextByXPath(@"/MainForm/Errors/AddSaveFailed", LanguageName),
-                           Language, LanguageName,
-                           Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
-
-                        // Enable buttons only if a share exists in the DataGridView
-                        if (dgvPortfolioFinalValue.RowCount > 0 && dgvPortfolioMarketValue.RowCount > 0)
-                        {
-                            // Enable controls
-                            additionalButtons.Add("btnRefreshAll");
-                            additionalButtons.Add("btnRefresh");
-                            additionalButtons.Add("btnEdit");
-                            additionalButtons.Add("btnDelete");
-                            additionalButtons.Add("btnClearLogger");
-                            Helper.EnableDisableControls(true, this, additionalButtons);
-                        }
-                    }
-
-                    // Check if the DataBinding is already done and
-                    // than set the new share to the DataGridview
-                    if (DgvPortfolioBindingSourceFinalValue.DataSource == null && dgvPortfolioFinalValue.DataSource == null)
-                    {
-                        DgvPortfolioBindingSourceFinalValue.DataSource = ShareObjectListFinalValue;
-                        dgvPortfolioFinalValue.DataSource = DgvPortfolioBindingSourceFinalValue;
-                    }
-                    else
-                        DgvPortfolioBindingSourceFinalValue.ResetBindings(false);
-
-                    if (DgvPortfolioBindingSourceMarketValue.DataSource == null && dgvPortfolioMarketValue.DataSource == null)
-                    {
-                        DgvPortfolioBindingSourceMarketValue.DataSource = ShareObjectListMarketValue;
-                        dgvPortfolioMarketValue.DataSource = DgvPortfolioBindingSourceMarketValue;
-                    }
-                    else
-                        DgvPortfolioBindingSourceMarketValue.ResetBindings(false);
                 }
+
+                // Check if the DataBinding is already done and
+                // than set the new share to the DataGridview
+                if (DgvPortfolioBindingSourceFinalValue.DataSource == null && dgvPortfolioFinalValue.DataSource == null)
+                {
+                    DgvPortfolioBindingSourceFinalValue.DataSource = ShareObjectListFinalValue;
+                    dgvPortfolioFinalValue.DataSource = DgvPortfolioBindingSourceFinalValue;
+                }
+                else
+                    DgvPortfolioBindingSourceFinalValue.ResetBindings(false);
+
+                if (DgvPortfolioBindingSourceMarketValue.DataSource == null && dgvPortfolioMarketValue.DataSource == null)
+                {
+                    DgvPortfolioBindingSourceMarketValue.DataSource = ShareObjectListMarketValue;
+                    dgvPortfolioMarketValue.DataSource = DgvPortfolioBindingSourceMarketValue;
+                }
+                else
+                    DgvPortfolioBindingSourceMarketValue.ResetBindings(false);
             }
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show("btnAdd_Click()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                var message = $"btnAdd_Click()\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
@@ -192,15 +187,15 @@ namespace SharePortfolioManager
         {
             try
             {
-                string WKN = @"";
+                var wkn = @"";
 
                 // Check if a share is selected
-                if (MarketValueOverviewTabSelected == true &&
+                if (MarketValueOverviewTabSelected &&
                     dgvPortfolioMarketValue.SelectedCells[0].Value != null &&
                     dgvPortfolioMarketValue.SelectedCells[0].Value.ToString() != ""
                    )
                 {
-                    WKN = dgvPortfolioMarketValue.SelectedCells[0].Value.ToString();
+                    wkn = dgvPortfolioMarketValue.SelectedCells[0].Value.ToString();
                     SelectedDataGridViewShareIndex = dgvPortfolioMarketValue.SelectedRows[0].Index;
                 }
 
@@ -209,68 +204,65 @@ namespace SharePortfolioManager
                     dgvPortfolioFinalValue.SelectedCells[0].Value.ToString() != ""
                    )
                 {
-                    WKN = dgvPortfolioFinalValue.SelectedCells[0].Value.ToString();
+                    wkn = dgvPortfolioFinalValue.SelectedCells[0].Value.ToString();
                     SelectedDataGridViewShareIndex = dgvPortfolioFinalValue.SelectedRows[0].Index;
                 }
 
-                if (WKN != @"")
+                if (wkn != @"")
                 {
-                    var editShare = new FrmShareEdit(this, Logger, Language, WKN, LanguageName);
+                    var editShare = new FrmShareEdit(this, Logger, Language, wkn, LanguageName);
 
-                    if (editShare.ShowDialog() == DialogResult.OK)
+                    if (editShare.ShowDialog() != DialogResult.OK) return;
+
+                    // Set delete flag
+                    EditFlagMarketValue = true;
+
+                    // Save the share values to the XML
+                    // Get WKN of the selected object
+                    var tempShareObjectFinalValue = ShareObjectListFinalValue[SelectedDataGridViewShareIndex];
+
+                    if (ShareObjectFinalValue.SaveShareObject(ShareObjectListFinalValue[SelectedDataGridViewShareIndex], ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio, _portfolioFileName, out var exception))
                     {
-                        // Set delete flag
-                        EditFlagMarketValue = true;
+                        // Sort portfolio list in order of the share names
+                        ShareObjectListFinalValue.Sort(new ShareObjectListComparer());
 
-                        // Save the share values to the XML
-                        Exception exception = null;
+                        // Select row of the new list index
+                        var searchObject = new ShareObjectSearch(tempShareObjectFinalValue.Wkn);
+                        SelectedDataGridViewShareIndex = ShareObjectListFinalValue.FindIndex(searchObject.Compare);
 
-                        // Get WKN of the selected object
-                        ShareObjectFinalValue tempShareObjectFinalValue = ShareObjectListFinalValue[SelectedDataGridViewShareIndex];
+                        // Add status message
+                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                            Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/EditSaveSuccessful", LanguageName),
+                            Language, LanguageName,
+                            Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
 
-                        if (ShareObjectFinalValue.SaveShareObject(ShareObjectListFinalValue[SelectedDataGridViewShareIndex], ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio, PortfolioFileName, out exception))
+                        // Reset / refresh DataGridView portfolio BindingSource
+                        DgvPortfolioBindingSourceMarketValue.ResetBindings(false);
+                        DgvPortfolioBindingSourceFinalValue.ResetBindings(false);
+
+#if DEBUG
+                        Console.WriteLine(@"Index: {0}", SelectedDataGridViewShareIndex);
+#endif
+                        if (SelectedDataGridViewShareIndex > 0)
                         {
-                            // Sort portfolio list in order of the share names
-                            ShareObjectListFinalValue.Sort(new ShareObjectListComparer());
-
-                            // Select row of the new list index
-                            ShareObjectSearch searchObject = new ShareObjectSearch(tempShareObjectFinalValue.Wkn);
-                            SelectedDataGridViewShareIndex = ShareObjectListFinalValue.FindIndex(searchObject.Compare);
-
-                            // Add status message
-                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                               Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/EditSaveSuccessful", LanguageName),
-                               Language, LanguageName,
-                               Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
-
-                            // Reset / refresh DataGridView portfolio BindingSource
-                            DgvPortfolioBindingSourceMarketValue.ResetBindings(false);
-                            DgvPortfolioBindingSourceFinalValue.ResetBindings(false);
-
-                            Console.WriteLine("Index: {0}", SelectedDataGridViewShareIndex);
-
-                            if (SelectedDataGridViewShareIndex > 0)
-                            {
-                                if (MarketValueOverviewTabSelected)
-                                    dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
-                                else
-                                    dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
-                            }
-
-                            // Scroll to the selected row
                             if (MarketValueOverviewTabSelected)
-                                Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
+                                dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
                             else
-                                Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
+                                dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
                         }
-                        else
-                        {
-                            // Add status message
-                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                               Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
-                               Language, LanguageName,
-                               Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
-                        }
+
+                        // Scroll to the selected row
+                        Helper.ScrollDgvToIndex(
+                            MarketValueOverviewTabSelected ? dgvPortfolioMarketValue : dgvPortfolioFinalValue,
+                            SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
+                    }
+                    else
+                    {
+                        // Add status message
+                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
+                            Language, LanguageName,
+                            Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
                     }
                 }
                 else
@@ -285,7 +277,8 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show("btnEdit_Click()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                var message = $"btnEdit_Click()\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
@@ -303,145 +296,147 @@ namespace SharePortfolioManager
         /// <param name="e">EventArgs</param>
         private void OnBtnDelete_Click(object sender, EventArgs e)
         {
-            string WKN = @"";
+            var wkn = @"";
 
             // Check if a share is selected
             if (MarketValueOverviewTabSelected == false &&
                 dgvPortfolioFinalValue.SelectedCells[0].Value != null &&
                 dgvPortfolioFinalValue.SelectedCells[0].Value.ToString() != ""
                )
-                WKN = dgvPortfolioFinalValue.SelectedCells[0].Value.ToString();
+                wkn = dgvPortfolioFinalValue.SelectedCells[0].Value.ToString();
 
-            if (MarketValueOverviewTabSelected == true &&
+            if (MarketValueOverviewTabSelected &&
                 dgvPortfolioMarketValue.SelectedCells[0].Value != null &&
                 dgvPortfolioMarketValue.SelectedCells[0].Value.ToString() != ""
                )
-                WKN = dgvPortfolioMarketValue.SelectedCells[0].Value.ToString();
+                wkn = dgvPortfolioMarketValue.SelectedCells[0].Value.ToString();
 
-            if (WKN != @"")
+            if (wkn != @"")
             {
                 try
                 {
                     var ownDeleteMessageBox = new OwnMessageBox(Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Info", LanguageName), Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/ShareDelete", LanguageName), Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Yes", LanguageName), Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/No", LanguageName));
-                    if (ownDeleteMessageBox.ShowDialog() == DialogResult.OK)
+                    if (ownDeleteMessageBox.ShowDialog() != DialogResult.OK) return;
+
+                    // Set delete flag
+                    DeleteFlagMarketValue = true;
+                    DeleteFlagFinalValue = true;
+
+                    #region Delete from XML file
+
+                    // Delete the share from the portfolio XML file
+                    var nodeDelete = Portfolio.SelectSingleNode($"//Share[@WKN='{wkn}']");
+                    nodeDelete?.ParentNode?.RemoveChild(nodeDelete);
+
+                    // Close reader for saving
+                    ReaderPortfolio.Close();
+                    // Save settings
+                    Portfolio.Save(_portfolioFileName);
+                    // Create a new reader
+                    ReaderPortfolio = XmlReader.Create(_portfolioFileName, ReaderSettingsPortfolio);
+                    Portfolio.Load(_portfolioFileName);
+
+                    #endregion Delete from XML file
+
+                    #region Delete from share lists
+                        
+                    // Find index of the share which should be deleted
+                    var indexRemove = -1;
+                    if (MarketValueOverviewTabSelected)
                     {
-                        // Set delete flag
-                        DeleteFlagMarketValue = true;
-                        DeleteFlagFinalValue = true;
-
-                        #region Delete from XML file
-
-                        // Delete the share from the portfolio XML file
-                        XmlNode nodeDelete = Portfolio.SelectSingleNode(string.Format("//Share[@WKN='{0}']", WKN));
-                        nodeDelete.ParentNode.RemoveChild(nodeDelete);
-                        
-                        // Close reader for saving
-                        ReaderPortfolio.Close();
-                        // Save settings
-                        Portfolio.Save(PortfolioFileName);
-                        // Create a new reader
-                        ReaderPortfolio = XmlReader.Create(PortfolioFileName, ReaderSettingsPortfolio);
-                        Portfolio.Load(PortfolioFileName);
-
-                        #endregion Delete from XML file
-
-                        #region Delete from share lists
-                        
-                        // Find index of the share which should be deleted
-                        var indexRemove = -1;
-                        if (MarketValueOverviewTabSelected)
-                        {
-                            if (ShareObjectMarketValue != null)
-                                indexRemove = ShareObjectListMarketValue.IndexOf(ShareObjectMarketValue);
-                        }
-                        else
-                        {
-                            if (ShareObjectFinalValue != null)
-                                indexRemove = ShareObjectListFinalValue.IndexOf(ShareObjectFinalValue);
-                        }
-
-                        // Remove share from the share list
-                        if (indexRemove > -1)
-                        {
-                            ShareObjectListMarketValue[indexRemove].Dispose();
-                            ShareObjectListMarketValue.RemoveAt(indexRemove);
-                            ShareObjectMarketValue = null;
-
-                            ShareObjectListFinalValue[indexRemove].Dispose();
-                            ShareObjectListFinalValue.RemoveAt(indexRemove);
-                            ShareObjectFinalValue = null;
-
-                            // Add status message
-                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                               Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/DeleteSuccessful", LanguageName),
-                               Language, LanguageName,
-                               Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
-                        }
-                        else
-                        {
-                            // Add status message
-                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(@"/MainForm/Errors/DeleteFailed", LanguageName),
-                                Language, LanguageName,
-                                Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
-                        }
-
-                        #endregion Delete from share lists
-
-                        // Check if other shares exists
-                        if (ShareObjectListFinalValue.Count == 0 || ShareObjectListMarketValue.Count == 0)
-                        {
-                            grpBoxShareDetails.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/Caption", LanguageName);
-                            lblDetailsFinalValueDateValue.Text = @"";
-                            lblDetailsFinalValueVolumeValue.Text = @"";
-                            lblDetailsFinalValueDividendValue.Text = @"";
-                            lblDetailsFinalValueCostsValue.Text = @"";
-                            lblDetailsFinalValueCurPriceValue.Text = @"";
-                            lblDetailsFinalValueDiffPerformancePrevValue.Text = @"";
-                            lblDetailsFinalValueDiffSumPrevValue.Text = @"";
-                            lblDetailsFinalValuePrevPriceValue.Text = @"";
-                            lblDetailsFinalValuePurchaseValue.Text = @"";
-                            lblDetailsFinalValueTotalProfitValue.Text = @"";
-                            lblDetailsFinalValueTotalPerformanceValue.Text = @"";
-                            lblDetailsFinalValueTotalSumValue.Text = @"";
-
-                            lblDetailsMarketValueDateValue.Text = @"";
-                            lblDetailsMarketValueVolumeValue.Text = @"";
-                            lblDetailsMarketValueDividendValue.Text = @"";
-                            lblDetailsMarketValueCostValue.Text = @"";
-                            lblDetailsMarketValueCurPriceValue.Text = @"";
-                            lblDetailsMarketValueDiffPerformancePrevValue.Text = @"";
-                            lblDetailsMarketValueDiffSumPrevValue.Text = @"";
-                            lblDetailsMarketValuePrevPriceValue.Text = @"";
-                            lblDetailsMarketValuePurchaseValue.Text = @"";
-                            lblDetailsMarketValueTotalProfitValue.Text = @"";
-                            lblDetailsMarketValueTotalPerformanceValue.Text = @"";
-                            lblDetailsMarketValueTotalSumValue.Text = @"";
-
-                            // Reset share object portfolio values
-                            ShareObjectFinalValue.PortfolioValuesReset();
-                            ShareObjectMarketValue.PortfolioValuesReset();
-
-                            // Disable buttons
-                            List<string> controlList = new List<string>();
-                            controlList.Add("btnRefreshAll");
-                            controlList.Add("btnRefresh");
-                            controlList.Add("btnEdit");
-                            controlList.Add("btnDelete");
-                            controlList.Add("btnClearLogger");
-                            controlList.Add("tabCtrlDetails");
-                            Helper.EnableDisableControls(false, this, controlList);
-                        }
-
-                        // Update DataGridView
-                        DgvPortfolioBindingSourceMarketValue.ResetBindings(false);
-                        DgvPortfolioBindingSourceFinalValue.ResetBindings(false);
+                        if (ShareObjectMarketValue != null)
+                            indexRemove = ShareObjectListMarketValue.IndexOf(ShareObjectMarketValue);
                     }
+                    else
+                    {
+                        if (ShareObjectFinalValue != null)
+                            indexRemove = ShareObjectListFinalValue.IndexOf(ShareObjectFinalValue);
+                    }
+
+                    // Remove share from the share list
+                    if (indexRemove > -1)
+                    {
+                        ShareObjectListMarketValue[indexRemove].Dispose();
+                        ShareObjectListMarketValue.RemoveAt(indexRemove);
+                        ShareObjectMarketValue = null;
+
+                        ShareObjectListFinalValue[indexRemove].Dispose();
+                        ShareObjectListFinalValue.RemoveAt(indexRemove);
+                        ShareObjectFinalValue = null;
+
+                        // Add status message
+                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                            Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/DeleteSuccessful", LanguageName),
+                            Language, LanguageName,
+                            Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
+                    }
+                    else
+                    {
+                        // Add status message
+                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/DeleteFailed", LanguageName),
+                            Language, LanguageName,
+                            Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
+                    }
+
+                    #endregion Delete from share lists
+
+                    // Check if other shares exists
+                    if (ShareObjectListFinalValue.Count == 0 || ShareObjectListMarketValue.Count == 0)
+                    {
+                        grpBoxShareDetails.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/Caption", LanguageName);
+                        lblDetailsFinalValueDateValue.Text = @"";
+                        lblDetailsFinalValueVolumeValue.Text = @"";
+                        lblDetailsFinalValueDividendValue.Text = @"";
+                        lblDetailsFinalValueCostsValue.Text = @"";
+                        lblDetailsFinalValueCurPriceValue.Text = @"";
+                        lblDetailsFinalValueDiffPerformancePrevValue.Text = @"";
+                        lblDetailsFinalValueDiffSumPrevValue.Text = @"";
+                        lblDetailsFinalValuePrevPriceValue.Text = @"";
+                        lblDetailsFinalValuePurchaseValue.Text = @"";
+                        lblDetailsFinalValueTotalProfitValue.Text = @"";
+                        lblDetailsFinalValueTotalPerformanceValue.Text = @"";
+                        lblDetailsFinalValueTotalSumValue.Text = @"";
+
+                        lblDetailsMarketValueDateValue.Text = @"";
+                        lblDetailsMarketValueVolumeValue.Text = @"";
+                        lblDetailsMarketValueDividendValue.Text = @"";
+                        lblDetailsMarketValueCostValue.Text = @"";
+                        lblDetailsMarketValueCurPriceValue.Text = @"";
+                        lblDetailsMarketValueDiffPerformancePrevValue.Text = @"";
+                        lblDetailsMarketValueDiffSumPrevValue.Text = @"";
+                        lblDetailsMarketValuePrevPriceValue.Text = @"";
+                        lblDetailsMarketValuePurchaseValue.Text = @"";
+                        lblDetailsMarketValueTotalProfitValue.Text = @"";
+                        lblDetailsMarketValueTotalPerformanceValue.Text = @"";
+                        lblDetailsMarketValueTotalSumValue.Text = @"";
+
+                        // Reset share object portfolio values
+                        ShareObjectFinalValue.PortfolioValuesReset();
+                        ShareObjectMarketValue.PortfolioValuesReset();
+
+                        // Disable buttons
+                        var controlList = new List<string>
+                        {
+                            "btnRefreshAll",
+                            "btnRefresh",
+                            "btnEdit",
+                            "btnDelete",
+                            "btnClearLogger",
+                            "tabCtrlDetails"
+                        };
+                        Helper.EnableDisableControls(false, this, controlList);
+                    }
+
+                    // Update DataGridView
+                    DgvPortfolioBindingSourceMarketValue.ResetBindings(false);
+                    DgvPortfolioBindingSourceFinalValue.ResetBindings(false);
                 }
                 catch (Exception ex)
                 {
 #if DEBUG
-                    MessageBox.Show("btnDelete_Click()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                    var message = $"btnDelete_Click()\n\n{ex.Message}";
+                    MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
 #endif
                     // Add status message

@@ -134,7 +134,7 @@ namespace SharePortfolioManager
 
                 #region GUI log entries
 
-                var iIndexGui = cbxGUIEntriesList.FindStringExact(ParentWindow.LoggerGUIEntriesSize.ToString());
+                var iIndexGui = cbxGUIEntriesList.FindStringExact(ParentWindow.LoggerGuiEntriesSize.ToString());
                 cbxGUIEntriesList.SelectedIndex = iIndexGui;
 
                 #endregion GUI log entries
@@ -381,7 +381,7 @@ namespace SharePortfolioManager
                     {
                         int.TryParse(cbxGUIEntriesList.SelectedItem.ToString(), out var iGuiEntriesSize);
                         // Set GUI entries size value to FrmMain member variable
-                        ParentWindow.LoggerGUIEntriesSize = iGuiEntriesSize;
+                        ParentWindow.LoggerGuiEntriesSize = iGuiEntriesSize;
                         // Set GUI entries size value to the XML
                         nodeLogGuiEntriesSize.InnerXml = iGuiEntriesSize.ToString();
                     }

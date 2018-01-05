@@ -47,9 +47,7 @@ namespace SharePortfolioManager
         /// <summary>
         /// This function starts the update all shares process
         /// </summary>
-        /// <param name="sender">Button</param>
-        /// <param name="e">EventArgs</param>
-        private void RefreshAll(object sender, EventArgs e)
+        private void RefreshAll()
         {
             try
             {
@@ -123,7 +121,8 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show("RefreshAll()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
@@ -134,12 +133,11 @@ namespace SharePortfolioManager
             }
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// This function starts the update single share process
         /// </summary>
-        /// <param name="sender">Button</param>
-        /// <param name="e">EventArgs</param>
-        private void Refresh(object sender, EventArgs e)
+        public override void Refresh()
         {
             try
             {
@@ -148,7 +146,7 @@ namespace SharePortfolioManager
                 {
                     // Check if a share is selected
                     if (MarketValueOverviewTabSelected == false && dgvPortfolioFinalValue.SelectedCells.Count != 0 && dgvPortfolioFinalValue.SelectedCells[0].Value.ToString() != "" ||
-                        MarketValueOverviewTabSelected == true && dgvPortfolioMarketValue.SelectedCells.Count != 0 && dgvPortfolioMarketValue.SelectedCells[0].Value.ToString() != ""
+                        MarketValueOverviewTabSelected && dgvPortfolioMarketValue.SelectedCells.Count != 0 && dgvPortfolioMarketValue.SelectedCells[0].Value.ToString() != ""
                        )
                     {
                         // Reset flag for updating all shares
@@ -208,7 +206,8 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                MessageBox.Show("Refresh()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
@@ -222,9 +221,7 @@ namespace SharePortfolioManager
         /// <summary>
         /// This function stops the update process
         /// </summary>
-        /// <param name="sender">Button</param>
-        /// <param name="e">EventArgs</param>
-        private void CancelWebParser(object sender, EventArgs e)
+        private void CancelWebParser()
         {
             if (WebParser != null)
                 WebParser.CancelThread = true;
@@ -245,12 +242,7 @@ namespace SharePortfolioManager
             {
                 try
                 {
-                    string ShareName = @"";
-
-                    if (MarketValueOverviewTabSelected)
-                        ShareName = ShareObjectMarketValue.Name;
-                    else
-                        ShareName = ShareObjectFinalValue.Name;
+                    var shareName = MarketValueOverviewTabSelected ? ShareObjectMarketValue.Name : ShareObjectFinalValue.Name;
 
                     switch (e.WebParserInfoState.LastErrorCode)
                     {
@@ -259,7 +251,7 @@ namespace SharePortfolioManager
                                 // Add status message
                                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
                                     Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/Finish1", LanguageName) +
-                                    ShareName +
+                                    shareName +
                                     Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/Finish2", LanguageName),
                                     Language, LanguageName,
                                     Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.WebParser);
@@ -308,8 +300,7 @@ namespace SharePortfolioManager
                                     }
 
                                     // Save the share values to the XML
-                                    Exception exception = null;
-                                    if (!ShareObjectFinalValue.SaveShareObject(ShareObjectFinalValue, ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio, PortfolioFileName, out exception))
+                                    if (!ShareObjectFinalValue.SaveShareObject(ShareObjectFinalValue, ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio, _portfolioFileName, out var exception))
                                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
                                             exception.Message,
                                             Language, LanguageName,
@@ -339,7 +330,7 @@ namespace SharePortfolioManager
                                     AddFlagFinalValue = false;
                                 }
 
-                                if (UpdateAllFlag == true)
+                                if (UpdateAllFlag)
                                 {
                                     // Check if another share object should be updated
                                     if (SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1)
@@ -362,9 +353,12 @@ namespace SharePortfolioManager
                                             Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
 
                                             // Start the asynchronous parsing operation.
-                                            WebParser.WebSite = ShareObjectMarketValue.WebSite;
-                                            WebParser.RegexList = ShareObjectMarketValue.RegexList;
-                                            WebParser.EncodingType = ShareObjectMarketValue.WebSiteEncodingType;
+                                            if (ShareObjectMarketValue != null)
+                                            {
+                                                WebParser.WebSite = ShareObjectMarketValue.WebSite;
+                                                WebParser.RegexList = ShareObjectMarketValue.RegexList;
+                                                WebParser.EncodingType = ShareObjectMarketValue.WebSiteEncodingType;
+                                            }
                                             WebParser.StartParsing();
                                         }
                                         else
@@ -379,9 +373,12 @@ namespace SharePortfolioManager
                                             Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
 
                                             // Start the asynchronous parsing operation.
-                                            WebParser.WebSite = ShareObjectFinalValue.WebSite;
-                                            WebParser.RegexList = ShareObjectFinalValue.RegexList;
-                                            WebParser.EncodingType = ShareObjectFinalValue.WebSiteEncodingType;
+                                            if (ShareObjectFinalValue != null)
+                                            {
+                                                WebParser.WebSite = ShareObjectFinalValue.WebSite;
+                                                WebParser.RegexList = ShareObjectFinalValue.RegexList;
+                                                WebParser.EncodingType = ShareObjectFinalValue.WebSiteEncodingType;
+                                            }
                                             WebParser.StartParsing();
                                         }
                                     }
@@ -482,7 +479,7 @@ namespace SharePortfolioManager
                                 // Add status message
                                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
                                     Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/Start1", LanguageName) +
-                                    ShareName +
+                                    shareName +
                                     Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/Start2", LanguageName),
                                     Language, LanguageName,
                                     Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.WebParser);
@@ -565,7 +562,7 @@ namespace SharePortfolioManager
                                 // Add status message
                                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
                                     Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/CancelThread1", LanguageName) +
-                                    ShareName +
+                                    shareName +
                                     Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/CancelThread2", LanguageName),
                                     Language, LanguageName,
                                     Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.WebParser);
@@ -617,7 +614,8 @@ namespace SharePortfolioManager
                 catch (Exception ex)
                 {
 #if DEBUG
-                    MessageBox.Show("webParser_UpdateGUI()\n\n" + ex.Message, @"Error", MessageBoxButtons.OK,
+                    var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                    MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
 #endif
                     // Add status message
