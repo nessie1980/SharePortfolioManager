@@ -339,7 +339,7 @@
 			<!-- Error messages -->
 			<Errors>
 				<FileDoesNotExists1 text="File '" />
-				<FileDoesNotExists2 text="' does not exists anymore! Create a new portfolio." />
+				<FileDoesNotExists2 text="' does not exists any more! Create a new portfolio." />
 				<CouldNotLoadFile1 text="Could not load file '" />
 				<CouldNotLoadFile2 text="'!" />
 				<XMLSyntaxFailure1 text="A XML syntax error exists in the file '" />
@@ -364,6 +364,7 @@
 				<SaveSettingsFailed text="Settings save failed!" />
 				<SelectionChangeFailed text="The selection change failed!" />
 				<ChangeLanguageFailed text="Changing the language failed!" />
+				<MainFormInitFailed text="Main from initialization failed!" />
 			</Errors>
 		</MainForm>	
 
@@ -1399,6 +1400,7 @@
 				<SaveSettingsFailed text="Speichern der Einstellungen fehlgeschalgen!" />
 				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
 				<ChangeLanguageFailed text="Ändern der Sprache fehlgeschlagen!" />
+				<MainFormInitFailed text="MainForm- Initialisierung fehlgeschlagen!" />
 			</Errors>
 		</MainForm>	
 

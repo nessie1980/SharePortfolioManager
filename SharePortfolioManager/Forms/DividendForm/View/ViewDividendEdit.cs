@@ -976,10 +976,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 #if DEBUG_DIVIDEND || DEBUG
                 var message = $"ShareDividendEdit_Load()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-#if DEBUG
-                var message = $"ShareDividendEdit_Load()\n\n{ex.Message}";
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
