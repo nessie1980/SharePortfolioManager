@@ -29,6 +29,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Xml;
 using SharePortfolioManager.Classes.ShareObjects;
+using SharePortfolioManager.Classes.ShareObjects;
 using SharePortfolioManager.Properties;
 
 namespace SharePortfolioManager

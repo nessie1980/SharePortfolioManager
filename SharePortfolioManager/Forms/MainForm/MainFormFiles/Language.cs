@@ -27,6 +27,7 @@ using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.ShareObjects;
+using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager
 {
