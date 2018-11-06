@@ -21,47 +21,47 @@
 //SOFTWARE.
 
 using SharePortfolioManager.Classes;
-using SharePortfolioManager.Forms.CostsForm.View;
+using SharePortfolioManager.Forms.BrokerageForm.View;
 using System.Collections.Generic;
-using System.Globalization;
 using SharePortfolioManager.Classes.ShareObjects;
 
-namespace SharePortfolioManager.Forms.CostsForm.Model
+namespace SharePortfolioManager.Forms.BrokerageForm.Model
 {
     /// <summary>
-    /// Interface of the CostEdit model
+    /// Interface of the BrokerageEdit model
     /// </summary>
-    public interface IModelCostEdit
+    public interface IModelBrokerageEdit
     {
         ShareObjectMarketValue ShareObjectMarketValue { get; set; }
         ShareObjectFinalValue ShareObjectFinalValue { get; set; }
         List<WebSiteRegex> WebSiteRegexList { get; set; }
         bool UpdateView { get; set; }
         bool UpdateViewFormatted { get; set; }
-        bool UpdateCost { get; set; }
-        CostErrorCode ErrorCode { get; set; }
+        bool UpdateBrokerage { get; set; }
+        BrokerageErrorCode ErrorCode { get; set; }
+        string SelectedGuid { get; set; }
         string SelectedDate { get; set; }
         bool PartOfABuy { get; set; }
         bool PartOfASale { get; set; }
         string Date { get; set; }
         string Time { get; set; }
-        string Costs { get; set; }
-        decimal CostsDec { get; set; }
+        string Brokerage { get; set; }
+        decimal BrokerageDec { get; set; }
         string Document { get; set; }
     }
 
     /// <inheritdoc />
     /// <summary>
-    /// Model class of the CostEdit
+    /// Model class of the BrokerageEdit
     /// </summary>
-    public class ModelCostEdit : IModelCostEdit
+    public class ModelBrokerageEdit : IModelBrokerageEdit
     {
         #region Fields
 
         private string _date;
         private string _time;
-        private string _costs;
-        private decimal _costsDec;
+        private string _brokerage;
+        private decimal _brokerageDec;
         private string _document;
 
         #endregion Fields
@@ -72,7 +72,7 @@ namespace SharePortfolioManager.Forms.CostsForm.Model
 
         public bool UpdateViewFormatted { get; set; }
 
-        public bool UpdateCost { get; set; }
+        public bool UpdateBrokerage { get; set; }
 
         public ShareObjectMarketValue ShareObjectMarketValue { get; set; }
 
@@ -80,7 +80,9 @@ namespace SharePortfolioManager.Forms.CostsForm.Model
 
         public List<WebSiteRegex> WebSiteRegexList { get; set; }
 
-        public CostErrorCode ErrorCode { get; set; }
+        public BrokerageErrorCode ErrorCode { get; set; }
+
+        public string SelectedGuid { get; set; }
 
         public string SelectedDate { get; set; }
 
@@ -112,40 +114,40 @@ namespace SharePortfolioManager.Forms.CostsForm.Model
             }
         }
 
-        public string Costs
+        public string Brokerage
         {
             get
             {
                 if (UpdateViewFormatted)
                 {
-                    // Only return the value if the costs is greater than '0'
-                    return _costsDec > 0 ? Helper.FormatDecimal(_costsDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : @"";
+                    // Only return the value if the brokerage is greater than '0'
+                    return _brokerageDec > 0 ? Helper.FormatDecimal(_brokerageDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : @"";
                 }
 
-                return _costs;
+                return _brokerage;
             }
             set
             {
-                if (_costs == value)
+                if (_brokerage == value)
                     return;
-                _costs = value;
+                _brokerage = value;
 
                 // Try to parse
-                if (!decimal.TryParse(_costs, out _costsDec))
-                    _costsDec = 0;
+                if (!decimal.TryParse(_brokerage, out _brokerageDec))
+                    _brokerageDec = 0;
             }
         }
 
-        public decimal CostsDec
+        public decimal BrokerageDec
         {
-            get => _costsDec;
+            get => _brokerageDec;
             set
             {
-                if (_costsDec == value)
+                if (_brokerageDec == value)
                     return;
-                _costsDec = value;
+                _brokerageDec = value;
 
-                Costs = _costsDec.ToString("G");
+                Brokerage = _brokerageDec.ToString("G");
             }
         }
 

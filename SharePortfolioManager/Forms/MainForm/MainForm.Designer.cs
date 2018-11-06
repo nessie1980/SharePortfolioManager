@@ -65,14 +65,14 @@ namespace SharePortfolioManager
             this.tabCtrlDetails = new System.Windows.Forms.TabControl();
             this.tabPgDetailsFinalValue = new System.Windows.Forms.TabPage();
             this.tblLayPnlFinaleValueShareDetails = new System.Windows.Forms.TableLayoutPanel();
-            this.lblDetailsFinalValueCost = new System.Windows.Forms.Label();
+            this.lblDetailsFinalValueBrokerage = new System.Windows.Forms.Label();
             this.lblDetailsFinalValueDividend = new System.Windows.Forms.Label();
             this.lblDetailsFinalValueVolume = new System.Windows.Forms.Label();
             this.lblDetailsFinalValueDate = new System.Windows.Forms.Label();
             this.lblDetailsFinalValueDateValue = new System.Windows.Forms.Label();
             this.lblDetailsFinalValueDividendValue = new System.Windows.Forms.Label();
             this.lblDetailsFinalValueTotalSum = new System.Windows.Forms.Label();
-            this.lblDetailsFinalValueCostsValue = new System.Windows.Forms.Label();
+            this.lblDetailsFinalValueBrokerageValue = new System.Windows.Forms.Label();
             this.lblDetailsFinalValuePrevPrice = new System.Windows.Forms.Label();
             this.lblDetailsFinalValueDiffSumPrev = new System.Windows.Forms.Label();
             this.lblDetailsPurchase = new System.Windows.Forms.Label();
@@ -92,8 +92,8 @@ namespace SharePortfolioManager
             this.tabPgDetailsMarketValue = new System.Windows.Forms.TabPage();
             this.tblLayPnlMarketValueShareDetails = new System.Windows.Forms.TableLayoutPanel();
             this.lblDetailsMarketValueDateValue = new System.Windows.Forms.Label();
-            this.lblDetailsMarketValueCostValue = new System.Windows.Forms.Label();
-            this.lblDetailsMarketValueCost = new System.Windows.Forms.Label();
+            this.lblDetailsMarketValueBrokerageValue = new System.Windows.Forms.Label();
+            this.lblDetailsMarketValueBrokerage = new System.Windows.Forms.Label();
             this.lblDetailsMarketValueDate = new System.Windows.Forms.Label();
             this.lblDetailsMarketValueCurPrice = new System.Windows.Forms.Label();
             this.lblDetailsMarketValuePrevPriceValue = new System.Windows.Forms.Label();
@@ -119,8 +119,8 @@ namespace SharePortfolioManager
             this.tabCtrlProfitLoss = new System.Windows.Forms.TabControl();
             this.tabPgDividends = new System.Windows.Forms.TabPage();
             this.tabCtrlDividends = new System.Windows.Forms.TabControl();
-            this.tabPgCosts = new System.Windows.Forms.TabPage();
-            this.tabCtrlCosts = new System.Windows.Forms.TabControl();
+            this.tabPgBrokerage = new System.Windows.Forms.TabPage();
+            this.tabCtrlBrokerage = new System.Windows.Forms.TabControl();
             this.grpBoxStatusMessage = new System.Windows.Forms.GroupBox();
             this.tblLayPnlStatusMessages = new System.Windows.Forms.TableLayoutPanel();
             this.rchTxtBoxStateMessage = new System.Windows.Forms.RichTextBox();
@@ -130,7 +130,7 @@ namespace SharePortfolioManager
             this.tblLayPnlUpdateState = new System.Windows.Forms.TableLayoutPanel();
             this.lblShareNameWebParser = new System.Windows.Forms.Label();
             this.timerStatusMessageClear = new System.Windows.Forms.Timer(this.components);
-            this.lblShareDetailsWithOutDividendCostSharePriceCurrentValue = new System.Windows.Forms.Label();
+            this.lblShareDetailsWithOutDividendBrokerageSharePriceCurrentValue = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.grpBoxSharePortfolio.SuspendLayout();
             this.tblLayPnlShareOverviews.SuspendLayout();
@@ -150,7 +150,7 @@ namespace SharePortfolioManager
             this.tblLayPnlMarketValueShareDetails.SuspendLayout();
             this.tabPgProfitLoss.SuspendLayout();
             this.tabPgDividends.SuspendLayout();
-            this.tabPgCosts.SuspendLayout();
+            this.tabPgBrokerage.SuspendLayout();
             this.grpBoxStatusMessage.SuspendLayout();
             this.tblLayPnlStatusMessages.SuspendLayout();
             this.grpBoxUpdateState.SuspendLayout();
@@ -587,7 +587,7 @@ namespace SharePortfolioManager
             this.tabCtrlDetails.Controls.Add(this.tabPgDetailsMarketValue);
             this.tabCtrlDetails.Controls.Add(this.tabPgProfitLoss);
             this.tabCtrlDetails.Controls.Add(this.tabPgDividends);
-            this.tabCtrlDetails.Controls.Add(this.tabPgCosts);
+            this.tabCtrlDetails.Controls.Add(this.tabPgBrokerage);
             this.tabCtrlDetails.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabCtrlDetails.Location = new System.Drawing.Point(3, 0);
             this.tabCtrlDetails.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
@@ -617,14 +617,14 @@ namespace SharePortfolioManager
             this.tblLayPnlFinaleValueShareDetails.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tblLayPnlFinaleValueShareDetails.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 210F));
             this.tblLayPnlFinaleValueShareDetails.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueCost, 0, 3);
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueBrokerage, 0, 3);
             this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueDividend, 0, 2);
             this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueVolume, 0, 1);
             this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueDate, 0, 0);
             this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueDateValue, 1, 0);
             this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueDividendValue, 1, 2);
             this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueTotalSum, 4, 3);
-            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueCostsValue, 1, 3);
+            this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueBrokerageValue, 1, 3);
             this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValuePrevPrice, 2, 3);
             this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsFinalValueDiffSumPrev, 2, 2);
             this.tblLayPnlFinaleValueShareDetails.Controls.Add(this.lblDetailsPurchase, 4, 0);
@@ -653,19 +653,19 @@ namespace SharePortfolioManager
             this.tblLayPnlFinaleValueShareDetails.Size = new System.Drawing.Size(1205, 96);
             this.tblLayPnlFinaleValueShareDetails.TabIndex = 0;
             // 
-            // lblDetailsFinalValueCost
+            // lblDetailsFinalValueBrokerage
             // 
-            this.lblDetailsFinalValueCost.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsFinalValueCost.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsFinalValueCost.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblDetailsFinalValueCost.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsFinalValueCost.Location = new System.Drawing.Point(1, 73);
-            this.lblDetailsFinalValueCost.Margin = new System.Windows.Forms.Padding(1);
-            this.lblDetailsFinalValueCost.Name = "lblDetailsFinalValueCost";
-            this.lblDetailsFinalValueCost.Size = new System.Drawing.Size(208, 22);
-            this.lblDetailsFinalValueCost.TabIndex = 32;
-            this.lblDetailsFinalValueCost.Text = "TotalCost_";
-            this.lblDetailsFinalValueCost.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDetailsFinalValueBrokerage.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsFinalValueBrokerage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsFinalValueBrokerage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsFinalValueBrokerage.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsFinalValueBrokerage.Location = new System.Drawing.Point(1, 73);
+            this.lblDetailsFinalValueBrokerage.Margin = new System.Windows.Forms.Padding(1);
+            this.lblDetailsFinalValueBrokerage.Name = "lblDetailsFinalValueBrokerage";
+            this.lblDetailsFinalValueBrokerage.Size = new System.Drawing.Size(208, 22);
+            this.lblDetailsFinalValueBrokerage.TabIndex = 32;
+            this.lblDetailsFinalValueBrokerage.Text = "TotalBrokerage_";
+            this.lblDetailsFinalValueBrokerage.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblDetailsFinalValueDividend
             // 
@@ -749,18 +749,18 @@ namespace SharePortfolioManager
             this.lblDetailsFinalValueTotalSum.Text = "TotalSum_";
             this.lblDetailsFinalValueTotalSum.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // lblDetailsFinalValueCostsValue
+            // lblDetailsFinalValueBrokerageValue
             // 
-            this.lblDetailsFinalValueCostsValue.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsFinalValueCostsValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsFinalValueCostsValue.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblDetailsFinalValueCostsValue.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsFinalValueCostsValue.Location = new System.Drawing.Point(211, 73);
-            this.lblDetailsFinalValueCostsValue.Margin = new System.Windows.Forms.Padding(1);
-            this.lblDetailsFinalValueCostsValue.Name = "lblDetailsFinalValueCostsValue";
-            this.lblDetailsFinalValueCostsValue.Size = new System.Drawing.Size(189, 22);
-            this.lblDetailsFinalValueCostsValue.TabIndex = 34;
-            this.lblDetailsFinalValueCostsValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDetailsFinalValueBrokerageValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsFinalValueBrokerageValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsFinalValueBrokerageValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsFinalValueBrokerageValue.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsFinalValueBrokerageValue.Location = new System.Drawing.Point(211, 73);
+            this.lblDetailsFinalValueBrokerageValue.Margin = new System.Windows.Forms.Padding(1);
+            this.lblDetailsFinalValueBrokerageValue.Name = "lblDetailsFinalValueBrokerageValue";
+            this.lblDetailsFinalValueBrokerageValue.Size = new System.Drawing.Size(189, 22);
+            this.lblDetailsFinalValueBrokerageValue.TabIndex = 34;
+            this.lblDetailsFinalValueBrokerageValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblDetailsFinalValuePrevPrice
             // 
@@ -1001,8 +1001,8 @@ namespace SharePortfolioManager
             this.tblLayPnlMarketValueShareDetails.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 210F));
             this.tblLayPnlMarketValueShareDetails.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueDateValue, 1, 0);
-            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueCostValue, 1, 3);
-            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueCost, 0, 3);
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueBrokerageValue, 1, 3);
+            this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueBrokerage, 0, 3);
             this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueDate, 0, 0);
             this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValueCurPrice, 2, 0);
             this.tblLayPnlMarketValueShareDetails.Controls.Add(this.lblDetailsMarketValuePrevPriceValue, 3, 3);
@@ -1049,32 +1049,32 @@ namespace SharePortfolioManager
             this.lblDetailsMarketValueDateValue.TabIndex = 60;
             this.lblDetailsMarketValueDateValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // lblDetailsMarketValueCostValue
+            // lblDetailsMarketValueBrokerageValue
             // 
-            this.lblDetailsMarketValueCostValue.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsMarketValueCostValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsMarketValueCostValue.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblDetailsMarketValueCostValue.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsMarketValueCostValue.Location = new System.Drawing.Point(211, 73);
-            this.lblDetailsMarketValueCostValue.Margin = new System.Windows.Forms.Padding(1);
-            this.lblDetailsMarketValueCostValue.Name = "lblDetailsMarketValueCostValue";
-            this.lblDetailsMarketValueCostValue.Size = new System.Drawing.Size(189, 22);
-            this.lblDetailsMarketValueCostValue.TabIndex = 58;
-            this.lblDetailsMarketValueCostValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDetailsMarketValueBrokerageValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsMarketValueBrokerageValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValueBrokerageValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsMarketValueBrokerageValue.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsMarketValueBrokerageValue.Location = new System.Drawing.Point(211, 73);
+            this.lblDetailsMarketValueBrokerageValue.Margin = new System.Windows.Forms.Padding(1);
+            this.lblDetailsMarketValueBrokerageValue.Name = "lblDetailsMarketValueBrokerageValue";
+            this.lblDetailsMarketValueBrokerageValue.Size = new System.Drawing.Size(189, 22);
+            this.lblDetailsMarketValueBrokerageValue.TabIndex = 58;
+            this.lblDetailsMarketValueBrokerageValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // lblDetailsMarketValueCost
+            // lblDetailsMarketValueBrokerage
             // 
-            this.lblDetailsMarketValueCost.BackColor = System.Drawing.Color.LightGray;
-            this.lblDetailsMarketValueCost.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDetailsMarketValueCost.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblDetailsMarketValueCost.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDetailsMarketValueCost.Location = new System.Drawing.Point(1, 73);
-            this.lblDetailsMarketValueCost.Margin = new System.Windows.Forms.Padding(1);
-            this.lblDetailsMarketValueCost.Name = "lblDetailsMarketValueCost";
-            this.lblDetailsMarketValueCost.Size = new System.Drawing.Size(208, 22);
-            this.lblDetailsMarketValueCost.TabIndex = 56;
-            this.lblDetailsMarketValueCost.Text = "TotalCost_";
-            this.lblDetailsMarketValueCost.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblDetailsMarketValueBrokerage.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsMarketValueBrokerage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDetailsMarketValueBrokerage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDetailsMarketValueBrokerage.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDetailsMarketValueBrokerage.Location = new System.Drawing.Point(1, 73);
+            this.lblDetailsMarketValueBrokerage.Margin = new System.Windows.Forms.Padding(1);
+            this.lblDetailsMarketValueBrokerage.Name = "lblDetailsMarketValueBrokerage";
+            this.lblDetailsMarketValueBrokerage.Size = new System.Drawing.Size(208, 22);
+            this.lblDetailsMarketValueBrokerage.TabIndex = 56;
+            this.lblDetailsMarketValueBrokerage.Text = "TotalBrokerage_";
+            this.lblDetailsMarketValueBrokerage.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblDetailsMarketValueDate
             // 
@@ -1412,29 +1412,29 @@ namespace SharePortfolioManager
             this.tabCtrlDividends.TabIndex = 0;
             this.tabCtrlDividends.SelectedIndexChanged += new System.EventHandler(this.TabCtrlDividends_SelectedIndexChanged);
             // 
-            // tabPgCosts
+            // tabPgBrokerage
             // 
-            this.tabPgCosts.AutoScroll = true;
-            this.tabPgCosts.AutoScrollMargin = new System.Drawing.Size(5, 5);
-            this.tabPgCosts.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.tabPgCosts.Controls.Add(this.tabCtrlCosts);
-            this.tabPgCosts.Location = new System.Drawing.Point(4, 26);
-            this.tabPgCosts.Margin = new System.Windows.Forms.Padding(0);
-            this.tabPgCosts.Name = "tabPgCosts";
-            this.tabPgCosts.Size = new System.Drawing.Size(1205, 96);
-            this.tabPgCosts.TabIndex = 2;
-            this.tabPgCosts.Text = "Costs_";
+            this.tabPgBrokerage.AutoScroll = true;
+            this.tabPgBrokerage.AutoScrollMargin = new System.Drawing.Size(5, 5);
+            this.tabPgBrokerage.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.tabPgBrokerage.Controls.Add(this.tabCtrlBrokerage);
+            this.tabPgBrokerage.Location = new System.Drawing.Point(4, 26);
+            this.tabPgBrokerage.Margin = new System.Windows.Forms.Padding(0);
+            this.tabPgBrokerage.Name = "tabPgBrokerage";
+            this.tabPgBrokerage.Size = new System.Drawing.Size(1205, 96);
+            this.tabPgBrokerage.TabIndex = 2;
+            this.tabPgBrokerage.Text = "Brokerage_";
             // 
-            // tabCtrlCosts
+            // tabCtrlBrokerage
             // 
-            this.tabCtrlCosts.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-            this.tabCtrlCosts.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabCtrlCosts.Location = new System.Drawing.Point(0, 0);
-            this.tabCtrlCosts.Name = "tabCtrlCosts";
-            this.tabCtrlCosts.SelectedIndex = 0;
-            this.tabCtrlCosts.Size = new System.Drawing.Size(1205, 96);
-            this.tabCtrlCosts.TabIndex = 0;
-            this.tabCtrlCosts.SelectedIndexChanged += new System.EventHandler(this.TabCtrlCosts_SelectedIndexChanged);
+            this.tabCtrlBrokerage.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
+            this.tabCtrlBrokerage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabCtrlBrokerage.Location = new System.Drawing.Point(0, 0);
+            this.tabCtrlBrokerage.Name = "tabCtrlBrokerage";
+            this.tabCtrlBrokerage.SelectedIndex = 0;
+            this.tabCtrlBrokerage.Size = new System.Drawing.Size(1205, 96);
+            this.tabCtrlBrokerage.TabIndex = 0;
+            this.tabCtrlBrokerage.SelectedIndexChanged += new System.EventHandler(this.TabCtrlBrokerage_SelectedIndexChanged);
             // 
             // grpBoxStatusMessage
             // 
@@ -1547,17 +1547,17 @@ namespace SharePortfolioManager
             this.timerStatusMessageClear.Interval = 2000;
             this.timerStatusMessageClear.Tick += new System.EventHandler(this.TimerStatusMessageDelete_Tick);
             // 
-            // lblShareDetailsWithOutDividendCostSharePriceCurrentValue
+            // lblShareDetailsWithOutDividendBrokerageSharePriceCurrentValue
             // 
-            this.lblShareDetailsWithOutDividendCostSharePriceCurrentValue.BackColor = System.Drawing.Color.LightGray;
-            this.lblShareDetailsWithOutDividendCostSharePriceCurrentValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblShareDetailsWithOutDividendCostSharePriceCurrentValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblShareDetailsWithOutDividendCostSharePriceCurrentValue.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.lblShareDetailsWithOutDividendCostSharePriceCurrentValue.Location = new System.Drawing.Point(636, 9);
-            this.lblShareDetailsWithOutDividendCostSharePriceCurrentValue.Name = "lblShareDetailsWithOutDividendCostSharePriceCurrentValue";
-            this.lblShareDetailsWithOutDividendCostSharePriceCurrentValue.Size = new System.Drawing.Size(143, 21);
-            this.lblShareDetailsWithOutDividendCostSharePriceCurrentValue.TabIndex = 43;
-            this.lblShareDetailsWithOutDividendCostSharePriceCurrentValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblShareDetailsWithOutDividendBrokerageSharePriceCurrentValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblShareDetailsWithOutDividendBrokerageSharePriceCurrentValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblShareDetailsWithOutDividendBrokerageSharePriceCurrentValue.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblShareDetailsWithOutDividendBrokerageSharePriceCurrentValue.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblShareDetailsWithOutDividendBrokerageSharePriceCurrentValue.Location = new System.Drawing.Point(636, 9);
+            this.lblShareDetailsWithOutDividendBrokerageSharePriceCurrentValue.Name = "lblShareDetailsWithOutDividendBrokerageSharePriceCurrentValue";
+            this.lblShareDetailsWithOutDividendBrokerageSharePriceCurrentValue.Size = new System.Drawing.Size(143, 21);
+            this.lblShareDetailsWithOutDividendBrokerageSharePriceCurrentValue.TabIndex = 43;
+            this.lblShareDetailsWithOutDividendBrokerageSharePriceCurrentValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // FrmMain
             // 
@@ -1602,7 +1602,7 @@ namespace SharePortfolioManager
             this.tblLayPnlMarketValueShareDetails.ResumeLayout(false);
             this.tabPgProfitLoss.ResumeLayout(false);
             this.tabPgDividends.ResumeLayout(false);
-            this.tabPgCosts.ResumeLayout(false);
+            this.tabPgBrokerage.ResumeLayout(false);
             this.grpBoxStatusMessage.ResumeLayout(false);
             this.tblLayPnlStatusMessages.ResumeLayout(false);
             this.grpBoxUpdateState.ResumeLayout(false);
@@ -1645,19 +1645,19 @@ namespace SharePortfolioManager
         private GroupBox grpBoxUpdateState;
         private Label lblShareNameWebParser;
         private Timer timerStatusMessageClear;
-        private Label lblDetailsFinalValueCost;
+        private Label lblDetailsFinalValueBrokerage;
         private Label lblDetailsFinalValueDividend;
-        private Label lblDetailsFinalValueCostsValue;
+        private Label lblDetailsFinalValueBrokerageValue;
         private Label lblDetailsFinalValueDividendValue;
         private TabControl tabCtrlDetails;
-        private TabPage tabPgCosts;
+        private TabPage tabPgBrokerage;
         private TabPage tabPgDetailsMarketValue;
         private Label lblDetailsMarketValueDateValue;
         private Label lblDetailsMarketValueDate;
-        private Label lblDetailsMarketValueCostValue;
+        private Label lblDetailsMarketValueBrokerageValue;
         private Label lblDetailsMarketValueDividendValue;
         private Label lblDetailsMarketValueCurPrice;
-        private Label lblDetailsMarketValueCost;
+        private Label lblDetailsMarketValueBrokerage;
         private Label lblDetailsMarketValuePurchase;
         private Label lblDetailsMarketValueDividend;
         private Label lblDetailsMarketValueVolume;
@@ -1678,7 +1678,7 @@ namespace SharePortfolioManager
         private Label lblDetailsMarketValuePrevPriceValue;
         private TabPage tabPgDividends;
         private TabControl tabCtrlDividends;
-        private TabControl tabCtrlCosts;
+        private TabControl tabCtrlBrokerage;
         private TabControl tabCtrlProfitLoss;
         private DataGridView dgvPortfolioFooterFinalValue;
         private RichTextBox rchTxtBoxStateMessage;
@@ -1695,7 +1695,7 @@ namespace SharePortfolioManager
         private TabPage tabPgMarketValue;
         private DataGridView dgvPortfolioMarketValue;
         private DataGridView dgvPortfolioFooterMarketValue;
-        private Label lblShareDetailsWithOutDividendCostSharePriceCurrentValue;
+        private Label lblShareDetailsWithOutDividendBrokerageSharePriceCurrentValue;
         private TabPage tabPgDetailsFinalValue;
         private TableLayoutPanel tblLayPnlFinaleValueShareDetails;
         private Label lblDetailsFinalValueDate;

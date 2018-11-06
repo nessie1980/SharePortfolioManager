@@ -20,8 +20,8 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using SharePortfolioManager.Classes;
 using System;
+using SharePortfolioManager.Classes;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -29,6 +29,7 @@ using System.Windows.Forms;
 
 namespace SharePortfolioManager
 {
+    [Serializable]
     public class AllDividendsOfTheShare
     {
         #region Properties
@@ -62,7 +63,8 @@ namespace SharePortfolioManager
         /// <param name="cultureInfoFc">Culture info of the payout for the foreign currency</param>
         /// <param name="csEnableFc">Flag if the payout is in a foreign currency</param>
         /// <param name="decExchangeRatio">Exchange ratio for the foreign currency</param>
-        /// <param name="strDateTime">Pay date of the new dividend list entry</param>
+        /// <param name="strGuid">Guid of the buy</param>
+        /// <param name="strDate">Pay date of the new dividend list entry</param>
         /// <param name="decRate">Paid dividend of one share</param>
         /// <param name="decVolume">Share volume at the pay date</param>
         /// <param name="decTaxAtSource">Tax at source value</param>
@@ -71,7 +73,7 @@ namespace SharePortfolioManager
         /// <param name="decSharePrice">Share price at the pay date</param>
         /// <param name="strDoc">Document of the dividend</param>
         /// <returns></returns>
-        public bool AddDividend(CultureInfo cultureInfoFc, CheckState csEnableFc, decimal decExchangeRatio, string strDateTime, decimal decRate, decimal decVolume,
+        public bool AddDividend(CultureInfo cultureInfoFc, CheckState csEnableFc, decimal decExchangeRatio, string strGuid, string strDate, decimal decRate, decimal decVolume,
             decimal decTaxAtSource, decimal decCapitalGainsTax, decimal decSolidarityTax, decimal decSharePrice, string strDoc = "")
         {
 #if DEBUG_DIVIDEND
@@ -80,14 +82,14 @@ namespace SharePortfolioManager
             try
             {
                 // Get year of the date of the new dividend
-                GetYearOfDate(strDateTime, out var year);
+                GetYearOfDate(strDate, out var year);
                 if (year == null)
                     return false;
 
                 // Search if a dividend for the given year already exists if not add it
                 if (AllDividendsOfTheShareDictionary.TryGetValue(year, out var searchObject))
                 {
-                    if (!searchObject.AddDividendObject(DividendCultureInfo, cultureInfoFc, csEnableFc, decExchangeRatio, strDateTime, decRate, decVolume,
+                    if (!searchObject.AddDividendObject(DividendCultureInfo, cultureInfoFc, csEnableFc, decExchangeRatio, strGuid, strDate, decRate, decVolume,
                         decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decSharePrice, strDoc))
                         return false;
                 }
@@ -96,7 +98,7 @@ namespace SharePortfolioManager
                     // Add new year dividend object for the dividend with a new year
                     var addObject = new DividendYearOfTheShare();
                     // Add dividend with the new year to the dividend year list
-                    if (addObject.AddDividendObject(DividendCultureInfo, cultureInfoFc, csEnableFc, decExchangeRatio, strDateTime, decRate, decVolume,
+                    if (addObject.AddDividendObject(DividendCultureInfo, cultureInfoFc, csEnableFc, decExchangeRatio, strGuid, strDate, decRate, decVolume,
                         decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decSharePrice, strDoc))
                     {
                         AllDividendsOfTheShareDictionary.Add(year, addObject);
@@ -130,21 +132,22 @@ namespace SharePortfolioManager
         /// <summary>
         /// This function removes a dividend entry from the list by the given date
         /// </summary>
-        /// <param name="payDate">Date of the dividend entry which should be removed</param>
+        /// <param name="strGuid">Guid of the dividend which should be removed</param>
+        /// <param name="strDate">Date of the dividend entry which should be removed</param>
         /// <returns>Flag if the remove was successful</returns>
-        public bool RemoveDividend(string payDate)
+        public bool RemoveDividend(string strGuid, string strDate)
         {
             try
             {
                 // Get year of the date of the new dividend
-                GetYearOfDate(payDate, out var year);
+                GetYearOfDate(strDate, out var year);
                 if (year == null)
                     return false;
 
                 // Search if a dividend for the given year already exists if not no remove will be made
                 if (AllDividendsOfTheShareDictionary.TryGetValue(year, out var searchObject))
                 {
-                    if (!searchObject.RemoveDividendObject(payDate))
+                    if (!searchObject.RemoveDividendObject(strGuid))
                         return false;
                     if (searchObject.DividendListYear.Count == 0)
                     {
@@ -206,7 +209,7 @@ namespace SharePortfolioManager
 
             foreach (var key in AllDividendsOfTheShareDictionary.Keys)
             {
-                    allDividendsOfTheShare.Add(key, Helper.FormatDecimal(AllDividendsOfTheShareDictionary[key].DividendValueYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", DividendCultureInfo));
+                    allDividendsOfTheShare.Add(key, Helper.FormatDecimal(AllDividendsOfTheShareDictionary[key].DividendValueYear, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", DividendCultureInfo));
             }
             return allDividendsOfTheShare;
         }
@@ -214,11 +217,12 @@ namespace SharePortfolioManager
         /// <summary>
         /// This function returns the dividend object of the given date and time
         /// </summary>
-        /// <param name="strDateTime">Date and time of the buy</param>
+        /// <param name="strGuid">Guid of the dividend</param>
+        /// <param name="strDate">Date and time of the dividend</param>
         /// <returns>DividendObject or null if the search failed</returns>
-        public DividendObject GetDividendObjectByDateTime(string strDateTime)
+        public DividendObject GetDividendObjectByGuidDate(string strGuid, string strDate)
         {
-            GetYearOfDate(strDateTime, out var year);
+            GetYearOfDate(strDate, out var year);
 
             if (year == null) return null;
 
@@ -226,7 +230,7 @@ namespace SharePortfolioManager
 
             foreach (var dividendObject in AllDividendsOfTheShareDictionary[year].DividendListYear)
             {
-                if (dividendObject.DateTime == strDateTime)
+                if (dividendObject.Guid == strGuid)
                 {
                     return dividendObject;
                 }

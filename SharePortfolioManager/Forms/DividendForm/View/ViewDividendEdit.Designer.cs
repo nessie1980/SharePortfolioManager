@@ -146,7 +146,7 @@
             // btnReset
             // 
             this.btnReset.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnReset.Enabled = false;
+            this.btnReset.Enabled = true;
             this.btnReset.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnReset.Location = new System.Drawing.Point(460, 1);
             this.btnReset.Margin = new System.Windows.Forms.Padding(1);
@@ -895,7 +895,7 @@
             this.tabCtrlDividends.Size = new System.Drawing.Size(812, 153);
             this.tabCtrlDividends.TabIndex = 0;
             this.tabCtrlDividends.SelectedIndexChanged += new System.EventHandler(this.TabCtrlDividends_SelectedIndexChanged);
-            this.tabCtrlDividends.MouseEnter += new System.EventHandler(this.tabCtrlDividends_MouseEnter);
+            this.tabCtrlDividends.MouseEnter += new System.EventHandler(this.TabCtrlDividends_MouseEnter);
             this.tabCtrlDividends.MouseLeave += new System.EventHandler(this.TabCtrlDividends_MouseLeave);
             // 
             // lblAddDate

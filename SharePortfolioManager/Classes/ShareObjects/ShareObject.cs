@@ -25,6 +25,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using WebParser;
@@ -39,7 +41,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
     /// - all buys of a share
     /// - all sales of a share
     /// </summary>
-    public class ShareObject : IDisposable
+    [Serializable]
+    public class ShareObject : IDisposable, ICloneable
     {
         #region Variables
 
@@ -72,13 +75,19 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
         #endregion General variables
 
-        #region Value units variables
+        #region General XML variables
 
-        #endregion Value units variables
+        /// <summary>
+        /// Stores the XML attribute name for the WKN
+        /// </summary>
+        internal const string GeneralWknAttrName= "WKN";
 
-        #region Buy variables
+        /// <summary>
+        /// Stores the XML attribute name for the share name
+        /// </summary>
+        internal const string GeneralNameAttrName = "Name";
 
-        #endregion Buy variables
+        #endregion General XML variables
 
         #region Buy XML variables
 
@@ -86,6 +95,11 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Stores the XML tag name prefix of a buy entry
         /// </summary>
         internal const string BuyTagNamePre = "Buy";
+
+        /// <summary>
+        /// Stores the XML attribute name for the buy Guid
+        /// </summary>
+        internal const string BuyGuidAttrName = "Guid";
 
         /// <summary>
         /// Stores the XML attribute name for the buy date
@@ -98,9 +112,19 @@ namespace SharePortfolioManager.Classes.ShareObjects
         internal const string BuyVolumeAttrName = "Volume";
 
         /// <summary>
+        /// Stores the XML attribute name for the sold volume of a buy
+        /// </summary>
+        internal const string BuyVolumeSoldAttrName = "VolumeSold";
+
+        /// <summary>
         /// Stores the XML attribute name for the reduction of a buy
         /// </summary>
         internal const string BuyReductionAttrName = "Reduction";
+
+        /// <summary>
+        /// Stores the XML attribute name for the brokerage of a buy
+        /// </summary>
+        internal const string BuyBrokerageAttrName = "Brokerage";
 
         /// <summary>
         /// Stores the XML attribute name for buy price of a share of a buy
@@ -113,15 +137,11 @@ namespace SharePortfolioManager.Classes.ShareObjects
         internal const string BuyDocumentAttrName = "Doc";
 
         /// <summary>
-        /// Stores the attribute count for the dividend
+        /// Stores the attribute count for the buy
         /// </summary>
-        internal const short BuyAttrCount = 5;
+        internal const short BuyAttrCount = 8;
 
         #endregion Buy XML variables
-
-        #region Sale variables
-
-        #endregion Sale variables
 
         #region Sale XML variables
 
@@ -131,19 +151,19 @@ namespace SharePortfolioManager.Classes.ShareObjects
         internal const string SaleTagNamePre = "Sale";
 
         /// <summary>
+        /// Stores the XML attribute name for the sale Guid
+        /// </summary>
+        internal const string SaleGuidAttrName = "Guid";
+
+        /// <summary>
         /// Stores the XML attribute name for the sale date
         /// </summary>
         internal const string SaleDateAttrName = "Date";
 
         /// <summary>
-        /// Stores the XML attribute name for the volume of a sale
+        /// Stores the XML attribute name for the buy volume of a sale
         /// </summary>
         internal const string SaleVolumeAttrName = "Volume";
-
-        /// <summary>
-        /// Stores the XML attribute name for the buy price of one share of a sale
-        /// </summary>
-        internal const string SaleBuyPriceAttrName = "BuyPrice";
 
         /// <summary>
         /// Stores the XML attribute name for the sale price of one share of a sale
@@ -166,16 +186,110 @@ namespace SharePortfolioManager.Classes.ShareObjects
         internal const string SaleSolidarityTaxAttrName = "SolidarityTax";
 
         /// <summary>
+        /// Stores the XML attribute name for the redction of a sale
+        /// </summary>
+        internal const string SaleReductionAttrName = "Reduction";
+
+        /// <summary>
         /// Stores the XML attribute name for the document of a sale
         /// </summary>
         internal const string SaleDocumentAttrName = "Doc";
 
         /// <summary>
+        /// Stores the XML attribute name for the used buys
+        /// </summary>
+        internal const string SaleUsedBuysAttrName = "UsedBuys";
+
+        /// <summary>
+        /// Stores the XML attribute name for the used buy
+        /// </summary>
+        internal const string SaleUsedBuyAttrName = "UsedBuy";
+
+        /// <summary>
+        /// Stores the XML attribute name for the buy date of a sale
+        /// </summary>
+        internal const string SaleBuyDateAttrName = "BuyDate";
+
+        /// <summary>
+        /// Stores the XML attribute name for the buy volume of a sale
+        /// </summary>
+        internal const string SaleBuyVolumeAttrName = "BuyVolume";
+
+        /// <summary>
+        /// Stores the XML attribute name for the buy price of one share of a sale
+        /// </summary>
+        internal const string SaleBuyPriceAttrName = "BuyPrice";
+
+        /// <summary>
+        /// Stores the XML attribute name for the buy Guid of the sale
+        /// </summary>
+        internal const string SaleBuyGuidAttrName = "BuyGuid";
+
+        /// <summary>
         /// Stores the attribute count for the dividend
         /// </summary>
-        internal const short SaleAttrCount = 8;
+        internal const short SaleAttrCount = 9;
+
+        /// <summary>
+        /// Stores the used buys count for the sale
+        /// </summary>
+        internal const short SaleUsedBuysCount = 1;
+
+        /// <summary>
+        /// Stores the attribute count for the used buy information
+        /// </summary>
+        internal const short SaleAttrCountUsedBuys = 4;
 
         #endregion Sale XML variables
+
+        #region Brokerage XML variables
+
+        /// <summary>
+        /// Stores the tag name prefix of a brokerage entry
+        /// </summary>
+        internal const string BrokerageTagNamePre = "Brokerage";
+
+        /// <summary>
+        /// Stores the XML attribute name for the brokerage Guid
+        /// </summary>
+        internal const string BrokerageGuidAttrName = "Guid";
+
+        /// <summary>
+        /// Stores the attribute name for the flag if the brokerage is a part of a buy
+        /// </summary>
+        internal const string BrokerageBuyPartAttrName = "BuyPart";
+
+        /// <summary>
+        /// Stores the attribute name for the flag if the brokerage is a part of a sale
+        /// </summary>
+        internal const string BrokerageSalePartAttrName = "SalePart";
+
+        /// <summary>
+        /// Stores the attribute name for the buy or sale Guid of the brokerage
+        /// </summary>
+        internal const string BrokerageGuidBuySaleAttrName = "GuidBuySale";
+
+        /// <summary>
+        /// Stores the attribute name for the date 
+        /// </summary>
+        internal const string BrokerageDateAttrName = "Date";
+
+        /// <summary>
+        /// Stores the attribute name for the value
+        /// </summary>
+        internal const string BrokerageValueAttrName = "Value";
+
+        /// <summary>
+        /// Stores the XML attribute name for the document of a brokerage
+        /// </summary>
+        internal const string BrokerageDocumentAttrName = "Doc";
+
+        /// <summary>
+        /// Stores the attribute count for the brokerage
+        /// </summary>
+        internal const short BrokerageAttrCount = 7;
+
+        #endregion Brokerage XML variables
 
         #region Dividends XML variables
 
@@ -184,53 +298,15 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         internal const string DividendPayoutIntervalAttrName = "PayoutInterval";
 
-        #endregion Dividends XML variables
-
-        #region Costs XML variables
-
-        /// <summary>
-        /// Stores the tag name prefix of a cost entry
-        /// </summary>
-        internal const string CostsTagNamePre = "Cost";
-
-        /// <summary>
-        /// Stores the attribute name for the flag if the cost is a part of a buy
-        /// </summary>
-        internal const string CostsBuyPartAttrName = "BuyPart";
-
-        /// <summary>
-        /// Stores the attribute name for the flag if the cost is a part of a sale
-        /// </summary>
-        internal const string CostsSalePartAttrName = "SalePart";
-
-        /// <summary>
-        /// Stores the attribute name for the date 
-        /// </summary>
-        internal const string CostsDateAttrName = "Date";
-
-        /// <summary>
-        /// Stores the attribute name for the value
-        /// </summary>
-        internal const string CostsValueAttrName = "Value";
-
-        /// <summary>
-        /// Stores the XML attribute name for the document of a cost
-        /// </summary>
-        internal const string CostsDocumentAttrName = "Doc";
-
-        /// <summary>
-        /// Stores the attribute count for the costs
-        /// </summary>
-        internal const short CostsAttrCount = 5;
-
-        #endregion Costs XML variables
-
-        #region Dividends XML variables
-
         /// <summary>
         /// Stores the XML tag name of a dividend entry
         /// </summary>
         internal const string DividendTagName = "Dividend";
+
+        /// <summary>
+        /// Stores the XML attribute name for the dividend Guid
+        /// </summary>
+        internal const string DividendGuidAttrName = "Guid";
 
         /// <summary>
         /// Stores the XML attribute name for the dividend pay date
@@ -472,53 +548,23 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Current share volume as string
         /// </summary>
         [Browsable(false)]
-        public string VolumeAsStr => Helper.FormatDecimal(Volume, Helper.Volumefivelength, true, Helper.Volumenonefixlength, false, @"", CultureInfo);
+        public string VolumeAsStr => Helper.FormatDecimal(Volume, Helper.Volumefivelength, false, Helper.Volumetwofixlength, false, @"", CultureInfo);
 
         /// <summary>
         /// Current share volume as string with unit
         /// </summary>
         [Browsable(false)]
-        public string VolumeAsStrUnit => Helper.FormatDecimal(Volume, Helper.Volumefivelength, true, Helper.Volumenonefixlength, true, PieceUnit, CultureInfo);
+        public string VolumeAsStrUnit => Helper.FormatDecimal(Volume, Helper.Volumefivelength, false, Helper.Volumetwofixlength, true, PieceUnit, CultureInfo);
 
         #endregion Volume properties
 
-        #region Buy properties
+        #region Purchase value properties
 
         /// <summary>
-        /// Total buy value of the share without reduction and costs
+        /// Total purchase value of the share without dividends, brokerage, profits and loss (market value)
         /// </summary>
         [Browsable(false)]
-        public decimal BuyMarketValueTotal { get; internal set; }
-
-        /// <summary>
-        /// Total buy value of the share without reduction and costs as string
-        /// </summary>
-        [Browsable(false)]
-        public string BuyMarketValueTotalAsStr => Helper.FormatDecimal(BuyMarketValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-
-        /// <summary>
-        /// Total buy value of the share without reduction and costs as string with unit
-        /// </summary>
-        [Browsable(false)]
-        public string BuyMarketValueTotalAsStrUnit => Helper.FormatDecimal(BuyMarketValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-
-        /// <summary>
-        /// Average buy price of all buys
-        /// </summary>
-        [Browsable(false)]
-        public decimal AverageBuyPrice { get; internal set; }
-
-        /// <summary>
-        /// Average buy price of all buys as string
-        /// </summary>
-        [Browsable(false)]
-        public string AverageBuyPriceAsStr => Helper.FormatDecimal(AverageBuyPrice, Helper.Currencyfivelength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-
-        /// <summary>
-        /// Average buy price of all buys as string with unit
-        /// </summary>
-        [Browsable(false)]
-        public string AverageBuyPriceAsStrUnit => Helper.FormatDecimal(AverageBuyPrice, Helper.Currencyfourlength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+        public decimal PurchaseValueTotal { get; internal set; }
 
         /// <summary>
         /// List of all buys of this share
@@ -526,7 +572,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         [Browsable(false)]
         public AllBuysOfTheShare AllBuyEntries { get; set; } = new AllBuysOfTheShare();
 
-        #endregion Buy properties
+        #endregion Purchase value properties
 
         #region Sales properties
 
@@ -535,18 +581,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         [Browsable(false)]
         public virtual decimal SalePurchaseValueTotal { get; set; } = decimal.MinValue / 2;
-
-        /// <summary>
-        /// Total sale value of the share as string
-        /// </summary>
-        [Browsable(false)]
-        public string SalePurchaseValueTotalAsStr => Helper.FormatDecimal(SalePurchaseValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-
-        /// <summary>
-        /// Total sale value of the share as string with unit
-        /// </summary>
-        [Browsable(false)]
-        public string SalePurchaseValueTotalAsStrUnit => Helper.FormatDecimal(SalePurchaseValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
 
         /// <summary>
         /// List of all sales of this share
@@ -568,13 +602,13 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Current price of the share as string
         /// </summary>
         [Browsable(false)]
-        public string CurPriceAsStr => Helper.FormatDecimal(CurPrice, Helper.Currencyfourlength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
+        public string CurPriceAsStr => Helper.FormatDecimal(CurPrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CultureInfo);
 
         /// <summary>
         /// Current price of the share as string with unit
         /// </summary>
         [Browsable(false)]
-        public string CurPriceAsStrUnit => Helper.FormatDecimal(CurPrice, Helper.Currencyfourlength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+        public string CurPriceAsStrUnit => Helper.FormatDecimal(CurPrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CultureInfo);
 
         /// <summary>
         /// Previous day price of the share. Will be updated via the Internet
@@ -586,13 +620,13 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Previous day price of the share as string
         /// </summary>
         [Browsable(false)]
-        public string PrevDayPriceAsStr => Helper.FormatDecimal(PrevDayPrice, Helper.Currencyfourlength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
+        public string PrevDayPriceAsStr => Helper.FormatDecimal(PrevDayPrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CultureInfo);
 
         /// <summary>
         /// Previous day price of the share as string with unit
         /// </summary>
         [Browsable(false)]
-        public string PrevDayPriceAsStrUnit => Helper.FormatDecimal(PrevDayPrice, Helper.Currencyfourlength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+        public string PrevDayPriceAsStrUnit => Helper.FormatDecimal(PrevDayPrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CultureInfo);
 
         /// <summary>
         /// Current and previous day price of the share as string with unit and a line break
@@ -602,8 +636,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
             get
             {
-                var value = Helper.FormatDecimal(CurPrice, Helper.Currencyfourlength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-                value += "\n" + Helper.FormatDecimal(PrevDayPrice, Helper.Currencyfourlength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+                var value = Helper.FormatDecimal(CurPrice, Helper.Currencyfivelength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+                value += "\n" + Helper.FormatDecimal(PrevDayPrice, Helper.Currencyfivelength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
                 return value;
             }
         }
@@ -619,28 +653,10 @@ namespace SharePortfolioManager.Classes.ShareObjects
         public decimal PrevDayDifference { get; internal set; } = decimal.MinValue / 2;
 
         /// <summary>
-        /// Price difference between the current and the previous day of the share as string
-        /// </summary>
-        [Browsable(false)]
-        public string PrevDayDifferenceAsStr => Helper.FormatDecimal(PrevDayDifference, Helper.Currencyfourlength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
-
-        /// <summary>
-        /// Price difference between the current and the previous day of the share as string with unit
-        /// </summary>
-        [Browsable(false)]
-        public string PrevDayDifferenceAsStrUnit => Helper.FormatDecimal(PrevDayDifference, Helper.Currencyfourlength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-
-        /// <summary>
         /// Performance in percent to the previous day of the share
         /// </summary>
         [Browsable(false)]
         public decimal PrevDayPerformance { get; internal set; } = decimal.MinValue / 2;
-
-        /// <summary>
-        /// Performance in percent to the previous day of the share as string
-        /// </summary>
-        [Browsable(false)]
-        public string PrevDayPerformanceAsStr => Helper.FormatDecimal(PrevDayPerformance, Helper.Currencythreelength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
 
         /// <summary>
         /// Performance in percent to the previous day of the share as string with unit
@@ -656,8 +672,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
             get
             {
-                var value = Helper.FormatDecimal(PrevDayDifference, Helper.Currencyfourlength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-                value += "\n" + Helper.FormatDecimal(PrevDayPerformance, Helper.Percentagefourlength, true, Helper.Percentagenonefixlength, true, PercentageUnit, CultureInfo);
+                var value = Helper.FormatDecimal(PrevDayDifference, Helper.Currencyfivelength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+                value += "\n" + Helper.FormatDecimal(PrevDayPerformance, Helper.Percentagefivelength, true, Helper.Percentagenonefixlength, true, PercentageUnit, CultureInfo);
                 return value;
             }
         }
@@ -667,12 +683,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         [Browsable(false)]
         public decimal PrevDayProfitLoss { get; internal set; } = decimal.MinValue / 2;
-
-        /// <summary>
-        /// Profit or loss to the previous day of the hole share volume as string
-        /// </summary>
-        [Browsable(false)]
-        public string PrevDayProfitLossAsStr => Helper.FormatDecimal(PrevDayProfitLoss, Helper.Currencythreelength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
 
         /// <summary>
         /// Profit or loss to the previous day of the hole share volume as string with unit
@@ -934,6 +944,24 @@ namespace SharePortfolioManager.Classes.ShareObjects
             // -
 
             Disposed = true;
+        }
+
+        public object Clone()
+        {
+            using (var stream = new MemoryStream())
+
+            {
+                if (GetType().IsSerializable)
+                {
+                    var formatter = new BinaryFormatter();
+                    formatter.Serialize(stream, this);
+                    stream.Position = 0;
+
+                    return formatter.Deserialize(stream);
+                }
+
+                return null;
+            }
         }
 
         #endregion Methods

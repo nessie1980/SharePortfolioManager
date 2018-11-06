@@ -75,14 +75,17 @@
             // 
             // OwnMessageBox
             // 
+            this.AcceptButton = this.btnOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(462, 195);
             this.Controls.Add(this.tblLayPnlOnwMessageBox);
             this.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(478, 234);
             this.Name = "OwnMessageBox";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;

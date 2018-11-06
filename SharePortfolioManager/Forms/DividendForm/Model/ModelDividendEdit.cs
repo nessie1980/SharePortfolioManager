@@ -41,11 +41,12 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
         bool UpdateDividend { get; set; }
 
         DividendErrorCode ErrorCode { get; set; }
+        string SelectedGuid { get; set; }
         string SelectedDate { get; set; }
 
         ShareObjectMarketValue ShareObjectMarketValue { get; set; }
-        List<ShareObjectMarketValue> ShareObjectListMarketValue { get; set; }
         ShareObjectFinalValue ShareObjectFinalValue { get; set; }
+        List<ShareObjectMarketValue> ShareObjectListMarketValue { get; set; }
         List<ShareObjectFinalValue> ShareObjectListFinalValue { get; set; }
 
         Logger Logger { get; set; }
@@ -134,13 +135,15 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
 
         public DividendErrorCode ErrorCode { get; set; }
 
+        public string SelectedGuid { get; set; }
+
         public string SelectedDate { get; set; }
 
         public ShareObjectMarketValue ShareObjectMarketValue { get; set; }
 
-        public List<ShareObjectMarketValue> ShareObjectListMarketValue { get; set; }
-
         public ShareObjectFinalValue ShareObjectFinalValue { get; set; }
+
+        public List<ShareObjectMarketValue> ShareObjectListMarketValue { get; set; }
 
         public List<ShareObjectFinalValue> ShareObjectListFinalValue { get; set; }
 
@@ -157,9 +160,8 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
             get => _date;
             set
             {
-                if (_date != null && _date == value)
+                if (Equals(_date, value))
                     return;
-
                 _date = value;
             }
         }
@@ -169,9 +171,8 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
             get => _time;
             set
             {
-                if (_time != null && _time == value)
+                if (Equals(_time, value))
                     return;
-
                 _time = value;
             }
         }
@@ -182,21 +183,20 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
         {
             get
             {
+                if (!decimal.TryParse(_exchangeRatio, out _exchangeRatioDec))
+                    _exchangeRatioDec = 0;
+
                 if (UpdateViewFormatted)
-                {
-                    // Only return the value if the exchange ratio is greater than '0'
-                    return _exchangeRatioDec > 0 ? Helper.FormatDecimal(_exchangeRatioDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : @"";
-                }
+                    return _exchangeRatioDec > 0 ? Helper.FormatDecimal(_exchangeRatioDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _exchangeRatio;
 
                 return _exchangeRatio;
             }
             set
             {
-                if (_exchangeRatio == value)
+                if (Equals(_exchangeRatio, value))
                     return;
                 _exchangeRatio = value;
 
-                // Try to parse
                 if (!decimal.TryParse(_exchangeRatio, out _exchangeRatioDec))
                     _exchangeRatioDec = 0;
             }
@@ -207,11 +207,9 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
             get => _exchangeRatioDec;
             set
             {
-                if (_exchangeRatioDec == value)
+                if (Equals(_exchangeRatioDec, value))
                     return;
                 _exchangeRatioDec = value;
-
-                ExchangeRatio = _exchangeRatioDec.ToString("G");
 
                 UpdateView = true;
             }
@@ -222,7 +220,7 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
             get => _cultureInfoFc;
             set
             {
-                if (_cultureInfoFc != null && Equals(_cultureInfoFc, value))
+                if (Equals(_cultureInfoFc, value))
                     return;
                 _cultureInfoFc = value;
             }
@@ -232,21 +230,20 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
         {
             get
             {
+                if (!decimal.TryParse(_rate, out _rateDec))
+                    _rateDec = 0;
+
                 if (UpdateViewFormatted)
-                {
-                    // Only return the value if the rate is greater than '0'
-                    return _rateDec > 0 ? Helper.FormatDecimal(_rateDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : @"";
-                }
+                    return _rateDec > 0 ? Helper.FormatDecimal(_rateDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _rate;
 
                 return _rate;
             }
             set
             {
-                if (_rate == value)
+                if (Equals(_rate, value))
                     return;
                 _rate = value;
 
-                // Try to parse
                 if (!decimal.TryParse(_rate, out _rateDec))
                     _rateDec = 0;
             }
@@ -257,11 +254,9 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
             get => _rateDec;
             set
             {
-                if (_rateDec == value)
+                if (Equals(_rateDec, value))
                     return;
                 _rateDec = value;
-
-                Rate = _rateDec.ToString("G");
 
                 UpdateView = true;
             }
@@ -271,21 +266,20 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
         {
             get
             {
+                if (!decimal.TryParse(_volume, out _volumeDec))
+                    _volumeDec = 0;
+
                 if (UpdateViewFormatted)
-                {
-                    // Only return the value if the volume is greater than '0'
-                    return _volumeDec > 0 ? Helper.FormatDecimal(_volumeDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : @"";
-                }
+                    return _volumeDec >= 0 ? Helper.FormatDecimal(_volumeDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _volume;
 
                 return _volume;
             }
             set
             {
-                if (_volume == value)
+                if (Equals(_volume, value))
                     return;
                 _volume = value;
 
-                // Try to parse
                 if (!decimal.TryParse(_volume, out _volumeDec))
                     _volumeDec = 0;
             }
@@ -296,25 +290,30 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
             get => _volumeDec;
             set
             {
-                if (_volumeDec == value)
-                {
+                if (Equals(_volumeDec, value))
                     return;
-                }
-
                 _volumeDec = value;
             }
         }
 
         public string Payout
         {
-            get => _payoutDec > 0 ? Helper.FormatDecimal(_payoutDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : @"";
+            get
+            {
+                if (!decimal.TryParse(_payout, out _payoutDec))
+                    _payoutDec = 0;
+
+                if (UpdateViewFormatted)
+                    return _payoutDec >= 0 ? Helper.FormatDecimal(_payoutDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _payout;
+
+                return _payout;
+            }
             set
             {
-                if (_payout == value)
+                if (Equals(_payout, value))
                     return;
                 _payout = value;
 
-                // Try to parse
                 if (!decimal.TryParse(_payout, out _payoutDec))
                     _payoutDec = 0;
 
@@ -327,11 +326,9 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
             get => _payoutDec;
             set
             {
-                if (_payoutDec == value)
+                if (Equals(_payoutDec, value))
                     return;
                 _payoutDec = value;
-
-                Payout = _payoutDec.ToString("G");
 
                 UpdateView = true;
             }
@@ -339,14 +336,27 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
 
         public string PayoutFc
         {
-            get => _payoutFcDec > 0 ? Helper.FormatDecimal(_payoutFcDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : @"";
+            get
+            {
+                if (!decimal.TryParse(_payoutFc, out _payoutFcDec))
+                    _payoutFcDec = 0;
+
+                if (UpdateViewFormatted)
+                {
+                    if(EnableFc == CheckState.Checked)
+                        return _payoutFcDec >= 0 ? Helper.FormatDecimal(_payoutFcDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _payoutFc;
+                    else
+                        return _payoutFcDec > 0 ? Helper.FormatDecimal(_payoutFcDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _payoutFc;
+                }
+
+                return _payoutFc;
+            }
             set
             {
-                if (_payoutFc == value)
+                if (Equals(_payoutFc, value))
                     return;
                 _payoutFc = value;
 
-                // Try to parse
                 if (!decimal.TryParse(_payoutFc, out _payoutFcDec))
                     _payoutFcDec = 0;
             }
@@ -357,11 +367,9 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
             get => _payoutFcDec;
             set
             {
-                if (_payoutFcDec == value)
+                if (Equals(_payoutFcDec, value))
                     return;
                 _payoutFcDec = value;
-
-                PayoutFc = _payoutFcDec.ToString("G");
 
                 UpdateView = true;
             }
@@ -371,21 +379,20 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
         {
             get
             {
+                if (!decimal.TryParse(_taxAtSource, out _taxAtSourceDec))
+                    _taxAtSourceDec = 0;
+
                 if (UpdateViewFormatted)
-                {
-                    // Only return the value if the tax is greater than '0'
-                    return _taxAtSourceDec > 0 ? Helper.FormatDecimal(_taxAtSourceDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : @"";
-                }
+                    return _taxAtSourceDec > 0 ? Helper.FormatDecimal(_taxAtSourceDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _taxAtSource;
 
                 return _taxAtSource;
             }
             set
             {
-                if (_taxAtSource == value)
+                if (Equals(_taxAtSource, value))
                     return;
                 _taxAtSource = value;
 
-                // Try to parse
                 if (!decimal.TryParse(_taxAtSource, out _taxAtSourceDec))
                     _taxAtSourceDec = 0;
             }
@@ -396,11 +403,8 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
             get => _taxAtSourceDec;
             set
             {
-                if (_taxAtSourceDec == value)
+                if (Equals(_taxAtSourceDec, value))
                     return;
-
-                TaxAtSource = TaxAtSourceDec.ToString("G");
-
                 _taxAtSourceDec = value;
             }
         }
@@ -409,21 +413,20 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
         {
             get
             {
+                if (!decimal.TryParse(_capitalGainsTax, out _capitalGainsTaxDec))
+                    _capitalGainsTaxDec = 0;
+
                 if (UpdateViewFormatted)
-                {
-                    // Only return the value if the tax is greater than '0'
-                    return _capitalGainsTaxDec > 0 ? Helper.FormatDecimal(_capitalGainsTaxDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : @"";
-                }
+                    return _capitalGainsTaxDec > 0 ? Helper.FormatDecimal(_capitalGainsTaxDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _capitalGainsTax;
 
                 return _capitalGainsTax;
             }
             set
             {
-                if (_capitalGainsTax == value)
+                if (Equals(_capitalGainsTax, value))
                     return;
                 _capitalGainsTax = value;
 
-                // Try to parse
                 if (!decimal.TryParse(_capitalGainsTax, out _capitalGainsTaxDec))
                     _capitalGainsTaxDec = 0;
             }
@@ -434,11 +437,8 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
             get => _capitalGainsTaxDec;
             set
             {
-                if (_capitalGainsTaxDec == value)
+                if (Equals(_capitalGainsTaxDec, value))
                     return;
-
-                CapitalGainsTax = CapitalGainsTaxDec.ToString("G");
-
                 _capitalGainsTaxDec = value;
             }
         }
@@ -447,21 +447,20 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
         {
             get
             {
+                if (!decimal.TryParse(_solidarityTax, out _solidarityTaxDec))
+                    _solidarityTaxDec = 0;
+
                 if (UpdateViewFormatted)
-                {
-                    // Only return the value if the tax is greater than '0'
-                    return _solidarityTaxDec > 0 ? Helper.FormatDecimal(_solidarityTaxDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : @"";
-                }
+                    return _solidarityTaxDec > 0 ? Helper.FormatDecimal(_solidarityTaxDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _solidarityTax;
 
                 return _solidarityTax;
             }
             set
             {
-                if (_solidarityTax == value)
+                if (Equals(_solidarityTax, value))
                     return;
                 _solidarityTax = value;
 
-                // Try to parse
                 if (!decimal.TryParse(_solidarityTax, out _solidarityTaxDec))
                     _solidarityTaxDec = 0;
             }
@@ -472,25 +471,30 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
             get => _solidarityTaxDec;
             set
             {
-                if (_solidarityTaxDec == value)
+                if (Equals(_solidarityTaxDec, value))
                     return;
-
-                SolidarityTax = SolidarityTaxDec.ToString("G");
-
                 _solidarityTaxDec = value;
             }
         }
 
         public string Tax
         {
-            get => _taxDec > 0 ? Helper.FormatDecimal(_taxDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : @"";
+            get
+            {
+                if (!decimal.TryParse(_tax, out _taxDec))
+                    _taxDec = 0;
+
+                if (UpdateViewFormatted)
+                    return _taxDec >= 0 ? Helper.FormatDecimal(_taxDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _tax;
+
+                return _tax;
+            }
             set
             {
-                if (_tax == value)
+                if (Equals(_tax, value))
                     return;
                 _tax = value;
 
-                // Try to parse
                 if (!decimal.TryParse(_tax, out _taxDec))
                     _taxDec = 0;
             }
@@ -501,25 +505,30 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
             get => _taxDec;
             set
             {
-                if (_taxDec == value)
+                if (Equals(_taxDec, value))
                     return;
-
-                Tax = TaxDec.ToString("G");
-
                 _taxDec = value;
             }
         }
 
         public string PayoutAfterTax
         {
-            get => _payoutAfterTaxDec > 0 ? Helper.FormatDecimal(_payoutAfterTaxDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : @"";
+            get
+            {
+                if (!decimal.TryParse(_payoutAfterTax, out _payoutAfterTaxDec))
+                    _payoutAfterTaxDec = 0;
+
+                if (UpdateViewFormatted)
+                    return _payoutAfterTaxDec >= 0 ? Helper.FormatDecimal(_payoutAfterTaxDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _payoutAfterTax;
+
+                return _payoutAfterTax;
+            }
             set
             {
-                if (_payoutAfterTax == value)
+                if (Equals(_payoutAfterTax, value))
                     return;
                 _payoutAfterTax = value;
 
-                // Try to parse
                 if (!decimal.TryParse(_payoutAfterTax, out _payoutAfterTaxDec))
                     _payoutAfterTaxDec = 0;
             }
@@ -530,11 +539,9 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
             get => _payoutAfterTaxDec;
             set
             {
-                if (_payoutAfterTaxDec == value)
+                if (Equals(_payoutAfterTaxDec, value))
                     return;
                 _payoutAfterTaxDec = value;
-
-                PayoutAfterTax = _payoutAfterTaxDec.ToString("G");
 
                 UpdateView = true;
             }
@@ -542,14 +549,22 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
 
         public string Yield
         {
-            get => _yieldDec > 0 ? Helper.FormatDecimal(_yieldDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : @"";
+            get
+            {
+                if (!decimal.TryParse(_yield, out _yieldDec))
+                    _yieldDec = 0;
+
+                if (UpdateViewFormatted)
+                    return _yieldDec >= 0 ? Helper.FormatDecimal(_yieldDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _yield;
+
+                return _yield;
+            }
             set
             {
-                if (_yield == value)
+                if (Equals(_yield, value))
                     return;
                 _yield = value;
 
-                // Try to parse
                 if (!decimal.TryParse(_yield, out _yieldDec))
                     _yieldDec = 0;
             }
@@ -560,11 +575,9 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
             get => _yieldDec;
             set
             {
-                if (_yieldDec == value)
+                if (Equals(_yieldDec, value))
                     return;
                 _yieldDec = value;
-
-                Yield = _yieldDec.ToString("G");
 
                 UpdateView = true;
             }
@@ -574,21 +587,20 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
         {
             get
             {
+                if (!decimal.TryParse(_price, out _priceDec))
+                    _priceDec = 0;
+
                 if (UpdateViewFormatted)
-                {
-                    // Only return the value if the price is greater than '0'
-                    return _priceDec > 0 ? Helper.FormatDecimal(_priceDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : @"";
-                }
+                    return _priceDec > 0 ? Helper.FormatDecimal(_priceDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _price;
 
                 return _price;
             }
             set
             {
-                if (_price == value)
+                if (Equals(_price, value))
                     return;
                 _price = value;
 
-                // Try to parse
                 if (!decimal.TryParse(_price, out _priceDec))
                     _priceDec = 0;
             }
@@ -599,7 +611,7 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
             get => _priceDec;
             set
             {
-                if (_priceDec == value)
+                if (Equals(_priceDec, value))
                     return;
                 _priceDec = value;
             }
@@ -610,7 +622,7 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
             get => _document;
             set
             {
-                if (_document == value)
+                if (Equals(_document, value))
                     return;
                 _document = value;
             }

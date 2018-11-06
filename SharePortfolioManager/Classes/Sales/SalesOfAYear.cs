@@ -28,6 +28,7 @@ using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager
 {
+    [Serializable]
     public class SalesYearOfTheShare
     {
         #region Properties
@@ -40,11 +41,11 @@ namespace SharePortfolioManager
 
         public string SalePayoutYearWithUnitAsStr => Helper.FormatDecimal(SalePayoutYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
 
-        public decimal SalePayoutWithoutCostsYear { get; internal set; } = -1;
+        public decimal SalePayoutWithoutBrokerageYear { get; internal set; } = -1;
 
-        public string SalePayoutWithoutCostsYearAsStr => Helper.FormatDecimal(SalePayoutWithoutCostsYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
+        public string SalePayoutWithoutBrokerageYearAsStr => Helper.FormatDecimal(SalePayoutWithoutBrokerageYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
 
-        public string SalePayoutWithoutCostsYearWithUnitAsStr => Helper.FormatDecimal(SalePayoutWithoutCostsYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
+        public string SalePayoutWithoutBrokerageYearWithUnitAsStr => Helper.FormatDecimal(SalePayoutWithoutBrokerageYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
 
         public decimal SaleVolumeYear { get; internal set; } = -1;
 
@@ -64,11 +65,11 @@ namespace SharePortfolioManager
 
         public string SaleProfitLossYearWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
 
-        public decimal SaleProfitLossWithoutCostsYear { get; internal set; } = -1;
+        public decimal SaleProfitLossWithoutBrokerageYear { get; internal set; } = -1;
 
-        public string SaleProfitLossWithoutCostsYearAsStr => Helper.FormatDecimal(SaleProfitLossWithoutCostsYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
+        public string SaleProfitLossWithoutBrokerageYearAsStr => Helper.FormatDecimal(SaleProfitLossWithoutBrokerageYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
 
-        public string SaleProfitLossYearWithoutCostsWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossWithoutCostsYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
+        public string SaleProfitLossYearWithoutBrokerageWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossWithoutBrokerageYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
 
         public List<SaleObject> SaleListYear { get; } = new List<SaleObject>();
 
@@ -82,19 +83,21 @@ namespace SharePortfolioManager
         /// This functions adds a new sale object to the year list with the given values
         /// It also recalculates the value of the sale shares in the year
         /// </summary>
-        /// <param name="cultureInfo">Culture info of the buy</param>
+        /// <param name="cultureInfo">Culture info of the sale</param>
+        /// <param name="strGuid">Guid of the sale</param>
         /// <param name="strDate">Date of the share sale</param>
         /// <param name="decVolume">Volume of the sale</param>
-        /// <param name="decBuyPrice">Buy price of the share</param>
         /// <param name="decSalePrice">Sale price of the share</param>
+        /// <param name="usedBuyDetails">Details of the used buys for the sale</param>
         /// <param name="decTaxAtSource">Tax at source of the sale</param>
         /// <param name="decCapitalGainsTax">Capital gains tax of the sale</param>
         /// <param name="decSolidarityTax">Solidarity tax of the sale</param>
-        /// <param name="decCosts">Costs of the sale</param>
+        /// <param name="decBrokerage">Brokerage of the sale</param>
+        /// <param name="decReduction">Reduction of the sale</param>
         /// <param name="strDoc">Document of the sale</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddSaleObject(CultureInfo cultureInfo, string strDate, decimal decVolume, decimal decBuyPrice, decimal decSalePrice, decimal decTaxAtSource, decimal decCapitalGainsTax,
-             decimal decSolidarityTax, decimal decCosts, string strDoc = "")
+        public bool AddSaleObject(CultureInfo cultureInfo,  string strGuid, string strDate, decimal decVolume, decimal decSalePrice, List<SaleBuyDetails> usedBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
+             decimal decSolidarityTax, decimal decBrokerage, decimal decReduction, string strDoc = "")
         {
 #if DEBUG_SALE
             Console.WriteLine(@"AddSaleObject");
@@ -105,24 +108,26 @@ namespace SharePortfolioManager
                 SaleCultureInfo = cultureInfo;
 
                 // Create new SaleObject
-                var addObject = new SaleObject(cultureInfo, strDate, decVolume, decBuyPrice, decSalePrice, decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decCosts, strDoc);
-                var addPorfitLossObject = new ProfitLossObject(cultureInfo, strDate, addObject.ProfitLoss, strDoc);
+                var addObject = new SaleObject(cultureInfo, strGuid, strDate, decVolume, decSalePrice, usedBuyDetails, decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decBrokerage, decReduction, strDoc);
+
+                var strGuidProfitLoss = Guid.NewGuid().ToString();
+                var addProfitLossObject = new ProfitLossObject(cultureInfo, strGuidProfitLoss, strDate, addObject.ProfitLoss, strDoc);
 
                 // Add object to the list
                 SaleListYear.Add(addObject);
                 SaleListYear.Sort(new SaleObjectComparer());
 
                 // Add profit or loss object to the list
-                ProfitLossListYear.Add(addPorfitLossObject);
+                ProfitLossListYear.Add(addProfitLossObject);
                 ProfitLossListYear.Sort(new ProfitLossObjectComparer());
 
                 // Calculate sale value
                 if (SalePayoutYear == -1)
                     SalePayoutYear = 0;
                 SalePayoutYear += addObject.Payout;
-                if (SalePayoutWithoutCostsYear == -1)
-                    SalePayoutWithoutCostsYear = 0;
-                SalePayoutWithoutCostsYear += addObject.PayoutWithoutCosts;
+                if (SalePayoutWithoutBrokerageYear == -1)
+                    SalePayoutWithoutBrokerageYear = 0;
+                SalePayoutWithoutBrokerageYear += addObject.PayoutWithoutBrokerage;
 
                 // Calculate sale volume
                 if (SaleVolumeYear == -1)
@@ -138,17 +143,17 @@ namespace SharePortfolioManager
                 if (SaleProfitLossYear == -1)
                     SaleProfitLossYear = 0;
                 SaleProfitLossYear += addObject.ProfitLoss;
-                if (SaleProfitLossWithoutCostsYear == -1)
-                    SaleProfitLossWithoutCostsYear = 0;
-                SaleProfitLossWithoutCostsYear += addObject.ProfitLossWithoutCosts;
+                if (SaleProfitLossWithoutBrokerageYear == -1)
+                    SaleProfitLossWithoutBrokerageYear = 0;
+                SaleProfitLossWithoutBrokerageYear += addObject.ProfitLossWithoutBrokerage;
 
 #if DEBUG_SALE
                 Console.WriteLine(@"SalePayoutYear: {0}", SalePayoutYear);
-                Console.WriteLine(@"SalePayoutWithoutCostsYear: {0}", SalePayoutWithoutCostsYear);
+                Console.WriteLine(@"SalePayoutWithoutBrokerageYear: {0}", SalePayoutWithoutBrokerageYear);
                 Console.WriteLine(@"SaleVolumeYear: {0}", SaleVolumeYear);
                 Console.WriteLine(@"SalePurchaseValueYear: {0}", SalePurchaseValueYear);
                 Console.WriteLine(@"SaleProfitLossYear: {0}", SaleProfitLossYear);
-                Console.WriteLine(@"SaleProfitLossWithoutCostsYear: {0}", SaleProfitLossWithoutCostsYear);
+                Console.WriteLine(@"SaleProfitLossWithoutBrokerageYear: {0}", SaleProfitLossWithoutBrokerageYear);
                 Console.WriteLine(@"");
 #endif
             }
@@ -164,9 +169,9 @@ namespace SharePortfolioManager
         /// This function removes the sale object with the given date and time from the list
         /// It also recalculates the sale value, volume and profit and loss
         /// </summary>
-        /// <param name="strDateTime">Date and time of the sale object which should be removed</param>
+        /// <param name="strGuid">Guid of the sale object which should be removed</param>
         /// <returns>Flag if the remove was successfully</returns>
-        public bool RemoveSaleObject(string strDateTime)
+        public bool RemoveSaleObject(string strGuid)
         {
 #if DEBUG_SALE
             Console.WriteLine(@"RemoveSaleObject");
@@ -177,7 +182,7 @@ namespace SharePortfolioManager
                 var iFoundIndex = -1;
                 foreach (var saleObject in SaleListYear)
                 {
-                    if (saleObject.Date != strDateTime) continue;
+                    if (saleObject.Guid != strGuid) continue;
 
                     iFoundIndex = SaleListYear.IndexOf(saleObject);
                     break;
@@ -190,20 +195,20 @@ namespace SharePortfolioManager
 
                 // Calculate sale value
                 SalePayoutYear -= removeObject.Payout;
-                SalePayoutWithoutCostsYear -= removeObject.PayoutWithoutCosts;
+                SalePayoutWithoutBrokerageYear -= removeObject.PayoutWithoutBrokerage;
                 // Calculate sale volume
                 SaleVolumeYear -= removeObject.Volume;
                 // Calculate purchase vale
                 SalePurchaseValueYear -= removeObject.PurchaseValue;
                 // Calculate sale profit or loss
                 SaleProfitLossYear -= removeObject.ProfitLoss;
-                SaleProfitLossWithoutCostsYear -= removeObject.ProfitLossWithoutCosts;
+                SaleProfitLossWithoutBrokerageYear -= removeObject.ProfitLossWithoutBrokerage;
 
                 // Search for the remove object
                 iFoundIndex = -1;
                 foreach (var profitLossObject in ProfitLossListYear)
                 {
-                    if (profitLossObject.Date != strDateTime) continue;
+                    if (profitLossObject.Guid != strGuid) continue;
 
                     iFoundIndex = ProfitLossListYear.IndexOf(profitLossObject);
                     break;
@@ -216,9 +221,9 @@ namespace SharePortfolioManager
 
 #if DEBUG_SALE
                 Console.WriteLine(@"SalePayoutYear: {0}", SalePayoutYear);
-                Console.WriteLine(@"SalePayoutWithoutCostsYear: {0}", SalePayoutWithoutCostsYear);
+                Console.WriteLine(@"SalePayoutWithoutBrokerageYear: {0}", SalePayoutWithoutBrokerageYear);
                 Console.WriteLine(@"SaleVolumeYear: {0}", SaleVolumeYear);
-                Console.WriteLine(@"SaleProfitLossWithoutCostsYear: {0}", SaleProfitLossWithoutCostsYear);
+                Console.WriteLine(@"SaleProfitLossWithoutBrokerageYear: {0}", SaleProfitLossWithoutBrokerageYear);
                 Console.WriteLine(@"");
 #endif
             }

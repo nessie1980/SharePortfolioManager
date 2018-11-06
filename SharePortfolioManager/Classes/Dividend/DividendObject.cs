@@ -23,14 +23,16 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using SharePortfolioManager.Classes;
 using System.Globalization;
 using System.Windows.Forms;
-using SharePortfolioManager.Classes.ShareObjects;
+using SharePortfolioManager.Properties;
 using static System.Decimal;
 
 namespace SharePortfolioManager
 {
+    [Serializable]
     public class DividendObject
     {
         #region Variables
@@ -56,29 +58,14 @@ namespace SharePortfolioManager
         private decimal _payoutDec;
 
         /// <summary>
-        /// Stores the paid dividend value as string
-        /// </summary>
-        private string _payout = "";
-
-        /// <summary>
         /// Stores the paid dividend value in the foreign currency
         /// </summary>
         private decimal _payoutFcDec;
 
         /// <summary>
-        /// Stores the paid dividend value in the foreign currency as string
-        /// </summary>
-        private string _payoutFc = "";
-
-        /// <summary>
         /// Stores the paid dividend value with taxes
         /// </summary>
         private decimal _payOutWithTaxesDec;
-
-        /// <summary>
-        /// Stores the paid dividend value with taxes as string
-        /// </summary>
-        private string _payOutWithTaxes = "";
 
         /// <summary>
         /// Stores the paid dividend of one piece of the share
@@ -128,7 +115,7 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores the paid taxes sum as string
         /// </summary>
-        private string _taxesSum = "";
+        private string _taxesSum;
 
         /// <summary>
         /// Stores the dividend yield
@@ -208,7 +195,10 @@ namespace SharePortfolioManager
         [Browsable(false)]
         public string ExchangeRatio
         {
-            get => Helper.FormatDecimal(_exchangeRatioDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", DividendCultureInfo);
+            get => _exchangeRatioDec > 0
+                ? Helper.FormatDecimal(_exchangeRatioDec, Helper.Currencyfivelength, true,
+                    Helper.Currencytwofixlength)
+                : @"";
             set
             {
                 if (_exchangeRatio == value)
@@ -223,28 +213,15 @@ namespace SharePortfolioManager
             }
         }
 
-        [Browsable(false)]
-        public string ExchangeRatioWithUnit => Helper.FormatDecimal(_exchangeRatioDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", DividendCultureInfo);
+        [Browsable(true)]
+        [DisplayName(@"Guid")]
+        public string Guid { get; internal set; }
 
         [Browsable(false)]
-        public string DateTime { get; set; }
+        public string Date { get; set; }
 
         [DisplayName(@"Date")]
-        public string DateTimeStr => DateTime;
-
-        [Browsable(false)]
-        public decimal RateDec
-        {
-            get => _rateDec;
-            set
-            {
-                if (_rateDec == value)
-                    return;
-                _rateDec = value;
-
-                CalculateDividendValues();
-            }
-        }
+        public string DateStr => DateTime.Parse(Date).ToShortDateString();
 
         [Browsable(false)]
         public decimal PayoutDec
@@ -261,25 +238,7 @@ namespace SharePortfolioManager
         }
 
         [Browsable(false)]
-        public string Payout
-        {
-            get => Helper.FormatDecimal(_payoutDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", DividendCultureInfo);
-            set
-            {
-                if (_payout == value)
-                    return;
-                _payout = value;
-
-                // Try to parse
-                if (!TryParse(_payout, out _payoutDec))
-                    _payoutDec = 0;
-
-                CalculateDividendValues();
-            }
-        }
-
-        [Browsable(false)]
-        public string PayoutWithUnit => Helper.FormatDecimal(_payoutDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", DividendCultureInfo);
+        public string Payout => _payoutDec > 0 ? Helper.FormatDecimal(_payoutDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : @"";
 
         [Browsable(false)]
         public decimal PayoutFcDec
@@ -296,25 +255,7 @@ namespace SharePortfolioManager
         }
 
         [Browsable(false)]
-        public string PayoutFc
-        {
-            get => _payoutFcDec.ToString("G");
-            set
-            {
-                if (_payoutFc == value)
-                    return;
-                _payoutFc = value;
-
-                // Try to parse
-                if (!TryParse(_payoutFc, out _payoutFcDec))
-                    _payoutFcDec = 0;
-
-                CalculateDividendValues();
-            }
-        }
-
-        [Browsable(false)]
-        public string PayoutFcWithUnit => Helper.FormatDecimal(_payoutFcDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", DividendCultureInfo);
+        public string PayoutFc => _payoutFcDec > 0 ? Helper.FormatDecimal(_payoutFcDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : @"";
 
         [Browsable(false)]
         public decimal PayoutWithTaxesDec
@@ -322,40 +263,21 @@ namespace SharePortfolioManager
             get => _payOutWithTaxesDec;
             internal set
             {
-                if (_payOutWithTaxesDec == value)
-                {
+                if (Equals(_payOutWithTaxesDec, value))
                     return;
-                }
 
                 _payOutWithTaxesDec = value;
             }
         }
 
-        [Browsable(true)]
-        [DisplayName(@"PayoutWithTaxes")]
-        public string PayoutWithTaxes
-        {
-            get => Helper.FormatDecimal(_payOutWithTaxesDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", DividendCultureInfo);
-            internal set
-            {
-                if (_payOutWithTaxes == value)
-                    return;
-                _payOutWithTaxes = value;
-
-                // Try to parse
-                if (!TryParse(_payOutWithTaxes, out _payOutWithTaxesDec))
-                    _payOutWithTaxesDec = 0;
-            }
-        }
-
         [Browsable(false)]
-        public string PayoutWithTaxesWithUnit => Helper.FormatDecimal(_payOutWithTaxesDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", DividendCultureInfo);
+        public string PayoutWithTaxes => _payOutWithTaxesDec > 0 ? Helper.FormatDecimal(_payOutWithTaxesDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : @"";
 
         [Browsable(true)]
         [DisplayName(@"Dividend")]
         public string Rate
         {
-            get => Helper.FormatDecimal(_rateDec, Helper.Currencysixlength, false, Helper.Currencytwofixlength, false, @"", DividendCultureInfo);
+            get => _rateDec > 0 ? Helper.FormatDecimal(_rateDec, Helper.Currencyfivelength, true, Helper.Currencytwofixlength) : @"";
             set
             {
                 if (_rate == value)
@@ -371,7 +293,51 @@ namespace SharePortfolioManager
         }
 
         [Browsable(false)]
-        public string RateWithUnit => Helper.FormatDecimal(_rateDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", DividendCultureInfo);
+        public decimal RateDec
+        {
+            get => _rateDec;
+            set
+            {
+                if (_rateDec == value)
+                    return;
+                _rateDec = value;
+
+                CalculateDividendValues();
+            }
+        }
+
+        [Browsable(false)]
+        public decimal VolumeDec
+        {
+            get => _volumeDec;
+            set
+            {
+                if (_volumeDec == value)
+                    return;
+                _volumeDec = value;
+
+                CalculateDividendValues();
+            }
+        }
+
+        [Browsable(true)]
+        [DisplayName(@"Volume")]
+        public string Volume
+        {
+            get => _volumeDec >= 0 ? Helper.FormatDecimal(_volumeDec, Helper.Currencyfivelength, true, Helper.Currencytwofixlength) : @"";
+            set
+            {
+                if (_volume == value)
+                    return;
+                _volume = value;
+
+                // Try to parse
+                if (!TryParse(_volume, out _volumeDec))
+                    _volumeDec = 0;
+
+                CalculateDividendValues();
+            }
+        }
 
         [Browsable(false)]
         public decimal TaxAtSourceDec
@@ -406,9 +372,6 @@ namespace SharePortfolioManager
         }
 
         [Browsable(false)]
-        public string TaxAtSourceWithUnit => Helper.FormatDecimal(_taxAtSourceDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", DividendCultureInfo);
-
-        [Browsable(false)]
         public decimal CapitalGainsTaxDec
         {
             get => _capitalGainsTaxDec;
@@ -441,9 +404,6 @@ namespace SharePortfolioManager
         }
 
         [Browsable(false)]
-        public string CapitalGainsTaxWithUnit => Helper.FormatDecimal(_capitalGainsTaxDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", DividendCultureInfo);
-
-        [Browsable(false)]
         public decimal SolidarityTaxDec
         {
             get => _solidarityTaxDec;
@@ -460,7 +420,7 @@ namespace SharePortfolioManager
         [Browsable(false)]
         public string SolidarityTax
         {
-            get => Helper.FormatDecimal(_solidarityTaxDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", DividendCultureInfo);
+            get => Helper.FormatDecimal(_solidarityTaxDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength);
             set
             {
                 if (_solidarityTax == value)
@@ -474,9 +434,6 @@ namespace SharePortfolioManager
                 CalculateDividendValues();
             }
         }
-
-        [Browsable(false)]
-        public string SolidarityTaxWithUnit => Helper.FormatDecimal(_solidarityTaxDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", DividendCultureInfo);
 
         [Browsable(false)]
         public decimal TaxesSumDec
@@ -494,10 +451,11 @@ namespace SharePortfolioManager
             }
         }
 
-        [Browsable(false)]
+        [Browsable(true)]
+        [DisplayName(@"TaxSum")]
         public string TaxesSum
         {
-            get => Helper.FormatDecimal(_taxesSumDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", DividendCultureInfo);
+            get => _taxesSumDec >= 0 ? Helper.FormatDecimal(_taxesSumDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : @"";
             set
             {
                 if (_taxesSum == value)
@@ -507,11 +465,10 @@ namespace SharePortfolioManager
                 // Try to parse
                 if (!TryParse(_taxesSum, out _taxesSumDec))
                     _taxesSumDec = 0;
+
+                CalculateDividendValues();
             }
         }
-
-        [Browsable(false)]
-        public string TaxesSumWithUnit => Helper.FormatDecimal(_taxesSumDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", DividendCultureInfo);
 
         [Browsable(false)]
         public decimal YieldDec
@@ -547,9 +504,6 @@ namespace SharePortfolioManager
         }
 
         [Browsable(false)]
-        public string YieldWithUnit => Helper.FormatDecimal(_yieldDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, DividendCultureInfo);
-
-        [Browsable(false)]
         public decimal PriceDec
         {
             get => _priceDec;
@@ -563,11 +517,10 @@ namespace SharePortfolioManager
             }
         }
 
-        [Browsable(true)]
-        [DisplayName(@"Price")]
+        [Browsable(false)]
         public string Price
         {
-            get => Helper.FormatDecimal(_priceDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", DividendCultureInfo);
+            get => Helper.FormatDecimal(_priceDec, Helper.Currencyfivelength, true, Helper.Currencytwofixlength);
             set
             {
                 if (_price == value)
@@ -583,50 +536,11 @@ namespace SharePortfolioManager
         }
 
         [Browsable(false)]
-        public string PriceWithUnit => Helper.FormatDecimal(_priceDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", DividendCultureInfo);
-
-        [Browsable(false)]
-        public decimal VolumeDec
-        {
-            get => _volumeDec;
-            set
-            {
-                if (_volumeDec == value)
-                    return;
-                _volumeDec = value;
-
-                CalculateDividendValues();
-            }
-        }
-
-        [Browsable(true)]
-        [DisplayName(@"Volume")]
-        public string Volume
-        {
-            get => Helper.FormatDecimal(_volumeDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", DividendCultureInfo);
-            set
-            {
-                if (_volume == value)
-                    return;
-                _volume = value;
-
-                // Try to parse
-                if (!TryParse(_volume, out _volumeDec))
-                    _volumeDec = 0;
-
-                CalculateDividendValues();
-            }
-        }
-
-        [Browsable(false)]
-        public string VolumeWithUnit => Helper.FormatDecimal(_volumeDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, DividendCultureInfo);
-
-        [Browsable(false)]
         public string Document { get; set; }
 
         [Browsable(true)]
         [DisplayName(@"Document")]
-        public string DocumentFileName => Helper.GetFileName(Document);
+        public Image DocumentGrid => Document == @"-" ? null : Resources.black_logger;
 
         #endregion Properties
 
@@ -639,6 +553,7 @@ namespace SharePortfolioManager
         /// <param name="cultureInfoFc">Foreign culture info of the share</param>
         /// <param name="csEnableFc">Flag if the payout is in a foreign currency</param>
         /// <param name="decExchangeRatio">Exchange ratio for the foreign currency calculation</param>
+        /// <param name="strGuid">Guid of the share buy</param>
         /// <param name="strDate">Date of the dividend pay</param>
         /// <param name="decDiviendRate">Dividend of one piece</param>
         /// <param name="decVolume">Volume of all shares</param>
@@ -648,14 +563,15 @@ namespace SharePortfolioManager
         /// <param name="decPrice">Price of one piece</param>
         /// <param name="strDoc">Document of the dividend</param>
         public DividendObject(CultureInfo cultureInfo, CultureInfo cultureInfoFc, CheckState csEnableFc, decimal decExchangeRatio,
-            string strDate, decimal decDiviendRate, decimal decVolume,
+            string strGuid, string strDate, decimal decDiviendRate, decimal decVolume,
             decimal decTaxAtSource, decimal decCapitalGainsTax, decimal decSolidarityTax,
             decimal decPrice, string strDoc = "")
         {
             DividendCultureInfo = cultureInfo;
             CultureInfoFc = cultureInfoFc;
 
-            DateTime = strDate;
+            Guid = strGuid;
+            Date = strDate;
             EnableFc = csEnableFc;
             ExchangeRatioDec = decExchangeRatio;
             RateDec = decDiviendRate;
@@ -674,7 +590,8 @@ namespace SharePortfolioManager
             if(EnableFc == CheckState.Checked)
                 Console.WriteLine(@"CultureInfoFC: {0}", CultureInfoFc.Name);
             Console.WriteLine(@"ExchangeRatio: {0}", ExchangeRatioDec);
-            Console.WriteLine(@"Date: {0}", DateTime);
+            Console.WriteLine(@"Guid: {0}", Guid);
+            Console.WriteLine(@"Date: {0}", Date);
             Console.WriteLine(@"DividendOfAShare: {0}", RateDec);
             Console.WriteLine(@"Volume: {0}", VolumeDec);
             Console.WriteLine(@"TaxAtSource: {0}", TaxAtSourceDec);
@@ -693,6 +610,13 @@ namespace SharePortfolioManager
         /// </summary>
         private void CalculateDividendValues()
         {
+//#if DEBUG_DIVIDEND
+            Console.WriteLine(@"");
+            Console.WriteLine(@"CalculateDividendValues");
+            Console.WriteLine(@"RateDec: {0}", RateDec);
+            Console.WriteLine(@"PriceDec: {0}", PriceDec);
+//#endif
+
             if (EnableFc == CheckState.Checked)
             {
                 // Calculate the payout
@@ -700,6 +624,8 @@ namespace SharePortfolioManager
 
                 if (ExchangeRatioDec != 0)
                     PayoutDec = Math.Round(PayoutFcDec / ExchangeRatioDec, 2, MidpointRounding.AwayFromZero);
+                else
+                    PayoutDec = 0;
             }
             else
             {
@@ -718,13 +644,16 @@ namespace SharePortfolioManager
             TaxesSumDec = TaxAtSourceDec + CapitalGainsTaxDec + SolidarityTaxDec;
 
             // Calculate payout with taxes
-            PayoutWithTaxesDec = PayoutDec - TaxesSumDec;
+            if ( PayoutDec > 0)
+                PayoutWithTaxesDec = PayoutDec - TaxesSumDec;
+            else
+                PayoutWithTaxesDec = 0;
 
             // Set flag for the view update
             UpdateView = true;
         }
 
-        #endregion Methods
+#endregion Methods
     }
 
     /// <inheritdoc />
@@ -734,17 +663,17 @@ namespace SharePortfolioManager
     /// </summary>
     public class DividendObjectComparer : IComparer<DividendObject>
     {
-        #region Methods
+#region Methods
 
         public int Compare(DividendObject dividendObject1, DividendObject dividendObject2)
         {
             if (dividendObject1 == null) return 0;
             if (dividendObject2 == null) return 0;
 
-            return DateTime.Compare(Convert.ToDateTime(dividendObject1.DateTime), Convert.ToDateTime(dividendObject2.DateTime));
+            return DateTime.Compare(Convert.ToDateTime(dividendObject1.Date), Convert.ToDateTime(dividendObject2.Date));
         }
 
-        #endregion Methods
+#endregion Methods
     }
 
 }

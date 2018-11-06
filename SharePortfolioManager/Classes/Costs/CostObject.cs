@@ -28,48 +28,54 @@ using System.Globalization;
 
 namespace SharePortfolioManager
 {
-    public class CostObject
+    [Serializable]
+    public class BrokerageObject
     {
         #region Properties
 
         [Browsable(false)]
-        public CultureInfo CostCultureInfo { get; internal set; }
+        public CultureInfo BrokerageCultureInfo { get; internal set; }
 
         [Browsable(false)]
-        public bool CostOfABuy { get; set; }
+        [DisplayName(@"Guid")]
+        public string Guid { get; internal set; }
 
         [Browsable(false)]
-        public bool CostOfASale { get; set; }
+        [DisplayName(@"GuidBuySale")]
+        public string GuidBuySale { get; internal set; }
 
         [Browsable(false)]
-        public string CostOfABuyAsStr => CostOfABuy.ToString();
+        public bool BrokerageOfABuy { get; set; }
 
         [Browsable(false)]
-        public string CostOfASaleAsStr => CostOfASale.ToString();
+        public bool BrokerageOfASale { get; set; }
 
         [Browsable(false)]
-        public string CostDate { get; set; }
+        public string BrokerageOfABuyAsStr => BrokerageOfABuy.ToString();
+
+        [Browsable(false)]
+        public string BrokerageOfASaleAsStr => BrokerageOfASale.ToString();
+
+        [Browsable(false)]
+        public string BrokerageDate { get; set; }
 
         [Browsable(true)]
         [DisplayName(@"Date")]
-        public string CostDateAsStr => CostDate;
+        public string BrokerageDateAsStr => BrokerageDate;
 
         [Browsable(false)]
-        public decimal CostValue { get; set; }
+        public decimal BrokerageValue { get; set; }
 
         [Browsable(true)]
         [DisplayName(@"Value")]
-        public string CostValueAsStr => Helper.FormatDecimal(CostValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", CostCultureInfo);
+        public string BrokerageValueAsStr => Helper.FormatDecimal(BrokerageValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", BrokerageCultureInfo);
 
         [Browsable(false)]
-        public string CostValueWithUnitAsStr => Helper.FormatDecimal(CostValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", CostCultureInfo);
-
-        [Browsable(false)]
-        public string CostDocument { get; set; }
+        public string BrokerageDocument { get; set; }
 
         [Browsable(true)]
         [DisplayName(@"Document")]
-        public string CostDocumentFileName => Helper.GetFileName(CostDocument);
+        public string BrokerageDocumentFileName => Helper.GetFileName(BrokerageDocument);
 
         #endregion Properties
 
@@ -78,32 +84,36 @@ namespace SharePortfolioManager
         /// <summary>
         /// Constructor with parameters
         /// </summary>
-        /// <param name="bCostOfABuy">Flag if the cost is part of a share buy</param>
-        /// <param name="bCostOfASale">Flag if the cost is part of a share sale</param>
+        /// <param name="strGuid">Guid of the share brokerage</param>
+        /// <param name="bBrokerageOfABuy">Flag if the brokerage is part of a share buy</param>
+        /// <param name="bBrokerageOfASale">Flag if the brokerage is part of a share sale</param>
         /// <param name="cultureInfo">Culture info of the share</param>
-        /// <param name="strDate">Date of the cost pay</param>
-        /// <param name="decValue">Value of the cost</param>
-        /// <param name="strDoc">Document of the cost</param>
-        public CostObject(bool bCostOfABuy, bool bCostOfASale, CultureInfo cultureInfo, string strDate, decimal decValue, string strDoc = "")
+        /// <param name="strGuidBuySale">Guid of the buy or sale</param>
+        /// <param name="strDate">Date of the brokerage pay</param>
+        /// <param name="decValue">Value of the brokerage</param>
+        /// <param name="strDoc">Document of the brokerage</param>
+        public BrokerageObject(string strGuid, bool bBrokerageOfABuy, bool bBrokerageOfASale, CultureInfo cultureInfo, string strGuidBuySale, string strDate, decimal decValue, string strDoc = "")
         {
-            CostOfABuy = bCostOfABuy;
-            CostOfASale = bCostOfASale;
-            CostCultureInfo = cultureInfo;
-            CostDate = strDate;
-            CostValue = decValue;
-            CostDocument = strDoc;
+            Guid = strGuid;
+            GuidBuySale = strGuidBuySale;
+            BrokerageOfABuy = bBrokerageOfABuy;
+            BrokerageOfASale = bBrokerageOfASale;
+            BrokerageCultureInfo = cultureInfo;
+            BrokerageDate = strDate;
+            BrokerageValue = decValue;
+            BrokerageDocument = strDoc;
 
-#if DEBUG_COST
+#if DEBUG_BROKERAGE
             Console.WriteLine(@"");
-            Console.WriteLine(@"New CostObject created");
-            Console.WriteLine(@"CostOfABuy: {0}", bCostOfABuy);
-            Console.WriteLine(@"CostOfASale: {0}", bCostOfASale);
+            Console.WriteLine(@"New BrokerageObject created");
+            Console.WriteLine(@"Guid: {0}", strGuid);
+            Console.WriteLine(@"BrokerageOfABuy: {0}", BrokerageOfABuy);
+            Console.WriteLine(@"bBrokerageOfASale: {0}", bBrokerageOfASale);
             Console.WriteLine(@"Date: {0}", strDate);
             Console.WriteLine(@"Value: {0}", decValue);
             Console.WriteLine(@"Document: {0}", strDoc);
             Console.WriteLine(@"");
 #endif
-
         }
 
         #endregion Methods
@@ -111,19 +121,19 @@ namespace SharePortfolioManager
 
     /// <inheritdoc />
     /// <summary>
-    /// This is the comparer class for the CostObject.
-    /// It is used for the sort for the cost lists.
+    /// This is the comparer class for the BrokerageObject.
+    /// It is used for the sort for the brokerage lists.
     /// </summary>
-    public class CostObjectComparer : IComparer<CostObject>
+    public class BrokerageObjectComparer : IComparer<BrokerageObject>
     {
         #region Methods
 
-        public int Compare(CostObject costObject1, CostObject costObject2)
+        public int Compare(BrokerageObject brokerageObject1, BrokerageObject brokerageObject2)
         {
-            if (costObject1 == null) return 0;
-            if (costObject2 == null) return 0;
+            if (brokerageObject1 == null) return 0;
+            if (brokerageObject2 == null) return 0;
 
-            return DateTime.Compare(Convert.ToDateTime(costObject1.CostDate), Convert.ToDateTime(costObject2.CostDate));
+            return DateTime.Compare(Convert.ToDateTime(brokerageObject1.BrokerageDate), Convert.ToDateTime(brokerageObject2.BrokerageDate));
         }
 
         #endregion Methods

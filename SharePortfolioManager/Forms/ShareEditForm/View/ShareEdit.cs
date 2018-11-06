@@ -29,9 +29,9 @@ using SharePortfolioManager.Forms.BuysForm.View;
 using SharePortfolioManager.Forms.DividendForm.Model;
 using SharePortfolioManager.Forms.DividendForm.Presenter;
 using SharePortfolioManager.Forms.DividendForm.View;
-using SharePortfolioManager.Forms.CostsForm.Model;
-using SharePortfolioManager.Forms.CostsForm.Presenter;
-using SharePortfolioManager.Forms.CostsForm.View;
+using SharePortfolioManager.Forms.BrokerageForm.Model;
+using SharePortfolioManager.Forms.BrokerageForm.Presenter;
+using SharePortfolioManager.Forms.BrokerageForm.View;
 using SharePortfolioManager.Forms.SalesForm.View;
 using SharePortfolioManager.Properties;
 using System;
@@ -113,7 +113,7 @@ namespace SharePortfolioManager
                     lblWknValue.Text = ShareObjectFinalValue.Wkn;
                     lblDateValue.Text = ShareObjectFinalValue.AllBuyEntries.AllBuysOfTheShareDictionary.Values.First().BuyListYear.First().Date;
                     txtBoxName.Text = ShareObjectFinalValue.Name;
-                    lblPurchaseValue.Text = ShareObjectFinalValue.PurchaseValueAsStr;
+                    lblPurchaseValue.Text = ShareObjectFinalValue.AllBuyEntries.BuyValueReductionBrokerageTotalAsStr;
                     lblDepositUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                     lblVolumeValue.Text = ShareObjectFinalValue.VolumeAsStr;
                     lblVolumeUnit.Text = ShareObject.PieceUnit;
@@ -152,7 +152,7 @@ namespace SharePortfolioManager
                     
                     #region GroupBox EarningsExpenditure
 
-                    lblBuysValue.Text = ShareObjectFinalValue.AllBuyEntries.BuyMarketValueReductionTotalAsStr;
+                    lblBuysValue.Text = ShareObjectFinalValue.AllBuyEntries.BuyValueTotalAsStrUnit;
                     lblBuysUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                     lblSalesValue.Text = ShareObjectFinalValue.AllSaleEntries.SalePayoutTotalAsStr;
                     lblSalesUnit.Text = ShareObjectFinalValue.CurrencyUnit;
@@ -160,8 +160,8 @@ namespace SharePortfolioManager
                     lblProfitLossUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                     lblDividendValue.Text = ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesAsStr;
                     lblDividendUnit.Text = ShareObjectFinalValue.CurrencyUnit;
-                    lblCostValue.Text = ShareObjectFinalValue.AllCostsEntries.CostValueTotalAsStr;
-                    lblCostUnit.Text = ShareObjectFinalValue.CurrencyUnit;
+                    lblBrokerageValue.Text = ShareObjectFinalValue.AllBrokerageEntries.BrokerageValueTotalAsStr;
+                    lblBrokerageUnit.Text = ShareObjectFinalValue.CurrencyUnit;
 
                     #endregion GroupBox EarningsExpenditure
 
@@ -214,14 +214,14 @@ namespace SharePortfolioManager
                     LanguageName);
                 btnShareDividendsEdit.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Buttons/Dividend",
                     LanguageName);
-                lblCost.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Costs", LanguageName);
-                btnShareCostsEdit.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Buttons/Costs",
+                lblBrokerage.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Brokerage", LanguageName);
+                btnShareBrokerageEdit.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Buttons/Brokerage",
                     LanguageName);
 
                 // Load button images
                 btnShareBuysEdit.Image = Resources.black_edit;
                 btnShareSalesEdit.Image = Resources.black_edit;
-                btnShareCostsEdit.Image = Resources.black_edit;
+                btnShareBrokerageEdit.Image = Resources.black_edit;
                 btnShareDividendsEdit.Image = Resources.black_edit;
 
                 #endregion GroupBox EarningsExpenditure
@@ -574,15 +574,15 @@ namespace SharePortfolioManager
         }
 
         /// <summary>
-        /// This function opens the share cost add / edit dialog
+        /// This function opens the share brokerage add / edit dialog
         /// </summary>
         /// <param name="sender">Clicked button</param>
         /// <param name="e">EventArgs</param>
-        private void OnBtnShareCostsEdit_Click(object sender, EventArgs e)
+        private void OnBtnShareBrokerageEdit_Click(object sender, EventArgs e)
         {
-            IModelCostEdit model = new ModelCostEdit();
-            IViewCostEdit view = new ViewCostEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, LanguageName);
-            var presenterCostEdit = new PresenterCostEdit(view, model);
+            IModelBrokerageEdit model = new ModelBrokerageEdit();
+            IViewBrokerageEdit view = new ViewBrokerageEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, LanguageName);
+            var presenterBrokerageEdit = new PresenterBrokerageEdit(view, model);
 
             var dlgResult = view.ShowDialog();
             Save = dlgResult == DialogResult.OK;
@@ -597,9 +597,9 @@ namespace SharePortfolioManager
         {
             lblVolumeValue.Text = ShareObjectFinalValue.VolumeAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.Volume, Helper.Volumefivelength, false, Helper.Volumetwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
             lblPurchaseValue.Text = ShareObjectFinalValue.PurchaseValueAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.PurchaseValue, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
-            lblBuysValue.Text = ShareObjectFinalValue.AllBuyEntries.BuyMarketValueReductionTotalAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.AllBuyEntries.BuyMarketValueReductionTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
+            lblBuysValue.Text = ShareObjectFinalValue.AllBuyEntries.BuyValueTotalAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.AllBuyEntries.BuyMarketValueReductionTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
             lblSalesValue.Text = ShareObjectFinalValue.AllSaleEntries.SalePayoutTotalAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.AllSaleEntries.SalePayoutTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
-            lblCostValue.Text = ShareObjectFinalValue.CostsValueTotalAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.AllCostsEntries.CostValueTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
+            lblBrokerageValue.Text = ShareObjectFinalValue.BrokerageValueTotalAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.AllBrokerageEntries.BrokerageValueTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
             lblProfitLossValue.Text = ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotalAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
             lblDividendValue.Text = ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxes, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
         }

@@ -50,8 +50,8 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         SharePriceEmpty,
         SharePriceWrongFormat,
         SharePriceWrongValue,
-        CostsWrongFormat,
-        CostsWrongValue,
+        BrokerageWrongFormat,
+        BrokerageWrongValue,
         ReductionWrongFormat,
         ReductionWrongValue,
         WebSiteEmpty,
@@ -89,7 +89,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         string Volume { get; set; }
         string SharePrice { get; set; }
         string MarketValue { get; set; }
-        string Costs { get; set; }
+        string Brokerage { get; set; }
         string Reduction { get; set; }
         string GrandTotal { get; set; }
         string WebSite { get; set; }
@@ -104,10 +104,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
     public partial class ViewShareAdd : Form, IViewShareAdd
     {
-        #region Fields
-
-        #endregion Fields
-
         #region Properties
 
         public FrmMain ParentWindow { get; set; }
@@ -233,14 +229,14 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
             }
         }
 
-        public string Costs
+        public string Brokerage
         {
-            get => txtBoxCosts.Text;
+            get => txtBoxBrokerage.Text;
             set
             {
-                if (txtBoxCosts.Text == value)
+                if (txtBoxBrokerage.Text == value)
                     return;
-                txtBoxCosts.Text = value;
+                txtBoxBrokerage.Text = value;
             }
         }
 
@@ -442,22 +438,22 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                         txtBoxSharePrice.Focus();
                         break;
                     }
-                case ShareAddErrorCode.CostsWrongFormat:
+                case ShareAddErrorCode.BrokerageWrongFormat:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/CostsWrongFormat", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/BrokerageWrongFormat", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxCosts.Focus();
+                        txtBoxBrokerage.Focus();
                         break;
                     }
-                case ShareAddErrorCode.CostsWrongValue:
+                case ShareAddErrorCode.BrokerageWrongValue:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/CostsWrongValue", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/BrokerageWrongValue", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxCosts.Focus();
+                        txtBoxBrokerage.Focus();
                         break;
                     }
                 case ShareAddErrorCode.ReductionWrongFormat:
@@ -610,8 +606,8 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 lblSharePriceUnit.Text = new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol;
                 lblMarketValue.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/MarketValue", LanguageName);
                 lblMarketValueUnit.Text = new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol;
-                lblCosts.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Costs", LanguageName);
-                lblCostsUnit.Text = new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol;
+                lblBrokerage.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Brokerage", LanguageName);
+                lblBrokerageUnit.Text = new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol;
                 lblReduction.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Reduction", LanguageName);
                 lblReductionUnit.Text = new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol;
                 lblFinalValue.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/FinalValue", LanguageName);
@@ -816,12 +812,12 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
             FormatInputValues?.Invoke(this, new EventArgs());
         }
 
-        private void OnTxtBoxCosts_TextChanged(object sender, EventArgs e)
+        private void OnTxtBoxBrokerage_TextChanged(object sender, EventArgs e)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Costs"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Brokerage"));
         }
 
-        private void OnTxtBoxCosts_Leave(object sender, EventArgs e)
+        private void OnTxtBoxBrokerage_Leave(object sender, EventArgs e)
         {
             FormatInputValues?.Invoke(this, new EventArgs());
         }

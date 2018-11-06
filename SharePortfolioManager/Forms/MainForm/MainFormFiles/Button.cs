@@ -73,7 +73,7 @@ namespace SharePortfolioManager
             if (btnRefresh.Text == Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Refresh", LanguageName))
             {
                 // Set row index
-                SelectedDataGridViewShareIndex = MarketValueOverviewTabSelected ? dgvPortfolioMarketValue.SelectedRows[0].Index : dgvPortfolioFinalValue.SelectedRows[0].Index;
+                 SelectedDataGridViewShareIndex = MarketValueOverviewTabSelected ? dgvPortfolioMarketValue.SelectedRows[0].Index : dgvPortfolioFinalValue.SelectedRows[0].Index;
 
                 // Refresh share
                 Refresh();
@@ -122,7 +122,7 @@ namespace SharePortfolioManager
                     additionalButtons.Add("btnEdit");
                     additionalButtons.Add("btnDelete");
                     additionalButtons.Add("btnClearLogger");
-                    Helper.EnableDisableControls(true, this, additionalButtons);
+                    Helper.EnableDisableControls(true, tblLayPnlShareOverviews, additionalButtons);
                 }
                 else
                 {
@@ -141,7 +141,7 @@ namespace SharePortfolioManager
                         additionalButtons.Add("btnEdit");
                         additionalButtons.Add("btnDelete");
                         additionalButtons.Add("btnClearLogger");
-                        Helper.EnableDisableControls(true, this, additionalButtons);
+                        Helper.EnableDisableControls(true, tblLayPnlShareOverviews, additionalButtons);
                     }
                 }
 
@@ -225,6 +225,7 @@ namespace SharePortfolioManager
                     {
                         // Sort portfolio list in order of the share names
                         ShareObjectListFinalValue.Sort(new ShareObjectListComparer());
+                        ShareObjectListMarketValue.Sort(new ShareObjectListComparer());
 
                         // Select row of the new list index
                         var searchObject = new ShareObjectSearch(tempShareObjectFinalValue.Wkn);
@@ -300,12 +301,14 @@ namespace SharePortfolioManager
 
             // Check if a share is selected
             if (MarketValueOverviewTabSelected == false &&
+                dgvPortfolioFinalValue.SelectedCells.Count > 0 &&
                 dgvPortfolioFinalValue.SelectedCells[0].Value != null &&
                 dgvPortfolioFinalValue.SelectedCells[0].Value.ToString() != ""
                )
                 wkn = dgvPortfolioFinalValue.SelectedCells[0].Value.ToString();
 
             if (MarketValueOverviewTabSelected &&
+                dgvPortfolioMarketValue.SelectedCells.Count > 0 &&
                 dgvPortfolioMarketValue.SelectedCells[0].Value != null &&
                 dgvPortfolioMarketValue.SelectedCells[0].Value.ToString() != ""
                )
@@ -388,7 +391,7 @@ namespace SharePortfolioManager
                         lblDetailsFinalValueDateValue.Text = @"";
                         lblDetailsFinalValueVolumeValue.Text = @"";
                         lblDetailsFinalValueDividendValue.Text = @"";
-                        lblDetailsFinalValueCostsValue.Text = @"";
+                        lblDetailsFinalValueBrokerageValue.Text = @"";
                         lblDetailsFinalValueCurPriceValue.Text = @"";
                         lblDetailsFinalValueDiffPerformancePrevValue.Text = @"";
                         lblDetailsFinalValueDiffSumPrevValue.Text = @"";
@@ -401,7 +404,7 @@ namespace SharePortfolioManager
                         lblDetailsMarketValueDateValue.Text = @"";
                         lblDetailsMarketValueVolumeValue.Text = @"";
                         lblDetailsMarketValueDividendValue.Text = @"";
-                        lblDetailsMarketValueCostValue.Text = @"";
+                        lblDetailsMarketValueBrokerageValue.Text = @"";
                         lblDetailsMarketValueCurPriceValue.Text = @"";
                         lblDetailsMarketValueDiffPerformancePrevValue.Text = @"";
                         lblDetailsMarketValueDiffSumPrevValue.Text = @"";
@@ -425,7 +428,7 @@ namespace SharePortfolioManager
                             "btnClearLogger",
                             "tabCtrlDetails"
                         };
-                        Helper.EnableDisableControls(false, this, controlList);
+                        Helper.EnableDisableControls(false, tblLayPnlShareOverviews, controlList);
                     }
 
                     // Update DataGridView

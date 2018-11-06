@@ -68,9 +68,9 @@
             this.txtBoxSharePrice = new System.Windows.Forms.TextBox();
             this.lblReduction = new System.Windows.Forms.Label();
             this.lblSharePrice = new System.Windows.Forms.Label();
-            this.lblCostsUnit = new System.Windows.Forms.Label();
-            this.txtBoxCosts = new System.Windows.Forms.TextBox();
-            this.lblCosts = new System.Windows.Forms.Label();
+            this.lblBrokerageUnit = new System.Windows.Forms.Label();
+            this.txtBoxBrokerage = new System.Windows.Forms.TextBox();
+            this.lblBrokerage = new System.Windows.Forms.Label();
             this.statusStrip1.SuspendLayout();
             this.grpBoxGeneral.SuspendLayout();
             this.tblLayPnlAddShareButtons.SuspendLayout();
@@ -465,11 +465,11 @@
             this.tblLayPnlAddShareInput.Controls.Add(this.txtBoxSharePrice, 1, 4);
             this.tblLayPnlAddShareInput.Controls.Add(this.lblReduction, 0, 7);
             this.tblLayPnlAddShareInput.Controls.Add(this.lblSharePrice, 0, 4);
-            this.tblLayPnlAddShareInput.Controls.Add(this.lblCostsUnit, 3, 6);
+            this.tblLayPnlAddShareInput.Controls.Add(this.lblBrokerageUnit, 3, 6);
             this.tblLayPnlAddShareInput.Controls.Add(this.txtBoxName, 1, 2);
-            this.tblLayPnlAddShareInput.Controls.Add(this.txtBoxCosts, 1, 6);
+            this.tblLayPnlAddShareInput.Controls.Add(this.txtBoxBrokerage, 1, 6);
             this.tblLayPnlAddShareInput.Controls.Add(this.lblVolume, 0, 3);
-            this.tblLayPnlAddShareInput.Controls.Add(this.lblCosts, 0, 6);
+            this.tblLayPnlAddShareInput.Controls.Add(this.lblBrokerage, 0, 6);
             this.tblLayPnlAddShareInput.Controls.Add(this.txtBoxVolume, 1, 3);
             this.tblLayPnlAddShareInput.Controls.Add(this.lblVolumeUnit, 3, 3);
             this.tblLayPnlAddShareInput.Controls.Add(this.lblMarketValue, 0, 5);
@@ -676,52 +676,52 @@
             this.lblSharePrice.Text = "_lblSharePrice";
             this.lblSharePrice.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // lblCostsUnit
+            // lblBrokerageUnit
             // 
-            this.lblCostsUnit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblCostsUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCostsUnit.Location = new System.Drawing.Point(743, 145);
-            this.lblCostsUnit.Margin = new System.Windows.Forms.Padding(1);
-            this.lblCostsUnit.Name = "lblCostsUnit";
-            this.lblCostsUnit.Size = new System.Drawing.Size(75, 22);
-            this.lblCostsUnit.TabIndex = 32;
-            this.lblCostsUnit.Text = "_lblCostsUnit";
-            this.lblCostsUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblBrokerageUnit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblBrokerageUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBrokerageUnit.Location = new System.Drawing.Point(743, 145);
+            this.lblBrokerageUnit.Margin = new System.Windows.Forms.Padding(1);
+            this.lblBrokerageUnit.Name = "lblBrokerageUnit";
+            this.lblBrokerageUnit.Size = new System.Drawing.Size(75, 22);
+            this.lblBrokerageUnit.TabIndex = 32;
+            this.lblBrokerageUnit.Text = "_lblBrokerageUnit";
+            this.lblBrokerageUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // txtBoxCosts
+            // txtBoxBrokerage
             // 
-            this.txtBoxCosts.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tblLayPnlAddShareInput.SetColumnSpan(this.txtBoxCosts, 2);
-            this.txtBoxCosts.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtBoxCosts.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxCosts.Location = new System.Drawing.Point(211, 145);
-            this.txtBoxCosts.Margin = new System.Windows.Forms.Padding(1);
-            this.txtBoxCosts.Name = "txtBoxCosts";
-            this.txtBoxCosts.Size = new System.Drawing.Size(530, 22);
-            this.txtBoxCosts.TabIndex = 6;
-            this.txtBoxCosts.TextChanged += new System.EventHandler(this.OnTxtBoxCosts_TextChanged);
-            this.txtBoxCosts.Leave += new System.EventHandler(this.OnTxtBoxCosts_Leave);
+            this.txtBoxBrokerage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tblLayPnlAddShareInput.SetColumnSpan(this.txtBoxBrokerage, 2);
+            this.txtBoxBrokerage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtBoxBrokerage.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxBrokerage.Location = new System.Drawing.Point(211, 145);
+            this.txtBoxBrokerage.Margin = new System.Windows.Forms.Padding(1);
+            this.txtBoxBrokerage.Name = "txtBoxBrokerage";
+            this.txtBoxBrokerage.Size = new System.Drawing.Size(530, 22);
+            this.txtBoxBrokerage.TabIndex = 6;
+            this.txtBoxBrokerage.TextChanged += new System.EventHandler(this.OnTxtBoxBrokerage_TextChanged);
+            this.txtBoxBrokerage.Leave += new System.EventHandler(this.OnTxtBoxBrokerage_Leave);
             // 
-            // lblCosts
+            // lblBrokerage
             // 
-            this.lblCosts.BackColor = System.Drawing.Color.LightGray;
-            this.lblCosts.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblCosts.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblCosts.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCosts.Location = new System.Drawing.Point(1, 145);
-            this.lblCosts.Margin = new System.Windows.Forms.Padding(1);
-            this.lblCosts.Name = "lblCosts";
-            this.lblCosts.Size = new System.Drawing.Size(208, 22);
-            this.lblCosts.TabIndex = 25;
-            this.lblCosts.Text = "_lblCosts";
-            this.lblCosts.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblBrokerage.BackColor = System.Drawing.Color.LightGray;
+            this.lblBrokerage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblBrokerage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblBrokerage.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBrokerage.Location = new System.Drawing.Point(1, 145);
+            this.lblBrokerage.Margin = new System.Windows.Forms.Padding(1);
+            this.lblBrokerage.Name = "lblBrokerage";
+            this.lblBrokerage.Size = new System.Drawing.Size(208, 22);
+            this.lblBrokerage.TabIndex = 25;
+            this.lblBrokerage.Text = "_lblBrokerage";
+            this.lblBrokerage.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // ViewShareAdd
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.ClientSize = new System.Drawing.Size(834, 424);
+            this.ClientSize = new System.Drawing.Size(834, 423);
             this.ControlBox = false;
             this.Controls.Add(this.grpBoxGeneral);
             this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -775,9 +775,9 @@
         private System.Windows.Forms.GroupBox grpBoxGeneral;
         private System.Windows.Forms.ComboBox cbxDividendPayoutInterval;
         private System.Windows.Forms.Label lblDividendPayoutInterval;
-        private System.Windows.Forms.Label lblCostsUnit;
-        private System.Windows.Forms.TextBox txtBoxCosts;
-        private System.Windows.Forms.Label lblCosts;
+        private System.Windows.Forms.Label lblBrokerageUnit;
+        private System.Windows.Forms.TextBox txtBoxBrokerage;
+        private System.Windows.Forms.Label lblBrokerage;
         private System.Windows.Forms.Label lblReductionUnit;
         private System.Windows.Forms.TextBox txtBoxReduction;
         private System.Windows.Forms.Label lblReduction;

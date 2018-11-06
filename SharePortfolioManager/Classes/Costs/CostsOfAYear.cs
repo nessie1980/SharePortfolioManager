@@ -23,63 +23,77 @@
 using SharePortfolioManager.Classes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 
 namespace SharePortfolioManager
 {
-    public class CostYearOfTheShare
+    [Serializable]
+    public class BrokerageYearOfTheShare
     {
         #region Properties
 
-        public CultureInfo CostCultureInfo { get; internal set; }
+        [Browsable(false)]
+        public CultureInfo BrokerageCultureInfo { get; internal set; }
 
-        public decimal CostValueYear { get; internal set; } = -1;
+        [Browsable(true)]
+        public string BrokerageYear { get; internal set; } = @"-";
 
-        public string CostValueYearAsStr => Helper.FormatDecimal(CostValueYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", CostCultureInfo);
+        [Browsable(true)]
+        public decimal BrokerageValueYear { get; internal set; } = -1;
 
-        public string CostValueYearWithUnitAsStr => Helper.FormatDecimal(CostValueYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", CostCultureInfo);
+        [Browsable(false)]
+        public string BrokerageValueYearWithUnitAsStr => Helper.FormatDecimal(BrokerageValueYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BrokerageCultureInfo);
 
-        public List<CostObject> CostListYear { get; } = new List<CostObject>();
+        [Browsable(false)]
+        public List<BrokerageObject> BrokerageListYear { get; } = new List<BrokerageObject>();
 
         #endregion Properties
 
         #region Methods
 
         /// <summary>
-        /// This functions adds a new cost object to the year list with the given values
-        /// It also recalculates the cost value
+        /// This functions adds a new brokerage object to the year list with the given values
+        /// It also recalculates the brokerage value
         /// </summary>
-        /// <param name="bCostOfABuy">Flag if the cost is a part of a share buy</param>
-        /// <param name="bCostOfASale">Flag if the cost is a part of a share sale</param>
+        /// <param name="strGuid">Guid of the brokerage</param>
+        /// <param name="bBrokerageOfABuy">Flag if the brokerage is a part of a share buy</param>
+        /// <param name="bBrokerageOfASale">Flag if the brokerage is a part of a share sale</param>
         /// <param name="cultureInfo">Culture info of the share</param>
-        /// <param name="strDate">Pay date of the new cost list entry</param>
-        /// <param name="decValue">Paid cost value</param>
-        /// <param name="strDoc">Document of the cost</param>
+        /// <param name="strGuidBuySale">Guid of the buy or sale</param>
+        /// <param name="strDate">Pay date of the new brokerage list entry</param>
+        /// <param name="decValue">Paid brokerage value</param>
+        /// <param name="strDoc">Document of the brokerage</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddCostObject(bool bCostOfABuy, bool bCostOfASale, CultureInfo cultureInfo, string strDate, decimal decValue, string strDoc = "")
+        public bool AddBrokerageObject(string strGuid, bool bBrokerageOfABuy, bool bBrokerageOfASale, CultureInfo cultureInfo, string strGuidBuySale, string strDate, decimal decValue, string strDoc = "")
         {
-#if DEBUG_COST
-            Console.WriteLine(@"AddCostObject");
+#if DEBUG_BROKERAGE
+            Console.WriteLine(@"");
+            Console.WriteLine(@"AddBrokerageObject");
 #endif
             try
             {
                 // Set culture info of the share
-                CostCultureInfo = cultureInfo;
+                BrokerageCultureInfo = cultureInfo;
 
-                // Create new CostObject
-                var addObject = new CostObject(bCostOfABuy, bCostOfASale, cultureInfo, strDate, decValue, strDoc);
+                // Create new BrokerageObject
+                var addObject = new BrokerageObject(strGuid, bBrokerageOfABuy, bBrokerageOfASale, cultureInfo, strGuidBuySale, strDate, decValue, strDoc);
 
                 // Add object to the list
-                CostListYear.Add(addObject);
-                CostListYear.Sort(new CostObjectComparer());
+                BrokerageListYear.Add(addObject);
+                BrokerageListYear.Sort(new BrokerageObjectComparer());
 
-                // Calculate cost value
-                if (CostValueYear == -1)
-                    CostValueYear = 0;
-                CostValueYear += addObject.CostValue;
+                // Set year
+                DateTime.TryParse(strDate, out var dateTime);
+                BrokerageYear = dateTime.Year.ToString();
 
-#if DEBUG_COST
-                Console.WriteLine(@"CostValueYear: {0}", CostValueYear);
+                // Calculate brokerage value
+                if (BrokerageValueYear == -1)
+                    BrokerageValueYear = 0;
+                BrokerageValueYear += addObject.BrokerageValue;
+
+#if DEBUG_BROKERAGE
+                Console.WriteLine(@"BrokerageValueYear: {0}", BrokerageValueYear);
                 Console.WriteLine(@"");
 #endif
             }
@@ -92,38 +106,38 @@ namespace SharePortfolioManager
         }
 
         /// <summary>
-        /// This function removes the cost object with the given pay date from the list
-        /// It also recalculates the cost value
+        /// This function removes the brokerage object with the given Guid from the list
+        /// It also recalculates the brokerage value
         /// </summary>
-        /// <param name="strDate">Pay date of the cost object which should be removed</param>
+        /// <param name="strGuid">Pay date of the brokerage object which should be removed</param>
         /// <returns>Flag if the remove was successfully</returns>
-        public bool RemoveCostObject(string strDate)
+        public bool RemoveBrokerageObject(string strGuid)
         {
-#if DEBUG_COST
-            Console.WriteLine(@"RemoveCostObject");
+#if DEBUG_BROKERAGE
+            Console.WriteLine(@"RemoveBrokerageObject");
 #endif
             try
             {
                 // Search for the remove object
                 var iFoundIndex = -1;
-                foreach (var costObject in CostListYear)
+                foreach (var brokerageObject in BrokerageListYear)
                 {
-                    if (costObject.CostDate != strDate) continue;
+                    if (brokerageObject.Guid != strGuid) continue;
 
-                    iFoundIndex = CostListYear.IndexOf(costObject);
+                    iFoundIndex = BrokerageListYear.IndexOf(brokerageObject);
                     break;
                 }
                 // Save remove object
-                var removeObject = CostListYear[iFoundIndex];
+                var removeObject = BrokerageListYear[iFoundIndex];
 
                 // Remove object from the list
-                CostListYear.Remove(removeObject);
+                BrokerageListYear.Remove(removeObject);
 
-                // Calculate cost value
-                CostValueYear -= removeObject.CostValue;
+                // Calculate brokerage value
+                BrokerageValueYear -= removeObject.BrokerageValue;
 
-#if DEBUG_COST
-                Console.WriteLine(@"CostValueYear: {0}", CostValueYear);
+#if DEBUG_BROKERAGE
+                Console.WriteLine(@"BrokerageValueYear: {0}", BrokerageValueYear);
                 Console.WriteLine(@"");
 #endif
             }
@@ -138,16 +152,16 @@ namespace SharePortfolioManager
         #endregion Methods
     }
 
-    public class CostYearOfTheShareComparer : IComparer<CostYearOfTheShare>
+    public class BrokerageYearOfTheShareComparer : IComparer<BrokerageYearOfTheShare>
     {
-        public int Compare(CostYearOfTheShare object1, CostYearOfTheShare object2)
+        public int Compare(BrokerageYearOfTheShare object1, BrokerageYearOfTheShare object2)
         {
             if (object1 == null) return 0;
             if (object2 == null) return 0;
 
-            if (Convert.ToInt16(object2.CostListYear) == Convert.ToInt16(object1.CostListYear))
+            if (Convert.ToInt16(object2.BrokerageListYear) == Convert.ToInt16(object1.BrokerageListYear))
                 return 0;
-            if (Convert.ToInt16(object2.CostListYear) > Convert.ToInt16(object1.CostListYear))
+            if (Convert.ToInt16(object2.BrokerageListYear) > Convert.ToInt16(object1.BrokerageListYear))
                 return 1;
             
             return -1;

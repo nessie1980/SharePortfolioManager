@@ -4,7 +4,6 @@
 		<!-- Application name -->
 		<Application>
 			<Name text="Share portfolio management" />
-			<Version text="Version" />
 		</Application>
 		
 		<!-- Notify icon -->
@@ -99,7 +98,7 @@
 
 				<!-- TabControl with share overviews -->
 				<TabCtrlShareOverviews>
-					<!-- TabPage with the complete depot values (Markt values + dividends - costs - taxes ) -->
+					<!-- TabPage with the complete depot values (Markt values + dividends - brokerage - taxes ) -->
 					<TabPgCompleteDepotValue>
 						<Caption text="Complete depot value" />
 
@@ -111,8 +110,8 @@
 							<ColHeader_PrevDay text="Pre. day" />
 							<ColHeader_Volume text="Volume"/>
 							<ColHeader_Performance text="Perf." />
-							<ColHeader_CostsDividend text="  Costs /   Dividends" />
-							<ColHeader_PurchaseMarketValue text="   Purchase /    Market" />
+							<ColHeader_BrokerageDividend text="  Brokerage / Dividends" />
+							<ColHeader_PurchaseMarketValue text="  Purchase / Market" />
 						</DgvPortfolio>
 						<DgvPortfolio_Error>
 							<ConfigurationFailed text="Configuration of the datagridview 'portfolio' failed!" />
@@ -126,7 +125,7 @@
 						<!-- DataGridView portfolio footer -->
 						<DgvPortfolioFooter>
 							<RowContent_TotalPurchaseValue text="Purchase (total) " />
-							<RowContent_TotalCostDividend text="Costs / Dividend (total) " />
+							<RowContent_TotalBrokerageDividend text="Brokerage / Dividend (total) " />
 							<RowContent_TotalPerformance text="Performance (total) " />
 							<RowContent_TotalDepotValue text="Current value of the depot " />
 						</DgvPortfolioFooter>
@@ -138,7 +137,7 @@
 						</DgvPortfolioFooter_Error>
 					</TabPgCompleteDepotValue>
 
-					<!-- TabPage with market values (Market values - costs)  -->
+					<!-- TabPage with market values (Market values - brokerage)  -->
 					<TabPgMarketDepotValue>
 						<Caption text="Markte values" />
 
@@ -150,7 +149,7 @@
 							<ColHeader_PrevDay text="Pre. day" />
 							<ColHeader_Volume text="Volume"/>
 							<ColHeader_Performance text="Perf." />
-							<ColHeader_PurchaseMarketValue text="   Purchase /   Market" />
+							<ColHeader_PurchaseMarketValue text="  Purchase / Market" />
 						</DgvPortfolio>
 						
 						<!-- DataGridView portfolio footer -->
@@ -184,16 +183,16 @@
 
 				<!-- TabControl with the details -->
 				<TabCtrlDetails>		
-					<!-- TabPage with dividend and costs -->
-					<TabPgWithDividendCosts>
-						<Caption text="With dividend / costs" />
+					<!-- TabPage with dividend and brokerage -->
+					<TabPgWithDividendBrokerage>
+						<Caption text="With dividend / brokerage" />
 						
 						<!-- Labels -->
 						<Labels>
 							<Date text="Share date:" />
 							<Volume text="Volume:"/>
 							<TotalDividend text="Dividend (total):" />		
-							<TotalCosts text="Costs (total):" />
+							<TotalBrokerage text="Brokerage (total):" />
 							<CurrentPrice text="Current share price:" />
 							<DiffPerformancePrevDay text="Performance (pre. day)"/>
 							<DiffSumPrevDay text="Profit / loss (pre. day):" />
@@ -203,18 +202,18 @@
 							<TotalProfitLoss text="Profit / loss (total):" />
 							<TotalSum text="Sum (total):" />
 						</Labels>
-					</TabPgWithDividendCosts>
+					</TabPgWithDividendBrokerage>
 					
-					<!-- Tab without dividend and costs -->
-					<TabPgWithOutDividendCosts>
-						<Caption text="Without dividend / costs" />
+					<!-- Tab without dividend and brokerage -->
+					<TabPgWithOutDividendBrokerage>
+						<Caption text="Without dividend / brokerage" />
 						
 						<!-- Labels -->
 						<Labels>
 							<Date text="Share date:" />
 							<Volume text="Volume:"/>
 							<TotalDividend text="Dividend (total):" />		
-							<TotalCosts text="Costs (total):" />
+							<TotalBrokerage text="Brokerage (total):" />
 							<DiffPerformancePrevDay text="Performance (pre. day)"/>
 							<CurrentPrice text="Current share price:" />
 							<DiffSumPrevDay text="Profit / loss (pre. day):" />
@@ -224,10 +223,10 @@
 							<TotalProfitLoss text="Profit / loss (total):" />
 							<TotalSum text="Sum (total):" />
 						</Labels>
-					</TabPgWithOutDividendCosts>					
-					<TabPgWithWithOutDividendCostsErrors>
+					</TabPgWithOutDividendBrokerage>					
+					<TabPgWithWithOutDividendBrokerageErrors>
 						<ShowFailed text="An error occurred while the share details should be shown!" />
-					</TabPgWithWithOutDividendCostsErrors>
+					</TabPgWithWithOutDividendBrokerageErrors>
 
 					<!-- Tab dividend overview -->
 					<TabPgDividend>
@@ -251,23 +250,23 @@
 						<RenameHeaderFailed text="Renaming of the column headers failed!" />
 					</TabPgDividend_Error>
 					
-					<!-- Tab cost overview -->
-					<TabPgCosts>
-						<Caption text="Costs" />
+					<!-- Tab brokerage overview -->
+					<TabPgBrokerage>
+						<Caption text="Brokerage" />
 						<Overview text="Overview" />
 						
-						<!-- DataGridView costs -->
-						<DgvCostsOverview>
+						<!-- DataGridView brokerage -->
+						<DgvBrokerageOverview>
 							<ColHeader_Date text="Date" />
 							<ColHeader_Year text="Year" />
-							<ColHeader_Costs text="Costs" />
+							<ColHeader_Brokerage text="Brokerage" />
 							<ColHeader_Document text="Document" />
-						</DgvCostsOverview>
-					</TabPgCosts>
-					<TabPgCosts_Error>
-						<ShowFailed text="An error occurred while the costs details should be shown!" />
+						</DgvBrokerageOverview>
+					</TabPgBrokerage>
+					<TabPgBrokerage_Error>
+						<ShowFailed text="An error occurred while the brokerage details should be shown!" />
 						<RenameHeaderFailed text="Renaming of the column headers failed!" />
-					</TabPgCosts_Error>
+					</TabPgBrokerage_Error>
 					
 					<!-- Tab profit or loss overview -->
 					<TabPgProfitLoss>
@@ -352,6 +351,7 @@
 				<WebSiteRegexNotFound1_2 text=" available!" />
 				<WebSiteRegexNotFound2_1 text="No parse configuration for the shares with the WKN " />
 				<WebSiteRegexNotFound2_2 text=" available!" />
+				<PortfolioNotSet text="No portfolio set. Create a new portfolio or open an existing one." />
 				<PortfolioConfigurationListEmpty text="Portfolio is empty!" />
 				<PortfolioConfigurationListLoadFailed text="Configuration incomplete!"/>
 				<AddShowFailed text="An error occurred while show!" />
@@ -364,7 +364,6 @@
 				<SaveSettingsFailed text="Settings save failed!" />
 				<SelectionChangeFailed text="The selection change failed!" />
 				<ChangeLanguageFailed text="Changing the language failed!" />
-				<MainFormInitFailed text="Main from initialization failed!" />
 			</Errors>
 		</MainForm>	
 
@@ -382,12 +381,13 @@
 					<Date text="Date:" />
 					<Name text="Name:" />
 					<Volume text="Volume:" />
+					<VolumeSold text="Already sold volume:" />
 					<SharePrice text="Market price:" />
 					<MarketValue text="Market value:" />
-					<Costs text="Costs:" />
+					<Brokerage text="Brokerage:" />
 					<Reduction text="Reduction:" />
 					<FinalValue text="Final value:" />
-					<WebSite text="Website address:" />
+					<WebSite text="Web page address:" />
 					<CultureInfo text="Country info:" />
 					<PayoutInterval text="Dividend payout interval:" />
 					<ShareType text="Type:" />
@@ -408,28 +408,28 @@
 			
 			<!-- Errors -->
 			<Errors>
-				<WKNEmpty text="Please insert a WKN number." />
+				<WKNEmpty text="Please enter a WKN number." />
 				<WKNExists text="The WKN number already exists." />
-				<NameEmpty text="Please insert a name." />
-				<NameExists text="The name already exists." />
-				<VolumeEmpty text="Please insert a volume." />
-				<VolumeWrongFormat text="Format for the value 'Volume' is invalid." />
-				<VolumeWrongValue text="The value for 'Volume' must be higher than '0'." />
-				<SharePriceEmpty text="Please insert a market price." />
-				<SharePriceWrongFormat text="Format for the value 'Market price' is invalid." />
-				<SharePriceWrongValue text="The value for 'Market price' must be higher than '0'." />
-				<CostsWrongFormat text="Format for the value 'Costs' is invalid." />
-				<CostsWrongValue text="The value for 'Costs' must be higher than '0'." />
-				<ReductionWrongFormat text="Format for the value 'Reduction' is invalid." />
-				<ReductionWrongValue text="The value for 'Reduction' must be higher than '0'." />
-				<WebSiteEmpty text="Please insert a website address." />
-				<WebSiteWrongFormat text="The website address has an invalid format or is not reachable. Try it again." />
-				<WebSiteExists text="The website already exists." />
-				<WebSiteRegexNotFound text="No parse configuration for the given web address available!" />
-				<AddSaveFailed text="An exception occurred. Add of the share failed!" />
-				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
-				<DirectoryDoesNotExist text="The directory does not exist!" />
-				<FileDoesNotExist text="The given file does not exist!" />
+				<NameEmpty text="Please enter a share name." />
+				<NameExists text="The share name already exists." />
+				<VolumeEmpty text="Please enter a value for the purchased shares." />
+				<VolumeWrongFormat text="The format for the value entered for the purchased shares is not valid." />
+				<VolumeWrongValue text="The value entered for the purchased shares must be greater than'0'." />
+				<SharePriceEmpty text="Please enter a market price." />
+				<SharePriceWrongFormat text="The format for the entered market price is not valid." />
+				<SharePriceWrongValue text="The value for the entered market price must be greater than '0'." />
+				<BrokerageWrongFormat text="The format for the entered brokerage is not valid." />
+				<BrokerageWrongValue text="The value for the entered brokerage must be greater than '0'." />
+				<ReductionWrongFormat text="The format for the entered reduction is not valid." />
+				<ReductionWrongValue text="The value for the entered reduction must be greater than '0'." />
+				<WebSiteEmpty text="Please enter a web page address." />
+				<WebSiteWrongFormat text="The web page address you entered is invalid or unreachable. Try again" />
+				<WebSiteExists text="The entered web page address already exists." />
+				<WebSiteRegexNotFound text="No parser configuration available for the specified web page address!" />
+				<AddSaveFailed text="An error occurred. Adding share failed!" />
+				<ChoseDocumentFailed text="An error occurred. Failed to select file!" />
+				<DirectoryDoesNotExist text="The specified directory does not exist!" />
+				<FileDoesNotExist text="The specified file does not exist!" />
 			</Errors>
 		</AddFormShare>
 		
@@ -466,7 +466,7 @@
 					<Profit text="Profit from sales:" />
 					<Loss text="Loss from sales:" />
 					<Dividend text="Dividends:" />
-					<Costs text="Costs:" />
+					<Brokerage text="Brokerage:" />
 				</Labels>
 
 				<!-- Buttons -->
@@ -474,7 +474,7 @@
 					<Buys text="" />
 					<Sales text="" />
 					<Dividend text="" />
-					<Costs text="" />
+					<Brokerage text="" />
 				</Buttons>	
 			</GrpBoxEarningsExpenditure>
 			
@@ -515,9 +515,10 @@
 				<Labels>
 					<Date text="Date:" />
 					<Volume text="Volume:" />
+					<VolumeSold text="Already sold volume:" />
 					<Price text="Market price:" />
 					<MarketValue text="Market value:" />
-					<Costs text="Costs:" />
+					<Brokerage text="Brokerage:" />
 					<Reduction text="Reduction:" />
 					<FinalValue text="Final value:" />
 					<Document text="Document:" />
@@ -555,7 +556,8 @@
 						<ColHeader_Date text="Date" />
 						<ColHeader_Volume text="Volume" />
 						<ColHeader_Price text="Price" />
-						<ColHeader_Value text="Market value" />
+						<ColHeader_Brokerage text="Brokerage" />
+						<ColHeader_Reduction text="Reduction" />
 						<ColHeader_Document text="Document" />
 					</DgvBuyOverview>
 				</TabCtrl>
@@ -574,16 +576,14 @@
 				<DeselectFailed text="Deselect of the selected rows failed!" />
 				<RenameColHeaderFailed text="Renaming of the column headers failed!" />
 				<SelectionChangeFailed text="The selection change failed!" />
-				<DateExists text="An entry for this date already exists." />
-				<DateWrongFormat text="Invalid date format. Current date is set." />
 				<VolumeEmpty text="Please insert a volume." />
 				<VolumeWrongFormat text="Format for the value 'Volume' is invalid." />
 				<VolumeWrongValue text="The value for 'Volume' must be higher than '0'." />
 				<SharePriceEmpty text="Please insert a market price." />
 				<SharePriceWrongFormat text="Format for the value 'Market price' is invalid." />
 				<SharePriceWrongValue text="The value for 'Market price' must be higher than '0'." />
-				<CostsWrongFormat text="Format for the value 'Costs' is invalid." />
-				<CostsWrongValue text="The value for 'Costs' must be higher than '0'." />
+				<BrokerageWrongFormat text="Format for the value 'Brokerage' is invalid." />
+				<BrokerageWrongValue text="The value for 'Brokerage' must be higher than '0'." />
 				<ReductionWrongFormat text="Format for the value 'Reduction' is invalid." />
 				<ReductionWrongValue text="The value for 'Reduction' must be higher than '0'." />
 				<AddFailed text="Buy add has been failed!" />
@@ -614,12 +614,14 @@
 <!--					<ForeignCurrencyActivation text="Activate foreign currency input:" /> -->
 <!--					<ForeignCurrencyFactor text="Calculation factor:" /> -->
 					<Volume text="Sale volume:" />
-					<BuyPrice text="Buy price of one share:" />
 					<SalesPrice text="Sale price of one share:" />
+					<BuyValue text="Sold buy value:" />
+					<BuyValueDetails text="Details" />
 					<TaxAtSource text="Tax at source:" />
 					<CapitalGainsTax text="Capital gains tax:" />
 					<SolidarityTax text="Solidarity tax:" />
-					<Costs text="Costs" />
+					<Brokerage text="Brokerage:" />
+					<Reduction text="Reduction:" />
 					<ProfitLoss text="Profit / loss:" />
 					<Payout text="Payout:" />
 					<Document text="Document:" />
@@ -678,8 +680,6 @@
 				<SearchFailed text="Getting the sale entry for the chosen date failed!" />
 				<RenameColHeaderFailed text="Renaming of the column headers failed!" />
 				<SelectionChangeFailed text="The selection change failed!" />
-				<DateExists text="An entry for this date already exists." />
-				<DateWrongFormat text="Invalid date format. Current date is set." />
 				<VolumeEmpty text="Please insert a volume." />
 				<VolumeWrongFormat text="Format for the value 'Volume' is invalid." />
 				<VolumeWrongValue text="The value for 'Volume' must be higher than '0'." />
@@ -694,8 +694,8 @@
 				<CapitalGainsTaxWrongValue text="The value for 'Capital gains tax' must be higher than '0'." />
 				<SolidarityTaxWrongFormat text="Format for the value 'Solidarity tax' is invalid." />
 				<SolidarityTaxWrongValue text="The value for 'Solidarity tax' must be higher than '0'." />
-				<CostsWrongFormat text="Format for the value 'Costs' is invalid." />
-				<CostsWrongValue text="The value for 'Costs' must be higher than '0'." />
+				<BrokerageWrongFormat text="Format for the value 'Brokerage' is invalid." />
+				<BrokerageWrongValue text="The value for 'Brokerage' must be higher than '0'." />
 				<AddFailed text="Sale add has been failed!" />
 				<EditFailed text="Sale changes save has been failed!" />
 				<DeleteFailed text="Delete of the sale entry has been failed!" />
@@ -706,6 +706,17 @@
 				<FileDoesNotExist text="The given file does not exist!" />
 				<DocumentShowFailed text="Show of the document failed!" />
 			</Errors>
+			
+			<UsedBuyDetailsForm>	
+				<!-- Caption -->
+				<Caption text="Used buy details" />
+			
+				<!-- Button -->
+				<Button text="Ok" />
+			
+				<!-- GroupBox -->
+				<GroupBox text="Overview" />
+			</UsedBuyDetailsForm>		
 		</AddEditFormSale>
 		
 		<!-- Dividend add / edit -->
@@ -765,11 +776,10 @@
 					<!-- DataGridView dividend -->
 					<DgvDividendOverview>
 						<ColHeader_Date text="Date" />
-						<ColHeader_Payout text="Pay" />
-						<ColHeader_Dividend text="Div." />
+						<ColHeader_Dividend text="Dividend" />
+						<ColHeader_Volume text="Volume" />
+						<ColHeader_TaxSum text="Taxes" />
 						<ColHeader_Yield text="Yield" />
-						<ColHeader_Price text="Pr." />
-						<ColHeader_Volume text="Vol." />
 						<ColHeader_Document text="Document" />
 					</DgvDividendOverview>
 				</TabCtrl>
@@ -788,8 +798,6 @@
 				<DeselectFailed text="Deselect of the selected rows failed!" />
 				<RenameColHeaderFailed text="Renaming of the column headers failed!" />
 				<SelectionChangeFailed text="The selection change failed!" />
-				<DateExists text="An entry for this date already exists." />
-				<DateWrongFormat text="Invalid date format. Current date is set." />
 				<ExchangeRatioEmpty text="Please insert a factor for the foreign currency." />
 				<ExchangeRatioWrongFormat text="Format for the value 'Factor' for the foreign currency is invalid." />
 				<ExchangeRatioWrongValue text="The value for 'Factor' for the foreign currency must be higher than '0'." />
@@ -822,19 +830,19 @@
 			</Errors>
 		</AddEditFormDividend>
 
-		<!-- Costs add / edit -->
-		<AddEditFormCost>
-			<Caption text="Add / edit costs of this share" />
+		<!-- Brokerage add / edit -->
+		<AddEditFormBrokerage>
+			<Caption text="Add / edit brokerage of this share" />
 			
-			<!-- GroupBox add / edit costs -->
+			<!-- GroupBox add / edit brokerage -->
 			<GrpBoxAddEdit>
-				<Add_Caption text="Add costs" />
-				<Edit_Caption text="Edit costs" />
+				<Add_Caption text="Add brokerage" />
+				<Edit_Caption text="Edit brokerage" />
 				
 				<!-- Labels -->
 				<Labels>
 					<Date text="Date:" />
-					<Cost text="Costs:" />
+					<Brokerage text="Brokerage:" />
 					<Document text="Document:" />
 				</Labels>
 
@@ -853,11 +861,11 @@
 				</Buttons>				
 			</GrpBoxAddEdit>
 			
-			<!-- GroupBox costs overview -->
-			<GrpBoxCost>
-				<Caption text="Costs overview" />
+			<!-- GroupBox brokerage overview -->
+			<GrpBoxBrokerage>
+				<Caption text="Brokerage overview" />
 
-				<!-- TabCtrl costs overview -->
+				<!-- TabCtrl brokerage overview -->
 				<TabCtrl>
 					
 					<!-- TabPage overview -->
@@ -865,37 +873,35 @@
 						<Overview text="Overview" />
 					</TabPgOverview>
 					
-					<!-- DataGridView costs -->
-					<DgvCostOverview>
+					<!-- DataGridView brokerage -->
+					<DgvBrokerageOverview>
 						<ColHeader_Date text="Date" />
-						<ColHeader_Costs text="Costs" />
+						<ColHeader_Brokerage text="Brokerage" />
 						<ColHeader_Document text="Document" />
-					</DgvCostOverview>
+					</DgvBrokerageOverview>
 				</TabCtrl>
-			</GrpBoxCost>
+			</GrpBoxBrokerage>
 			
-			<!-- Costs add / edit state messages -->
+			<!-- Brokerage add / edit state messages -->
 			<StateMessages>
-				<AddSuccess text="Costs has been added." />
-				<EditSuccess text="Costs changes has been saved." />
-				<DeleteSuccess text="Costs entry has been deleted." />
+				<AddSuccess text="Brokerage has been added." />
+				<EditSuccess text="Brokerage changes has been saved." />
+				<DeleteSuccess text="Brokerage entry has been deleted." />
 			</StateMessages>
 			
-			<!-- Costs add / edit errors -->
+			<!-- Brokerage add / edit errors -->
 			<Errors>
-				<ShowFailed text="An error occurred while the costs should be shown!" />
+				<ShowFailed text="An error occurred while the brokerage should be shown!" />
 				<DeselectFailed text="Deselect of the selected rows failed!" />
 				<RenameColHeaderFailed text="Renaming of the column headers failed!" />
-				<SearchFailed text="Getting the costs entry for the chosen date failed!" />
+				<SearchFailed text="Getting the brokerage entry for the chosen date failed!" />
 				<SelectionChangeFailed text="The selection change failed!" />
-				<DateExists text="An entry for this date already exists." />
-				<DateWrongFormat text="Invalid date format. Current date is set." />
-				<CostsEmpty text="Please insert a value for the costs." />
-				<CostsWrongFormat text="Format for the value 'Costs' is invalid." />
-				<CostsWrongValue text="The value for 'Costs' must be higher than '0'." />
-				<AddFailed text="Costs add failed!" />
-				<EditFailed text="Costs changes save has been failed!" />
-				<DeleteFailed text="Delete of the costs entry failed!" />
+				<BrokerageEmpty text="Please insert a value for the brokerage." />
+				<BrokerageWrongFormat text="Format for the value 'Brokerage' is invalid." />
+				<BrokerageWrongValue text="The value for 'Brokerage' must be higher than '0'." />
+				<AddFailed text="Brokerage add failed!" />
+				<EditFailed text="Brokerage changes save has been failed!" />
+				<DeleteFailed text="Delete of the brokerage entry failed!" />
 				<CancelFailure text="An error occurred while the cancel should be done!" />
 				<CheckInputFailure text="An error occurred while the input check should be done!" />
 				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
@@ -903,7 +909,7 @@
 				<FileDoesNotExist text="The given file does not exist!" />
 				<DocumentShowFailed text="Show of the document failed!" />
 			</Errors>
-		</AddEditFormCost>
+		</AddEditFormBrokerage>
 		
 		<!-- Logger settings -->
 		<LoggerSettingsForm>
@@ -1003,7 +1009,7 @@
 				<BuyDelete text="Do you really want to remove this buy?" />
 				<SaleDelete text="Do you really want to remove this sale?" />
 				<DividendDelete text="Do you realy want to remove this dividend?" />
-				<CostDelete text="Do you realy want to remove this cost?" />
+				<BrokerageDelete text="Do you realy want to remove this brokerage?" />
 				<DocumentDoesNotExistDelete text="The document does not exist. Would you delete the document from the data?"/>
 				<ShareDelete text="Do you really want to delete this share from the portfolio?"/>
 				<LoggerSetttingsReboot text="The changes of the logger settings will be used after a software restarted"/>
@@ -1011,7 +1017,7 @@
 				<PortfolioNameExists text="A portfolio with the given name already exists. Should this portfolio be overwritten?"/>
 			</Content>
 		</MessageBoxForm>
-					
+		
 		<!-- About window -->
 		<AboutForm>
 			<Caption text="About" />
@@ -1040,7 +1046,6 @@
 		<!-- Application name -->
 		<Application>
 			<Name text="Aktien- Portfolio- Manager" />
-			<Version text="Version" />
 		</Application>
 		
 		<!-- Notify icon -->
@@ -1135,7 +1140,7 @@
 
 				<!-- TabControl with share overviews -->
 				<TabCtrlShareOverviews>
-					<!-- TabPage with the complete depot values (Markt values + dividends - costs - taxes ) -->
+					<!-- TabPage with the complete depot values (Markt values + dividends - brokerage - taxes ) -->
 					<TabPgCompleteDepotValue>
 						<Caption text="Kompletter Depotwert" />
 
@@ -1147,8 +1152,8 @@
 							<ColHeader_PrevDay text="Vortag" />
 							<ColHeader_Volume text="Anteile"/>
 							<ColHeader_Performance text="Entw." />
-							<ColHeader_CostsDividend text="Kosten /  Dividenden" />
-							<ColHeader_PurchaseMarketValue text=" Einzahlung /   Marktwert" />
+							<ColHeader_BrokerageDividend text="Kosten / Dividenden" />
+							<ColHeader_PurchaseMarketValue text=" Einzahlung / Marktwert" />
 						</DgvPortfolio>
 						<DgvPortfolio_Error>
 							<ConfigurationFailed text="Konfiguration des DataGridView 'Portfolio' fehlgeschlagen!" />
@@ -1162,7 +1167,7 @@
 						<!-- DataGridView portfolio footer -->
 						<DgvPortfolioFooter>
 							<RowContent_TotalPurchaseValue text="Einzahlung (gesamt) " />
-							<RowContent_TotalCostDividend text="Kosten / Dividenden (ges.) " />
+							<RowContent_TotalBrokerageDividend text="Kosten / Dividenden (ges.) " />
 							<RowContent_TotalPerformance text="Entwicklung (gesamt) " />
 							<RowContent_TotalDepotValue text="Aktueller Depotstand " />
 						</DgvPortfolioFooter>
@@ -1174,7 +1179,7 @@
 						</DgvPortfolioFooter_Error>
 					</TabPgCompleteDepotValue>
 
-					<!-- TabPage with market values (Market values - costs)  -->
+					<!-- TabPage with market values (Market values - brokerage)  -->
 					<TabPgMarketDepotValue>
 						<Caption text="Marktwert" />
 
@@ -1186,7 +1191,7 @@
 							<ColHeader_PrevDay text="Vortag" />
 							<ColHeader_Volume text="Anteile"/>
 							<ColHeader_Performance text="Entw." />
-							<ColHeader_PurchaseMarketValue text=" Einzahlung /   Marktwert" />
+							<ColHeader_PurchaseMarketValue text=" Einzahlung / Marktwert" />
 						</DgvPortfolio>
 						
 						<!-- DataGridView portfolio footer -->
@@ -1220,8 +1225,8 @@
 
 				<!-- TabControl with the details -->
 				<TabCtrlDetails>		
-					<!-- TabPage with dividend and costs -->
-					<TabPgWithDividendCosts>
+					<!-- TabPage with dividend and brokerage -->
+					<TabPgWithDividendBrokerage>
 						<Caption text="Mit Dividenden / Kosten" />
 						
 						<!-- Labels -->
@@ -1229,7 +1234,7 @@
 							<Date text="Aktien- Datum:" />
 							<Volume text="Anteile:"/>
 							<TotalDividend text="Dividenden (gesamt):" />		
-							<TotalCosts text="Kosten (gesamt):" />
+							<TotalBrokerage text="Kosten (gesamt):" />
 							<CurrentPrice text="Aktueller Aktien- Preis:" />
 							<DiffPerformancePrevDay text="Entwicklung (Vortag)"/>
 							<DiffSumPrevDay text="Gewinn / Verlust (Vortag):" />
@@ -1239,10 +1244,10 @@
 							<TotalProfitLoss text="Gewinn / Verlust (gesamt):" />
 							<TotalSum text="Summe (gesamt):" />
 						</Labels>
-					</TabPgWithDividendCosts>
+					</TabPgWithDividendBrokerage>
 					
-					<!-- Tab without dividend and costs -->
-					<TabPgWithOutDividendCosts>
+					<!-- Tab without dividend and brokerage -->
+					<TabPgWithOutDividendBrokerage>
 						<Caption text="Ohne Dividenden / Kosten" />
 						
 						<!-- Labels -->
@@ -1250,7 +1255,7 @@
 							<Date text="Aktien- Datum:" />
 							<Volume text="Anteile:"/>
 							<TotalDividend text="Dividenden (gesamt):" />		
-							<TotalCosts text="Kosten (gesamt):" />
+							<TotalBrokerage text="Kosten (gesamt):" />
 							<CurrentPrice text="Aktueller Aktien- Preis:" />
 							<DiffPerformancePrevDay text="Entwicklung (Vortag)"/>
 							<DiffSumPrevDay text="Gewinn / Verlust (Vortag):" />
@@ -1260,10 +1265,10 @@
 							<TotalProfitLoss text="Gewinn / Verlust (gesamt):" />
 							<TotalSum text="Summe (gesamt):" />
 						</Labels>
-					</TabPgWithOutDividendCosts>
-					<TabPgWithWithOutDividendCostsErrors>
+					</TabPgWithOutDividendBrokerage>
+					<TabPgWithWithOutDividendBrokerageErrors>
 						<ShowFailed text="Es trat ein Fehler beim Anzeigen der Aktien- Details auf!" />
-					</TabPgWithWithOutDividendCostsErrors>
+					</TabPgWithWithOutDividendBrokerageErrors>
 					
 					<!-- Tab dividend overview -->
 					<TabPgDividend>
@@ -1287,23 +1292,23 @@
 						<RenameHeaderFailed text="Umbennenen der Spalten- Namen ist fehlgeschlagen!" />
 					</TabPgDividend_Error>
 					
-					<!-- Tab cost overview -->
-					<TabPgCosts>
+					<!-- Tab brokerage overview -->
+					<TabPgBrokerage>
 						<Caption text="Kosten" />
 						<Overview text="Übersicht" />
 						
-						<!-- DataGridView costs -->
-						<DgvCostsOverview>
+						<!-- DataGridView brokerage -->
+						<DgvBrokerageOverview>
 							<ColHeader_Date text="Datum" />
 							<ColHeader_Year text="Jahr" />
-							<ColHeader_Costs text="Kosten" />
+							<ColHeader_Brokerage text="Kosten" />
 							<ColHeader_Document text="Dokument" />
-						</DgvCostsOverview>
-					</TabPgCosts>
-					<TabPgCosts_Error>
+						</DgvBrokerageOverview>
+					</TabPgBrokerage>
+					<TabPgBrokerage_Error>
 						<ShowFailed text="Es trat ein Fehler beim Anzeigen der Kosten- Details auf!" />
 						<RenameHeaderFailed text="Umbennenen der Spalten- Namen ist fehlgeschlagen!" />
-					</TabPgCosts_Error>
+					</TabPgBrokerage_Error>
 					
 					<!-- Tab profit or loss overview -->
 					<TabPgProfitLoss>
@@ -1369,7 +1374,7 @@
 				<EditSaveSuccessful text="Änderung war erfolgreich." />
 				<DeleteSuccessful text="Aktie wurde erfolgreich entfernt." />
 				<ChangeLanguageSuccessful text="Sprache wurde geändert." />
-				<ChangingPortfolioSuccessful text="Wechseln des Portfolios erfolgreich." />
+				<ChangingPortfolioSuccessful text="Wechsel des Portfolios erfolgreich." />
 			</StatusMessages>
 			
 			<!-- Error messages -->
@@ -1388,6 +1393,7 @@
 				<WebSiteRegexNotFound1_2 text=" verfügbar!" />
 				<WebSiteRegexNotFound2_1 text="Kein Parser-Konfiguration für die Aktien mit den WKN " />
 				<WebSiteRegexNotFound2_2 text=" verfügbar!" />
+				<PortfolioNotSet text="Kein Portfolio ausgewählt. Erstellen Sie ein Neues oder laden Sie ein Bestehendes." />
 				<PortfolioConfigurationListEmpty text="Portfolio ist leer!" />
 				<PortfolioConfigurationListLoadFailed text="Konfiguration unvollständig!"/>
 				<AddShowFailed text="Es trat ein Fehler bei der Anzeige auf!" />
@@ -1400,7 +1406,6 @@
 				<SaveSettingsFailed text="Speichern der Einstellungen fehlgeschalgen!" />
 				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
 				<ChangeLanguageFailed text="Ändern der Sprache fehlgeschlagen!" />
-				<MainFormInitFailed text="MainForm- Initialisierung fehlgeschlagen!" />
 			</Errors>
 		</MainForm>	
 
@@ -1418,9 +1423,10 @@
 					<Date text="Datum:" />
 					<Name text="Name:" />
 					<Volume text="Anteile:" />
+					<VolumeSold text="Bereits verkaufte Anteile:" />
 					<SharePrice text="Kurs:" />
 					<MarketValue text="Kurswert:" />
-					<Costs text="Kosten:" />
+					<Brokerage text="Provision:" />
 					<Reduction text="Rabatt:" />
 					<FinalValue text="Endbetrag:" />
 					<WebSite text="Webseiten- Adresse:" />
@@ -1445,23 +1451,23 @@
 			<!-- Errors -->
 			<Errors>
 				<WKNEmpty text="Bitte geben Sie eine WKN- Nummer ein." />
-				<WKNExists text="Die WKN- Nummber existiert bereits." />
-				<NameEmpty text="Bitte geben Sie einen Namen ein." />
-				<NameExists text="Der Name existiert bereits." />
-				<VolumeEmpty text="Bitte geben Sie einen Anteile- Wert ein." />
-				<VolumeWrongFormat text="Format für den 'Anteile'- Wert ist ungültig." />
-				<VolumeWrongValue text="Der Wert für 'Anteile' muss größer '0' sein." />
+				<WKNExists text="Die eingegebene WKN- Nummber existiert bereits." />
+				<NameEmpty text="Bitte geben Sie einen Aktien- Namen ein." />
+				<NameExists text="Der eingegebene Aktien- Name existiert bereits." />
+				<VolumeEmpty text="Bitte geben Sie einen Wert für die gekauften Anteile ein." />
+				<VolumeWrongFormat text="Das Format für den eingegebenen Wert für die gekauften Anteile ist ungültig." />
+				<VolumeWrongValue text="Der eingegeben Wert für  die gekauften Anteile muss größer '0' sein." />
 				<SharePriceEmpty text="Bitte geben Sie einen Kurs ein." />
-				<SharePriceWrongFormat text="Format für den 'Kurs'- Wert ist ungültig." />
-				<SharePriceWrongValue text="Der Wert für 'Kurs' muss größer als '0' sein." />
-				<CostsWrongFormat text="Format für den 'Kosten'- Wert ist ungültig." />
-				<CostsWrongValue text="Der Wert für 'Kosten' muss größer '0' sein." />
-				<ReductionWrongFormat text="Format für den 'Rabatt'- Wert ist ungültig." />
-				<ReductionWrongValue text="Der Wert für 'Rabatt' muss größer '0' sein." />
+				<SharePriceWrongFormat text="Das Format für den eingegebenen Kurs ist ungültig." />
+				<SharePriceWrongValue text="Der Wert für eingegebenen Kurs muss größer als '0' sein." />
+				<BrokerageWrongFormat text="Das Format für die eingegebene Provision ist ungültig." />
+				<BrokerageWrongValue text="Der Wert für die eingebene Provision muss größer '0' sein." />
+				<ReductionWrongFormat text="Das Format für den eingegebenen Rabatt ist ungültig." />
+				<ReductionWrongValue text="Der Wert für den eingegebenen Rabatt muss größer '0' sein." />
 				<WebSiteEmpty text="Bitte geben Sie eine Webseiten- Adresse ein." />
 				<WebSiteWrongFormat text="Die eingegebene Webseiten- Adresse ist ungültig oder nicht erreichbar. Versuchen Sie es noch einmal." />
-				<WebSiteExists text="Die Webseite existiert bereits." />
-				<WebSiteRegexNotFound text="Kein Parser-Konfiguration für die angegebene Web- Addresse verfügbar!" />
+				<WebSiteExists text="Die eingegebene Webseite existiert bereits." />
+				<WebSiteRegexNotFound text="Keine Parser-Konfiguration für die angegebene Web- Addresse verfügbar!" />
 				<AddSaveFailed text="Es trat ein Fehler auf. Hinzufügen der Aktien ist fehlgeschlagen!" />
 				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
 				<DirectoryDoesNotExist text="Das angegebene Verzeichnis existiert nicht!" />
@@ -1502,7 +1508,7 @@
 					<Profit text="Gewinn / Verlust aus Verkäufen:" />
 					<Loss text="Verlust aus Verkäufen:" />
 					<Dividend text="Dividenden:" />
-					<Costs text="Kosten:" />
+					<Brokerage text="Kosten:" />
 				</Labels>
 
 				<!-- Buttons -->
@@ -1510,7 +1516,7 @@
 					<Buys text="" />
 					<Sales text="" />
 					<Dividend text="" />
-					<Costs text="" />
+					<Brokerage text="" />
 				</Buttons>
 			</GrpBoxEarningsExpenditure>
 
@@ -1551,9 +1557,10 @@
 				<Labels>
 					<Date text="Datum des Kaufs:" />
 					<Volume text="Gekaufte Anteile:" />
+					<VolumeSold text="Bereits verkaufte Anteile:" />
 					<Price text="Kurs:" />
 					<MarketValue text="Kurswert:" />
-					<Costs text="Kosten:" />
+					<Brokerage text="Provision:" />
 					<Reduction text="Rabatt:" />
 					<FinalValue text="Endbetrag:" />
 					<Document text="Dokument:" />
@@ -1591,7 +1598,8 @@
 						<ColHeader_Date text="Datum" />
 						<ColHeader_Volume text="Anteile" />
 						<ColHeader_Price text="Kurs" />
-						<ColHeader_Value text="Kurswert" />
+						<ColHeader_Brokerage text="Provision" />
+						<ColHeader_Reduction text="Rabatt" />
 						<ColHeader_Document text="Dokument" />
 					</DgvBuyOverview>
 				</TabCtrl>
@@ -1610,16 +1618,14 @@
 				<DeselectFailed text="Deselektieren der selektierten Zeile ist fehlgeschlagen!" />
 				<RenameColHeaderFailed text="Umbennenen der Spalten- Namen ist fehlgeschlagen!" />
 				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
-				<DateExists text="Es besteht bereits ein Eintrag für das eingegebene Datum." />
-				<DateWrongFormat text="Ungültiges Datumsformat. Aktuelles Datum wurde gesetzt." />
 				<VolumeEmpty text="Bitte geben Sie einen Anteile- Wert ein." />
 				<VolumeWrongFormat text="Format für den 'Anteile'- Wert ist ungültig." />
 				<VolumeWrongValue text="Der Wert für 'Anteile' muss größer als '0' sein." />
 				<SharePriceEmpty text="Bitte geben Sie einen Kurs ein." />
 				<SharePriceWrongFormat text="Format für den 'Kurs'- Wert ist ungültig." />
 				<SharePriceWrongValue text="Der Wert für 'Kurs' muss größer als '0' sein." />
-				<CostsWrongFormat text="Format für den 'Kosten'- Wert ist ungültig." />
-				<CostsWrongValue text="Der Wert für 'Kosten' muss größer als '0' sein." />
+				<BrokerageWrongFormat text="Format für den 'Provisions'- Wert ist ungültig." />
+				<BrokerageWrongValue text="Der Wert für 'Provision' muss größer als '0' sein." />
 				<ReductionWrongFormat text="Format für den 'Rabatt'- Wert ist ungültig." />
 				<ReductionWrongValue text="Der Wert für 'Rabatt' muss größer als '0' sein." />
 				<AddFailed text="Hinzufügen des Kaufs ist fehlgeschlagen!" />
@@ -1650,12 +1656,14 @@
 <!--					<ForeignCurrencyActivation text="Fremdwährungseingabe aktivieren:" /> -->
 <!--					<ForeignCurrencyFactor text="Umrechnungsfaktor:" /> -->
 					<Volume text="Verkaufte Anteile:" />
-					<BuyPrice text="Kauf- Preis einer Aktie:" />
+					<BuyValue text="Verkaufter Kaufwert:" />
+					<BuyValueDetails text="Details" />
 					<SalesPrice text="Verkaufs- Preis einer Aktie:" />
 					<TaxAtSource text="Quellsteuer:" />
 					<CapitalGainsTax text="Kapitalertragssteuer:" />
 					<SolidarityTax text="Solidaritätszuschlag:" />
-					<Costs text="Kosten" />
+					<Brokerage text="Provision:" />
+					<Reduction text="Rabatt:" />
 					<ProfitLoss text="Gewinn / Verlust:" />
 					<Payout text="Auszahlung:" />
 					<Document text="Dokument:" />
@@ -1714,8 +1722,6 @@
 				<SearchFailed text="Ermitteln des Verkaufs- Eintrags / der Verkaufs- Einträge für das ausgewählte Datum ist fehlgeschalgen!" />
 				<RenameColHeaderFailed text="Umbennenen der Spalten- Namen ist fehlgeschlagen!" />
 				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
-				<DateExists text="Es besteht bereits ein Eintrag für das eingegebene Datum." />
-				<DateWrongFormat text="Ungültiges Datumsformat. Aktuelles Datum wurde gesetzt." />
 				<VolumeEmpty text="Bitte geben Sie einen Anteile- Wert ein." />
 				<VolumeWrongFormat text="Format für den 'Anteile'- Wert ist ungültig." />
 				<VolumeWrongValue text="Der Wert für 'Anteile' muss größer als '0' sein." />
@@ -1730,8 +1736,8 @@
 				<CapitalGainsTaxWrongValue text="Der Wert für 'Kapitalertragssteuer' muss größer als '0' sein." />
 				<SolidarityTaxWrongFormat text="Format für den 'Solidaritätszuschlag'- Wert ist ungültig." />
 				<SolidarityTaxWrongValue text="Der Wert für 'Solidaritätszuschlag' muss größer als '0' sein." />
-				<CostsWrongFormat text="Format für den 'Kosten'- Wert ist ungültig." />
-				<CostsWrongValue text="Der Wert für 'Kosten' muss größer '0' sein." />
+				<BrokerageWrongFormat text="Format für den 'Provisions'- Wert ist ungültig." />
+				<BrokerageWrongValue text="Der Wert für 'Provision' muss größer '0' sein." />
 				<AddFailed text="Hinzufügen des Kaufs ist fehlgeschlagen!" />
 				<EditFailed text="Speichern der Kauf- Änderung ist fehlgeschlagen!" />
 				<DeleteFailed text="Entfernen des Kauf- Eintrags ist fehlgeschlagen!" />
@@ -1742,6 +1748,17 @@
 				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
 				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
 			</Errors>
+			
+			<UsedBuyDetailsForm>	
+				<!-- Caption -->
+				<Caption text="Details der verwendeten Käufe" />
+			
+				<!-- Button -->
+				<Button text="Ok" />
+			
+				<!-- GroupBox -->
+				<GroupBox text="Übersicht" />
+			</UsedBuyDetailsForm>					
 		</AddEditFormSale>
 
 		<!-- Dividend add / edit -->
@@ -1801,11 +1818,10 @@
 					<!-- DataGridView dividend -->
 					<DgvDividendOverview>
 						<ColHeader_Date text="Datum" />
-						<ColHeader_Payout text="Ausz." />
-						<ColHeader_Dividend text="Div." />
-						<ColHeader_Yield text="Ren." />
-						<ColHeader_Price text="Pr." />
-						<ColHeader_Volume text="Ant." />
+						<ColHeader_Dividend text="Dividende" />
+						<ColHeader_Volume text="Anteile." />
+						<ColHeader_TaxSum text="Steuern" />
+						<ColHeader_Yield text="Rendite" />
 						<ColHeader_Document text="Dokument" />
 					</DgvDividendOverview>
 				</TabCtrl>
@@ -1824,8 +1840,6 @@
 				<DeselectFailed text="Deselektieren der selektierten Zeile ist fehlgeschlagen!" />
 				<RenameColHeaderFailed text="Umbennenen der Spalten- Namen ist fehlgeschlagen!" />
 				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
-				<DateExists text="Es besteht bereits ein Eintrag für das eingegebene Datum." />
-				<DateWrongFormat text="Ungültiges Datumsformat. Aktuelles Datum wurde gesetzt." />
 				<ExchangeRatioEmpty text="Bitte geben Sie einen Faktor für der Fremdwährung ein." />
 				<ExchangeRatioWrongFormat text="Format für den 'Faktor'- Wert für der Fremdwährung ist ungültig." />
 				<ExchangeRatioWrongValue text="Der Wert für den 'Faktor' für der Fremdwährung muss größer als '0' sein." />
@@ -1858,11 +1872,11 @@
 			</Errors>
 		</AddEditFormDividend>
 		
-		<!-- Costs add / edit -->
-		<AddEditFormCost>
+		<!-- Brokerage add / edit -->
+		<AddEditFormBrokerage>
 			<Caption text="Hinzufügen / editieren der Kosten dieser Aktie" />
 			
-			<!-- GroupBox add / edit costs -->
+			<!-- GroupBox add / edit brokerage -->
 			<GrpBoxAddEdit>
 				<Add_Caption text="Kosten hinzufügen" />
 				<Edit_Caption text="Kosten editieren" />
@@ -1870,7 +1884,7 @@
 				<!-- Labels -->
 				<Labels>
 					<Date text="Datum:" />
-					<Cost text="Kosten:" />
+					<Brokerage text="Kosten:" />
 					<Document text="Dokument:" />
 				</Labels>
 
@@ -1889,11 +1903,11 @@
 				</Buttons>				
 			</GrpBoxAddEdit>
 			
-			<!-- GroupBox costs overview -->
-			<GrpBoxCost>
+			<!-- GroupBox brokerage overview -->
+			<GrpBoxBrokerage>
 				<Caption text="Kosten- Übersicht" />
 
-				<!-- TabCtrl costs overview -->
+				<!-- TabCtrl brokerage overview -->
 				<TabCtrl>
 					
 					<!-- TabPage overview -->
@@ -1901,34 +1915,32 @@
 						<Overview text="Übersicht" />
 					</TabPgOverview>
 					
-					<!-- DataGridView costs -->
-					<DgvCostOverview>
+					<!-- DataGridView brokerage -->
+					<DgvBrokerageOverview>
 						<ColHeader_Date text="Datum" />
-						<ColHeader_Costs text="Kosten" />
+						<ColHeader_Brokerage text="Kosten" />
 						<ColHeader_Document text="Dokument" />
-					</DgvCostOverview>
+					</DgvBrokerageOverview>
 				</TabCtrl>
-			</GrpBoxCost>
+			</GrpBoxBrokerage>
 			
-			<!-- Costs add / edit state messages -->
+			<!-- Brokerage add / edit state messages -->
 			<StateMessages>
 				<AddSuccess text="Kosten wurden hinzugefügt." />
 				<EditSuccess text="Kosten- Änderung wurde gespeichert." />
 				<DeleteSuccess text="Kosten- Eintrage wurde entfernt." />
 			</StateMessages>
 			
-			<!-- Costs add / edit errors -->
+			<!-- Brokerage add / edit errors -->
 			<Errors>
 				<ShowFailed text="Es trat ein Fehler beim Anzeigen der Kosten auf!" />
 				<DeselectFailed text="Deselektieren der selektierten Zeile ist fehlgeschlagen!" />
 				<SearchFailed text="Ermitteln des Dividenen- Eintrags / der Dividenden- Einträge für das ausgewählte Datum ist fehlgeschalgen!" />
 				<RenameColHeaderFailed text="Umbennenen der Spalten- Namen ist fehlgeschlagen!" />
 				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
-				<DateExists text="Es besteht bereits ein Eintrag für das eingegebene Datum." />
-				<DateWrongFormat text="Ungültiges Datumsformat. Aktuelles Datum wurde gesetzt." />
-				<CostsEmpty text="Bitte geben Sie die Kosten ein." />
-				<CostsWrongFormat text="Format für den 'Kosten'- Wert ist ungültig." />
-				<CostsWrongValue text="Der Wert für 'Kosten' muss größer als '0' sein." />
+				<BrokerageEmpty text="Bitte geben Sie die Kosten ein." />
+				<BrokerageWrongFormat text="Format für den 'Kosten'- Wert ist ungültig." />
+				<BrokerageWrongValue text="Der Wert für 'Kosten' muss größer als '0' sein." />
 				<AddFailed text="Hinzufügen der Kosten ist fehlgeschlagen!" />
 				<EditFailed text="Speichern der Kosten- Änderung ist fehlgeschlagen!" />
 				<DeleteFailed text="Entfernen des Kosten- Eintrags ist fehlgeschlagen!" />
@@ -1939,7 +1951,7 @@
 				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
 				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
 			</Errors>
-		</AddEditFormCost>
+		</AddEditFormBrokerage>
 
 		<!-- Logger settings -->
 		<LoggerSettingsForm>
@@ -2039,7 +2051,7 @@
 				<BuyDelete text="Möchten Sie den Kauf wirklich entfernen"/>
 				<SaleDelete text="Möchten Sie den Verkauf wirklich entfernen"/>
 				<DividendDelete text="Möchten Sie den Dividenden- Eintrag wirklich entfernen?" />
-				<CostDelete text="Möchten Sie den Kosten- Eintrag wirklich entfernen?" />
+				<BrokerageDelete text="Möchten Sie den Kosten- Eintrag wirklich entfernen?" />
 				<DocumentDoesNotExistDelete text="Das Dokument existiert nicht mehr. Möchten Sie das Dokument aus den Daten entfernen?"/>
 				<ShareDelete text="Möchten Sie den Aktien- Eintrag wirklich aus dem Portfolio entfernen?"/>
 				<LoggerSetttingsReboot text="Die Änderungen der Logger- Einstellung werden erst nach meinem Software- Neustart angewendet."/>

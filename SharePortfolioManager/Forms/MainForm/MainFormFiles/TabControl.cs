@@ -77,7 +77,7 @@ namespace SharePortfolioManager
 
             UpdateShareDetails(MarketValueOverviewTabSelected);
             UpdateProfitLossDetails(MarketValueOverviewTabSelected);
-            UpdateCostsDetails(MarketValueOverviewTabSelected);
+            UpdateBrokerageDetails(MarketValueOverviewTabSelected);
             UpdateDividendDetails(MarketValueOverviewTabSelected);
 
             tabCtrlDetails.SelectedIndex = 0;
@@ -95,7 +95,7 @@ namespace SharePortfolioManager
         #region Tab control details
 
         /// <summary>
-        /// This function updates the dividend, costs and profit / loss values in the tab controls
+        /// This function updates the dividend, brokerage and profit / loss values in the tab controls
         /// if one of them three pages are chosen.
         /// </summary>
         /// <param name="sender">TabControl</param>
@@ -112,13 +112,13 @@ namespace SharePortfolioManager
                     UpdateDividendDetails(MarketValueOverviewTabSelected);
                     break;
                 case 3:
-                    UpdateCostsDetails(MarketValueOverviewTabSelected);
+                    UpdateBrokerageDetails(MarketValueOverviewTabSelected);
                     break;
             }
 
             // Update the dividend page
 
-            // Update the costs page
+            // Update the brokerage page
         }
 
         #region Reset group box details
@@ -132,12 +132,12 @@ namespace SharePortfolioManager
             // Tab captions
             if (tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsFinalValue))
                 tabCtrlDetails.TabPages[_tabPageDetailsFinalValue].Text =
-                Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendCosts/Caption",
+                Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Caption",
                     LanguageName);
 
             if (tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsMarketValue))
                 tabCtrlDetails.TabPages[_tabPageDetailsMarketValue].Text =
-                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendCosts/Caption",
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Caption",
                         LanguageName);
 
             if (tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsProfitLossValue))
@@ -148,15 +148,15 @@ namespace SharePortfolioManager
                 tabCtrlDetails.TabPages[_tabPageDetailsDividendValue].Text =
                     Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/Caption", LanguageName);
 
-            if (tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsCostsValue))
-                tabCtrlDetails.TabPages[_tabPageDetailsCostsValue].Text =
-                Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgCosts/Caption", LanguageName);
+            if (tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsBrokerageValue))
+                tabCtrlDetails.TabPages[_tabPageDetailsBrokerageValue].Text =
+                Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/Caption", LanguageName);
 
             // Label values of the market value
             lblDetailsMarketValueDateValue.Text = @"";
             lblDetailsMarketValueVolumeValue.Text = @"";
             lblDetailsMarketValueDividendValue.Text = @"";
-            lblDetailsMarketValueCostValue.Text = @"";
+            lblDetailsMarketValueBrokerageValue.Text = @"";
             lblDetailsMarketValueCurPriceValue.Text = @"";
             lblDetailsMarketValueDiffPerformancePrevValue.Text = @"";
             lblDetailsMarketValueDiffSumPrevValue.Text = @"";
@@ -170,7 +170,7 @@ namespace SharePortfolioManager
             lblDetailsFinalValueDateValue.Text = @"";
             lblDetailsFinalValueVolumeValue.Text = @"";
             lblDetailsFinalValueDividendValue.Text = @"";
-            lblDetailsFinalValueCostsValue.Text = @"";
+            lblDetailsFinalValueBrokerageValue.Text = @"";
             lblDetailsFinalValueCurPriceValue.Text = @"";
             lblDetailsFinalValueDiffPerformancePrevValue.Text = @"";
             lblDetailsFinalValueDiffSumPrevValue.Text = @"";
@@ -183,7 +183,7 @@ namespace SharePortfolioManager
 
         #endregion Reset group box details
 
-        #region Share details with or without dividends and costs
+        #region Share details with or without dividends and brokerage
 
         /// <summary>
         /// This function updates the details information of a share
@@ -274,11 +274,11 @@ namespace SharePortfolioManager
                     lblDetailsMarketValueDividend.Enabled = false;
                     lblDetailsMarketValueDividendValue.Enabled = false;
 
-                    // Set cost value
-                    lblDetailsMarketValueCostValue.Text = @"-";
-                    // Disable the cost labels 
-                    lblDetailsMarketValueCost.Enabled = false;
-                    lblDetailsMarketValueCostValue.Enabled = false;
+                    // Set brokerage value
+                    lblDetailsMarketValueBrokerageValue.Text = @"-";
+                    // Disable the Brokerage labels 
+                    lblDetailsMarketValueBrokerage.Enabled = false;
+                    lblDetailsMarketValueBrokerageValue.Enabled = false;
 
                     // Set the current price value
                     lblDetailsMarketValueCurPriceValue.Text =
@@ -352,8 +352,8 @@ namespace SharePortfolioManager
                         tabCtrlDetails.TabPages.Insert(1, _tempDividends);
                     if (!tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsProfitLossValue))
                         tabCtrlDetails.TabPages.Insert(2, _tempProfitLoss);
-                    if (!tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsCostsValue))
-                        tabCtrlDetails.TabPages.Insert(3, _tempCosts);
+                    if (!tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsBrokerageValue))
+                        tabCtrlDetails.TabPages.Insert(3, _tempBrokerage);
 
                     // Check if a share is selected
                     if (ShareObjectFinalValue == null)
@@ -424,12 +424,12 @@ namespace SharePortfolioManager
                     lblDetailsMarketValueDividend.Enabled = false;
                     lblDetailsMarketValueDividendValue.Enabled = false;
                     
-                    // Set cost value
-                    lblDetailsFinalValueCostsValue.Text =
-                        ShareObjectFinalValue.AllCostsEntries.CostValueTotalWithUnitAsStr;
-                    // Disable the cost labels 
-                    lblDetailsMarketValueCost.Enabled = false;
-                    lblDetailsMarketValueCostValue.Enabled = false;
+                    // Set brokerage value
+                    lblDetailsFinalValueBrokerageValue.Text =
+                        ShareObjectFinalValue.AllBrokerageEntries.BrokerageValueTotalWithUnitAsStr;
+                    // Disable the brokerage labels 
+                    lblDetailsMarketValueBrokerage.Enabled = false;
+                    lblDetailsMarketValueBrokerageValue.Enabled = false;
 
                     // Set the current price value
                     lblDetailsFinalValueCurPriceValue.Text =
@@ -496,13 +496,13 @@ namespace SharePortfolioManager
 #endif
                 // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithWithOutDividendCostsErrors/ShowFailed", LanguageName),
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithWithOutDividendBrokerageErrors/ShowFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
             }
         }
 
-        #endregion Share details with or without dividends and costs
+        #endregion Share details with or without dividends and brokerage
 
         #region Profit loss details
 
@@ -867,8 +867,8 @@ namespace SharePortfolioManager
                         if (messageBox.ShowDialog() == DialogResult.OK)
                         {
                             // Remove sale object and add it with no document
-                            if (ShareObjectFinalValue.RemoveSale(temp.Date) &&
-                                ShareObjectFinalValue.AddSale(strDateTime, temp.Volume, temp.BuyPrice, temp.SalePrice, temp.TaxAtSource, temp.CapitalGainsTax, temp.SolidarityTax, temp.Costs))
+                            if (ShareObjectFinalValue.RemoveSale(temp.Guid, temp.Date) &&
+                                ShareObjectFinalValue.AddSale(temp.Guid, strDateTime, temp.Volume, temp.SalePrice, temp.SaleBuyDetails, temp.TaxAtSource, temp.CapitalGainsTax, temp.SolidarityTax, temp.Brokerage, temp.Reduction))
                             {
                                 // TODO Refresh profit or loss
                                 //Show();
@@ -947,8 +947,20 @@ namespace SharePortfolioManager
                     switch (i)
                     {
                         case 0:
-                            ((DataGridView) sender).Columns[i].HeaderText = Language.GetLanguageTextByXPath(tabCtrlProfitLoss.TabPages.Count == 1 ? @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/DgvProfitLossOverview/ColHeader_Year" : @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/DgvProfitLossOverview/ColHeader_Date", LanguageName);
-                            break;
+                            {
+                                if (tabCtrlProfitLoss.TabPages.Count == 1)
+                                    ((DataGridView) sender).Columns[i].HeaderText = Language.GetLanguageTextByXPath(
+                                        @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/DgvProfitLossOverview/ColHeader_Year",
+                                        LanguageName
+                                    );
+                                else
+                                    ((DataGridView)sender).Columns[i].HeaderText = Language.GetLanguageTextByXPath(
+                                        @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/DgvProfitLossOverview/ColHeader_Date",
+                                        LanguageName
+                                    );
+
+                                break;
+                            }
                         case 1:
                             ((DataGridView)sender).Columns[i].HeaderText =
                                 Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/DgvProfitLossOverview/ColHeader_ProfitLoss",
@@ -1336,13 +1348,16 @@ namespace SharePortfolioManager
                     switch (i)
                     {
                         case 0:
-                        {
-                            ((DataGridView) sender).Columns[i].HeaderText = Language.GetLanguageTextByXPath(
-                                tabCtrlDividends.TabPages.Count == 1
-                                    ? @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Year"
-                                    : @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Date",
-                                LanguageName);
-                                break;
+                            {
+                                if (tabCtrlDividends.TabPages.Count == 1)
+                                    ((DataGridView)sender).Columns[i].HeaderText = Language.GetLanguageTextByXPath(
+                                        @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Year",
+                                        LanguageName);
+                                else
+                                    ((DataGridView)sender).Columns[i].HeaderText = Language.GetLanguageTextByXPath(
+                                        @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Date",
+                                        LanguageName);
+                                break;                    
                             }
                         case 1:
                             {
@@ -1442,12 +1457,12 @@ namespace SharePortfolioManager
 
         #endregion Dividend details
 
-        #region Costs details
+        #region Brokerage details
 
         /// <summary>
-        /// This function updates the costs information of a share
+        /// This function updates the brokerage information of a share
         /// </summary>
-        private void UpdateCostsDetails(bool bShowMarketValue)
+        private void UpdateBrokerageDetails(bool bShowMarketValue)
         {
             try
             {
@@ -1455,17 +1470,17 @@ namespace SharePortfolioManager
                 {
 
                     // Remove page
-                    if (!tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsCostsValue)) return;
+                    if (!tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsBrokerageValue)) return;
 
                     // Save page for later adding when the final value overview is selected again
-                    _tempCosts = tabCtrlDetails.TabPages[_tabPageDetailsCostsValue];
-                    tabCtrlDetails.TabPages.Remove(tabCtrlDetails.TabPages[_tabPageDetailsCostsValue]);
+                    _tempBrokerage = tabCtrlDetails.TabPages[_tabPageDetailsBrokerageValue];
+                    tabCtrlDetails.TabPages.Remove(tabCtrlDetails.TabPages[_tabPageDetailsBrokerageValue]);
                 }
                 else
                 {
                     // Add page
-                    if (!tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsCostsValue))
-                        tabCtrlDetails.TabPages.Insert(3, _tempCosts);
+                    if (!tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsBrokerageValue))
+                        tabCtrlDetails.TabPages.Insert(3, _tempBrokerage);
 
                     // Check if a share is selected
                     if (ShareObjectFinalValue == null)
@@ -1476,101 +1491,101 @@ namespace SharePortfolioManager
 
                     Thread.CurrentThread.CurrentCulture = ShareObjectFinalValue.CultureInfo;
 
-                    tabCtrlDetails.TabPages[_tabPageDetailsCostsValue].Text =
+                    tabCtrlDetails.TabPages[_tabPageDetailsBrokerageValue].Text =
                         $@"{
                                 Language.GetLanguageTextByXPath(
-                                    @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgCosts/Caption", LanguageName)
-                            } ({ShareObjectFinalValue.AllCostsEntries.CostValueTotalWithUnitAsStr})";
+                                    @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/Caption", LanguageName)
+                            } ({ShareObjectFinalValue.AllBrokerageEntries.BrokerageValueTotalWithUnitAsStr})";
 
                     Thread.CurrentThread.CurrentCulture = CultureInfo.CurrentUICulture;
 
                     if (tabCtrlDetails.SelectedIndex != 3) return;
 
                     // Reset tab control
-                    foreach (TabPage tabPage in tabCtrlCosts.TabPages)
+                    foreach (TabPage tabPage in tabCtrlBrokerage.TabPages)
                     {
                         foreach (var control in tabPage.Controls)
                         {
                             if (!(control is DataGridView view)) continue;
 
-                            view.SelectionChanged -= DataGridViewCostsOfAYear_SelectionChanged;
-                            view.SelectionChanged -= DataGridViewCostsOfYears_SelectionChanged;
-                            view.DataBindingComplete -= DataGridViewCostsOfAYear_DataBindingComplete;
+                            view.SelectionChanged -= DataGridViewBrokerageOfAYear_SelectionChanged;
+                            view.SelectionChanged -= DataGridViewBrokerageOfYears_SelectionChanged;
+                            view.DataBindingComplete -= DataGridViewBrokerageOfAYear_DataBindingComplete;
                         }
                         tabPage.Controls.Clear();
-                        tabCtrlCosts.TabPages.Remove(tabPage);
+                        tabCtrlBrokerage.TabPages.Remove(tabPage);
                     }
 
-                    tabCtrlCosts.TabPages.Clear();
+                    tabCtrlBrokerage.TabPages.Clear();
 
-                    // Create TabPage for the costs of the years
+                    // Create TabPage for the brokerage of the years
                     var newTabPageOverviewYears = new TabPage
                     {
                         Name = Language.GetLanguageTextByXPath(
-                            @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgCosts/Overview",
+                            @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/Overview",
                             LanguageName),
                         Text = Language.GetLanguageTextByXPath(
-                                   @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgCosts/Overview", LanguageName) +
-                               $@" ({ShareObjectFinalValue.AllCostsEntries.CostValueTotalWithUnitAsStr})"
+                                   @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/Overview", LanguageName) +
+                               $@" ({ShareObjectFinalValue.AllBrokerageEntries.BrokerageValueTotalWithUnitAsStr})"
                     };
                     // Set TabPage name
 
-                    // Create Binding source for the costs data
+                    // Create Binding source for the brokerage data
                     var bindingSourceOverview = new BindingSource();
-                    if (ShareObjectFinalValue.AllCostsEntries.GetAllCostsTotalValues().Count > 0)
+                    if (ShareObjectFinalValue.AllBrokerageEntries.GetAllBrokerageTotalValues().Count > 0)
                         bindingSourceOverview.DataSource =
-                            ShareObjectFinalValue.AllCostsEntries.GetAllCostsTotalValues();
+                            ShareObjectFinalValue.AllBrokerageEntries.GetAllBrokerageTotalValues();
 
                     // Create DataGridView
-                    var dataGridViewCostsOverviewOfAYears = new DataGridView
+                    var dataGridViewBrokerageOverviewOfAYears = new DataGridView
                     {
                         Dock = DockStyle.Fill,
 
-                        // Bind source with costs values to the DataGridView
+                        // Bind source with brokerage values to the DataGridView
                         DataSource = bindingSourceOverview
                     };
                     // Set the delegate for the DataBindingComplete event
-                    dataGridViewCostsOverviewOfAYears.DataBindingComplete +=
-                        DataGridViewCostsOfAYear_DataBindingComplete;
+                    dataGridViewBrokerageOverviewOfAYears.DataBindingComplete +=
+                        DataGridViewBrokerageOfAYear_DataBindingComplete;
 
                     // Set row select event
-                    dataGridViewCostsOverviewOfAYears.SelectionChanged += DataGridViewCostsOfYears_SelectionChanged;
+                    dataGridViewBrokerageOverviewOfAYears.SelectionChanged += DataGridViewBrokerageOfYears_SelectionChanged;
 
-                    // Advanced configuration DataGridView costs
+                    // Advanced configuration DataGridView brokerage
                     var styleOverviewOfYears =
-                        dataGridViewCostsOverviewOfAYears.ColumnHeadersDefaultCellStyle;
+                        dataGridViewBrokerageOverviewOfAYears.ColumnHeadersDefaultCellStyle;
                     styleOverviewOfYears.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-                    dataGridViewCostsOverviewOfAYears.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-                    dataGridViewCostsOverviewOfAYears.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-                    dataGridViewCostsOverviewOfAYears.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+                    dataGridViewBrokerageOverviewOfAYears.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+                    dataGridViewBrokerageOverviewOfAYears.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+                    dataGridViewBrokerageOverviewOfAYears.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 
-                    dataGridViewCostsOverviewOfAYears.RowHeadersVisible = false;
-                    dataGridViewCostsOverviewOfAYears.RowsDefaultCellStyle.BackColor = Color.White;
-                    dataGridViewCostsOverviewOfAYears.DefaultCellStyle.SelectionBackColor = Color.Blue;
-                    dataGridViewCostsOverviewOfAYears.DefaultCellStyle.SelectionForeColor = Color.Yellow;
+                    dataGridViewBrokerageOverviewOfAYears.RowHeadersVisible = false;
+                    dataGridViewBrokerageOverviewOfAYears.RowsDefaultCellStyle.BackColor = Color.White;
+                    dataGridViewBrokerageOverviewOfAYears.DefaultCellStyle.SelectionBackColor = Color.Blue;
+                    dataGridViewBrokerageOverviewOfAYears.DefaultCellStyle.SelectionForeColor = Color.Yellow;
 
-                    dataGridViewCostsOverviewOfAYears.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+                    dataGridViewBrokerageOverviewOfAYears.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
 
-                    dataGridViewCostsOverviewOfAYears.MultiSelect = false;
+                    dataGridViewBrokerageOverviewOfAYears.MultiSelect = false;
 
-                    dataGridViewCostsOverviewOfAYears.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                    dataGridViewCostsOverviewOfAYears.AllowUserToResizeColumns = false;
-                    dataGridViewCostsOverviewOfAYears.AllowUserToResizeRows = false;
+                    dataGridViewBrokerageOverviewOfAYears.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                    dataGridViewBrokerageOverviewOfAYears.AllowUserToResizeColumns = false;
+                    dataGridViewBrokerageOverviewOfAYears.AllowUserToResizeRows = false;
 
-                    dataGridViewCostsOverviewOfAYears.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                    dataGridViewBrokerageOverviewOfAYears.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-                    newTabPageOverviewYears.Controls.Add(dataGridViewCostsOverviewOfAYears);
-                    dataGridViewCostsOverviewOfAYears.Parent = newTabPageOverviewYears;
-                    tabCtrlCosts.Controls.Add(newTabPageOverviewYears);
-                    newTabPageOverviewYears.Parent = tabCtrlCosts;
+                    newTabPageOverviewYears.Controls.Add(dataGridViewBrokerageOverviewOfAYears);
+                    dataGridViewBrokerageOverviewOfAYears.Parent = newTabPageOverviewYears;
+                    tabCtrlBrokerage.Controls.Add(newTabPageOverviewYears);
+                    newTabPageOverviewYears.Parent = tabCtrlBrokerage;
 
-                    // Check if costs pays exists
-                    if (ShareObjectFinalValue.AllCostsEntries.AllCostsOfTheShareDictionary.Count > 0)
+                    // Check if brokerage pays exists
+                    if (ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageOfTheShareDictionary.Count > 0)
                     {
-                        // Loop through the years of the costs pays
+                        // Loop through the years of the brokerage pays
                         foreach (
-                            var keyName in ShareObjectFinalValue.AllCostsEntries.AllCostsOfTheShareDictionary.Keys.Reverse()
+                            var keyName in ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageOfTheShareDictionary.Keys.Reverse()
                         )
                         {
                             // Create TabPage
@@ -1578,20 +1593,20 @@ namespace SharePortfolioManager
                             {
                                 Name = keyName,
                                 Text = keyName +
-                                       $@" ({ShareObjectFinalValue.AllCostsEntries.AllCostsOfTheShareDictionary[keyName].CostValueYearWithUnitAsStr})"
+                                       $@" ({ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageOfTheShareDictionary[keyName].BrokerageValueYearWithUnitAsStr})"
                             };
                             // Set TabPage name
 
-                            // Create Binding source for the costs data
+                            // Create Binding source for the brokerage data
                             var bindingSource = new BindingSource
                             {
                                 DataSource =
-                                    ShareObjectFinalValue.AllCostsEntries.AllCostsOfTheShareDictionary[keyName]
-                                        .CostListYear
+                                    ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageOfTheShareDictionary[keyName]
+                                        .BrokerageListYear
                             };
 
                             // Create DataGridView
-                            var dataGridViewCostsOfAYear = new DataGridView
+                            var dataGridViewBrokerageOfAYear = new DataGridView
                             {
                                 Dock = DockStyle.Fill,
 
@@ -1600,39 +1615,39 @@ namespace SharePortfolioManager
                             };
 
                             // Set the delegate for the DataBindingComplete event
-                            dataGridViewCostsOfAYear.DataBindingComplete +=
-                                DataGridViewCostsOfAYear_DataBindingComplete;
+                            dataGridViewBrokerageOfAYear.DataBindingComplete +=
+                                DataGridViewBrokerageOfAYear_DataBindingComplete;
 
                             // Set row select event
-                            dataGridViewCostsOfAYear.SelectionChanged += DataGridViewCostsOfAYear_SelectionChanged;
+                            dataGridViewBrokerageOfAYear.SelectionChanged += DataGridViewBrokerageOfAYear_SelectionChanged;
 
-                            // Advanced configuration DataGridView costs
-                            var style = dataGridViewCostsOfAYear.ColumnHeadersDefaultCellStyle;
+                            // Advanced configuration DataGridView brokerage
+                            var style = dataGridViewBrokerageOfAYear.ColumnHeadersDefaultCellStyle;
                             style.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-                            dataGridViewCostsOfAYear.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-                            dataGridViewCostsOfAYear.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-                            dataGridViewCostsOfAYear.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+                            dataGridViewBrokerageOfAYear.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+                            dataGridViewBrokerageOfAYear.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+                            dataGridViewBrokerageOfAYear.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 
-                            dataGridViewCostsOfAYear.RowHeadersVisible = false;
-                            dataGridViewCostsOfAYear.RowsDefaultCellStyle.BackColor = Color.White;
-                            dataGridViewCostsOfAYear.DefaultCellStyle.SelectionBackColor = Color.Blue;
-                            dataGridViewCostsOfAYear.DefaultCellStyle.SelectionForeColor = Color.Yellow;
+                            dataGridViewBrokerageOfAYear.RowHeadersVisible = false;
+                            dataGridViewBrokerageOfAYear.RowsDefaultCellStyle.BackColor = Color.White;
+                            dataGridViewBrokerageOfAYear.DefaultCellStyle.SelectionBackColor = Color.Blue;
+                            dataGridViewBrokerageOfAYear.DefaultCellStyle.SelectionForeColor = Color.Yellow;
 
-                            dataGridViewCostsOfAYear.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+                            dataGridViewBrokerageOfAYear.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
 
-                            dataGridViewCostsOfAYear.MultiSelect = false;
+                            dataGridViewBrokerageOfAYear.MultiSelect = false;
 
-                            dataGridViewCostsOfAYear.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                            dataGridViewCostsOfAYear.AllowUserToResizeColumns = false;
-                            dataGridViewCostsOfAYear.AllowUserToResizeRows = false;
+                            dataGridViewBrokerageOfAYear.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                            dataGridViewBrokerageOfAYear.AllowUserToResizeColumns = false;
+                            dataGridViewBrokerageOfAYear.AllowUserToResizeRows = false;
 
-                            dataGridViewCostsOfAYear.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                            dataGridViewBrokerageOfAYear.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-                            newTabPage.Controls.Add(dataGridViewCostsOfAYear);
-                            dataGridViewCostsOfAYear.Parent = newTabPage;
-                            tabCtrlCosts.Controls.Add(newTabPage);
-                            newTabPage.Parent = tabCtrlCosts;
+                            newTabPage.Controls.Add(dataGridViewBrokerageOfAYear);
+                            dataGridViewBrokerageOfAYear.Parent = newTabPage;
+                            tabCtrlBrokerage.Controls.Add(newTabPage);
+                            newTabPage.Parent = tabCtrlBrokerage;
                         }
                     }
 
@@ -1648,7 +1663,7 @@ namespace SharePortfolioManager
 #endif
                 // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgCosts_Error/ShowFailed", LanguageName),
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage_Error/ShowFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
             }
@@ -1661,14 +1676,14 @@ namespace SharePortfolioManager
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        private void DataGridViewCostsOfAYear_SelectionChanged(object sender, EventArgs args)
+        private void DataGridViewBrokerageOfAYear_SelectionChanged(object sender, EventArgs args)
         {
             try
             {
-                if (tabCtrlCosts.TabPages.Count <= 0) return;
+                if (tabCtrlBrokerage.TabPages.Count <= 0) return;
 
                 // Deselect row only of the other TabPages DataGridViews
-                if (tabCtrlCosts.SelectedTab.Controls.Contains((DataGridView)sender))
+                if (tabCtrlBrokerage.SelectedTab.Controls.Contains((DataGridView)sender))
                     DeselectRowsOfDataGridViews((DataGridView)sender);
             }
             catch (Exception ex)
@@ -1695,7 +1710,7 @@ namespace SharePortfolioManager
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        private void DataGridViewCostsOfYears_SelectionChanged(object sender, EventArgs args)
+        private void DataGridViewBrokerageOfYears_SelectionChanged(object sender, EventArgs args)
         {
             try
             {
@@ -1704,11 +1719,11 @@ namespace SharePortfolioManager
                 // Get the currently selected item in the ListBox
                 var curItem = ((DataGridView)sender).SelectedRows;
 
-                foreach (TabPage tabPage in tabCtrlCosts.TabPages)
+                foreach (TabPage tabPage in tabCtrlBrokerage.TabPages)
                 {
                     if (tabPage.Name != curItem[0].Cells[0].Value.ToString()) continue;
 
-                    tabCtrlCosts.SelectTab(tabPage);
+                    tabCtrlBrokerage.SelectTab(tabPage);
                     tabPage.Focus();
 
                     // Deselect rows
@@ -1740,7 +1755,7 @@ namespace SharePortfolioManager
         /// </summary>
         /// <param name="sender">DataGridView</param>
         /// <param name="e">DataGridViewBindingCompleteEventArgs</param>
-        private void DataGridViewCostsOfAYear_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        private void DataGridViewBrokerageOfAYear_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             try
             {
@@ -1754,18 +1769,22 @@ namespace SharePortfolioManager
                     switch (i)
                     {
                         case 0:
-                        {
-                            ((DataGridView) sender).Columns[i].HeaderText = Language.GetLanguageTextByXPath(
-                                tabCtrlCosts.TabPages.Count == 1
-                                    ? @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgCosts/DgvCostsOverview/ColHeader_Year"
-                                    : @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgCosts/DgvCostsOverview/ColHeader_Date",
-                                LanguageName);
+                            {
+                                if (tabCtrlBrokerage.TabPages.Count == 1)
+                                    ((DataGridView) sender).Columns[i].HeaderText = Language.GetLanguageTextByXPath(
+                                        @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/DgvBrokerageOverview/ColHeader_Year",
+                                        LanguageName
+                                    );
+                                else
+                                    ((DataGridView)sender).Columns[i].HeaderText = Language.GetLanguageTextByXPath(
+                                        @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/DgvBrokerageOverview/ColHeader_Date",
+                                        LanguageName);
                                 break;
                             }
                         case 1:
                             {
                                 ((DataGridView)sender).Columns[i].HeaderText =
-                                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgCosts/DgvCostsOverview/ColHeader_Costs",
+                                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/DgvBrokerageOverview/ColHeader_Brokerage",
                                         LanguageName) +
                                     $@" ({new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol})";
                                 break;
@@ -1773,7 +1792,7 @@ namespace SharePortfolioManager
                         case 2:
                             {
                                 ((DataGridView)sender).Columns[i].HeaderText =
-                                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgCosts/DgvCostsOverview/ColHeader_Document",
+                                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/DgvBrokerageOverview/ColHeader_Document",
                                         LanguageName) +
                                     $@" ({new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol})";
                                 break;
@@ -1793,7 +1812,7 @@ namespace SharePortfolioManager
 #endif
                 // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgCosts_Error/RenameHeaderFailed", LanguageName),
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage_Error/RenameHeaderFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
             }
@@ -1804,7 +1823,7 @@ namespace SharePortfolioManager
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void TabCtrlCosts_SelectedIndexChanged(object sender, EventArgs e)
+        private void TabCtrlBrokerage_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {
@@ -1829,7 +1848,7 @@ namespace SharePortfolioManager
             }
         }
 
-        #endregion Costs details
+        #endregion Brokerage details
 
         /// <summary>
         /// This function deselects all selected rows of the
@@ -1854,7 +1873,7 @@ namespace SharePortfolioManager
                 }
 
                 // Deselect the row
-                foreach (TabPage tabPage in tabCtrlCosts.TabPages)
+                foreach (TabPage tabPage in tabCtrlBrokerage.TabPages)
                 {
                     foreach (Control control in tabPage.Controls)
                     {

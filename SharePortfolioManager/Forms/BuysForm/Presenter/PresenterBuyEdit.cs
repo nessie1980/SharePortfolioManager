@@ -53,9 +53,10 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
             _view.Date = _model.Date;
             _view.Time = _model.Time;
             _view.Volume = _model.Volume;
+            _view.VolumeSold = _model.VolumeSold;
             _view.Price = _model.SharePrice;
             _view.MarketValue = _model.MarketValue;
-            _view.Costs = _model.Costs;
+            _view.Brokerage = _model.Brokerage;
             _view.Reduction = _model.Reduction;
             _view.FinalValue = _model.FinalValue;
             _view.Document = _model.Document;
@@ -72,15 +73,16 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
 
         private void OnViewChange(object sender, EventArgs e)
         {
-            UpdateModelwithView();
+            UpdateModelWithView();
         }
 
-        private void UpdateModelwithView()
+        private void UpdateModelWithView()
         {
             _model.ShareObjectMarketValue = _view.ShareObjectMarketValue;
             _model.ShareObjectFinalValue = _view.ShareObjectFinalValue;
             _model.ErrorCode = _view.ErrorCode;
             _model.UpdateBuy = _view.UpdateBuy;
+            _model.SelectedGuid = _view.SelectedGuid;
             _model.SelectedDate = _view.SelectedDate;
 
             _model.Logger = _view.Logger;
@@ -90,9 +92,10 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
             _model.Date = _view.Date;
             _model.Time = _view.Time;
             _model.Volume = _view.Volume;
+            _model.VolumeSold = _view.VolumeSold;
             _model.SharePrice = _view.Price;
             _model.MarketValue = _view.MarketValue;
-            _model.Costs = _view.Costs;
+            _model.Brokerage = _view.Brokerage;
             _model.Reduction = _view.Reduction;
             _model.FinalValue = _view.FinalValue;
             _model.Document = _view.Document;
@@ -109,13 +112,27 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
             if (!CheckInputValues(_model.UpdateBuy))
             {
                 var bErrorFlag = false;
+
+                // Set date
                 var strDateTime = _model.Date + " " + _model.Time;
 
-                // Cost entry if the costs value is not 0
-                if (_model.CostsDec > 0)
-                    bErrorFlag = !_model.ShareObjectFinalValue.AddCost(true, false, strDateTime, _model.CostsDec, _model.Document);
+                // Generate Guid
+                var strGuidBuy = Guid.NewGuid().ToString();
 
-                if (_model.ShareObjectFinalValue.AddBuy(strDateTime, _model.VolumeDec, _model.SharePricedec, _model.ReductionDec, _model.CostsDec, _model.Document)
+                // Brokerage entry if the brokerage value is not 0
+                if (_model.BrokerageDec > 0)
+                {
+                    // Generate Guid
+                    var strGuidBrokerage = Guid.NewGuid().ToString();
+
+                    // Calculate brokerage
+                    var brokerage = _model.BrokerageDec - _model.ReductionDec;
+                    bErrorFlag = !_model.ShareObjectFinalValue.AddBrokerage(strGuidBrokerage, true, false, strGuidBuy, strDateTime, brokerage,
+                        _model.Document);
+                }
+                
+                if (_model.ShareObjectFinalValue.AddBuy(strGuidBuy, strDateTime, _model.VolumeDec, _model.VolumeSoldDec, _model.SharePriceDec, _model.ReductionDec, _model.BrokerageDec, _model.Document) &&
+                    _model.ShareObjectMarketValue.AddBuy(strGuidBuy, strDateTime, _model.VolumeDec, _model.VolumeSoldDec, _model.SharePriceDec, _model.Document)
                     && bErrorFlag == false)
                 {
                     _model.ErrorCode = BuyErrorCode.AddSuccessful;
@@ -136,21 +153,40 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
             // Check the input values
             if (!CheckInputValues(_model.UpdateBuy))
             {
+                // Set date
                 var strDateTime = _model.Date + " " + _model.Time;
 
-                if (_model.ShareObjectFinalValue.RemoveBuy(_model.SelectedDate) && _model.ShareObjectFinalValue.AddBuy(strDateTime, _model.VolumeDec, _model.SharePricedec, _model.ReductionDec, _model.CostsDec, _model.Document))
+                if (_model.ShareObjectFinalValue.RemoveBuy(_model.SelectedGuid, _model.SelectedDate) &&
+                    _model.ShareObjectFinalValue.AddBuy(_model.SelectedGuid, strDateTime, _model.VolumeDec, _model.VolumeSoldDec, _model.SharePriceDec, _model.ReductionDec, _model.BrokerageDec, _model.Document) &&
+                    _model.ShareObjectMarketValue.RemoveBuy(_model.SelectedGuid, _model.SelectedDate) &&
+                    _model.ShareObjectMarketValue.AddBuy(_model.SelectedGuid, strDateTime, _model.VolumeDec, _model.VolumeSoldDec, _model.SharePriceDec, _model.Document)
+                    )
                 {
-                    var bFlagCostEdit = true;
+                    var bFlagBrokerageEdit = true;
 
-                    // Check if an old cost entry must be deleted
-                    if (_model.ShareObjectFinalValue.AllCostsEntries.GetCostObjectByDateTime(strDateTime) != null)
-                        bFlagCostEdit = _model.ShareObjectFinalValue.RemoveCost(strDateTime);
+                    var guidBrokerage = @"";
 
-                    // Check if a new cost entry must be made
-                    if (bFlagCostEdit && _model.CostsDec > 0)
-                        bFlagCostEdit = _model.ShareObjectFinalValue.AddCost(true, false, strDateTime, _model.CostsDec, _model.Document);
+                    // Check if an old brokerage entry must be deleted
+                    if (_model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByBuyGuid(_model.SelectedGuid,
+                            strDateTime) != null)
+                    {
+                        // Get brokerage GUID
+                        guidBrokerage = _model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByBuyGuid(
+                            _model.SelectedGuid,
+                            strDateTime).Guid;
+                        bFlagBrokerageEdit = _model.ShareObjectFinalValue.RemoveBrokerage(guidBrokerage, strDateTime);
+                    }
 
-                    if (bFlagCostEdit)
+                    // Check if a new brokerage entry must be made
+                    if (bFlagBrokerageEdit && _model.BrokerageDec > 0)
+                    {
+                        // Calculate brokerage
+                        var brokerage = _model.BrokerageDec - _model.ReductionDec;
+                        bFlagBrokerageEdit = _model.ShareObjectFinalValue.AddBrokerage(guidBrokerage, true, false, _model.SelectedGuid, strDateTime,
+                            brokerage, _model.Document);
+                    }
+
+                    if (bFlagBrokerageEdit)
                     {
                         _model.ErrorCode = BuyErrorCode.EditSuccessful;
                     }
@@ -175,16 +211,19 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
             if (_model.ShareObjectFinalValue.AllBuyEntries.GetAllBuysOfTheShare().Count > 1)
             {
                 // Delete the buy of the selected date
-                if (_model.ShareObjectFinalValue.RemoveBuy(_model.SelectedDate))
+                if (_model.ShareObjectFinalValue.RemoveBuy(_model.SelectedGuid, _model.SelectedDate) &&
+                    _model.ShareObjectMarketValue.RemoveBuy(_model.SelectedGuid, _model.SelectedDate))
                 {
-                    // Check if a cost object exists
-                    if (_model.ShareObjectFinalValue.AllCostsEntries.GetCostObjectByDateTime(_model.SelectedDate) != null)
+                    // Check if a brokerage object exists
+                    if (_model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByBuyGuid(_model.SelectedGuid, _model.SelectedDate) != null)
                     {
-                        _model.ErrorCode = _model.ShareObjectFinalValue.RemoveCost(_model.SelectedDate) ? BuyErrorCode.DeleteSuccessful : BuyErrorCode.DeleteFailed;
+                        var guidBrokerage = _model.ShareObjectFinalValue.AllBrokerageEntries
+                            .GetBrokerageObjectByBuyGuid(_model.SelectedGuid, _model.SelectedDate).Guid;
+                        _model.ErrorCode = _model.ShareObjectFinalValue.RemoveBrokerage(guidBrokerage, _model.SelectedDate) ? BuyErrorCode.DeleteSuccessful : BuyErrorCode.DeleteFailed;
                     }
                     else
                     {
-                        _model.ErrorCode = BuyErrorCode.DeleteSuccessful;
+                        _model.ErrorCode = BuyErrorCode.DeleteFailed;
                     }
                 }
                 else
@@ -237,12 +276,13 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
         {
             try
             {
-                Helper.CalcBuyValues(_model.VolumeDec, _model.SharePricedec, _model.CostsDec,
-                    _model.ReductionDec, out var decMarketValue, out var decPurchaseValue, out var decFinalValue);
+                Helper.CalcBuyValues(_model.VolumeDec, _model.SharePriceDec, _model.BrokerageDec,
+                    _model.ReductionDec, out var decMarketValue, out var decPurchaseValue, out var decFinalValue, out var decBrokerageReduction);
 
                 _model.MarketValueDec = decMarketValue;
                 _model.PurchaseValueDec = decPurchaseValue;
                 _model.FinalValueDec = decFinalValue;
+                _model.BrokerageDec = decBrokerageReduction;
             }
             catch (Exception ex)
             {
@@ -271,48 +311,23 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
 
                 _model.ErrorCode = bFlagEdit ? BuyErrorCode.EditSuccessful : BuyErrorCode.AddSuccessful;
 
-                var strDate = _model.Date + " " + _model.Time;
-
-                // Check if a buy with the given date and time already exists
-                foreach (var buyObject in _model.ShareObjectFinalValue.AllBuyEntries.GetAllBuysOfTheShare())
-                {
-                    // Check if a buy should be added or a buy should be edit
-                    if (!bFlagEdit)
-                    {
-                        // By an Add all dates must be checked
-                        if (buyObject.Date != strDate) continue;
-
-                        _model.ErrorCode = BuyErrorCode.DateExists;
-                        bErrorFlag = true;
-                        break;
-                    }
-
-                    // By an Edit all buys without the edit entry date and time must be checked
-                    if (buyObject.Date != strDate || _model.SelectedDate == null ||
-                        buyObject.Date == _model.SelectedDate) continue;
-
-                    _model.ErrorCode = BuyErrorCode.DateExists;
-                    bErrorFlag = true;
-                    break;
-                }
-
                 // Check if a correct volume for the buy is given
-                if (_model.Volume == @"" && bErrorFlag == false)
+                if (_model.Volume == @"")
                 {
                     _model.ErrorCode = BuyErrorCode.VolumeEmpty;
                     bErrorFlag = true;
                 }
-                else if (!decimal.TryParse(_model.Volume, out var decVolume) && bErrorFlag == false)
+                else if (!decimal.TryParse(_model.Volume, out var decVolume))
                 {
                     _model.ErrorCode = BuyErrorCode.VolumeWrongFormat;
                     bErrorFlag = true;
                 }
-                else if (decVolume <= 0 && bErrorFlag == false)
+                else if (decVolume <= 0)
                 {
                     _model.ErrorCode = BuyErrorCode.VolumeWrongValue;
                     bErrorFlag = true;
                 }
-                else if (bErrorFlag == false)
+                else
                     _model.VolumeDec = decVolume;
 
                 // Check if a correct price for the buy is given
@@ -332,23 +347,23 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
                     bErrorFlag = true;
                 }
                 else if (bErrorFlag == false)
-                    _model.SharePricedec = decPrice;
+                    _model.SharePriceDec = decPrice;
 
-                // Costs input check
-                if (_model.Costs != "" && bErrorFlag == false)
+                // Brokerage input check
+                if (_model.Brokerage != "" && bErrorFlag == false)
                 {
-                    if (!decimal.TryParse(_model.Costs, out var decCosts))
+                    if (!decimal.TryParse(_model.Brokerage, out var decBrokerage))
                     {
-                        _model.ErrorCode = BuyErrorCode.CostsWrongFormat;
+                        _model.ErrorCode = BuyErrorCode.BrokerageWrongFormat;
                         bErrorFlag = true;
                     }
-                    else if (decCosts < 0)
+                    else if (decBrokerage < 0)
                     {
-                        _model.ErrorCode = BuyErrorCode.CostsWrongValue;
+                        _model.ErrorCode = BuyErrorCode.BrokerageWrongValue;
                         bErrorFlag = true;
                     }
                     else
-                        _model.CostsDec = decCosts;
+                        _model.BrokerageDec = decBrokerage;
                 }
 
                 // Reduction input check

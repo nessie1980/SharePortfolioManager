@@ -33,9 +33,9 @@ using System.Linq;
 using System.Windows.Forms;
 using SharePortfolioManager.Classes.ShareObjects;
 
-namespace SharePortfolioManager.Forms.CostsForm.View
+namespace SharePortfolioManager.Forms.BrokerageForm.View
 {
-    public enum CostErrorCode
+    public enum BrokerageErrorCode
     {
         AddSuccessful,
         EditSuccessful,
@@ -44,50 +44,54 @@ namespace SharePortfolioManager.Forms.CostsForm.View
         EditFailed,
         DeleteFailed,
         InputeValuesInvalid,
-        DateExists,
-        DateWrongFormat,
-        CostsEmpty,
-        CostsWrongFormat,
-        CostsWrongValue,
+        BrokerageEmpty,
+        BrokerageWrongFormat,
+        BrokerageWrongValue,
         DocumentDirectoryDoesNotExits,
         DocumentFileDoesNotExists
     };
 
     /// <inheritdoc />
     /// <summary>
-    /// Interface of the CostEdit view
+    /// Interface of the BrokerageEdit view
     /// </summary>
-    public interface IViewCostEdit : INotifyPropertyChanged
+    public interface IViewBrokerageEdit : INotifyPropertyChanged
     {
         event EventHandler FormatInputValues;
-        event EventHandler AddCost;
-        event EventHandler EditCost;
-        event EventHandler DeleteCost;
+        event EventHandler AddBrokerage;
+        event EventHandler EditBrokerage;
+        event EventHandler DeleteBrokerage;
 
-        CostErrorCode ErrorCode { get; set; }
+        BrokerageErrorCode ErrorCode { get; set; }
 
         ShareObjectMarketValue ShareObjectMarketValue { get; }
         ShareObjectFinalValue ShareObjectFinalValue { get; }
 
-        bool UpdateCost { get; set; }
+        bool UpdateBrokerage { get; set; }
+        string SelectedGuid { get; set; }
         string SelectedDate { get; set; }
         bool PartOfABuy { get; set; }
         bool PartOfASale { get; set; }
         string Date { get; set; }
         string Time { get; set; }
-        string Costs { get; set; }
+        string Brokerage { get; set; }
         string Document { get; set; }
 
         DialogResult ShowDialog();
         void AddEditDeleteFinish();
     }
 
-    public partial class ViewCostEdit : Form, IViewCostEdit
+    public partial class ViewBrokerageEdit : Form, IViewBrokerageEdit
     {
         #region Fields
 
         /// <summary>
-        /// Stores the date of a selected cost row
+        /// Stores the Guid of a selected brokerage row
+        /// </summary>
+        private string _selectedGuid;
+
+        /// <summary>
+        /// Stores the date of a selected brokerage row
         /// </summary>
         private string _selectedDate;
 
@@ -101,7 +105,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
 
         public string LanguageName { get; }
 
-        public bool UpdateCostFlag { get; set; }
+        public bool UpdateBrokerageFlag { get; set; }
 
         public bool SaveFlag { get; set; }
 
@@ -111,14 +115,14 @@ namespace SharePortfolioManager.Forms.CostsForm.View
 
         #region IView members
 
-        public bool UpdateCost
+        public bool UpdateBrokerage
         {
-            get => UpdateCostFlag;
+            get => UpdateBrokerageFlag;
             set
             {
-                UpdateCostFlag = value;
+                UpdateBrokerageFlag = value;
 
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("UpdateCost"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("UpdateBrokerage"));
             }
         }
 
@@ -126,11 +130,22 @@ namespace SharePortfolioManager.Forms.CostsForm.View
 
         public bool PartOfASale { get; set; }
 
-        public CostErrorCode ErrorCode { get; set; }
+        public BrokerageErrorCode ErrorCode { get; set; }
 
         public ShareObjectMarketValue ShareObjectMarketValue { get; }
 
         public ShareObjectFinalValue ShareObjectFinalValue { get; }
+
+        public string SelectedGuid
+        {
+            get => _selectedGuid;
+            set
+            {
+                _selectedGuid = value;
+
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SelectedGuid"));
+            }
+        }
 
         public string SelectedDate
         {
@@ -167,14 +182,14 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             }
         }
 
-        public string Costs
+        public string Brokerage
         {
-            get => txtBoxCosts.Text;
+            get => txtBoxBrokerage.Text;
             set
             {
-                if (txtBoxCosts.Text == value)
+                if (txtBoxBrokerage.Text == value)
                     return;
-                txtBoxCosts.Text = value;
+                txtBoxBrokerage.Text = value;
             }
         }
 
@@ -200,39 +215,35 @@ namespace SharePortfolioManager.Forms.CostsForm.View
 
             switch (ErrorCode)
             {
-                case CostErrorCode.AddSuccessful:
+                case BrokerageErrorCode.AddSuccessful:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormCost/StateMessages/AddSuccess", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/StateMessages/AddSuccess", LanguageName);
                         // Set flag to save the share object.
                         SaveFlag = true;
 
-                        // Refresh the cost list
-                        ShowCosts();
-
-                        // Reset values
-                        Enabled = true;
-                        ResetInputValues();
+                        // Refresh the brokerage list
+                        ShowBrokerage();
 
                         break;
                     }
-                case CostErrorCode.AddFailed:
+                case BrokerageErrorCode.AddFailed:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormCost/Errors/AddFailed", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/AddFailed", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
                         Enabled = true;
-                        txtBoxCosts.Focus();
+                        txtBoxBrokerage.Focus();
 
                         break;
                     }
-                case CostErrorCode.EditSuccessful:
+                case BrokerageErrorCode.EditSuccessful:
                     {
                         // Enable button(s)
                         btnAddSave.Text =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxAddEdit/Buttons/Add",
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Add",
                                 LanguageName);
                         btnAddSave.Image = Resources.black_add;
                         // Disable button(s)
@@ -241,44 +252,40 @@ namespace SharePortfolioManager.Forms.CostsForm.View
 
                         // Rename group box
                         grpBoxAdd.Text =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxAddEdit/Add_Caption",
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Add_Caption",
                                 LanguageName);
 
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormCost/StateMessages/EditSuccess", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/StateMessages/EditSuccess", LanguageName);
                         // Set flag to save the share object.
                         SaveFlag = true;
 
-                        // Refresh the cost list
-                        ShowCosts();
-
-                        // Reset values
-                        Enabled = true;
-                        ResetInputValues();
+                        // Refresh the brokerage list
+                        ShowBrokerage();
 
                         break;
                     }
-                case CostErrorCode.EditFailed:
+                case BrokerageErrorCode.EditFailed:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormCost/Errors/EditFailed", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/EditFailed", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
                         Enabled = true;
-                        txtBoxCosts.Focus();
+                        txtBoxBrokerage.Focus();
 
                         break;
                     }
-                case CostErrorCode.DeleteSuccessful:
+                case BrokerageErrorCode.DeleteSuccessful:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormCost/StateMessages/DeleteSuccess", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/StateMessages/DeleteSuccess", LanguageName);
                         // Set flag to save the share object.
                         SaveFlag = true;
 
                         // Enable button(s)
-                        btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxAddEdit/Buttons/Add", LanguageName);
+                        btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Add", LanguageName);
                         btnAddSave.Image = Resources.black_add;
 
                         // Disable button(s)
@@ -286,114 +293,86 @@ namespace SharePortfolioManager.Forms.CostsForm.View
                         btnDelete.Enabled = false;
 
                         // Rename group box
-                        grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxAddEdit/Add_Caption", LanguageName);
+                        grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Add_Caption", LanguageName);
 
-                        // Refresh the cost list
-                        ShowCosts();
-
-                        // Reset values
-                        Enabled = true;
-                        ResetInputValues();
+                        // Refresh the brokerage list
+                        ShowBrokerage();
 
                         break;
                     }
-                case CostErrorCode.DeleteFailed:
+                case BrokerageErrorCode.DeleteFailed:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormCost/Errors/DeleteFailed", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/DeleteFailed", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
                         Enabled = true;
-                        txtBoxCosts.Focus();
+                        txtBoxBrokerage.Focus();
 
                         break;
                     }
-                case CostErrorCode.InputeValuesInvalid:
+                case BrokerageErrorCode.InputeValuesInvalid:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormCost/Errors/CheckInputFailure", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/CheckInputFailure", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
                         Enabled = true;
-                        txtBoxCosts.Focus();
+                        txtBoxBrokerage.Focus();
 
                         break;
                     }
-                case CostErrorCode.DateExists:
+                case BrokerageErrorCode.BrokerageEmpty:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormCost/Errors/DateExists", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/BrokerageEmpty", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
                         Enabled = true;
-                        datePickerDate.Focus();
+                        txtBoxBrokerage.Focus();
 
                         break;
                     }
-                case CostErrorCode.DateWrongFormat:
+                case BrokerageErrorCode.BrokerageWrongFormat:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormCost/Errors/DateWrongFormat", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/BrokerageWrongFormat", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
                         Enabled = true;
-                        datePickerDate.Focus();
+                        txtBoxBrokerage.Focus();
 
                         break;
                     }
-                case CostErrorCode.CostsEmpty:
+                case BrokerageErrorCode.BrokerageWrongValue:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormCost/Errors/CostsEmpty", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/BrokerageWrongValue", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
                         Enabled = true;
-                        txtBoxCosts.Focus();
+                        txtBoxBrokerage.Focus();
 
                         break;
                     }
-                case CostErrorCode.CostsWrongFormat:
+                case BrokerageErrorCode.DocumentDirectoryDoesNotExits:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormCost/Errors/CostsWrongFormat", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-
-                        Enabled = true;
-                        txtBoxCosts.Focus();
-
-                        break;
-                    }
-                case CostErrorCode.CostsWrongValue:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormCost/Errors/CostsWrongValue", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-
-                        Enabled = true;
-                        txtBoxCosts.Focus();
-
-                        break;
-                    }
-                case CostErrorCode.DocumentDirectoryDoesNotExits:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormCost/Errors/DirectoryDoesNotExist", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/DirectoryDoesNotExist", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
                         break;
                     }
-                case CostErrorCode.DocumentFileDoesNotExists:
+                case BrokerageErrorCode.DocumentFileDoesNotExists:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormCost/Errors/FileDoesNotExist", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/FileDoesNotExist", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -401,7 +380,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
                     }
             }
 
-            Helper.AddStatusMessage(toolStripStatusLabelMessageCostEdit,
+            Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
                strMessage,
                Language,
                LanguageName,
@@ -417,9 +396,9 @@ namespace SharePortfolioManager.Forms.CostsForm.View
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler FormatInputValues;
-        public event EventHandler AddCost;
-        public event EventHandler EditCost;
-        public event EventHandler DeleteCost;
+        public event EventHandler AddBrokerage;
+        public event EventHandler EditBrokerage;
+        public event EventHandler DeleteBrokerage;
 
         #endregion
 
@@ -436,7 +415,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
         /// <param name="logger">Logger</param>
         /// <param name="language">Language file</param>
         /// <param name="languageName">Language</param>
-        public ViewCostEdit(ShareObjectMarketValue shareObjectMarketValue, ShareObjectFinalValue shareObjectFinalValue, Logger logger, Language language, string languageName)
+        public ViewBrokerageEdit(ShareObjectMarketValue shareObjectMarketValue, ShareObjectFinalValue shareObjectFinalValue, Logger logger, Language language, string languageName)
         {
             InitializeComponent();
 
@@ -454,43 +433,43 @@ namespace SharePortfolioManager.Forms.CostsForm.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ShareCostEdit_Load(object sender, EventArgs e)
+        private void ShareBrokerageEdit_Load(object sender, EventArgs e)
         {
             try
             {
                 #region Language configuration
 
-                Text = Language.GetLanguageTextByXPath(@"/AddEditFormCost/Caption", LanguageName);
+                Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Caption", LanguageName);
                 grpBoxAdd.Text =
-                    Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxAddEdit/Add_Caption", LanguageName);
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Add_Caption", LanguageName);
                 grpBoxOverview.Text =
-                    Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxCost/Caption",
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxBrokerage/Caption",
                         LanguageName);
-                lblDate.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxAddEdit/Labels/Date",
+                lblDate.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Labels/Date",
                     LanguageName);
-                lblCosts.Text =
-                    Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxAddEdit/Labels/Cost",
+                lblBrokerage.Text =
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Labels/Brokerage",
                         LanguageName);
                 lblDocument.Text =
-                    Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxAddEdit/Labels/Document",
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Labels/Document",
                         LanguageName);
-                btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxAddEdit/Buttons/Add",
+                btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Add",
                     LanguageName);
-                btnReset.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxAddEdit/Buttons/Reset",
+                btnReset.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Reset",
                     LanguageName);
                 btnDelete.Text =
-                    Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxAddEdit/Buttons/Delete",
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Delete",
                         LanguageName);
                 btnCancel.Text =
-                    Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxAddEdit/Buttons/Cancel",
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Cancel",
                         LanguageName);
 
                 #endregion Language configuration
 
                 #region Unit configuration
 
-                // Set cost unit to the edit box
-                lblAddCostsUnit.Text = ShareObjectFinalValue.CurrencyUnit;
+                // Set brokerage unit to the edit box
+                lblAddBrokerageUnit.Text = ShareObjectFinalValue.CurrencyUnit;
 
                 #endregion Unit configuration
 
@@ -504,19 +483,19 @@ namespace SharePortfolioManager.Forms.CostsForm.View
 
                 #endregion Image configuration
 
-                // Load costs of the share
-                ShowCosts();
+                // Load brokerage of the share
+                ShowBrokerage();
             }
             catch (Exception ex)
             {
-#if DEBUG_COST || DEBUG
-                var message = $"ShareCostEdit_Load()\n\n{ex.Message}";
+#if DEBUG_BROKERAGE || DEBUG
+                var message = $"ShareBrokerageEdit_Load()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessageCostEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormCost/Errors/ShowFailed", LanguageName),
+                Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
+                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/ShowFailed", LanguageName),
                    Language, LanguageName, Color.DarkRed, Logger,
                    (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
@@ -524,13 +503,13 @@ namespace SharePortfolioManager.Forms.CostsForm.View
 
         /// <summary>
         /// This function change the dialog result if the share object must be saved
-        /// because a cost has been added or deleted
+        /// because a brokerage has been added or deleted
         /// </summary>
         /// <param name="sender">Dialog</param>
         /// <param name="e">FormClosingEventArgs</param>
-        private void ShareCostEdit_FormClosing(object sender, FormClosingEventArgs e)
+        private void ShareBrokerageEdit_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // Check if a cost change must be saved
+            // Check if a brokerage change must be saved
             DialogResult = SaveFlag ? DialogResult.OK : DialogResult.Cancel;
         }
 
@@ -545,9 +524,9 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             datePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
 
             // Reset text boxes
-            txtBoxCosts.Text = @"";
+            txtBoxBrokerage.Text = @"";
             txtBoxDocument.Text = @"";
-            txtBoxCosts.Focus();
+            txtBoxBrokerage.Focus();
         }
 
         #endregion Form
@@ -603,9 +582,9 @@ namespace SharePortfolioManager.Forms.CostsForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void OnTxtBoxCosts_TextChanged(object sender, EventArgs e)
+        private void OnTxtBoxBrokerage_TextChanged(object sender, EventArgs e)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Costs"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Brokerage"));
         }
 
         /// <summary>
@@ -613,7 +592,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void OnTxtBoxCosts_Leave(object sender, EventArgs e)
+        private void OnTxtBoxBrokerage_Leave(object sender, EventArgs e)
         {
             FormatInputValues?.Invoke(this, new EventArgs());
         }
@@ -659,8 +638,8 @@ namespace SharePortfolioManager.Forms.CostsForm.View
         #region Buttons
 
         /// <summary>
-        /// This function adds a new cost entry to the share object
-        /// or edit a cost entry
+        /// This function adds a new brokerage entry to the share object
+        /// or edit a brokerage entry
         /// It also checks if an entry already exists for the given date and time
         /// </summary>
         /// <param name="sender">Clicked button</param>
@@ -672,29 +651,29 @@ namespace SharePortfolioManager.Forms.CostsForm.View
                 // Disable controls
                 //this.Enabled = false;
 
-                if (btnAddSave.Text == Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxAddEdit/Buttons/Add", LanguageName))
+                if (btnAddSave.Text == Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Add", LanguageName))
                 {
-                    UpdateCost = false;
+                    UpdateBrokerage = false;
 
-                    AddCost?.Invoke(this, null);
+                    AddBrokerage?.Invoke(this, null);
                 }
                 else
                 {
-                    UpdateCost = true;
+                    UpdateBrokerage = true;
 
-                    EditCost?.Invoke(this, null);
+                    EditBrokerage?.Invoke(this, null);
                 }
             }
             catch (Exception ex)
             {
-#if DEBUG_COST || DEBUG
+#if DEBUG_BROKERAGE || DEBUG
                 var message = $"btnAdd_Click()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessageCostEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormCost/Errors/AddFailed", LanguageName),
+                Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
+                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/AddFailed", LanguageName),
                    Language, LanguageName,
                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
@@ -702,9 +681,9 @@ namespace SharePortfolioManager.Forms.CostsForm.View
 
         /// <summary>
         /// This function shows a message box which ask the user
-        /// if he really wants to delete the cost.
-        /// If the user press "Ok" the cost will be deleted and the
-        /// list of the costs will be updated.
+        /// if he really wants to delete the brokerage.
+        /// If the user press "Ok" the brokerage will be deleted and the
+        /// list of the brokerage will be updated.
         /// </summary>
         /// <param name="sender">Pressed button of the user</param>
         /// <param name="arg">EventArgs</param>
@@ -715,10 +694,10 @@ namespace SharePortfolioManager.Forms.CostsForm.View
                 // Disable controls
                 Enabled = false;
 
-                toolStripStatusLabelMessageCostEdit.Text = @"";
+                toolStripStatusLabelMessageBrokerageEdit.Text = @"";
 
                 var strCaption = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Info", LanguageName);
-                var strMessage = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/CostDelete",
+                var strMessage = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/BrokerageDelete",
                     LanguageName);
                 var strOk = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", LanguageName);
                 var strCancel = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", LanguageName);
@@ -729,25 +708,25 @@ namespace SharePortfolioManager.Forms.CostsForm.View
 
                 if (dlgResult != DialogResult.OK) return;
 
-                DeleteCost?.Invoke(this, null);
+                DeleteBrokerage?.Invoke(this, null);
             }
             catch (Exception ex)
             {
-#if DEBUG_COST || DEBUG
+#if DEBUG_BROKERAGE || DEBUG
                 var message = $"btnDelete_Click()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessageCostEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormCost/Errors/DeleteFailed", LanguageName),
+                Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
+                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/DeleteFailed", LanguageName),
                    Language, LanguageName,
                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
         /// <summary>
-        /// This function cancel the edit process of a cost
+        /// This function cancel the edit process of a brokerage
         /// </summary>
         /// <param name="sender">Clicked button</param>
         /// <param name="e">EventArgs</param>
@@ -755,10 +734,10 @@ namespace SharePortfolioManager.Forms.CostsForm.View
         {
             try
             {
-                toolStripStatusLabelMessageCostEdit.Text = @"";
+                toolStripStatusLabelMessageBrokerageEdit.Text = @"";
 
                 // Enable button(s)
-                btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxAddEdit/Buttons/Add", LanguageName);
+                btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Add", LanguageName);
                 btnAddSave.Image = Resources.black_add;
 
                 // Disable button(s)
@@ -767,7 +746,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
 
                 // Rename group box
                 grpBoxAdd.Text =
-                    Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxAddEdit/Add_Caption", LanguageName);
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Add_Caption", LanguageName);
 
                 // Deselect rows
                 DeselectRowsOfDataGridViews(null);
@@ -777,23 +756,23 @@ namespace SharePortfolioManager.Forms.CostsForm.View
 
                 // Select overview tab
                 if (
-                    tabCtrlCosts.TabPages.ContainsKey(
+                    tabCtrlBrokerage.TabPages.ContainsKey(
                         Language.GetLanguageTextByXPath(
-                            @"/AddEditFormCost/GrpBoxCost/TabCtrl/TabPgOverview/Overview", LanguageName)))
-                    tabCtrlCosts.SelectTab(
+                            @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/TabPgOverview/Overview", LanguageName)))
+                    tabCtrlBrokerage.SelectTab(
                         Language.GetLanguageTextByXPath(
-                            @"/AddEditFormCost/GrpBoxCost/TabCtrl/TabPgOverview/Overview", LanguageName));
+                            @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/TabPgOverview/Overview", LanguageName));
             }
             catch (Exception ex)
             {
-#if DEBUG_COST || DEBUG
+#if DEBUG_BROKERAGE || DEBUG
                 var message = $"btnReset_Click()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessageCostEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormCost/Errors/CancelFailure", LanguageName),
+                Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
+                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/CancelFailure", LanguageName),
                    Language, LanguageName,
                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
@@ -811,7 +790,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
 
         /// <summary>
         /// This function opens a file dialog and the user
-        /// can chose a file which documents the cost
+        /// can chose a file which documents the brokerage
         /// </summary>
         /// <param name="sender">Button</param>
         /// <param name="e">EventArgs</param>
@@ -820,18 +799,18 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             try
             {
                 const string strFilter = "pdf (*.pdf)|*.pdf|txt (*.txt)|.txt|doc (*.doc)|.doc|docx (*.docx)|.docx";
-                txtBoxDocument.Text = Helper.SetDocument(Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxAddEdit/OpenFileDialog/Title", LanguageName), strFilter, txtBoxDocument.Text);
+                txtBoxDocument.Text = Helper.SetDocument(Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/OpenFileDialog/Title", LanguageName), strFilter, txtBoxDocument.Text);
             }
             catch (Exception ex)
             {
-#if DEBUG_COST || DEBUG
-                var message = $"btnCostsDocumentBrowse_Click()\n\n{ex.Message}";
+#if DEBUG_BROKERAGE || DEBUG
+                var message = $"btnBrokerageDocumentBrowse_Click()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessageCostEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormCost/Errors/ChoseDocumentFailed", LanguageName),
+                Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/ChoseDocumentFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
@@ -842,14 +821,14 @@ namespace SharePortfolioManager.Forms.CostsForm.View
         #region Data grid view
 
         /// <summary>
-        /// This function paints the cost list of the share
+        /// This function paints the brokerage list of the share
         /// </summary>
-        private void ShowCosts()
+        private void ShowBrokerage()
         {
             try
             {
                 // Reset tab control
-                foreach (TabPage tabPage in tabCtrlCosts.TabPages)
+                foreach (TabPage tabPage in tabCtrlBrokerage.TabPages)
                 {
                     foreach (var control in tabPage.Controls)
                     {
@@ -857,58 +836,60 @@ namespace SharePortfolioManager.Forms.CostsForm.View
 
                         if (tabPage.Name == "Overview")
                         {
-                            dataGridView.SelectionChanged -= OnDataGridViewCostsOfYears_SelectionChanged;
-                            dataGridView.MouseEnter -= OnDataGridViewCostsOfYears_MouseEnter;
-                            dataGridView.MouseLeave -= OnDataGridViewCostsOfYears_MouseLeave;
+                            dataGridView.SelectionChanged -= OnDataGridViewBrokerageOfYears_SelectionChanged;
+                            dataGridView.MouseEnter -= OnDataGridViewBrokerageOfYears_MouseEnter;
+                            dataGridView.MouseLeave -= OnDataGridViewBrokerageOfYears_MouseLeave;
                         }
                         else
                         {
-                            dataGridView.SelectionChanged -= OnDataGridViewCostsOfAYear_SelectionChanged;
-                            dataGridView.MouseEnter -= OnDataGridViewCostsOfAYear_MouseEnter;
-                            dataGridView.MouseLeave -= OnDataGridViewCostsOfAYear_MouseEnter;
-                            dataGridView.CellContentDoubleClick -= OnDataGridViewCostsOfAYear_CellContentdecimalClick;
+                            dataGridView.SelectionChanged -= OnDataGridViewBrokerageOfAYear_SelectionChanged;
+                            dataGridView.MouseEnter -= OnDataGridViewBrokerageOfAYear_MouseEnter;
+                            dataGridView.MouseLeave -= OnDataGridViewBrokerageOfAYear_MouseEnter;
+                            dataGridView.CellContentDoubleClick -= OnDataGridViewBrokerageOfAYear_CellContentdecimalClick;
                         }
 
-                        dataGridView.DataBindingComplete -= OnDataGridViewCosts_DataBindingComplete;
+                        dataGridView.DataBindingComplete -= OnDataGridViewBrokerage_DataBindingComplete;
                     }
                     tabPage.Controls.Clear();
-                    tabCtrlCosts.TabPages.Remove(tabPage);
+                    tabCtrlBrokerage.TabPages.Remove(tabPage);
                 }
 
-                tabCtrlCosts.TabPages.Clear();
-
+                tabCtrlBrokerage.TabPages.Clear();
+                
                 #region Add page
 
-                // Create TabPage for the costs of the years
+                // Create TabPage for the brokerage of the years
                 var newTabPageOverviewYears = new TabPage
                 {
                     // Set TabPage name
                     Name = Language.GetLanguageTextByXPath(
-                        @"/AddEditFormCost/GrpBoxCost/TabCtrl/TabPgOverview/Overview",
+                        @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/TabPgOverview/Overview",
                         LanguageName),
 
                     // Set TabPage caption
                     Text = Language.GetLanguageTextByXPath(
-                               @"/AddEditFormCost/GrpBoxCost/TabCtrl/TabPgOverview/Overview", LanguageName) +
-                           @" (" + ShareObjectFinalValue.AllCostsEntries.CostValueTotalWithUnitAsStr + @")"
+                               @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/TabPgOverview/Overview", 
+                               LanguageName)
+                           + @" (" + ShareObjectFinalValue.AllBrokerageEntries.BrokerageValueTotalWithUnitAsStr +
+                           @")"
                 };
 
                 #endregion Add page
 
                 #region Data source, data binding and data grid view
 
-                // Create Binding source for the cost data
+                // Create Binding source for the brokerage data
                 var bindingSourceOverview = new BindingSource();
-                if (ShareObjectFinalValue.AllCostsEntries.GetAllCostsTotalValues().Count > 0)
+                if (ShareObjectFinalValue.AllBrokerageEntries.GetAllBrokerageTotalValues().Count > 0)
                     bindingSourceOverview.DataSource =
-                        ShareObjectFinalValue.AllCostsEntries.GetAllCostsTotalValues();
+                        ShareObjectFinalValue.AllBrokerageEntries.GetAllBrokerageTotalValues();
 
                 // Create DataGridView
-                var dataGridViewCostsOverviewOfAYears = new DataGridView
+                var dataGridViewBrokerageOverviewOfAYears = new DataGridView
                 {
                     Dock = DockStyle.Fill,
 
-                    // Bind source with cost values to the DataGridView
+                    // Bind source with brokerage values to the DataGridView
                     DataSource = bindingSourceOverview
                 };
 
@@ -917,59 +898,64 @@ namespace SharePortfolioManager.Forms.CostsForm.View
                 #region Events
 
                 // Set the delegate for the DataBindingComplete event
-                dataGridViewCostsOverviewOfAYears.DataBindingComplete += OnDataGridViewCosts_DataBindingComplete;
+                dataGridViewBrokerageOverviewOfAYears.DataBindingComplete += OnDataGridViewBrokerage_DataBindingComplete;
                 // Set the delegate for the mouse enter event
-                dataGridViewCostsOverviewOfAYears.MouseEnter += OnDataGridViewCostsOfYears_MouseEnter;
+                dataGridViewBrokerageOverviewOfAYears.MouseEnter += OnDataGridViewBrokerageOfYears_MouseEnter;
                 // Set the delegate for the mouse leave event
-                dataGridViewCostsOverviewOfAYears.MouseLeave += OnDataGridViewCostsOfYears_MouseLeave;
+                dataGridViewBrokerageOverviewOfAYears.MouseLeave += OnDataGridViewBrokerageOfYears_MouseLeave;
                 // Set row select event
-                dataGridViewCostsOverviewOfAYears.SelectionChanged += OnDataGridViewCostsOfYears_SelectionChanged;
+                dataGridViewBrokerageOverviewOfAYears.SelectionChanged += OnDataGridViewBrokerageOfYears_SelectionChanged;
 
                 #endregion Events
 
                 #region Style 
 
-                // Advanced configuration DataGridView costs
-                var styleOverviewOfYears = dataGridViewCostsOverviewOfAYears.ColumnHeadersDefaultCellStyle;
-                styleOverviewOfYears.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                // Advanced configuration DataGridView brokerage
+                dataGridViewBrokerageOverviewOfAYears.EnableHeadersVisualStyles = false;
+                // Columnheader styling
+                dataGridViewBrokerageOverviewOfAYears.ColumnHeadersDefaultCellStyle.Alignment =
+                    DataGridViewContentAlignment.MiddleCenter;
+                dataGridViewBrokerageOverviewOfAYears.ColumnHeadersDefaultCellStyle.BackColor =
+                    SystemColors.ControlLight;
+                dataGridViewBrokerageOverviewOfAYears.ColumnHeadersHeight = 25;
+                dataGridViewBrokerageOverviewOfAYears.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+                // Column styling
+                dataGridViewBrokerageOverviewOfAYears.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                // Row styling
+                dataGridViewBrokerageOverviewOfAYears.RowHeadersVisible = false;
+                dataGridViewBrokerageOverviewOfAYears.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
+                dataGridViewBrokerageOverviewOfAYears.RowsDefaultCellStyle.BackColor = Color.White;
+                dataGridViewBrokerageOverviewOfAYears.MultiSelect = false;
+                dataGridViewBrokerageOverviewOfAYears.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                // Cell styling
 
-                dataGridViewCostsOverviewOfAYears.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-                dataGridViewCostsOverviewOfAYears.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-                dataGridViewCostsOverviewOfAYears.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-
-
-                dataGridViewCostsOverviewOfAYears.RowHeadersVisible = false;
-                dataGridViewCostsOverviewOfAYears.RowsDefaultCellStyle.BackColor = Color.White;
-                dataGridViewCostsOverviewOfAYears.DefaultCellStyle.SelectionBackColor = Color.Blue;
-                dataGridViewCostsOverviewOfAYears.DefaultCellStyle.SelectionForeColor = Color.Yellow;
-
-                dataGridViewCostsOverviewOfAYears.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-
-                dataGridViewCostsOverviewOfAYears.MultiSelect = false;
-
-                dataGridViewCostsOverviewOfAYears.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                dataGridViewCostsOverviewOfAYears.AllowUserToResizeColumns = false;
-                dataGridViewCostsOverviewOfAYears.AllowUserToResizeRows = false;
-
-                dataGridViewCostsOverviewOfAYears.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                dataGridViewBrokerageOverviewOfAYears.DefaultCellStyle.SelectionBackColor = Color.Blue;
+                dataGridViewBrokerageOverviewOfAYears.DefaultCellStyle.SelectionForeColor = Color.Yellow;
+                dataGridViewBrokerageOverviewOfAYears.CellBorderStyle = DataGridViewCellBorderStyle.Single;
+                dataGridViewBrokerageOverviewOfAYears.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+                // Allow styling
+                dataGridViewBrokerageOverviewOfAYears.AllowUserToResizeColumns = false;
+                dataGridViewBrokerageOverviewOfAYears.AllowUserToResizeRows = false;
+                dataGridViewBrokerageOverviewOfAYears.AllowUserToAddRows = false;
+                dataGridViewBrokerageOverviewOfAYears.AllowUserToDeleteRows = false;
 
                 #endregion Style
 
                 #region Control add
 
-                newTabPageOverviewYears.Controls.Add(dataGridViewCostsOverviewOfAYears);
-                dataGridViewCostsOverviewOfAYears.Parent = newTabPageOverviewYears;
-                tabCtrlCosts.Controls.Add(newTabPageOverviewYears);
-                newTabPageOverviewYears.Parent = tabCtrlCosts;
+                newTabPageOverviewYears.Controls.Add(dataGridViewBrokerageOverviewOfAYears);
+                dataGridViewBrokerageOverviewOfAYears.Parent = newTabPageOverviewYears;
+                tabCtrlBrokerage.Controls.Add(newTabPageOverviewYears);
+                newTabPageOverviewYears.Parent = tabCtrlBrokerage;
 
                 #endregion Control add
 
-                // Check if costs exists
-                if (ShareObjectFinalValue.AllCostsEntries.AllCostsOfTheShareDictionary.Count <= 0) return;
+                // Check if brokerage exists
+                if (ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageOfTheShareDictionary.Count <= 0) return;
 
-                // Loop through the years of the costs
+                // Loop through the years of the brokerage
                 foreach (
-                    var keyName in ShareObjectFinalValue.AllCostsEntries.AllCostsOfTheShareDictionary.Keys.Reverse()
+                    var keyName in ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageOfTheShareDictionary.Keys.Reverse()
                 )
                 {
                     #region Add page
@@ -982,8 +968,8 @@ namespace SharePortfolioManager.Forms.CostsForm.View
 
                         // Set TabPage caption
                         Text = keyName + @" (" +
-                               ShareObjectFinalValue.AllCostsEntries.AllCostsOfTheShareDictionary[keyName]
-                                   .CostValueYearWithUnitAsStr
+                               ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageOfTheShareDictionary[keyName]
+                                   .BrokerageValueYearWithUnitAsStr
                                + @")"
                     };
 
@@ -991,19 +977,19 @@ namespace SharePortfolioManager.Forms.CostsForm.View
 
                     #region Data source, data binding and data grid view
 
-                    // Create Binding source for the cost data
+                    // Create Binding source for the brokerage data
                     var bindingSource = new BindingSource
                     {
-                        DataSource = ShareObjectFinalValue.AllCostsEntries.AllCostsOfTheShareDictionary[keyName]
-                            .CostListYear
+                        DataSource = ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageOfTheShareDictionary[keyName]
+                            .BrokerageListYear
                     };
 
                     // Create DataGridView
-                    var dataGridViewCostsOfAYear = new DataGridView
+                    var dataGridViewBrokerageOfAYear = new DataGridView
                     {
                         Dock = DockStyle.Fill,
 
-                        // Bind source with cost values to the DataGridView
+                        // Bind source with brokerage values to the DataGridView
                         DataSource = bindingSource
                     };
 
@@ -1012,65 +998,71 @@ namespace SharePortfolioManager.Forms.CostsForm.View
                     #region Events
 
                     // Set the delegate for the DataBindingComplete event
-                    dataGridViewCostsOfAYear.DataBindingComplete += OnDataGridViewCosts_DataBindingComplete;
+                    dataGridViewBrokerageOfAYear.DataBindingComplete += OnDataGridViewBrokerage_DataBindingComplete;
                     // Set the delegate for the mouse enter event
-                    dataGridViewCostsOfAYear.MouseEnter += OnDataGridViewCostsOfAYear_MouseEnter;
+                    dataGridViewBrokerageOfAYear.MouseEnter += OnDataGridViewBrokerageOfAYear_MouseEnter;
                     // Set the delegate for the mouse leave event
-                    dataGridViewCostsOfAYear.MouseLeave += OnDataGridViewCostsOfAYear_MouseLeave;
+                    dataGridViewBrokerageOfAYear.MouseLeave += OnDataGridViewBrokerageOfAYear_MouseLeave;
                     // Set row select event
-                    dataGridViewCostsOfAYear.SelectionChanged += OnDataGridViewCostsOfAYear_SelectionChanged;
+                    dataGridViewBrokerageOfAYear.SelectionChanged += OnDataGridViewBrokerageOfAYear_SelectionChanged;
                     // Set cell decimal click event
-                    dataGridViewCostsOfAYear.CellContentDoubleClick += OnDataGridViewCostsOfAYear_CellContentdecimalClick;
+                    dataGridViewBrokerageOfAYear.CellContentDoubleClick += OnDataGridViewBrokerageOfAYear_CellContentdecimalClick;
 
                     #endregion Events
 
                     #region Style
 
-                    // Advanced configuration DataGridView costs
-                    var style = dataGridViewCostsOfAYear.ColumnHeadersDefaultCellStyle;
-                    style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                    // Advanced configuration DataGridView brokerage
+                    dataGridViewBrokerageOfAYear.EnableHeadersVisualStyles = false;
+                    // Columnheader styling
+                    dataGridViewBrokerageOfAYear.ColumnHeadersDefaultCellStyle.Alignment =
+                        DataGridViewContentAlignment.MiddleCenter;
+                    dataGridViewBrokerageOfAYear.ColumnHeadersDefaultCellStyle.BackColor =
+                        SystemColors.ControlLight;
+                    dataGridViewBrokerageOfAYear.ColumnHeadersHeight = 25;
+                    dataGridViewBrokerageOfAYear.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+                    // Column styling
+                    dataGridViewBrokerageOfAYear.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                    // Row styling
+                    dataGridViewBrokerageOfAYear.RowHeadersVisible = false;
+                    dataGridViewBrokerageOfAYear.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
+                    dataGridViewBrokerageOfAYear.RowsDefaultCellStyle.BackColor = Color.White;
+                    dataGridViewBrokerageOfAYear.MultiSelect = false;
+                    dataGridViewBrokerageOfAYear.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                    // Cell styling
 
-                    dataGridViewCostsOfAYear.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-                    dataGridViewCostsOfAYear.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-                    dataGridViewCostsOfAYear.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-
-                    dataGridViewCostsOfAYear.RowHeadersVisible = false;
-                    dataGridViewCostsOfAYear.RowsDefaultCellStyle.BackColor = Color.White;
-                    dataGridViewCostsOfAYear.DefaultCellStyle.SelectionBackColor = Color.Blue;
-                    dataGridViewCostsOfAYear.DefaultCellStyle.SelectionForeColor = Color.Yellow;
-
-                    dataGridViewCostsOfAYear.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-
-                    dataGridViewCostsOfAYear.MultiSelect = false;
-
-                    dataGridViewCostsOfAYear.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                    dataGridViewCostsOfAYear.AllowUserToResizeColumns = false;
-                    dataGridViewCostsOfAYear.AllowUserToResizeRows = false;
-
-                    dataGridViewCostsOfAYear.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                    dataGridViewBrokerageOfAYear.DefaultCellStyle.SelectionBackColor = Color.Blue;
+                    dataGridViewBrokerageOfAYear.DefaultCellStyle.SelectionForeColor = Color.Yellow;
+                    dataGridViewBrokerageOfAYear.CellBorderStyle = DataGridViewCellBorderStyle.Single;
+                    dataGridViewBrokerageOfAYear.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+                    // Allow styling
+                    dataGridViewBrokerageOfAYear.AllowUserToResizeColumns = false;
+                    dataGridViewBrokerageOfAYear.AllowUserToResizeRows = false;
+                    dataGridViewBrokerageOfAYear.AllowUserToAddRows = false;
+                    dataGridViewBrokerageOfAYear.AllowUserToDeleteRows = false;
 
                     #endregion Style
 
                     #region Control add
 
-                    newTabPage.Controls.Add(dataGridViewCostsOfAYear);
-                    dataGridViewCostsOfAYear.Parent = newTabPage;
-                    tabCtrlCosts.Controls.Add(newTabPage);
-                    newTabPage.Parent = tabCtrlCosts;
+                    newTabPage.Controls.Add(dataGridViewBrokerageOfAYear);
+                    dataGridViewBrokerageOfAYear.Parent = newTabPage;
+                    tabCtrlBrokerage.Controls.Add(newTabPage);
+                    newTabPage.Parent = tabCtrlBrokerage;
 
                     #endregion Control add
                 }
             }
             catch (Exception ex)
             {
-#if DEBUG_COST || DEBUG
-                var message = $"ShowCosts()\n\n{ex.Message}";
+#if DEBUG_BROKERAGE || DEBUG
+                var message = $"ShowBrokerage()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessageCostEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormCost/Errors/ShowFailed", LanguageName),
+                Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
+                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/ShowFailed", LanguageName),
                    Language, LanguageName, Color.DarkRed, Logger,
                    (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
@@ -1081,7 +1073,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
         /// </summary>
         /// <param name="sender">DataGridView</param>
         /// <param name="e">DataGridViewBindingCompleteEventArgs</param>
-        private void OnDataGridViewCosts_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        private void OnDataGridViewBrokerage_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             try
             {
@@ -1094,19 +1086,19 @@ namespace SharePortfolioManager.Forms.CostsForm.View
 
                     switch (i)
                     {
-                        case 0:
-                            ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxCost/TabCtrl/DgvCostOverview/ColHeader_Date",
-                                    LanguageName);
-                            break;
                         case 1:
                             ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxCost/TabCtrl/DgvCostOverview/ColHeader_Costs",
-                                    LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
+                                Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Date",
+                                    LanguageName);
                             break;
                         case 2:
                             ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxCost/TabCtrl/DgvCostOverview/ColHeader_Document",
+                                Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Brokerage",
+                                    LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
+                            break;
+                        case 3:
+                            ((DataGridView)sender).Columns[i].HeaderText =
+                                Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Document",
                                     LanguageName);
                             break;
                     }
@@ -1120,14 +1112,14 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_COST || DEBUG
-                var message = $"dataGridViewCostsOfAYear_DataBindingComplete()\n\n{ex.Message}";
+#if DEBUG_BROKERAGE || DEBUG
+                var message = $"dataGridViewBrokerageOfAYear_DataBindingComplete()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessageCostEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormCost/Errors/RenameColHeaderFailed", LanguageName),
+                Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
+                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/RenameColHeaderFailed", LanguageName),
                    Language, LanguageName,
                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
@@ -1142,7 +1134,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             try
             {
                 // Deselect the row
-                foreach (TabPage tabPage in tabCtrlCosts.TabPages)
+                foreach (TabPage tabPage in tabCtrlBrokerage.TabPages)
                 {
                     foreach (Control control in tabPage.Controls)
                     {
@@ -1159,14 +1151,14 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_COST || DEBUG
+#if DEBUG_BROKERAGE || DEBUG
                 var message = $"DeselectRowsOfDataGridViews()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessageCostEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormCost/Errors/DeselectFailed", LanguageName),
+                Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
+                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/DeselectFailed", LanguageName),
                    Language, LanguageName,
                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
@@ -1179,12 +1171,12 @@ namespace SharePortfolioManager.Forms.CostsForm.View
         /// </summary>
         /// <param name="sender">Tab control</param>
         /// <param name="e">EventArgs</param>
-        private void TabCtrlCosts_SelectedIndexChanged(object sender, EventArgs e)
+        private void TabCtrlBrokerage_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (tabCtrlCosts.SelectedTab == null) return;
+            if (tabCtrlBrokerage.SelectedTab == null) return;
 
             // Loop trough the controls of the selected tab page and set focus on the data grid view
-            foreach (Control control in tabCtrlCosts.SelectedTab.Controls)
+            foreach (Control control in tabCtrlBrokerage.SelectedTab.Controls)
             {
                 if (control is DataGridView view)
                     view.Focus();
@@ -1196,12 +1188,12 @@ namespace SharePortfolioManager.Forms.CostsForm.View
         /// </summary>
         /// <param name="sender">Data grid view</param>
         /// <param name="e">EventArgs</param>
-        private void TabCtrlCosts_MouseEnter(object sender, EventArgs e)
+        private void TabCtrlBrokerage_MouseEnter(object sender, EventArgs e)
         {
-            if (tabCtrlCosts.SelectedTab == null) return;
+            if (tabCtrlBrokerage.SelectedTab == null) return;
 
             // Loop trough the controls of the selected tab page and set focus on the data grid view
-            foreach (Control control in tabCtrlCosts.SelectedTab.Controls)
+            foreach (Control control in tabCtrlBrokerage.SelectedTab.Controls)
             {
                 if (control is DataGridView view)
                     view.Focus();
@@ -1213,14 +1205,14 @@ namespace SharePortfolioManager.Forms.CostsForm.View
         /// </summary>
         /// <param name="sender">Tab control</param>
         /// <param name="e">EventArgs</param>
-        private void TabCtrlCosts_MouseLeave(object sender, EventArgs e)
+        private void TabCtrlBrokerage_MouseLeave(object sender, EventArgs e)
         {
             grpBoxAdd.Focus();
         }
 
         #endregion Tab control delegates
 
-        #region Costs of years
+        #region Brokerage of years
 
         /// <summary>
         /// This functions selects the tab page of the chosen year
@@ -1228,7 +1220,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        private void OnDataGridViewCostsOfYears_SelectionChanged(object sender, EventArgs args)
+        private void OnDataGridViewBrokerageOfYears_SelectionChanged(object sender, EventArgs args)
         {
             try
             {
@@ -1237,11 +1229,11 @@ namespace SharePortfolioManager.Forms.CostsForm.View
                 // Get the currently selected item in the ListBox
                 var curItem = ((DataGridView)sender).SelectedRows;
 
-                foreach (TabPage tabPage in tabCtrlCosts.TabPages)
+                foreach (TabPage tabPage in tabCtrlBrokerage.TabPages)
                 {
                     if (tabPage.Name != curItem[0].Cells[0].Value.ToString()) continue;
 
-                    tabCtrlCosts.SelectTab(tabPage);
+                    tabCtrlBrokerage.SelectTab(tabPage);
                     tabPage.Focus();
 
                     // Deselect rows
@@ -1252,14 +1244,14 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_COST || DEBUG
-                var message = $"dataGridViewCostsOfYears_SelectionChanged()\n\n{ex.Message}";
+#if DEBUG_BROKERAGE || DEBUG
+                var message = $"dataGridViewBrokerageOfYears_SelectionChanged()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessageCostEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormCost/Errors/SelectionChangeFailed", LanguageName),
+                Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
+                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/SelectionChangeFailed", LanguageName),
                    Language, LanguageName,
                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
@@ -1270,7 +1262,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
         /// </summary>
         /// <param name="sender">Entered data grid view</param>
         /// <param name="args">EventArgs</param>
-        private static void OnDataGridViewCostsOfYears_MouseEnter(object sender, EventArgs args)
+        private static void OnDataGridViewBrokerageOfYears_MouseEnter(object sender, EventArgs args)
         {
             ((DataGridView)sender).Focus();
         }
@@ -1280,14 +1272,14 @@ namespace SharePortfolioManager.Forms.CostsForm.View
         /// </summary>
         /// <param name="sender">Left data grid view</param>
         /// <param name="args">EventArgs</param>
-        private void OnDataGridViewCostsOfYears_MouseLeave(object sender, EventArgs args)
+        private void OnDataGridViewBrokerageOfYears_MouseLeave(object sender, EventArgs args)
         {
             grpBoxAdd.Focus();
         }
 
-        #endregion Costs of years
+        #endregion Brokerage of years
 
-        #region Costs of a year
+        #region Brokerage of a year
 
         /// <summary>
         /// This function deselects the other selected rows of any other DataGridViews
@@ -1296,14 +1288,14 @@ namespace SharePortfolioManager.Forms.CostsForm.View
         /// </summary>
         /// <param name="sender">Data grid view</param>
         /// <param name="args">EventArgs</param>
-        private void OnDataGridViewCostsOfAYear_SelectionChanged(object sender, EventArgs args)
+        private void OnDataGridViewBrokerageOfAYear_SelectionChanged(object sender, EventArgs args)
         {
             try
             {
-                if (tabCtrlCosts.TabPages.Count > 0)
+                if (tabCtrlBrokerage.TabPages.Count > 0)
                 {
                     // Deselect row only of the other TabPages DataGridViews
-                    if (tabCtrlCosts.SelectedTab.Controls.Contains((DataGridView)sender))
+                    if (tabCtrlBrokerage.SelectedTab.Controls.Contains((DataGridView)sender))
                         DeselectRowsOfDataGridViews((DataGridView)sender);
                 }
 
@@ -1315,58 +1307,74 @@ namespace SharePortfolioManager.Forms.CostsForm.View
                     // Set selected date
                     SelectedDate = curItem[0].Cells[0].Value.ToString();
 
-                    // Get CostObject of the selected DataGridView row
-                    var selectedCostObject = ShareObjectFinalValue.AllCostsEntries.GetCostObjectByDateTime(SelectedDate);
+                    // Get list of brokerage of a year
+                    DateTime.TryParse(SelectedDate, out var dateTime);
+                    var brokerageListYear =  ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageOfTheShareDictionary[dateTime.Year.ToString()]
+                        .BrokerageListYear;
 
-                    // Set cost values
-                    if (selectedCostObject != null)
+                    var index = ((DataGridView) sender).SelectedRows[0].Index;
+
+                    // Set selected Guid
+                    SelectedGuid = brokerageListYear[index].Guid;
+
+                    // Get BrokerageObject of the selected DataGridView row
+                    var selectedBrokerageObject = brokerageListYear[index];
+
+                    // Set brokerage values
+                    if (selectedBrokerageObject != null)
                     {
-                        datePickerDate.Value = Convert.ToDateTime(selectedCostObject.CostDate);
-                        datePickerTime.Value = Convert.ToDateTime(selectedCostObject.CostDate);
-                        txtBoxCosts.Text = selectedCostObject.CostValueAsStr;
-                        txtBoxDocument.Text = selectedCostObject.CostDocument;
+                        datePickerDate.Value = Convert.ToDateTime(selectedBrokerageObject.BrokerageDate);
+                        datePickerTime.Value = Convert.ToDateTime(selectedBrokerageObject.BrokerageDate);
+                        txtBoxBrokerage.Text = selectedBrokerageObject.BrokerageValueAsStr;
+                        txtBoxDocument.Text = selectedBrokerageObject.BrokerageDocument;
                     }
                     else
                     {
                         datePickerDate.Value = Convert.ToDateTime(SelectedDate);
                         datePickerTime.Value = Convert.ToDateTime(SelectedDate);
-                        txtBoxCosts.Text = curItem[0].Cells[1].Value.ToString();
+                        txtBoxBrokerage.Text = curItem[0].Cells[1].Value.ToString();
                         txtBoxDocument.Text = curItem[0].Cells[2].Value.ToString();
                     }
 
-                    // Set cost values
-                    if (selectedCostObject != null && (selectedCostObject.CostOfABuy || selectedCostObject.CostOfASale))
+                    // Set brokerage values
+                    if (selectedBrokerageObject != null && (selectedBrokerageObject.BrokerageOfABuy || selectedBrokerageObject.BrokerageOfASale))
                     {
-                        // Set flag if cost is part of a buy
-                        PartOfABuy = selectedCostObject.CostOfABuy;
+                        // Set flag if brokerage is part of a buy
+                        PartOfABuy = selectedBrokerageObject.BrokerageOfABuy;
 
-                        // Set flag if cost is part of a sale
-                        PartOfASale = selectedCostObject.CostOfASale;
+                        // Set flag if brokerage is part of a sale
+                        PartOfASale = selectedBrokerageObject.BrokerageOfASale;
 
-                        // Enable TextBoxe(s)
+                        // Disable TextBoxe(s)
                         datePickerDate.Enabled = false;
                         datePickerTime.Enabled = false;
-                        txtBoxCosts.Enabled = false;
+                        txtBoxBrokerage.Enabled = false;
+                        txtBoxDocument.Enabled = false;
 
                         // Enable Button(s)
+                        btnDocumentBrowse.Enabled = false;
+                        btnAddSave.Enabled = false;
                         btnDelete.Enabled = false;
                     }
                     else
                     {
-                        if (selectedCostObject != null)
+                        if (selectedBrokerageObject != null)
                         {
-                            // Set flag if cost is part of a buy
-                            PartOfABuy = selectedCostObject.CostOfABuy;
+                            // Set flag if brokerage is part of a buy
+                            PartOfABuy = selectedBrokerageObject.BrokerageOfABuy;
 
-                            // Set flag if cost is part of a sale
-                            PartOfASale = selectedCostObject.CostOfASale;
+                            // Set flag if brokerage is part of a sale
+                            PartOfASale = selectedBrokerageObject.BrokerageOfASale;
 
                             // Enable TextBoxe(s)
                             datePickerDate.Enabled = true;
                             datePickerTime.Enabled = true;
-                            txtBoxCosts.Enabled = true;
+                            txtBoxBrokerage.Enabled = true;
+                            txtBoxDocument.Enabled = true;
 
                             // Enable Button(s)
+                            btnDocumentBrowse.Enabled = true;
+                            btnAddSave.Enabled = true;
                             btnDelete.Enabled = true;
                         }
                     }
@@ -1374,11 +1382,11 @@ namespace SharePortfolioManager.Forms.CostsForm.View
                     // Enable button(s)
                     btnReset.Enabled = true;
                     // Rename button
-                    btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxAddEdit/Buttons/Save", LanguageName);
+                    btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Save", LanguageName);
                     btnAddSave.Image = Resources.black_edit;
 
                     // Rename group box
-                    grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxAddEdit/Edit_Caption", LanguageName);
+                    grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Edit_Caption", LanguageName);
 
                     // Store DataGridView instance
                     SelectedDataGridView = (DataGridView)sender;
@@ -1389,7 +1397,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
                 else
                 {
                     // Rename button
-                    btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxAddEdit/Buttons/Add", LanguageName);
+                    btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Add", LanguageName);
                     btnAddSave.Image = Resources.black_add;
                     // Disable button(s)
                     btnReset.Enabled = false;
@@ -1399,10 +1407,10 @@ namespace SharePortfolioManager.Forms.CostsForm.View
                     // Enabled TextBoxe(s)
                     datePickerDate.Enabled = true;
                     datePickerTime.Enabled = true;
-                    txtBoxCosts.Enabled = true;
+                    txtBoxBrokerage.Enabled = true;
 
                     // Rename group box
-                    grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormCost/GrpBoxAddEdit/Add_Caption", LanguageName);
+                    grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Add_Caption", LanguageName);
 
                     // Reset stored DataGridView instance
                     SelectedDataGridView = null;
@@ -1410,20 +1418,20 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_COST || DEBUG
-                var message = $"dataGridViewCostsOfAYear_SelectionChanged()\n\n{ex.Message}";
+#if DEBUG_BROKERAGE || DEBUG
+                var message = $"dataGridViewBrokerageOfAYear_SelectionChanged()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessageCostEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormCost/Errors/SelectionChangeFailed", LanguageName),
+                Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
+                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/SelectionChangeFailed", LanguageName),
                    Language, LanguageName,
                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
 
                 ResetInputValues();
 
-                ShowCosts();
+                ShowBrokerage();
             }
         }
 
@@ -1432,7 +1440,7 @@ namespace SharePortfolioManager.Forms.CostsForm.View
         /// </summary>
         /// <param name="sender">Entered data grid view</param>
         /// <param name="args">EventArgs</param>
-        private static void OnDataGridViewCostsOfAYear_MouseEnter(object sender, EventArgs args)
+        private static void OnDataGridViewBrokerageOfAYear_MouseEnter(object sender, EventArgs args)
         {
             ((DataGridView)sender).Focus();
         }
@@ -1442,17 +1450,17 @@ namespace SharePortfolioManager.Forms.CostsForm.View
         /// </summary>
         /// <param name="sender">Left data grid view</param>
         /// <param name="args">EventArgs</param>
-        private void OnDataGridViewCostsOfAYear_MouseLeave(object sender, EventArgs args)
+        private void OnDataGridViewBrokerageOfAYear_MouseLeave(object sender, EventArgs args)
         {
             grpBoxAdd.Focus();
         }
 
         /// <summary>
-        /// This function opens the cost document if a document is present
+        /// This function opens the brokerage document if a document is present
         /// </summary>
         /// <param name="sender">DataGridView</param>
         /// <param name="e">DataGridViewCellEventArgs</param>
-        private void OnDataGridViewCostsOfAYear_CellContentdecimalClick(object sender, DataGridViewCellEventArgs e)
+        private void OnDataGridViewBrokerageOfAYear_CellContentdecimalClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
@@ -1467,22 +1475,24 @@ namespace SharePortfolioManager.Forms.CostsForm.View
 
                 // Get the current selected row
                 var curItem = ((DataGridView)sender).SelectedRows;
-                // Get date and time of the selected cost item
-                var strDateTime = curItem[0].Cells[0].Value.ToString();
+                // Get Guid of the selected buy item
+                var strGuidBuy = curItem[0].Cells[0].Value.ToString();
+                // Get date and time of the selected brokerage item
+                var strDateTime = curItem[0].Cells[1].Value.ToString();
 
                 // Check if a document is set
                 if (curItem[0].Cells[iColumnCount - 1].Value.ToString() == @"-") return;
 
-                // Get doc from the cost with the strDateTime
-                foreach (var temp in ShareObjectFinalValue.AllCostsEntries.GetAllCostsOfTheShare())
+                // Get doc from the brokerage with the strDateTime
+                foreach (var temp in ShareObjectFinalValue.AllBrokerageEntries.GetAllBrokerageOfTheShare())
                 {
-                    // Check if the cost date and time is the same as the date and time of the clicked cost item
-                    if (temp.CostDate != strDateTime) continue;
+                    // Check if the brokerage Guid is the same as the Guid of the clicked brokerage item
+                    if (temp.Guid != strGuidBuy) continue;
 
                     // Check if the file still exists
-                    if (File.Exists(temp.CostDocument))
+                    if (File.Exists(temp.BrokerageDocument))
                         // Open the file
-                        Process.Start(temp.CostDocument);
+                        Process.Start(temp.BrokerageDocument);
                     else
                     {
                         var strCaption =
@@ -1503,29 +1513,32 @@ namespace SharePortfolioManager.Forms.CostsForm.View
                             strCancel);
                         if (messageBox.ShowDialog() == DialogResult.OK)
                         {
-                            // Remove cost object and add it with no document
-                            if (ShareObjectFinalValue.RemoveCost(temp.CostDate) &&
-                                ShareObjectFinalValue.AddCost(false, false, strDateTime, temp.CostValue))
+                            // Generate Guid
+                            var strGuidBrokerage = Guid.NewGuid().ToString();
+
+                            // Remove brokerage object and add it with no document
+                            if (ShareObjectFinalValue.RemoveBrokerage(temp.Guid ,temp.BrokerageDate) &&
+                                ShareObjectFinalValue.AddBrokerage(temp.Guid, false, false, strGuidBrokerage, strDateTime, temp.BrokerageValue))
                             {
                                 // Set flag to save the share object.
                                 SaveFlag = true;
 
                                 ResetInputValues();
-                                ShowCosts();
+                                ShowBrokerage();
 
                                 // Add status message
-                                Helper.AddStatusMessage(toolStripStatusLabelMessageCostEdit,
+                                Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
                                     Language.GetLanguageTextByXPath(
-                                        @"/AddEditFormCost/StateMessages/EditSuccess", LanguageName),
+                                        @"/AddEditFormBrokerage/StateMessages/EditSuccess", LanguageName),
                                     Language, LanguageName,
                                     Color.Black, Logger, (int)FrmMain.EStateLevels.Info,
                                     (int)FrmMain.EComponentLevels.Application);
                             }
                             else
                             {
-                                Helper.AddStatusMessage(toolStripStatusLabelMessageCostEdit,
+                                Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
                                     Language.GetLanguageTextByXPath(
-                                        @"/AddEditFormCost/Errors/EditFailed", LanguageName),
+                                        @"/AddEditFormBrokerage/Errors/EditFailed", LanguageName),
                                     Language, LanguageName,
                                     Color.Red, Logger, (int)FrmMain.EStateLevels.Error,
                                     (int)FrmMain.EComponentLevels.Application);
@@ -1538,21 +1551,21 @@ namespace SharePortfolioManager.Forms.CostsForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_COST || DEBUG
-                var message = $"dataGridViewCostsOfAYear_CellContentdecimalClick()\n\n{ex.Message}";
+#if DEBUG_BROKERAGE || DEBUG
+                var message = $"dataGridViewBrokerageOfAYear_CellContentdecimalClick()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessageCostEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormCost/Errors/DocumentShowFailed", LanguageName),
+                Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/DocumentShowFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError,
                     (int)FrmMain.EComponentLevels.Application);
             }
         }
 
-        #endregion Costs of a year
+        #endregion Brokerage of a year
 
         #endregion Data grid view
 

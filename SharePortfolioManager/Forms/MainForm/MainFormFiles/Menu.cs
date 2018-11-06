@@ -40,6 +40,9 @@ namespace SharePortfolioManager
         /// <param name="e">EventArgs</param>
         private void NewToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // Save old portfolio filename
+            var oldPortfolioFileName = _portfolioFileName;
+
             var dlgPortfolioFileName = new OwnMessageBox(
                 Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/InputPortfolioName", LanguageName),
                 Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/InputPortfolioName", LanguageName),
@@ -50,7 +53,7 @@ namespace SharePortfolioManager
 
             if (dlgResult != DialogResult.OK) return;
 
-            _portfolioFileName = Application.StartupPath + "\\Portfolios\\" + dlgPortfolioFileName.InputString + ".XML";
+            _portfolioFileName = Application.StartupPath + "\\Portfolios\\" + dlgPortfolioFileName.InputString + ".xml";
 
             // Check if the portfolio file already exists
             if (File.Exists(_portfolioFileName))
@@ -67,12 +70,17 @@ namespace SharePortfolioManager
                     _portfolioFileName = "";
             }
 
-            // Write new file or overwrite already existing file
-            if (_portfolioFileName == "") return;
+            // Cancel has been pressed so do nothing
+            if (_portfolioFileName == "")
+            {
+                _portfolioFileName = oldPortfolioFileName;
+                return;
+            }
 
-            // Check if the portfolio directory exists
-            if (!Directory.Exists(Path.GetDirectoryName(_portfolioFileName)))
-                Directory.CreateDirectory(Path.GetDirectoryName(_portfolioFileName));
+            // Check if the portfolio directory does not exist so create it
+            var path = Path.GetDirectoryName(_portfolioFileName);
+            if (path != null && !Directory.Exists(path))
+                Directory.CreateDirectory(path);
 
             // Check if the portfolio directory creation was successful
             if (Directory.Exists(Path.GetDirectoryName(_portfolioFileName)))
@@ -185,7 +193,7 @@ namespace SharePortfolioManager
                         // TODO
                         //UpdateShareDetails();
                         //UpdateDividendDetails();
-                        //UpdateCostsDetails();
+                        //UpdateBrokerageDetails();
                         //UpdateProfitLossDetails();
                     }
                 }

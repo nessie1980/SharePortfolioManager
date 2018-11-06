@@ -23,41 +23,42 @@
 using SharePortfolioManager.Classes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
-using SharePortfolioManager.Classes.ShareObjects;
 
+// ReSharper disable once CheckNamespace
 namespace SharePortfolioManager
 {
+    [Serializable]
     public class BuysYearOfTheShare
     {
         #region Properties
 
+        [Browsable(false)]
         public CultureInfo BuyCultureInfo { get; internal set; }
 
-        public decimal BuyMarketValueYear { get; internal set; } = -1;
+        [Browsable(true)]
+        public string BuyYear { get; internal set; } = @"-";
 
-        public string BuyMarketValueYearAsStr => Helper.FormatDecimal(BuyMarketValueYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
-
-        public string BuyMarketValueYearAsStrUnit => Helper.FormatDecimal(BuyMarketValueYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
-
-        public decimal BuyMarketValueReductionYear { get; internal set; } = -1;
-
-        public string BuyMarketValueReductionYearAsStr => Helper.FormatDecimal(BuyMarketValueReductionYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
-
-        public string BuyMarketValueReductionYearAsStrUnit => Helper.FormatDecimal(BuyMarketValueReductionYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
-
-        public decimal BuyMarketValueReductionCostsYear { get; internal set; } = -1;
-
-        public string BuyMarketValueReductionCostsYearAsStr => Helper.FormatDecimal(BuyMarketValueReductionCostsYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
-
-        public string BuyMarketValueReductionCostsYearAsStrUnit => Helper.FormatDecimal(BuyMarketValueReductionCostsYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
-
+        [Browsable(true)]
         public decimal BuyVolumeYear { get; internal set; } = -1;
 
-        public string BuyVolumeYearAsStr => Helper.FormatDecimal(BuyVolumeYear, Helper.Volumefivelength, false, Helper.Volumetwofixlength, false, @"", BuyCultureInfo);
+        [Browsable(true)]
+        public decimal BuyValueYear { get; internal set; } = -1;
 
-        public string BuyVolumeYearAsStrUnit => Helper.FormatDecimal(BuyVolumeYear, Helper.Volumefivelength, false, Helper.Volumetwofixlength, true, ShareObject.PieceUnit, BuyCultureInfo);
+        [Browsable(false)]
+        public string BuyValueYearAsStrUnit => Helper.FormatDecimal(BuyValueYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
 
+        [Browsable(false)]
+        public decimal BuyValueReductionYear { get; internal set; } = -1;
+
+        [Browsable(false)]
+        public decimal BuyValueReductionBrokerageYear { get; internal set; } = -1;
+
+        [Browsable(false)]
+        public string BuyValueReductionBrokerageYearAsStrUnit => Helper.FormatDecimal(BuyValueReductionBrokerageYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
+
+        [Browsable(false)]
         public List<BuyObject> BuyListYear { get; } = new List<BuyObject>();
 
         #endregion Properties
@@ -69,14 +70,16 @@ namespace SharePortfolioManager
         /// It also recalculates the value of the bought shares in the year
         /// </summary>
         /// <param name="cultureInfo">Culture info of the buy</param>
+        /// <param name="strGuid">Guid of the buy</param>
         /// <param name="strDate">Buy date of the new buy list entry</param>
         /// <param name="decVolume">Volume of the buy</param>
+        /// <param name="decVolumeSold">Volume of the buy which is already sold</param>
         /// <param name="decSharePrice">Price for one share</param>
         /// <param name="decReduction">Reduction of the buy</param>
-        /// <param name="decCosts">Costs of the buy</param>
+        /// <param name="decBrokerage">Brokerage of the buy</param>
         /// <param name="strDoc">Document of the buy</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddBuyObject(CultureInfo cultureInfo, string strDate, decimal decVolume, decimal decSharePrice, decimal decReduction, decimal decCosts, string strDoc = "")
+        public bool AddBuyObject(CultureInfo cultureInfo, string strGuid, string strDate, decimal decVolume, decimal decVolumeSold, decimal decSharePrice, decimal decReduction, decimal decBrokerage, string strDoc = "")
         {
 #if DEBUG_BUY
             Console.WriteLine(@"");
@@ -88,26 +91,30 @@ namespace SharePortfolioManager
                 BuyCultureInfo = cultureInfo;
 
                 // Create new BuyObject
-                var addObject = new BuyObject(cultureInfo, strDate, decVolume, decSharePrice, decReduction, decCosts, strDoc);
+                var addObject = new BuyObject(cultureInfo, strGuid, strDate, decVolume, decVolumeSold, decSharePrice, decReduction, decBrokerage, strDoc);
 
                 // Add object to the list
                 BuyListYear.Add(addObject);
                 BuyListYear.Sort(new BuyObjectComparer());
 
-                // Calculate buy value without reductions and costs
-                if (BuyMarketValueYear == -1)
-                    BuyMarketValueYear = 0;
-                BuyMarketValueYear += addObject.MarketValue;
+                // Set year
+                DateTime.TryParse(strDate, out var dateTime);
+                BuyYear = dateTime.Year.ToString();
+
+                // Calculate buy value without reductions and brokerage
+                if (BuyValueYear == -1)
+                    BuyValueYear = 0;
+                BuyValueYear += addObject.BuyValue;
 
                 // Calculate buy value with reduction
-                if (BuyMarketValueReductionYear == -1)
-                    BuyMarketValueReductionYear = 0;
-                BuyMarketValueReductionYear += addObject.MarketValueReduction;
+                if (BuyValueReductionYear == -1)
+                    BuyValueReductionYear = 0;
+                BuyValueReductionYear += addObject.BuyValueReduction;
 
-                // Calculate buy value with reduction and costs
-                if (BuyMarketValueReductionCostsYear == -1)
-                    BuyMarketValueReductionCostsYear = 0;
-                BuyMarketValueReductionCostsYear += addObject.MarketValueReductionCosts;
+                // Calculate buy value with reduction and brokerage
+                if (BuyValueReductionBrokerageYear == -1)
+                    BuyValueReductionBrokerageYear = 0;
+                BuyValueReductionBrokerageYear += addObject.BuyValueReductionBrokerage;
 
                 // Calculate buy volume
                 if (BuyVolumeYear == -1)
@@ -115,9 +122,9 @@ namespace SharePortfolioManager
                 BuyVolumeYear += addObject.Volume;
 
 #if DEBUG_BUY
-                Console.WriteLine(@"MarketValueYear: {0}", BuyMarketValueYear);
-                Console.WriteLine(@"PurchaseValueYear: {0}", BuyMarketValueReductionYear);
-                Console.WriteLine(@"FinalValueYear: {0}", BuyMarketValueReductionCostsYear);
+                Console.WriteLine(@"BuyValueYear: {0}", BuyValueYear);
+                Console.WriteLine(@"BuyValueReductionYear: {0}", BuyValueReductionYear);
+                Console.WriteLine(@"BuyValueReductionBrokerageYear: {0}", BuyValueReductionBrokerageYear);
                 Console.WriteLine(@"VolumeYear: {0}", BuyVolumeYear);
                 Console.WriteLine(@"");
 #endif
@@ -131,12 +138,12 @@ namespace SharePortfolioManager
         }
 
         /// <summary>
-        /// This function removes the buy object with the given date and time from the list
+        /// This function removes the buy object with the given Guid from the list
         /// It also recalculates the buy value and volume
         /// </summary>
-        /// <param name="buyDateTime">Date and time of the buy object which should be removed</param>
+        /// <param name="strGuid">Guid of the buy object which should be removed</param>
         /// <returns>Flag if the remove was successfully</returns>
-        public bool RemoveBuyObject(string buyDateTime)
+        public bool RemoveBuyObject(string strGuid)
         {
 #if DEBUG_BUY
             Console.WriteLine(@"RemoveBuyObject");
@@ -147,7 +154,7 @@ namespace SharePortfolioManager
                 var iFoundIndex = -1;
                 foreach (var buyObject in BuyListYear)
                 {
-                    if (buyObject.Date != buyDateTime) continue;
+                    if (buyObject.Guid != strGuid) continue;
 
                     iFoundIndex =  BuyListYear.IndexOf(buyObject);
                     break;
@@ -158,18 +165,19 @@ namespace SharePortfolioManager
                 // Remove object from the list
                 BuyListYear.Remove(removeObject);
 
-                // Calculate buy value with reduction and costs
-                BuyMarketValueReductionCostsYear -= removeObject.MarketValueReductionCosts;
+                // Calculate buy value with reduction and brokerage
+                BuyValueReductionBrokerageYear -= removeObject.BuyValueReductionBrokerage;
                 // Calculate buy value with reduction
-                BuyMarketValueReductionYear -= removeObject.MarketValueReduction;
-                // Calculate buy value without reduction and costs
-                BuyMarketValueYear -= removeObject.MarketValue;
+                BuyValueReductionYear -= removeObject.BuyValueReduction;
+                // Calculate buy value without reduction and brokerage
+                BuyValueYear -= removeObject.BuyValue;
                 // Calculate buy volume
                 BuyVolumeYear -= removeObject.Volume;
 
 #if DEBUG_BUY
-                Console.WriteLine(@"MarketValueYear: {0}", BuyMarketValueYear);
-                Console.WriteLine(@"FinalValueYear: {0}", BuyMarketValueReductionCostsYear);
+                Console.WriteLine(@"BuyValueYear: {0}", BuyValueYear);
+                Console.WriteLine(@"BuyValueReductionYear: {0}", BuyValueReductionYear);
+                Console.WriteLine(@"BuyValueReductionBrokerageYear: {0}", BuyValueReductionBrokerageYear);
                 Console.WriteLine(@"VolumeYear: {0}", BuyVolumeYear);
                 Console.WriteLine(@"");
 #endif

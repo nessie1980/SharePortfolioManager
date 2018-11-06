@@ -70,7 +70,11 @@ namespace SharePortfolioManager
                 InputString = _txtBoxInputString.Text;
 
             // Check if an input string is given if an input string must be given
-            if ((!_flagInputBox || _txtBoxInputString.Text == "") && _flagInputBox) return;
+            if ((!_flagInputBox || _txtBoxInputString.Text == "") && _flagInputBox)
+            {
+                _txtBoxInputString.Focus();
+                return;
+            }
 
             DialogResult = DialogResult.OK;
             Close();
@@ -132,13 +136,15 @@ namespace SharePortfolioManager
             else
                 Size = new Size(Width, size.Height + btnOk.Height + 75);
 
-            Controls.Add(_txtBoxInputString);
-
             // Resize the form
         }
 
         private void OwnMessageBox_Shown(object sender, EventArgs e)
         {
+            // Add text box
+            Controls.Add(_txtBoxInputString);
+
+            // Set focus to text box
             if (_flagInputBox)
                 _txtBoxInputString.Focus();
         }

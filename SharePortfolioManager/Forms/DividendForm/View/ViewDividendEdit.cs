@@ -46,8 +46,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         EditFailed,
         DeleteFailed,
         InputValuesInvalid,
-        DateExists,
-        DateWrongFormat,
         ExchangeRatioEmpty,
         ExchangeRatioWrongFormat,
         ExchangeRatioWrongValue,
@@ -64,8 +62,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         CapitalGainsTaxWrongValue,
         SolidarityTaxWrongFormat,
         SolidarityTaxWrongValue,
-        TaxWrongFormat,
-        TaxWrongValue,
         PriceEmpty,
         PriceWrongFormat,
         PriceWrongValue,
@@ -88,9 +84,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
         DividendErrorCode ErrorCode { get; set; }
 
-        bool UpdateDividend { get; set; }
-        string SelectedDate { get; set; }
-
         ShareObjectMarketValue ShareObjectMarketValue { get; set; }
         ShareObjectFinalValue ShareObjectFinalValue { get; set; }
 
@@ -98,6 +91,9 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         Language Language { get; }
         string LanguageName { get; }
 
+        bool UpdateDividend { get; set; }
+        string SelectedGuid { get; set; }
+        string SelectedDate { get; set; }
         string Date { get; set; }
         string Time { get; set; }
         CheckState EnableFc { get; set; }
@@ -135,6 +131,11 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         #endregion Flags
 
         /// <summary>
+        /// Stores the Guid of a selected buy row
+        /// </summary>
+        private string _selectedGuid;
+
+        /// <summary>
         /// Stores the date of a selected dividend row
         /// </summary>
         private string _selectedDate;
@@ -159,6 +160,17 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         public ShareObjectMarketValue ShareObjectMarketValue { get; set; }
 
         public ShareObjectFinalValue ShareObjectFinalValue { get; set; }
+
+        public string SelectedGuid
+        {
+            get => _selectedGuid;
+            set
+            {
+                _selectedGuid = value;
+
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SelectedGuid"));
+            }
+        }
 
         public string SelectedDate
         {
@@ -383,10 +395,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                         // Refresh the buy list
                         ShowDividends();
 
-                        // Reset values
-                        Enabled = true;
-                        ResetInputValues();
-
                         break;
                     }
                 case DividendErrorCode.AddFailed:
@@ -409,7 +417,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                                 LanguageName);
                         btnAddSave.Image = Resources.black_add;
                         // Disable button(s)
-                        btnReset.Enabled = false;
                         btnDelete.Enabled = false;
 
                         // Rename group box
@@ -424,10 +431,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
                         // Refresh the buy list
                         ShowDividends();
-
-                        // Reset values
-                        Enabled = true;
-                        ResetInputValues();
 
                         break;
                     }
@@ -455,7 +458,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                         btnAddSave.Image = Resources.black_add;
 
                         // Disable button(s)
-                        btnReset.Enabled = false;
                         btnDelete.Enabled = false;
 
                         // Rename group box
@@ -463,10 +465,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
                         // Refresh the buy list
                         ShowDividends();
-
-                        // Reset values
-                        Enabled = true;
-                        ResetInputValues();
 
                         break;
                     }
@@ -491,30 +489,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
                         Enabled = true;
                         txtBoxVolume.Focus();
-
-                        break;
-                    }
-                case DividendErrorCode.DateExists:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DateExists", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-
-                        Enabled = true;
-                        datePickerDate.Focus();
-
-                        break;
-                    }
-                case DividendErrorCode.DateWrongFormat:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DateWrongFormat", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-
-                        Enabled = true;
-                        datePickerDate.Focus();
 
                         break;
                     }
@@ -963,7 +937,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     cbxBoxDividendFCUnit.Items.Add($"{temp.Key} / {temp.Value.CurrencySymbol}");
                 }
 
-                CheckForeignCurrencyCalulationShouldBeDone();
+                CheckForeignCurrencyCalculationShouldBeDone();
 
                 // Chose USD item
                 var iIndex = cbxBoxDividendFCUnit.FindString("en-US");
@@ -975,7 +949,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             {
 #if DEBUG_DIVIDEND || DEBUG
                 var message = $"ShareDividendEdit_Load()\n\n{ex.Message}";
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
@@ -1040,8 +1014,12 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             {
                 // Set current share value
                 txtBoxVolume.Text = ShareObjectFinalValue.VolumeAsStr;
-
             }
+
+            if (tabCtrlDividends.TabPages.Count > 0)
+                tabCtrlDividends.SelectTab(0);
+
+            FormatInputValues?.Invoke(this, new EventArgs());
         }
 
         #endregion Form
@@ -1057,7 +1035,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("EnableFC"));
 
-            CheckForeignCurrencyCalulationShouldBeDone();
+            CheckForeignCurrencyCalculationShouldBeDone();
         }
 
         #endregion CheckBoxes
@@ -1256,6 +1234,8 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         private void TxtBoxDocument_TextChanged(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Document"));
+
+            if (txtBoxDocument.Text == @"") return;
         }
 
         /// <summary>
@@ -1281,6 +1261,15 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             foreach (var filePath in files)
             {
                 txtBoxDocument.Text = filePath;
+
+                if (txtBoxDocument.Text == @"") return;
+
+                // TODO Parse PDF and set values to the form
+                //var pdf = new PdfDocument(new PdfReader(txtBoxDocument.Text));
+                //var text = PdfTextExtractor.GetTextFromPage(pdf.GetPage(1), new LocationTextExtractionStrategy());
+                //pdf.Close();
+                //Console.WriteLine(@"Extracted text:");
+                //Console.WriteLine(text);
             }
         }
 
@@ -1411,7 +1400,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 btnAddSave.Image = Resources.black_add;
 
                 // Disable button(s)
-                btnReset.Enabled = false;
                 btnDelete.Enabled = false;
 
                 // Rename group box
@@ -1464,7 +1452,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// This function check is a foreign current calculation should be done.
         /// The function shows or hides, resize and reposition controls
         /// </summary>
-        private void CheckForeignCurrencyCalulationShouldBeDone()
+        private void CheckForeignCurrencyCalculationShouldBeDone()
         {
             if (chkBoxEnableFC.CheckState == CheckState.Checked)
             {
@@ -1526,6 +1514,13 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
                 txtBoxRate.Focus();
             }
+
+            // Check if any volume is present
+            if (ShareObjectFinalValue.Volume > 0)
+            {
+                // Set current share value
+                txtBoxVolume.Text = ShareObjectFinalValue.VolumeAsStr;
+            }
         }
 
         /// <summary>
@@ -1568,16 +1563,19 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                             dataGridView.SelectionChanged -= DataGridViewDividendsOfAYear_SelectionChanged;
                             dataGridView.MouseEnter -= OnDataGridViewDividendsOfAYear_MouseEnter;
                             dataGridView.MouseLeave -= OnDataGridViewDividendsOfAYear_MouseLeave;
-                            dataGridView.CellContentDoubleClick -= DataGridViewDividendsOfAYear_CellContentdecimalClick;
+                            dataGridView.CellContentDoubleClick -= DataGridViewDividendsOfAYear_CellContentClick;
                         }
 
-                        dataGridView.DataBindingComplete -= DataGridViewDividens_DataBindingComplete;
+                        dataGridView.DataBindingComplete -= DataGridViewDividends_DataBindingComplete;
                     }
                     tabPage.Controls.Clear();
                     tabCtrlDividends.TabPages.Remove(tabPage);
                 }
 
                 tabCtrlDividends.TabPages.Clear();
+
+                // Enable controls
+                Enabled = true;
 
                 #region Add page
 
@@ -1609,6 +1607,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 // Create DataGridView
                 var dataGridViewDividendsOverviewOfAYears = new DataGridView
                 {
+                    Name = @"Overview",
                     Dock = DockStyle.Fill,
 
                     // Bind source with dividend values to the DataGridView
@@ -1620,7 +1619,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 #region Events
 
                 // Set the delegate for the DataBindingComplete event
-                dataGridViewDividendsOverviewOfAYears.DataBindingComplete += DataGridViewDividens_DataBindingComplete;
+                dataGridViewDividendsOverviewOfAYears.DataBindingComplete += DataGridViewDividends_DataBindingComplete;
                 // Set the delegate for the mouse enter event
                 dataGridViewDividendsOverviewOfAYears.MouseEnter += OnDataGridViewDividendsOfYears_MouseEnter;
                 // Set the delegate for the mouse leave event
@@ -1633,27 +1632,32 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 #region Style
 
                 // Advanced configuration DataGridView dividends
-                var styleOverviewOfYears = dataGridViewDividendsOverviewOfAYears.ColumnHeadersDefaultCellStyle;
-                styleOverviewOfYears.Alignment = DataGridViewContentAlignment.MiddleCenter;
-
-                dataGridViewDividendsOverviewOfAYears.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+                dataGridViewDividendsOverviewOfAYears.EnableHeadersVisualStyles = false;
+                // Columnheader styling
+                dataGridViewDividendsOverviewOfAYears.ColumnHeadersDefaultCellStyle.Alignment =
+                    DataGridViewContentAlignment.MiddleCenter;
+                dataGridViewDividendsOverviewOfAYears.ColumnHeadersDefaultCellStyle.BackColor =
+                    SystemColors.ControlLight;
+                dataGridViewDividendsOverviewOfAYears.ColumnHeadersHeight = 25;
                 dataGridViewDividendsOverviewOfAYears.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-                dataGridViewDividendsOverviewOfAYears.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-
+                // Column styling
+                dataGridViewDividendsOverviewOfAYears.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                // Row styling
                 dataGridViewDividendsOverviewOfAYears.RowHeadersVisible = false;
+                dataGridViewDividendsOverviewOfAYears.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
                 dataGridViewDividendsOverviewOfAYears.RowsDefaultCellStyle.BackColor = Color.White;
+                dataGridViewDividendsOverviewOfAYears.MultiSelect = false;
+                dataGridViewDividendsOverviewOfAYears.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                // Cell styling
                 dataGridViewDividendsOverviewOfAYears.DefaultCellStyle.SelectionBackColor = Color.Blue;
                 dataGridViewDividendsOverviewOfAYears.DefaultCellStyle.SelectionForeColor = Color.Yellow;
-
+                dataGridViewDividendsOverviewOfAYears.CellBorderStyle = DataGridViewCellBorderStyle.Single;
                 dataGridViewDividendsOverviewOfAYears.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-
-                dataGridViewDividendsOverviewOfAYears.MultiSelect = false;
-
-                dataGridViewDividendsOverviewOfAYears.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                // Allow styling
                 dataGridViewDividendsOverviewOfAYears.AllowUserToResizeColumns = false;
                 dataGridViewDividendsOverviewOfAYears.AllowUserToResizeRows = false;
-
-                dataGridViewDividendsOverviewOfAYears.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                dataGridViewDividendsOverviewOfAYears.AllowUserToAddRows = false;
+                dataGridViewDividendsOverviewOfAYears.AllowUserToDeleteRows = false;
 
                 #endregion Style
 
@@ -1667,103 +1671,108 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 #endregion Control add
 
                 // Check if dividend pays exists
-                if (ShareObjectFinalValue.AllDividendEntries.AllDividendsOfTheShareDictionary.Count > 0)
+                if (ShareObjectFinalValue.AllDividendEntries.AllDividendsOfTheShareDictionary.Count <= 0) return;
+
+                // Loop through the years of the dividend pays
+                foreach (
+                    var keyName in ShareObjectFinalValue.AllDividendEntries.AllDividendsOfTheShareDictionary.Keys.Reverse()
+                    )
                 {
-                    // Loop through the years of the dividend pays
-                    foreach (
-                        var keyName in ShareObjectFinalValue.AllDividendEntries.AllDividendsOfTheShareDictionary.Keys.Reverse()
-                        )
+                    #region Add page
+
+                    // Create TabPage
+                    var newTabPage = new TabPage
                     {
-                        #region Add page
+                        // Set TabPage name
+                        Name = keyName,
 
-                        // Create TabPage
-                        var newTabPage = new TabPage
-                        {
-                            // Set TabPage name
-                            Name = keyName,
+                        // Set TabPage caption
+                        Text = keyName + @" (" +
+                               ShareObjectFinalValue.AllDividendEntries.AllDividendsOfTheShareDictionary[keyName]
+                                   .DividendValueYearWithUnitAsStr
+                               + @")"
+                    };
 
-                            // Set TabPage caption
-                            Text = keyName + @" (" +
-                                   ShareObjectFinalValue.AllDividendEntries.AllDividendsOfTheShareDictionary[keyName]
-                                       .DividendValueYearWithUnitAsStr
-                                   + @")"
-                        };
+                    #endregion Add page
 
-                        #endregion Add page
+                    #region Data source, data binding and data grid view
 
-                        #region Data source, data binding and data grid view
+                    // Create Binding source for the dividend data
+                    var bindingSource = new BindingSource
+                    {
+                        DataSource =
+                            ShareObjectFinalValue.AllDividendEntries.AllDividendsOfTheShareDictionary[keyName]
+                                .DividendListYear
+                    };
 
-                        // Create Binding source for the dividend data
-                        var bindingSource = new BindingSource
-                        {
-                            DataSource =
-                                ShareObjectFinalValue.AllDividendEntries.AllDividendsOfTheShareDictionary[keyName]
-                                    .DividendListYear
-                        };
+                    // Create DataGridView
+                    var dataGridViewDividendsOfAYear = new DataGridView
+                    {
+                        Name = keyName,
+                        Dock = DockStyle.Fill,
 
-                        // Create DataGridView
-                        var dataGridViewDividendsOfAYear = new DataGridView
-                        {
-                            Dock = DockStyle.Fill,
-                            DataSource = bindingSource
-                        };
                         // Bind source with dividend values to the DataGridView
+                        DataSource = bindingSource
+                    };
 
-                        #endregion Data source, data binding and data grid view
+                    #endregion Data source, data binding and data grid view
 
-                        #region Events
+                    #region Events
 
-                        // Set the delegate for the DataBindingComplete event
-                        dataGridViewDividendsOfAYear.DataBindingComplete += DataGridViewDividens_DataBindingComplete;
-                        // Set the delegate for the mouse enter event
-                        dataGridViewDividendsOfAYear.MouseEnter += OnDataGridViewDividendsOfAYear_MouseEnter;
-                        // Set the delegate for the mouse leave event
-                        dataGridViewDividendsOfAYear.MouseLeave += OnDataGridViewDividendsOfAYear_MouseLeave;
-                        // Set row select event
-                        dataGridViewDividendsOfAYear.SelectionChanged += DataGridViewDividendsOfAYear_SelectionChanged;
-                        // Set cell decimal click event
-                        dataGridViewDividendsOfAYear.CellContentDoubleClick += DataGridViewDividendsOfAYear_CellContentdecimalClick;
+                    // Set the delegate for the DataBindingComplete event
+                    dataGridViewDividendsOfAYear.DataBindingComplete += DataGridViewDividends_DataBindingComplete;
+                    // Set the delegate for the mouse enter event
+                    dataGridViewDividendsOfAYear.MouseEnter += OnDataGridViewDividendsOfAYear_MouseEnter;
+                    // Set the delegate for the mouse leave event
+                    dataGridViewDividendsOfAYear.MouseLeave += OnDataGridViewDividendsOfAYear_MouseLeave;
+                    // Set row select event
+                    dataGridViewDividendsOfAYear.SelectionChanged += DataGridViewDividendsOfAYear_SelectionChanged;
+                    // Set cell decimal click event
+                    dataGridViewDividendsOfAYear.CellContentDoubleClick += DataGridViewDividendsOfAYear_CellContentClick;
 
-                        #endregion Events
+                    #endregion Events
 
-                        #region Style
+                    #region Style
 
-                        // Advanced configuration DataGridView dividends
-                        DataGridViewCellStyle style = dataGridViewDividendsOfAYear.ColumnHeadersDefaultCellStyle;
-                        style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                    // Advanced configuration DataGridView dividends
+                    dataGridViewDividendsOfAYear.EnableHeadersVisualStyles = false;
+                    // Column header styling
+                    dataGridViewDividendsOfAYear.ColumnHeadersDefaultCellStyle.Alignment =
+                        DataGridViewContentAlignment.MiddleCenter;
+                    dataGridViewDividendsOfAYear.ColumnHeadersDefaultCellStyle.BackColor = SystemColors.ControlLight;
+                    dataGridViewDividendsOfAYear.ColumnHeadersHeight = 25;
+                    dataGridViewDividendsOfAYear.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+                    // Column styling
+                    dataGridViewDividendsOfAYear.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                    // Row styling
+                    dataGridViewDividendsOfAYear.RowHeadersVisible = false;
+                    dataGridViewDividendsOfAYear.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
+                    dataGridViewDividendsOfAYear.RowsDefaultCellStyle.BackColor = Color.White;
+                    dataGridViewDividendsOfAYear.MultiSelect = false;
+                    dataGridViewDividendsOfAYear.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                    // Cell styling
+                    dataGridViewDividendsOfAYear.DefaultCellStyle.SelectionBackColor = Color.Blue;
+                    dataGridViewDividendsOfAYear.DefaultCellStyle.SelectionForeColor = Color.Yellow;
+                    dataGridViewDividendsOfAYear.CellBorderStyle = DataGridViewCellBorderStyle.Single;
+                    dataGridViewDividendsOfAYear.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+                    // Allow styling
+                    dataGridViewDividendsOfAYear.AllowUserToResizeColumns = false;
+                    dataGridViewDividendsOfAYear.AllowUserToResizeRows = false;
+                    dataGridViewDividendsOfAYear.AllowUserToAddRows = false;
+                    dataGridViewDividendsOfAYear.AllowUserToDeleteRows = false;
 
-                        dataGridViewDividendsOfAYear.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-                        dataGridViewDividendsOfAYear.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-                        dataGridViewDividendsOfAYear.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+                    #endregion Style
 
-                        dataGridViewDividendsOfAYear.RowHeadersVisible = false;
-                        dataGridViewDividendsOfAYear.RowsDefaultCellStyle.BackColor = Color.White;
-                        dataGridViewDividendsOfAYear.DefaultCellStyle.SelectionBackColor = Color.Blue;
-                        dataGridViewDividendsOfAYear.DefaultCellStyle.SelectionForeColor = Color.Yellow;
+                    #region Control add
 
-                        dataGridViewDividendsOfAYear.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+                    newTabPage.Controls.Add(dataGridViewDividendsOfAYear);
+                    dataGridViewDividendsOfAYear.Parent = newTabPage;
+                    tabCtrlDividends.Controls.Add(newTabPage);
+                    newTabPage.Parent = tabCtrlDividends;
 
-                        dataGridViewDividendsOfAYear.MultiSelect = false;
-
-                        dataGridViewDividendsOfAYear.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                        dataGridViewDividendsOfAYear.AllowUserToResizeColumns = false;
-                        dataGridViewDividendsOfAYear.AllowUserToResizeRows = false;
-
-                        dataGridViewDividendsOfAYear.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
-                        #endregion Style
-
-                        #region Control add
-
-                        newTabPage.Controls.Add(dataGridViewDividendsOfAYear);
-                        dataGridViewDividendsOfAYear.Parent = newTabPage;
-                        tabCtrlDividends.Controls.Add(newTabPage);
-                        newTabPage.Parent = tabCtrlDividends;
-
-                        #endregion Control add
-                    }
+                    #endregion Control add
                 }
-
+                
                 Thread.CurrentThread.CurrentCulture = CultureInfo.CurrentUICulture;
             }
             catch (Exception ex)
@@ -1786,7 +1795,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// </summary>
         /// <param name="sender">DataGridView</param>
         /// <param name="e">DataGridViewBindingCompleteEventArgs</param>
-        private void DataGridViewDividens_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        private void DataGridViewDividends_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             try
             {
@@ -1800,38 +1809,58 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     switch (i)
                     {
                         case 0:
-                            ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxDividend/TabCtrl/DgvDividendOverview/ColHeader_Date",
-                                    LanguageName);
+                            if (((DataGridView)sender).Name == @"Overview")
+                            {
+                                ((DataGridView)sender).Columns[i].HeaderText =
+                                    Language.GetLanguageTextByXPath(
+                                        @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Date",
+                                        LanguageName);
+                            }
                             break;
                         case 1:
-                            ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxDividend/TabCtrl/DgvDividendOverview/ColHeader_Payout",
-                                    LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
+                            if (((DataGridView)sender).Name == @"Overview")
+                            {
+                                ((DataGridView)sender).Columns[i].HeaderText =
+                                    Language.GetLanguageTextByXPath(
+                                        @"/AddEditFormDividend/GrpBoxDividend/TabCtrl/DgvDividendOverview/ColHeader_Dividend",
+                                        LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
+                            }
+                            else
+                            {
+                                ((DataGridView)sender).Columns[i].HeaderText =
+                                    Language.GetLanguageTextByXPath(
+                                        @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Date",
+                                        LanguageName);
+                            }
                             break;
                         case 2:
                             ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxDividend/TabCtrl/DgvDividendOverview/ColHeader_Dividend",
+                                Language.GetLanguageTextByXPath(
+                                    @"/AddEditFormDividend/GrpBoxDividend/TabCtrl/DgvDividendOverview/ColHeader_Dividend",
                                     LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
                             break;
                         case 3:
                             ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxDividend/TabCtrl/DgvDividendOverview/ColHeader_Yield",
-                                    LanguageName) + @" (" + ShareObject.PercentageUnit + @")";
+                                Language.GetLanguageTextByXPath(
+                                    @"/AddEditFormDividend/GrpBoxDividend/TabCtrl/DgvDividendOverview/ColHeader_Volume",
+                                    LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
                             break;
                         case 4:
-                            ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxDividend/TabCtrl/DgvDividendOverview/ColHeader_Price",
+                            ((DataGridView) sender).Columns[i].HeaderText =
+                                Language.GetLanguageTextByXPath(
+                                    @"/AddEditFormDividend/GrpBoxDividend/TabCtrl/DgvDividendOverview/ColHeader_TaxSum",
                                     LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
                             break;
                         case 5:
-                            ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxDividend/TabCtrl/DgvDividendOverview/ColHeader_Volume",
-                                    LanguageName) + @" (" + ShareObject.PieceUnit + @")";
+                            ((DataGridView) sender).Columns[i].HeaderText =
+                                Language.GetLanguageTextByXPath(
+                                    @"/AddEditFormDividend/GrpBoxDividend/TabCtrl/DgvDividendOverview/ColHeader_Yield",
+                                    LanguageName) + @" (" + ShareObject.PercentageUnit + @")";
                             break;
                         case 6:
-                            ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxDividend/TabCtrl/DgvDividendOverview/ColHeader_Document",
+                            ((DataGridView) sender).Columns[i].HeaderText =
+                                Language.GetLanguageTextByXPath(
+                                    @"/AddEditFormDividend/GrpBoxDividend/TabCtrl/DgvDividendOverview/ColHeader_Document",
                                     LanguageName);
                             break;
                     }
@@ -1842,6 +1871,9 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     ((DataGridView)sender).Rows[0].Selected = false;
                     ((DataGridView)sender).ScrollBars = ScrollBars.Both;
                 }
+
+                if (((DataGridView)sender).Name != @"Overview")
+                    ((DataGridView)sender).Columns[0].Visible = false;
 
                 // Reset the text box values
                 ResetInputValues();
@@ -1884,7 +1916,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     }
                 }
 
-                ResetInputValues();
+                //ResetInputValues();
             }
             catch (Exception ex)
             {
@@ -1926,7 +1958,12 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             // Loop trough the controls of the selected tab page and set focus on the data grid view
             foreach (Control control in tabCtrlDividends.SelectedTab.Controls)
             {
-                (control as DataGridView)?.Focus();
+                if (control is DataGridView view)
+                {
+                    if (view.Rows.Count > 0 && view.Name != @"Overview")
+                        view.Rows[0].Selected = true;
+                    view.Focus();
+                }
             }
         }
 
@@ -1935,7 +1972,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// </summary>
         /// <param name="sender">Data grid view</param>
         /// <param name="e">EventArgs</param>
-        private void tabCtrlDividends_MouseEnter(object sender, EventArgs e)
+        private void TabCtrlDividends_MouseEnter(object sender, EventArgs e)
         {
             if (tabCtrlDividends.SelectedTab == null) return;
 
@@ -1982,9 +2019,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
                     tabCtrlDividends.SelectTab(tabPage);
                     tabPage.Focus();
-
-                    // Deselect rows
-                    DeselectRowsOfDataGridViews(null);
 
                     break;
                 }
@@ -2048,16 +2082,25 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
                 if (((DataGridView) sender).SelectedRows.Count == 1)
                 {
-                    ResetInputValues();
-
                     // Get the currently selected item in the ListBox
                     var curItem = ((DataGridView) sender).SelectedRows;
 
                     // Set selected date
-                    SelectedDate = curItem[0].Cells[0].Value.ToString();
+                    SelectedDate = curItem[0].Cells[1].Value.ToString();
 
-                    // Get DividendObject of the selected DataGridView row
-                    var selectedDividendObject = ShareObjectFinalValue.AllDividendEntries.GetDividendObjectByDateTime(SelectedDate);
+                    // Get list of buys of a year
+                    DateTime.TryParse(SelectedDate, out var dateTime);
+                    var dividendListYear = ShareObjectFinalValue.AllDividendEntries.AllDividendsOfTheShareDictionary[dateTime.Year.ToString()]
+                        .DividendListYear;
+
+                    var index = ((DataGridView)sender).SelectedRows[0].Index;
+
+                    // Set selected Guid
+                    SelectedGuid = dividendListYear[index].Guid;
+
+                    // Get BrokerageObject of the selected DataGridView row
+                    var selectedDividendObject = dividendListYear[index];
+
                     if (selectedDividendObject != null)
                     {
                         if (selectedDividendObject.EnableFc == CheckState.Checked)
@@ -2084,8 +2127,8 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                             cbxBoxDividendFCUnit.SelectedIndex = iIndex;
                         }
 
-                        datePickerDate.Value = Convert.ToDateTime(selectedDividendObject.DateTime);
-                        datePickerTime.Value = Convert.ToDateTime(selectedDividendObject.DateTime);
+                        datePickerDate.Value = Convert.ToDateTime(selectedDividendObject.Date);
+                        datePickerTime.Value = Convert.ToDateTime(selectedDividendObject.Date);
                         txtBoxRate.Text = selectedDividendObject.Rate;
                         txtBoxVolume.Text = selectedDividendObject.Volume;
                         txtBoxTaxAtSource.Text = selectedDividendObject.TaxAtSource;
@@ -2108,7 +2151,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     }
 
                     // Enable button(s)
-                    btnReset.Enabled = true;
                     btnDelete.Enabled = true;
                     // Rename button
                     btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Save", LanguageName);
@@ -2129,7 +2171,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Add", LanguageName);
                     btnAddSave.Image = Resources.black_add;
                     // Disable button(s)
-                    btnReset.Enabled = false;
                     btnDelete.Enabled = false;
 
                     // Rename group box
@@ -2179,7 +2220,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// </summary>
         /// <param name="sender">DataGridView</param>
         /// <param name="e">DataGridViewCellEventArgs</param>
-        private void DataGridViewDividendsOfAYear_CellContentdecimalClick(object sender, DataGridViewCellEventArgs e)
+        private void DataGridViewDividendsOfAYear_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
@@ -2194,17 +2235,17 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
                 // Get the current selected row
                 var curItem = ((DataGridView)sender).SelectedRows;
-                // Get date and time of the selected buy item
-                var strDateTime = curItem[0].Cells[0].Value.ToString();
+                // Get Guid of the selected buy item
+                var strGuid = curItem[0].Cells[0].Value.ToString();
 
                 // Check if a document is set
-                if (curItem[0].Cells[iColumnCount - 1].Value.ToString() == @"-") return;
+                if (curItem[0].Cells[iColumnCount - 1].Value == null) return;
 
                 // Get doc from the dividend with the strDateTime
                 foreach (var temp in ShareObjectFinalValue.AllDividendEntries.GetAllDividendsOfTheShare())
                 {
                     // Check if the dividend date and time is the same as the date and time of the clicked buy item
-                    if (temp.DateTime != strDateTime) continue;
+                    if (temp.Guid != strGuid) continue;
 
                     // Check if the file still exists
                     if (File.Exists(temp.Document))
@@ -2231,8 +2272,8 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                         if (messageBox.ShowDialog() == DialogResult.OK)
                         {
                             // Remove dividend object and add it with no document
-                            if (ShareObjectFinalValue.RemoveDividend(temp.DateTime) &&
-                                ShareObjectFinalValue.AddDividend(temp.CultureInfoFc, temp.EnableFc, temp.ExchangeRatioDec, strDateTime, temp.RateDec, temp.VolumeDec,
+                            if (ShareObjectFinalValue.RemoveDividend(temp.Guid, temp.Date) &&
+                                ShareObjectFinalValue.AddDividend(temp.CultureInfoFc, temp.EnableFc, temp.ExchangeRatioDec, temp.Guid, temp.Date, temp.RateDec, temp.VolumeDec,
                                     temp.TaxAtSourceDec, temp.CapitalGainsTaxDec, temp.SolidarityTaxDec, temp.PriceDec))
                             {
                                 // Set flag to save the share object.

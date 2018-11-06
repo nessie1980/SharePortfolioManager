@@ -20,28 +20,28 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using SharePortfolioManager.Forms.CostsForm.Model;
-using SharePortfolioManager.Forms.CostsForm.View;
+using SharePortfolioManager.Forms.BrokerageForm.Model;
+using SharePortfolioManager.Forms.BrokerageForm.View;
 using System;
 using System.IO;
 
-namespace SharePortfolioManager.Forms.CostsForm.Presenter
+namespace SharePortfolioManager.Forms.BrokerageForm.Presenter
 {
-    internal class PresenterCostEdit
+    internal class PresenterBrokerageEdit
     {
-        private readonly IModelCostEdit _model;
-        private readonly IViewCostEdit _view;
+        private readonly IModelBrokerageEdit _model;
+        private readonly IViewBrokerageEdit _view;
 
-        public PresenterCostEdit(IViewCostEdit view, IModelCostEdit model)
+        public PresenterBrokerageEdit(IViewBrokerageEdit view, IModelBrokerageEdit model)
         {
             _view = view;
             _model = model;
 
             view.PropertyChanged += OnViewChange;
             view.FormatInputValues += OnViewFormatInputValues;
-            view.AddCost += OnAddCost;
-            view.EditCost += OnEditCost;
-            view.DeleteCost += OnDeleteCost;
+            view.AddBrokerage += OnAddBrokerage;
+            view.EditBrokerage += OnEditBrokerage;
+            view.DeleteBrokerage += OnDeleteBrokerage;
         }
 
         private void UpdateViewWithModel()
@@ -49,7 +49,7 @@ namespace SharePortfolioManager.Forms.CostsForm.Presenter
             _view.ErrorCode = _model.ErrorCode;
             _view.Date = _model.Date;
             _view.Time = _model.Time;
-            _view.Costs = _model.Costs;
+            _view.Brokerage = _model.Brokerage;
             _view.Document = _model.Document;
         }
 
@@ -72,13 +72,14 @@ namespace SharePortfolioManager.Forms.CostsForm.Presenter
             _model.ShareObjectMarketValue = _view.ShareObjectMarketValue;
             _model.ShareObjectFinalValue = _view.ShareObjectFinalValue;
             _model.ErrorCode = _view.ErrorCode;
-            _model.UpdateCost = _view.UpdateCost;
+            _model.UpdateBrokerage = _view.UpdateBrokerage;
+            _model.SelectedGuid = _view.SelectedGuid;
             _model.SelectedDate = _view.SelectedDate;
             _model.PartOfABuy = _view.PartOfABuy;
             _model.PartOfASale = _view.PartOfASale;
             _model.Date = _view.Date;
             _model.Time = _view.Time;
-            _model.Costs = _view.Costs;
+            _model.Brokerage = _view.Brokerage;
             _model.Document = _view.Document;
 
             // TODO
@@ -88,13 +89,18 @@ namespace SharePortfolioManager.Forms.CostsForm.Presenter
                 UpdateViewWithModel();
         }
 
-        private void OnAddCost(object sender, EventArgs e)
+        private void OnAddBrokerage(object sender, EventArgs e)
         {
             // Check the input values
-            if (!CheckInputValues(_model.UpdateCost))
+            if (!CheckInputValues(_model.UpdateBrokerage))
             {
+                // Set date 
                 var strDateTime = _model.Date + " " + _model.Time;
-                _model.ErrorCode = _model.ShareObjectFinalValue.AddCost(false, false, strDateTime, _model.CostsDec, _model.Document) ? CostErrorCode.AddSuccessful : CostErrorCode.AddFailed;
+
+                // Generate Guid
+                var strGuid = Guid.NewGuid().ToString();
+
+                _model.ErrorCode = _model.ShareObjectFinalValue.AddBrokerage(_model.SelectedGuid, false, false, strGuid, strDateTime, _model.BrokerageDec, _model.Document) ? BrokerageErrorCode.AddSuccessful : BrokerageErrorCode.AddFailed;
             }
 
             UpdateViewWithModel();
@@ -102,16 +108,20 @@ namespace SharePortfolioManager.Forms.CostsForm.Presenter
             _view.AddEditDeleteFinish();
         }
 
-        private void OnEditCost(object sender, EventArgs e)
+        private void OnEditBrokerage(object sender, EventArgs e)
         {
             // Check the input values
-            if (!CheckInputValues(_model.UpdateCost))
+            if (!CheckInputValues(_model.UpdateBrokerage))
             {
+                // Set date
                 var strDateTime = _model.Date + " " + _model.Time;
 
-                if (_model.ShareObjectFinalValue.RemoveCost(_model.SelectedDate) && _model.ShareObjectFinalValue.AddCost(_model.PartOfABuy, _model.PartOfASale, strDateTime, _model.CostsDec, _model.Document))
+                // Generate Guid
+                var strGuid = Guid.NewGuid().ToString();
+
+                if (_model.ShareObjectFinalValue.RemoveBrokerage(_model.SelectedGuid, _model.SelectedDate) && _model.ShareObjectFinalValue.AddBrokerage(_model.SelectedGuid, _model.PartOfABuy, _model.PartOfASale, strGuid, strDateTime, _model.BrokerageDec, _model.Document))
                 {
-                    _model.ErrorCode = CostErrorCode.EditSuccessful;
+                    _model.ErrorCode = BrokerageErrorCode.EditSuccessful;
 
                     UpdateViewWithModel();
 
@@ -126,10 +136,10 @@ namespace SharePortfolioManager.Forms.CostsForm.Presenter
             _view.AddEditDeleteFinish();
         }
 
-        private void OnDeleteCost(object sender, EventArgs e)
+        private void OnDeleteBrokerage(object sender, EventArgs e)
         {
-            // Delete the cost of the selected date
-            _model.ErrorCode = _model.ShareObjectFinalValue.RemoveCost(_model.SelectedDate) ? CostErrorCode.DeleteSuccessful : CostErrorCode.DeleteFailed;
+            // Delete the brokerage of the selected date
+            _model.ErrorCode = _model.ShareObjectFinalValue.RemoveBrokerage(_model.SelectedGuid, _model.SelectedDate) ? BrokerageErrorCode.DeleteSuccessful : BrokerageErrorCode.DeleteFailed;
 
             // Update error code
             _view.ErrorCode = _model.ErrorCode;
@@ -140,9 +150,9 @@ namespace SharePortfolioManager.Forms.CostsForm.Presenter
         /// <summary>
         /// This function checks if the input is correct
         /// With the flag "bFlagAddEdit" it is chosen if
-        /// a cost should be add or edit.
+        /// a brokerage should be add or edit.
         /// </summary>
-        /// <param name="bFlagEdit">Flag if a cost should be add (true) or edit (false)</param>
+        /// <param name="bFlagEdit">Flag if a brokerage should be add (true) or edit (false)</param>
         /// <returns>Flag if the input values are correct or not</returns>
         private bool CheckInputValues(bool bFlagEdit)
         {
@@ -150,64 +160,39 @@ namespace SharePortfolioManager.Forms.CostsForm.Presenter
             {
                 var bErrorFlag = false;
 
-                _model.ErrorCode = bFlagEdit ? CostErrorCode.EditSuccessful : CostErrorCode.AddSuccessful;
+                _model.ErrorCode = bFlagEdit ? BrokerageErrorCode.EditSuccessful : BrokerageErrorCode.AddSuccessful;
 
-                var strDate = _model.Date + " " + _model.Time;
-
-                // Check if a cost with the given date and time already exists
-                foreach (var costObject in _model.ShareObjectFinalValue.AllCostsEntries.GetAllCostsOfTheShare())
+                // Brokerage input check
+                if (_model.Brokerage == @"")
                 {
-                    // Check if a cost should be added or a cost should be edit
-                    if (!bFlagEdit)
-                    {
-                        // By an Add all dates must be checked
-                        if (costObject.CostDate != strDate) continue;
-
-                        _model.ErrorCode = CostErrorCode.DateExists;
-                        bErrorFlag = true;
-                        break;
-                    }
-
-                    // By an Edit all costs without the edit entry date and time must be checked
-                    if (costObject.CostDate != strDate || _model.SelectedDate == null ||
-                        costObject.CostDate == _model.SelectedDate) continue;
-
-                    _model.ErrorCode = CostErrorCode.DateExists;
-                    bErrorFlag = true;
-                    break;
-                }
-
-                // Costs input check
-                if (_model.Costs == @"" && bErrorFlag == false)
-                {
-                    _model.ErrorCode = CostErrorCode.CostsEmpty;
+                    _model.ErrorCode = BrokerageErrorCode.BrokerageEmpty;
                     bErrorFlag = true;
                 }
-                else if (!decimal.TryParse(_model.Costs, out var decCosts) && bErrorFlag == false)
+                else if (!decimal.TryParse(_model.Brokerage, out var decBrokerage) && bErrorFlag == false)
                 {
-                    _model.ErrorCode = CostErrorCode.CostsWrongFormat;
+                    _model.ErrorCode = BrokerageErrorCode.BrokerageWrongFormat;
                     bErrorFlag = true;
                 }
-                else if (decCosts < 0 && bErrorFlag == false)
+                else if (decBrokerage < 0 && bErrorFlag == false)
                 {
-                    _model.ErrorCode = CostErrorCode.CostsWrongValue;
+                    _model.ErrorCode = BrokerageErrorCode.BrokerageWrongValue;
                     bErrorFlag = true;
                 }
                 else if (bErrorFlag == false)
-                    _model.CostsDec = decCosts;
+                    _model.BrokerageDec = decBrokerage;
 
                 // Check if a given document exists
                 if (_model.Document == null)
                     _model.Document = @"";
                 else if (_model.Document != @"" && _model.Document != @"-" && !Directory.Exists(Path.GetDirectoryName(_model.Document)))
                 {
-                    _model.ErrorCode = CostErrorCode.DocumentDirectoryDoesNotExits;
+                    _model.ErrorCode = BrokerageErrorCode.DocumentDirectoryDoesNotExits;
                     bErrorFlag = true;
                 }
                 else if (_model.Document != @"" && _model.Document != @"-" && !File.Exists(_model.Document) && bErrorFlag == false)
                 {
                     _model.Document = @"";
-                    _model.ErrorCode = CostErrorCode.DocumentFileDoesNotExists;
+                    _model.ErrorCode = BrokerageErrorCode.DocumentFileDoesNotExists;
                     bErrorFlag = true;
                 }
 
@@ -215,7 +200,7 @@ namespace SharePortfolioManager.Forms.CostsForm.Presenter
             }
             catch
             {
-                _model.ErrorCode = CostErrorCode.InputeValuesInvalid;
+                _model.ErrorCode = BrokerageErrorCode.InputeValuesInvalid;
                 return true;
             }
         }

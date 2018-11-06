@@ -28,6 +28,7 @@ using System.Windows.Forms;
 
 namespace SharePortfolioManager
 {
+    [Serializable]
     public class DividendYearOfTheShare
     {
         #region Properties
@@ -35,8 +36,6 @@ namespace SharePortfolioManager
         public CultureInfo DividendCultureInfo { get; internal set; }
 
         public decimal DividendValueYear { get; internal set; } = -1;
-
-        public string DividendValueYearAsStr => Helper.FormatDecimal(DividendValueYear, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", DividendCultureInfo);
 
         public string DividendValueYearWithUnitAsStr => Helper.FormatDecimal(DividendValueYear, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", DividendCultureInfo);
 
@@ -54,7 +53,8 @@ namespace SharePortfolioManager
         /// <param name="cultureInfoFc">Culture info of the share for the foreign currency</param>
         /// <param name="csEnableFc">Flag if the payout is in a foreign currency</param>
         /// <param name="decExchangeRatio">Exchange ratio for the foreign currency</param>
-        /// <param name="strDateTime">Pay date of the new dividend list entry</param>
+        /// <param name="strGuid">Guid of the dividend</param>
+        /// <param name="strDate">Pay date of the new dividend list entry</param>
         /// <param name="decRate">Paid dividend of one share</param>
         /// <param name="decVolume">Share volume at the pay date</param>
         /// <param name="decTaxAtSource">Tax at source value</param>
@@ -63,7 +63,7 @@ namespace SharePortfolioManager
         /// <param name="decSharePrice">Share price at the pay date</param>
         /// <param name="strDoc">Document of the dividend</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddDividendObject(CultureInfo cultureInfo, CultureInfo cultureInfoFc, CheckState csEnableFc, decimal decExchangeRatio, string strDateTime, decimal decRate, decimal decVolume,
+        public bool AddDividendObject(CultureInfo cultureInfo, CultureInfo cultureInfoFc, CheckState csEnableFc, decimal decExchangeRatio, string strGuid, string strDate, decimal decRate, decimal decVolume,
             decimal decTaxAtSource, decimal decCapitalGainsTax, decimal decSolidarityTax, decimal decSharePrice, string strDoc = "")
         {
 #if DEBUG_DIVIDEND
@@ -75,7 +75,7 @@ namespace SharePortfolioManager
                 DividendCultureInfo = cultureInfo;
 
                 // Create new DividendObject
-                var addObject = new DividendObject(cultureInfo, cultureInfoFc, csEnableFc, decExchangeRatio, strDateTime, decRate, decVolume,
+                var addObject = new DividendObject(cultureInfo, cultureInfoFc, csEnableFc, decExchangeRatio, strGuid, strDate, decRate, decVolume,
                     decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decSharePrice, strDoc);
 
                 // Add object to the list
@@ -104,9 +104,9 @@ namespace SharePortfolioManager
         /// This function removes the dividend object with the given pay date from the list
         /// It also recalculates the dividend value and the dividend percent value of the hole year
         /// </summary>
-        /// <param name="strDate">Pay date of the dividend object which should be removed</param>
+        /// <param name="strGuid">Guid of the dividend object which should be removed</param>
         /// <returns>Flag if the remove was successfully</returns>
-        public bool RemoveDividendObject(string strDate)
+        public bool RemoveDividendObject(string strGuid)
         {
 #if DEBUG_DIVIDEND
             Console.WriteLine(@"RemoveDividendObject");
@@ -117,7 +117,7 @@ namespace SharePortfolioManager
                 var iFoundIndex = -1;
                 foreach (var dividendObject in DividendListYear)
                 {
-                    if (dividendObject.DateTime != strDate) continue;
+                    if (dividendObject.Guid != strGuid) continue;
 
                     iFoundIndex =  DividendListYear.IndexOf(dividendObject);
                     break;

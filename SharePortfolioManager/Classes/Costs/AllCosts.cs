@@ -20,27 +20,28 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using SharePortfolioManager.Classes;
 using System;
+using SharePortfolioManager.Classes;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
 namespace SharePortfolioManager
 {
-    public class AllCostsOfTheShare
+    [Serializable]
+    public class AllBrokerageOfTheShare
     {
         #region Properties
 
-        public CultureInfo CostCultureInfo { get; internal set; }
+        public CultureInfo BrokerageCultureInfo { get; internal set; }
 
-        public decimal CostValueTotal { get; internal set; }
+        public decimal BrokerageValueTotal { get; internal set; }
 
-        public string CostValueTotalAsStr => Helper.FormatDecimal(CostValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CostCultureInfo);
+        public string BrokerageValueTotalAsStr => Helper.FormatDecimal(BrokerageValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BrokerageCultureInfo);
 
-        public string CostValueTotalWithUnitAsStr => Helper.FormatDecimal(CostValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CostCultureInfo);
+        public string BrokerageValueTotalWithUnitAsStr => Helper.FormatDecimal(BrokerageValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BrokerageCultureInfo);
 
-        public SortedDictionary<string, CostYearOfTheShare> AllCostsOfTheShareDictionary { get; } = new SortedDictionary<string, CostYearOfTheShare>();
+        public SortedDictionary<string, BrokerageYearOfTheShare> AllBrokerageOfTheShareDictionary { get; } = new SortedDictionary<string, BrokerageYearOfTheShare>();
 
         #endregion Properties
 
@@ -52,60 +53,62 @@ namespace SharePortfolioManager
         /// <param name="cultureInfo"></param>
         public void SetCultureInfo(CultureInfo cultureInfo)
         {
-            CostCultureInfo = cultureInfo;
+            BrokerageCultureInfo = cultureInfo;
         }
 
         /// <summary>
-        /// This function adds a cost to the list
+        /// This function adds a brokerage to the list
         /// </summary>
-        /// <param name="bCostOfABuy">Flag if the cost is part of a buy</param>
-        /// <param name="bCostOfASale">Flag if the cost is part of a Sale</param>
-        /// <param name="strDateTime">Date and time of the costs</param>
-        /// <param name="decValue">Value of the costs</param>
-        /// <param name="strDoc">Document of the costs</param>
+        /// <param name="strGuid">Guid of the brokerage</param>
+        /// <param name="bBrokerageOfABuy">Flag if the brokerage is part of a buy</param>
+        /// <param name="bBrokerageOfASale">Flag if the brokerage is part of a Sale</param>
+        /// <param name="strGuidBuySale">Guid of the buy or sale</param>
+        /// <param name="strDateTime">Date and time of the brokerage</param>
+        /// <param name="decValue">Value of the brokerage</param>
+        /// <param name="strDoc">Document of the brokerage</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddCost(bool bCostOfABuy, bool bCostOfASale, string strDateTime, decimal decValue, string strDoc = "")
+        public bool AddBrokerage(string strGuid, bool bBrokerageOfABuy, bool bBrokerageOfASale, string strGuidBuySale, string strDateTime, decimal decValue, string strDoc = "")
         {
-#if DEBUG_COST
-            Console.WriteLine(@"Add CostYearOfTheShare");
+#if DEBUG_BROKERAGE
+            Console.WriteLine(@"Add BrokerageYearOfTheShare");
 #endif
             try
             {
-                // Get year of the date of the new cost
+                // Get year of the date of the new brokerage
                 GetYearOfDate(strDateTime, out var year);
                 if (year == null)
                     return false;
 
-                // Search if a cost for the given year already exists if not add it
-                if (AllCostsOfTheShareDictionary.TryGetValue(year, out var searchObject))
+                // Search if a brokerage for the given year already exists if not add it
+                if (AllBrokerageOfTheShareDictionary.TryGetValue(year, out var searchObject))
                 {
-                    if (!searchObject.AddCostObject(bCostOfABuy, bCostOfASale, CostCultureInfo, strDateTime, decValue, strDoc))
+                    if (!searchObject.AddBrokerageObject(strGuid, bBrokerageOfABuy, bBrokerageOfASale, BrokerageCultureInfo, strGuidBuySale, strDateTime, decValue, strDoc))
                         return false;
                 }
                 else
                 {
-                    // Add new year cost object for the cost with a new year
-                    var addObject = new CostYearOfTheShare();
-                    // Add cost with the new year to the cost year list
-                    if (addObject.AddCostObject(bCostOfABuy, bCostOfASale, CostCultureInfo, strDateTime, decValue, strDoc))
+                    // Add new year brokerage object for the brokerage with a new year
+                    var addObject = new BrokerageYearOfTheShare();
+                    // Add brokerage with the new year to the brokerage year list
+                    if (addObject.AddBrokerageObject(strGuid, bBrokerageOfABuy, bBrokerageOfASale, BrokerageCultureInfo, strGuidBuySale, strDateTime, decValue, strDoc))
                     {
-                        AllCostsOfTheShareDictionary.Add(year, addObject);
+                        AllBrokerageOfTheShareDictionary.Add(year, addObject);
                     }
                     else
                         return false;
                 }
-                
-                // Calculate the total cost values
-                // Reset total cost values
-                CostValueTotal = 0;
 
-                // Calculate the new total cost value
-                foreach (var calcObject in AllCostsOfTheShareDictionary.Values)
+                // Calculate the total brokerage values
+                // Reset total brokerage values
+                BrokerageValueTotal = 0;
+
+                // Calculate the new total brokerage value
+                foreach (var calcObject in AllBrokerageOfTheShareDictionary.Values)
                 {
-                    CostValueTotal += calcObject.CostValueYear;
+                    BrokerageValueTotal += calcObject.BrokerageValueYear;
                 }
-#if DEBUG_COST
-                Console.WriteLine(@"CostValueTotal:{0}", CostValueTotal);
+#if DEBUG_BROKERAGE
+                Console.WriteLine(@"BrokerageValueTotal:{0}", BrokerageValueTotal);
 #endif
             }
             catch
@@ -117,31 +120,32 @@ namespace SharePortfolioManager
         }
 
         /// <summary>
-        /// This function removes a cost from the cost lists by the given date
+        /// This function removes a brokerage from the brokerage lists by the given date
         /// </summary>
-        /// <param name="strDate">Date of the cost entry which should be removed</param>
+        /// <param name="strGuid">Guid of the brokerage which should be removed</param>
+        /// <param name="strDate">Date of the brokerage entry which should be removed</param>
         /// <returns></returns>
-        public bool RemoveCost(string strDate)
+        public bool RemoveBrokerage(string strGuid, string strDate)
         {
-#if DEBUG_COST
-            Console.WriteLine(@"Remove CostYearOfTheShare");
+#if DEBUG_BROKERAGE
+            Console.WriteLine(@"Remove BrokerageYearOfTheShare");
 #endif
             try
             {
-                // Get year of the date of the new cost
+                // Get year of the date of the new brokerage
                 GetYearOfDate(strDate, out var year);
                 if (year == null)
                     return false;
 
-                // Search if a cost for the given year already exists if not no remove will be made
-                if (AllCostsOfTheShareDictionary.TryGetValue(year, out var searchObject))
+                // Search if a brokerage for the given year already exists if not no remove will be made
+                if (AllBrokerageOfTheShareDictionary.TryGetValue(year, out var searchObject))
                 {
-                    if (!searchObject.RemoveCostObject(strDate))
+                    if (!searchObject.RemoveBrokerageObject(strGuid))
                         return false;
 
-                    if (searchObject.CostListYear.Count == 0)
+                    if (searchObject.BrokerageListYear.Count == 0)
                     {
-                        if (!AllCostsOfTheShareDictionary.Remove(year))
+                        if (!AllBrokerageOfTheShareDictionary.Remove(year))
                             return false;
                     }
                 }
@@ -150,18 +154,18 @@ namespace SharePortfolioManager
                     return false;
                 }
 
-                // Calculate the total cost values
-                // Reset total cost values
-                CostValueTotal = 0;
+                // Calculate the total brokerage values
+                // Reset total brokerage values
+                BrokerageValueTotal = 0;
 
-                // Calculate the new total cost value
-                foreach (var calcObject in AllCostsOfTheShareDictionary.Values)
+                // Calculate the new total brokerage value
+                foreach (var calcObject in AllBrokerageOfTheShareDictionary.Values)
                 {
-                    CostValueTotal += calcObject.CostValueYear;
+                    BrokerageValueTotal += calcObject.BrokerageValueYear;
                 }
 
-#if DEBUG_COST
-                Console.WriteLine(@"CostValueTotal:{0}", CostValueTotal);
+#if DEBUG_BROKERAGE
+                Console.WriteLine(@"BrokerageValueTotal:{0}", BrokerageValueTotal);
 #endif
             }
             catch
@@ -173,57 +177,83 @@ namespace SharePortfolioManager
         }
 
         /// <summary>
-        /// This function creates a list of all cost objects of the share
+        /// This function creates a list of all brokerage objects of the share
         /// </summary>
-        /// <returns>List of CostObjects or a empty list if no CostObjects exists</returns>
-        public List<CostObject> GetAllCostsOfTheShare()
+        /// <returns>List of BrokerageObjects or a empty list if no BrokerageObjects exists</returns>
+        public List<BrokerageObject> GetAllBrokerageOfTheShare()
         {
-            var allCostsOfTheShare = new List<CostObject>();
+            var allBrokerageOfTheShare = new List<BrokerageObject>();
 
-            foreach(var costYearOfTheShareObject in AllCostsOfTheShareDictionary.Values)
+            foreach(var brokerageYearOfTheShareObject in AllBrokerageOfTheShareDictionary.Values)
             {
-                foreach(var costObject in costYearOfTheShareObject.CostListYear)
+                foreach(var brokerageObject in brokerageYearOfTheShareObject.BrokerageListYear)
                 {
-                    allCostsOfTheShare.Add(costObject);
+                    allBrokerageOfTheShare.Add(brokerageObject);
                 }
             }
-            return allCostsOfTheShare;
+            return allBrokerageOfTheShare;
         }
 
         /// <summary>
         /// This function creates a dictionary with the years
-        /// and the total costs of the years
+        /// and the total brokerage of the years
         /// </summary>
-        /// <returns>Dictionary with the years and the costs values of the year or empty dictionary if no year exist.</returns>
-        public Dictionary<string, string> GetAllCostsTotalValues()
+        /// <returns>Dictionary with the years and the brokerage values of the year or empty dictionary if no year exist.</returns>
+        public List<BrokerageYearOfTheShare> GetAllBrokerageTotalValues()
         {
-            var allCostsOfTheShare = new Dictionary<string, string>();
+            var allBrokerageOfTheShare = new List<BrokerageYearOfTheShare>();
 
-            foreach (var key in AllCostsOfTheShareDictionary.Keys)
+            foreach (var key in AllBrokerageOfTheShareDictionary.Keys)
             {
-                allCostsOfTheShare.Add(key, Helper.FormatDecimal(AllCostsOfTheShareDictionary[key].CostValueYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", CostCultureInfo));
+                allBrokerageOfTheShare.Add(AllBrokerageOfTheShareDictionary[key]);
             }
-            return allCostsOfTheShare;
+            return allBrokerageOfTheShare;
         }
 
         /// <summary>
-        /// This function returns the cost object of the given date and time
+        /// This function returns the brokerage object of the given brokerage GUID and date and time
         /// </summary>
+        /// <param name="strGuid">Guid of the brokerage</param>
         /// <param name="strDateTime">Date and time of the buy</param>
-        /// <returns>CostObject or null if the search failed</returns>
-        public CostObject GetCostObjectByDateTime(string strDateTime)
+        /// <returns>BrokerageObject or null if the search failed</returns>
+        public BrokerageObject GetBrokerageObjectByGuid(string strGuid, string strDateTime)
         {
             GetYearOfDate(strDateTime, out var year);
 
             if (year == null) return null;
 
-            if (!AllCostsOfTheShareDictionary.ContainsKey(year)) return null;
+            if (!AllBrokerageOfTheShareDictionary.ContainsKey(year)) return null;
 
-            foreach (var costObject in AllCostsOfTheShareDictionary[year].CostListYear)
+            foreach (var brokerageObject in AllBrokerageOfTheShareDictionary[year].BrokerageListYear)
             {
-                if (costObject.CostDate == strDateTime)
+                if (brokerageObject.Guid == strGuid)
                 {
-                    return costObject;
+                    return brokerageObject;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// This function returns the brokerage object of the buy GUID and given date and time
+        /// </summary>
+        /// <param name="strGuid">Guid of the buy of the brokerage</param>
+        /// <param name="strDateTime">Date and time of the buy</param>
+        /// <returns>BrokerageObject or null if the search failed</returns>
+        public BrokerageObject GetBrokerageObjectByBuyGuid(string strGuid, string strDateTime)
+        {
+            GetYearOfDate(strDateTime, out var year);
+
+            if (year == null) return null;
+
+            if (!AllBrokerageOfTheShareDictionary.ContainsKey(year)) return null;
+
+            foreach (var brokerageObject in AllBrokerageOfTheShareDictionary[year].BrokerageListYear)
+            {
+                if (brokerageObject.GuidBuySale == strGuid)
+                {
+                    return brokerageObject;
                 }
             }
 

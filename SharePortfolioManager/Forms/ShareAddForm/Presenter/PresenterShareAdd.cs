@@ -60,7 +60,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             _view.Volume = _model.Volume;
             _view.SharePrice = _model.SharePrice;
             _view.MarketValue = _model.MarketValue;
-            _view.Costs = _model.Costs;
+            _view.Brokerage = _model.Brokerage;
             _view.Reduction = _model.Reduction;
             _view.GrandTotal = _model.FinalValue;
             _view.WebSite = _model.WebSite;
@@ -99,7 +99,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             _model.Volume = _view.Volume;
             _model.SharePrice = _view.SharePrice;
             _model.MarketValue = _view.MarketValue;
-            _model.Costs = _view.Costs;
+            _model.Brokerage = _view.Brokerage;
             _model.Reduction = _view.Reduction;
             _model.FinalValue = _view.GrandTotal;
             _model.WebSite = _view.WebSite;
@@ -122,11 +122,12 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
         {
             try
             {
-                Helper.CalcBuyValues(_model.Volumedec, _model.SharePricedec, _model.Costsdec,
-                    _model.Reductiondec, out var decMarketValue, out var decPurchaseValue, out var decFinalValue);
+                Helper.CalcBuyValues(_model.Volumedec, _model.SharePricedec, _model.Brokeragedec,
+                    _model.Reductiondec, out var decMarketValue, out var decPurchaseValue, out var decFinalValue, out var decBrokerageReduction);
 
                 _model.MarketValuedec = decMarketValue;
                 _model.FinalValuedec = decFinalValue;
+                _model.Brokeragedec = decBrokerageReduction;
             }
             catch (Exception ex)
             {
@@ -151,6 +152,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                 var tempShareObjectMarketValue = new List<ShareObjectMarketValue>
                 {
                     new ShareObjectMarketValue(
+                        @"",
                         _model.Wkn,
                         strDateTime,
                         _model.Name,
@@ -159,8 +161,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                         DateTime.MinValue,
                         0,
                         _model.Volumedec,
-                        _model.Reductiondec,
-                        _model.Costsdec,
+                        0,
                         _model.WebSite,
                         _model.ImageList,
                         null,
@@ -174,6 +175,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                 var tempShareObjectFinalValue = new List<ShareObjectFinalValue>
                 {
                     new ShareObjectFinalValue(
+                        @"",
                         _model.Wkn,
                         strDateTime,
                         _model.Name,
@@ -182,8 +184,9 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                         DateTime.MinValue,
                         0,
                         _model.Volumedec,
+                        0,
                         _model.Reductiondec,
-                        _model.Costsdec,
+                        _model.Brokeragedec,
                         _model.WebSite,
                         _model.ImageList,
                         null,
@@ -199,46 +202,51 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                     tempShareObjectFinalValue[0].SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList)
                     )
                 {
+                    // Generate Guid
+                    var guid = Guid.NewGuid().ToString();
+
                     // Add market value share
                     _model.ShareObjectListMarketValue.Add(new ShareObjectMarketValue(
-                            _model.Wkn,
-                            strDateTime,
-                            _model.Name,
-                            DateTime.MinValue,
-                            DateTime.MinValue,
-                            DateTime.MinValue,
-                            _model.SharePricedec,
-                            _model.Volumedec,
-                            _model.Reductiondec,
-                            _model.Costsdec,
-                            _model.WebSite,
-                            _model.ImageList,
-                            null,
-                            _model.CultureInfo,
-                            _model.ShareType,
-                            _model.Document
-                            ));
+                        guid,
+                        _model.Wkn,
+                        strDateTime,
+                        _model.Name,
+                        DateTime.MinValue,
+                        DateTime.MinValue,
+                        DateTime.MinValue,
+                        _model.SharePricedec,
+                        _model.Volumedec,
+                        0,
+                        _model.WebSite,
+                        _model.ImageList,
+                        null,
+                        _model.CultureInfo,
+                        _model.ShareType,
+                        _model.Document
+                        ));
 
                     // Add final value share
                     _model.ShareObjectListFinalValue.Add(new ShareObjectFinalValue(
-                            _model.Wkn,
-                            strDateTime,
-                            _model.Name,
-                            DateTime.MinValue,
-                            DateTime.MinValue,
-                            DateTime.MinValue,
-                            _model.SharePricedec,
-                            _model.Volumedec,
-                            _model.Reductiondec,
-                            _model.Costsdec,
-                            _model.WebSite,
-                            _model.ImageList,
-                            null,
-                            _model.CultureInfo,
-                            _model.DividendPayoutInterval,
-                            _model.ShareType,
-                            _model.Document
-                            ));
+                        guid,
+                        _model.Wkn,
+                        strDateTime,
+                        _model.Name,
+                        DateTime.MinValue,
+                        DateTime.MinValue,
+                        DateTime.MinValue,
+                        _model.SharePricedec,
+                        _model.Volumedec,
+                        0,
+                        _model.Reductiondec,
+                        _model.Brokeragedec,
+                        _model.WebSite,
+                        _model.ImageList,
+                        null,
+                        _model.CultureInfo,
+                        _model.DividendPayoutInterval,
+                        _model.ShareType,
+                        _model.Document
+                        ));
 
                     // Set parsing expression to the market value share list
                     _model.ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1].SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList);
@@ -251,9 +259,18 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                     _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1].SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList);
                     _model.ShareObjectFinalValue = _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1];
 
-                    // Cost entry if the costs value is not 0 and add it to the final value list
-                    if (_model.Costsdec > 0)
-                        _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1].AddCost(true, false, strDateTime, _model.Costsdec, _model.Document);
+                    // Brokerage entry if the brokerage value is not 0
+                    if (_model.Brokeragedec > 0)
+                    {
+                        // Generate Guid
+                        var strGuidBrokerage = Guid.NewGuid().ToString();
+
+                        // Calculate brokerage
+                        var brokerage = _model.Brokeragedec - _model.Reductiondec;
+
+                        _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1].AddBrokerage(strGuidBrokerage, true,
+                            false, guid , strDateTime, brokerage, _model.Document);
+                    }
 
                     // Sort portfolio list in order of the share names
                     _model.ShareObjectListFinalValue.Sort(new ShareObjectListComparer());
@@ -389,21 +406,21 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             else if (bErrorFlag == false)
                 _model.SharePricedec = decPrice;
 
-            // Costs input check
-            if (_model.Costs != "" && bErrorFlag == false)
+            // Brokerage input check
+            if (_model.Brokerage != "" && bErrorFlag == false)
             {
-                if (!decimal.TryParse(_model.Costs, out var decCosts))
+                if (!decimal.TryParse(_model.Brokerage, out var decBrokerage))
                 {
-                    _model.ErrorCode = ShareAddErrorCode.CostsWrongFormat;
+                    _model.ErrorCode = ShareAddErrorCode.BrokerageWrongFormat;
                     bErrorFlag = true;
                 }
-                else if (decCosts < 0)
+                else if (decBrokerage < 0)
                 {
-                    _model.ErrorCode = ShareAddErrorCode.CostsWrongValue;
+                    _model.ErrorCode = ShareAddErrorCode.BrokerageWrongValue;
                     bErrorFlag = true;
                 }
                 else
-                    _model.Costsdec = decCosts;
+                    _model.Brokeragedec = decBrokerage;
             }
 
             // Reduction input check

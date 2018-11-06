@@ -24,11 +24,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager
 {
+    [Serializable]
     public class SaleObject
     {
         #region Variables
@@ -69,9 +71,14 @@ namespace SharePortfolioManager
         private decimal _taxSum;
 
         /// <summary>
-        /// Stores the costs of the sale
+        /// Stores the brokerage of the sale
         /// </summary>
-        private decimal _costs = -1;
+        private decimal _brokerage = -1;
+
+        /// <summary>
+        /// Stores the reduction of the sale
+        /// </summary>
+        private decimal _reduction = -1;
 
         #endregion Variables
 
@@ -79,6 +86,10 @@ namespace SharePortfolioManager
 
         [Browsable(false)]
         public CultureInfo SaleCultureInfo { get; internal set; }
+
+        [Browsable(false)]
+        [DisplayName(@"Guid")]
+        public string Guid { get; internal set; }
 
         [Browsable(false)]
         public string Date { get; internal set; }
@@ -105,26 +116,7 @@ namespace SharePortfolioManager
         public string VolumeAsStr => Helper.FormatDecimal(_volume, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
 
         [Browsable(false)]
-        public string VolumeWithUnitAsStr => Helper.FormatDecimal(_volume, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, ShareObject.PieceUnit, SaleCultureInfo);
-
-        [Browsable(false)]
-        public decimal BuyPrice
-        {
-            get => _buyPrice;
-            internal set
-            {
-                _buyPrice = value;
-
-                // Calculate profit / loss and payout
-                CalculateProfitLossAndPayout();
-            }
-        }
-
-        [Browsable(false)]
-        public string BuyPriceAsStr => BuyPrice.ToString("G");
-
-        [Browsable(false)]
-        public string BuyPriceWithUnitAsStr => Helper.FormatDecimal(_buyPrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
+        public List<SaleBuyDetails> SaleBuyDetails = new List<SaleBuyDetails>();
 
         [Browsable(false)]
         public decimal SalePrice
@@ -141,9 +133,6 @@ namespace SharePortfolioManager
 
         [Browsable(false)]
         public string SalePriceAsStr => Helper.FormatDecimal(_salePrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
-
-        [Browsable(false)]
-        public string SalePriceWithUnitAsStr => Helper.FormatDecimal(_salePrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
 
         [Browsable(false)]
         public decimal TaxAtSource
@@ -165,9 +154,6 @@ namespace SharePortfolioManager
         public string TaxAtSourceAsStr => Helper.FormatDecimal(_taxAtSource, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
 
         [Browsable(false)]
-        public string TaxAtSourceWithUnitAsStr => Helper.FormatDecimal(_taxAtSource, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo);
-
-        [Browsable(false)]
         public decimal CapitalGainsTax
         {
             get => _capitalGainsTax;
@@ -185,9 +171,6 @@ namespace SharePortfolioManager
 
         [Browsable(false)]
         public string CapitalGainsTaxAsStr => Helper.FormatDecimal(_capitalGainsTax, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
-
-        [Browsable(false)]
-        public string CapitalGainsTaxWithUnitAsStr => Helper.FormatDecimal(_capitalGainsTax, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo);
 
         [Browsable(false)]
         public decimal SolidarityTax
@@ -209,9 +192,6 @@ namespace SharePortfolioManager
         public string SolidarityTaxAsStr => Helper.FormatDecimal(_solidarityTax, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
 
         [Browsable(false)]
-        public string SolidarityTaxWithUnitAsStr => Helper.FormatDecimal(_solidarityTax, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo);
-
-        [Browsable(false)]
         public decimal TaxSum
         {
             get => _taxSum;
@@ -225,18 +205,12 @@ namespace SharePortfolioManager
         }
 
         [Browsable(false)]
-        public string TaxSumTaxAsStr => Helper.FormatDecimal(_taxSum, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
-
-        [Browsable(false)]
-        public string TaxSumWithUnitAsStr => Helper.FormatDecimal(_taxSum, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo);
-
-        [Browsable(false)]
-        public decimal Costs
+        public decimal Brokerage
         {
-            get => _costs;
+            get => _brokerage;
             internal set
             {
-                _costs = value;
+                _brokerage = value;
 
                 // Calculate profit / loss and payout
                 CalculateProfitLossAndPayout();
@@ -244,20 +218,26 @@ namespace SharePortfolioManager
         }
 
         [Browsable(false)]
-        public string CostsAsStr => Helper.FormatDecimal(_costs, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
+        public string BrokerageAsStr => Helper.FormatDecimal(_brokerage, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
 
         [Browsable(false)]
-        public string CostsWithUnitAsStr => Helper.FormatDecimal(_costs, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo);
+        public decimal Reduction
+        {
+            get => _reduction;
+            internal set
+            {
+                _reduction = value;
+
+                // Calculate profit / loss and payout
+                CalculateProfitLossAndPayout();
+            }
+        }
+
+        [Browsable(false)]
+        public string ReductionAsStr => Helper.FormatDecimal(_reduction, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
 
         [Browsable(false)]
         public decimal PurchaseValue { get; internal set; } = -1;
-
-        [Browsable(true)]
-        [DisplayName("PurchaseValue")]
-        public string PurchaseValueAsStr => Helper.FormatDecimal(PurchaseValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
-
-        [Browsable(false)]
-        public string PurchaseValueWithUnitAsStr => Helper.FormatDecimal(PurchaseValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo);
 
         [Browsable(false)]
         public decimal ProfitLoss { get; internal set; }
@@ -267,16 +247,7 @@ namespace SharePortfolioManager
         public string ProfitLossAsStr => Helper.FormatDecimal(ProfitLoss, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
 
         [Browsable(false)]
-        public string ProfitLossWithUnitAsStr => Helper.FormatDecimal(ProfitLoss, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo);
-
-        [Browsable(false)]
-        public decimal ProfitLossWithoutCosts { get; internal set; }
-
-        [Browsable(false)]
-        public string ProfitLossWithoutCostsAsStr => Helper.FormatDecimal(ProfitLossWithoutCosts, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
-
-        [Browsable(false)]
-        public string ProfitLossWithoutCostsWithUnitAsStr => Helper.FormatDecimal(ProfitLossWithoutCosts, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo);
+        public decimal ProfitLossWithoutBrokerage { get; internal set; }
 
         [Browsable(false)]
         public decimal Payout { get; internal set; }
@@ -286,23 +257,10 @@ namespace SharePortfolioManager
         public string PayoutAsStr => Helper.FormatDecimal(Payout, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
 
         [Browsable(false)]
-        public string PayoutWithUnitAsStr => Helper.FormatDecimal(Payout, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo);
-
-        [Browsable(false)]
-        public decimal PayoutWithoutCosts { get; internal set; }
-
-        [Browsable(false)]
-        public string PayoutWithoutCostsAsStr => Helper.FormatDecimal(PayoutWithoutCosts, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
-
-        [Browsable(false)]
-        public string PayoutWithoutCostsWithUnitAsStr => Helper.FormatDecimal(PayoutWithoutCosts, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit, SaleCultureInfo);
+        public decimal PayoutWithoutBrokerage { get; internal set; }
 
         [Browsable(false)]
         public string Document { get; internal set; }
-
-        [Browsable(true)]
-        [DisplayName(@"Document")]
-        public string DocumentFileName => Helper.GetFileName(Document);
 
         #endregion Properties
 
@@ -312,27 +270,37 @@ namespace SharePortfolioManager
         /// Constructor with parameters
         /// </summary>
         /// <param name="cultureInfo">Culture info of the share</param>
+        /// <param name="strGuid">Guid of the share sale</param>
         /// <param name="strDate">Date of the share sale</param>
         /// <param name="decVolume">Volume of the sale</param>
-        /// <param name="decBuyPrice">Buy price of the share</param>
         /// <param name="decSalePrice">Sale price of the share</param>
+        /// <param name="saleBuyDetails">Buys which are sold for this sale</param>
         /// <param name="decTaxAtSource">Tax at source of the sale</param>
         /// <param name="decCapitalGainsTax">Capital gains tax of the sale</param>
         /// <param name="decSolidarityTax">Solidarity tax of the sale</param>
-        /// <param name="decCosts">Costs of the sale</param>
+        /// <param name="decBrokerage">Brokerage of the sale</param>
+        /// <param name="decReduction">Reduction of the sale</param>
         /// <param name="strDoc">Document of the sale</param>
-        public SaleObject(CultureInfo cultureInfo, string strDate, decimal decVolume, decimal decBuyPrice, decimal decSalePrice, decimal decTaxAtSource, decimal decCapitalGainsTax,
-             decimal decSolidarityTax, decimal decCosts, string strDoc = "")
+        public SaleObject(CultureInfo cultureInfo, string strGuid, string strDate, decimal decVolume, decimal decSalePrice, List<SaleBuyDetails> saleBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
+             decimal decSolidarityTax, decimal decBrokerage, decimal decReduction, string strDoc = "")
         {
+            Guid = strGuid;
             SaleCultureInfo = cultureInfo;
             Date = strDate;
             Volume = decVolume;
-            BuyPrice = decBuyPrice;
+
+            foreach (var saleBuyDetail in saleBuyDetails)
+            {
+                saleBuyDetail.SaleBuyDetailsAdded = true;
+                SaleBuyDetails.Add(saleBuyDetail);
+            }
+
             SalePrice = decSalePrice;
             TaxAtSource = decTaxAtSource;
             CapitalGainsTax = decCapitalGainsTax;
             SolidarityTax = decSolidarityTax;
-            Costs = decCosts;
+            Brokerage = decBrokerage;
+            Reduction = decReduction;
             Document = strDoc;
 
 #if DEBUG_SALE
@@ -345,7 +313,7 @@ namespace SharePortfolioManager
             Console.WriteLine(@"TaxAtSource: {0}", TaxAtSource);
             Console.WriteLine(@"CapitalGainsTax: {0}", CapitalGainsTax);
             Console.WriteLine(@"SolidarityTax: {0}", SolidarityTax);
-            Console.WriteLine(@"Costs: {0}", Costs);
+            Console.WriteLine(@"Brokerage: {0}", Brokerage);
             Console.WriteLine(@"Document: {0}", Document);
             Console.WriteLine(@"");
 #endif
@@ -359,12 +327,13 @@ namespace SharePortfolioManager
             if (Volume <= -1 || SalePrice <= -1) return;
 
             var decSaleValue = Volume * SalePrice;
-            PurchaseValue = Volume * BuyPrice;
 
-            ProfitLossWithoutCosts = decSaleValue - PurchaseValue - TaxSum;
-            ProfitLoss = ProfitLossWithoutCosts - Costs;
-            PayoutWithoutCosts = decSaleValue - TaxSum;
-            Payout = PayoutWithoutCosts - Costs;
+            PurchaseValue = SaleBuyDetails.Sum(saleDetail => saleDetail.DecVolume * saleDetail.DecBuyPrice);
+
+            ProfitLossWithoutBrokerage = decSaleValue - PurchaseValue - TaxSum;
+            ProfitLoss = ProfitLossWithoutBrokerage - Brokerage + Reduction;
+            PayoutWithoutBrokerage = decSaleValue - TaxSum;
+            Payout = PayoutWithoutBrokerage - Brokerage + Reduction;
         }
 
         #endregion Methods
@@ -390,40 +359,88 @@ namespace SharePortfolioManager
         #endregion Methods
     }
 
+    [Serializable]
+    public class SaleBuyDetails
+    {
+        #region Properties
+
+        [Browsable(false)] public CultureInfo SaleBuyDetailsCultureInfo { get; internal set; }
+
+        [Browsable(false)] public bool SaleBuyDetailsAdded { get; internal set; }
+
+        [Browsable(false)] public string StrDateTime { get; internal set; }
+
+        [Browsable(false)] public decimal DecBuyPrice { get; internal set; }
+
+        [Browsable(false)]
+        public string SaleBuyPriceAsStr => Helper.FormatDecimal(DecBuyPrice, Helper.Currencyfivelength, false,
+            Helper.Currencytwofixlength, false, @"", SaleBuyDetailsCultureInfo);
+
+        [Browsable(false)] public decimal DecVolume { get; internal set; }
+
+        [Browsable(false)]
+        public string SaleBuyVolumeAsStr => Helper.FormatDecimal(DecVolume, Helper.Currencyfivelength, false,
+            Helper.Currencytwofixlength, false, @"", SaleBuyDetailsCultureInfo);
+
+        [Browsable(false)] public decimal SaleBuyValue { get; }
+
+        [Browsable(true)]
+        [DisplayName("Data")]
+        public string SaleBuyDetailsData {
+
+            get
+            {
+                const string format = "  {0,10} : {1,20:0.00000} * {2,20:0.00000} = {3,18:0.00}";
+                return  string.Format(format,
+                    StrDateTime,
+                    DecVolume,
+                    DecBuyPrice,
+                    DecVolume * DecBuyPrice
+                    );
+            }
+        }
+
+        [Browsable(false)]
+        public string BuyGuid { get; internal set; }
+
+        #endregion Properties
+
+        #region Methods
+
+        public SaleBuyDetails(CultureInfo cultureInfo, string strDateTime, decimal decVolume, decimal decBuyPrice, string buyGuid)
+        {
+            SaleBuyDetailsCultureInfo = cultureInfo;
+            StrDateTime = strDateTime;
+            DecVolume = decVolume;
+            DecBuyPrice = decBuyPrice;
+            BuyGuid = buyGuid;
+
+            // Calculate buy value
+            SaleBuyValue = decVolume * decBuyPrice;
+        }
+
+        #endregion Methods
+    }
+
+    [Serializable]
     public class ProfitLossObject
     {
-        #region Variables
-
-        #endregion Variables
-
         #region Properties
 
         [Browsable(false)]
         public CultureInfo ProfitLossCultureInfo { get; internal set; }
 
         [Browsable(false)]
-        public string Date { get; internal set; }
+        public string Guid { get; internal set; }
 
-        [Browsable(true)]
-        [DisplayName(@"Date")]
-        public string DateFormatted => Date;
+        [Browsable(false)]
+        public string Date { get; internal set; }
 
         [Browsable(false)]
         public decimal ProfitLoss { get; internal set; }
 
-        [Browsable(true)]
-        [DisplayName(@"ProfitLoss")]
-        public string ProfitLossAsStr => Helper.FormatDecimal(ProfitLoss, Helper.Currencyfivelength, false, Helper.Currencytwofixlength);
-
-        [Browsable(false)]
-        public string ProfitLossWithUnitAsStr => Helper.FormatDecimal(ProfitLoss, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, ShareObject.PercentageUnit);
-
         [Browsable(false)]
         public string Document { get; internal set; }
-
-        [Browsable(true)]
-        [DisplayName(@"Document")]
-        public string DocumentFormatted => Helper.GetFileName(Document);
 
         #endregion Properties
 
@@ -433,19 +450,22 @@ namespace SharePortfolioManager
         /// Constructor with parameters
         /// </summary>
         /// <param name="cultureInfo">Culture info of the share</param>
+        /// <param name="strGuid">Guid of the share sale</param>
         /// <param name="strDate">Date of the share sale</param>
-        /// <param name="decProftiLoss">Value of the profit or loss</param>
+        /// <param name="decProfitLoss">Value of the profit or loss</param>
         /// <param name="strDoc">Document of the sale</param>
-        public ProfitLossObject(CultureInfo cultureInfo, string strDate, decimal decProftiLoss, string strDoc = "")
+        public ProfitLossObject(CultureInfo cultureInfo, string strGuid, string strDate, decimal decProfitLoss, string strDoc = "")
         {
             ProfitLossCultureInfo = cultureInfo;
+            Guid = strGuid;
             Date = strDate;
-            ProfitLoss = decProftiLoss;
+            ProfitLoss = decProfitLoss;
             Document = strDoc;
 
 #if DEBUG_SALE
             Console.WriteLine(@"");
             Console.WriteLine(@"New sale created");
+            Console.WriteLine(@"Guid: {0}", Guid);
             Console.WriteLine(@"Date: {0}", Date);
             Console.WriteLine(@"ProfitLoss: {0}", ProfitLoss);
             Console.WriteLine(@"Document: {0}", Document);

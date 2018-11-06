@@ -63,7 +63,7 @@ namespace SharePortfolioManager
             EWknNumberColumnIndex = 0,
             EShareNameColumnIndex,
             EShareVolumeColumnIndex,
-            EShareCostsDividendColumnIndex,
+            EShareBrokerageDividendColumnIndex,
             ESharePriceColumnIndex,
             ESharePerformanceDayBeforeColumnIndex,
             EImagePerformanceColumnIndex,
@@ -73,8 +73,8 @@ namespace SharePortfolioManager
 
         private enum ColumnIndicesPortfolioFooterFinalValue
         {
-            ELabelCostsDividendIndex = 0,
-            ECostsDividendIndex,
+            ELabelBrokerageDividendIndex = 0,
+            EBrokerageDividendIndex,
             ELabelTotalColumnIndex,
             EPerformanceColumnIndex,
             ESumColumnIndex
@@ -89,21 +89,13 @@ namespace SharePortfolioManager
         private const int WknNumber = 70;
         private const int SharePrice = 110;
         private const int ShareVolume = 125;
-        private const int ShareCostsDividend = 100;
+        private const int ShareBrokerageDividend = 100;
         private const int SharePerformanceDayBefore = 110;
         private const int ImagePerformance = 25;
         private const int SharePerformance = 100;
         private const int ShareSum = 125;
 
         #endregion Column width for the dgvPortfolio and dgvPortfolioFooter
-
-        #region Data binding sources for the data grid views
-
-        #endregion Data binding sources for the data grid views
-
-        #region ImageList with the images for the performance visualization in the data gird views
-
-        #endregion Images for the performance visualization in the data grid views
 
         #endregion Variables
 
@@ -137,8 +129,12 @@ namespace SharePortfolioManager
                 #region dgvProtfolioMarketValue
 
                 // Advanced configuration DataGridView share portfolio
+                dgvPortfolioMarketValue.EnableHeadersVisualStyles = false;
+                dgvPortfolioMarketValue.ColumnHeadersHeight = 30;
+
                 var styleMarketValue = dgvPortfolioMarketValue.ColumnHeadersDefaultCellStyle;
                 styleMarketValue.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                styleMarketValue.BackColor = SystemColors.ControlLight;
 
                 dgvPortfolioMarketValue.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
                 dgvPortfolioMarketValue.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
@@ -158,8 +154,12 @@ namespace SharePortfolioManager
                 #region dgvProtfolioFinalValue
 
                 // Advanced configuration DataGridView share portfolio
+                dgvPortfolioFinalValue.EnableHeadersVisualStyles = false;
+                dgvPortfolioFinalValue.ColumnHeadersHeight = 30;
+
                 var styleFinaleValue = dgvPortfolioFinalValue.ColumnHeadersDefaultCellStyle;
                 styleFinaleValue.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                styleFinaleValue.BackColor = SystemColors.ControlLight;
 
                 dgvPortfolioFinalValue.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
                 dgvPortfolioFinalValue.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
@@ -232,14 +232,14 @@ namespace SharePortfolioManager
 
                 #region dgvPortfolioFooterMarketValue
 
-                var dgvscLabelCostDividendFinalValue = new DataGridViewTextBoxColumn();
-                var dgvscCostsDividendFinalValue = new DataGridViewTextBoxColumn();
+                var dgvscLabelBrokerageDividendFinalValue = new DataGridViewTextBoxColumn();
+                var dgvscBrokerageDividendFinalValue = new DataGridViewTextBoxColumn();
                 var dgvscLabelTotalFinalValue = new DataGridViewTextBoxColumn();
                 var dgvscPerformanceFinalValue = new DataGridViewTextBoxColumn();
                 var dgvscTotalFinalValue = new DataGridViewTextBoxColumn();
 
-                dgvPortfolioFooterFinalValue.Columns.Add(dgvscLabelCostDividendFinalValue);
-                dgvPortfolioFooterFinalValue.Columns.Add(dgvscCostsDividendFinalValue);
+                dgvPortfolioFooterFinalValue.Columns.Add(dgvscLabelBrokerageDividendFinalValue);
+                dgvPortfolioFooterFinalValue.Columns.Add(dgvscBrokerageDividendFinalValue);
                 dgvPortfolioFooterFinalValue.Columns.Add(dgvscLabelTotalFinalValue);
                 dgvPortfolioFooterFinalValue.Columns.Add(dgvscPerformanceFinalValue);
                 dgvPortfolioFooterFinalValue.Columns.Add(dgvscTotalFinalValue);
@@ -323,7 +323,7 @@ namespace SharePortfolioManager
                 UpdateShareDetails(MarketValueOverviewTabSelected);
                 UpdateProfitLossDetails(MarketValueOverviewTabSelected);
                 UpdateDividendDetails(MarketValueOverviewTabSelected);
-                UpdateCostsDetails(MarketValueOverviewTabSelected);
+                UpdateBrokerageDetails(MarketValueOverviewTabSelected);
             }
             catch (Exception ex)
             {
@@ -386,7 +386,7 @@ namespace SharePortfolioManager
                 UpdateShareDetails(MarketValueOverviewTabSelected);
                 UpdateProfitLossDetails(MarketValueOverviewTabSelected);
                 UpdateDividendDetails(MarketValueOverviewTabSelected);
-                UpdateCostsDetails(MarketValueOverviewTabSelected);
+                UpdateBrokerageDetails(MarketValueOverviewTabSelected);
             }
             catch (Exception ex)
             {
@@ -524,7 +524,7 @@ namespace SharePortfolioManager
                         ShareSum;
                 }
 
-                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ECostsDividendIndex].Width = ShareCostsDividend;
+                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.EBrokerageDividendIndex].Width = ShareBrokerageDividend;
                 dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelTotalColumnIndex].Width = columnLabelTotalWidth;
 
                 #endregion dgvPortfolioFooterFinalValue
@@ -708,10 +708,10 @@ namespace SharePortfolioManager
                     {
                         $@"{
                                 Language.GetLanguageTextByXPath(
-                                    @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalCostDividend",
+                                    @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalBrokerageDividend",
                                     LanguageName)
                             }",
-                        ShareObjectListFinalValue[0].CostsDividendPortfolioValueAsStr,
+                        ShareObjectListFinalValue[0].BrokerageDividendPortfolioValueAsStr,
                         $@"{
                                 Language.GetLanguageTextByXPath(
                                     @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalPerformance",
@@ -990,10 +990,10 @@ namespace SharePortfolioManager
                 dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareVolumeColumnIndex].HeaderText =
                     Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Volume", LanguageName);
 
-                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareCostsDividendColumnIndex].Name =
-                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_CostsDividend", LanguageName);
-                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareCostsDividendColumnIndex].HeaderText =
-                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_CostsDividend", LanguageName);
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareBrokerageDividendColumnIndex].Name =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_BrokerageDividend", LanguageName);
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareBrokerageDividendColumnIndex].HeaderText =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_BrokerageDividend", LanguageName);
 
                 dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePriceColumnIndex].Name =
                     Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Price", LanguageName);
@@ -1022,7 +1022,7 @@ namespace SharePortfolioManager
                 dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EWknNumberColumnIndex].Width = WknNumber;
                 dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePriceColumnIndex].Width = SharePrice;
                 dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareVolumeColumnIndex].Width = ShareVolume;
-                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareCostsDividendColumnIndex].Width = ShareCostsDividend;
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareBrokerageDividendColumnIndex].Width = ShareBrokerageDividend;
                 dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePerformanceDayBeforeColumnIndex].Width = SharePerformanceDayBefore;
                 dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EImagePerformanceColumnIndex].Width = ImagePerformance;
                 dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePerformanceColumnIndex].Width = SharePerformance;
@@ -1041,7 +1041,7 @@ namespace SharePortfolioManager
                 dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareVolumeColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePerformanceDayBeforeColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                 dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EImagePerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareCostsDividendColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareBrokerageDividendColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                 dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                 dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareSumColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
@@ -1049,18 +1049,18 @@ namespace SharePortfolioManager
 
                 #region Footer configuration
 
-                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ECostsDividendIndex].Width = ShareCostsDividend;
+                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.EBrokerageDividendIndex].Width = ShareBrokerageDividend;
                 dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.EPerformanceColumnIndex].Width = SharePerformance;
                 dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ESumColumnIndex].Width = ShareSum;
 
-                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelCostsDividendIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ECostsDividendIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelBrokerageDividendIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.EBrokerageDividendIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                 dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelTotalColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                 dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.EPerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                 dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ESumColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
-                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelCostsDividendIndex].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelCostsDividendIndex].FillWeight = 10;
+                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelBrokerageDividendIndex].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelBrokerageDividendIndex].FillWeight = 10;
 
                 #endregion Footer configuration
 
@@ -1668,9 +1668,9 @@ namespace SharePortfolioManager
                 dgvPortfolioFooterFinalValue.Rows[0].Cells[
                     (int)ColumnIndicesPortfolioFooterFinalValue.ESumColumnIndex].Value = ShareObjectListFinalValue[0].PortfolioPurchaseValueAsStrUnit;
 
-                // Set costs and dividend of all shares
+                // Set brokerage and dividend of all shares
                 dgvPortfolioFooterFinalValue.Rows[1].Cells[
-                    (int)ColumnIndicesPortfolioFooterFinalValue.ECostsDividendIndex].Value = ShareObjectListFinalValue[0].CostsDividendPortfolioValueAsStr;
+                    (int)ColumnIndicesPortfolioFooterFinalValue.EBrokerageDividendIndex].Value = ShareObjectListFinalValue[0].BrokerageDividendPortfolioValueAsStr;
 
                 // Set performance of all shares
                 dgvPortfolioFooterFinalValue.Rows[1].Cells[

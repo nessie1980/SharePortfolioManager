@@ -33,6 +33,7 @@ using LanguageHandler;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
 using System.Net;
+using MenuItem = System.Windows.Forms.MenuItem;
 
 namespace SharePortfolioManager.Classes
 {
@@ -62,7 +63,7 @@ namespace SharePortfolioManager.Classes
         #region Currency
 
         /// <summary>
-        /// Stores currency format (price, deposit, costs, buys...)
+        /// Stores currency format (price, deposit, brokerage, buys...)
         /// </summary>
         public const int Currencysixlength = 6;
         public const int Currencyfivelength = 5;
@@ -110,6 +111,7 @@ namespace SharePortfolioManager.Classes
         public const int Volumetwolength = 2;
         public const int Volumeonelength = 1;
 
+        public const int Volumefivefixlength = 5;
         public const int Volumefourfixlength = 4;
         public const int Volumethreefixlength = 3;
         public const int Volumetwofixlength = 2;
@@ -324,76 +326,80 @@ namespace SharePortfolioManager.Classes
                     // GroupBox
                     if (control.GetType() == typeof(GroupBox))
                     {
-                        var castControl = (GroupBox)control;
+                        var castControl = (GroupBox) control;
+                        Console.WriteLine(castControl.Name);
 
                         if (listControlNames.Contains(castControl.Name))
                             castControl.Enabled = flag;
+
                         if (castControl.Controls.Count > 0)
-                        {
                             EnableDisableControls(flag, castControl, listControlNames);
-                        }
                     }
 
                     // Button
                     if (control.GetType() == typeof(Button))
                     {
-                        var castControl = (Button)control;
+                        var castControl = (Button) control;
+                        Console.WriteLine(castControl.Name);
 
                         if (listControlNames.Contains(castControl.Name))
-                        {
                             castControl.Enabled = flag;
-                        }
+
                         if (castControl.Controls.Count > 0)
-                        {
                             EnableDisableControls(flag, castControl, listControlNames);
-                        }
                     }
 
                     // MenuStrip
                     if (control.GetType() == typeof(MenuStrip))
                     {
-                        var castControl = (MenuStrip)control;
+                        var castControl = (MenuStrip) control;
+                        Console.WriteLine(castControl.Name);
 
                         if (listControlNames.Contains(castControl.Name))
-                        {
                             castControl.Enabled = flag;
-                        }
+
                         if (castControl.Controls.Count > 0)
-                        {
                             EnableDisableControls(flag, castControl, listControlNames);
-                        }
+                    }
+
+                    // MenuStrip item
+                    if (control.GetType() == typeof(MenuItem))
+                    {
+                        var castControl = (MenuStrip) control;
+                        Console.WriteLine(castControl.Name);
+
+                        if (listControlNames.Contains(castControl.Name))
+                            castControl.Enabled = flag;
+
+                        if (castControl.Controls.Count > 0)
+                            EnableDisableControls(flag, castControl, listControlNames);
                     }
 
                     // DataGridView
                     if (control.GetType() == typeof(DataGridView))
                     {
-                        var castControl = (DataGridView)control;
+                        var castControl = (DataGridView) control;
+                        Console.WriteLine(castControl.Name);
 
                         if (listControlNames.Contains(castControl.Name))
-                        {
                             castControl.Enabled = flag;
-                        }
+
                         if (castControl.Controls.Count > 0)
-                        {
                             EnableDisableControls(flag, castControl, listControlNames);
-                        }
                     }
 
                     // TabControl
-                    if (control.GetType() == typeof(TabControl))
+                    if (control.GetType() != typeof(TabControl)) continue;
                     {
-                        var castControl = (TabControl)control;
+                        var castControl = (TabControl) control;
+                        Console.WriteLine(castControl.Name);
 
                         if (listControlNames.Contains(castControl.Name))
-                        {
                             castControl.Enabled = flag;
-                        }
-                        if (castControl.Controls.Count > 0)
-                        {
-                            EnableDisableControls(flag, castControl, listControlNames);
-                        }
-                    }
 
+                        if (castControl.Controls.Count > 0)
+                            EnableDisableControls(flag, castControl, listControlNames);
+                    }
                 }
             }
             catch (Exception ex)
@@ -404,6 +410,48 @@ namespace SharePortfolioManager.Classes
         }
 
         #endregion Enable or disable controls
+
+        // TODO
+        //#region Enable or disable item
+
+        ///// <summary>
+        ///// This function allows to enable or disable controls
+        ///// The controls are
+        ///// GroupBox
+        ///// Button
+        ///// MenuStrip
+        ///// DataGridView
+        ///// TabControl
+        ///// </summary>
+        ///// <param name="flag">true = enable / false = disable</param>
+        ///// <param name="givenItem">Object of the item</param>
+        ///// <param name="listControlNames">List with the control names which should be enabled or disabled</param>
+        //public static void EnableDisableItems(bool flag, Control givenItem, List<string> listControlNames)
+        //{
+        //    try
+        //    {
+        //        // TabControl
+        //        if (givenItem.GetType() == typeof(MenuItem))
+        //        {
+        //            var castControl = (MenuItem)givenItem;
+        //            Console.WriteLine(castControl.Name);
+
+        //            if (listControlNames.Contains(castControl.Name))
+        //                castControl.Enabled = flag;
+
+        //            if (castControl.MenuItems.Count > 0)
+        //                EnableDisableItems(flag, castControl, listControlNames);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var message = $"EnableDisableItems()\n\n{ex.Message}";
+        //        MessageBox.Show(message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+
+        //}
+
+        //#endregion Enable or disable item
 
         #region Scroll DataGridView to given index
 
@@ -847,10 +895,13 @@ namespace SharePortfolioManager.Classes
 
 #endregion Get culture info by name
 
-#region Calculate market value, market value minus reduction and market value minus reduction and plus costs
+#region Calculate market value, market value minus reduction and market value minus reduction and plus brokerage
 
-        public static void CalcBuyValues(decimal decVolume, decimal decSharePrice, decimal decCosts, decimal decReduction, out decimal decMarketValue, out decimal decMarketValueReduction, out decimal decMarketValueReductionCosts)
+        public static void CalcBuyValues(decimal decVolume, decimal decSharePrice, decimal decBrokerage, decimal decReduction,
+            out decimal decMarketValue, out decimal decMarketValueReduction, out decimal decMarketValueReductionBrokerage, out decimal decBrokerageOut)
         {
+            decBrokerageOut = 0;
+
             if (decVolume > 0 && decSharePrice > 0)
             {
                 decMarketValue = Math.Round(decVolume * decSharePrice, 2);
@@ -858,21 +909,24 @@ namespace SharePortfolioManager.Classes
                 if (decReduction > 0)
                     decMarketValueReduction -= decReduction;
 
-                decMarketValueReductionCosts = decMarketValueReduction;
-                if (decCosts > 0)
-                    decMarketValueReductionCosts += decCosts;
+                decMarketValueReductionBrokerage = decMarketValueReduction;
+
+                if (decBrokerage > 0)
+                    decMarketValueReductionBrokerage += decBrokerage;
             }
             else
             {
                 decMarketValue = 0;
                 decMarketValueReduction = 0;
-                decMarketValueReductionCosts = 0;
+                decMarketValueReductionBrokerage = 0;
             }
+
+            decBrokerageOut = decBrokerage - decReduction;
         }
 
-#endregion  Calculate market value, market value minus reduction and market value minus reduction and plus costs
+        #endregion  Calculate market value, market value minus reduction and market value minus reduction and plus brokerage
 
-#region URL checker
+        #region URL checker
 
         public static bool UrlChecker(ref string url, int timeout)
         {

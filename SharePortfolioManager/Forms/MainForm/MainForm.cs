@@ -23,14 +23,14 @@
 using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Classes;
+using SharePortfolioManager.Classes.ShareObjects;
+using SharePortfolioManager.Properties;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml;
-using SharePortfolioManager.Classes.ShareObjects;
-using SharePortfolioManager.Classes.ShareObjects;
-using SharePortfolioManager.Properties;
 
 namespace SharePortfolioManager
 {
@@ -53,7 +53,7 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores the context menu for the notify icon
         /// </summary>
-        private ContextMenuStrip _notifyContextMenuStríp;
+        private ContextMenuStrip _notifyContextMenuStrip;
 
         /// <summary>
         /// Stores the name of the final value tab control
@@ -71,9 +71,9 @@ namespace SharePortfolioManager
         private readonly string _tabPageDetailsDividendValue = "tabPgDividends";
 
         /// <summary>
-        /// Stores the name of the costs tab control
+        /// Stores the name of the brokerage tab control
         /// </summary>
-        private readonly string _tabPageDetailsCostsValue = "tabPgCosts";
+        private readonly string _tabPageDetailsBrokerageValue = "tabPgBrokerage";
 
         /// <summary>
         /// Stores the name of the profit / loss value tab control
@@ -159,10 +159,6 @@ namespace SharePortfolioManager
         private const short WebSiteTagCount = 4;
 
         #endregion WebSite configuration
-
-        #region Control names list
-
-        #endregion Control names list
 
         #endregion Variables
 
@@ -278,6 +274,24 @@ namespace SharePortfolioManager
 
         #endregion XML files settings
 
+        #region Portfolio load 
+
+        /// <summary>
+        /// State of the portfolio load
+        /// </summary>
+        public enum EStatePortfolioLoad
+        {
+            FileDoesNotExit = -3,
+            PortfolioListEmtpy = -2,
+            LoadFailed = -1,
+            LoadSucessful = 0,
+
+        }
+
+        public EStatePortfolioLoad PortfolioLoadState;
+        
+        #endregion Portofolio load
+
         #region Flags
 
         public bool InitFlag { get; set; }
@@ -338,7 +352,7 @@ namespace SharePortfolioManager
         private TabPage _tempMarketValues;
         private TabPage _tempProfitLoss;
         private TabPage _tempDividends;
-        private TabPage _tempCosts;
+        private TabPage _tempBrokerage;
 
         #endregion Properties
 
@@ -371,15 +385,10 @@ namespace SharePortfolioManager
                 #region Set controls names for the "enable / disable" list
 
                 EnableDisableControlNames.Add("menuStrip1");
-                EnableDisableControlNames.Add("btnRefreshAll");
-                EnableDisableControlNames.Add("btnRefresh");
-                EnableDisableControlNames.Add("btnAdd");
-                EnableDisableControlNames.Add("btnEdit");
-                EnableDisableControlNames.Add("btnDelete");
-                EnableDisableControlNames.Add("btnClearLogger");
-                EnableDisableControlNames.Add("dataGridViewSharePortfolio");
-                EnableDisableControlNames.Add("dataGridViewSharePortfolioFooter");
-                EnableDisableControlNames.Add("tabCtrlDetails");
+                EnableDisableControlNames.Add("grpBoxSharePortfolio");
+                EnableDisableControlNames.Add("grpBoxShareDetails");
+                EnableDisableControlNames.Add("grpBoxStatusMessage");
+                EnableDisableControlNames.Add("grpBoxUpdateState");
 
                 // Disable all controls
                 Helper.EnableDisableControls(false, this, EnableDisableControlNames);
@@ -456,72 +465,120 @@ namespace SharePortfolioManager
 
                 #endregion Set language values to the control
 
-                #region Read shares from XML
+                #region Read shares from XML / Load portfolio
 
-                Text = Language.GetLanguageTextByXPath(@"/Application/Name", LanguageName)
-                       + @" " + Helper.GetApplicationVersion();
-
-                // Only load portfolio if a portfolio is set in the settings
+                // Only load portfolio if a portfolio file is set in the Settings.xml
                 if (_portfolioFileName != "")
                 {
-                    Text += @" - (" + _portfolioFileName + @")";
-
+                    // Load portfolio
                     LoadPortfolio();
+
+                    // Check portfolio load state
+                    switch (PortfolioLoadState)
+                    {
+                        case EStatePortfolioLoad.LoadSucessful:
+                        {
+                            AddSharesToDataGridViews();
+                            AddShareFooters();
+
+                            // Enable controls
+                            EnableDisableControlNames.Clear();
+                            EnableDisableControlNames.Add("menuStrip1");
+                            EnableDisableControlNames.Add("grpBoxSharePortfolio");
+                            EnableDisableControlNames.Add("grpBoxShareDetails");
+                            EnableDisableControlNames.Add("grpBoxStatusMessage");
+                            EnableDisableControlNames.Add("grpBoxUpdateState");
+                            Helper.EnableDisableControls(true, this, EnableDisableControlNames);
+                        } break;
+                        case EStatePortfolioLoad.PortfolioListEmtpy:
+                        {
+                            // Enable controls
+                            EnableDisableControlNames.Clear();
+                            EnableDisableControlNames.Add("menuStrip1");
+                            EnableDisableControlNames.Add("grpBoxSharePortfolio");
+                            EnableDisableControlNames.Add("grpBoxShareDetails");
+                            EnableDisableControlNames.Add("grpBoxStatusMessage");
+                            EnableDisableControlNames.Add("grpBoxUpdateState");
+                            Helper.EnableDisableControls(true, this, EnableDisableControlNames);
+
+                            // Disable controls
+                            EnableDisableControlNames.Clear();
+                            EnableDisableControlNames.Add("btnRefreshAll");
+                            EnableDisableControlNames.Add("btnRefresh");
+                            EnableDisableControlNames.Add("btnEdit");
+                            EnableDisableControlNames.Add("btnDelete");
+                            Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
+
+                                // Add status message
+                                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                Language.GetLanguageTextByXPath(@"/MainForm/Errors/PortfolioConfigurationListEmpty",
+                                    LanguageName),
+                                Language, LanguageName,
+                                Color.OrangeRed, Logger, (int) EStateLevels.Warning,
+                                (int) EComponentLevels.Application);
+                        } break;
+                        case EStatePortfolioLoad.LoadFailed:
+                        {
+                            // Enable controls
+                            EnableDisableControlNames.Clear();
+                            EnableDisableControlNames.Add("menuStrip1");
+                            Helper.EnableDisableControls(true, this, EnableDisableControlNames);
+
+                            // Disable controls
+                            saveAsToolStripMenuItem.Enabled = false;
+
+                            _portfolioFileName = @"";
+                        } break;
+                        case EStatePortfolioLoad.FileDoesNotExit:
+                        {
+                            // Enable controls
+                            EnableDisableControlNames.Clear();
+                            EnableDisableControlNames.Add("menuStrip1");
+                            Helper.EnableDisableControls(true, this, EnableDisableControlNames);
+
+                            // Disable controls
+                            saveAsToolStripMenuItem.Enabled = false;
+
+                            // Add status message
+                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists1", LanguageName)
+                            + _portfolioFileName
+                            + Language.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists2", LanguageName),
+                            Language, LanguageName,
+                            Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+
+                            _portfolioFileName = @"";
+                        }
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+
+                    // Set portfolio filename to the application caption
+                    Text = Language.GetLanguageTextByXPath(@"/Application/Name", LanguageName)
+                           + @" " + Helper.GetApplicationVersion();
+                    if ( _portfolioFileName !=  @"")
+                    Text += @" - (" + _portfolioFileName + @")";
                 }
-
-                #endregion Read shares from XML
-
-                #region Add items to DataGridView portfolio and set DataGridView portfolio footer
-
-                AddSharesToDataGridViews();
-
-                AddShareFooters();
-
-                #endregion Add items to DataGridView portfolio and set DataGridView portfolio footer
-
-                #region Message if portfolio is empty
-
-                if (PortfolioEmptyFlag && InitFlag)
+                else
                 {
                     // Add status message
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        Language.GetLanguageTextByXPath(@"/MainForm/Errors/PortfolioConfigurationListEmpty", LanguageName),
+                        Language.GetLanguageTextByXPath(@"/MainForm/Errors/PortfolioNotSet", LanguageName),
                         Language, LanguageName,
                         Color.OrangeRed, Logger, (int)EStateLevels.Warning, (int)EComponentLevels.Application);
-                }
 
-                #endregion Message if portfolio is empty
+                    // Disable menustrip menu point "Save as..."
+                    saveAsToolStripMenuItem.Enabled = false;
 
-                #region Enable / disable controls
-
-                // Enable controls if the initialization was correct and a portfolio is set
-                if (ShareObjectListMarketValue.Count != 0 && ShareObjectListFinalValue.Count != 0 && _portfolioFileName != "")
-                {
-                    // Enable controls
-                    EnableDisableControlNames.Add(@"btnRefreshAll");
-                    EnableDisableControlNames.Add(@"btnRefresh");
-                    EnableDisableControlNames.Add(@"btnEdit");
-                    EnableDisableControlNames.Add(@"btnDelete");
-                    EnableDisableControlNames.Add(@"btnClearLogger");
-                    EnableDisableControlNames.Add(@"dgvPortfolio");
-                    EnableDisableControlNames.Add(@"dgvPortfolioFooter");
-                    EnableDisableControlNames.Add(@"tabCtrlDetails");
-
-                    // Enable controls
-                    Helper.EnableDisableControls(true, this, EnableDisableControlNames);
-                }
-
-                // Enable controls if the initialization was correct and a portfolio is set
-                //if (InitFlag && PortfolioFileName == "")
-                //{
-                    // Enable controls
                     EnableDisableControlNames.Clear();
-                    EnableDisableControlNames.Add(@"menuStrip1");
+                    EnableDisableControlNames.Add("menuStrip1");
 
+                    // Disable all controls
                     Helper.EnableDisableControls(true, this, EnableDisableControlNames);
-                //}
+                }
 
-                #endregion Enable / disable controls
+                #endregion Read shares from XML / Load portfolio
 
                 #region Set tab controls names
 
@@ -529,12 +586,12 @@ namespace SharePortfolioManager
                 _tabPageDetailsMarketValue = tabCtrlDetails.TabPages[1].Name;
                 _tabPageDetailsProfitLossValue = tabCtrlDetails.TabPages[2].Name;
                 _tabPageDetailsDividendValue = tabCtrlDetails.TabPages[3].Name;
-                _tabPageDetailsCostsValue = tabCtrlDetails.TabPages[4].Name;
+                _tabPageDetailsBrokerageValue = tabCtrlDetails.TabPages[4].Name;
 
                 _tempFinalValues = tabCtrlDetails.TabPages[_tabPageDetailsFinalValue];
                 _tempMarketValues = tabCtrlDetails.TabPages[_tabPageDetailsMarketValue];
                 _tempDividends = tabCtrlDetails.TabPages[_tabPageDetailsDividendValue];
-                _tempCosts = tabCtrlDetails.TabPages[_tabPageDetailsCostsValue];
+                _tempBrokerage = tabCtrlDetails.TabPages[_tabPageDetailsBrokerageValue];
                 _tempProfitLoss = tabCtrlDetails.TabPages[_tabPageDetailsProfitLossValue];
 
                 #endregion Set tab controls names
@@ -649,11 +706,11 @@ namespace SharePortfolioManager
 
         private void FrmMain_Shown(object sender, EventArgs e)
         {
-            _formIsShown = true;
-
             Size = NormalWindowSize;
             Location = NormalWindowPosition;
             WindowState = MyWindowState;
+
+            _formIsShown = true;
         }
 
         #endregion MainForm shown
@@ -793,16 +850,16 @@ namespace SharePortfolioManager
         /// </summary>
         private void CreateNotifyIconContextMenu()
         {
-            _notifyContextMenuStríp = new ContextMenuStrip();
-            _notifyContextMenuStríp.Items.Add(
+            _notifyContextMenuStrip = new ContextMenuStrip();
+            _notifyContextMenuStrip.Items.Add(
                 Language.GetLanguageTextByXPath(@"/NotifyIcon/Show", LanguageName),
                 Resources.black_show, Show_Click);
-            _notifyContextMenuStríp.Items.Add(
+            _notifyContextMenuStrip.Items.Add(
                 Language.GetLanguageTextByXPath(@"/NotifyIcon/Exit", LanguageName),
                 Resources.black_exit, Exit_Click);
 
             // Set created context menu to the notify icon
-            _notifyIcon.ContextMenuStrip = _notifyContextMenuStríp;
+            _notifyIcon.ContextMenuStrip = _notifyContextMenuStrip;
         }
 
         // When click on notify icon, we bring the form to front

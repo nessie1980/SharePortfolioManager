@@ -54,22 +54,27 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
             // Copy decimal values from the dividend object to the model
             if (_model.DividendObject != null)
             {
-                _model.Date = Convert.ToDateTime(_model.DividendObject.DateTime).ToShortDateString();
-                _model.Time = Convert.ToDateTime(_model.DividendObject.DateTime).ToShortTimeString();
+                _model.Date = Convert.ToDateTime(_model.DividendObject.Date).ToShortDateString();
+                _model.Time = Convert.ToDateTime(_model.DividendObject.Date).ToShortTimeString();
                 _model.EnableFc = _model.DividendObject.EnableFc;
                 _model.ExchangeRatioDec = _model.DividendObject.ExchangeRatioDec;
                 _model.CultureInfoFc = _model.DividendObject.CultureInfoFc;
                 _model.RateDec = _model.DividendObject.RateDec;
                 _model.VolumeDec = _model.DividendObject.VolumeDec;
                 _model.PayoutDec = _model.DividendObject.PayoutDec;
+                _model.Payout = _model.DividendObject.Payout;
                 _model.PayoutFcDec = _model.DividendObject.PayoutFcDec;
+                _model.PayoutFc = _model.DividendObject.PayoutFc;
                 _model.TaxAtSourceDec = _model.DividendObject.TaxAtSourceDec;
                 _model.CapitalGainsTaxDec = _model.DividendObject.CapitalGainsTaxDec;
                 _model.SolidarityTaxDec = _model.DividendObject.SolidarityTaxDec;
                 _model.TaxDec = _model.DividendObject.TaxesSumDec;
+                _model.Tax = _model.DividendObject.TaxesSum;
                 _model.PayoutAfterTaxDec = _model.DividendObject.PayoutWithTaxesDec;
-                _model.YieldDec = _model.DividendObject.YieldDec;
+                _model.PayoutAfterTax = _model.DividendObject.PayoutWithTaxes;
                 _model.PriceDec = _model.DividendObject.PriceDec;
+                _model.YieldDec = _model.DividendObject.YieldDec;
+                _model.Yield = _model.DividendObject.Yield;
                 _model.Document = _model.DividendObject.Document;
             }
 
@@ -105,15 +110,16 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
 
         private void OnViewChange(object sender, EventArgs e)
         {
-            UpdateModelwithView();
+            UpdateModelWithView();
         }
 
-        private void UpdateModelwithView()
+        private void UpdateModelWithView()
         {
             _model.ShareObjectMarketValue = _view.ShareObjectMarketValue;
             _model.ShareObjectFinalValue = _view.ShareObjectFinalValue;
             _model.ErrorCode = _view.ErrorCode;
             _model.UpdateDividend = _view.UpdateDividend;
+            _model.SelectedGuid = _view.SelectedGuid;
             _model.SelectedDate = _view.SelectedDate;
 
             _model.Logger = _view.Logger;
@@ -130,7 +136,9 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
             _model.TaxAtSource = _view.TaxAtSource;
             _model.CapitalGainsTax = _view.CapitalGainsTax;
             _model.SolidarityTax = _view.SolidarityTax;
+            _model.Tax = _view.Tax;
             _model.PayoutAfterTax = _view.PayoutAfterTax;
+            _model.Yield = _view.Yield;
             _model.Price = _view.Price;
             _model.Document = _view.Document;
 
@@ -142,6 +150,7 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
                     _model.CultureInfoFc,
                     _model.EnableFc,
                     _model.ExchangeRatioDec,
+                    _model.SelectedGuid,
                     _model.Date + " " + _model.Time,
                     _model.RateDec,
                     _model.VolumeDec,
@@ -154,7 +163,8 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
             }
             else
             {
-                _model.DividendObject.DateTime = _model.Date + " " + _model.Time;
+                _model.DividendObject.Guid = _model.SelectedGuid;
+                _model.DividendObject.Date = _model.Date + " " + _model.Time;
                 _model.DividendObject.EnableFc = _model.EnableFc;
                 _model.DividendObject.ExchangeRatio = _model.ExchangeRatio;
                 _model.DividendObject.CultureInfoFc = _model.CultureInfoFc;
@@ -180,8 +190,11 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
             {
                 var strDateTime = _model.Date + " " + _model.Time;
 
+                // Generate Guid
+                var strGuid = Guid.NewGuid().ToString();
+
                 // If no error occurred add the new dividend to the share
-                var bAddFlag = _model.ShareObjectFinalValue.AddDividend(_model.CultureInfoFc, _model.EnableFc, _model.ExchangeRatioDec, strDateTime, _model.RateDec, _model.VolumeDec,
+                var bAddFlag = _model.ShareObjectFinalValue.AddDividend(_model.CultureInfoFc, _model.EnableFc, _model.ExchangeRatioDec, strGuid, strDateTime, _model.RateDec, _model.VolumeDec,
                     _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec,
                     _model.PriceDec, _model.Document);
 
@@ -198,9 +211,11 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
             // Check the input values
             if (!CheckInputValues(_model.UpdateDividend))
             {
-                if (_model.ShareObjectFinalValue.RemoveDividend(_model.SelectedDate) &&
+                var strDateTime = _model.Date + " " + _model.Time;
+
+                if (_model.ShareObjectFinalValue.RemoveDividend(_model.SelectedGuid, _model.SelectedDate) &&
                     _model.ShareObjectFinalValue.AddDividend(
-                        _model.CultureInfoFc, _model.EnableFc, _model.ExchangeRatioDec, _model.Date, _model.RateDec, _model.VolumeDec,
+                        _model.CultureInfoFc, _model.EnableFc, _model.ExchangeRatioDec, _model.SelectedGuid, strDateTime, _model.RateDec, _model.VolumeDec,
                         _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, _model.PriceDec, _model.Document)
                         )
                 {
@@ -209,6 +224,10 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
                     _view.AddEditDeleteFinish();
 
                     return;
+                }
+                else
+                {
+                    _model.ErrorCode = DividendErrorCode.EditFailed;
                 }
             }
 
@@ -220,7 +239,7 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
         private void OnDeleteDividend(object sender, EventArgs e)
         {
            // Delete the buy of the selected date
-            _model.ErrorCode = _model.ShareObjectFinalValue.RemoveDividend(_model.SelectedDate) ? DividendErrorCode.DeleteSuccessful : DividendErrorCode.DeleteFailed;
+            _model.ErrorCode = _model.ShareObjectFinalValue.RemoveDividend(_model.SelectedGuid, _model.SelectedDate) ? DividendErrorCode.DeleteSuccessful : DividendErrorCode.DeleteFailed;
 
             // Update error code
             _view.ErrorCode = _model.ErrorCode;
@@ -272,34 +291,10 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
 
             _model.ErrorCode = bFlagEdit ? DividendErrorCode.EditSuccessful : DividendErrorCode.AddSuccessful;
 
-            var strDateTime = _model.Date + " " + _model.Time;
-
             try
             {
-                // Check if a dividend with the given date and time already exists
-                foreach (var dividend in _model.ShareObjectFinalValue.AllDividendEntries.GetAllDividendsOfTheShare())
-                {
-                    if (!bFlagEdit)
-                    {
-                        // By an Add all dates and times must be checked
-                        if (dividend.DateTime != strDateTime) continue;
-
-                        _model.ErrorCode = DividendErrorCode.DateExists;
-                        bErrorFlag = true;
-                        break;
-                    }
-
-                    // By an Edit all dividends without the edit entry date and time must be checked
-                    if (dividend.DateTime != strDateTime || _model.SelectedDate == null ||
-                        dividend.DateTime == _model.SelectedDate) continue;
-
-                    _model.ErrorCode = DividendErrorCode.DateWrongFormat;
-                    bErrorFlag = true;
-                    break;
-                }
-
                 // Check foreign CheckBox
-                if (_model.EnableFc == CheckState.Checked && bErrorFlag == false)
+                if (_model.EnableFc == CheckState.Checked)
                 {
                     // Check if a foreign currency factor is given
                     if (_model.ExchangeRatio == @"")

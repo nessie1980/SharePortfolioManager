@@ -25,10 +25,10 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager
 {
+    [Serializable]
     public class AllSalesOfTheShare
     {
         #region Variables
@@ -46,39 +46,23 @@ namespace SharePortfolioManager
 
         public decimal SalePayoutTotal { get; internal set; }
 
-        public string SalePayoutTotalAsStr => Helper.FormatDecimal(SalePayoutTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
+        public string SalePayoutTotalAsStr => Helper.FormatDecimal(SalePayoutTotal, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
 
-        public string SalePayoutTotalWithUnitAsStr => Helper.FormatDecimal(SalePayoutTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
+        public string SalePayoutTotalWithUnitAsStr => Helper.FormatDecimal(SalePayoutTotal, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
 
-        public decimal SalePayoutWithoutCostsTotal { get; internal set; }
-
-        public string SalePayoutWithoutCostsTotalAsStr => Helper.FormatDecimal(SalePayoutWithoutCostsTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
-
-        public string SalePayoutWithoutCostsTotalWithUnitAsStr => Helper.FormatDecimal(SalePayoutWithoutCostsTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
+        public decimal SalePayoutWithoutBrokerageTotal { get; internal set; }
 
         public decimal SaleVolumeTotal { get; internal set; }
 
-        public string SaleVolumeTotalAsStr => Helper.FormatDecimal(SaleVolumeTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
-
-        public string SaleVolumeTotalWithUnitAsStr => Helper.FormatDecimal(SaleVolumeTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, ShareObject.PieceUnit, SaleCultureInfo);
-
         public decimal SalePurchaseValueTotal { get; internal set; }
-
-        public string SalePurchaseValueTotalAsStr => Helper.FormatDecimal(SalePurchaseValueTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
-
-        public string SalePurchaseValueTotalWithUnitAsStr => Helper.FormatDecimal(SalePurchaseValueTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, ShareObject.PieceUnit, SaleCultureInfo);
 
         public decimal SaleProfitLossTotal { get; internal set; }
 
-        public string SaleProfitLossTotalAsStr => Helper.FormatDecimal(SaleProfitLossTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
+        public string SaleProfitLossTotalAsStr => Helper.FormatDecimal(SaleProfitLossTotal, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
 
-        public string SaleProfitLossTotalWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
+        public string SaleProfitLossTotalWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossTotal, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
 
-        public decimal SaleProfitLossTotalWithoutCosts { get; internal set; }
-
-        public string SaleProfitLossWithoutCostsTotalAsStr => Helper.FormatDecimal(SaleProfitLossTotalWithoutCosts, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
-
-        public string SaleProfitLossTotalWithoutCostsWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossTotalWithoutCosts, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
+        public decimal SaleProfitLossTotalWithoutBrokerage { get; internal set; }
 
         public SortedDictionary<string, SalesYearOfTheShare> AllSalesOfTheShareDictionary => _allSalesOfTheShareDictionary;
 
@@ -98,18 +82,20 @@ namespace SharePortfolioManager
         /// <summary>
         /// This function adds a sale to the list
         /// </summary>
+        /// <param name="strGuid">Guid of the share sale</param>
         /// <param name="strDate">Date of the share sale</param>
         /// <param name="decVolume">Volume of the sale</param>
-        /// <param name="decBuyPrice">Buy price of the share</param>
         /// <param name="decSalePrice">Sale price of the share</param>
+        /// <param name="usedBuyDetails">Details of the used buys for the sale</param>
         /// <param name="decTaxAtSource">Tax at source of the sale</param>
         /// <param name="decCapitalGainsTax">Capital gains tax of the sale</param>
         /// <param name="decSolidarityTax">Solidarity tax of the sale</param>
-        /// <param name="decCosts">Costs of the sale</param>
+        /// <param name="decBrokerage">Brokerage of the sale</param>
+        /// <param name="decReduction">Reduction of the sale</param>
         /// <param name="strDoc">Document of the sale</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddSale(string strDate, decimal decVolume, decimal decBuyPrice, decimal decSalePrice, decimal decTaxAtSource, decimal decCapitalGainsTax,
-             decimal decSolidarityTax, decimal decCosts, string strDoc = "")
+        public bool AddSale(string strGuid, string strDate, decimal decVolume, decimal decSalePrice, List<SaleBuyDetails> usedBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
+             decimal decSolidarityTax, decimal decBrokerage, decimal decReduction, string strDoc = "")
         {
 #if DEBUG_SALE
             Console.WriteLine(@"Add AllSalesOfTheShare");
@@ -124,7 +110,7 @@ namespace SharePortfolioManager
                 // Search if a sale for the given year already exists if not add it
                 if (AllSalesOfTheShareDictionary.TryGetValue(year, out var searchObject))
                 {
-                    if (!searchObject.AddSaleObject(SaleCultureInfo, strDate, decVolume, decBuyPrice, decSalePrice, decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decCosts, strDoc))
+                    if (!searchObject.AddSaleObject(SaleCultureInfo, strGuid, strDate, decVolume, decSalePrice, usedBuyDetails, decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decBrokerage, decReduction, strDoc))
                         return false;
                 }
                 else
@@ -132,7 +118,7 @@ namespace SharePortfolioManager
                     // Add new year sale object for the sale with a new year
                     var addObject = new SalesYearOfTheShare();
                     // Add sale with the new year to the sale year list
-                    if (addObject.AddSaleObject(SaleCultureInfo, strDate, decVolume, decBuyPrice, decSalePrice, decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decCosts, strDoc))
+                    if (addObject.AddSaleObject(SaleCultureInfo, strGuid, strDate, decVolume, decSalePrice, usedBuyDetails ,decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decBrokerage, decReduction, strDoc))
                     {
                         AllSalesOfTheShareDictionary.Add(year, addObject);
                     }
@@ -143,29 +129,29 @@ namespace SharePortfolioManager
                 // Calculate the total sale value, total sale volume and sale profit or loss
                 // Reset total sale value, sale volume and profit or loss
                 SalePayoutTotal = 0;
-                SalePayoutWithoutCostsTotal = 0;
+                SalePayoutWithoutBrokerageTotal = 0;
                 SaleVolumeTotal = 0;
                 SalePurchaseValueTotal = 0;
                 SaleProfitLossTotal = 0;
-                SaleProfitLossTotalWithoutCosts = 0;
+                SaleProfitLossTotalWithoutBrokerage = 0;
 
                 // Calculate the new total sale value, sale volume and profit or loss
                 foreach (var calcObject in AllSalesOfTheShareDictionary.Values)
                 {
                     SalePayoutTotal += calcObject.SalePayoutYear;
-                    SalePayoutWithoutCostsTotal += calcObject.SalePayoutWithoutCostsYear;
+                    SalePayoutWithoutBrokerageTotal += calcObject.SalePayoutWithoutBrokerageYear;
                     SaleVolumeTotal += calcObject.SaleVolumeYear;
                     SalePurchaseValueTotal += calcObject.SalePurchaseValueYear;
                     SaleProfitLossTotal += calcObject.SaleProfitLossYear;
-                    SaleProfitLossTotalWithoutCosts += calcObject.SaleProfitLossWithoutCostsYear;
+                    SaleProfitLossTotalWithoutBrokerage += calcObject.SaleProfitLossWithoutBrokerageYear;
                 }
 #if DEBUG_SALE
                 Console.WriteLine(@"SalePayoutTotal:{0}", SalePayoutTotal);
-                Console.WriteLine(@"SalePayoutWithoutCostsTotal:{0}", SalePayoutWithoutCostsTotal);
+                Console.WriteLine(@"SalePayoutWithoutBrokerageTotal:{0}", SalePayoutWithoutBrokerageTotal);
                 Console.WriteLine(@"SaleVolumeTotal:{0}", SaleVolumeTotal);
                 Console.WriteLine(@"SalePurchaseValueTotal:{0}", SalePurchaseValueTotal);
                 Console.WriteLine(@"SaleProfitLossTotal:{0}", SaleProfitLossTotal);
-                Console.WriteLine(@"SaleProfitLossTotalWithoutCosts:{0}", SaleProfitLossTotalWithoutCosts);
+                Console.WriteLine(@"SaleProfitLossTotalWithoutBrokerage:{0}", SaleProfitLossTotalWithoutBrokerage);
 #endif
             }
             catch
@@ -180,9 +166,10 @@ namespace SharePortfolioManager
         /// This function remove a sale with the given date and time
         /// from the dictionary
         /// </summary>
+        /// <param name="strGuid">Guid of the sale which should be removed</param>
         /// <param name="strDateTime">Date and time of the sale which should be removed</param>
         /// <returns>Flag if the remove was successful</returns>
-        public bool RemoveSale(string strDateTime)
+        public bool RemoveSale(string strGuid, string strDateTime)
         {
 #if DEBUG_SALE
             Console.WriteLine(@"Remove AllSalesOfTheShare");
@@ -214,29 +201,29 @@ namespace SharePortfolioManager
                 // Calculate the total sale value, volume and profit or loss
                 // Reset total sale value, volume and profit or loss
                 SalePayoutTotal = 0;
-                SalePayoutWithoutCostsTotal = 0;
+                SalePayoutWithoutBrokerageTotal = 0;
                 SaleVolumeTotal = 0;
                 SaleProfitLossTotal = 0;
-                SaleProfitLossTotalWithoutCosts = 0;
+                SaleProfitLossTotalWithoutBrokerage = 0;
 
                 // Calculate the new total sale value, volume and profit or loss
                 foreach (var calcObject in AllSalesOfTheShareDictionary.Values)
                 {
                     SalePayoutTotal += calcObject.SalePayoutYear;
-                    SalePayoutWithoutCostsTotal += calcObject.SalePayoutWithoutCostsYear;
+                    SalePayoutWithoutBrokerageTotal += calcObject.SalePayoutWithoutBrokerageYear;
                     SaleVolumeTotal += calcObject.SaleVolumeYear;
                     SalePurchaseValueTotal += calcObject.SalePurchaseValueYear;
                     SaleProfitLossTotal += calcObject.SaleProfitLossYear;
-                    SaleProfitLossTotalWithoutCosts += calcObject.SaleProfitLossWithoutCostsYear;
+                    SaleProfitLossTotalWithoutBrokerage += calcObject.SaleProfitLossWithoutBrokerageYear;
                 }
 
 #if DEBUG_SALE
                 Console.WriteLine(@"SaleValueTotal:{0}", SalePayoutTotal);
-                Console.WriteLine(@"SalePayoutWithoutCostsYear:{0}", SalePayoutWithoutCostsTotal);
+                Console.WriteLine(@"SalePayoutWithoutBrokerageYear:{0}", SalePayoutWithoutBrokerageTotal);
                 Console.WriteLine(@"SaleVolumeTotal:{0}", SaleVolumeTotal);
                 Console.WriteLine(@"SalePurchaseValueTotal:{0}", SalePurchaseValueTotal);
                 Console.WriteLine(@"SaleProfitLossTotal:{0}", SaleProfitLossTotal);
-                Console.WriteLine(@"SaleProfitLossTotalWithoutCosts:{0}", SaleProfitLossTotalWithoutCosts);
+                Console.WriteLine(@"SaleProfitLossTotalWithoutBrokerage:{0}", SaleProfitLossTotalWithoutBrokerage);
 #endif
             }
             catch
@@ -267,9 +254,9 @@ namespace SharePortfolioManager
 
         /// <summary>
         /// This function creates a dictionary with the years
-        /// and the total sales values with costs of the years
+        /// and the total sales values with brokerage of the years
         /// </summary>
-        /// <returns>Dictionary with the years and the sales values with costs of the year or empty dictionary if no year exist.</returns>
+        /// <returns>Dictionary with the years and the sales values with brokerage of the year or empty dictionary if no year exist.</returns>
         public Dictionary<string, string> GetAllSalesTotalValues()
         {
             var allSalesOfTheShare = new Dictionary<string, string>();
@@ -283,25 +270,25 @@ namespace SharePortfolioManager
 
         /// <summary>
         /// This function creates a dictionary with the years
-        /// and the total sales values without costs of the years
+        /// and the total sales values without brokerage of the years
         /// </summary>
-        /// <returns>Dictionary with the years and the sales values without costs of the year or empty dictionary if no year exist.</returns>
-        public Dictionary<string, string> GetAllSalesWithoutCostsTotalValues()
+        /// <returns>Dictionary with the years and the sales values without brokerage of the year or empty dictionary if no year exist.</returns>
+        public Dictionary<string, string> GetAllSalesWithoutBrokerageTotalValues()
         {
             var allSalesOfTheShare = new Dictionary<string, string>();
 
             foreach (var key in AllSalesOfTheShareDictionary.Keys)
             {
-                allSalesOfTheShare.Add(key, Helper.FormatDecimal(AllSalesOfTheShareDictionary[key].SalePayoutWithoutCostsYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo));
+                allSalesOfTheShare.Add(key, Helper.FormatDecimal(AllSalesOfTheShareDictionary[key].SalePayoutWithoutBrokerageYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo));
             }
             return allSalesOfTheShare;
         }
 
         /// <summary>
         /// This function creates a dictionary with the years
-        /// and the total profit / loss value with costs of the years
+        /// and the total profit / loss value with brokerage of the years
         /// </summary>
-        /// <returns>Dictionary with the years and the profit / loss values with costs of the year or empty dictionary if no year exist.</returns>
+        /// <returns>Dictionary with the years and the profit / loss values with brokerage of the year or empty dictionary if no year exist.</returns>
         public Dictionary<string, string> GetAllProfitLossTotalValues()
         {
             var allProfitLossOfTheShare = new Dictionary<string, string>();
@@ -315,16 +302,16 @@ namespace SharePortfolioManager
 
         /// <summary>
         /// This function creates a dictionary with the years
-        /// and the total profit / loss value without costs of the years
+        /// and the total profit / loss value without brokerage of the years
         /// </summary>
         /// <returns>Dictionary with the years and the profit / loss values of the year or empty dictionary if no year exist.</returns>
-        public Dictionary<string, string> GetAllProfitLossWithoutCostsTotalValues()
+        public Dictionary<string, string> GetAllProfitLossWithoutBrokerageTotalValues()
         {
             var allProfitLossOfTheShare = new Dictionary<string, string>();
 
             foreach (var key in AllSalesOfTheShareDictionary.Keys)
             {
-                allProfitLossOfTheShare.Add(key, Helper.FormatDecimal(AllSalesOfTheShareDictionary[key].SaleProfitLossWithoutCostsYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo));
+                allProfitLossOfTheShare.Add(key, Helper.FormatDecimal(AllSalesOfTheShareDictionary[key].SaleProfitLossWithoutBrokerageYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo));
             }
             return allProfitLossOfTheShare;
         }

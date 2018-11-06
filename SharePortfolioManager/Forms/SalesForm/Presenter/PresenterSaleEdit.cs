@@ -24,8 +24,9 @@ using SharePortfolioManager.Classes;
 using SharePortfolioManager.Forms.SalesForm.Model;
 using SharePortfolioManager.Forms.SalesForm.View;
 using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
+using System.Linq;
 
 namespace SharePortfolioManager.Forms.SalesForm.Presenter
 {
@@ -40,25 +41,28 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
             _model = model;
 
             view.PropertyChanged += OnViewChange;
-            view.FormatInputValues += OnViewFormatInputValues;
-            view.AddSale += OnAddSale;
-            view.EditSale += OnEditSale;
-            view.DeleteSale += OnDeleteSale;
-            view.DocumentBrowse += OnDocumentBrowse;
+            view.FormatInputValuesEventHandler += OnViewFormatInputValues;
+            view.AddSaleEventHandler += OnAddSale;
+            view.EditSaleEventHandler += OnEditSale;
+            view.DeleteSaleEventHandler += OnDeleteSale;
+            view.DocumentBrowseEventHandler += OnDocumentBrowse;
         }
 
         private void UpdateViewWithModel()
         {
             _view.ErrorCode = _model.ErrorCode;
             _view.Date = _model.Date;
+            _view.SelectedGuidLast = _model.SelectedGuidLast;
             _view.Time = _model.Time;
             _view.Volume = _model.Volume;
-            _view.BuyPrice = _model.BuyPrice;
             _view.SalePrice = _model.SalePrice;
+            _view.SaleBuyValue = _model.SaleBuyValue;
+            _view.UsedBuyDetails = _model.UsedBuyDetails;
             _view.TaxAtSource = _model.TaxAtSource;
             _view.CapitalGainsTax = _model.CapitalGainsTax;
             _view.SolidarityTax = _model.SolidarityTax;
-            _view.Costs = _model.Costs;
+            _view.Brokerage = _model.Brokerage;
+            _view.Reduction = _model.Reduction;
             _view.ProfitLoss = _model.ProfitLoss;
             _view.Payout = _model.Payout;
             _view.Document = _model.Document;
@@ -75,25 +79,30 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
 
         private void OnViewChange(object sender, EventArgs e)
         {
-            UpdateModelwithView();
+            UpdateModelWithView();
         }
 
-        private void UpdateModelwithView()
+        private void UpdateModelWithView()
         {
             _model.ShareObjectMarketValue = _view.ShareObjectMarketValue;
             _model.ShareObjectFinalValue = _view.ShareObjectFinalValue;
+            _model.ShareObjectCalculation = _view.ShareObjectCalculation;
             _model.ErrorCode = _view.ErrorCode;
+            _model.ShowSales = _view.ShowSales;
+            _model.AddSale = _view.AddSale;
             _model.UpdateSale = _view.UpdateSale;
+            _model.SelectedGuid = _view.SelectedGuid;
+            _model.SelectedGuidLast = _view.SelectedGuidLast;
             _model.SelectedDate = _view.SelectedDate;
             _model.Date = _view.Date;
             _model.Time = _view.Time;
             _model.Volume = _view.Volume;
-            _model.BuyPrice = _view.BuyPrice;
             _model.SalePrice = _view.SalePrice;
             _model.TaxAtSource = _view.TaxAtSource;
             _model.CapitalGainsTax = _view.CapitalGainsTax;
             _model.SolidarityTax = _view.SolidarityTax;
-            _model.Costs = _view.Costs;
+            _model.Brokerage = _view.Brokerage;
+            _model.Reduction = _view.Reduction;
             _model.ProfitLoss = _view.ProfitLoss;
             _model.Payout = _view.Payout;
             _model.Document = _view.Document;
@@ -110,15 +119,35 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
             if (!CheckInputValues(_model.UpdateSale))
             {
                 var bErrorFlag = false;
+
                 var strDateTime = _model.Date + " " + _model.Time;
 
-                // Cost entry if the costs value is not 0
-                if (_model.CostsDec > 0)
-                    bErrorFlag = !_model.ShareObjectFinalValue.AddCost(false, true, strDateTime, _model.CostsDec, _model.Document);
+                // Generate Guid
+                var strGuidBrokerage = Guid.NewGuid().ToString();
 
-                if (_model.ShareObjectFinalValue.AddSale(strDateTime, _model.VolumeDec, _model.BuyPriceDec, _model.SalePriceDec,
-                    _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, _model.CostsDec, _model.Document)
-                    && bErrorFlag == false)
+                // Generate Guid
+                var strGuidSale = Guid.NewGuid().ToString();
+
+                // Brokerage entry if the brokerage value is not 0
+                if (_model.BrokerageDec > 0)
+                    bErrorFlag = !_model.ShareObjectFinalValue.AddBrokerage(strGuidBrokerage, false, true, strGuidSale, strDateTime, _model.BrokerageDec, _model.Document);
+
+                // Update buys with the sale volumes
+                foreach (var usedBuyDetail in _model.UsedBuyDetails)
+                {
+                    // Add sale volume to the sold volume of the buy
+                    _model.ShareObjectMarketValue.AllBuyEntries.AddSaleVolumeByGuid(usedBuyDetail.BuyGuid,
+                        usedBuyDetail.DecVolume);
+                    _model.ShareObjectFinalValue.AllBuyEntries.AddSaleVolumeByGuid(usedBuyDetail.BuyGuid,
+                        usedBuyDetail.DecVolume);
+                }
+
+                // TODO when the sale volume has been changed the UseBuyDetails must be updated
+                if (_model.ShareObjectFinalValue.AddSale(strGuidSale, strDateTime, _model.VolumeDec, _model.SalePriceDec, _model.UsedBuyDetails,
+                        _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, _model.BrokerageDec, _model.ReductionDec, _model.Document) &&
+                    _model.ShareObjectMarketValue.AddSale(strGuidSale, strDateTime, _model.VolumeDec, _model.SalePriceDec, _model.UsedBuyDetails,
+                        _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, _model.BrokerageDec, _model.ReductionDec, _model.Document) &&
+                    bErrorFlag == false)
                 {
                     _model.ErrorCode = SaleErrorCode.AddSuccessful;
                 }
@@ -127,6 +156,8 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                     _model.ErrorCode = SaleErrorCode.AddFailed;
                 }
             }
+
+            _model.UsedBuyDetails.Clear();
 
             UpdateViewWithModel();
 
@@ -140,20 +171,74 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
             {
                 var strDateTime = _model.Date + " " + _model.Time;
 
-                if (_model.ShareObjectFinalValue.RemoveSale(_model.SelectedDate) && _model.ShareObjectFinalValue.AddSale(strDateTime, _model.VolumeDec, _model.BuyPriceDec, _model.SalePriceDec,
-                    _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, _model.CostsDec, _model.Document))
+                // Remove old sale volumes from the old used buys
+                foreach (var sales in _model.ShareObjectFinalValue.AllSaleEntries.AllSalesOfTheShareDictionary.Values)
                 {
-                    var bFlagCostEdit = true;
+                    foreach (var saleYear in sales.SaleListYear)
+                    {
+                        foreach (var buyDetails in saleYear.SaleBuyDetails)
+                        {
+                            foreach (var buysYear in _model.ShareObjectFinalValue.AllBuyEntries
+                                .AllBuysOfTheShareDictionary.Values)
+                            {
+                                foreach (var buy in buysYear.BuyListYear)
+                                {
+                                    if (buy.Guid == buyDetails.BuyGuid)
+                                        buy.VolumeSold -= buyDetails.DecVolume;
+                                }
+                            }
+                        }
+                    }
+                }
+                foreach (var sales in _model.ShareObjectMarketValue.AllSaleEntries.AllSalesOfTheShareDictionary.Values)
+                {
+                    foreach (var saleYear in sales.SaleListYear)
+                    {
+                        foreach (var buyDetails in saleYear.SaleBuyDetails)
+                        {
+                            foreach (var buysYear in _model.ShareObjectMarketValue.AllBuyEntries
+                                .AllBuysOfTheShareDictionary.Values)
+                            {
+                                foreach (var buy in buysYear.BuyListYear)
+                                {
+                                    if (buy.Guid == buyDetails.BuyGuid)
+                                        buy.VolumeSold -= buyDetails.DecVolume;
+                                }
+                            }
+                        }
+                    }
+                }
 
-                    // Check if an old cost entry must be deleted
-                    if (_model.ShareObjectFinalValue.AllCostsEntries.GetCostObjectByDateTime(strDateTime) != null)
-                        bFlagCostEdit = _model.ShareObjectFinalValue.RemoveCost(strDateTime);
+                // Update buys with the sale volumes
+                foreach (var usedBuyDetail in _model.UsedBuyDetails)
+                {
+                    // Add sale volume to the sold volume of the buy
+                    _model.ShareObjectMarketValue.AllBuyEntries.AddSaleVolumeByGuid(usedBuyDetail.BuyGuid,
+                        usedBuyDetail.DecVolume);
+                    _model.ShareObjectFinalValue.AllBuyEntries.AddSaleVolumeByGuid(usedBuyDetail.BuyGuid,
+                        usedBuyDetail.DecVolume);
+                }
 
-                    // Check if a new cost entry must be made
-                    if (bFlagCostEdit && _model.CostsDec > 0)
-                        bFlagCostEdit = _model.ShareObjectFinalValue.AddCost(false, true, strDateTime, _model.CostsDec, _model.Document);
+                // Generate Guid
+                var strGuidBrokerage = Guid.NewGuid().ToString();
 
-                    if (bFlagCostEdit)
+                if (_model.ShareObjectFinalValue.RemoveSale(_model.SelectedGuid, _model.SelectedDate) && _model.ShareObjectFinalValue.AddSale(_model.SelectedGuid, strDateTime, _model.VolumeDec, _model.SalePriceDec,
+                    _model.UsedBuyDetails, _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, _model.BrokerageDec, _model.ReductionDec, _model.Document) &&
+                    _model.ShareObjectMarketValue.RemoveSale(_model.SelectedGuid, _model.SelectedDate) && _model.ShareObjectMarketValue.AddSale(_model.SelectedGuid, strDateTime, _model.VolumeDec, _model.SalePriceDec,
+                        _model.UsedBuyDetails, _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, _model.BrokerageDec, _model.ReductionDec, _model.Document)
+                    )
+                {
+                    var bFlagBrokerageEdit = true;
+
+                    // Check if an old brokerage entry must be deleted
+                    if (_model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByGuid(_model.SelectedGuid, strDateTime) != null)
+                        bFlagBrokerageEdit = _model.ShareObjectFinalValue.RemoveBrokerage(_model.SelectedGuid, strDateTime);
+
+                    // Check if a new brokerage entry must be made
+                    if (bFlagBrokerageEdit && _model.BrokerageDec > 0)
+                        bFlagBrokerageEdit = _model.ShareObjectFinalValue.AddBrokerage(strGuidBrokerage, false, true, _model.SelectedGuid, strDateTime, _model.BrokerageDec, _model.Document);
+
+                    if (bFlagBrokerageEdit)
                     {
                         _model.ErrorCode = SaleErrorCode.EditSuccessful;
                     }
@@ -178,12 +263,12 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
             if (_model.ShareObjectFinalValue.AllSaleEntries.GetAllSalesOfTheShare().Count > 1)
             {
                 // Delete the sale of the selected date
-                if (_model.ShareObjectFinalValue.RemoveSale(_model.SelectedDate))
+                if (_model.ShareObjectFinalValue.RemoveSale(_model.SelectedGuid, _model.SelectedDate))
                 {
-                    // Check if a cost object exists
-                    if (_model.ShareObjectFinalValue.AllCostsEntries.GetCostObjectByDateTime(_model.SelectedDate) != null)
+                    // Check if a brokerage object exists
+                    if (_model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByGuid(_model.SelectedGuid, _model.SelectedDate) != null)
                     {
-                        _model.ErrorCode = _model.ShareObjectFinalValue.RemoveCost(_model.SelectedDate) ? SaleErrorCode.DeleteSuccessful : SaleErrorCode.DeleteFailed;
+                        _model.ErrorCode = _model.ShareObjectFinalValue.RemoveBrokerage(_model.SelectedGuid, _model.SelectedDate) ? SaleErrorCode.DeleteSuccessful : SaleErrorCode.DeleteFailed;
                     }
                     else
                     {
@@ -196,7 +281,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                 }
             }
             else
-                _model.ErrorCode = SaleErrorCode.DeleteFailedUnerasable;
+                _model.ErrorCode = SaleErrorCode.DeleteFailedUnErasable;
 
             // Update error code
             _view.ErrorCode = _model.ErrorCode;
@@ -239,9 +324,118 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
         {
             try
             {
-                var decProfitLoss = (_model.SalePriceDec - _model.BuyPriceDec /*_model.ShareObjectFinalValue.AverageBuyPrice*/) * _model.VolumeDec;
-                var decPayout = decProfitLoss - _model.TaxAtSourceDec - _model.CapitalGainsTaxDec - _model.SolidarityTaxDec - _model.CostsDec;
+                Console.WriteLine(@"UpdateSale: {0}", _model.UpdateSale);
+                Console.WriteLine(@"AddSale:    {0}", _model.AddSale);
 
+                var soldVolume = new decimal(0.0);
+
+                // Remove used buys from the currently selected sale of the calculation object
+                if (_model.UpdateSale && !_model.ShowSales && _model.SelectedGuidLast != _model.SelectedGuid)
+                {
+                    foreach (var salesYear in _model.ShareObjectCalculation.AllSaleEntries.AllSalesOfTheShareDictionary)
+                    {
+                        foreach (var sale in salesYear.Value.SaleListYear)
+                        {
+                            Console.WriteLine(@"sale.Guid:           {0}", sale.Guid);
+                            Console.WriteLine(@"_model.SelectedGuid: {0}", _model.SelectedGuid);
+                            if (sale.Guid != _model.SelectedGuid) continue;
+
+                            foreach (var saleDetail in sale.SaleBuyDetails)
+                            {
+                                foreach (var buysYear in _model.ShareObjectCalculation.AllBuyEntries
+                                    .AllBuysOfTheShareDictionary)
+                                {
+                                    foreach (var buy in buysYear.Value.BuyListYear)
+                                    {
+                                        if (buy.Guid == saleDetail.BuyGuid && buy.VolumeSold > 0)
+                                        {
+                                            if ( buy.VolumeSold >= saleDetail.DecVolume)
+                                                buy.VolumeSold -= saleDetail.DecVolume;
+                                            else
+                                            {
+                                                buy.VolumeSold = 0;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // Save current selected Guid of the sale
+                    _model.SelectedGuidLast = _model.SelectedGuid;
+                }
+
+                // Check if the list for the used buy details is set else clear the list
+                if (!_model.AddSale)
+                {
+                    if (_model.UsedBuyDetails == null)
+                        _model.UsedBuyDetails = new List<SaleBuyDetails>();
+                    else
+                    {
+                        foreach (var modelUsedBuyDetail in _model.UsedBuyDetails)
+                        {
+                            if (!modelUsedBuyDetail.SaleBuyDetailsAdded)
+                            {
+                                // Remove sale volumes from calculation object
+                                _model.ShareObjectCalculation.AllBuyEntries.RemoveSaleVolumeByGuid(
+                                    modelUsedBuyDetail.BuyGuid,
+                                    modelUsedBuyDetail.DecVolume);
+                            }
+                        }
+
+                        _model.UsedBuyDetails.Clear();
+                    }
+                }
+
+                // Loop through the buys and check which buy should be used for this sale
+                foreach (var buy in _model.ShareObjectCalculation.AllBuyEntries.GetAllBuysOfTheShare())
+                {
+                    // Check if this buy is already completely sold
+                    if (buy.VolumeSold == buy.Volume) continue;
+
+                    // Calculate the already sold volume
+                    if (_model.UsedBuyDetails != null && _model.UsedBuyDetails.Count > 0)
+                        soldVolume = _model.UsedBuyDetails.Sum(x => x.DecVolume);
+
+                    // Calculate the volume which has to be sold 
+                    var toBeSold = _model.VolumeDec - soldVolume;
+
+                    // Check if all sale are done
+                    if (toBeSold <= 0) break;
+
+                    // Salable volume
+                    var salableVolume = buy.Volume - buy.VolumeSold;
+
+                    // Check if the remaining buy volume is greater than the volume which must be sold
+                    if (toBeSold >= buy.Volume - buy.VolumeSold)
+                    {
+                        _model.UsedBuyDetails.Add(new SaleBuyDetails(_model.ShareObjectCalculation.CultureInfo,
+                            buy.DateAsStr, salableVolume, buy.SharePrice, buy.Guid));
+
+                        // Add sale volume to the sold volume of the buy
+                        _model.ShareObjectCalculation.AllBuyEntries.AddSaleVolumeByGuid(buy.Guid,
+                            salableVolume);
+                    }
+                    else
+                    {
+                        _model.UsedBuyDetails.Add(new SaleBuyDetails(_model.ShareObjectCalculation.CultureInfo,
+                            buy.DateAsStr, toBeSold, buy.SharePrice, buy.Guid));
+
+                        // Add sale volume to the sold volume of the buy
+                        _model.ShareObjectCalculation.AllBuyEntries.AddSaleVolumeByGuid(buy.Guid,
+                            toBeSold);
+                    }
+
+                    //Console.WriteLine(@"   Buy Date 2: {0}", buy.DateAsStr);
+                    //Console.WriteLine(@"     Volume 2: {0}", buy.Volume);
+                    //Console.WriteLine(@"Sold Volume 2: {0}", buy.VolumeSold);
+                }
+
+                var decProfitLoss = _model.SalePriceDec * _model.VolumeDec - _model.UsedBuyDetails.Sum(x => x.SaleBuyValue);
+                var decPayout = decProfitLoss - _model.TaxAtSourceDec - _model.CapitalGainsTaxDec - _model.SolidarityTaxDec - _model.BrokerageDec + _model.ReductionDec;
+
+                _model.SaleBuyValueDec = Math.Round(_model.UsedBuyDetails.Sum(x => x.SaleBuyValue), 2);
                 _model.ProfitLossDec = decProfitLoss;
                 _model.PayoutDec = decPayout;
             }
@@ -272,41 +466,18 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
 
                 var strDate = _model.Date + " " + _model.Time;
 
-                // Check if a sale with the given date and time already exists
-                foreach (var saleObject in _model.ShareObjectFinalValue.AllSaleEntries.GetAllSalesOfTheShare())
-                {
-                    // Check if a sale should be added or a sale should be edit
-                    if (!bFlagEdit)
-                    {
-                        // By an Add all dates must be checked
-                        if (saleObject.Date != strDate) continue;
-
-                        _model.ErrorCode = SaleErrorCode.DateExists;
-                        bErrorFlag = true;
-                        break;
-                    }
-
-                    // By an Edit all sales without the edit entry date and time must be checked
-                    if (saleObject.Date != strDate || _model.SelectedDate == null ||
-                        saleObject.Date == _model.SelectedDate) continue;
-
-                    _model.ErrorCode = SaleErrorCode.DateExists;
-                    bErrorFlag = true;
-                    break;
-                }
-
                 // Check if a correct volume for the sale is given
-                if (_model.Volume == @"" && bErrorFlag == false)
+                if (_model.Volume == @"")
                 {
                     _model.ErrorCode = SaleErrorCode.VolumeEmpty;
                     bErrorFlag = true;
                 }
-                else if (!decimal.TryParse(_model.Volume, out var decVolume) && bErrorFlag == false)
+                else if (!decimal.TryParse(_model.Volume, out var decVolume))
                 {
                     _model.ErrorCode = SaleErrorCode.VolumeWrongFormat;
                     bErrorFlag = true;
                 }
-                else if (decVolume <= 0 && bErrorFlag == false)
+                else if (decVolume <= 0)
                 {
                     _model.ErrorCode = SaleErrorCode.VolumeWrongValue;
                     bErrorFlag = true;
@@ -315,7 +486,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                 {
                     if (!bFlagEdit)
                     {
-                        if (decVolume > _model.ShareObjectFinalValue.Volume && bErrorFlag == false)
+                        if (decVolume > _model.ShareObjectFinalValue.Volume)
                         {
                             _model.ErrorCode = SaleErrorCode.VolumeMaxValue;
                             bErrorFlag = true;
@@ -350,21 +521,21 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                 else if (bErrorFlag == false)
                     _model.SalePriceDec = decSalePrice;
 
-                // Costs input check
-                if (_model.Costs != "" && bErrorFlag == false)
+                // Brokerage input check
+                if (_model.Brokerage != "" && bErrorFlag == false)
                 {
-                    if (!decimal.TryParse(_model.Costs, out var decCosts))
+                    if (!decimal.TryParse(_model.Brokerage, out var decBrokerage))
                     {
-                        _model.ErrorCode = SaleErrorCode.CostsWrongFormat;
+                        _model.ErrorCode = SaleErrorCode.BrokerageWrongFormat;
                         bErrorFlag = true;
                     }
-                    else if (decCosts < 0)
+                    else if (decBrokerage < 0)
                     {
-                        _model.ErrorCode = SaleErrorCode.CostsWrongValue;
+                        _model.ErrorCode = SaleErrorCode.BrokerageWrongValue;
                         bErrorFlag = true;
                     }
                     else
-                        _model.CostsDec = decCosts;
+                        _model.BrokerageDec = decBrokerage;
                 }
 
                 // Check if a given document exists
