@@ -381,7 +381,6 @@
 					<Date text="Date:" />
 					<Name text="Name:" />
 					<Volume text="Volume:" />
-					<VolumeSold text="Already sold volume:" />
 					<SharePrice text="Market price:" />
 					<MarketValue text="Market value:" />
 					<Brokerage text="Brokerage:" />
@@ -590,7 +589,7 @@
 				<AddFailed text="Buy add has been failed!" />
 				<EditFailed text="Buy changes save has been failed!" />
 				<DeleteFailed text="Delete of the buy entry has been failed!" />
-                <DeleteFailedUnerasable text="This buy is the last existing buy, which only can be delete via a delete of the complete share!" />
+                <DeleteFailedUnErasable text="This buy is the last existing buy, which only can be delete via a delete of the complete share!" />
 				<CancelFailure text="An error occurred while the cancel should be done!" />
 				<CheckInputFailure text="An error occurred while the input check should be done!" />
 				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
@@ -680,7 +679,6 @@
 			<Errors>
 				<ShowFailed text="An error occurred while the sales should be shown!" />
 				<DeselectFailed text="Deselect of the selected rows failed!" />
-				<SearchFailed text="Getting the sale entry for the chosen date failed!" />
 				<RenameColHeaderFailed text="Renaming of the column headers failed!" />
 				<SelectionChangeFailed text="The selection change failed!" />
 				<VolumeEmpty text="Please insert a volume." />
@@ -845,6 +843,8 @@
 				<!-- Labels -->
 				<Labels>
 					<Date text="Date:" />
+					<BuyPart text="Part of a purchase" />
+					<SalePart text="Part of a sale" />
 					<Brokerage text="Brokerage:" />
 					<Document text="Document:" />
 				</Labels>
@@ -898,7 +898,6 @@
 				<ShowFailed text="An error occurred while the brokerage should be shown!" />
 				<DeselectFailed text="Deselect of the selected rows failed!" />
 				<RenameColHeaderFailed text="Renaming of the column headers failed!" />
-				<SearchFailed text="Getting the brokerage entry for the chosen date failed!" />
 				<SelectionChangeFailed text="The selection change failed!" />
 				<BrokerageEmpty text="Please insert a value for the brokerage." />
 				<BrokerageWrongFormat text="Format for the value 'Brokerage' is invalid." />
@@ -1427,7 +1426,6 @@
 					<Date text="Datum:" />
 					<Name text="Name:" />
 					<Volume text="Anteile:" />
-					<VolumeSold text="Bereits verkaufte Anteile:" />
 					<SharePrice text="Kurs:" />
 					<MarketValue text="Kurswert:" />
 					<Brokerage text="Provision:" />
@@ -1636,7 +1634,7 @@
 				<AddFailed text="Hinzufügen des Kaufs ist fehlgeschlagen!" />
 				<EditFailed text="Speichern der Kauf- Änderung ist fehlgeschlagen!" />
 				<DeleteFailed text="Entfernen des Kauf- Eintrags ist fehlgeschlagen!" />
-                <DeleteFailedUnerasable text="Dies ist der letzte existierende Kauf, welcher nur mit dem Löschen der Aktie gelöscht werden kann!" />
+                <DeleteFailedUnErasable text="Dies ist der letzte existierende Kauf, welcher nur mit dem Löschen der Aktie gelöscht werden kann!" />
 				<CancelFailure text="Es ist ein Fehler aufgetreten beim Abbrechen!" />
 				<CheckInputFailure text="Es ist ein Fehler aufgetreten beim der Eingabenprüfung!" />
 				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
@@ -1726,7 +1724,6 @@
 			<Errors>
 				<ShowFailed text="Es trat ein Fehler beim Anzeigen der Verkäufe auf!" />
 				<DeselectFailed text="Deselektieren der selektierten Zeile ist fehlgeschlagen!" />
-				<SearchFailed text="Ermitteln des Verkaufs- Eintrags / der Verkaufs- Einträge für das ausgewählte Datum ist fehlgeschalgen!" />
 				<RenameColHeaderFailed text="Umbennenen der Spalten- Namen ist fehlgeschlagen!" />
 				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
 				<VolumeEmpty text="Bitte geben Sie einen Anteile- Wert ein." />
@@ -1891,6 +1888,8 @@
 				<!-- Labels -->
 				<Labels>
 					<Date text="Datum:" />
+					<BuyPart text="Bestandteil eines Kaufs" />
+					<SalePart text="Bestandteil eines Verkaufs" />
 					<Brokerage text="Kosten:" />
 					<Document text="Dokument:" />
 				</Labels>
@@ -1942,7 +1941,6 @@
 			<Errors>
 				<ShowFailed text="Es trat ein Fehler beim Anzeigen der Kosten auf!" />
 				<DeselectFailed text="Deselektieren der selektierten Zeile ist fehlgeschlagen!" />
-				<SearchFailed text="Ermitteln des Dividenen- Eintrags / der Dividenden- Einträge für das ausgewählte Datum ist fehlgeschalgen!" />
 				<RenameColHeaderFailed text="Umbennenen der Spalten- Namen ist fehlgeschlagen!" />
 				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
 				<BrokerageEmpty text="Bitte geben Sie die Kosten ein." />

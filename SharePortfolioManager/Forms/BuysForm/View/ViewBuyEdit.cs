@@ -599,7 +599,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     txtBoxDocument.Text = @"-";
 
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/ChoseDocumentFailed",
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ChoseDocumentFailed",
                             LanguageName);
                     break;
                 }

@@ -502,6 +502,10 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
                         LanguageName);
                 lblDate.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Labels/Date",
                     LanguageName);
+                chkBoxBuyPart.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Labels/BuyPart",
+                    LanguageName);
+                chkBoxSalePart.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Labels/SalePart",
+                    LanguageName);
                 lblBrokerage.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Labels/Brokerage",
                         LanguageName);
@@ -1477,6 +1481,8 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
                     {
                         datePickerDate.Value = Convert.ToDateTime(selectedBrokerageObject.BrokerageDate);
                         datePickerTime.Value = Convert.ToDateTime(selectedBrokerageObject.BrokerageDate);
+                        chkBoxBuyPart.CheckState = PartOfABuy ? CheckState.Checked : CheckState.Unchecked;
+                        chkBoxSalePart.CheckState = PartOfASale ? CheckState.Checked : CheckState.Unchecked;
                         txtBoxBrokerage.Text = selectedBrokerageObject.BrokerageValueAsStr;
                         txtBoxDocument.Text = selectedBrokerageObject.BrokerageDocument;
                     }
@@ -1484,6 +1490,8 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
                     {
                         datePickerDate.Value = Convert.ToDateTime(SelectedDate);
                         datePickerTime.Value = Convert.ToDateTime(SelectedDate);
+                        chkBoxBuyPart.CheckState = CheckState.Unchecked;
+                        chkBoxSalePart.CheckState = CheckState.Unchecked;
                         txtBoxBrokerage.Text = curItem[0].Cells[1].Value.ToString();
                         txtBoxDocument.Text = curItem[0].Cells[2].Value.ToString();
                     }

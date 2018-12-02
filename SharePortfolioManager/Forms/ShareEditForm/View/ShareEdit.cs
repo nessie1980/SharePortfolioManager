@@ -209,7 +209,10 @@ namespace SharePortfolioManager
                 btnShareSalesEdit.Text =
                     Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Buttons/Sales",
                     LanguageName);
-                lblProfitLoss.Text = Language.GetLanguageTextByXPath(ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotal < 0 ? @"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Loss" : @"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Profit", LanguageName);
+                if (ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotal < 0)
+                lblProfitLoss.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Loss", LanguageName);
+                        else
+                    lblProfitLoss.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Profit", LanguageName);
                 lblDividend.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Dividend",
                     LanguageName);
                 btnShareDividendsEdit.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Buttons/Dividend",

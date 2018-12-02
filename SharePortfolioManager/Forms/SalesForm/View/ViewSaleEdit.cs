@@ -2075,7 +2075,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageSaleEdit,
-                Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SelectionChangeFailed", LanguageName),
+                Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/SelectionChangeFailed", LanguageName),
                 Language, LanguageName,
                 Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                 (int) FrmMain.EComponentLevels.Application);

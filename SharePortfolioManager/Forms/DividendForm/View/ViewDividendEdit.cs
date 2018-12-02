@@ -1888,7 +1888,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                             {
                                 ((DataGridView)sender).Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
-                                        @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Date",
+                                        @"/AddEditFormDividend/GrpBoxDividend/TabCtrl/DgvDividendOverview/ColHeader_Date",
                                         LanguageName);
                             }
                             break;
