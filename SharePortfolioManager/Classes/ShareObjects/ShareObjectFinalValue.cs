@@ -31,6 +31,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using System.Xml;
+using SharePortfolioManager.Classes.Sales;
 using WebParser;
 
 namespace SharePortfolioManager.Classes.ShareObjects
@@ -949,7 +950,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                     PurchaseValue += saleObject.PurchaseValue;
                     SalePurchaseValueTotal -= saleObject.PurchaseValue;
 
-                    // Remove sale by date and time
+                    // Remove sale by Guid and DateTime
                     if (!AllSaleEntries.RemoveSale(strGuid, strDateTime))
                         return false;
 

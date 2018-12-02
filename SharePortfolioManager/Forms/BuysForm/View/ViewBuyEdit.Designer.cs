@@ -263,6 +263,7 @@
             this.datePickerDate.Size = new System.Drawing.Size(241, 22);
             this.datePickerDate.TabIndex = 0;
             this.datePickerDate.ValueChanged += new System.EventHandler(this.OnDatePickerDate_ValueChanged);
+            this.datePickerDate.Enter += new System.EventHandler(this.OnDatePickerDate_Enter);
             this.datePickerDate.Leave += new System.EventHandler(this.OnDatePickerDate_Leave);
             // 
             // datePickerTime
@@ -277,6 +278,7 @@
             this.datePickerTime.Size = new System.Drawing.Size(241, 22);
             this.datePickerTime.TabIndex = 1;
             this.datePickerTime.ValueChanged += new System.EventHandler(this.OnDatePickerTime_ValueChanged);
+            this.datePickerTime.Enter += new System.EventHandler(this.OnDatePickerTime_Enter);
             this.datePickerTime.Leave += new System.EventHandler(this.OnDatePickerTime_Leave);
             // 
             // txtBoxVolume
@@ -291,6 +293,7 @@
             this.txtBoxVolume.Size = new System.Drawing.Size(484, 22);
             this.txtBoxVolume.TabIndex = 2;
             this.txtBoxVolume.TextChanged += new System.EventHandler(this.OnTxtBoxAddVolume_TextChanged);
+            this.txtBoxVolume.Enter += new System.EventHandler(this.OnTxtBoxVolume_Enter);
             this.txtBoxVolume.Leave += new System.EventHandler(this.OnTxtBoxVolume_Leave);
             // 
             // lblVolume
@@ -420,6 +423,7 @@
             this.txtBoxDocument.TextChanged += new System.EventHandler(this.OnTxtBoxDocument_TextChanged);
             this.txtBoxDocument.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragDrop);
             this.txtBoxDocument.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragEnter);
+            this.txtBoxDocument.Enter += new System.EventHandler(this.OnTxtBoxDocument_Enter);
             this.txtBoxDocument.Leave += new System.EventHandler(this.OnTxtBoxDocument_Leave);
             // 
             // txtBoxFinalValue
@@ -450,6 +454,7 @@
             this.txtBoxReduction.Size = new System.Drawing.Size(484, 22);
             this.txtBoxReduction.TabIndex = 5;
             this.txtBoxReduction.TextChanged += new System.EventHandler(this.OnTxtBoxReduction_TextChanged);
+            this.txtBoxReduction.Enter += new System.EventHandler(this.OnTxtBoxReduction_Enter);
             this.txtBoxReduction.Leave += new System.EventHandler(this.OnTxtBoxReduction_Leave);
             // 
             // txtBoxBrokerage
@@ -464,6 +469,7 @@
             this.txtBoxBrokerage.Size = new System.Drawing.Size(484, 22);
             this.txtBoxBrokerage.TabIndex = 4;
             this.txtBoxBrokerage.TextChanged += new System.EventHandler(this.OnTxtBoxBrokerage_TextChanged);
+            this.txtBoxBrokerage.Enter += new System.EventHandler(this.OnTxtBoxBrokerage_Enter);
             this.txtBoxBrokerage.Leave += new System.EventHandler(this.OnTxtBoxBrokerage_Leave);
             // 
             // txtBoxMarketValue
@@ -494,6 +500,7 @@
             this.txtBoxPrice.Size = new System.Drawing.Size(484, 22);
             this.txtBoxPrice.TabIndex = 3;
             this.txtBoxPrice.TextChanged += new System.EventHandler(this.OnTxtBoxPrice_TextChanged);
+            this.txtBoxPrice.Enter += new System.EventHandler(this.OnTxtBoxPrice_Enter);
             this.txtBoxPrice.Leave += new System.EventHandler(this.OnTxtBoxPrice_Leave);
             // 
             // txtBoxVolumeSold
@@ -631,6 +638,7 @@
             this.grpBoxOverview.TabIndex = 16;
             this.grpBoxOverview.TabStop = false;
             this.grpBoxOverview.Text = "_grpBoxOverview";
+            this.grpBoxOverview.MouseLeave += new System.EventHandler(this.OnGrpBoxOverview_MouseLeave);
             // 
             // tblLayPnlOverviewTabControl
             // 
@@ -648,6 +656,7 @@
             // tabCtrlBuys
             // 
             this.tabCtrlBuys.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
+            this.tabCtrlBuys.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabCtrlBuys.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabCtrlBuys.Location = new System.Drawing.Point(3, 3);
             this.tabCtrlBuys.Name = "tabCtrlBuys";
@@ -656,8 +665,9 @@
             this.tabCtrlBuys.TabIndex = 0;
             this.tabCtrlBuys.TabStop = false;
             this.tabCtrlBuys.SelectedIndexChanged += new System.EventHandler(this.TabCtrlBuys_SelectedIndexChanged);
-            this.tabCtrlBuys.MouseEnter += new System.EventHandler(this.TabCtrlBuys_MouseEnter);
-            this.tabCtrlBuys.MouseLeave += new System.EventHandler(this.TabCtrlBuys_MouseLeave);
+            this.tabCtrlBuys.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnTabCtrlBuys_KeyDown);
+            this.tabCtrlBuys.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.OnTabCtrlBuys_KeyPress);
+            this.tabCtrlBuys.MouseLeave += new System.EventHandler(this.OnTabCtrlBuys_MouseLeave);
             // 
             // lblPurchaseValue
             // 

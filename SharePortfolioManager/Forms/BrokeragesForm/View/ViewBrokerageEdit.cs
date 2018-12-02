@@ -20,10 +20,6 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using LanguageHandler;
-using Logging;
-using SharePortfolioManager.Classes;
-using SharePortfolioManager.Properties;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -31,10 +27,15 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using LanguageHandler;
+using Logging;
+using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.ShareObjects;
+using SharePortfolioManager.Properties;
 
-namespace SharePortfolioManager.Forms.BrokerageForm.View
+namespace SharePortfolioManager.Forms.BrokeragesForm.View
 {
+    // Error codes of the BrokerageEdit
     public enum BrokerageErrorCode
     {
         AddSuccessful,
@@ -43,10 +44,11 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
         AddFailed,
         EditFailed,
         DeleteFailed,
-        InputeValuesInvalid,
+        InputValuesInvalid,
         BrokerageEmpty,
         BrokerageWrongFormat,
         BrokerageWrongValue,
+        DocumentBrowseFailed,
         DocumentDirectoryDoesNotExits,
         DocumentFileDoesNotExists
     };
@@ -57,15 +59,20 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
     /// </summary>
     public interface IViewBrokerageEdit : INotifyPropertyChanged
     {
-        event EventHandler FormatInputValues;
-        event EventHandler AddBrokerage;
-        event EventHandler EditBrokerage;
-        event EventHandler DeleteBrokerage;
+        event EventHandler FormatInputValuesEventHandler;
+        event EventHandler AddBrokerageEventHandler;
+        event EventHandler EditBrokerageEventHandler;
+        event EventHandler DeleteBrokerageEventHandler;
+        event EventHandler DocumentBrowseEventHandler;
 
         BrokerageErrorCode ErrorCode { get; set; }
 
         ShareObjectMarketValue ShareObjectMarketValue { get; }
         ShareObjectFinalValue ShareObjectFinalValue { get; }
+
+        Logger Logger { get; }
+        Language Language { get; }
+        string LanguageName { get; }
 
         bool UpdateBrokerage { get; set; }
         string SelectedGuid { get; set; }
@@ -79,6 +86,7 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
 
         DialogResult ShowDialog();
         void AddEditDeleteFinish();
+        void DocumentBrowseFinish();
     }
 
     public partial class ViewBrokerageEdit : Form, IViewBrokerageEdit
@@ -95,21 +103,34 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
         /// </summary>
         private string _selectedDate;
 
+        /// <summary>
+        /// Stores the last focused date time picker or text box
+        /// </summary>
+        private Control _focusedControl;
+
         #endregion Fields
 
         #region Properties
 
-        public Logger Logger { get; }
+        #region Transfer parameter
 
-        public Language Language { get; }
+        public Logger Logger { get; internal set; }
 
-        public string LanguageName { get; }
+        public Language Language { get; internal set; }
+
+        public string LanguageName { get; internal set; }
+
+        #endregion Transfer parameter
+
+        #region Flags
 
         public bool UpdateBrokerageFlag { get; set; }
 
         public bool SaveFlag { get; set; }
 
-        public DataGridView SelectedDataGridView { get; set; }
+        #endregion Flags
+
+        public DataGridView SelectedDataGridView { get; internal set; }
 
         #endregion Properties
 
@@ -223,7 +244,7 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
                         SaveFlag = true;
 
                         // Refresh the brokerage list
-                        ShowBrokerage();
+                        OnShowBrokerage();
 
                         break;
                     }
@@ -261,7 +282,7 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
                         SaveFlag = true;
 
                         // Refresh the brokerage list
-                        ShowBrokerage();
+                        OnShowBrokerage();
 
                         break;
                     }
@@ -296,7 +317,7 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
                         grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Add_Caption", LanguageName);
 
                         // Refresh the brokerage list
-                        ShowBrokerage();
+                        OnShowBrokerage();
 
                         break;
                     }
@@ -312,7 +333,7 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
 
                         break;
                     }
-                case BrokerageErrorCode.InputeValuesInvalid:
+                case BrokerageErrorCode.InputValuesInvalid:
                     {
                         strMessage =
                             Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/CheckInputFailure", LanguageName);
@@ -390,15 +411,45 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
                (int)FrmMain.EComponentLevels.Application);
         }
 
+        public void DocumentBrowseFinish()
+        {
+            // Set messages
+            var strMessage = @"";
+            var clrMessage = Color.Black;
+            const FrmMain.EStateLevels stateLevel = FrmMain.EStateLevels.Info;
+
+            switch (ErrorCode)
+            {
+                case BrokerageErrorCode.DocumentBrowseFailed:
+                {
+                    txtBoxDocument.Text = @"-";
+
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/ChoseDocumentFailed", LanguageName);
+                    break;
+                }
+            }
+
+            Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
+                strMessage,
+                Language,
+                LanguageName,
+                clrMessage,
+                Logger,
+                (int)stateLevel,
+                (int)FrmMain.EComponentLevels.Application);
+        }
+
         #endregion IView members
 
         #region Event members
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public event EventHandler FormatInputValues;
-        public event EventHandler AddBrokerage;
-        public event EventHandler EditBrokerage;
-        public event EventHandler DeleteBrokerage;
+        public event EventHandler FormatInputValuesEventHandler;
+        public event EventHandler AddBrokerageEventHandler;
+        public event EventHandler EditBrokerageEventHandler;
+        public event EventHandler DeleteBrokerageEventHandler;
+        public event EventHandler DocumentBrowseEventHandler;
 
         #endregion
 
@@ -421,9 +472,13 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
 
             ShareObjectMarketValue = shareObjectMarketValue;
             ShareObjectFinalValue = shareObjectFinalValue;
+
             Logger = logger;
             Language = language;
             LanguageName = languageName;
+
+            _focusedControl = txtBoxBrokerage;
+
             SaveFlag = false;
         }
 
@@ -484,7 +539,7 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
                 #endregion Image configuration
 
                 // Load brokerage of the share
-                ShowBrokerage();
+                OnShowBrokerage();
             }
             catch (Exception ex)
             {
@@ -521,12 +576,42 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
         {
             // Reset date time picker
             datePickerDate.Value = DateTime.Now;
+            datePickerDate.Enabled = true;
             datePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+            datePickerTime.Enabled = true;
 
             // Reset text boxes
             txtBoxBrokerage.Text = @"";
+            txtBoxBrokerage.Enabled = true;
             txtBoxDocument.Text = @"";
+            txtBoxDocument.Enabled = true;
+
+            toolStripStatusLabelMessageBrokerageEdit.Text = @"";
+
+            // Enable button(s)
+            btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Add", LanguageName);
+            btnAddSave.Image = Resources.black_add;
+
+            // Disable button(s)
+            btnDelete.Enabled = false;
+
+            // Rename group box
+            grpBoxAdd.Text =
+                Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Add_Caption", LanguageName);
+
+            // Deselect rows
+            OnDeselectRowsOfDataGridViews(null);
+
+            // Reset stored DataGridView instance
+            SelectedDataGridView = null;
+
+            // Select overview tab
+            if (tabCtrlBrokerage.TabPages.Count > 0)
+                tabCtrlBrokerage.SelectTab(0);
+
             txtBoxBrokerage.Focus();
+
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
         }
 
         #endregion Form
@@ -550,7 +635,17 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
         /// <param name="e">EventArgs</param>
         private void OnDatePickerDate_Leave(object sender, EventArgs e)
         {
-            FormatInputValues?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the date time picker for the date to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnDatePickerDate_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = datePickerDate;
         }
 
         /// <summary>
@@ -570,7 +665,17 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
         /// <param name="e">EventArgs</param>
         private void datePickerTime_Leave(object sender, EventArgs e)
         {
-            FormatInputValues?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the date time picker for the time to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnDatePickerTime_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = datePickerTime;
         }
 
         #endregion Date Time
@@ -594,7 +699,17 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxBrokerage_Leave(object sender, EventArgs e)
         {
-            FormatInputValues?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxBrokerage_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = txtBoxBrokerage;
         }
 
         /// <summary>
@@ -612,25 +727,51 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void OntxtBoxDocument_Leave(object sender, EventArgs e)
+        private void OnTxtBoxDocument_Leave(object sender, EventArgs e)
         {
-            FormatInputValues?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
         }
 
-        private void OnTxtBoxDocument_DragDrop(object sender, DragEventArgs e)
+        /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxDocument_Enter(object sender, EventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
+            _focusedControl = txtBoxDocument;
         }
 
+        /// <summary>
+        /// This function allows to sets via Drag and Drop a document for this brokerage
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
         private void OnTxtBoxDocument_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
+        }
+
+        /// <summary>
+        /// This function shows the Drop sign
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxDocument_DragDrop(object sender, DragEventArgs e)
         {
             if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
 
             var files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            foreach (var filePath in files)
-            {
-                txtBoxDocument.Text = filePath;
-            }
+            if (files.Length <= 0 || files.Length > 1) return;
+
+            txtBoxDocument.Text = files[0];
+
+            // TODO Parse PDF and set values to the form
+            //var pdf = new PdfDocument(new PdfReader(txtBoxDocument.Text));
+            //var text = PdfTextExtractor.GetTextFromPage(pdf.GetPage(1), new LocationTextExtractionStrategy());
+            //pdf.Close();
+            //Console.WriteLine(@"Extracted text:");
+            //Console.WriteLine(text);
         }
 
         #endregion TextBoxes
@@ -649,19 +790,19 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
             try
             {
                 // Disable controls
-                //this.Enabled = false;
+                Enabled = false;
 
                 if (btnAddSave.Text == Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Add", LanguageName))
                 {
                     UpdateBrokerage = false;
 
-                    AddBrokerage?.Invoke(this, null);
+                    AddBrokerageEventHandler?.Invoke(this, null);
                 }
                 else
                 {
                     UpdateBrokerage = true;
 
-                    EditBrokerage?.Invoke(this, null);
+                    EditBrokerageEventHandler?.Invoke(this, null);
                 }
             }
             catch (Exception ex)
@@ -708,7 +849,7 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
 
                 if (dlgResult != DialogResult.OK) return;
 
-                DeleteBrokerage?.Invoke(this, null);
+                DeleteBrokerageEventHandler?.Invoke(this, null);
             }
             catch (Exception ex)
             {
@@ -734,34 +875,8 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
         {
             try
             {
-                toolStripStatusLabelMessageBrokerageEdit.Text = @"";
-
-                // Enable button(s)
-                btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Add", LanguageName);
-                btnAddSave.Image = Resources.black_add;
-
-                // Disable button(s)
-                btnReset.Enabled = false;
-                btnDelete.Enabled = false;
-
-                // Rename group box
-                grpBoxAdd.Text =
-                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Add_Caption", LanguageName);
-
-                // Deselect rows
-                DeselectRowsOfDataGridViews(null);
-
-                // Reset stored DataGridView instance
-                SelectedDataGridView = null;
-
-                // Select overview tab
-                if (
-                    tabCtrlBrokerage.TabPages.ContainsKey(
-                        Language.GetLanguageTextByXPath(
-                            @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/TabPgOverview/Overview", LanguageName)))
-                    tabCtrlBrokerage.SelectTab(
-                        Language.GetLanguageTextByXPath(
-                            @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/TabPgOverview/Overview", LanguageName));
+                // Reset values
+                ResetInputValues();
             }
             catch (Exception ex)
             {
@@ -794,36 +909,28 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
         /// </summary>
         /// <param name="sender">Button</param>
         /// <param name="e">EventArgs</param>
-        private void OnBtnDocumentBrowse_Click(object sender, EventArgs e)
+        private void OnBtnBrokerageDocumentBrowse_Click(object sender, EventArgs e)
         {
-            try
-            {
-                const string strFilter = "pdf (*.pdf)|*.pdf|txt (*.txt)|.txt|doc (*.doc)|.doc|docx (*.docx)|.docx";
-                txtBoxDocument.Text = Helper.SetDocument(Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/OpenFileDialog/Title", LanguageName), strFilter, txtBoxDocument.Text);
-            }
-            catch (Exception ex)
-            {
-#if DEBUG_BROKERAGE || DEBUG
-                var message = $"btnBrokerageDocumentBrowse_Click()\n\n{ex.Message}";
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/ChoseDocumentFailed", LanguageName),
-                    Language, LanguageName,
-                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
-            }
+            DocumentBrowseEventHandler?.Invoke(this, new EventArgs());
         }
 
         #endregion Buttons
+
+        #region Group box overview
+
+        private void OnGrpBoxOverview_MouseLeave(object sender, EventArgs e)
+        {
+            _focusedControl?.Focus();
+        }
+
+        #endregion Group box overview
 
         #region Data grid view
 
         /// <summary>
         /// This function paints the brokerage list of the share
         /// </summary>
-        private void ShowBrokerage()
+        private void OnShowBrokerage()
         {
             try
             {
@@ -838,14 +945,13 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
                         {
                             dataGridView.SelectionChanged -= OnDataGridViewBrokerageOfYears_SelectionChanged;
                             dataGridView.MouseEnter -= OnDataGridViewBrokerageOfYears_MouseEnter;
-                            dataGridView.MouseLeave -= OnDataGridViewBrokerageOfYears_MouseLeave;
                         }
                         else
                         {
                             dataGridView.SelectionChanged -= OnDataGridViewBrokerageOfAYear_SelectionChanged;
                             dataGridView.MouseEnter -= OnDataGridViewBrokerageOfAYear_MouseEnter;
                             dataGridView.MouseLeave -= OnDataGridViewBrokerageOfAYear_MouseEnter;
-                            dataGridView.CellContentDoubleClick -= OnDataGridViewBrokerageOfAYear_CellContentdecimalClick;
+                            dataGridView.CellContentDoubleClick -= OnDataGridViewBrokerageOfAYear_CellContentDecimalClick;
                         }
 
                         dataGridView.DataBindingComplete -= OnDataGridViewBrokerage_DataBindingComplete;
@@ -855,7 +961,10 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
                 }
 
                 tabCtrlBrokerage.TabPages.Clear();
-                
+
+                // Enable controls
+                Enabled = true;
+
                 #region Add page
 
                 // Create TabPage for the brokerage of the years
@@ -887,6 +996,8 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
                 // Create DataGridView
                 var dataGridViewBrokerageOverviewOfAYears = new DataGridView
                 {
+                    // TODO correct
+                    Name = @"Overview",
                     Dock = DockStyle.Fill,
 
                     // Bind source with brokerage values to the DataGridView
@@ -901,8 +1012,6 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
                 dataGridViewBrokerageOverviewOfAYears.DataBindingComplete += OnDataGridViewBrokerage_DataBindingComplete;
                 // Set the delegate for the mouse enter event
                 dataGridViewBrokerageOverviewOfAYears.MouseEnter += OnDataGridViewBrokerageOfYears_MouseEnter;
-                // Set the delegate for the mouse leave event
-                dataGridViewBrokerageOverviewOfAYears.MouseLeave += OnDataGridViewBrokerageOfYears_MouseLeave;
                 // Set row select event
                 dataGridViewBrokerageOverviewOfAYears.SelectionChanged += OnDataGridViewBrokerageOfYears_SelectionChanged;
 
@@ -912,7 +1021,7 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
 
                 // Advanced configuration DataGridView brokerage
                 dataGridViewBrokerageOverviewOfAYears.EnableHeadersVisualStyles = false;
-                // Columnheader styling
+                // Column header styling
                 dataGridViewBrokerageOverviewOfAYears.ColumnHeadersDefaultCellStyle.Alignment =
                     DataGridViewContentAlignment.MiddleCenter;
                 dataGridViewBrokerageOverviewOfAYears.ColumnHeadersDefaultCellStyle.BackColor =
@@ -980,13 +1089,15 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
                     // Create Binding source for the brokerage data
                     var bindingSource = new BindingSource
                     {
-                        DataSource = ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageOfTheShareDictionary[keyName]
-                            .BrokerageListYear
+                        DataSource = 
+                            ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageOfTheShareDictionary[keyName]
+                                .BrokerageListYear
                     };
 
                     // Create DataGridView
                     var dataGridViewBrokerageOfAYear = new DataGridView
                     {
+                        Name = keyName,
                         Dock = DockStyle.Fill,
 
                         // Bind source with brokerage values to the DataGridView
@@ -1001,12 +1112,10 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
                     dataGridViewBrokerageOfAYear.DataBindingComplete += OnDataGridViewBrokerage_DataBindingComplete;
                     // Set the delegate for the mouse enter event
                     dataGridViewBrokerageOfAYear.MouseEnter += OnDataGridViewBrokerageOfAYear_MouseEnter;
-                    // Set the delegate for the mouse leave event
-                    dataGridViewBrokerageOfAYear.MouseLeave += OnDataGridViewBrokerageOfAYear_MouseLeave;
                     // Set row select event
                     dataGridViewBrokerageOfAYear.SelectionChanged += OnDataGridViewBrokerageOfAYear_SelectionChanged;
                     // Set cell decimal click event
-                    dataGridViewBrokerageOfAYear.CellContentDoubleClick += OnDataGridViewBrokerageOfAYear_CellContentdecimalClick;
+                    dataGridViewBrokerageOfAYear.CellContentDoubleClick += OnDataGridViewBrokerageOfAYear_CellContentDecimalClick;
 
                     #endregion Events
 
@@ -1014,7 +1123,7 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
 
                     // Advanced configuration DataGridView brokerage
                     dataGridViewBrokerageOfAYear.EnableHeadersVisualStyles = false;
-                    // Columnheader styling
+                    // Column header styling
                     dataGridViewBrokerageOfAYear.ColumnHeadersDefaultCellStyle.Alignment =
                         DataGridViewContentAlignment.MiddleCenter;
                     dataGridViewBrokerageOfAYear.ColumnHeadersDefaultCellStyle.BackColor =
@@ -1086,26 +1195,56 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
 
                     switch (i)
                     {
+                        case 0:
+                        {
+                            if (((DataGridView)sender).Name == @"Overview")
+                            {
+                                ((DataGridView)sender).Columns[i].HeaderText =
+                                    Language.GetLanguageTextByXPath(
+                                        @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Year",
+                                        LanguageName);
+                            }
+                        }
+                        break;
                         case 1:
+                            if (((DataGridView)sender).Name == @"Overview")
+                            {
+                                ((DataGridView)sender).Columns[i].HeaderText =
+                                    Language.GetLanguageTextByXPath(
+                                        @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Brokerage",
+                                        LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
+                            }
+                            else
+                            {
                             ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Date",
+                                Language.GetLanguageTextByXPath(
+                                    @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Date",
                                     LanguageName);
+                            }
                             break;
                         case 2:
                             ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Brokerage",
+                                Language.GetLanguageTextByXPath(
+                                    @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Brokerage",
                                     LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
                             break;
                         case 3:
                             ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Document",
+                                Language.GetLanguageTextByXPath(
+                                    @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Document",
                                     LanguageName);
                             break;
                     }
                 }
 
                 if (((DataGridView)sender).Rows.Count > 0)
+                {
                     ((DataGridView)sender).Rows[0].Selected = false;
+                    ((DataGridView)sender).ScrollBars = ScrollBars.Both;
+                }
+
+                if (((DataGridView)sender).Name != @"Overview")
+                    ((DataGridView)sender).Columns[0].Visible = false;
 
                 // Reset the text box values
                 ResetInputValues();
@@ -1129,7 +1268,7 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
         /// This function deselects all selected rows of the
         /// DataGridViews in the TabPages
         /// </summary>
-        private void DeselectRowsOfDataGridViews(DataGridView dataGridView)
+        private void OnDeselectRowsOfDataGridViews(DataGridView dataGridView)
         {
             try
             {
@@ -1146,8 +1285,6 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
                         }
                     }
                 }
-
-                ResetInputValues();
             }
             catch (Exception ex)
             {
@@ -1179,35 +1316,59 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
             foreach (Control control in tabCtrlBrokerage.SelectedTab.Controls)
             {
                 if (control is DataGridView view)
+                {
+                    if (view.Rows.Count > 0 && view.Name != @"Overview")
+                        view.Rows[0].Selected = true;
                     view.Focus();
+
+                    if (view.Name == @"Overview")
+                        ResetInputValues();
+                }
             }
         }
 
         /// <summary>
-        /// This function sets the focus on the data grid view of the current selected tab page of the tab control
-        /// </summary>
-        /// <param name="sender">Data grid view</param>
-        /// <param name="e">EventArgs</param>
-        private void TabCtrlBrokerage_MouseEnter(object sender, EventArgs e)
-        {
-            if (tabCtrlBrokerage.SelectedTab == null) return;
-
-            // Loop trough the controls of the selected tab page and set focus on the data grid view
-            foreach (Control control in tabCtrlBrokerage.SelectedTab.Controls)
-            {
-                if (control is DataGridView view)
-                    view.Focus();
-            }
-        }
-
-        /// <summary>
-        /// This function sets the focus to the group box add / edit when the mouse leaves the data grid view
+        /// This function sets the focus on the last focused control
         /// </summary>
         /// <param name="sender">Tab control</param>
         /// <param name="e">EventArgs</param>
-        private void TabCtrlBrokerage_MouseLeave(object sender, EventArgs e)
+        private void OnTabCtrlBrokerage_KeyDown(object sender, KeyEventArgs e)
         {
-            grpBoxAdd.Focus();
+            _focusedControl?.Focus();
+        }
+
+        /// <summary>
+        /// This function sets key value ( char ) to the last focused control
+        /// </summary>
+        /// <param name="sender">Tab control</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTabCtrlBrokerage_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Check if the last focused control was a text box so set the
+            // key value ( char ) to the text box and then set the cursor behind the text
+            if (_focusedControl is TextBox textBox)
+            {
+                textBox.Text = e.KeyChar.ToString();
+                textBox.Select(textBox.Text.Length, 0);
+            }
+
+            // Check if the last focused control was a date time picker
+            if (_focusedControl is DateTimePicker dateTimePicker)
+            {
+                // Check if the pressed key was a numeric key
+                if (e.KeyChar == '0' ||
+                    e.KeyChar == '1' ||
+                    e.KeyChar == '2' ||
+                    e.KeyChar == '3' ||
+                    e.KeyChar == '4' ||
+                    e.KeyChar == '5' ||
+                    e.KeyChar == '6' ||
+                    e.KeyChar == '7' ||
+                    e.KeyChar == '8' ||
+                    e.KeyChar == '9'
+                )
+                    dateTimePicker.Text = e.KeyChar.ToString();
+            }
         }
 
         #endregion Tab control delegates
@@ -1231,13 +1392,11 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
 
                 foreach (TabPage tabPage in tabCtrlBrokerage.TabPages)
                 {
-                    if (tabPage.Name != curItem[0].Cells[0].Value.ToString()) continue;
+                    if (curItem[0].Cells[1].Value != null && 
+                        tabPage.Name != curItem[0].Cells[0].Value.ToString()) continue;
 
                     tabCtrlBrokerage.SelectTab(tabPage);
                     tabPage.Focus();
-
-                    // Deselect rows
-                    DeselectRowsOfDataGridViews(null);
 
                     break;
                 }
@@ -1267,16 +1426,6 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
             ((DataGridView)sender).Focus();
         }
 
-        /// <summary>
-        /// This function sets the focus to the left data grid view
-        /// </summary>
-        /// <param name="sender">Left data grid view</param>
-        /// <param name="args">EventArgs</param>
-        private void OnDataGridViewBrokerageOfYears_MouseLeave(object sender, EventArgs args)
-        {
-            grpBoxAdd.Focus();
-        }
-
         #endregion Brokerage of years
 
         #region Brokerage of a year
@@ -1296,7 +1445,7 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
                 {
                     // Deselect row only of the other TabPages DataGridViews
                     if (tabCtrlBrokerage.SelectedTab.Controls.Contains((DataGridView)sender))
-                        DeselectRowsOfDataGridViews((DataGridView)sender);
+                        OnDeselectRowsOfDataGridViews((DataGridView)sender);
                 }
 
                 if (((DataGridView)sender).SelectedRows.Count == 1)
@@ -1305,7 +1454,10 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
                     var curItem = ((DataGridView)sender).SelectedRows;
 
                     // Set selected date
-                    SelectedDate = curItem[0].Cells[0].Value.ToString();
+                    if (curItem[0].Cells[1].Value != null)
+                        SelectedDate = curItem[0].Cells[1].Value.ToString();
+                    else
+                        return;
 
                     // Get list of brokerage of a year
                     DateTime.TryParse(SelectedDate, out var dateTime);
@@ -1337,7 +1489,9 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
                     }
 
                     // Set brokerage values
-                    if (selectedBrokerageObject != null && (selectedBrokerageObject.BrokerageOfABuy || selectedBrokerageObject.BrokerageOfASale))
+                    if (selectedBrokerageObject != null && 
+                        (selectedBrokerageObject.BrokerageOfABuy || selectedBrokerageObject.BrokerageOfASale)
+                        )
                     {
                         // Set flag if brokerage is part of a buy
                         PartOfABuy = selectedBrokerageObject.BrokerageOfABuy;
@@ -1345,7 +1499,7 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
                         // Set flag if brokerage is part of a sale
                         PartOfASale = selectedBrokerageObject.BrokerageOfASale;
 
-                        // Disable TextBoxe(s)
+                        // Disable TextBox(es)
                         datePickerDate.Enabled = false;
                         datePickerTime.Enabled = false;
                         txtBoxBrokerage.Enabled = false;
@@ -1366,7 +1520,7 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
                             // Set flag if brokerage is part of a sale
                             PartOfASale = selectedBrokerageObject.BrokerageOfASale;
 
-                            // Enable TextBoxe(s)
+                            // Enable TextBox(es)
                             datePickerDate.Enabled = true;
                             datePickerTime.Enabled = true;
                             txtBoxBrokerage.Enabled = true;
@@ -1379,8 +1533,6 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
                         }
                     }
 
-                    // Enable button(s)
-                    btnReset.Enabled = true;
                     // Rename button
                     btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Save", LanguageName);
                     btnAddSave.Image = Resources.black_edit;
@@ -1392,25 +1544,27 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
                     SelectedDataGridView = (DataGridView)sender;
 
                     // Format the input value
-                    FormatInputValues?.Invoke(this, new EventArgs());
+                    FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
                 }
                 else
                 {
                     // Rename button
                     btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Add", LanguageName);
                     btnAddSave.Image = Resources.black_add;
-                    // Disable button(s)
-                    btnReset.Enabled = false;
-                    btnDelete.Enabled = false;
-                    // Enable Button(s)
-                    btnAddSave.Enabled = true;
-                    // Enabled TextBoxe(s)
-                    datePickerDate.Enabled = true;
-                    datePickerTime.Enabled = true;
-                    txtBoxBrokerage.Enabled = true;
 
                     // Rename group box
                     grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Add_Caption", LanguageName);
+
+                    // Disable button(s)
+                    btnDelete.Enabled = false;
+
+                    // Enable Button(s)
+                    btnAddSave.Enabled = true;
+
+                    // Enabled TextBox(es)
+                    datePickerDate.Enabled = true;
+                    datePickerTime.Enabled = true;
+                    txtBoxBrokerage.Enabled = true;
 
                     // Reset stored DataGridView instance
                     SelectedDataGridView = null;
@@ -1431,7 +1585,7 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
 
                 ResetInputValues();
 
-                ShowBrokerage();
+                OnShowBrokerage();
             }
         }
 
@@ -1446,21 +1600,11 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
         }
 
         /// <summary>
-        /// This function sets the focus to the left data grid view
-        /// </summary>
-        /// <param name="sender">Left data grid view</param>
-        /// <param name="args">EventArgs</param>
-        private void OnDataGridViewBrokerageOfAYear_MouseLeave(object sender, EventArgs args)
-        {
-            grpBoxAdd.Focus();
-        }
-
-        /// <summary>
         /// This function opens the brokerage document if a document is present
         /// </summary>
         /// <param name="sender">DataGridView</param>
         /// <param name="e">DataGridViewCellEventArgs</param>
-        private void OnDataGridViewBrokerageOfAYear_CellContentdecimalClick(object sender, DataGridViewCellEventArgs e)
+        private void OnDataGridViewBrokerageOfAYear_CellContentDecimalClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
@@ -1524,7 +1668,7 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
                                 SaveFlag = true;
 
                                 ResetInputValues();
-                                ShowBrokerage();
+                                OnShowBrokerage();
 
                                 // Add status message
                                 Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
@@ -1552,7 +1696,7 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
             catch (Exception ex)
             {
 #if DEBUG_BROKERAGE || DEBUG
-                var message = $"dataGridViewBrokerageOfAYear_CellContentdecimalClick()\n\n{ex.Message}";
+                var message = $"dataGridViewBrokerageOfAYear_CellContentDecimalClick()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif

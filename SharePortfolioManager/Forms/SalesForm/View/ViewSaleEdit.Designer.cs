@@ -125,7 +125,8 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.tabCtrlSales.Size = new System.Drawing.Size(813, 147);
             this.tabCtrlSales.TabIndex = 0;
             this.tabCtrlSales.SelectedIndexChanged += new System.EventHandler(this.TabCtrlSales_SelectedIndexChanged);
-            this.tabCtrlSales.MouseEnter += new System.EventHandler(this.TabCtrlSales_MouseEnter);
+            this.tabCtrlSales.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnTabCtrlSales_KeyDown);
+            this.tabCtrlSales.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.OnTabCtrlSales_KeyPress);
             this.tabCtrlSales.MouseLeave += new System.EventHandler(this.TabCtrlSales_MouseLeave);
             // 
             // btnDelete
@@ -162,7 +163,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             // btnReset
             // 
             this.btnReset.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnReset.Enabled = false;
             this.btnReset.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnReset.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnReset.Location = new System.Drawing.Point(460, 1);
@@ -327,6 +327,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.txtBoxTaxAtSource.Size = new System.Drawing.Size(530, 22);
             this.txtBoxTaxAtSource.TabIndex = 4;
             this.txtBoxTaxAtSource.TextChanged += new System.EventHandler(this.OnTxtBoxTaxAtSource_TextChanged);
+            this.txtBoxTaxAtSource.Enter += new System.EventHandler(this.OnTxtBoxTaxAtSource_Enter);
             this.txtBoxTaxAtSource.Leave += new System.EventHandler(this.OnTxtBoxTaxAtSourceLeave);
             // 
             // lblTaxAtSource
@@ -368,6 +369,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.txtBoxSalePrice.Size = new System.Drawing.Size(530, 22);
             this.txtBoxSalePrice.TabIndex = 3;
             this.txtBoxSalePrice.TextChanged += new System.EventHandler(this.OnTxtBoxSalePrice_TextChanged);
+            this.txtBoxSalePrice.Enter += new System.EventHandler(this.OnTxtBoxSalePrice_Enter);
             this.txtBoxSalePrice.Leave += new System.EventHandler(this.OnTxtBoxSalePrice_Leave);
             // 
             // datePickerDate
@@ -384,6 +386,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.datePickerDate.Size = new System.Drawing.Size(226, 22);
             this.datePickerDate.TabIndex = 0;
             this.datePickerDate.ValueChanged += new System.EventHandler(this.OnDatePickerDate_ValueChanged);
+            this.datePickerDate.Enter += new System.EventHandler(this.OnDatePickerDate_Enter);
             this.datePickerDate.Leave += new System.EventHandler(this.OnDatePickerDate_Leave);
             // 
             // datePickerTime
@@ -398,6 +401,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.datePickerTime.Size = new System.Drawing.Size(226, 22);
             this.datePickerTime.TabIndex = 1;
             this.datePickerTime.ValueChanged += new System.EventHandler(this.OnDatePickerTime_ValueChanged);
+            this.datePickerTime.Enter += new System.EventHandler(this.OnDatePickerTime_Enter);
             this.datePickerTime.Leave += new System.EventHandler(this.OnDatePickerTime_Leave);
             // 
             // lblVolume
@@ -426,6 +430,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.txtBoxVolume.Size = new System.Drawing.Size(530, 22);
             this.txtBoxVolume.TabIndex = 2;
             this.txtBoxVolume.TextChanged += new System.EventHandler(this.OnTxtBoxAddVolume_TextChanged);
+            this.txtBoxVolume.Enter += new System.EventHandler(this.OnTxtBoxVolume_Enter);
             this.txtBoxVolume.Leave += new System.EventHandler(this.OnTxtBoxVolume_Leave);
             // 
             // lblVolumeUnit
@@ -483,6 +488,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.txtBoxDocument.TextChanged += new System.EventHandler(this.OnTxtBoxDocument_TextChanged);
             this.txtBoxDocument.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragDrop);
             this.txtBoxDocument.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragEnter);
+            this.txtBoxDocument.Enter += new System.EventHandler(this.txtBoxDocument_Enter);
             this.txtBoxDocument.Leave += new System.EventHandler(this.OnTxtBoxDocument_Leave);
             // 
             // txtBoxPayout
@@ -512,7 +518,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.btnSalesDocumentBrowse.Text = "...";
             this.btnSalesDocumentBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSalesDocumentBrowse.UseVisualStyleBackColor = true;
-            this.btnSalesDocumentBrowse.Click += new System.EventHandler(this.OnBtnSaleDocumentBrowse_Click);
             // 
             // lblPayoutUnit
             // 
@@ -674,6 +679,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.txtBoxReduction.Size = new System.Drawing.Size(530, 22);
             this.txtBoxReduction.TabIndex = 8;
             this.txtBoxReduction.TextChanged += new System.EventHandler(this.OnTxtBoxReduction_TextChanged);
+            this.txtBoxReduction.Enter += new System.EventHandler(this.OnTxtBoxReduction_Enter);
             this.txtBoxReduction.Leave += new System.EventHandler(this.OnTxtBoxReductionLeave);
             // 
             // txtBoxBrokerage
@@ -688,6 +694,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.txtBoxBrokerage.Size = new System.Drawing.Size(530, 22);
             this.txtBoxBrokerage.TabIndex = 7;
             this.txtBoxBrokerage.TextChanged += new System.EventHandler(this.OnTxtBoxBrokerage_TextChanged);
+            this.txtBoxBrokerage.Enter += new System.EventHandler(this.OnTxtBoxBrokerage_Enter);
             this.txtBoxBrokerage.Leave += new System.EventHandler(this.OnTxtBoxBrokerageLeave);
             // 
             // txtBoxSolidarityTax
@@ -702,6 +709,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.txtBoxSolidarityTax.Size = new System.Drawing.Size(530, 22);
             this.txtBoxSolidarityTax.TabIndex = 6;
             this.txtBoxSolidarityTax.TextChanged += new System.EventHandler(this.OnTxtBoxSolidarityTax_TextChanged);
+            this.txtBoxSolidarityTax.Enter += new System.EventHandler(this.OnTxtBoxSolidarityTax_Enter);
             this.txtBoxSolidarityTax.Leave += new System.EventHandler(this.OnTxtBoxSolidarityTaxLeave);
             // 
             // txtBoxCapitalGainsTax
@@ -716,6 +724,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.txtBoxCapitalGainsTax.Size = new System.Drawing.Size(530, 22);
             this.txtBoxCapitalGainsTax.TabIndex = 5;
             this.txtBoxCapitalGainsTax.TextChanged += new System.EventHandler(this.OnTxtBoxCapitalGainsTax_TextChanged);
+            this.txtBoxCapitalGainsTax.Enter += new System.EventHandler(this.OnTxtBoxCapitalGainsTax_Enter);
             this.txtBoxCapitalGainsTax.Leave += new System.EventHandler(this.OnTxtBoxCapitalGainsTaxLeave);
             // 
             // lblReductionUnit

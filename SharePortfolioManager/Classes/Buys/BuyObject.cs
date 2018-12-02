@@ -67,15 +67,13 @@ namespace SharePortfolioManager
         [Browsable(false)]
         public CultureInfo BuyCultureInfo { get; internal set; }
 
-        [Browsable(true)]
-        [DisplayName(@"Guid")]
+        [Browsable(false)]
         public string Guid { get; internal set; }
 
         [Browsable(false)]
         public string Date { get; internal set; }
 
-        [Browsable(true)]
-        [DisplayName(@"Date")]
+        [Browsable(false)]
         public string DateAsStr => DateTime.Parse(Date).Date.ToShortDateString();
 
         [Browsable(false)]
@@ -93,8 +91,7 @@ namespace SharePortfolioManager
             }
         }
 
-        [Browsable(true)]
-        [DisplayName(@"Volume")]
+        [Browsable(false)]
         public string VolumeAsStr => Helper.FormatDecimal(Volume, Helper.Volumefivelength, false, Helper.Volumetwofixlength, false, @"", BuyCultureInfo);
 
         [Browsable(false)]
@@ -130,8 +127,7 @@ namespace SharePortfolioManager
             }
         }
 
-        [Browsable(true)]
-        [DisplayName(@"Price")]
+        [Browsable(false)]
         public string SharePriceAsStr => Helper.FormatDecimal(SharePrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
 
         [Browsable(false)]
@@ -149,8 +145,7 @@ namespace SharePortfolioManager
             }
         }
 
-        [Browsable(true)]
-        [DisplayName(@"Brokerage")]
+        [Browsable(false)]
         public string BrokerageAsStr => Helper.FormatDecimal(Brokerage, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
 
         [Browsable(false)]
@@ -168,8 +163,7 @@ namespace SharePortfolioManager
             }
         }
 
-        [Browsable(true)]
-        [DisplayName(@"Reduction")]
+        [Browsable(false)]
         public string ReductionAsStr => Helper.FormatDecimal(Reduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
 
         [Browsable(false)]
@@ -187,11 +181,39 @@ namespace SharePortfolioManager
         [Browsable(false)]
         public string Document { get; internal set; }
 
+        #endregion Properties
+
+        #region Data grid view properties
+
+        [Browsable(true)]
+        [DisplayName(@"Guid")]
+        public string DgvGuid => Guid;
+
+        [Browsable(true)]
+        [DisplayName(@"Date")]
+        public string DgvDateAsStr => DateAsStr;
+
+        [Browsable(true)]
+        [DisplayName(@"Volume")]
+        public string DgvVolumeAsStr => VolumeAsStr;
+
+        [Browsable(true)]
+        [DisplayName(@"Price")]
+        public string DgvSharePriceAsStr => SharePriceAsStr;
+
+        [Browsable(true)]
+        [DisplayName(@"Brokerage")]
+        public string DgvBrokerageAsStr => BrokerageAsStr;
+
+        [Browsable(true)]
+        [DisplayName(@"Reduction")]
+        public string DgvReductionAsStr => ReductionAsStr;
+
         [Browsable(true)]
         [DisplayName(@"Document")]
         public Image DocumentGrid => Document == @"-" ? null : Resources.black_logger;
 
-        #endregion Properties
+        #endregion Data grid view properties
 
         #region Methods
 
@@ -251,15 +273,6 @@ namespace SharePortfolioManager
             BuyValue = decMarketValue;
             BuyValueReduction = decMarketValueReduction;
             BuyValueReductionBrokerage = decMarketValueReductionBrokerage;
-        }
-
-        /// <summary>
-        /// This function checks if the buy is sold complete or not
-        /// </summary>
-        /// <returns>Flag if all shares have been sold</returns>
-        public bool HasSharesForSale()
-        {
-            return _volume > _volumeAlreadySold;
         }
 
         #endregion Methods

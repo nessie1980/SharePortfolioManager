@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace SharePortfolioManager
+namespace SharePortfolioManager.Forms.UsedBuyDetailsList
 {
     public partial class UsedBuyDetailsList : Form
     {
@@ -20,6 +20,12 @@ namespace SharePortfolioManager
             Text = strCaption;
             grpBoxUsedBuyDetails.Text = strGrpBoxCaption;
             btnOk.Text = strOk;
+        }
+
+        public sealed override string Text
+        {
+            get => base.Text;
+            set => base.Text = value;
         }
 
         private void btnOk_Click(object sender, EventArgs e)

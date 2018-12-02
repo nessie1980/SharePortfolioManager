@@ -196,6 +196,14 @@
     <Compile Include="Forms\AboutForm\About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\BrokeragesForm\Model\ModelBrokerageEdit.cs" />
+    <Compile Include="Forms\BrokeragesForm\Presenter\PresenterBrokerageEdit.cs" />
+    <Compile Include="Forms\BrokeragesForm\View\ViewBrokerageEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\BrokeragesForm\View\ViewBrokerageEdit.Designer.cs">
+      <DependentUpon>ViewBrokerageEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\BuysForm\Presenter\PresenterBuyEdit.cs" />
     <Compile Include="Forms\BuysForm\View\ViewBuyEdit.cs">
       <SubType>Form</SubType>
@@ -204,14 +212,6 @@
       <DependentUpon>ViewBuyEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\BuysForm\Model\ModelBuyEdit.cs" />
-    <Compile Include="Forms\CostsForm\Presenter\PresenterCostEdit.cs" />
-    <Compile Include="Forms\CostsForm\View\ViewCostEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\CostsForm\View\ViewCostEdit.Designer.cs">
-      <DependentUpon>ViewCostEdit.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\CostsForm\Model\ModelCostEdit.cs" />
     <Compile Include="Forms\DividendForm\Model\ModelDividendEdit.cs" />
     <Compile Include="Forms\DividendForm\Presenter\PresenterDividendEdit.cs" />
     <Compile Include="Forms\DividendForm\View\ViewDividendEdit.cs">
@@ -290,10 +290,10 @@
     <Compile Include="Forms\MainForm\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\UsedBuyDetailsList\UserBuyDetailsList.cs">
+    <Compile Include="Forms\SalesForm\UsedBuyDetailsList\UserBuyDetailsList.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\UsedBuyDetailsList\UserBuyDetailsList.Designer.cs">
+    <Compile Include="Forms\SalesForm\UsedBuyDetailsList\UserBuyDetailsList.Designer.cs">
       <DependentUpon>UserBuyDetailsList.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -305,11 +305,11 @@
     <EmbeddedResource Include="Forms\AboutForm\About.resx">
       <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\BrokeragesForm\View\ViewBrokerageEdit.resx">
+      <DependentUpon>ViewBrokerageEdit.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\BuysForm\View\ViewBuyEdit.resx">
       <DependentUpon>ViewBuyEdit.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\CostsForm\View\ViewCostEdit.resx">
-      <DependentUpon>ViewCostEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\DividendForm\View\ViewDividendEdit.resx">
       <DependentUpon>ViewDividendEdit.cs</DependentUpon>
@@ -337,7 +337,7 @@
     <EmbeddedResource Include="Forms\ShareEditForm\View\ShareEdit.resx">
       <DependentUpon>ShareEdit.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\UsedBuyDetailsList\UserBuyDetailsList.resx">
+    <EmbeddedResource Include="Forms\SalesForm\UsedBuyDetailsList\UserBuyDetailsList.resx">
       <DependentUpon>UserBuyDetailsList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

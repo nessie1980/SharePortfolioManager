@@ -32,6 +32,7 @@ using SharePortfolioManager.Properties;
 using System.Linq;
 using System.IO;
 using System.ComponentModel;
+using SharePortfolioManager.Classes.Sales;
 using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager.Forms.SalesForm.View
@@ -136,6 +137,11 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// </summary>
         private string _selectedDate;
 
+        /// <summary>
+        /// Stores the last focused date time picker or text box
+        /// </summary>
+        private Control _focusedControl;
+
         #endregion Fields
 
         #region Properties
@@ -225,7 +231,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             get => _selectedGuidLast;
             set
             {
-                if (_selectedGuidLast == value)
+                if (_selectedGuidLast != null && _selectedGuidLast == value)
                     return;
                 _selectedGuidLast = value;
             }
@@ -806,17 +812,21 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// <param name="logger">Logger</param>
         /// <param name="xmlLanguage">Language file</param>
         /// <param name="language">Language</param>
-        public ViewSaleEdit(ShareObjectMarketValue shareObjectMarketValue, ShareObjectFinalValue shareObjectFinalValue, Logger logger, Language xmlLanguage, string language)
+        public ViewSaleEdit(ShareObjectMarketValue shareObjectMarketValue, ShareObjectFinalValue shareObjectFinalValue,
+            Logger logger, Language xmlLanguage, string language)
         {
             InitializeComponent();
+
+            ShareObjectMarketValue = shareObjectMarketValue;
+            ShareObjectFinalValue = shareObjectFinalValue;
+            ShareObjectCalculation = (ShareObjectFinalValue)ShareObjectFinalValue.Clone();
 
             Logger = logger;
             Language = xmlLanguage;
             LanguageName = language;
 
-            ShareObjectMarketValue = shareObjectMarketValue;
-            ShareObjectFinalValue = shareObjectFinalValue;
-            ShareObjectCalculation = (ShareObjectFinalValue) ShareObjectFinalValue.Clone();
+            _focusedControl = txtBoxVolume;
+
             SaveFlag = false;
         }
 
@@ -979,6 +989,26 @@ namespace SharePortfolioManager.Forms.SalesForm.View
 
                 // Set current share price
                 txtBoxSalePrice.Text = ShareObjectFinalValue.CurPriceAsStr;
+
+                datePickerDate.Enabled = true;
+                datePickerTime.Enabled = true;
+
+                txtBoxVolume.Enabled = true;
+                txtBoxSalePrice.Enabled = true;
+
+                btnSalesBuyDetails.Enabled = true;
+
+                txtBoxTaxAtSource.Enabled = true;
+                txtBoxCapitalGainsTax.Enabled = true;
+                txtBoxSolidarityTax.Enabled = true;
+
+                txtBoxBrokerage.Enabled = true;
+                txtBoxReduction.Enabled = true;
+
+                txtBoxDocument.Enabled = true;
+                btnSalesDocumentBrowse.Enabled = true;
+
+                btnAddSave.Enabled = true;
             }
             else
             {
@@ -1003,10 +1033,16 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 btnAddSave.Enabled = false;
             }
 
-            txtBoxVolume.Focus();
+            // TODO Renaming of the buttons and so on
 
+            // Select overview tab
             if (tabCtrlSales.TabPages.Count > 0)
                 tabCtrlSales.SelectTab(0);
+
+            txtBoxVolume.Focus();
+
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+
         }
 
         #endregion Form
@@ -1034,6 +1070,16 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         }
 
         /// <summary>
+        /// This function stores the date time picker for the date to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnDatePickerDate_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = datePickerDate;
+        }
+
+        /// <summary>
         /// This function updates the model if the time has changed
         /// </summary>
         /// <param name="sender">DateTime picker</param>
@@ -1051,6 +1097,17 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         private void OnDatePickerTime_Leave(object sender, EventArgs e)
         {
             FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the date time picker for the time to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnDatePickerTime_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = datePickerTime;
+
         }
 
         #endregion Date Time
@@ -1078,6 +1135,16 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         }
 
         /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxVolume_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = txtBoxVolume;
+        }
+
+        /// <summary>
         /// This function updates the model if the text has changed
         /// </summary>
         /// <param name="sender">Text box</param>
@@ -1096,6 +1163,16 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         {
             FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
 
+        }
+
+        /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxSalePrice_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = txtBoxSalePrice;
         }
 
         /// <summary>
@@ -1119,6 +1196,16 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         }
 
         /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxTaxAtSource_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = txtBoxTaxAtSource;
+        }
+
+        /// <summary>
         /// This function updates the model if the text has changed
         /// </summary>
         /// <param name="sender">Text box</param>
@@ -1136,6 +1223,16 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         private void OnTxtBoxCapitalGainsTaxLeave(object sender, EventArgs e)
         {
             FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxCapitalGainsTax_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = txtBoxCapitalGainsTax;
         }
 
         /// <summary>
@@ -1159,6 +1256,16 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         }
 
         /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxSolidarityTax_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = txtBoxSolidarityTax;
+        }
+
+        /// <summary>
         /// This function updates the model if the text has changed
         /// </summary>
         /// <param name="sender">Text box</param>
@@ -1176,6 +1283,16 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         private void OnTxtBoxBrokerageLeave(object sender, EventArgs e)
         {
             FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxBrokerage_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = txtBoxBrokerage;
         }
 
         /// <summary>
@@ -1199,6 +1316,16 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         }
 
         /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxReduction_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = txtBoxReduction;
+        }
+
+        /// <summary>
         /// This function only sets the document of the model to the view
         /// </summary>
         /// <param name="sender">Text box</param>
@@ -1218,20 +1345,46 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
         }
 
-        private void OnTxtBoxDocument_DragDrop(object sender, DragEventArgs e)
+        /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void txtBoxDocument_Enter(object sender, EventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
+            _focusedControl = txtBoxDocument;
         }
 
+        /// <summary>
+        /// This function shows the Drop sign
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxDocument_DragDrop(object sender, DragEventArgs e)
+        {
+            e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
+        }
+
+        /// <summary>
+        /// This function allows to sets via Drag and Drop a document for this brokerage
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
         private void OnTxtBoxDocument_DragEnter(object sender, DragEventArgs e)
         {
             if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
 
             var files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            foreach (var filePath in files)
-            {
-                txtBoxDocument.Text = filePath;
-            }
+            if (files.Length <= 0 || files.Length > 1) return;
+
+            txtBoxDocument.Text = files[0];
+
+            // TODO Parse PDF and set values to the form
+            //var pdf = new PdfDocument(new PdfReader(txtBoxDocument.Text));
+            //var text = PdfTextExtractor.GetTextFromPage(pdf.GetPage(1), new LocationTextExtractionStrategy());
+            //pdf.Close();
+            //Console.WriteLine(@"Extracted text:");
+            //Console.WriteLine(text);
         }
 
         #endregion TextBoxes
@@ -1267,7 +1420,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
 
             // Create form with the used buy details and the result
             var showOwnMessageBox =
-                new UsedBuyDetailsList(
+                new UsedBuyDetailsList.UsedBuyDetailsList(
                     Language.GetLanguageTextByXPath(@"/AddEditFormSale/UsedBuyDetailsForm/Caption", LanguageName),
                     Language.GetLanguageTextByXPath(@"/AddEditFormSale/UsedBuyDetailsForm/GroupBox", LanguageName),
                     strMessage,
@@ -1436,7 +1589,32 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             Close();
         }
 
+        /// <summary>
+        /// This function opens a file dialog and the user
+        /// can chose a file which documents the buy
+        /// </summary>
+        /// <param name="sender">Button</param>
+        /// <param name="e">EventArgs</param>
+        private void OnBtnBuyDocumentBrowse_Click(object sender, EventArgs e)
+        {
+            DocumentBrowseEventHandler?.Invoke(this, new EventArgs());
+        }
+
         #endregion Buttons
+
+        #region Group box overview
+
+        /// <summary>
+        /// This function sets the focus back to the last focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnGrpBoxOverview_MouseLeave(object sender, EventArgs e)
+        {
+            _focusedControl?.Focus();
+        }
+
+        #endregion Group box overview
 
         #region Data grid view
 
@@ -1461,13 +1639,11 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         {
                             dataGridView.SelectionChanged -= OnDataGridViewSalesOfYears_SelectionChanged;
                             dataGridView.MouseEnter -= OnDataGridViewSalesOfYears_MouseEnter;
-                            dataGridView.MouseLeave -= OnDataGridViewSalesOfYears_MouseLeave;
                         }
                         else
                         {
                             dataGridView.SelectionChanged -= OnDataGridViewSalesOfAYear_SelectionChanged;
                             dataGridView.MouseEnter -= OnDataGridViewSalesOfYears_MouseEnter;
-                            dataGridView.MouseLeave -= OnDataGridViewSalesOfAYear_MouseLeave;
                         }
 
                         dataGridView.DataBindingComplete -= OnDataGridViewSalesOfAYear_DataBindingComplete;
@@ -1487,7 +1663,9 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 var newTabPageOverviewYears = new TabPage
                 {
                     // Set TabPage name
-                    Name = @"Overview",
+                    Name = Language.GetLanguageTextByXPath(
+                        @"/AddEditFormSale/GrpBoxSale/TabCtrl/TabPgOverview/Overview",
+                        LanguageName),
 
                     // Set TabPage caption
                     Text = Language.GetLanguageTextByXPath(
@@ -1512,6 +1690,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 // Create DataGridView
                 var dataGridViewSalesOverviewOfAYears = new DataGridView
                 {
+                    // TODO correct
                     Name = @"Overview",
                     Dock = DockStyle.Fill,
 
@@ -1527,8 +1706,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 dataGridViewSalesOverviewOfAYears.DataBindingComplete += OnDataGridViewSalesOfAYear_DataBindingComplete;
                 // Set the delegate for the mouse enter event
                 dataGridViewSalesOverviewOfAYears.MouseEnter += OnDataGridViewSalesOfYears_MouseEnter;
-                // Set the delegate for the mouse leave event
-                dataGridViewSalesOverviewOfAYears.MouseLeave += OnDataGridViewSalesOfYears_MouseLeave;
                 // Set row select event
                 dataGridViewSalesOverviewOfAYears.SelectionChanged += OnDataGridViewSalesOfYears_SelectionChanged;
 
@@ -1631,8 +1808,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                     dataGridViewSalesOfAYear.DataBindingComplete += OnDataGridViewSalesOfAYear_DataBindingComplete;
                     // Set the delegate for the mouse enter event
                     dataGridViewSalesOfAYear.MouseEnter += OnDataGridViewSalesOfAYear_MouseEnter;
-                    // Set the delegate for the mouse leave event
-                    dataGridViewSalesOfAYear.MouseLeave += OnDataGridViewSalesOfAYear_MouseLeave;
                     // Set row select event
                     dataGridViewSalesOfAYear.SelectionChanged += OnDataGridViewSalesOfAYear_SelectionChanged;
                     // Set cell decimal click event
@@ -1688,7 +1863,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_SALE || DEBUG
+#if DEBUG
                 var message = $"ShowSales()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1720,19 +1895,50 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                     switch (i)
                     {
                         case 0:
-                            ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxSale/TabCtrl/DgvSaleOverview/ColHeader_Date",
-                                    LanguageName);
-                            break;
+                        {
+                            if (((DataGridView) sender).Name == @"Overview")
+                            {
+                                ((DataGridView) sender).Columns[i].HeaderText =
+                                    Language.GetLanguageTextByXPath(
+                                        @"/AddEditFormSale/GrpBoxSale/TabCtrl/DgvSaleOverview/ColHeader_Year",
+                                        LanguageName);
+                            }
+                        }
+                        break;
                         case 1:
-                            ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxSale/TabCtrl/DgvSaleOverview/ColHeader_Volume",
-                                    LanguageName) + @" (" + ShareObject.PieceUnit + @")";
-                            break;
+                        {
+                            if (((DataGridView) sender).Name == @"Overview")
+                            {
+                                ((DataGridView) sender).Columns[i].HeaderText =
+                                    Language.GetLanguageTextByXPath(
+                                        @"/AddEditFormSale/GrpBoxSale/TabCtrl/DgvSaleOverview/ColHeader_Volume",
+                                        LanguageName) + @" (" + ShareObject.PieceUnit + @")";
+                            }
+                            else
+                            {
+                                ((DataGridView)sender).Columns[i].HeaderText =
+                                    Language.GetLanguageTextByXPath(
+                                        @"/AddEditFormSale/GrpBoxSale/TabCtrl/DgvSaleOverview/ColHeader_Date",
+                                        LanguageName);
+                            }
+                        }
+                        break;
                         case 2:
-                            ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxSale/TabCtrl/DgvSaleOverview/ColHeader_Purchase",
-                                    LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
+                            if (((DataGridView)sender).Name == @"Overview")
+                            {
+                                ((DataGridView)sender).Columns[i].HeaderText =
+                                    Language.GetLanguageTextByXPath(
+                                        @"/AddEditFormSale/GrpBoxSale/TabCtrl/DgvSaleOverview/ColHeader_Payout",
+                                        LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
+                            }
+                            else
+                            {
+                                ((DataGridView) sender).Columns[i].HeaderText =
+                                    Language.GetLanguageTextByXPath(
+                                        @"/AddEditFormSale/GrpBoxSale/TabCtrl/DgvSaleOverview/ColHeader_Purchase",
+                                        LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
+                            }
+
                             break;
                         case 3:
                             ((DataGridView)sender).Columns[i].HeaderText =
@@ -1801,8 +2007,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         }
                     }
                 }
-
-                //ResetInputValues();
             }
             catch (Exception ex)
             {
@@ -1819,34 +2023,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             }
         }
 
-        /// <summary>
-        /// This function opens a file dialog and the user
-        /// can chose a file which documents the sale
-        /// </summary>
-        /// <param name="sender">Button</param>
-        /// <param name="e">EventArgs</param>
-        private void OnBtnSaleDocumentBrowse_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                const string strFilter = "pdf (*.pdf)|*.pdf|txt (*.txt)|.txt|doc (*.doc)|.doc|docx (*.docx)|.docx";
-                txtBoxDocument.Text = Helper.SetDocument(Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/OpenFileDialog/Title", LanguageName), strFilter, txtBoxDocument.Text);
-            }
-            catch (Exception ex)
-            {
-#if DEBUG_SALE || DEBUG
-                var message = $"btnSaleDocumentBrowse_Click()\n\n{ex.Message}";
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessageSaleEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/ChoseDocumentFailed", LanguageName),
-                    Language, LanguageName,
-                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
-            }
-        }
-
         #region Tab control delegates
 
         /// <summary>
@@ -1856,47 +2032,53 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// <param name="e">EventArgs</param>
         private void TabCtrlSales_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (tabCtrlSales.SelectedTab == null) return;
-
-            // Loop trough the controls of the selected tab page and set focus on the data grid view
-            foreach (Control control in tabCtrlSales.SelectedTab.Controls)
+            try
             {
-                if (control is DataGridView view)
+                // Reset last selected Guid
+                SelectedGuidLast = @"";
+
+                if (tabCtrlSales.SelectedTab == null) return;
+
+                // Loop trough the controls of the selected tab page and set focus on the data grid view
+                foreach (Control control in tabCtrlSales.SelectedTab.Controls)
                 {
-                    if (view.Rows.Count > 0 && view.Name != @"Overview")
+                    if (control is DataGridView view)
                     {
-                        // Set update flag
-                        UpdateSale = true;
+                        if (view.Rows.Count > 0 && view.Name != @"Overview")
+                        {
+                            if (view.Rows[0].Cells.Count > 0)
+                            {
+                                view.Rows[0].Selected = true;
 
-                        view.Rows[0].Selected = true;
+                                // Set update flag
+                                UpdateSale = true;
+                            }
+
+                            view.Focus();
+
+                            if (view.Name == @"Overview")
+                                ResetInputValues();
+                        }
+                        else
+                        {
+                            UpdateSale = false;
+                        }
                     }
-                    else
-                    {
-                        SelectedGuidLast = @"";
-                        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SelectedGuidLast"));
-
-                        UpdateSale = false;
-                    }
-
-                    view.Focus();
                 }
             }
-        }
-
-        /// <summary>
-        /// This function sets the focus on the data grid view of the current selected tab page of the tab control
-        /// </summary>
-        /// <param name="sender">Data grid view</param>
-        /// <param name="e">EventArgs</param>
-        private void TabCtrlSales_MouseEnter(object sender, EventArgs e)
-        {
-            if (tabCtrlSales.SelectedTab == null) return;
-
-            // Loop trough the controls of the selected tab page and set focus on the data grid view
-            foreach (Control control in tabCtrlSales.SelectedTab.Controls)
+            catch (Exception ex)
             {
-                if (control is DataGridView view)
-                    view.Focus();
+#if DEBUG
+                var message = $"TabCtrlBuys_SelectedIndexChanged()\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+#endif
+                // Add status message
+                Helper.AddStatusMessage(toolStripStatusLabelMessageSaleEdit,
+                Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SelectionChangeFailed", LanguageName),
+                Language, LanguageName,
+                Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                (int) FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -1907,7 +2089,52 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// <param name="e">EventArgs</param>
         private void TabCtrlSales_MouseLeave(object sender, EventArgs e)
         {
-            grpBoxAdd.Focus();
+            _focusedControl?.Focus();
+        }
+
+        /// <summary>
+        /// This function sets the focus on the last focused control
+        /// </summary>
+        /// <param name="sender">Tab control</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTabCtrlSales_KeyDown(object sender, KeyEventArgs e)
+        {
+            _focusedControl?.Focus();
+        }
+
+        /// <summary>
+        /// This function sets key value ( char ) to the last focused control
+        /// </summary>
+        /// <param name="sender">Tab control</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTabCtrlSales_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Check if the last focused control was a text box so set the
+            // key value ( char ) to the text box and then set the cursor behind the text
+            if (_focusedControl is TextBox textBox)
+            {
+                textBox.Text = e.KeyChar.ToString();
+                textBox.Select(textBox.Text.Length, 0);
+            }
+
+            // Check if the last focused control was a date time picker
+            if (_focusedControl is DateTimePicker dateTimePicker)
+            {
+                // Check if the pressed key was a numeric key
+                if (e.KeyChar == '0' ||
+                    e.KeyChar == '1' ||
+                    e.KeyChar == '2' ||
+                    e.KeyChar == '3' ||
+                    e.KeyChar == '4' ||
+                    e.KeyChar == '5' ||
+                    e.KeyChar == '6' ||
+                    e.KeyChar == '7' ||
+                    e.KeyChar == '8' ||
+                    e.KeyChar == '9'
+                )
+                    dateTimePicker.Text = e.KeyChar.ToString();
+            }
+
         }
 
         #endregion Tab control delegates
@@ -1931,7 +2158,9 @@ namespace SharePortfolioManager.Forms.SalesForm.View
 
                 foreach (TabPage tabPage in tabCtrlSales.TabPages)
                 {
-                    if (tabPage.Name != curItem[0].Cells[0].Value.ToString()) continue;
+                    if (curItem[0].Cells[1].Value != null && 
+                        tabPage.Name != curItem[0].Cells[0].Value.ToString()
+                        ) continue;
 
                     tabCtrlSales.SelectTab(tabPage);
                     tabPage.Focus();
@@ -1959,19 +2188,9 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// </summary>
         /// <param name="sender">Entered data grid view</param>
         /// <param name="args">EventArgs</param>
-        private void OnDataGridViewSalesOfYears_MouseEnter(object sender, EventArgs args)
+        private static void OnDataGridViewSalesOfYears_MouseEnter(object sender, EventArgs args)
         {
             ((DataGridView)sender).Focus();
-        }
-
-        /// <summary>
-        /// This function sets the focus to the left data grid view
-        /// </summary>
-        /// <param name="sender">Left data grid view</param>
-        /// <param name="args">EventArgs</param>
-        private void OnDataGridViewSalesOfYears_MouseLeave(object sender, EventArgs args)
-        {
-            grpBoxAdd.Focus();
         }
 
         #endregion Sales of years
@@ -2002,11 +2221,15 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                     var curItem = ((DataGridView)sender).SelectedRows;
 
                     // Set selected date
-                    SelectedDate = curItem[0].Cells[0].Value.ToString();
+                    if (curItem[0].Cells[1].Value != null)
+                        SelectedDate = curItem[0].Cells[1].Value.ToString();
+                    else
+                        return;
 
                     // Get list of sales of a year
                     DateTime.TryParse(SelectedDate, out var dateTime);
-                    var saleListYear = ShareObjectFinalValue.AllSaleEntries.AllSalesOfTheShareDictionary[dateTime.Year.ToString()]
+                    var saleListYear = ShareObjectFinalValue.AllSaleEntries
+                        .AllSalesOfTheShareDictionary[dateTime.Year.ToString()]
                         .SaleListYear;
 
                     var index = ((DataGridView)sender).SelectedRows[0].Index;
@@ -2043,11 +2266,8 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         txtBoxDocument.Text = curItem[0].Cells[5].Value.ToString();
                     }
 
-                    if (ShareObjectFinalValue.AllBuyEntries.IsDateLastDate(SelectedDate) &&
-                        ShareObjectFinalValue.AllSaleEntries.IsDateLastDate(SelectedDate)
-                        )
+                    if (ShareObjectFinalValue.AllSaleEntries.IsDateLastDate(SelectedDate))
                     {
-                        // Check if a sale exists
                         btnDelete.Enabled = ShareObjectFinalValue.AllSaleEntries.GetAllSalesOfTheShare().Count > 1;
 
                         // Enable text box(es)
@@ -2059,12 +2279,13 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         txtBoxCapitalGainsTax.Enabled = true;
                         txtBoxSolidarityTax.Enabled = true;
                         txtBoxBrokerage.Enabled = true;
+                        txtBoxReduction.Enabled = true;
                     }
                     else
                     {
                         // Disable Button(s)
                         btnDelete.Enabled = false;
-                        // Disable text box(es)
+                        // Disable TextBox(es)
                         datePickerDate.Enabled = false;
                         datePickerTime.Enabled = false;
                         txtBoxVolume.Enabled = false;
@@ -2073,14 +2294,17 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         txtBoxCapitalGainsTax.Enabled = false;
                         txtBoxSolidarityTax.Enabled = false;
                         txtBoxBrokerage.Enabled = false;
+                        txtBoxReduction.Enabled = false;
                     }
 
                     // Rename button
-                    btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Buttons/Save", LanguageName);
+                    btnAddSave.Text = 
+                        Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Buttons/Save", LanguageName);
                     btnAddSave.Image = Resources.black_edit;
 
                     // Rename group box
-                    grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Edit_Caption", LanguageName);
+                    grpBoxAdd.Text = 
+                        Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Edit_Caption", LanguageName);
 
                     // Store DataGridView instance
                     SelectedDataGridView = (DataGridView)sender;
@@ -2091,16 +2315,20 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 else
                 {
                     // Rename button
-                    btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Buttons/Add", LanguageName);
+                    btnAddSave.Text = 
+                        Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Buttons/Add", LanguageName);
                     btnAddSave.Image = Resources.black_add;
 
-                    // Reset update flag
-                    UpdateSale = false;
+                    // Rename group box
+                    grpBoxAdd.Text = 
+                        Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Add_Caption", LanguageName);
 
                     // Disable button(s)
                     btnDelete.Enabled = false;
+
                     // Enable Button(s)
                     btnAddSave.Enabled = true;
+
                     // Enable text box(es)
                     datePickerDate.Enabled = true;
                     datePickerTime.Enabled = true;
@@ -2111,8 +2339,8 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                     txtBoxSolidarityTax.Enabled = true;
                     txtBoxBrokerage.Enabled = true;
 
-                    // Rename group box
-                    grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Add_Caption", LanguageName);
+                    // Reset update flag
+                    UpdateSale = false;
 
                     // Reset stored DataGridView instance
                     SelectedDataGridView = null;
@@ -2138,19 +2366,9 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// </summary>
         /// <param name="sender">Entered data grid view</param>
         /// <param name="args">EventArgs</param>
-        private void OnDataGridViewSalesOfAYear_MouseEnter(object sender, EventArgs args)
+        private static void OnDataGridViewSalesOfAYear_MouseEnter(object sender, EventArgs args)
         {
             ((DataGridView)sender).Focus();
-        }
-
-        /// <summary>
-        /// This function sets the focus to the left data grid view
-        /// </summary>
-        /// <param name="sender">Left data grid view</param>
-        /// <param name="args">EventArgs</param>
-        private void OnDataGridViewSalesOfAYear_MouseLeave(object sender, EventArgs args)
-        {
-            grpBoxAdd.Focus();
         }
 
         /// <summary>
@@ -2211,7 +2429,9 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         {
                             // Remove sale object and add it with no document
                             if (ShareObjectFinalValue.RemoveSale(temp.Guid, temp.Date) &&
-                                ShareObjectFinalValue.AddSale(strGuid, temp.Date, temp.Volume, temp.SalePrice, temp.SaleBuyDetails, temp.TaxAtSource, temp.CapitalGainsTax, temp.SolidarityTax, temp.Brokerage, temp.Reduction))
+                                ShareObjectFinalValue.AddSale(strGuid, temp.Date, temp.Volume,
+                                    temp.SalePrice, temp.SaleBuyDetails, temp.TaxAtSource, temp.CapitalGainsTax,
+                                    temp.SolidarityTax, temp.Brokerage, temp.Reduction))
                             {
                                 // Set flag to save the share object.
                                 SaveFlag = true;
@@ -2260,59 +2480,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         #endregion Sales of a year
 
         #endregion Data grid view
-
-        //        /// <summary>
-        //        /// This function calculates the profit / loss of the given values
-        //        /// If a given value is not valid the profit / loss text box is set to "-"
-        //        /// <param name="strSaleVolume">Sale volume of the share</param>
-        //        /// <param name="strSalePrice">Current price of the share</param>
-        //        /// <param name="decShareDeposit">Current deposit of the share</param>
-        //        /// <param name="decShareVolume">Current share volume</param>
-        //        /// <returns>String with the profit / loss or "-" if the calculation failed</returns>>
-        //        /// </summary>
-        //        private string CalculateProfitLoss(string strSaleVolume, string strSalePrice, decimal decShareDeposit, decimal decShareVolume)
-        //        {
-        //            try
-        //            {
-        //                decimal volume = 0;
-
-        //                if (decimal.TryParse(strSaleVolume, out volume) && volume > 0)
-        //                {
-        //                    decimal price = 0;
-
-        //                    if (decimal.TryParse(strSalePrice, out price))
-        //                    {
-        //                        decimal decSalePrice = price * volume;
-
-        //                        // Check if the share deposit and share volume is not "0"
-        //                        decimal decDeposit = 0;
-        //                        if (decShareDeposit > 0 && decShareVolume > 0)
-        //                        {
-        //                            decDeposit = volume * decShareDeposit / decShareVolume;
-        //                        }
-
-        //                        return Helper.FormatDecimal((decSalePrice - decDeposit), Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
-        //                    }
-        //                    else
-        //                    {
-        //                        return @"-";
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    return @"-";
-        //                }
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //#if DEBUG_SALE || DEBUG
-        //                var message = $"CalculatePrice()\n\n{ex.Message}";
-        //                MessageBox.Show(message, @"Error",  MessageBoxButtons.OK,
-        //                    MessageBoxIcon.Error);
-        //#endif
-        //                return @"-";
-        //            }
-        //        }
 
         #endregion Methods
     }

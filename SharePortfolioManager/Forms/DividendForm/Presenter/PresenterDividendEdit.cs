@@ -40,11 +40,11 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
             _model = model;
 
             view.PropertyChanged += OnViewChange;
-            view.FormatInputValues += OnViewFormatInputValues;
-            view.AddDividend += OnAddDividend;
-            view.EditDividend += OnEditDividend;
-            view.DeleteDividend += OnDeleteDividend;
-            view.DocumentBrowse += OnDocumentBrowse;
+            view.FormatInputValuesEventHandler += OnViewFormatInputValues;
+            view.AddDividendEventHandler += OnAddDividend;
+            view.EditDividendEventHandler += OnEditDividend;
+            view.DeleteDividendEventHandler += OnDeleteDividend;
+            view.DocumentBrowseEventHandler += OnDocumentBrowse;
         }
 
         private void UpdateViewWithModel()
@@ -420,12 +420,12 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
                     _model.Document = @"";
                 else if (_model.Document != @"" && _model.Document != @"-" && !Directory.Exists(Path.GetDirectoryName(_model.Document)) && bErrorFlag == false)
                 {
-                    _model.ErrorCode = DividendErrorCode.DirectoryDoesNotExists;
+                    _model.ErrorCode = DividendErrorCode.DocumentDirectoryDoesNotExists;
                     bErrorFlag = true;
                 }
                 else if (_model.Document != @"" && _model.Document != @"-" && !File.Exists(_model.Document) && bErrorFlag == false)
                 {
-                    _model.ErrorCode = DividendErrorCode.FileDoesNotExists;
+                    _model.ErrorCode = DividendErrorCode.DocumentFileDoesNotExists;
                     bErrorFlag = true;
                 }
 

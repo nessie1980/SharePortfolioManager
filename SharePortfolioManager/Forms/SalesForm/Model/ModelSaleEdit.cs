@@ -20,12 +20,13 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+using LanguageHandler;
+using Logging;
 using SharePortfolioManager.Classes;
+using SharePortfolioManager.Classes.Sales;
+using SharePortfolioManager.Classes.ShareObjects;
 using SharePortfolioManager.Forms.SalesForm.View;
 using System.Collections.Generic;
-using SharePortfolioManager.Classes.ShareObjects;
-using Logging;
-using LanguageHandler;
 
 namespace SharePortfolioManager.Forms.SalesForm.Model
 {
@@ -36,9 +37,6 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
     {
         bool UpdateView { get; set; }
         bool UpdateViewFormatted { get; set; }
-
-        bool ShowSales { get; set; }
-        bool AddSale { get; set; }
         bool UpdateSale { get; set; }
 
         SaleErrorCode ErrorCode { get; set; }
@@ -46,11 +44,12 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
         string SelectedGuidLast { get; set; }
         string SelectedDate { get; set; }
 
+        bool ShowSales { get; set; }
+        bool AddSale { get; set; }
+
         ShareObjectMarketValue ShareObjectMarketValue { get; set; }
         ShareObjectFinalValue ShareObjectFinalValue { get; set; }
         ShareObjectFinalValue ShareObjectCalculation { get; set; }
-
-        List<WebSiteRegex> WebSiteRegexList { get; set; }
 
         Logger Logger { get; set; }
         Language Language { get; set; }
@@ -122,11 +121,11 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
 
         public bool UpdateViewFormatted { get; set; }
 
+        public bool UpdateSale { get; set; }
+
         public bool ShowSales { get; set; }
 
         public bool AddSale { get; set; }
-
-        public bool UpdateSale { get; set; }
 
         public SaleErrorCode ErrorCode { get; set; }
 
@@ -141,8 +140,6 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
         public ShareObjectFinalValue ShareObjectFinalValue { get; set; }
 
         public ShareObjectFinalValue ShareObjectCalculation{ get; set; }
-
-        public List<WebSiteRegex> WebSiteRegexList { get; set; }
 
         public Logger Logger { get; set; }
 

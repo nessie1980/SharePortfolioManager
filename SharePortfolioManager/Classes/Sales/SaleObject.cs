@@ -23,12 +23,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using SharePortfolioManager.Classes;
-using SharePortfolioManager.Classes.ShareObjects;
+using SharePortfolioManager.Properties;
 
-namespace SharePortfolioManager
+namespace SharePortfolioManager.Classes.Sales
 {
     [Serializable]
     public class SaleObject
@@ -39,11 +39,6 @@ namespace SharePortfolioManager
         /// Stores the sale volume
         /// </summary>
         private decimal _volume = -1;
-
-        /// <summary>
-        /// Stores the buy price of the share
-        /// </summary>
-        private decimal _buyPrice = -1;
 
         /// <summary>
         /// Stores the sale price of the sale
@@ -88,14 +83,12 @@ namespace SharePortfolioManager
         public CultureInfo SaleCultureInfo { get; internal set; }
 
         [Browsable(false)]
-        [DisplayName(@"Guid")]
         public string Guid { get; internal set; }
 
         [Browsable(false)]
         public string Date { get; internal set; }
 
-        [Browsable(true)]
-        [DisplayName(@"Date")]
+        [Browsable(false)]
         public string DateAsStr => Date;
 
         [Browsable(false)]
@@ -111,8 +104,7 @@ namespace SharePortfolioManager
             }
         }
 
-        [Browsable(true)]
-        [DisplayName(@"Volume")]
+        [Browsable(false)]
         public string VolumeAsStr => Helper.FormatDecimal(_volume, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
 
         [Browsable(false)]
@@ -240,10 +232,12 @@ namespace SharePortfolioManager
         public decimal PurchaseValue { get; internal set; } = -1;
 
         [Browsable(false)]
+        public string PurchaseValueAsStr => Helper.FormatDecimal(PurchaseValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
+
+        [Browsable(false)]
         public decimal ProfitLoss { get; internal set; }
 
-        [Browsable(true)]
-        [DisplayName("ProfitLoss")]
+        [Browsable(false)]
         public string ProfitLossAsStr => Helper.FormatDecimal(ProfitLoss, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
 
         [Browsable(false)]
@@ -252,8 +246,7 @@ namespace SharePortfolioManager
         [Browsable(false)]
         public decimal Payout { get; internal set; }
 
-        [Browsable(true)]
-        [DisplayName("Payout")]
+        [Browsable(false)]
         public string PayoutAsStr => Helper.FormatDecimal(Payout, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
 
         [Browsable(false)]
@@ -263,6 +256,34 @@ namespace SharePortfolioManager
         public string Document { get; internal set; }
 
         #endregion Properties
+
+        #region Data grid view properties
+
+        [Browsable(true)]
+        [DisplayName(@"Guid")]
+        public string DgvGuid => Guid;
+
+        [Browsable(true)]
+        [DisplayName(@"Date")]
+        public string DgvDateAsStr => DateAsStr;
+
+        [Browsable(true)]
+        [DisplayName(@"Purchase")]
+        public string DgvPurchaseValueAsStr => PurchaseValueAsStr;
+
+        [Browsable(true)]
+        [DisplayName(@"ProfitLoss")]
+        public string DgvProfitLossAsStr => ProfitLossAsStr;
+
+        [Browsable(true)]
+        [DisplayName(@"Payout")]
+        public string DgvPayoutAsStr => PayoutAsStr;
+
+        [Browsable(true)]
+        [DisplayName(@"Document")]
+        public Image DocumentGrid => Document == @"-" ? null : Resources.black_logger;
+
+        #endregion Data grid view properties
 
         #region Methods
 
@@ -431,7 +452,7 @@ namespace SharePortfolioManager
         public CultureInfo ProfitLossCultureInfo { get; internal set; }
 
         [Browsable(false)]
-        public string Guid { get; internal set; }
+        public string SaleGuid { get; internal set; }
 
         [Browsable(false)]
         public string Date { get; internal set; }
@@ -450,14 +471,14 @@ namespace SharePortfolioManager
         /// Constructor with parameters
         /// </summary>
         /// <param name="cultureInfo">Culture info of the share</param>
-        /// <param name="strGuid">Guid of the share sale</param>
+        /// <param name="strSaleGuid">Guid of the share sale</param>
         /// <param name="strDate">Date of the share sale</param>
         /// <param name="decProfitLoss">Value of the profit or loss</param>
         /// <param name="strDoc">Document of the sale</param>
-        public ProfitLossObject(CultureInfo cultureInfo, string strGuid, string strDate, decimal decProfitLoss, string strDoc = "")
+        public ProfitLossObject(CultureInfo cultureInfo, string strSaleGuid, string strDate, decimal decProfitLoss, string strDoc = "")
         {
             ProfitLossCultureInfo = cultureInfo;
-            Guid = strGuid;
+            SaleGuid = strSaleGuid;
             Date = strDate;
             ProfitLoss = decProfitLoss;
             Document = strDoc;
@@ -465,7 +486,7 @@ namespace SharePortfolioManager
 #if DEBUG_SALE
             Console.WriteLine(@"");
             Console.WriteLine(@"New sale created");
-            Console.WriteLine(@"Guid: {0}", Guid);
+            Console.WriteLine(@"SaleGuid: {0}", SaleGuid);
             Console.WriteLine(@"Date: {0}", Date);
             Console.WriteLine(@"ProfitLoss: {0}", ProfitLoss);
             Console.WriteLine(@"Document: {0}", Document);

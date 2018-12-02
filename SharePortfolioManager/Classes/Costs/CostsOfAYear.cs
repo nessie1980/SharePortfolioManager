@@ -36,10 +36,10 @@ namespace SharePortfolioManager
         [Browsable(false)]
         public CultureInfo BrokerageCultureInfo { get; internal set; }
 
-        [Browsable(true)]
+        [Browsable(false)]
         public string BrokerageYear { get; internal set; } = @"-";
 
-        [Browsable(true)]
+        [Browsable(false)]
         public decimal BrokerageValueYear { get; internal set; } = -1;
 
         [Browsable(false)]
@@ -49,6 +49,16 @@ namespace SharePortfolioManager
         public List<BrokerageObject> BrokerageListYear { get; } = new List<BrokerageObject>();
 
         #endregion Properties
+
+        #region Data grid view properties
+
+        [Browsable(true)]
+        public string DgvBrokerageYear => BrokerageYear;
+
+        [Browsable(true)]
+        public decimal DgvBrokerageValueYear => BrokerageValueYear;
+
+        #endregion Data grid view properties
 
         #region Methods
 

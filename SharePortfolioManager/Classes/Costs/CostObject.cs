@@ -24,7 +24,9 @@ using SharePortfolioManager.Classes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Globalization;
+using SharePortfolioManager.Properties;
 
 namespace SharePortfolioManager
 {
@@ -37,11 +39,9 @@ namespace SharePortfolioManager
         public CultureInfo BrokerageCultureInfo { get; internal set; }
 
         [Browsable(false)]
-        [DisplayName(@"Guid")]
         public string Guid { get; internal set; }
 
         [Browsable(false)]
-        [DisplayName(@"GuidBuySale")]
         public string GuidBuySale { get; internal set; }
 
         [Browsable(false)]
@@ -59,25 +59,39 @@ namespace SharePortfolioManager
         [Browsable(false)]
         public string BrokerageDate { get; set; }
 
-        [Browsable(true)]
-        [DisplayName(@"Date")]
+        [Browsable(false)]
         public string BrokerageDateAsStr => BrokerageDate;
 
         [Browsable(false)]
         public decimal BrokerageValue { get; set; }
 
-        [Browsable(true)]
-        [DisplayName(@"Value")]
+        [Browsable(false)]
         public string BrokerageValueAsStr => Helper.FormatDecimal(BrokerageValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", BrokerageCultureInfo);
 
         [Browsable(false)]
         public string BrokerageDocument { get; set; }
 
-        [Browsable(true)]
-        [DisplayName(@"Document")]
+        [Browsable(false)]
         public string BrokerageDocumentFileName => Helper.GetFileName(BrokerageDocument);
 
         #endregion Properties
+
+        #region Data grid view properties
+
+        [Browsable(true)]
+        public string DgvGuid => Guid;
+
+        [Browsable(true)]
+        public string DgvBrokerageDate => BrokerageDateAsStr;
+
+        [Browsable(true)]
+        public string DgvBrokerageValueAsStr => BrokerageValueAsStr;
+
+        [Browsable(true)]
+        public Image DocumentGrid => BrokerageDocument == @"-" ? null : Resources.black_logger;
+
+
+        #endregion Data grid view properties
 
         #region Methods
 

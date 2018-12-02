@@ -23,6 +23,7 @@
 using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Classes;
+using SharePortfolioManager.Classes.ShareObjects;
 using SharePortfolioManager.Properties;
 using System;
 using System.ComponentModel;
@@ -33,10 +34,10 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager.Forms.DividendForm.View
 {
+    // Error codes of the DividendEdit
     public enum DividendErrorCode
     {
         AddSuccessful,
@@ -66,26 +67,26 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         PriceWrongFormat,
         PriceWrongValue,
         DocumentBrowseFailed,
-        DirectoryDoesNotExists,
-        FileDoesNotExists
+        DocumentDirectoryDoesNotExists,
+        DocumentFileDoesNotExists
     }
 
     /// <inheritdoc />
     /// <summary>
-    /// Interface of the ShareAdd view
+    /// Interface of the DividendEdit view
     /// </summary>
     public interface IViewDividendEdit : INotifyPropertyChanged
     {
-        event EventHandler FormatInputValues;
-        event EventHandler AddDividend;
-        event EventHandler EditDividend;
-        event EventHandler DeleteDividend;
-        event EventHandler DocumentBrowse;
+        event EventHandler FormatInputValuesEventHandler;
+        event EventHandler AddDividendEventHandler;
+        event EventHandler EditDividendEventHandler;
+        event EventHandler DeleteDividendEventHandler;
+        event EventHandler DocumentBrowseEventHandler;
 
         DividendErrorCode ErrorCode { get; set; }
 
-        ShareObjectMarketValue ShareObjectMarketValue { get; set; }
-        ShareObjectFinalValue ShareObjectFinalValue { get; set; }
+        ShareObjectMarketValue ShareObjectMarketValue { get; }
+        ShareObjectFinalValue ShareObjectFinalValue { get; }
 
         Logger Logger { get; }
         Language Language { get; }
@@ -121,17 +122,8 @@ namespace SharePortfolioManager.Forms.DividendForm.View
     {
         #region Fields
 
-        #region Flags
-
         /// <summary>
-        /// Stores if a dividend should be updated
-        /// </summary>
-        private bool _bUpdateDividend;
-
-        #endregion Flags
-
-        /// <summary>
-        /// Stores the Guid of a selected buy row
+        /// Stores the Guid of a selected dividend row
         /// </summary>
         private string _selectedGuid;
 
@@ -140,26 +132,57 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// </summary>
         private string _selectedDate;
 
+        /// <summary>
+        /// Stores the last focused date time picker or text box
+        /// </summary>
+        private Control _focusedControl;
+
         #endregion Fields
+
+        #region Properties
+
+        #region Transfer parameter
+
+        public Logger Logger { get; internal set; }
+
+        public Language Language { get; internal set; }
+
+        public string LanguageName { get; internal set; }
+
+        #endregion Transfer parameter
+
+        #region Flags
+
+        public bool UpdateDividendFlag { get; set; }
+
+        public bool SaveFlag { get; internal set; }
+
+        public bool LoadGridSelectionFlag { get; internal set; }
+
+        #endregion Flags
+
+        public DataGridView SelectedDataGridView { get; internal set; }
+
+        #endregion Properties
 
         #region IViewMember
 
-        public DividendErrorCode ErrorCode { get; set; }
-
         public bool UpdateDividend
         {
-            get => _bUpdateDividend;
+            get => UpdateDividendFlag;
             set
             {
-                _bUpdateDividend = value;
+                UpdateDividendFlag = value;
 
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("UpdateDividend"));
             }
         }
 
-        public ShareObjectMarketValue ShareObjectMarketValue { get; set; }
+        public DividendErrorCode ErrorCode { get; set; }
 
-        public ShareObjectFinalValue ShareObjectFinalValue { get; set; }
+        public ShareObjectMarketValue ShareObjectMarketValue { get; }
+
+        public ShareObjectFinalValue ShareObjectFinalValue { get; }
 
         public string SelectedGuid
         {
@@ -393,7 +416,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                         SaveFlag = true;
 
                         // Refresh the buy list
-                        ShowDividends();
+                        OnShowDividends();
 
                         break;
                     }
@@ -430,7 +453,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                         SaveFlag = true;
 
                         // Refresh the buy list
-                        ShowDividends();
+                        OnShowDividends();
 
                         break;
                     }
@@ -464,7 +487,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                         grpBoxAddDividend.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", LanguageName);
 
                         // Refresh the buy list
-                        ShowDividends();
+                        OnShowDividends();
 
                         break;
                     }
@@ -722,7 +745,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
                         break;
                     }
-                case DividendErrorCode.DirectoryDoesNotExists:
+                case DividendErrorCode.DocumentDirectoryDoesNotExists:
                     {
                         strMessage =
                             Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DirectoryDoesNotExist", LanguageName);
@@ -734,7 +757,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
                         break;
                     }
-                case DividendErrorCode.FileDoesNotExists:
+                case DividendErrorCode.DocumentFileDoesNotExists:
                     {
                         strMessage =
                             Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/FileDoesNotExist", LanguageName);
@@ -789,37 +812,13 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         #region Event members
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public event EventHandler FormatInputValues;
-        public event EventHandler AddDividend;
-        public event EventHandler EditDividend;
-        public event EventHandler DeleteDividend;
-        public event EventHandler DocumentBrowse;
+        public event EventHandler FormatInputValuesEventHandler;
+        public event EventHandler AddDividendEventHandler;
+        public event EventHandler EditDividendEventHandler;
+        public event EventHandler DeleteDividendEventHandler;
+        public event EventHandler DocumentBrowseEventHandler;
 
         #endregion Event members
-
-        #region Properties
-
-        #region Transfer parameter
-
-        public Logger Logger { get; internal set; }
-
-        public Language Language { get; internal set; }
-
-        public string LanguageName { get; internal set; }
-
-        #endregion Transfer parameter
-
-        #region Flags
-
-        public bool SaveFlag { get; internal set; }
-
-        public bool LoadGridSelectionFlag { get; internal set; }
-
-        #endregion Flags
-
-        public DataGridView SelectedDataGridView { get; internal set; }
-
-        #endregion Properties
 
         #region Methods
 
@@ -834,7 +833,8 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// <param name="logger">Logger</param>
         /// <param name="xmlLanguage">Language file</param>
         /// <param name="language">Language</param>
-        public ViewDividendEdit(ShareObjectMarketValue shareObjectMarketValue, ShareObjectFinalValue shareObjectFinalValue, Logger logger, Language xmlLanguage, string language)
+        public ViewDividendEdit(ShareObjectMarketValue shareObjectMarketValue, ShareObjectFinalValue shareObjectFinalValue,
+            Logger logger, Language xmlLanguage, string language)
         {
             InitializeComponent();
 
@@ -943,7 +943,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 var iIndex = cbxBoxDividendFCUnit.FindString("en-US");
                 cbxBoxDividendFCUnit.SelectedIndex = iIndex;
 
-                ShowDividends();
+                OnShowDividends();
             }
             catch (Exception ex)
             {
@@ -989,25 +989,51 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         {
             // Reset date time picker
             datePickerDate.Value = DateTime.Now;
+            datePickerDate.Enabled = true;
             datePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+            datePickerTime.Enabled = true;
 
             // Reset text boxes
             chkBoxEnableFC.CheckState = CheckState.Unchecked;
+            chkBoxEnableFC.Enabled = true;
             txtBoxExchangeRatio.Text = @"";
             txtBoxVolume.Text = @"";
+            txtBoxVolume.Enabled = true;
             txtBoxRate.Text = @"";
+            txtBoxRate.Enabled = true;
             txtBoxPayout.Text = @"";
             txtBoxPayoutFC.Text = @"";
             txtBoxTaxAtSource.Text = @"";
+            txtBoxTaxAtSource.Enabled = true;
             txtBoxCapitalGainsTax.Text = @"";
+            txtBoxCapitalGainsTax.Enabled = true;
             txtBoxSolidarityTax.Text = @"";
+            txtBoxSolidarityTax.Enabled = true;
             txtBoxTax.Text = @"";
             txtBoxPayoutAfterTax.Text = @"";
             txtBoxYield.Text = @"";
             txtBoxPrice.Text = @"";
             txtBoxDocument.Text = @"";
 
-            txtBoxRate.Focus();
+            toolStripStatusLabelMessage.Text = @"";
+
+            // Enable button(s)
+            btnAddSave.Text = 
+                Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Add", LanguageName);
+            btnAddSave.Image = Resources.black_add;
+
+            // Disable button(s)
+            btnDelete.Enabled = false;
+
+            // Rename group box
+            grpBoxAddDividend.Text =
+                Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", LanguageName);
+
+            // Deselect rows
+            OnDeselectRowsOfDataGridViews(null);
+
+            // Reset stored DataGridView instance
+            SelectedDataGridView = null;
 
             // Check if any volume is present
             if (ShareObjectFinalValue.Volume > 0)
@@ -1019,7 +1045,9 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             if (tabCtrlDividends.TabPages.Count > 0)
                 tabCtrlDividends.SelectTab(0);
 
-            FormatInputValues?.Invoke(this, new EventArgs());
+            txtBoxRate.Focus();
+
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
         }
 
         #endregion Form
@@ -1031,14 +1059,51 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// </summary>
         /// <param name="sender">CheckBox</param>
         /// <param name="e">EventArgs</param>
-        private void ChkBoxAddDividendForeignCurrency_CheckedChanged(object sender, EventArgs e)
+        private void OnChkBoxAddDividendForeignCurrency_CheckedChanged(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("EnableFC"));
 
             CheckForeignCurrencyCalculationShouldBeDone();
         }
 
+        /// <summary>
+        /// This function stores the check box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnChkBoxEnableFC_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = chkBoxEnableFC;
+        }
+
         #endregion CheckBoxes
+
+        #region Combo box foreign currency
+
+        /// <summary>
+        /// This function changes the currency unit when the currency
+        /// has been changed and changes the currency unit to the taxes
+        /// </summary>
+        /// <param name="sender">ComboBox</param>
+        /// <param name="e">EventArgs</param>
+        private void CbxBoxAddDividendForeignCurrency_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            lblPayoutFCUnit.Text = ((ComboBox)sender).SelectedItem.ToString().Split('/')[1].Trim();
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CultureInfoFC"));
+        }
+
+        /// <summary>
+        /// This function stores the combo box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnCbxBoxDividendFCUnit_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = cbxBoxDividendFCUnit;
+        }
+
+        #endregion Combo box foreign currency
 
         #region Date / Time
 
@@ -1059,7 +1124,17 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// <param name="e">EventArgs</param>
         private void OnDatePickerDate_Leave(object sender, EventArgs e)
         {
-            FormatInputValues?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the date time picker for the date to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnDatePickerDate_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = datePickerDate;
         }
 
         /// <summary>
@@ -1079,7 +1154,18 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// <param name="e">EventArgs</param>
         private void OnDatePickerTime_Leave(object sender, EventArgs e)
         {
-            FormatInputValues?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the date time picker for the time to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnDatePickerTime_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = datePickerTime;
+
         }
 
         #endregion Date / Time
@@ -1101,9 +1187,19 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void TxtBoxExchangeRatio_Leave(object sender, EventArgs e)
+        private void OnTxtBoxExchangeRatio_Leave(object sender, EventArgs e)
         {
-            FormatInputValues?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxExchangeRatio_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = txtBoxExchangeRatio;
         }
 
         /// <summary>
@@ -1111,7 +1207,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void TxtBoxAddDividendRate_TextChanged(object sender, EventArgs e)
+        private void OnTxtBoxAddDividendRate_TextChanged(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Rate"));
         }
@@ -1121,9 +1217,19 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void TxtBoxRate_Leave(object sender, EventArgs e)
+        private void OnTxtBoxRate_Leave(object sender, EventArgs e)
         {
-            FormatInputValues?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxRate_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = txtBoxRate;
         }
 
         /// <summary>
@@ -1131,7 +1237,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void TxtBoxAddVolume_TextChanged(object sender, EventArgs e)
+        private void OnTxtBoxAddVolume_TextChanged(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Volume"));
         }
@@ -1141,9 +1247,19 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void TxtBoxVolume_Leave(object sender, EventArgs e)
+        private void OnTxtBoxVolume_Leave(object sender, EventArgs e)
         {
-            FormatInputValues?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxVolume_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = txtBoxVolume;
         }
 
         /// <summary>
@@ -1151,7 +1267,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void TxtBoxTaxAtSource_TextChanged(object sender, EventArgs e)
+        private void OnTxtBoxTaxAtSource_TextChanged(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TaxAtSource"));
         }
@@ -1161,9 +1277,19 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void TxtBoxTaxAtSource_Leave(object sender, EventArgs e)
+        private void OnTxtBoxTaxAtSource_Leave(object sender, EventArgs e)
         {
-            FormatInputValues?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxTaxAtSource_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = txtBoxTaxAtSource;
         }
 
         /// <summary>
@@ -1171,7 +1297,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void TxtBoxCapitalGainsTax_TextChanged(object sender, EventArgs e)
+        private void OnTxtBoxCapitalGainsTax_TextChanged(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CapitalGainsTax"));
         }
@@ -1181,9 +1307,19 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void TxtBoxCapitalGainsTax_Leave(object sender, EventArgs e)
+        private void OnTxtBoxCapitalGainsTax_Leave(object sender, EventArgs e)
         {
-            FormatInputValues?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxCapitalGainsTax_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = txtBoxCapitalGainsTax;
         }
 
         /// <summary>
@@ -1191,7 +1327,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void TxtBoxSolidarityTax_TextChanged(object sender, EventArgs e)
+        private void OnTxtBoxSolidarityTax_TextChanged(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SolidarityTax"));
         }
@@ -1201,9 +1337,19 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void TxtBoxSolidarityTax_Leave(object sender, EventArgs e)
+        private void OnTxtBoxSolidarityTax_Leave(object sender, EventArgs e)
         {
-            FormatInputValues?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxSolidarityTax_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = txtBoxSolidarityTax;
         }
 
         /// <summary>
@@ -1211,7 +1357,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void TxtBoxPrice_TextChanged(object sender, EventArgs e)
+        private void OnTxtBoxPrice_TextChanged(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Price"));
         }
@@ -1221,9 +1367,19 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void TxtBoxPrice_Leave(object sender, EventArgs e)
+        private void OnTxtBoxPrice_Leave(object sender, EventArgs e)
         {
-            FormatInputValues?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxPrice_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = txtBoxPrice;
         }
 
         /// <summary>
@@ -1231,11 +1387,9 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void TxtBoxDocument_TextChanged(object sender, EventArgs e)
+        private void OnTxtBoxDocument_TextChanged(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Document"));
-
-            if (txtBoxDocument.Text == @"") return;
         }
 
         /// <summary>
@@ -1243,34 +1397,51 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void TxtBoxDocument_Leave(object sender, EventArgs e)
+        private void OnTxtBoxDocument_Leave(object sender, EventArgs e)
         {
-            FormatInputValues?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
         }
 
-        private void OnTxtBoxDocument_DragDrop(object sender, DragEventArgs e)
+        /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxDocument_Enter(object sender, EventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
+            _focusedControl = txtBoxDocument;
         }
 
+        /// <summary>
+        /// This function allows to sets via Drag and Drop a document for this brokerage
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
         private void OnTxtBoxDocument_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
+        }
+
+        /// <summary>
+        /// This function shows the Drop sign
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxDocument_DragDrop(object sender, DragEventArgs e)
         {
             if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
 
             var files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            foreach (var filePath in files)
-            {
-                txtBoxDocument.Text = filePath;
+            if (files.Length <= 0 || files.Length > 1) return;
 
-                if (txtBoxDocument.Text == @"") return;
+            txtBoxDocument.Text = files[0];
 
-                // TODO Parse PDF and set values to the form
-                //var pdf = new PdfDocument(new PdfReader(txtBoxDocument.Text));
-                //var text = PdfTextExtractor.GetTextFromPage(pdf.GetPage(1), new LocationTextExtractionStrategy());
-                //pdf.Close();
-                //Console.WriteLine(@"Extracted text:");
-                //Console.WriteLine(text);
-            }
+            // TODO Parse PDF and set values to the form
+            //var pdf = new PdfDocument(new PdfReader(txtBoxDocument.Text));
+            //var text = PdfTextExtractor.GetTextFromPage(pdf.GetPage(1), new LocationTextExtractionStrategy());
+            //pdf.Close();
+            //Console.WriteLine(@"Extracted text:");
+            //Console.WriteLine(text);
         }
 
         #endregion TextBoxes
@@ -1297,13 +1468,13 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 {
                     UpdateDividend = false;
 
-                    AddDividend?.Invoke(this, null);
+                    AddDividendEventHandler?.Invoke(this, null);
                 }
                 else
                 {
                     UpdateDividend = true;
 
-                    EditDividend?.Invoke(this, null);
+                    EditDividendEventHandler?.Invoke(this, null);
                 }
             }
             catch (Exception ex)
@@ -1353,7 +1524,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 // Check if a row is selected
                 if (SelectedDataGridView != null && SelectedDataGridView.SelectedRows.Count == 1)
                 {
-                    DeleteDividend?.Invoke(this, null);
+                    DeleteDividendEventHandler?.Invoke(this, null);
                 }
 
                 // Reset values
@@ -1367,7 +1538,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 grpBoxAddDividend.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", LanguageName);
 
                 // Refresh the dividend list
-                ShowDividends();
+                OnShowDividends();
             }
             catch (Exception ex)
             {
@@ -1393,33 +1564,8 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         {
             try
             {
-                toolStripStatusLabelMessage.Text = @"";
-
-                // Enable button(s)
-                btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Add", LanguageName);
-                btnAddSave.Image = Resources.black_add;
-
-                // Disable button(s)
-                btnDelete.Enabled = false;
-
-                // Rename group box
-                grpBoxAddDividend.Text =
-                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", LanguageName);
-
-                // Deselect rows
-                DeselectRowsOfDataGridViews(null);
-
-                // Reset stored DataGridView instance
-                SelectedDataGridView = null;
-
-                // Select overview tab
-                if (
-                    tabCtrlDividends.TabPages.ContainsKey(
-                        Language.GetLanguageTextByXPath(
-                            @"/AddEditFormDividend/GrpBoxDividend/TabCtrl/TabPgOverview/Overview", LanguageName)))
-                    tabCtrlDividends.SelectTab(
-                        Language.GetLanguageTextByXPath(
-                            @"/AddEditFormDividend/GrpBoxDividend/TabCtrl/TabPgOverview/Overview", LanguageName));
+                // Reset values
+                ResetInputValues();
             }
             catch (Exception ex)
             {
@@ -1446,102 +1592,34 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             Close();
         }
 
+        /// <summary>
+        /// This function opens a file dialog and the user
+        /// can chose a file which documents the dividend pay of the share
+        /// </summary>
+        /// <param name="sender">Button</param>
+        /// <param name="e">EventArgs</param>
+        private void BtnDividendDocumentBrowse_Click(object sender, EventArgs e)
+        {
+            DocumentBrowseEventHandler?.Invoke(this, new EventArgs());
+        }
+
         #endregion Buttons
 
-        /// <summary>
-        /// This function check is a foreign current calculation should be done.
-        /// The function shows or hides, resize and reposition controls
-        /// </summary>
-        private void CheckForeignCurrencyCalculationShouldBeDone()
+        #region Group box overview
+
+        private void OnGrpBoxDividends_MouseLeave(object sender, EventArgs e)
         {
-            if (chkBoxEnableFC.CheckState == CheckState.Checked)
-            {
-                // Enable controls
-                txtBoxExchangeRatio.Enabled = true;
-                txtBoxExchangeRatio.ReadOnly = false;
-                txtBoxTaxAtSource.Enabled = true;
-                txtBoxTaxAtSource.ReadOnly = false;
-                cbxBoxDividendFCUnit.Enabled = true;
-
-                // Set values
-                if (!LoadGridSelectionFlag)
-                {
-                    txtBoxExchangeRatio.Text = @"";
-                    txtBoxVolume.Text = @"";
-                    txtBoxRate.Text = @"";
-                    txtBoxPayout.Text = @"";
-                    txtBoxPayoutFC.Text = @"";
-                    txtBoxTaxAtSource.Text = @"";
-                    txtBoxCapitalGainsTax.Text = @"";
-                    txtBoxSolidarityTax.Text = @"";
-                    txtBoxTax.Text = @"";
-                    txtBoxPayoutAfterTax.Text = @"";
-                    txtBoxPrice.Text = @"";
-                    txtBoxDocument.Text = @"";
-
-                    // Reset status message
-                    toolStripStatusLabelMessage.Text = @"";
-                }
-
-                txtBoxExchangeRatio.Focus();
-            }
-            else
-            {
-                // Disable controls
-                txtBoxExchangeRatio.Enabled = false;
-                txtBoxExchangeRatio.ReadOnly = true;
-                cbxBoxDividendFCUnit.Enabled = false;
-
-                // Set values
-                if (!LoadGridSelectionFlag)
-                {
-                    txtBoxExchangeRatio.Text = @"";
-                    txtBoxVolume.Text = @"";
-                    txtBoxRate.Text = @"";
-                    txtBoxPayout.Text = @"";
-                    txtBoxPayoutFC.Text = @"";
-                    txtBoxTaxAtSource.Text = @"";
-                    txtBoxCapitalGainsTax.Text = @"";
-                    txtBoxSolidarityTax.Text = @"";
-                    txtBoxTax.Text = @"";
-                    txtBoxPayoutAfterTax.Text = @"";
-                    txtBoxPrice.Text = @"";
-                    txtBoxDocument.Text = @"";
-
-                    // Reset status message
-                    toolStripStatusLabelMessage.Text = @"";
-                }
-
-                txtBoxRate.Focus();
-            }
-
-            // Check if any volume is present
-            if (ShareObjectFinalValue.Volume > 0)
-            {
-                // Set current share value
-                txtBoxVolume.Text = ShareObjectFinalValue.VolumeAsStr;
-            }
+            _focusedControl?.Focus();
         }
 
-        /// <summary>
-        /// This function changes the currency unit when the currency
-        /// has been changed and changes the currency unit to the taxes
-        /// </summary>
-        /// <param name="sender">ComboBox</param>
-        /// <param name="e">EventArgs</param>
-        private void CbxBoxAddDividendForeignCurrency_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            lblPayoutFCUnit.Text = ((ComboBox)sender).SelectedItem.ToString().Split('/')[1].Trim();
-
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CultureInfoFC"));
-        }
+        #endregion Group box overview
 
         #region Data grid view
 
         /// <summary>
         /// This function paints the dividend list of the share
         /// </summary>
-        private void ShowDividends()
+        private void OnShowDividends()
         {
             try
             {
@@ -1556,17 +1634,14 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                         {
                             dataGridView.SelectionChanged -= DataGridViewDividendsOfYears_SelectionChanged;
                             dataGridView.MouseEnter -= OnDataGridViewDividendsOfYears_MouseEnter;
-                            dataGridView.MouseLeave -= OnDataGridViewDividendsOfYears_MouseLeave;
                         }
                         else
                         {
                             dataGridView.SelectionChanged -= DataGridViewDividendsOfAYear_SelectionChanged;
                             dataGridView.MouseEnter -= OnDataGridViewDividendsOfAYear_MouseEnter;
-                            dataGridView.MouseLeave -= OnDataGridViewDividendsOfAYear_MouseLeave;
-                            dataGridView.CellContentDoubleClick -= DataGridViewDividendsOfAYear_CellContentClick;
                         }
 
-                        dataGridView.DataBindingComplete -= DataGridViewDividends_DataBindingComplete;
+                        dataGridView.DataBindingComplete -= OnDataGridViewDividends_DataBindingComplete;
                     }
                     tabPage.Controls.Clear();
                     tabCtrlDividends.TabPages.Remove(tabPage);
@@ -1607,6 +1682,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 // Create DataGridView
                 var dataGridViewDividendsOverviewOfAYears = new DataGridView
                 {
+                    // TODO correct
                     Name = @"Overview",
                     Dock = DockStyle.Fill,
 
@@ -1619,11 +1695,9 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 #region Events
 
                 // Set the delegate for the DataBindingComplete event
-                dataGridViewDividendsOverviewOfAYears.DataBindingComplete += DataGridViewDividends_DataBindingComplete;
+                dataGridViewDividendsOverviewOfAYears.DataBindingComplete += OnDataGridViewDividends_DataBindingComplete;
                 // Set the delegate for the mouse enter event
                 dataGridViewDividendsOverviewOfAYears.MouseEnter += OnDataGridViewDividendsOfYears_MouseEnter;
-                // Set the delegate for the mouse leave event
-                dataGridViewDividendsOverviewOfAYears.MouseLeave += OnDataGridViewDividendsOfYears_MouseLeave;
                 // Set row select event
                 dataGridViewDividendsOverviewOfAYears.SelectionChanged += DataGridViewDividendsOfYears_SelectionChanged;
 
@@ -1633,7 +1707,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
                 // Advanced configuration DataGridView dividends
                 dataGridViewDividendsOverviewOfAYears.EnableHeadersVisualStyles = false;
-                // Columnheader styling
+                // Column header styling
                 dataGridViewDividendsOverviewOfAYears.ColumnHeadersDefaultCellStyle.Alignment =
                     DataGridViewContentAlignment.MiddleCenter;
                 dataGridViewDividendsOverviewOfAYears.ColumnHeadersDefaultCellStyle.BackColor =
@@ -1720,11 +1794,9 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     #region Events
 
                     // Set the delegate for the DataBindingComplete event
-                    dataGridViewDividendsOfAYear.DataBindingComplete += DataGridViewDividends_DataBindingComplete;
+                    dataGridViewDividendsOfAYear.DataBindingComplete += OnDataGridViewDividends_DataBindingComplete;
                     // Set the delegate for the mouse enter event
                     dataGridViewDividendsOfAYear.MouseEnter += OnDataGridViewDividendsOfAYear_MouseEnter;
-                    // Set the delegate for the mouse leave event
-                    dataGridViewDividendsOfAYear.MouseLeave += OnDataGridViewDividendsOfAYear_MouseLeave;
                     // Set row select event
                     dataGridViewDividendsOfAYear.SelectionChanged += DataGridViewDividendsOfAYear_SelectionChanged;
                     // Set cell decimal click event
@@ -1739,7 +1811,8 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     // Column header styling
                     dataGridViewDividendsOfAYear.ColumnHeadersDefaultCellStyle.Alignment =
                         DataGridViewContentAlignment.MiddleCenter;
-                    dataGridViewDividendsOfAYear.ColumnHeadersDefaultCellStyle.BackColor = SystemColors.ControlLight;
+                    dataGridViewDividendsOfAYear.ColumnHeadersDefaultCellStyle.BackColor =
+                        SystemColors.ControlLight;
                     dataGridViewDividendsOfAYear.ColumnHeadersHeight = 25;
                     dataGridViewDividendsOfAYear.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
                     // Column styling
@@ -1772,7 +1845,9 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
                     #endregion Control add
                 }
-                
+
+                tabCtrlDividends.TabPages[0].Select();
+
                 Thread.CurrentThread.CurrentCulture = CultureInfo.CurrentUICulture;
             }
             catch (Exception ex)
@@ -1795,7 +1870,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// </summary>
         /// <param name="sender">DataGridView</param>
         /// <param name="e">DataGridViewBindingCompleteEventArgs</param>
-        private void DataGridViewDividends_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        private void OnDataGridViewDividends_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             try
             {
@@ -1843,7 +1918,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                             ((DataGridView)sender).Columns[i].HeaderText =
                                 Language.GetLanguageTextByXPath(
                                     @"/AddEditFormDividend/GrpBoxDividend/TabCtrl/DgvDividendOverview/ColHeader_Volume",
-                                    LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
+                                    LanguageName) + @" (" + ShareObject.PieceUnit + @")";
                             break;
                         case 4:
                             ((DataGridView) sender).Columns[i].HeaderText =
@@ -1881,7 +1956,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             catch (Exception ex)
             {
 #if DEBUG_DIVIDEND || DEBUG
-                var message = $"dataGridViewDividensOfAYear_DataBindingComplete()\n\n{ex.Message}";
+                var message = $"dataGridViewDividendsOfAYear_DataBindingComplete()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -1898,7 +1973,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// This function deselects all selected rows of the
         /// DataGridViews in the TabPages
         /// </summary>
-        private void DeselectRowsOfDataGridViews(DataGridView dataGridView)
+        private void OnDeselectRowsOfDataGridViews(DataGridView dataGridView)
         {
             try
             {
@@ -1915,8 +1990,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                         }
                     }
                 }
-
-                //ResetInputValues();
             }
             catch (Exception ex)
             {
@@ -1933,17 +2006,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             }
         }
 
-        /// <summary>
-        /// This function opens a file dialog and the user
-        /// can chose a file which documents the dividend pay of the share
-        /// </summary>
-        /// <param name="sender">Button</param>
-        /// <param name="e">EventArgs</param>
-        private void BtnAddDividendDocumentBrowse_Click(object sender, EventArgs e)
-        {
-            DocumentBrowse?.Invoke(this, new EventArgs());
-        }
-
         #region Tab control delegates
 
         /// <summary>
@@ -1951,7 +2013,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// </summary>
         /// <param name="sender">Tab control</param>
         /// <param name="e">EventArgs</param>
-        private void TabCtrlDividends_SelectedIndexChanged(object sender, EventArgs e)
+        private void OnTabCtrlDividends_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (tabCtrlDividends.SelectedTab == null) return;
 
@@ -1961,37 +2023,71 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 if (control is DataGridView view)
                 {
                     if (view.Rows.Count > 0 && view.Name != @"Overview")
-                        view.Rows[0].Selected = true;
+                    {
+                        if(view.Rows[0].Cells.Count > 0)
+                            view.Rows[0].Selected = true;
+                    }
+
                     view.Focus();
+
+                    if (view.Name == @"Overview")
+                        ResetInputValues();
                 }
             }
         }
 
         /// <summary>
-        /// This function sets the focus on the data grid view of the current selected tab page of the tab control
+        /// This function sets the focus back to the last focused control
         /// </summary>
-        /// <param name="sender">Data grid view</param>
+        /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void TabCtrlDividends_MouseEnter(object sender, EventArgs e)
+        private void OnTabCtrlDividends_MouseLeave(object sender, EventArgs e)
         {
-            if (tabCtrlDividends.SelectedTab == null) return;
-
-            // Loop trough the controls of the selected tab page and set focus on the data grid view
-            foreach (Control control in tabCtrlDividends.SelectedTab.Controls)
-            {
-                if (control is DataGridView view)
-                    view.Focus();
-            }
+            _focusedControl?.Focus();
         }
 
         /// <summary>
-        /// This function sets the focus to the group box add / edit when the mouse leaves the data grid view
+        /// This function sets the focus on the last focused control
         /// </summary>
         /// <param name="sender">Tab control</param>
         /// <param name="e">EventArgs</param>
-        private void TabCtrlDividends_MouseLeave(object sender, EventArgs e)
+        private void OnTabCtrlDividends_KeyDown(object sender, KeyEventArgs e)
         {
-            grpBoxAddDividend.Focus();
+            _focusedControl?.Focus();
+        }
+
+        /// <summary>
+        /// This function sets key value ( char ) to the last focused control
+        /// </summary>
+        /// <param name="sender">Tab control</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTabCtrlDividends_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Check if the last focused control was a text box so set the
+            // key value ( char ) to the text box and then set the cursor behind the text
+            if (_focusedControl is TextBox textBox)
+            {
+                textBox.Text = e.KeyChar.ToString();
+                textBox.Select(textBox.Text.Length, 0);
+            }
+
+            // Check if the last focused control was a date time picker
+            if (_focusedControl is DateTimePicker dateTimePicker)
+            {
+                // Check if the pressed key was a numeric key
+                if (e.KeyChar == '0' ||
+                    e.KeyChar == '1' ||
+                    e.KeyChar == '2' ||
+                    e.KeyChar == '3' ||
+                    e.KeyChar == '4' ||
+                    e.KeyChar == '5' ||
+                    e.KeyChar == '6' ||
+                    e.KeyChar == '7' ||
+                    e.KeyChar == '8' ||
+                    e.KeyChar == '9'
+                )
+                    dateTimePicker.Text = e.KeyChar.ToString();
+            }
         }
 
         #endregion Tab control delegates
@@ -2015,7 +2111,9 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
                 foreach (TabPage tabPage in tabCtrlDividends.TabPages)
                 {
-                    if (tabPage.Name != curItem[0].Cells[0].Value.ToString()) continue;
+                    if (curItem[0].Cells[1].Value != null && 
+                        tabPage.Name != curItem[0].Cells[0].Value.ToString()
+                        ) continue;
 
                     tabCtrlDividends.SelectTab(tabPage);
                     tabPage.Focus();
@@ -2048,16 +2146,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             ((DataGridView)sender).Focus();
         }
 
-        /// <summary>
-        /// This function sets the focus to the left data grid view
-        /// </summary>
-        /// <param name="sender">Left data grid view</param>
-        /// <param name="args">EventArgs</param>
-        private void OnDataGridViewDividendsOfYears_MouseLeave(object sender, EventArgs args)
-        {
-            grpBoxAddDividend.Focus();
-        }
-
         #endregion Dividends of years
 
         #region Dividends of a year
@@ -2077,7 +2165,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 {
                     // Deselect row only of the other TabPages DataGridViews
                     if (tabCtrlDividends.SelectedTab.Controls.Contains((DataGridView) sender))
-                        DeselectRowsOfDataGridViews((DataGridView) sender);
+                        OnDeselectRowsOfDataGridViews((DataGridView) sender);
                 }
 
                 if (((DataGridView) sender).SelectedRows.Count == 1)
@@ -2086,11 +2174,15 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     var curItem = ((DataGridView) sender).SelectedRows;
 
                     // Set selected date
-                    SelectedDate = curItem[0].Cells[1].Value.ToString();
+                    if (curItem[0].Cells[1].Value != null)
+                        SelectedDate = curItem[0].Cells[1].Value.ToString();
+                    else
+                        return;
 
                     // Get list of buys of a year
                     DateTime.TryParse(SelectedDate, out var dateTime);
-                    var dividendListYear = ShareObjectFinalValue.AllDividendEntries.AllDividendsOfTheShareDictionary[dateTime.Year.ToString()]
+                    var dividendListYear = ShareObjectFinalValue.AllDividendEntries
+                        .AllDividendsOfTheShareDictionary[dateTime.Year.ToString()]
                         .DividendListYear;
 
                     var index = ((DataGridView)sender).SelectedRows[0].Index;
@@ -2101,6 +2193,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     // Get BrokerageObject of the selected DataGridView row
                     var selectedDividendObject = dividendListYear[index];
 
+                    // Set dividend values
                     if (selectedDividendObject != null)
                     {
                         if (selectedDividendObject.EnableFc == CheckState.Checked)
@@ -2150,31 +2243,45 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                         txtBoxDocument.Text = curItem[0].Cells[6].Value.ToString();
                     }
 
-                    // Enable button(s)
-                    btnDelete.Enabled = true;
                     // Rename button
-                    btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Save", LanguageName);
+                    btnAddSave.Text = 
+                        Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Save", LanguageName);
                     btnAddSave.Image = Resources.black_edit;
 
                     // Rename group box
-                    grpBoxAddDividend.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Edit_Caption", LanguageName);
+                    grpBoxAddDividend.Text = 
+                        Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Edit_Caption", LanguageName);
 
                     // Store DataGridView instance
                     SelectedDataGridView = (DataGridView)sender;
 
                     // Format the input value
-                    FormatInputValues?.Invoke(this, new EventArgs());
+                    FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
                 }
                 else
                 {
                     // Rename button
-                    btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Add", LanguageName);
+                    btnAddSave.Text = 
+                        Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Add", LanguageName);
                     btnAddSave.Image = Resources.black_add;
+
+                    // Rename group box
+                    grpBoxAddDividend.Text = 
+                        Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", LanguageName);
+
                     // Disable button(s)
                     btnDelete.Enabled = false;
 
-                    // Rename group box
-                    grpBoxAddDividend.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", LanguageName);
+                    // TODO correct
+                    // Enabled TextBox(es)
+                    datePickerDate.Enabled = true;
+                    datePickerTime.Enabled = true;
+                    txtBoxRate.Enabled = true;
+                    txtBoxVolume.Enabled = true;
+                    txtBoxTaxAtSource.Enabled = true;
+                    txtBoxCapitalGainsTax.Enabled = true;
+                    txtBoxSolidarityTax.Enabled = true;
+                    txtBoxPrice.Enabled = true;
 
                     // Reset stored DataGridView instance
                     SelectedDataGridView = null;
@@ -2203,16 +2310,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         private static void OnDataGridViewDividendsOfAYear_MouseEnter(object sender, EventArgs args)
         {
             ((DataGridView)sender).Focus();
-        }
-
-        /// <summary>
-        /// This function sets the focus to the left data grid view
-        /// </summary>
-        /// <param name="sender">Left data grid view</param>
-        /// <param name="args">EventArgs</param>
-        private void OnDataGridViewDividendsOfAYear_MouseLeave(object sender, EventArgs args)
-        {
-            grpBoxAddDividend.Focus();
         }
 
         /// <summary>
@@ -2279,8 +2376,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                                 // Set flag to save the share object.
                                 SaveFlag = true;
 
-                                ResetInputValues();
-                                ShowDividends();
+                                OnShowDividends();
 
                                 // Add status message
                                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
@@ -2301,13 +2397,14 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                             }
                         }
                     }
+
                     break;
                 }
             }
             catch (Exception ex)
             {
 #if DEBUG_DIVIDEND || DEBUG
-                var message = $"dataGridViewDividendsOfAYear_CellContentdecimalClick()\n\n{ex.Message}";
+                var message = $"dataGridViewDividendsOfAYear_CellContentDecimalClick()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -2324,7 +2421,81 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
         #endregion Data grid view
 
-        #endregion Methods
+        /// <summary>
+        /// This function check is a foreign current calculation should be done.
+        /// The function shows or hides, resize and reposition controls
+        /// </summary>
+        private void CheckForeignCurrencyCalculationShouldBeDone()
+        {
+            if (chkBoxEnableFC.CheckState == CheckState.Checked)
+            {
+                // Enable controls
+                txtBoxExchangeRatio.Enabled = true;
+                txtBoxExchangeRatio.ReadOnly = false;
+                txtBoxTaxAtSource.Enabled = true;
+                txtBoxTaxAtSource.ReadOnly = false;
+                cbxBoxDividendFCUnit.Enabled = true;
 
+                // Set values
+                if (!LoadGridSelectionFlag)
+                {
+                    txtBoxExchangeRatio.Text = @"";
+                    txtBoxVolume.Text = @"";
+                    txtBoxRate.Text = @"";
+                    txtBoxPayout.Text = @"";
+                    txtBoxPayoutFC.Text = @"";
+                    txtBoxTaxAtSource.Text = @"";
+                    txtBoxCapitalGainsTax.Text = @"";
+                    txtBoxSolidarityTax.Text = @"";
+                    txtBoxTax.Text = @"";
+                    txtBoxPayoutAfterTax.Text = @"";
+                    txtBoxPrice.Text = @"";
+                    txtBoxDocument.Text = @"";
+
+                    // Reset status message
+                    toolStripStatusLabelMessage.Text = @"";
+                }
+
+                txtBoxExchangeRatio.Focus();
+            }
+            else
+            {
+                // Disable controls
+                txtBoxExchangeRatio.Enabled = false;
+                txtBoxExchangeRatio.ReadOnly = true;
+                cbxBoxDividendFCUnit.Enabled = false;
+
+                // Set values
+                if (!LoadGridSelectionFlag)
+                {
+                    txtBoxExchangeRatio.Text = @"";
+                    txtBoxVolume.Text = @"";
+                    txtBoxRate.Text = @"";
+                    txtBoxPayout.Text = @"";
+                    txtBoxPayoutFC.Text = @"";
+                    txtBoxTaxAtSource.Text = @"";
+                    txtBoxCapitalGainsTax.Text = @"";
+                    txtBoxSolidarityTax.Text = @"";
+                    txtBoxTax.Text = @"";
+                    txtBoxPayoutAfterTax.Text = @"";
+                    txtBoxPrice.Text = @"";
+                    txtBoxDocument.Text = @"";
+
+                    // Reset status message
+                    toolStripStatusLabelMessage.Text = @"";
+                }
+
+                txtBoxRate.Focus();
+            }
+
+            // Check if any volume is present
+            if (ShareObjectFinalValue.Volume > 0)
+            {
+                // Set current share value
+                txtBoxVolume.Text = ShareObjectFinalValue.VolumeAsStr;
+            }
+        }
+
+        #endregion Methods
     }
 }

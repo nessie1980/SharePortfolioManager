@@ -24,7 +24,6 @@ using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Forms.BuysForm.View;
-using System.Collections.Generic;
 using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager.Forms.BuysForm.Model
@@ -44,7 +43,6 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
 
         ShareObjectMarketValue ShareObjectMarketValue { get; set; }
         ShareObjectFinalValue ShareObjectFinalValue { get; set; }
-        List<WebSiteRegex> WebSiteRegexList { get; set; }
 
         Logger Logger { get; set; }
         Language Language { get; set; }
@@ -92,7 +90,6 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
         private decimal _brokerageDec;
         private string _reduction;
         private decimal _reductionDec;
-        private string _purchaseValue;
         private decimal _purchaseValueDec;
         private string _finalValue;
         private decimal _finalValueDec;
@@ -117,8 +114,6 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
         public ShareObjectMarketValue ShareObjectMarketValue { get; set; }
 
         public ShareObjectFinalValue ShareObjectFinalValue { get; set; }
-
-        public List<WebSiteRegex> WebSiteRegexList { get; set; }
 
         public Logger Logger { get; set; }
 
@@ -342,20 +337,6 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
                 if (Equals(_reductionDec, value))
                     return;
                 _reductionDec = value;
-            }
-        }
-
-        public string PurchaseValue
-        {
-            get => PurchaseValueDec >= 0 ? Helper.FormatDecimal(_purchaseValueDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _purchaseValue;
-            set
-            {
-                if (Equals(_purchaseValue, value))
-                    return;
-                _purchaseValue = value;
-
-                if (!decimal.TryParse(_purchaseValue, out _purchaseValueDec))
-                    PurchaseValueDec = 0;
             }
         }
 

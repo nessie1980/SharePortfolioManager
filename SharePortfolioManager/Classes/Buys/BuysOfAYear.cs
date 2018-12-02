@@ -37,13 +37,13 @@ namespace SharePortfolioManager
         [Browsable(false)]
         public CultureInfo BuyCultureInfo { get; internal set; }
 
-        [Browsable(true)]
+        [Browsable(false)]
         public string BuyYear { get; internal set; } = @"-";
 
-        [Browsable(true)]
+        [Browsable(false)]
         public decimal BuyVolumeYear { get; internal set; } = -1;
 
-        [Browsable(true)]
+        [Browsable(false)]
         public decimal BuyValueYear { get; internal set; } = -1;
 
         [Browsable(false)]
@@ -56,12 +56,22 @@ namespace SharePortfolioManager
         public decimal BuyValueReductionBrokerageYear { get; internal set; } = -1;
 
         [Browsable(false)]
-        public string BuyValueReductionBrokerageYearAsStrUnit => Helper.FormatDecimal(BuyValueReductionBrokerageYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
-
-        [Browsable(false)]
         public List<BuyObject> BuyListYear { get; } = new List<BuyObject>();
 
         #endregion Properties
+
+        #region Data grid view properties
+
+        [Browsable(true)]
+        public string DgvBuyYear => BuyYear;
+
+        [Browsable(true)]
+        public decimal DgvBuyVolumeYear => BuyVolumeYear;
+
+        [Browsable(true)]
+        public decimal DgvBuyValueYear => BuyValueYear;
+
+        #endregion Data grid view properties
 
         #region Methods
 

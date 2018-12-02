@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using SharePortfolioManager.Classes;
 using System.Windows.Forms;
@@ -33,15 +34,32 @@ namespace SharePortfolioManager
     {
         #region Properties
 
+        [Browsable(false)]
         public CultureInfo DividendCultureInfo { get; internal set; }
 
+        [Browsable(false)]
+        public string DividendYear { get; internal set; } = @"-";
+
+        [Browsable(false)]
         public decimal DividendValueYear { get; internal set; } = -1;
 
+        [Browsable(false)]
         public string DividendValueYearWithUnitAsStr => Helper.FormatDecimal(DividendValueYear, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", DividendCultureInfo);
 
+        [Browsable(false)]
         public List<DividendObject> DividendListYear { get; } = new List<DividendObject>();
 
         #endregion Properties
+
+        #region Data grid view properties
+
+        [Browsable(true)]
+        public string DgvDividendYear => DividendYear;
+
+        [Browsable(true)]
+        public string DgvDividendValueYearWithUnitAsStr => DividendValueYearWithUnitAsStr;
+
+        #endregion Data grid view properties
 
         #region Methods
 
@@ -81,6 +99,10 @@ namespace SharePortfolioManager
                 // Add object to the list
                 DividendListYear.Add(addObject);
                 DividendListYear.Sort(new DividendObjectComparer());
+
+                // Set year
+                DateTime.TryParse(strDate, out var dateTime);
+                DividendYear = dateTime.Year.ToString();
 
                 // Calculate dividend value
                 if (DividendValueYear == -1)

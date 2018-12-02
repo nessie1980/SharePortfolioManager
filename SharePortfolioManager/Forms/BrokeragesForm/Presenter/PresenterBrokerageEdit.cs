@@ -20,12 +20,16 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using SharePortfolioManager.Forms.BrokerageForm.Model;
-using SharePortfolioManager.Forms.BrokerageForm.View;
 using System;
 using System.IO;
+#if DEBUG
+using System.Windows.Forms;
+#endif
+using SharePortfolioManager.Classes;
+using SharePortfolioManager.Forms.BrokeragesForm.Model;
+using SharePortfolioManager.Forms.BrokeragesForm.View;
 
-namespace SharePortfolioManager.Forms.BrokerageForm.Presenter
+namespace SharePortfolioManager.Forms.BrokeragesForm.Presenter
 {
     internal class PresenterBrokerageEdit
     {
@@ -38,10 +42,11 @@ namespace SharePortfolioManager.Forms.BrokerageForm.Presenter
             _model = model;
 
             view.PropertyChanged += OnViewChange;
-            view.FormatInputValues += OnViewFormatInputValues;
-            view.AddBrokerage += OnAddBrokerage;
-            view.EditBrokerage += OnEditBrokerage;
-            view.DeleteBrokerage += OnDeleteBrokerage;
+            view.FormatInputValuesEventHandler += OnViewFormatInputValues;
+            view.AddBrokerageEventHandler += OnAddBrokerage;
+            view.EditBrokerageEventHandler += OnEditBrokerage;
+            view.DeleteBrokerageEventHandler += OnDeleteBrokerage;
+            view.DocumentBrowseEventHandler += OnDocumentBrowse;
         }
 
         private void UpdateViewWithModel()
@@ -64,10 +69,10 @@ namespace SharePortfolioManager.Forms.BrokerageForm.Presenter
 
         private void OnViewChange(object sender, EventArgs e)
         {
-            UpdateModelwithView();
+            UpdateModelWithView();
         }
 
-        private void UpdateModelwithView()
+        private void UpdateModelWithView()
         {
             _model.ShareObjectMarketValue = _view.ShareObjectMarketValue;
             _model.ShareObjectFinalValue = _view.ShareObjectFinalValue;
@@ -75,6 +80,11 @@ namespace SharePortfolioManager.Forms.BrokerageForm.Presenter
             _model.UpdateBrokerage = _view.UpdateBrokerage;
             _model.SelectedGuid = _view.SelectedGuid;
             _model.SelectedDate = _view.SelectedDate;
+
+            _model.Logger = _view.Logger;
+            _model.Language = _view.Language;
+            _model.LanguageName = _view.LanguageName;
+
             _model.PartOfABuy = _view.PartOfABuy;
             _model.PartOfASale = _view.PartOfASale;
             _model.Date = _view.Date;
@@ -146,7 +156,35 @@ namespace SharePortfolioManager.Forms.BrokerageForm.Presenter
 
             _view.AddEditDeleteFinish();
         }
-        
+
+        /// <summary>
+        /// This function opens the document browse dialog and set the chosen document
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnDocumentBrowse(object sender, EventArgs e)
+        {
+            try
+            {
+                const string strFilter = "pdf (*.pdf)|*.pdf|txt (*.txt)|.txt|doc (*.doc)|.doc|docx (*.docx)|.docx";
+                _model.Document = Helper.SetDocument(_model.Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/OpenFileDialog/Title", _model.LanguageName), strFilter, _model.Document);
+
+                UpdateViewWithModel();
+
+                _view.DocumentBrowseFinish();
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                var message = $"OnDocumentBrowse()\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+#endif
+                _model.ErrorCode = BrokerageErrorCode.DocumentBrowseFailed;
+            }
+
+        }
+
         /// <summary>
         /// This function checks if the input is correct
         /// With the flag "bFlagAddEdit" it is chosen if
@@ -168,17 +206,17 @@ namespace SharePortfolioManager.Forms.BrokerageForm.Presenter
                     _model.ErrorCode = BrokerageErrorCode.BrokerageEmpty;
                     bErrorFlag = true;
                 }
-                else if (!decimal.TryParse(_model.Brokerage, out var decBrokerage) && bErrorFlag == false)
+                else if (!decimal.TryParse(_model.Brokerage, out var decBrokerage))
                 {
                     _model.ErrorCode = BrokerageErrorCode.BrokerageWrongFormat;
                     bErrorFlag = true;
                 }
-                else if (decBrokerage < 0 && bErrorFlag == false)
+                else if (decBrokerage < 0)
                 {
                     _model.ErrorCode = BrokerageErrorCode.BrokerageWrongValue;
                     bErrorFlag = true;
                 }
-                else if (bErrorFlag == false)
+                else
                     _model.BrokerageDec = decBrokerage;
 
                 // Check if a given document exists
@@ -200,7 +238,7 @@ namespace SharePortfolioManager.Forms.BrokerageForm.Presenter
             }
             catch
             {
-                _model.ErrorCode = BrokerageErrorCode.InputeValuesInvalid;
+                _model.ErrorCode = BrokerageErrorCode.InputValuesInvalid;
                 return true;
             }
         }

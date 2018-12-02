@@ -35,6 +35,7 @@ using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager.Forms.BuysForm.View
 {
+    // Error codes of the BuyEdit
     public enum BuyErrorCode
     {
         AddSuccessful,
@@ -48,7 +49,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         VolumeEmpty,
         VolumeWrongFormat,
         VolumeWrongValue,
-        SharePricEmpty,
+        SharePriceEmpty,
         SharePriceWrongFormat,
         SharePriceWrongValue,
         BrokerageWrongFormat,
@@ -66,11 +67,11 @@ namespace SharePortfolioManager.Forms.BuysForm.View
     /// </summary>
     public interface IViewBuyEdit : INotifyPropertyChanged
     {
-        event EventHandler FormatInputValues;
-        event EventHandler AddBuy;
-        event EventHandler EditBuy;
-        event EventHandler DeleteBuy;
-        event EventHandler DocumentBrowse;
+        event EventHandler FormatInputValuesEventHandler;
+        event EventHandler AddBuyEventHandler;
+        event EventHandler EditBuyEventHandler;
+        event EventHandler DeleteBuyEventHandler;
+        event EventHandler DocumentBrowseEventHandler;
 
         BuyErrorCode ErrorCode { get; set; }
 
@@ -82,6 +83,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         string LanguageName { get; }
 
         bool UpdateBuy { get; set; }
+
         string SelectedGuid { get; set; }
         string SelectedDate { get; set; }
         string Date { get; set; }
@@ -114,6 +116,11 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// </summary>
         private string _selectedDate;
 
+        /// <summary>
+        /// Stores the last focused date time picker or text box
+        /// </summary>
+        private Control _focusedControl;
+
         #endregion Fields
 
         #region Properties
@@ -136,7 +143,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
 
         #endregion Flags
 
-        public DataGridView SelectedDataGridView { get; set; }
+        public DataGridView SelectedDataGridView { get; internal set; }
 
         #endregion Properties
 
@@ -305,275 +312,277 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             switch (ErrorCode)
             {
                 case BuyErrorCode.AddSuccessful:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/StateMessages/AddSuccess", LanguageName);
-                        // Set flag to save the share object.
-                        SaveFlag = true;
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/StateMessages/AddSuccess", LanguageName);
+                    // Set flag to save the share object.
+                    SaveFlag = true;
 
-                        // Refresh the buy list
-                        ShowBuys();
+                    // Refresh the buy list
+                    OnShowBuys();
 
-                        break;
-                    }
+                    break;
+                }
                 case BuyErrorCode.AddFailed:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/AddFailed", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/AddFailed", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
 
-                        Enabled = true;
-                        txtBoxVolume.Focus();
+                    Enabled = true;
+                    txtBoxVolume.Focus();
 
-                        break;
-                    }
+                    break;
+                }
                 case BuyErrorCode.EditSuccessful:
-                    {
-                        // Enable button(s)
-                        btnAddSave.Text =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add",
-                                LanguageName);
-                        btnAddSave.Image = Resources.black_add;
-                        // Disable button(s)
-                        btnDelete.Enabled = false;
+                {
+                    // Enable button(s)
+                    btnAddSave.Text =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add",
+                            LanguageName);
+                    btnAddSave.Image = Resources.black_add;
+                    // Disable button(s)
+                    btnDelete.Enabled = false;
 
-                        // Rename group box
-                        grpBoxAdd.Text =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Add_Caption",
-                                LanguageName);
+                    // Rename group box
+                    grpBoxAdd.Text =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Add_Caption",
+                            LanguageName);
 
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/StateMessages/EditSuccess", LanguageName);
-                        // Set flag to save the share object.
-                        SaveFlag = true;
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/StateMessages/EditSuccess", LanguageName);
+                    // Set flag to save the share object.
+                    SaveFlag = true;
 
-                        // Refresh the buy list
-                        ShowBuys();
+                    // Refresh the buy list
+                    OnShowBuys();
 
-                        break;
-                    }
+                    break;
+                }
                 case BuyErrorCode.EditFailed:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/EditFailed", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/EditFailed", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
 
-                        Enabled = true;
-                        txtBoxVolume.Focus();
+                    Enabled = true;
+                    txtBoxVolume.Focus();
 
-                        break;
-                    }
+                    break;
+                }
                 case BuyErrorCode.DeleteSuccessful:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/StateMessages/DeleteSuccess", LanguageName);
-                        // Set flag to save the share object.
-                        SaveFlag = true;
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/StateMessages/DeleteSuccess", LanguageName);
+                    // Set flag to save the share object.
+                    SaveFlag = true;
 
-                        // Enable button(s)
-                        btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", LanguageName);
-                        btnAddSave.Image = Resources.black_add;
+                    // Enable button(s)
+                    btnAddSave.Text =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", LanguageName);
+                    btnAddSave.Image = Resources.black_add;
 
-                        // Disable button(s)
-                        btnDelete.Enabled = false;
+                    // Disable button(s)
+                    btnDelete.Enabled = false;
 
-                        // Rename group box
-                        grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Add_Caption", LanguageName);
+                    // Rename group box
+                    grpBoxAdd.Text =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Add_Caption", LanguageName);
 
-                        // Refresh the buy list
-                        ShowBuys();
+                    // Refresh the buy list
+                    OnShowBuys();
 
-                        break;
-                    }
+                    break;
+                }
                 case BuyErrorCode.DeleteFailed:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DeleteFailed", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DeleteFailed", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
 
-                        Enabled = true;
-                        txtBoxVolume.Focus();
+                    Enabled = true;
+                    txtBoxVolume.Focus();
 
-                        break;
-                    }
+                    break;
+                }
                 case BuyErrorCode.DeleteFailedUnerasable:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DeleteFailedUnErasable", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DeleteFailedUnErasable", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
 
-                        Enabled = true;
-                        txtBoxVolume.Focus();
+                    Enabled = true;
+                    txtBoxVolume.Focus();
 
-                        break;
-                    }
+                    break;
+                }
                 case BuyErrorCode.InputValuesInvalid:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/CheckInputFailure", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/CheckInputFailure", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
 
-                        Enabled = true;
-                        txtBoxVolume.Focus();
+                    Enabled = true;
+                    txtBoxVolume.Focus();
 
-                        break;
-                    }
+                    break;
+                }
                 case BuyErrorCode.VolumeEmpty:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/VolumeEmpty", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/VolumeEmpty", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
 
-                        Enabled = true;
-                        txtBoxVolume.Focus();
+                    Enabled = true;
+                    txtBoxVolume.Focus();
 
-                        break;
-                    }
+                    break;
+                }
                 case BuyErrorCode.VolumeWrongFormat:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/VolumeWrongFormat", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/VolumeWrongFormat", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
 
-                        Enabled = true;
-                        txtBoxVolume.Focus();
+                    Enabled = true;
+                    txtBoxVolume.Focus();
 
-                        break;
-                    }
+                    break;
+                }
                 case BuyErrorCode.VolumeWrongValue:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/VolumeWrongValue", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/VolumeWrongValue", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
 
-                        Enabled = true;
-                        txtBoxVolume.Focus();
+                    Enabled = true;
+                    txtBoxVolume.Focus();
 
-                        break;
-                    }
-                case BuyErrorCode.SharePricEmpty:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SharePriceEmpty", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
+                    break;
+                }
+                case BuyErrorCode.SharePriceEmpty:
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SharePriceEmpty", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
 
-                        Enabled = true;
-                        txtBoxPrice.Focus();
+                    Enabled = true;
+                    txtBoxPrice.Focus();
 
-                        break;
-                    }
+                    break;
+                }
                 case BuyErrorCode.SharePriceWrongFormat:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SharePriceWrongFormat", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SharePriceWrongFormat", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
 
-                        Enabled = true;
-                        txtBoxPrice.Focus();
+                    Enabled = true;
+                    txtBoxPrice.Focus();
 
-                        break;
-                    }
+                    break;
+                }
                 case BuyErrorCode.SharePriceWrongValue:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SharePriceWrongValue", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SharePriceWrongValue", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
 
-                        Enabled = true;
-                        txtBoxPrice.Focus();
+                    Enabled = true;
+                    txtBoxPrice.Focus();
 
-                        break;
-                    }
+                    break;
+                }
                 case BuyErrorCode.BrokerageWrongFormat:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/BrokerageWrongFormat", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/BrokerageWrongFormat", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
 
-                        Enabled = true;
-                        txtBoxBrokerage.Focus();
+                    Enabled = true;
+                    txtBoxBrokerage.Focus();
 
-                        break;
-                    }
+                    break;
+                }
                 case BuyErrorCode.BrokerageWrongValue:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/BrokerageWrongValue", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/BrokerageWrongValue", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
 
-                        Enabled = true;
-                        txtBoxBrokerage.Focus();
+                    Enabled = true;
+                    txtBoxBrokerage.Focus();
 
-                        break;
-                    }
+                    break;
+                }
                 case BuyErrorCode.ReductionWrongFormat:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ReductionWrongFormat", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ReductionWrongFormat", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
 
-                        Enabled = true;
-                        txtBoxReduction.Focus();
+                    Enabled = true;
+                    txtBoxReduction.Focus();
 
-                        break;
-                    }
+                    break;
+                }
                 case BuyErrorCode.ReductionWrongValue:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ReductionWrongValue", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ReductionWrongValue", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
 
-                        Enabled = true;
-                        txtBoxReduction.Focus();
+                    Enabled = true;
+                    txtBoxReduction.Focus();
 
-                        break;
-                    }
+                    break;
+                }
                 case BuyErrorCode.DocumentDirectoryDoesNotExits:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DirectoryDoesNotExist", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DirectoryDoesNotExist", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
 
-                        Enabled = true;
-                        txtBoxDocument.Focus();
+                    Enabled = true;
+                    txtBoxDocument.Focus();
 
-                        break;
-                    }
+                    break;
+                }
                 case BuyErrorCode.DocumentFileDoesNotExists:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/FileDoesNotExist", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/FileDoesNotExist", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
 
-                        break;
-                    }
+                    break;
+                }
             }
 
             Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-               strMessage,
-               Language,
-               LanguageName,
-               clrMessage,
-               Logger,
-               (int)stateLevel,
-               (int)FrmMain.EComponentLevels.Application);
+                strMessage,
+                Language,
+                LanguageName,
+                clrMessage,
+                Logger,
+                (int) stateLevel,
+                (int) FrmMain.EComponentLevels.Application);
         }
 
         public void DocumentBrowseFinish()
@@ -586,23 +595,24 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             switch (ErrorCode)
             {
                 case BuyErrorCode.DocumentBrowseFailed:
-                    {
-                        txtBoxDocument.Text = @"-";
+                {
+                    txtBoxDocument.Text = @"-";
 
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/ChoseDocumentFailed", LanguageName);
-                        break;
-                    }
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/ChoseDocumentFailed",
+                            LanguageName);
+                    break;
+                }
             }
 
             Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-               strMessage,
-               Language,
-               LanguageName,
-               clrMessage,
-               Logger,
-               (int)stateLevel,
-               (int)FrmMain.EComponentLevels.Application);
+                strMessage,
+                Language,
+                LanguageName,
+                clrMessage,
+                Logger,
+                (int) stateLevel,
+                (int) FrmMain.EComponentLevels.Application);
         }
 
         #endregion IView members
@@ -610,11 +620,11 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         #region Event members
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public event EventHandler FormatInputValues;
-        public event EventHandler AddBuy;
-        public event EventHandler EditBuy;
-        public event EventHandler DeleteBuy;
-        public event EventHandler DocumentBrowse;
+        public event EventHandler FormatInputValuesEventHandler;
+        public event EventHandler AddBuyEventHandler;
+        public event EventHandler EditBuyEventHandler;
+        public event EventHandler DeleteBuyEventHandler;
+        public event EventHandler DocumentBrowseEventHandler;
 
         #endregion
 
@@ -631,15 +641,20 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// <param name="logger">Logger</param>
         /// <param name="language">Language file</param>
         /// <param name="languageName">Language</param>
-        public ViewBuyEdit(ShareObjectMarketValue shareObjectMarketValue, ShareObjectFinalValue shareObjectFinalValue, Logger logger, Language language, string languageName)
+        public ViewBuyEdit(ShareObjectMarketValue shareObjectMarketValue, ShareObjectFinalValue shareObjectFinalValue,
+            Logger logger, Language language, string languageName)
         {
             InitializeComponent();
 
             ShareObjectMarketValue = shareObjectMarketValue;
             ShareObjectFinalValue = shareObjectFinalValue;
+
             Logger = logger;
             Language = language;
             LanguageName = languageName;
+
+            _focusedControl = txtBoxVolume;
+
             SaveFlag = false;
         }
 
@@ -724,7 +739,9 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 #endregion Image configuration
 
                 // Load buys of the share
-                ShowBuys();
+                OnShowBuys();
+
+                txtBoxVolume.Focus();
             }
             catch (Exception ex)
             {
@@ -735,9 +752,9 @@ namespace SharePortfolioManager.Forms.BuysForm.View
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ShowFailed", LanguageName),
-                   Language, LanguageName, Color.DarkRed, Logger,
-                   (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ShowFailed", LanguageName),
+                    Language, LanguageName, Color.DarkRed, Logger,
+                    (int) FrmMain.EStateLevels.FatalError, (int) FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -759,21 +776,51 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// </summary>
         private void ResetInputValues()
         {
-            // Reset date time picker
+            // Reset and enable date time picker
             datePickerDate.Value = DateTime.Now;
+            datePickerDate.Enabled = true;
             datePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+            datePickerTime.Enabled = true;
 
-            // Reset text boxes
+            // Reset and enable text boxes
             txtBoxVolume.Text = @"";
+            txtBoxVolume.Enabled = true;
+            txtBoxVolumeSold.Text = @"";
             txtBoxPrice.Text = @"";
+            txtBoxPrice.Enabled = true;
             txtBoxBrokerage.Text = @"";
+            txtBoxBrokerage.Enabled = true;
             txtBoxReduction.Text = @"";
+            txtBoxReduction.Enabled = true;
             txtBoxDocument.Text = @"";
+
+            toolStripStatusLabelMessageBuyEdit.Text = @"";
+
+            // Enable button(s)
+            btnAddSave.Text =
+                Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", LanguageName);
+            btnAddSave.Image = Resources.black_add;
+
+            // Disable button(s)
+            btnDelete.Enabled = false;
+
+            // Rename group box
+            grpBoxAdd.Text =
+                Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Add_Caption", LanguageName);
+
+            // Deselect rows
+            OnDeselectRowsOfDataGridViews(null);
+
+            // Reset stored DataGridView instance
+            SelectedDataGridView = null;
+
+            // Select overview tab
+            if (tabCtrlBuys.TabPages.Count > 0)
+                tabCtrlBuys.SelectTab(0);
 
             txtBoxVolume.Focus();
 
-            if (tabCtrlBuys.TabPages.Count > 0)
-                tabCtrlBuys.SelectTab(0);
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
         }
 
         #endregion Form
@@ -797,7 +844,17 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// <param name="e">EventArgs</param>
         private void OnDatePickerDate_Leave(object sender, EventArgs e)
         {
-            FormatInputValues?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the date time picker for the date to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnDatePickerDate_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = datePickerDate;
         }
 
         /// <summary>
@@ -817,7 +874,18 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// <param name="e">EventArgs</param>
         private void OnDatePickerTime_Leave(object sender, EventArgs e)
         {
-            FormatInputValues?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the date time picker for the time to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnDatePickerTime_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = datePickerTime;
+
         }
 
         #endregion Date Time
@@ -841,7 +909,17 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxVolume_Leave(object sender, EventArgs e)
         {
-            FormatInputValues?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxVolume_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = txtBoxVolume;
         }
 
         /// <summary>
@@ -852,6 +930,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         private void OnTxtBoxAddVolumeSold_TextChanged(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("VolumeSold"));
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
         }
 
         /// <summary>
@@ -861,7 +940,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxVolumeSold_Leave(object sender, EventArgs e)
         {
-            FormatInputValues?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
         }
 
         /// <summary>
@@ -881,7 +960,17 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxPrice_Leave(object sender, EventArgs e)
         {
-            FormatInputValues?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxPrice_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = txtBoxPrice;
         }
 
         /// <summary>
@@ -901,7 +990,17 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxBrokerage_Leave(object sender, EventArgs e)
         {
-            FormatInputValues?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxBrokerage_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = txtBoxBrokerage;
         }
 
         /// <summary>
@@ -921,7 +1020,17 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxReduction_Leave(object sender, EventArgs e)
         {
-            FormatInputValues?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxReduction_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = txtBoxReduction;
         }
 
         /// <summary>
@@ -941,23 +1050,49 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxDocument_Leave(object sender, EventArgs e)
         {
-            FormatInputValues?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
         }
 
+        /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxDocument_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = txtBoxDocument;
+        }
+
+        /// <summary>
+        /// This function shows the Drop sign
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
         private void OnTxtBoxDocument_DragEnter(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
+            e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
         }
 
+        /// <summary>
+        /// This function allows to sets via Drag and Drop a document for this brokerage
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
         private void OnTxtBoxDocument_DragDrop(object sender, DragEventArgs e)
         {
             if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
 
-            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            foreach (var filePath in files)
-            {
-                txtBoxDocument.Text = filePath;
-            }
+            var files = (string[]) e.Data.GetData(DataFormats.FileDrop);
+            if (files.Length <= 0 || files.Length > 1) return;
+
+            txtBoxDocument.Text = files[0];
+
+            // TODO Parse PDF and set values to the form
+            //var pdf = new PdfDocument(new PdfReader(txtBoxDocument.Text));
+            //var text = PdfTextExtractor.GetTextFromPage(pdf.GetPage(1), new LocationTextExtractionStrategy());
+            //pdf.Close();
+            //Console.WriteLine(@"Extracted text:");
+            //Console.WriteLine(text);
         }
 
         #endregion TextBoxes
@@ -972,39 +1107,41 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// <param name="sender">Clicked button</param>
         /// <param name="e">EventArgs</param>
         private void OnBtnAddSave_Click(object sender, EventArgs e)
+    {
+        try
         {
-            try
+            // Disable controls
+            Enabled = false;
+
+            if (btnAddSave.Text ==
+                Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", LanguageName))
             {
-                // Disable controls
-                Enabled = false;
+                UpdateBuy = false;
 
-                if (btnAddSave.Text == Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", LanguageName))
-                {
-                    UpdateBuy = false;
-
-                    AddBuy?.Invoke(this, null);
-                }
-                else
-                {
-                    UpdateBuy = true;
-
-                    EditBuy?.Invoke(this, null);
-                }
+                AddBuyEventHandler?.Invoke(this, null);
             }
-            catch (Exception ex)
+            else
             {
-#if DEBUG_BUY || DEBUG
-                var message = $"btnAdd_Click()\n\n{ex.Message}";
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/AddFailed", LanguageName),
-                   Language, LanguageName,
-                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                UpdateBuy = true;
+
+                EditBuyEventHandler?.Invoke(this, null);
             }
         }
+        catch (Exception ex)
+        {
+#if DEBUG_BUY || DEBUG
+            var message = $"btnAdd_Click()\n\n{ex.Message}";
+            MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+#endif
+            // Add status message
+            Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
+                Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/AddFailed", LanguageName),
+                Language, LanguageName,
+                Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                (int) FrmMain.EComponentLevels.Application);
+        }
+    }
 
         /// <summary>
         /// This function shows a message box which ask the user
@@ -1033,10 +1170,32 @@ namespace SharePortfolioManager.Forms.BuysForm.View
 
                 var dlgResult = messageBox.ShowDialog();
 
-                if (dlgResult == DialogResult.OK)
+                if (dlgResult != DialogResult.OK) return;
+
+                // Set flag to save the share object.
+                SaveFlag = true;
+
+                // Check if a row is selected
+                if (SelectedDataGridView != null && SelectedDataGridView.SelectedRows.Count == 1)
                 {
-                    DeleteBuy?.Invoke(this, null);
+                    DeleteBuyEventHandler?.Invoke(this, null);
                 }
+
+                // Reset values
+                ResetInputValues();
+
+                // Enable button(s)
+                btnAddSave.Text =
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", LanguageName);
+                btnAddSave.Image = Resources.black_add;
+
+                // Rename group box
+                grpBoxAdd.Text =
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Add_Caption", LanguageName);
+
+                // Refresh the dividend list
+                OnShowBuys();
+
             }
             catch (Exception ex)
             {
@@ -1047,9 +1206,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DeleteFailed", LanguageName),
-                   Language, LanguageName,
-                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DeleteFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                    (int) FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -1062,34 +1222,8 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         {
             try
             {
-                toolStripStatusLabelMessageBuyEdit.Text = @"";
-
-                // Enable button(s)
-                btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", LanguageName);
-                btnAddSave.Image = Resources.black_add;
-
-                // Disable button(s)
-                btnDelete.Enabled = false;
-
-                // Rename group box
-                grpBoxAdd.Text =
-                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Add_Caption", LanguageName);
-
-                // Deselect rows
-                DeselectRowsOfDataGridViews(null);
-
+                // Reset values
                 ResetInputValues();
-                // Reset stored DataGridView instance
-                SelectedDataGridView = null;
-
-                // Select overview tab
-                if (
-                    tabCtrlBuys.TabPages.ContainsKey(
-                        Language.GetLanguageTextByXPath(
-                            @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/TabPgOverview/Overview", LanguageName)))
-                    tabCtrlBuys.SelectTab(
-                        Language.GetLanguageTextByXPath(
-                            @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/TabPgOverview/Overview", LanguageName));
             }
             catch (Exception ex)
             {
@@ -1100,9 +1234,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/CancelFailure", LanguageName),
-                   Language, LanguageName,
-                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/CancelFailure", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                    (int) FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -1116,14 +1251,39 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             Close();
         }
 
+        /// <summary>
+        /// This function opens a file dialog and the user
+        /// can chose a file which documents the buy
+        /// </summary>
+        /// <param name="sender">Button</param>
+        /// <param name="e">EventArgs</param>
+        private void OnBtnBuyDocumentBrowse_Click(object sender, EventArgs e)
+        {
+            DocumentBrowseEventHandler?.Invoke(this, new EventArgs());
+        }
+
         #endregion Buttons
+
+        #region Group box overview
+
+        /// <summary>
+        /// This function sets the focus back to the last focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnGrpBoxOverview_MouseLeave(object sender, EventArgs e)
+        {
+            _focusedControl?.Focus();
+        }
+
+        #endregion Group box overview
 
         #region Data grid view
 
         /// <summary>
         /// This function paints the buy list of the share
         /// </summary>
-        private void ShowBuys()
+        private void OnShowBuys()
         {
             try
             {
@@ -1138,23 +1298,23 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                         {
                             dataGridView.SelectionChanged -= OnDataGridViewBuysOfYears_SelectionChanged;
                             dataGridView.MouseEnter -= OnDataGridViewBuysOfYears_MouseEnter;
-                            dataGridView.MouseLeave -= OnDataGridViewBuysOfYears_MouseLeave;
                         }
                         else
                         {
                             dataGridView.SelectionChanged -= OnDataGridViewBuysOfAYear_SelectionChanged;
                             dataGridView.MouseEnter -= OnDataGridViewBuysOfAYear_MouseEnter;
-                            dataGridView.MouseLeave -= OnDataGridViewBuysOfAYear_MouseEnter;
                         }
 
                         dataGridView.DataBindingComplete -= OnDataGridViewBuys_DataBindingComplete;
                     }
+
                     tabPage.Controls.Clear();
                     tabCtrlBuys.TabPages.Remove(tabPage);
                 }
 
                 tabCtrlBuys.TabPages.Clear();
 
+                // Enable controls
                 Enabled = true;
 
                 #region Add page
@@ -1163,13 +1323,14 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 var newTabPageOverviewYears = new TabPage
                 {
                     // Set TabPage name
-                    Name = @"Overview",
+                    Name = Language.GetLanguageTextByXPath(
+                        @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/TabPgOverview/Overview",
+                        LanguageName),
 
                     // Set TabPage caption
                     Text = Language.GetLanguageTextByXPath(
-                               @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/TabPgOverview/Overview",
-                               LanguageName)
-                           + @" (" + ShareObjectFinalValue.AllBuyEntries.BuyValueTotalAsStrUnit + 
+                               @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/TabPgOverview/Overview", LanguageName)
+                           + @" (" + ShareObjectFinalValue.AllBuyEntries.BuyValueTotalAsStrUnit +
                            @")"
                 };
 
@@ -1186,6 +1347,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 // Create DataGridView
                 var dataGridViewBuysOverviewOfAYears = new DataGridView
                 {
+                    // TODO correct
                     Name = @"Overview",
                     Dock = DockStyle.Fill,
 
@@ -1201,8 +1363,6 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 dataGridViewBuysOverviewOfAYears.DataBindingComplete += OnDataGridViewBuys_DataBindingComplete;
                 // Set the delegate for the mouse enter event
                 dataGridViewBuysOverviewOfAYears.MouseEnter += OnDataGridViewBuysOfYears_MouseEnter;
-                // Set the delegate for the mouse leave event
-                dataGridViewBuysOverviewOfAYears.MouseLeave += OnDataGridViewBuysOfYears_MouseLeave;
                 // Set row select event
                 dataGridViewBuysOverviewOfAYears.SelectionChanged += OnDataGridViewBuysOfYears_SelectionChanged;
 
@@ -1279,8 +1439,9 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     // Create Binding source for the buy data
                     var bindingSource = new BindingSource
                     {
-                        DataSource = ShareObjectFinalValue.AllBuyEntries.AllBuysOfTheShareDictionary[keyName]
-                            .BuyListYear
+                        DataSource =
+                            ShareObjectFinalValue.AllBuyEntries.AllBuysOfTheShareDictionary[keyName]
+                                .BuyListYear
                     };
 
                     // Create DataGridView
@@ -1301,8 +1462,6 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     dataGridViewBuysOfAYear.DataBindingComplete += OnDataGridViewBuys_DataBindingComplete;
                     // Set the delegate for the mouse enter event
                     dataGridViewBuysOfAYear.MouseEnter += OnDataGridViewBuysOfAYear_MouseEnter;
-                    // Set the delegate for the mouse leave event
-                    dataGridViewBuysOfAYear.MouseLeave += OnDataGridViewBuysOfAYear_MouseLeave;
                     // Set row select event
                     dataGridViewBuysOfAYear.SelectionChanged += OnDataGridViewBuysOfAYear_SelectionChanged;
                     // Set cell decimal click event
@@ -1317,7 +1476,8 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     // Column header styling
                     dataGridViewBuysOfAYear.ColumnHeadersDefaultCellStyle.Alignment =
                         DataGridViewContentAlignment.MiddleCenter;
-                    dataGridViewBuysOfAYear.ColumnHeadersDefaultCellStyle.BackColor = SystemColors.ControlLight;
+                    dataGridViewBuysOfAYear.ColumnHeadersDefaultCellStyle.BackColor =
+                        SystemColors.ControlLight;
                     dataGridViewBuysOfAYear.ColumnHeadersHeight = 25;
                     dataGridViewBuysOfAYear.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
                     // Column styling
@@ -1362,14 +1522,14 @@ namespace SharePortfolioManager.Forms.BuysForm.View
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ShowFailed", LanguageName),
-                   Language, LanguageName, Color.DarkRed, Logger,
-                   (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ShowFailed", LanguageName),
+                    Language, LanguageName, Color.DarkRed, Logger,
+                    (int) FrmMain.EStateLevels.FatalError, (int) FrmMain.EComponentLevels.Application);
             }
         }
 
         /// <summary>
-        /// This function TODO
+        /// This function deselects the select row after the DataBinding is complete
         /// </summary>
         /// <param name="sender">DataGridView</param>
         /// <param name="e">DataGridViewBindingCompleteEventArgs</param>
@@ -1391,30 +1551,32 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                             {
                                 ((DataGridView) sender).Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
-                                        @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Date",
+                                        @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Year",
                                         LanguageName);
                             }
+
                             break;
                         case 1:
                             if (((DataGridView) sender).Name == @"Overview")
                             {
-                                ((DataGridView)sender).Columns[i].HeaderText =
+                                ((DataGridView) sender).Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Volume",
                                         LanguageName) + @" (" + ShareObject.PieceUnit + @")";
                             }
                             else
                             {
-                                ((DataGridView)sender).Columns[i].HeaderText =
+                                ((DataGridView) sender).Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Date",
                                         LanguageName);
                             }
+
                             break;
                         case 2:
                             if (((DataGridView) sender).Name == @"Overview")
                             {
-                                ((DataGridView)sender).Columns[i].HeaderText =
+                                ((DataGridView) sender).Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Price",
                                         LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
@@ -1426,6 +1588,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                                         @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Volume",
                                         LanguageName) + @" (" + ShareObject.PieceUnit + @")";
                             }
+
                             break;
                         case 3:
                             ((DataGridView) sender).Columns[i].HeaderText =
@@ -1440,13 +1603,13 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                                     LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
                             break;
                         case 5:
-                            ((DataGridView)sender).Columns[i].HeaderText =
+                            ((DataGridView) sender).Columns[i].HeaderText =
                                 Language.GetLanguageTextByXPath(
                                     @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Reduction",
                                     LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
                             break;
                         case 6:
-                            ((DataGridView)sender).Columns[i].HeaderText =
+                            ((DataGridView) sender).Columns[i].HeaderText =
                                 Language.GetLanguageTextByXPath(
                                     @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Document",
                                     LanguageName);
@@ -1454,14 +1617,14 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     }
                 }
 
-                if (((DataGridView)sender).Rows.Count > 0)
+                if (((DataGridView) sender).Rows.Count > 0)
                 {
-                    ((DataGridView)sender).Rows[0].Selected = false;
-                    ((DataGridView)sender).ScrollBars = ScrollBars.Both;
+                    ((DataGridView) sender).Rows[0].Selected = false;
+                    ((DataGridView) sender).ScrollBars = ScrollBars.Both;
                 }
 
-                if ( ((DataGridView)sender).Name != @"Overview" )
-                    ((DataGridView)sender).Columns[0].Visible = false;
+                if (((DataGridView) sender).Name != @"Overview")
+                    ((DataGridView) sender).Columns[0].Visible = false;
 
                 // Reset the text box values
                 ResetInputValues();
@@ -1475,9 +1638,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/RenameColHeaderFailed", LanguageName),
-                   Language, LanguageName,
-                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/RenameColHeaderFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                    (int) FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -1485,7 +1649,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// This function deselects all selected rows of the
         /// DataGridViews in the TabPages
         /// </summary>
-        private void DeselectRowsOfDataGridViews(DataGridView dataGridView)
+        private void OnDeselectRowsOfDataGridViews(DataGridView dataGridView)
         {
             try
             {
@@ -1502,8 +1666,6 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                         }
                     }
                 }
-
-                //ResetInputValues();
             }
             catch (Exception ex)
             {
@@ -1514,37 +1676,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DeselectFailed", LanguageName),
-                   Language, LanguageName,
-                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
-            }
-        }
-
-        /// <summary>
-        /// This function opens a file dialog and the user
-        /// can chose a file which documents the buy
-        /// </summary>
-        /// <param name="sender">Button</param>
-        /// <param name="e">EventArgs</param>
-        private void OnBtnBuyDocumentBrowse_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                const string strFilter = "pdf (*.pdf)|*.pdf|txt (*.txt)|.txt|doc (*.doc)|.doc|docx (*.docx)|.docx";
-                txtBoxDocument.Text = Helper.SetDocument(Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/OpenFileDialog/Title", LanguageName), strFilter, txtBoxDocument.Text);
-            }
-            catch (Exception ex)
-            {
-#if DEBUG_BUY || DEBUG
-                var message = $"btnBuyDocumentBrowse_Click()\n\n{ex.Message}";
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ChoseDocumentFailed", LanguageName),
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DeselectFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                    (int) FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -1557,45 +1692,96 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// <param name="e">EventArgs</param>
         private void TabCtrlBuys_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (tabCtrlBuys.SelectedTab == null) return;
-
-            // Loop trough the controls of the selected tab page and set focus on the data grid view
-            foreach (Control control in tabCtrlBuys.SelectedTab.Controls)
+            try
             {
-                if (control is DataGridView view)
+                if (tabCtrlBuys.SelectedTab == null) return;
+
+                // Loop trough the controls of the selected tab page and set focus on the data grid view
+                foreach (Control control in tabCtrlBuys.SelectedTab.Controls)
                 {
-                    if (view.Rows.Count > 0 && view.Name != @"Overview")
-                        view.Rows[0].Selected = true;
-                    view.Focus();
+                    if (control is DataGridView view)
+                    {
+                        if (view.Rows.Count > 0 && view.Name != @"Overview")
+                        {
+                            if (view.Rows[0].Cells.Count > 0)
+                                view.Rows[0].Selected = true;
+                        }
+
+                        view.Focus();
+
+                        if (view.Name == @"Overview")
+                            ResetInputValues();
+                    }
                 }
             }
-        }
-
-        /// <summary>
-        /// This function sets the focus on the data grid view of the current selected tab page of the tab control
-        /// </summary>
-        /// <param name="sender">Data grid view</param>
-        /// <param name="e">EventArgs</param>
-        private void TabCtrlBuys_MouseEnter(object sender, EventArgs e)
-        {
-            if (tabCtrlBuys.SelectedTab == null) return;
-
-            // Loop trough the controls of the selected tab page and set focus on the data grid view
-            foreach (Control control in tabCtrlBuys.SelectedTab.Controls)
+            catch (Exception ex)
             {
-                if (control is DataGridView view)
-                    view.Focus();
+#if DEBUG_BUY || DEBUG
+                var message = $"TabCtrlBuys_SelectedIndexChanged()\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+#endif
+                // Add status message
+                Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SelectionChangeFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                    (int) FrmMain.EComponentLevels.Application);
             }
         }
 
         /// <summary>
-        /// This function sets the focus to the group box add / edit when the mouse leaves the data grid view
+        /// This function sets the focus back to the last focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTabCtrlBuys_MouseLeave(object sender, EventArgs e)
+        {
+            _focusedControl?.Focus();
+        }
+
+        /// <summary>
+        /// This function sets the focus on the last focused control
         /// </summary>
         /// <param name="sender">Tab control</param>
         /// <param name="e">EventArgs</param>
-        private void TabCtrlBuys_MouseLeave(object sender, EventArgs e)
+        private void OnTabCtrlBuys_KeyDown(object sender, KeyEventArgs e)
         {
-            grpBoxAdd.Focus();
+            _focusedControl?.Focus();
+        }
+
+        /// <summary>
+        /// This function sets key value ( char ) to the last focused control
+        /// </summary>
+        /// <param name="sender">Tab control</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTabCtrlBuys_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Check if the last focused control was a text box so set the
+            // key value ( char ) to the text box and then set the cursor behind the text
+            if (_focusedControl is TextBox textBox)
+            {
+                textBox.Text = e.KeyChar.ToString();
+                textBox.Select(textBox.Text.Length, 0);
+            }
+
+            // Check if the last focused control was a date time picker
+            if (_focusedControl is DateTimePicker dateTimePicker)
+            {
+                // Check if the pressed key was a numeric key
+                if (e.KeyChar == '0' ||
+                    e.KeyChar == '1' ||
+                    e.KeyChar == '2' ||
+                    e.KeyChar == '3' ||
+                    e.KeyChar == '4' ||
+                    e.KeyChar == '5' ||
+                    e.KeyChar == '6' ||
+                    e.KeyChar == '7' ||
+                    e.KeyChar == '8' ||
+                    e.KeyChar == '9'
+                )
+                    dateTimePicker.Text = e.KeyChar.ToString();
+            }
         }
 
         #endregion Tab control delegates
@@ -1615,11 +1801,13 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 if (((DataGridView) sender).SelectedRows.Count != 1) return;
 
                 // Get the currently selected item in the ListBox
-                var curItem = ((DataGridView)sender).SelectedRows;
+                var curItem = ((DataGridView) sender).SelectedRows;
 
                 foreach (TabPage tabPage in tabCtrlBuys.TabPages)
                 {
-                    if (tabPage.Name != curItem[0].Cells[0].Value.ToString()) continue;
+                    if (curItem[0].Cells[1].Value != null &&
+                        tabPage.Name != curItem[0].Cells[0].Value.ToString()
+                    ) continue;
 
                     tabCtrlBuys.SelectTab(tabPage);
                     tabPage.Focus();
@@ -1630,15 +1818,16 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             catch (Exception ex)
             {
 #if DEBUG_BUY || DEBUG
-                var message = $"dataGridViewBuysOfYears_SelectionChanged()\n\n{ex.Message}";
+                var message = $"OnDataGridViewBuysOfYears_SelectionChanged()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SelectionChangeFailed", LanguageName),
-                   Language, LanguageName,
-                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SelectionChangeFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                    (int) FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -1649,17 +1838,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// <param name="args">EventArgs</param>
         private static void OnDataGridViewBuysOfYears_MouseEnter(object sender, EventArgs args)
         {
-            ((DataGridView)sender).Focus();
-        }
-
-        /// <summary>
-        /// This function sets the focus to the left data grid view
-        /// </summary>
-        /// <param name="sender">Left data grid view</param>
-        /// <param name="args">EventArgs</param>
-        private void OnDataGridViewBuysOfYears_MouseLeave(object sender, EventArgs args)
-        {
-            grpBoxAdd.Focus();
+            ((DataGridView) sender).Focus();
         }
 
         #endregion Buys of years
@@ -1680,24 +1859,28 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 if (tabCtrlBuys.TabPages.Count > 0)
                 {
                     // Deselect row only of the other TabPages DataGridViews
-                    if (tabCtrlBuys.SelectedTab.Controls.Contains((DataGridView)sender))
-                        DeselectRowsOfDataGridViews((DataGridView)sender);
+                    if (tabCtrlBuys.SelectedTab.Controls.Contains((DataGridView) sender))
+                        OnDeselectRowsOfDataGridViews((DataGridView) sender);
                 }
 
-                if (((DataGridView)sender).SelectedRows.Count == 1)
+                if (((DataGridView) sender).SelectedRows.Count == 1)
                 {
                     // Get the currently selected item in the ListBox
-                    var curItem = ((DataGridView)sender).SelectedRows;
+                    var curItem = ((DataGridView) sender).SelectedRows;
 
                     // Set selected date
-                    SelectedDate = curItem[0].Cells[1].Value.ToString();
+                    if (curItem[0].Cells[1].Value != null)
+                        SelectedDate = curItem[0].Cells[1].Value.ToString();
+                    else
+                        return;
 
                     // Get list of buys of a year
                     DateTime.TryParse(SelectedDate, out var dateTime);
-                    var buyListYear = ShareObjectFinalValue.AllBuyEntries.AllBuysOfTheShareDictionary[dateTime.Year.ToString()]
+                    var buyListYear = ShareObjectFinalValue.AllBuyEntries
+                        .AllBuysOfTheShareDictionary[dateTime.Year.ToString()]
                         .BuyListYear;
 
-                    var index = ((DataGridView)sender).SelectedRows[0].Index;
+                    var index = ((DataGridView) sender).SelectedRows[0].Index;
 
                     // Set selected Guid
                     SelectedGuid = buyListYear[index].Guid;
@@ -1729,9 +1912,9 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                         txtBoxDocument.Text = curItem[0].Cells[4].Value.ToString();
                     }
 
-                    if (ShareObjectFinalValue.AllBuyEntries.IsDateLastDate(SelectedDate) &&
-                        ShareObjectFinalValue.AllSaleEntries.IsDateLastDate(SelectedDate)
-                        )
+                    if (ShareObjectFinalValue.AllBuyEntries.IsLastBuy(SelectedGuid) &&
+                        !ShareObjectFinalValue.AllBuyEntries.IsPartOfASale(SelectedGuid)
+                    )
                     {
                         btnDelete.Enabled = ShareObjectFinalValue.AllBuyEntries.GetAllBuysOfTheShare().Count > 1;
 
@@ -1763,27 +1946,37 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     }
 
                     // Rename button
-                    btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Save", LanguageName);
+                    btnAddSave.Text =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Save", LanguageName);
                     btnAddSave.Image = Resources.black_edit;
 
                     // Rename group box
-                    grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Edit_Caption", LanguageName);
+                    grpBoxAdd.Text =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Edit_Caption", LanguageName);
 
                     // Store DataGridView instance
-                    SelectedDataGridView = (DataGridView)sender;
+                    SelectedDataGridView = (DataGridView) sender;
 
                     // Format the input value
-                    FormatInputValues?.Invoke(this, new EventArgs());
+                    FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
                 }
                 else
                 {
                     // Rename button
-                    btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", LanguageName);
+                    btnAddSave.Text =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", LanguageName);
                     btnAddSave.Image = Resources.black_add;
+
+                    // Rename group box
+                    grpBoxAdd.Text =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Add_Caption", LanguageName);
+
                     // Disable button(s)
                     btnDelete.Enabled = false;
+
                     // Enable Button(s)
                     btnAddSave.Enabled = true;
+
                     // Enabled TextBox(es)
                     datePickerDate.Enabled = true;
                     datePickerTime.Enabled = true;
@@ -1795,9 +1988,6 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     txtBoxReduction.Enabled = true;
                     txtBoxFinalValue.Enabled = true;
 
-                    // Rename group box
-                    grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Add_Caption", LanguageName);
-
                     // Reset stored DataGridView instance
                     SelectedDataGridView = null;
                 }
@@ -1805,17 +1995,18 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             catch (Exception ex)
             {
 #if DEBUG_BUY || DEBUG
-                var message = $"dataGridViewBuysOfAYear_SelectionChanged()\n\n{ex.Message}";
+                var message = $"OnDataGridViewBuysOfAYear_SelectionChanged()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SelectionChangeFailed", LanguageName),
-                   Language, LanguageName,
-                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SelectionChangeFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                    (int) FrmMain.EComponentLevels.Application);
 
-                ShowBuys();
+                OnShowBuys();
             }
         }
 
@@ -1826,17 +2017,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// <param name="args">EventArgs</param>
         private static void OnDataGridViewBuysOfAYear_MouseEnter(object sender, EventArgs args)
         {
-            ((DataGridView)sender).Focus();
-        }
-
-        /// <summary>
-        /// This function sets the focus to the left data grid view
-        /// </summary>
-        /// <param name="sender">Left data grid view</param>
-        /// <param name="args">EventArgs</param>
-        private void OnDataGridViewBuysOfAYear_MouseLeave(object sender, EventArgs args)
-        {
-            grpBoxAdd.Focus();
+            ((DataGridView) sender).Focus();
         }
 
         /// <summary>
@@ -1849,7 +2030,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             try
             {
                 // Get column count of the given DataGridView
-                var iColumnCount = ((DataGridView)sender).ColumnCount;
+                var iColumnCount = ((DataGridView) sender).ColumnCount;
 
                 // Check if the last column (document column) has been clicked
                 if (e.ColumnIndex != iColumnCount - 1) return;
@@ -1858,7 +2039,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 if (((DataGridView) sender).SelectedRows.Count != 1) return;
 
                 // Get the current selected row
-                var curItem = ((DataGridView)sender).SelectedRows;
+                var curItem = ((DataGridView) sender).SelectedRows;
                 // Get Guid of the selected buy item
                 var strGuid = curItem[0].Cells[0].Value.ToString();
 
@@ -1897,20 +2078,21 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                         {
                             // Remove buy object and add it with no document
                             if (ShareObjectFinalValue.RemoveBuy(temp.Guid, temp.Date) &&
-                                ShareObjectFinalValue.AddBuy(strGuid, temp.Date, temp.Volume, temp.VolumeSold, temp.Reduction, temp.Brokerage, temp.BuyValue))
+                                ShareObjectFinalValue.AddBuy(strGuid, temp.Date, temp.Volume, temp.VolumeSold,
+                                    temp.Reduction, temp.Brokerage, temp.BuyValue))
                             {
                                 // Set flag to save the share object.
                                 SaveFlag = true;
 
-                                ShowBuys();
+                                OnShowBuys();
 
                                 // Add status message
                                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormBuy/StateMessages/EditSuccess", LanguageName),
                                     Language, LanguageName,
-                                    Color.Black, Logger, (int)FrmMain.EStateLevels.Info,
-                                    (int)FrmMain.EComponentLevels.Application);
+                                    Color.Black, Logger, (int) FrmMain.EStateLevels.Info,
+                                    (int) FrmMain.EComponentLevels.Application);
                             }
                             else
                             {
@@ -1918,8 +2100,8 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormBuy/Errors/EditFailed", LanguageName),
                                     Language, LanguageName,
-                                    Color.Red, Logger, (int)FrmMain.EStateLevels.Error,
-                                    (int)FrmMain.EComponentLevels.Application);
+                                    Color.Red, Logger, (int) FrmMain.EStateLevels.Error,
+                                    (int) FrmMain.EComponentLevels.Application);
                             }
                         }
                     }
@@ -1930,7 +2112,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             catch (Exception ex)
             {
 #if DEBUG_BUY || DEBUG
-                var message = $"dataGridViewBuysOfAYear_CellContentdecimalClick()\n\n{ex.Message}";
+                var message = $"OnDataGridViewBuysOfAYear_CellContentClick()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -1938,8 +2120,8 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DocumentShowFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError,
-                    (int)FrmMain.EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                    (int) FrmMain.EComponentLevels.Application);
             }
         }
 

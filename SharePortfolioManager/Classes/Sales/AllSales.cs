@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using SharePortfolioManager.Classes.Sales;
 
 namespace SharePortfolioManager
 {
@@ -184,7 +185,7 @@ namespace SharePortfolioManager
                 // Search if the sale for the given year exists
                 if (AllSalesOfTheShareDictionary.TryGetValue(year, out var searchObject))
                 {
-                    if (!searchObject.RemoveSaleObject(strDateTime))
+                    if (!searchObject.RemoveSaleObject(strGuid))
                         return false;
 
                     if (searchObject.SaleListYear.Count == 0)
@@ -257,14 +258,15 @@ namespace SharePortfolioManager
         /// and the total sales values with brokerage of the years
         /// </summary>
         /// <returns>Dictionary with the years and the sales values with brokerage of the year or empty dictionary if no year exist.</returns>
-        public Dictionary<string, string> GetAllSalesTotalValues()
+        public List<SalesYearOfTheShare> GetAllSalesTotalValues()
         {
-            var allSalesOfTheShare = new Dictionary<string, string>();
+            var allSalesOfTheShare = new List<SalesYearOfTheShare>();
 
             foreach (var key in AllSalesOfTheShareDictionary.Keys)
             {
-                allSalesOfTheShare.Add(key, Helper.FormatDecimal(AllSalesOfTheShareDictionary[key].SalePayoutYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo));
+                allSalesOfTheShare.Add(AllSalesOfTheShareDictionary[key]);
             }
+
             return allSalesOfTheShare;
         }
 

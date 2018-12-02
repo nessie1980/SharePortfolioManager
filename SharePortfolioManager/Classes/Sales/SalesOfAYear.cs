@@ -22,60 +22,72 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
-using SharePortfolioManager.Classes;
-using SharePortfolioManager.Classes.ShareObjects;
 
-namespace SharePortfolioManager
+namespace SharePortfolioManager.Classes.Sales
 {
     [Serializable]
     public class SalesYearOfTheShare
     {
         #region Properties
 
+        [Browsable(false)]
         public CultureInfo SaleCultureInfo { get; internal set; }
 
+        [Browsable(false)]
+        public string SaleYear { get; internal set; } = @"-";
+
+        [Browsable(false)]
         public decimal SalePayoutYear { get; internal set; } = -1;
 
-        public string SalePayoutYearAsStr => Helper.FormatDecimal(SalePayoutYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
+        [Browsable(false)]
+        public string SalePayoutYearAsStr => Helper.FormatDecimal(SalePayoutYear, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
 
+        [Browsable(false)]
         public string SalePayoutYearWithUnitAsStr => Helper.FormatDecimal(SalePayoutYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
 
+        [Browsable(false)]
         public decimal SalePayoutWithoutBrokerageYear { get; internal set; } = -1;
 
-        public string SalePayoutWithoutBrokerageYearAsStr => Helper.FormatDecimal(SalePayoutWithoutBrokerageYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
-
-        public string SalePayoutWithoutBrokerageYearWithUnitAsStr => Helper.FormatDecimal(SalePayoutWithoutBrokerageYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
-
+        [Browsable(false)]
         public decimal SaleVolumeYear { get; internal set; } = -1;
 
-        public string SaleVolumeYearAsStr => Helper.FormatDecimal(SaleVolumeYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
+        [Browsable(false)]
+        public string SaleVolumeYearAsStr => Helper.FormatDecimal(SaleVolumeYear, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
 
-        public string SaleVolumeYearWithUnitAsStr => Helper.FormatDecimal(SaleVolumeYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, ShareObject.PieceUnit, SaleCultureInfo);
-
+        [Browsable(false)]
         public decimal SalePurchaseValueYear { get; internal set; } = -1;
 
-        public string SalePurchaseValueYearAsStr => Helper.FormatDecimal(SalePurchaseValueYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
-
-        public string SalePurchaseValueYearWithUnitAsStr => Helper.FormatDecimal(SalePurchaseValueYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, ShareObject.PieceUnit, SaleCultureInfo);
-
+        [Browsable(false)]
         public decimal SaleProfitLossYear { get; internal set; } = -1;
 
-        public string SaleProfitLossYearAsStr => Helper.FormatDecimal(SaleProfitLossYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
-
+        [Browsable(false)]
         public string SaleProfitLossYearWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
 
+        [Browsable(false)]
         public decimal SaleProfitLossWithoutBrokerageYear { get; internal set; } = -1;
 
-        public string SaleProfitLossWithoutBrokerageYearAsStr => Helper.FormatDecimal(SaleProfitLossWithoutBrokerageYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
-
-        public string SaleProfitLossYearWithoutBrokerageWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossWithoutBrokerageYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
-
+        [Browsable(false)]
         public List<SaleObject> SaleListYear { get; } = new List<SaleObject>();
 
+        [Browsable(false)]
         public List<ProfitLossObject> ProfitLossListYear { get; } = new List<ProfitLossObject>();
 
         #endregion Properties
+
+        #region Data grid view properties
+
+        [Browsable(true)]
+        public string DgvSaleYear => SaleYear;
+
+        [Browsable(true)]
+        public string DgvSaleVolumeYear => SaleVolumeYearAsStr;
+        
+        [Browsable(true)]
+        public string DgvSalePayoutYearAsStr => SalePayoutYearAsStr;
+
+        #endregion Data grid view properties
 
         #region Methods
 
@@ -110,8 +122,7 @@ namespace SharePortfolioManager
                 // Create new SaleObject
                 var addObject = new SaleObject(cultureInfo, strGuid, strDate, decVolume, decSalePrice, usedBuyDetails, decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decBrokerage, decReduction, strDoc);
 
-                var strGuidProfitLoss = Guid.NewGuid().ToString();
-                var addProfitLossObject = new ProfitLossObject(cultureInfo, strGuidProfitLoss, strDate, addObject.ProfitLoss, strDoc);
+                var addProfitLossObject = new ProfitLossObject(cultureInfo, strGuid, strDate, addObject.ProfitLoss, strDoc);
 
                 // Add object to the list
                 SaleListYear.Add(addObject);
@@ -120,6 +131,10 @@ namespace SharePortfolioManager
                 // Add profit or loss object to the list
                 ProfitLossListYear.Add(addProfitLossObject);
                 ProfitLossListYear.Sort(new ProfitLossObjectComparer());
+
+                // Set year
+                DateTime.TryParse(strDate, out var dateTime);
+                SaleYear = dateTime.Year.ToString();
 
                 // Calculate sale value
                 if (SalePayoutYear == -1)
@@ -208,7 +223,7 @@ namespace SharePortfolioManager
                 iFoundIndex = -1;
                 foreach (var profitLossObject in ProfitLossListYear)
                 {
-                    if (profitLossObject.Guid != strGuid) continue;
+                    if (profitLossObject.SaleGuid != strGuid) continue;
 
                     iFoundIndex = ProfitLossListYear.IndexOf(profitLossObject);
                     break;

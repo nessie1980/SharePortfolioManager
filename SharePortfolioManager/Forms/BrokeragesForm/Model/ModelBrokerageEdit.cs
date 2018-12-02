@@ -20,27 +20,34 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+using LanguageHandler;
+using Logging;
 using SharePortfolioManager.Classes;
-using SharePortfolioManager.Forms.BrokerageForm.View;
-using System.Collections.Generic;
 using SharePortfolioManager.Classes.ShareObjects;
+using SharePortfolioManager.Forms.BrokeragesForm.View;
 
-namespace SharePortfolioManager.Forms.BrokerageForm.Model
+namespace SharePortfolioManager.Forms.BrokeragesForm.Model
 {
     /// <summary>
     /// Interface of the BrokerageEdit model
     /// </summary>
     public interface IModelBrokerageEdit
     {
-        ShareObjectMarketValue ShareObjectMarketValue { get; set; }
-        ShareObjectFinalValue ShareObjectFinalValue { get; set; }
-        List<WebSiteRegex> WebSiteRegexList { get; set; }
         bool UpdateView { get; set; }
         bool UpdateViewFormatted { get; set; }
         bool UpdateBrokerage { get; set; }
+
         BrokerageErrorCode ErrorCode { get; set; }
         string SelectedGuid { get; set; }
         string SelectedDate { get; set; }
+
+        ShareObjectMarketValue ShareObjectMarketValue { get; set; }
+        ShareObjectFinalValue ShareObjectFinalValue { get; set; }
+
+        Logger Logger { get; set; }
+        Language Language { get; set; }
+        string LanguageName { get; set; }
+
         bool PartOfABuy { get; set; }
         bool PartOfASale { get; set; }
         string Date { get; set; }
@@ -74,17 +81,21 @@ namespace SharePortfolioManager.Forms.BrokerageForm.Model
 
         public bool UpdateBrokerage { get; set; }
 
-        public ShareObjectMarketValue ShareObjectMarketValue { get; set; }
-
-        public ShareObjectFinalValue ShareObjectFinalValue { get; set; }
-
-        public List<WebSiteRegex> WebSiteRegexList { get; set; }
-
         public BrokerageErrorCode ErrorCode { get; set; }
 
         public string SelectedGuid { get; set; }
 
         public string SelectedDate { get; set; }
+
+        public ShareObjectMarketValue ShareObjectMarketValue { get; set; }
+
+        public ShareObjectFinalValue ShareObjectFinalValue { get; set; }
+
+        public Logger Logger { get; set; }
+
+        public Language Language { get; set; }
+
+        public string LanguageName { get; set; }
 
         public bool PartOfABuy { get; set; }
 

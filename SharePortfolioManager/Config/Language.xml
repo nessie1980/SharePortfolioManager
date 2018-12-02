@@ -553,6 +553,7 @@
 					
 					<!-- DataGridView buy -->
 					<DgvBuyOverview>
+						<ColHeader_Year text="Year" />
 						<ColHeader_Date text="Date" />
 						<ColHeader_Volume text="Volume" />
 						<ColHeader_Price text="Price" />
@@ -656,7 +657,9 @@
 					
 					<!-- DataGridView sale -->
 					<DgvSaleOverview>
+						<ColHeader_Year text="Year" />
 						<ColHeader_Date text="Date" />
+						<ColHeader_Payout text="Payout" />
 						<ColHeader_Volume text="Volume" />
 						<ColHeader_Purchase text="Purchase" />
 						<ColHeader_ProfitLoss text="Profit / Loss" />
@@ -876,6 +879,7 @@
 					<!-- DataGridView brokerage -->
 					<DgvBrokerageOverview>
 						<ColHeader_Date text="Date" />
+						<ColHeader_Year text="Year" />
 						<ColHeader_Brokerage text="Brokerage" />
 						<ColHeader_Document text="Document" />
 					</DgvBrokerageOverview>
@@ -904,9 +908,9 @@
 				<DeleteFailed text="Delete of the brokerage entry failed!" />
 				<CancelFailure text="An error occurred while the cancel should be done!" />
 				<CheckInputFailure text="An error occurred while the input check should be done!" />
-				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
 				<DirectoryDoesNotExist text="The directory does not exist!" />
 				<FileDoesNotExist text="The given file does not exist!" />
+				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
 				<DocumentShowFailed text="Show of the document failed!" />
 			</Errors>
 		</AddEditFormBrokerage>
@@ -1595,6 +1599,7 @@
 					
 					<!-- DataGridView buy -->
 					<DgvBuyOverview>
+						<ColHeader_Year text="Jahr" />
 						<ColHeader_Date text="Datum" />
 						<ColHeader_Volume text="Anteile" />
 						<ColHeader_Price text="Kurs" />
@@ -1698,7 +1703,9 @@
 					
 					<!-- DataGridView sale -->
 					<DgvSaleOverview>
+						<ColHeader_Year text="Jahr" />
 						<ColHeader_Date text="Datum" />
+						<ColHeader_Payout text="Auszahlung" />
 						<ColHeader_Volume text="Anteile" />
 						<ColHeader_Purchase text="Kaufsumme" />
 						<ColHeader_ProfitLoss text="Gewinn / Verlust" />
@@ -1908,8 +1915,7 @@
 				<Caption text="Kosten- Übersicht" />
 
 				<!-- TabCtrl brokerage overview -->
-				<TabCtrl>
-					
+				<TabCtrl>			
 					<!-- TabPage overview -->
 					<TabPgOverview>
 						<Overview text="Übersicht" />
@@ -1918,6 +1924,7 @@
 					<!-- DataGridView brokerage -->
 					<DgvBrokerageOverview>
 						<ColHeader_Date text="Datum" />
+						<ColHeader_Year text="Jahr" />
 						<ColHeader_Brokerage text="Kosten" />
 						<ColHeader_Document text="Dokument" />
 					</DgvBrokerageOverview>

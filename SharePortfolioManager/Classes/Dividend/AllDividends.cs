@@ -203,13 +203,13 @@ namespace SharePortfolioManager
         /// and the total dividend of the years
         /// </summary>
         /// <returns>Dictionary with the years and the dividend values of the year or empty dictionary if no year exist.</returns>
-        public Dictionary<string, string> GetAllDividendsTotalValues()
+        public List<DividendYearOfTheShare> GetAllDividendsTotalValues()
         {
-            var allDividendsOfTheShare = new Dictionary<string, string>();
+            var allDividendsOfTheShare = new List<DividendYearOfTheShare>();
 
             foreach (var key in AllDividendsOfTheShareDictionary.Keys)
             {
-                    allDividendsOfTheShare.Add(key, Helper.FormatDecimal(AllDividendsOfTheShareDictionary[key].DividendValueYear, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", DividendCultureInfo));
+                allDividendsOfTheShare.Add(AllDividendsOfTheShareDictionary[key]);
             }
             return allDividendsOfTheShare;
         }

@@ -28,6 +28,7 @@ using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml;
+using SharePortfolioManager.Classes.Sales;
 using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager

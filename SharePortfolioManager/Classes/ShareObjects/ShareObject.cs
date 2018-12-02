@@ -29,11 +29,11 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
+using SharePortfolioManager.Classes.Buys;
 using WebParser;
 
 namespace SharePortfolioManager.Classes.ShareObjects
 {
-    /// <inheritdoc />
     /// <summary>
     /// This class is the base class of a share.
     /// The class stores the following things:

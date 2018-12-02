@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace SharePortfolioManager.Forms.BrokerageForm.View
+namespace SharePortfolioManager.Forms.BrokeragesForm.View
 {
     partial class ViewBrokerageEdit
     {
@@ -73,6 +73,7 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
             this.grpBoxOverview.TabIndex = 5;
             this.grpBoxOverview.TabStop = false;
             this.grpBoxOverview.Text = "_brokerage";
+            this.grpBoxOverview.MouseLeave += new System.EventHandler(this.OnGrpBoxOverview_MouseLeave);
             // 
             // tblLayPnlOverviewTabControl
             // 
@@ -100,8 +101,8 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
             this.tabCtrlBrokerage.Size = new System.Drawing.Size(813, 156);
             this.tabCtrlBrokerage.TabIndex = 0;
             this.tabCtrlBrokerage.SelectedIndexChanged += new System.EventHandler(this.TabCtrlBrokerage_SelectedIndexChanged);
-            this.tabCtrlBrokerage.MouseEnter += new System.EventHandler(this.TabCtrlBrokerage_MouseEnter);
-            this.tabCtrlBrokerage.MouseLeave += new System.EventHandler(this.TabCtrlBrokerage_MouseLeave);
+            this.tabCtrlBrokerage.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnTabCtrlBrokerage_KeyDown);
+            this.tabCtrlBrokerage.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.OnTabCtrlBrokerage_KeyPress);
             // 
             // grpBoxAdd
             // 
@@ -187,7 +188,6 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
             // btnReset
             // 
             this.btnReset.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnReset.Enabled = false;
             this.btnReset.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnReset.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnReset.Location = new System.Drawing.Point(460, 1);
@@ -240,7 +240,7 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
             this.btnDocumentBrowse.Text = "...";
             this.btnDocumentBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnDocumentBrowse.UseVisualStyleBackColor = true;
-            this.btnDocumentBrowse.Click += new System.EventHandler(this.OnBtnDocumentBrowse_Click);
+            this.btnDocumentBrowse.Click += new System.EventHandler(this.OnBtnBrokerageDocumentBrowse_Click);
             // 
             // lblDate
             // 
@@ -285,7 +285,8 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
             this.txtBoxDocument.TextChanged += new System.EventHandler(this.OnTxtBoxDocument_TextChanged);
             this.txtBoxDocument.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragDrop);
             this.txtBoxDocument.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragEnter);
-            this.txtBoxDocument.Leave += new System.EventHandler(this.OntxtBoxDocument_Leave);
+            this.txtBoxDocument.Enter += new System.EventHandler(this.OnTxtBoxDocument_Enter);
+            this.txtBoxDocument.Leave += new System.EventHandler(this.OnTxtBoxDocument_Leave);
             // 
             // lblDocument
             // 
@@ -314,6 +315,7 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
             this.datePickerDate.Size = new System.Drawing.Size(244, 22);
             this.datePickerDate.TabIndex = 10;
             this.datePickerDate.ValueChanged += new System.EventHandler(this.OnDatePickerDate_ValueChanged);
+            this.datePickerDate.Enter += new System.EventHandler(this.OnDatePickerDate_Enter);
             this.datePickerDate.Leave += new System.EventHandler(this.OnDatePickerDate_Leave);
             // 
             // datePickerTime
@@ -328,6 +330,7 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
             this.datePickerTime.Size = new System.Drawing.Size(244, 22);
             this.datePickerTime.TabIndex = 18;
             this.datePickerTime.ValueChanged += new System.EventHandler(this.OnDatePickerTime_ValueChanged);
+            this.datePickerTime.Enter += new System.EventHandler(this.OnDatePickerTime_Enter);
             this.datePickerTime.Leave += new System.EventHandler(this.datePickerTime_Leave);
             // 
             // txtBoxBrokerage
@@ -342,6 +345,7 @@ namespace SharePortfolioManager.Forms.BrokerageForm.View
             this.txtBoxBrokerage.Size = new System.Drawing.Size(490, 22);
             this.txtBoxBrokerage.TabIndex = 0;
             this.txtBoxBrokerage.TextChanged += new System.EventHandler(this.OnTxtBoxBrokerage_TextChanged);
+            this.txtBoxBrokerage.Enter += new System.EventHandler(this.OnTxtBoxBrokerage_Enter);
             this.txtBoxBrokerage.Leave += new System.EventHandler(this.OnTxtBoxBrokerage_Leave);
             // 
             // lblAddBrokerageUnit

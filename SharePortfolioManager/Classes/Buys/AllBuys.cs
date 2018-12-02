@@ -20,13 +20,12 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using SharePortfolioManager.Classes;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
-namespace SharePortfolioManager
+namespace SharePortfolioManager.Classes.Buys
 {
     [Serializable]
     public class AllBuysOfTheShare
@@ -253,7 +252,6 @@ namespace SharePortfolioManager
                 allBuysOfTheShare.Add(AllBuysOfTheShareDictionary[key]);
             }
             return allBuysOfTheShare;
-
         }
 
         /// <summary>
@@ -343,13 +341,13 @@ namespace SharePortfolioManager
                     if (decSaleVolume <= buyObject.VolumeSold)
                         buyObject.VolumeSold -= decSaleVolume;
 
-//#if DEBUG_BUY
+#if DEBUG_BUY
                     Console.WriteLine(@"After remove sale volume");
                     Console.WriteLine(@"Guid: {0}", strGuid);
                     Console.WriteLine(@"decSaleVolume: {0}", decSaleVolume);
                     Console.WriteLine(@"VolumeSold: {0}", buyObject.VolumeSold);
                     Console.WriteLine(@"");
-//#endif
+#endif
                     return true;
                 }
             }
@@ -358,23 +356,43 @@ namespace SharePortfolioManager
         }
 
         /// <summary>
-        /// This function checks if the given date is the last date of the entries
+        /// This function checks if the buy with the given Guid is the last buy of the entries
         /// </summary>
-        /// <param name="strDate">Given date and time</param>
+        /// <param name="strGuid">Given date and time</param>
         /// <returns></returns>
-        public bool IsDateLastDate(string strDate)
+        public bool IsLastBuy(string strGuid)
         {
-            if (_allBuysOfTheShareDictionary.Count <= 0) return true;
+            if (_allBuysOfTheShareDictionary.Count <= 0) return false;
 
             var lastYearEntries = _allBuysOfTheShareDictionary.Last().Value;
+
+            if (lastYearEntries.BuyListYear.Count <= 0) return false;
+
+            if (lastYearEntries.BuyListYear.Last().Guid == strGuid)
+                return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// This function checks if the buy is already part of a sale
+        /// </summary>
+        /// <param name="strGuid">Guid of the buy</param>
+        /// <returns>Flag if the buy is part of a sale.</returns>
+        public bool IsPartOfASale(string strGuid)
+        {
+            if (_allBuysOfTheShareDictionary.Count <= 0) return false;
+
+            foreach (var buysYearOfTheShare in _allBuysOfTheShareDictionary.Values)
             {
-                if (lastYearEntries.BuyListYear.Count <= 0) return true;
-
-                var tempTimeDate = Convert.ToDateTime(lastYearEntries.BuyListYear.Last().Date);
-                var givenTimeDate = Convert.ToDateTime(strDate);
-
-                return givenTimeDate >= tempTimeDate;
+                foreach (var buyObject in buysYearOfTheShare.BuyListYear)
+                {
+                    if (buyObject.Guid != strGuid) continue;
+                    return buyObject.VolumeSold != 0;
+                }
             }
+
+            return false;
         }
 
         /// <summary>

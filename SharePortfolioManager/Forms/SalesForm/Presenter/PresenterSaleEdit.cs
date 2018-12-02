@@ -21,12 +21,16 @@
 //SOFTWARE.
 
 using SharePortfolioManager.Classes;
+using SharePortfolioManager.Classes.Sales;
 using SharePortfolioManager.Forms.SalesForm.Model;
 using SharePortfolioManager.Forms.SalesForm.View;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+#if DEBUG
+using System.Windows.Forms;
+#endif
 
 namespace SharePortfolioManager.Forms.SalesForm.Presenter
 {
@@ -94,6 +98,11 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
             _model.SelectedGuid = _view.SelectedGuid;
             _model.SelectedGuidLast = _view.SelectedGuidLast;
             _model.SelectedDate = _view.SelectedDate;
+
+            _model.Logger = _view.Logger;
+            _model.Language = _view.Language;
+            _model.LanguageName = _view.LanguageName;
+
             _model.Date = _view.Date;
             _model.Time = _view.Time;
             _model.Volume = _view.Volume;
@@ -142,7 +151,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                         usedBuyDetail.DecVolume);
                 }
 
-                // TODO when the sale volume has been changed the UseBuyDetails must be updated
+                // When the sale volume has been changed the UseBuyDetails must be updated
                 if (_model.ShareObjectFinalValue.AddSale(strGuidSale, strDateTime, _model.VolumeDec, _model.SalePriceDec, _model.UsedBuyDetails,
                         _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, _model.BrokerageDec, _model.ReductionDec, _model.Document) &&
                     _model.ShareObjectMarketValue.AddSale(strGuidSale, strDateTime, _model.VolumeDec, _model.SalePriceDec, _model.UsedBuyDetails,
@@ -259,25 +268,52 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
 
         private void OnDeleteSale(object sender, EventArgs e)
         {
-            // If this is the first sale of all. This sale can´t be deleted. Only if the whole share will be deleted
-            if (_model.ShareObjectFinalValue.AllSaleEntries.GetAllSalesOfTheShare().Count > 1)
+            // Get selected sale
+            foreach (var salesOfTheYears in _model.ShareObjectFinalValue.AllSaleEntries.AllSalesOfTheShareDictionary.Values)
             {
-                // Delete the sale of the selected date
-                if (_model.ShareObjectFinalValue.RemoveSale(_model.SelectedGuid, _model.SelectedDate))
+                foreach (var sale in salesOfTheYears.SaleListYear)
                 {
-                    // Check if a brokerage object exists
-                    if (_model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByGuid(_model.SelectedGuid, _model.SelectedDate) != null)
+                    if (sale.Guid != _model.SelectedGuid) continue;
+
+                    // Loop through the buys of the selected sale
+                    foreach (var buySale in sale.SaleBuyDetails)
                     {
-                        _model.ErrorCode = _model.ShareObjectFinalValue.RemoveBrokerage(_model.SelectedGuid, _model.SelectedDate) ? SaleErrorCode.DeleteSuccessful : SaleErrorCode.DeleteFailed;
+                        // Get buy and remove sale volume from ShareObjectFinalValue
+                        foreach (var buyOfTheYears in _model.ShareObjectFinalValue.AllBuyEntries
+                            .AllBuysOfTheShareDictionary.Values)
+                        {
+                            foreach (var buy in buyOfTheYears.BuyListYear)
+                                if (buy.Guid == buySale.BuyGuid)
+                                    buy.VolumeSold -= buySale.DecVolume;
+                        }
+
+                        // Get buy and remove sale volume from ShareObjectMarketValue
+                        foreach (var buyOfTheYears in _model.ShareObjectMarketValue.AllBuyEntries
+                            .AllBuysOfTheShareDictionary.Values)
+                        {
+                            foreach (var buy in buyOfTheYears.BuyListYear)
+                                if (buy.Guid == buySale.BuyGuid)
+                                    buy.VolumeSold -= buySale.DecVolume;
+                        }
                     }
-                    else
-                    {
-                        _model.ErrorCode = SaleErrorCode.DeleteSuccessful;
-                    }
+                }
+            }
+
+            // Delete the sale of the selected date
+            if (_model.ShareObjectFinalValue.RemoveSale(_model.SelectedGuid, _model.SelectedDate))
+            {
+                // Check if a brokerage object exists
+                if (_model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByGuid(_model.SelectedGuid,
+                        _model.SelectedDate) != null)
+                {
+                    _model.ErrorCode =
+                        _model.ShareObjectFinalValue.RemoveBrokerage(_model.SelectedGuid, _model.SelectedDate)
+                            ? SaleErrorCode.DeleteSuccessful
+                            : SaleErrorCode.DeleteFailed;
                 }
                 else
                 {
-                    _model.ErrorCode = SaleErrorCode.DeleteFailed;
+                    _model.ErrorCode = SaleErrorCode.DeleteSuccessful;
                 }
             }
             else
@@ -307,7 +343,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
             }
             catch (Exception ex)
             {
-#if DEBUG_SALE
+#if DEBUG
                 var message = $"OnDocumentBrowse()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -324,22 +360,25 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
         {
             try
             {
-                Console.WriteLine(@"UpdateSale: {0}", _model.UpdateSale);
-                Console.WriteLine(@"AddSale:    {0}", _model.AddSale);
+                Console.WriteLine(@"UpdateSale:              {0}", _model.UpdateSale);
+                Console.WriteLine(@"AddSale:                 {0}", _model.AddSale);
+                Console.WriteLine(@"_model.SelectedGuid:     {0}", _model.SelectedGuid);
+                Console.WriteLine(@"_model.SelectedGuidLast: {0}", _model.SelectedGuidLast);
+                Console.WriteLine();
 
                 var soldVolume = new decimal(0.0);
 
-                // Remove used buys from the currently selected sale of the calculation object
-                if (_model.UpdateSale && !_model.ShowSales && _model.SelectedGuidLast != _model.SelectedGuid)
+                // In this case a change of the TabControl has been done.
+                // Only the buys of the selected sale will be removed from the buys sold volume.
+                if (_model.UpdateSale && !_model.ShowSales &&
+                    _model.SelectedGuidLast != _model.SelectedGuid &&
+                    _model.SelectedGuidLast == @"")
                 {
                     foreach (var salesYear in _model.ShareObjectCalculation.AllSaleEntries.AllSalesOfTheShareDictionary)
                     {
                         foreach (var sale in salesYear.Value.SaleListYear)
                         {
-                            Console.WriteLine(@"sale.Guid:           {0}", sale.Guid);
-                            Console.WriteLine(@"_model.SelectedGuid: {0}", _model.SelectedGuid);
                             if (sale.Guid != _model.SelectedGuid) continue;
-
                             foreach (var saleDetail in sale.SaleBuyDetails)
                             {
                                 foreach (var buysYear in _model.ShareObjectCalculation.AllBuyEntries
@@ -349,11 +388,65 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                                     {
                                         if (buy.Guid == saleDetail.BuyGuid && buy.VolumeSold > 0)
                                         {
-                                            if ( buy.VolumeSold >= saleDetail.DecVolume)
-                                                buy.VolumeSold -= saleDetail.DecVolume;
-                                            else
+                                            // Remove sale volumes from calculation object
+                                            _model.ShareObjectCalculation.AllBuyEntries.RemoveSaleVolumeByGuid(
+                                                buy.Guid,
+                                                saleDetail.DecVolume);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // In this case a change of the TabControl has been done.
+                // The buys of the selected sale will be removed from the buys sold volume
+                // and the buys of the selected sale will be added to the buys sold volume.
+                if (_model.UpdateSale && !_model.ShowSales &&
+                    _model.SelectedGuidLast != _model.SelectedGuid &&
+                    _model.SelectedGuidLast != @"")
+                {
+                    foreach (var salesYear in _model.ShareObjectCalculation.AllSaleEntries.AllSalesOfTheShareDictionary)
+                    {
+                        foreach (var sale in salesYear.Value.SaleListYear)
+                        {
+                            if (sale.Guid == _model.SelectedGuid)
+                            {
+                                foreach (var saleDetail in sale.SaleBuyDetails)
+                                {
+                                    foreach (var buysYear in _model.ShareObjectCalculation.AllBuyEntries
+                                        .AllBuysOfTheShareDictionary)
+                                    {
+                                        foreach (var buy in buysYear.Value.BuyListYear)
+                                        {
+                                            if (buy.Guid == saleDetail.BuyGuid && buy.VolumeSold > 0)
                                             {
-                                                buy.VolumeSold = 0;
+                                                // Remove sale volumes from calculation object
+                                                _model.ShareObjectCalculation.AllBuyEntries.RemoveSaleVolumeByGuid(
+                                                    buy.Guid,
+                                                    saleDetail.DecVolume);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (sale.Guid == _model.SelectedGuidLast)
+                            {
+                                foreach (var saleDetail in sale.SaleBuyDetails)
+                                {
+                                    foreach (var buysYear in _model.ShareObjectCalculation.AllBuyEntries
+                                        .AllBuysOfTheShareDictionary)
+                                    {
+                                        foreach (var buy in buysYear.Value.BuyListYear)
+                                        {
+                                            if (buy.Guid == saleDetail.BuyGuid)
+                                            {
+                                                // Add sale volumes from calculation object
+                                                _model.ShareObjectCalculation.AllBuyEntries.AddSaleVolumeByGuid(
+                                                    buy.Guid,
+                                                    saleDetail.DecVolume);
                                             }
                                         }
                                     }
@@ -361,14 +454,15 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                             }
                         }
                     }
-
-                    // Save current selected Guid of the sale
-                    _model.SelectedGuidLast = _model.SelectedGuid;
                 }
 
-                // Check if the list for the used buy details is set else clear the list
-                if (!_model.AddSale)
-                {
+                // Save current selected Guid of the selected sale
+                if (_model.SelectedGuid != _model.SelectedGuidLast)
+                    _model.SelectedGuidLast = _model.SelectedGuid;
+
+                //Check if the list for the used buy details is set else clear the list
+                //if (!_model.AddSale /*&& !_model.UpdateSale*/)
+                //{
                     if (_model.UsedBuyDetails == null)
                         _model.UsedBuyDetails = new List<SaleBuyDetails>();
                     else
@@ -386,7 +480,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
 
                         _model.UsedBuyDetails.Clear();
                     }
-                }
+                //}
 
                 // Loop through the buys and check which buy should be used for this sale
                 foreach (var buy in _model.ShareObjectCalculation.AllBuyEntries.GetAllBuysOfTheShare())
@@ -426,10 +520,6 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                         _model.ShareObjectCalculation.AllBuyEntries.AddSaleVolumeByGuid(buy.Guid,
                             toBeSold);
                     }
-
-                    //Console.WriteLine(@"   Buy Date 2: {0}", buy.DateAsStr);
-                    //Console.WriteLine(@"     Volume 2: {0}", buy.Volume);
-                    //Console.WriteLine(@"Sold Volume 2: {0}", buy.VolumeSold);
                 }
 
                 var decProfitLoss = _model.SalePriceDec * _model.VolumeDec - _model.UsedBuyDetails.Sum(x => x.SaleBuyValue);
@@ -441,7 +531,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
             }
             catch (Exception ex)
             {
-#if DEBUG_SALE
+#if DEBUG
                 var message = $"CalculateProfitLossAndPayout()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);

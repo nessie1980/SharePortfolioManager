@@ -20,12 +20,14 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+using System;
+using System.IO;
+#if DEBUG
+using System.Windows.Forms;
+#endif
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Forms.BuysForm.Model;
 using SharePortfolioManager.Forms.BuysForm.View;
-using System;
-using System.IO;
-using System.Windows.Forms;
 
 namespace SharePortfolioManager.Forms.BuysForm.Presenter
 {
@@ -40,11 +42,11 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
             _model = model;
 
             view.PropertyChanged += OnViewChange;
-            view.FormatInputValues += OnViewFormatInputValues;
-            view.AddBuy += OnAddBuy;
-            view.EditBuy += OnEditBuy;
-            view.DeleteBuy += OnDeleteBuy;
-            view.DocumentBrowse += OnDocumentBrowse;
+            view.FormatInputValuesEventHandler += OnViewFormatInputValues;
+            view.AddBuyEventHandler += OnAddBuy;
+            view.EditBuyEventHandler += OnEditBuy;
+            view.DeleteBuyEventHandler += OnDeleteBuy;
+            view.DocumentBrowseEventHandler += OnDocumentBrowse;
         }
 
         private void UpdateViewWithModel()
@@ -223,7 +225,7 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
                     }
                     else
                     {
-                        _model.ErrorCode = BuyErrorCode.DeleteFailed;
+                        _model.ErrorCode = BuyErrorCode.DeleteSuccessful;
                     }
                 }
                 else
@@ -333,7 +335,7 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
                 // Check if a correct price for the buy is given
                 if (_model.SharePrice == @"" && bErrorFlag == false)
                 {
-                    _model.ErrorCode = BuyErrorCode.SharePricEmpty;
+                    _model.ErrorCode = BuyErrorCode.SharePriceEmpty;
                     bErrorFlag = true;
                 }
                 else if (!decimal.TryParse(_model.SharePrice, out var decPrice) && bErrorFlag == false)

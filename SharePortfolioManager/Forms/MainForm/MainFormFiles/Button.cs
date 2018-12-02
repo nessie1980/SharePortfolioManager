@@ -146,7 +146,7 @@ namespace SharePortfolioManager
                 }
 
                 // Check if the DataBinding is already done and
-                // than set the new share to the DataGridview
+                // than set the new share to the DataGridvVew
                 if (DgvPortfolioBindingSourceFinalValue.DataSource == null && dgvPortfolioFinalValue.DataSource == null)
                 {
                     DgvPortfolioBindingSourceFinalValue.DataSource = ShareObjectListFinalValue;
