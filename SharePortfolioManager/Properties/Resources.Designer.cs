@@ -63,9 +63,9 @@ namespace SharePortfolioManager.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap black_add {
+        internal static System.Drawing.Bitmap button_add_24 {
             get {
-                object obj = ResourceManager.GetObject("black_add", resourceCulture);
+                object obj = ResourceManager.GetObject("button_add_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace SharePortfolioManager.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap black_cancel {
+        internal static System.Drawing.Bitmap button_back_24 {
             get {
-                object obj = ResourceManager.GetObject("black_cancel", resourceCulture);
+                object obj = ResourceManager.GetObject("button_back_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace SharePortfolioManager.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap black_delete {
+        internal static System.Drawing.Bitmap button_cancel_24 {
             get {
-                object obj = ResourceManager.GetObject("black_delete", resourceCulture);
+                object obj = ResourceManager.GetObject("button_cancel_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,9 +93,9 @@ namespace SharePortfolioManager.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap black_edit {
+        internal static System.Drawing.Bitmap button_exit_24 {
             get {
-                object obj = ResourceManager.GetObject("black_edit", resourceCulture);
+                object obj = ResourceManager.GetObject("button_exit_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +103,9 @@ namespace SharePortfolioManager.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap black_exit {
+        internal static System.Drawing.Bitmap button_pencil_16 {
             get {
-                object obj = ResourceManager.GetObject("black_exit", resourceCulture);
+                object obj = ResourceManager.GetObject("button_pencil_16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -113,9 +113,9 @@ namespace SharePortfolioManager.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap black_logger {
+        internal static System.Drawing.Bitmap button_pencil_24 {
             get {
-                object obj = ResourceManager.GetObject("black_logger", resourceCulture);
+                object obj = ResourceManager.GetObject("button_pencil_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -123,9 +123,9 @@ namespace SharePortfolioManager.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap black_new {
+        internal static System.Drawing.Bitmap button_recycle_bin_24 {
             get {
-                object obj = ResourceManager.GetObject("black_new", resourceCulture);
+                object obj = ResourceManager.GetObject("button_recycle_bin_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -133,9 +133,9 @@ namespace SharePortfolioManager.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap black_open {
+        internal static System.Drawing.Bitmap button_reset_24 {
             get {
-                object obj = ResourceManager.GetObject("black_open", resourceCulture);
+                object obj = ResourceManager.GetObject("button_reset_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -143,9 +143,9 @@ namespace SharePortfolioManager.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap black_save {
+        internal static System.Drawing.Bitmap button_save_24 {
             get {
-                object obj = ResourceManager.GetObject("black_save", resourceCulture);
+                object obj = ResourceManager.GetObject("button_save_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -153,9 +153,9 @@ namespace SharePortfolioManager.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap black_show {
+        internal static System.Drawing.Bitmap button_save_as_24 {
             get {
-                object obj = ResourceManager.GetObject("black_show", resourceCulture);
+                object obj = ResourceManager.GetObject("button_save_as_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -163,9 +163,9 @@ namespace SharePortfolioManager.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap black_update {
+        internal static System.Drawing.Bitmap button_update_24 {
             get {
-                object obj = ResourceManager.GetObject("black_update", resourceCulture);
+                object obj = ResourceManager.GetObject("button_update_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -173,9 +173,69 @@ namespace SharePortfolioManager.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap black_update_all {
+        internal static System.Drawing.Bitmap button_update_all_24 {
             get {
-                object obj = ResourceManager.GetObject("black_update_all", resourceCulture);
+                object obj = ResourceManager.GetObject("button_update_all_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap doc_excel_24 {
+            get {
+                object obj = ResourceManager.GetObject("doc_excel_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap doc_excel_image_24 {
+            get {
+                object obj = ResourceManager.GetObject("doc_excel_image_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap doc_pdf_24 {
+            get {
+                object obj = ResourceManager.GetObject("doc_pdf_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap doc_pdf_image_24 {
+            get {
+                object obj = ResourceManager.GetObject("doc_pdf_image_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap doc_word_24 {
+            get {
+                object obj = ResourceManager.GetObject("doc_word_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap doc_word_image_24 {
+            get {
+                object obj = ResourceManager.GetObject("doc_word_image_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -193,9 +253,9 @@ namespace SharePortfolioManager.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap gray_neutral_arrow {
+        internal static System.Drawing.Bitmap menu_about_24 {
             get {
-                object obj = ResourceManager.GetObject("gray_neutral_arrow", resourceCulture);
+                object obj = ResourceManager.GetObject("menu_about_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -203,9 +263,9 @@ namespace SharePortfolioManager.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap green_up_arrow {
+        internal static System.Drawing.Bitmap menu_eventlog_24 {
             get {
-                object obj = ResourceManager.GetObject("green_up_arrow", resourceCulture);
+                object obj = ResourceManager.GetObject("menu_eventlog_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -213,9 +273,189 @@ namespace SharePortfolioManager.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap red_down_arrow {
+        internal static System.Drawing.Bitmap menu_file_add_24 {
             get {
-                object obj = ResourceManager.GetObject("red_down_arrow", resourceCulture);
+                object obj = ResourceManager.GetObject("menu_file_add_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap menu_file_add2_24 {
+            get {
+                object obj = ResourceManager.GetObject("menu_file_add2_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap menu_file_add3_24 {
+            get {
+                object obj = ResourceManager.GetObject("menu_file_add3_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap menu_flag_german_24 {
+            get {
+                object obj = ResourceManager.GetObject("menu_flag_german_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap menu_flag_usa_24 {
+            get {
+                object obj = ResourceManager.GetObject("menu_flag_usa_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap menu_folder_add_24 {
+            get {
+                object obj = ResourceManager.GetObject("menu_folder_add_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap menu_folder_open_16 {
+            get {
+                object obj = ResourceManager.GetObject("menu_folder_open_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap menu_folder_open_24 {
+            get {
+                object obj = ResourceManager.GetObject("menu_folder_open_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap menu_settings_24 {
+            get {
+                object obj = ResourceManager.GetObject("menu_settings_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap negativ_development_16 {
+            get {
+                object obj = ResourceManager.GetObject("negativ_development_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap negativ_development_24 {
+            get {
+                object obj = ResourceManager.GetObject("negativ_development_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap neutral_development_16 {
+            get {
+                object obj = ResourceManager.GetObject("neutral_development_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap neutral_development_24 {
+            get {
+                object obj = ResourceManager.GetObject("neutral_development_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap positiv_development_16 {
+            get {
+                object obj = ResourceManager.GetObject("positiv_development_16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap positiv_development_24 {
+            get {
+                object obj = ResourceManager.GetObject("positiv_development_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap search_failed_24 {
+            get {
+                object obj = ResourceManager.GetObject("search_failed_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap search_info_24 {
+            get {
+                object obj = ResourceManager.GetObject("search_info_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap search_ok_24 {
+            get {
+                object obj = ResourceManager.GetObject("search_ok_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap show_window_24 {
+            get {
+                object obj = ResourceManager.GetObject("show_window_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

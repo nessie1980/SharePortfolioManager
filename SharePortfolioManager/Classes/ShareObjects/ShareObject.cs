@@ -30,7 +30,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using SharePortfolioManager.Classes.Buys;
-using WebParser;
+using Parser;
 
 namespace SharePortfolioManager.Classes.ShareObjects
 {
@@ -117,14 +117,9 @@ namespace SharePortfolioManager.Classes.ShareObjects
         internal const string BuyVolumeSoldAttrName = "VolumeSold";
 
         /// <summary>
-        /// Stores the XML attribute name for the reduction of a buy
+        /// Stores the XML attribute name for the brokerage Guid of a buy
         /// </summary>
-        internal const string BuyReductionAttrName = "Reduction";
-
-        /// <summary>
-        /// Stores the XML attribute name for the brokerage of a buy
-        /// </summary>
-        internal const string BuyBrokerageAttrName = "Brokerage";
+        internal const string BuyBrokerageGuidAttrName = "BrokerageGuid";
 
         /// <summary>
         /// Stores the XML attribute name for buy price of a share of a buy
@@ -139,7 +134,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <summary>
         /// Stores the attribute count for the buy
         /// </summary>
-        internal const short BuyAttrCount = 8;
+        internal const short BuyAttrCount = 7;
 
         #endregion Buy XML variables
 
@@ -275,9 +270,24 @@ namespace SharePortfolioManager.Classes.ShareObjects
         internal const string BrokerageDateAttrName = "Date";
 
         /// <summary>
-        /// Stores the attribute name for the value
+        /// Stores the attribute name for the provision value
         /// </summary>
-        internal const string BrokerageValueAttrName = "Value";
+        internal const string BrokerageProvisionAttrName = "Provision";
+
+        /// <summary>
+        /// Stores the attribute name for the broker fee value
+        /// </summary>
+        internal const string BrokerageBrokerFeeAttrName = "BrokerFee";
+
+        /// <summary>
+        /// Stores the attribute name for the trader place fee value
+        /// </summary>
+        internal const string BrokerageTraderPlaceFeeAttrName = "TraderPlaceFee";
+
+        /// <summary>
+        /// Stores the attribute name for the reduction value
+        /// </summary>
+        internal const string BrokerageReductionAttrName = "Reduction";
 
         /// <summary>
         /// Stores the XML attribute name for the document of a brokerage
@@ -287,7 +297,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <summary>
         /// Stores the attribute count for the brokerage
         /// </summary>
-        internal const short BrokerageAttrCount = 7;
+        internal const short BrokerageAttrCount = 10;
 
         #endregion Brokerage XML variables
 

@@ -50,7 +50,7 @@ namespace SharePortfolioManager
             this.lblColorStart = new System.Windows.Forms.Label();
             this.grpBoxComponents = new System.Windows.Forms.GroupBox();
             this.chkBoxLanguageHander = new System.Windows.Forms.CheckBox();
-            this.chkBoxWebParser = new System.Windows.Forms.CheckBox();
+            this.chkBoxParser = new System.Windows.Forms.CheckBox();
             this.chkBoxApplication = new System.Windows.Forms.CheckBox();
             this.grpBoxEnableFileLogging = new System.Windows.Forms.GroupBox();
             this.chkBoxEnableFileLogging = new System.Windows.Forms.CheckBox();
@@ -63,7 +63,6 @@ namespace SharePortfolioManager
             this.lblStoredLogFiles = new System.Windows.Forms.Label();
             this.grpBoxCleanUpAtStartUp = new System.Windows.Forms.GroupBox();
             this.chkBoxEnableCleanUpAtStartUp = new System.Windows.Forms.CheckBox();
-            this.statusStrip1.SuspendLayout();
             this.grpBoxLogLevel.SuspendLayout();
             this.grpBoxLogColors.SuspendLayout();
             this.grpBoxComponents.SuspendLayout();
@@ -77,14 +76,15 @@ namespace SharePortfolioManager
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Image = global::SharePortfolioManager.Properties.Resources.black_cancel;
+            this.btnCancel.Image = global::SharePortfolioManager.Properties.Resources.button_cancel_24;
             this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCancel.Location = new System.Drawing.Point(559, 299);
+            this.btnCancel.Location = new System.Drawing.Point(559, 297);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(166, 31);
             this.btnCancel.TabIndex = 0;
             this.btnCancel.Text = "_Cancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCancel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.OnBtnCancel_Click);
             // 
@@ -92,23 +92,21 @@ namespace SharePortfolioManager
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSave.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnSave.Image = global::SharePortfolioManager.Properties.Resources.black_save;
+            this.btnSave.Image = global::SharePortfolioManager.Properties.Resources.button_save_24;
             this.btnSave.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnSave.Location = new System.Drawing.Point(387, 299);
+            this.btnSave.Location = new System.Drawing.Point(387, 297);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(166, 31);
             this.btnSave.TabIndex = 1;
             this.btnSave.Text = "_Save";
             this.btnSave.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSave.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.OnBtnSave_Click);
             // 
             // statusStrip1
             // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabelMessage,
-            this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 335);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 334);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(734, 22);
             this.statusStrip1.SizingGrip = false;
@@ -273,7 +271,7 @@ namespace SharePortfolioManager
             // grpBoxComponents
             // 
             this.grpBoxComponents.Controls.Add(this.chkBoxLanguageHander);
-            this.grpBoxComponents.Controls.Add(this.chkBoxWebParser);
+            this.grpBoxComponents.Controls.Add(this.chkBoxParser);
             this.grpBoxComponents.Controls.Add(this.chkBoxApplication);
             this.grpBoxComponents.Location = new System.Drawing.Point(8, 125);
             this.grpBoxComponents.Name = "grpBoxComponents";
@@ -291,14 +289,14 @@ namespace SharePortfolioManager
             this.chkBoxLanguageHander.Text = "_chkBoxLanguageHandler";
             this.chkBoxLanguageHander.UseVisualStyleBackColor = true;
             // 
-            // chkBoxWebParser
+            // chkBoxParser
             // 
-            this.chkBoxWebParser.Location = new System.Drawing.Point(10, 49);
-            this.chkBoxWebParser.Name = "chkBoxWebParser";
-            this.chkBoxWebParser.Size = new System.Drawing.Size(175, 19);
-            this.chkBoxWebParser.TabIndex = 6;
-            this.chkBoxWebParser.Text = "_chkBoxWebParser";
-            this.chkBoxWebParser.UseVisualStyleBackColor = true;
+            this.chkBoxParser.Location = new System.Drawing.Point(10, 49);
+            this.chkBoxParser.Name = "chkBoxParser";
+            this.chkBoxParser.Size = new System.Drawing.Size(175, 19);
+            this.chkBoxParser.TabIndex = 6;
+            this.chkBoxParser.Text = "_chkBoxParser";
+            this.chkBoxParser.UseVisualStyleBackColor = true;
             // 
             // chkBoxApplication
             // 
@@ -449,8 +447,7 @@ namespace SharePortfolioManager
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.ClientSize = new System.Drawing.Size(734, 357);
-            this.ControlBox = false;
+            this.ClientSize = new System.Drawing.Size(734, 356);
             this.Controls.Add(this.grpBoxCleanUpAtStartUp);
             this.Controls.Add(this.grpBoxStoredLogFiles);
             this.Controls.Add(this.grpBoxGUIEntries);
@@ -462,7 +459,9 @@ namespace SharePortfolioManager
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnCancel);
             this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold);
+            this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(750, 395);
+            this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(750, 395);
             this.Name = "FrmLoggerSettings";
             this.ShowIcon = false;
@@ -470,8 +469,6 @@ namespace SharePortfolioManager
             this.Text = "LoggerSettings";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmLoggerSettings_FormClosing);
             this.Load += new System.EventHandler(this.FrmLoggerSettings_Load);
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
             this.grpBoxLogLevel.ResumeLayout(false);
             this.grpBoxLogColors.ResumeLayout(false);
             this.grpBoxComponents.ResumeLayout(false);
@@ -506,7 +503,7 @@ namespace SharePortfolioManager
         private System.Windows.Forms.Label lblColorStart;
         private System.Windows.Forms.GroupBox grpBoxComponents;
         private System.Windows.Forms.CheckBox chkBoxLanguageHander;
-        private System.Windows.Forms.CheckBox chkBoxWebParser;
+        private System.Windows.Forms.CheckBox chkBoxParser;
         private System.Windows.Forms.CheckBox chkBoxApplication;
         private System.Windows.Forms.GroupBox grpBoxEnableFileLogging;
         private System.Windows.Forms.CheckBox chkBoxEnableFileLogging;

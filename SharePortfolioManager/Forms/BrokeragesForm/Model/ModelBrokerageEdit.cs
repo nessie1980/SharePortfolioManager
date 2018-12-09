@@ -52,6 +52,14 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.Model
         bool PartOfASale { get; set; }
         string Date { get; set; }
         string Time { get; set; }
+        string Provision { get; set; }
+        decimal ProvisionDec { get; set; }
+        string BrokerFee { get; set; }
+        decimal BrokerFeeDec { get; set; }
+        string TraderPlaceFee { get; set; }
+        decimal TraderPlaceFeeDec { get; set; }
+        string Reduction { get; set; }
+        decimal ReductionDec { get; set; }
         string Brokerage { get; set; }
         decimal BrokerageDec { get; set; }
         string Document { get; set; }
@@ -67,6 +75,14 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.Model
 
         private string _date;
         private string _time;
+        private string _provision;
+        private decimal _provisionDec;
+        private string _brokerFee;
+        private decimal _brokerFeeDec;
+        private string _traderPlaceFee;
+        private decimal _traderPlaceFeeDec;
+        private string _reduction;
+        private decimal _reductionDec;
         private string _brokerage;
         private decimal _brokerageDec;
         private string _document;
@@ -122,6 +138,154 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.Model
                     return;
 
                 _time = value;
+            }
+        }
+
+        public string Provision
+        {
+            get
+            {
+                if (UpdateViewFormatted)
+                {
+                    // Only return the value if the provision is greater than '0'
+                    return _provisionDec > 0 ? Helper.FormatDecimal(_provisionDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : @"";
+                }
+
+                return _provision;
+            }
+            set
+            {
+                if (_provision == value)
+                    return;
+                _provision = value;
+
+                // Try to parse
+                if (!decimal.TryParse(_provision, out _provisionDec))
+                    _provisionDec = 0;
+            }
+        }
+
+        public decimal ProvisionDec
+        {
+            get => _provisionDec;
+            set
+            {
+                if (_provisionDec == value)
+                    return;
+                _provisionDec = value;
+
+                Provision = _provisionDec.ToString("G");
+            }
+        }
+
+        public string BrokerFee
+        {
+            get
+            {
+                if (UpdateViewFormatted)
+                {
+                    // Only return the value if the broker free is greater than '0'
+                    return _brokerFeeDec > 0 ? Helper.FormatDecimal(_brokerFeeDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : @"";
+                }
+
+                return _brokerFee;
+            }
+            set
+            {
+                if (_brokerFee == value)
+                    return;
+                _brokerFee = value;
+
+                // Try to parse
+                if (!decimal.TryParse(_brokerFee, out _brokerFeeDec))
+                    _brokerFeeDec = 0;
+            }
+        }
+
+        public decimal BrokerFeeDec
+        {
+            get => _brokerFeeDec;
+            set
+            {
+                if (_brokerFeeDec == value)
+                    return;
+                _brokerFeeDec = value;
+
+                BrokerFee = _brokerFeeDec.ToString("G");
+            }
+        }
+
+        public string TraderPlaceFee
+        {
+            get
+            {
+                if (UpdateViewFormatted)
+                {
+                    // Only return the value if the trader place fee is greater than '0'
+                    return _traderPlaceFeeDec > 0 ? Helper.FormatDecimal(_traderPlaceFeeDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : @"";
+                }
+
+                return _traderPlaceFee;
+            }
+            set
+            {
+                if (_traderPlaceFee == value)
+                    return;
+                _traderPlaceFee = value;
+
+                // Try to parse
+                if (!decimal.TryParse(_traderPlaceFee, out _traderPlaceFeeDec))
+                    _traderPlaceFeeDec = 0;
+            }
+        }
+
+        public decimal TraderPlaceFeeDec
+        {
+            get => _traderPlaceFeeDec;
+            set
+            {
+                if (_traderPlaceFeeDec == value)
+                    return;
+                _traderPlaceFeeDec = value;
+
+                TraderPlaceFee = _traderPlaceFeeDec.ToString("G");
+            }
+        }
+
+        public string Reduction
+        {
+            get
+            {
+                if (UpdateViewFormatted)
+                {
+                    // Only return the value if the brokerage is greater than '0'
+                    return _reductionDec > 0 ? Helper.FormatDecimal(_reductionDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : @"";
+                }
+
+                return _reduction;
+            }
+            set
+            {
+                if (_reduction == value)
+                    return;
+                _reduction = value;
+
+                // Try to parse
+                if (!decimal.TryParse(_reduction, out _reductionDec))
+                    _reductionDec = 0;
+            }
+        }
+
+        public decimal ReductionDec
+        {
+            get => _reductionDec;
+            set
+            {
+                if (_reductionDec == value)
+                    return;
+                _reductionDec = value;
+
+                Brokerage = _reductionDec.ToString("G");
             }
         }
 

@@ -20,21 +20,20 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using SharePortfolioManager.Classes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 
-namespace SharePortfolioManager
+namespace SharePortfolioManager.Classes.Costs
 {
     [Serializable]
-    public class BrokerageYearOfTheShare
+    public class BrokerageReductionYearOfTheShare
     {
         #region Properties
 
         [Browsable(false)]
-        public CultureInfo BrokerageCultureInfo { get; internal set; }
+        public CultureInfo BrokerageReductionCultureInfo { get; internal set; }
 
         [Browsable(false)]
         public string BrokerageYear { get; internal set; } = @"-";
@@ -43,10 +42,16 @@ namespace SharePortfolioManager
         public decimal BrokerageValueYear { get; internal set; } = -1;
 
         [Browsable(false)]
-        public string BrokerageValueYearWithUnitAsStr => Helper.FormatDecimal(BrokerageValueYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BrokerageCultureInfo);
+        public string BrokerageValueYearWithUnitAsStr => Helper.FormatDecimal(BrokerageValueYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BrokerageReductionCultureInfo);
 
         [Browsable(false)]
-        public List<BrokerageObject> BrokerageListYear { get; } = new List<BrokerageObject>();
+        public decimal BrokerageWithReductionValueYear { get; internal set; } = -1;
+
+        [Browsable(false)]
+        public string BrokerageWithReductionValueYearWithUnitAsStr => Helper.FormatDecimal(BrokerageWithReductionValueYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BrokerageReductionCultureInfo);
+
+        [Browsable(false)]
+        public List<BrokerageReductionObject> BrokerageReductionListYear { get; } = new List<BrokerageReductionObject>();
 
         #endregion Properties
 
@@ -56,7 +61,7 @@ namespace SharePortfolioManager
         public string DgvBrokerageYear => BrokerageYear;
 
         [Browsable(true)]
-        public decimal DgvBrokerageValueYear => BrokerageValueYear;
+        public decimal DgvBrokerageWithReductionValueYear => BrokerageWithReductionValueYear;
 
         #endregion Data grid view properties
 
@@ -67,31 +72,35 @@ namespace SharePortfolioManager
         /// It also recalculates the brokerage value
         /// </summary>
         /// <param name="strGuid">Guid of the brokerage</param>
-        /// <param name="bBrokerageOfABuy">Flag if the brokerage is a part of a share buy</param>
-        /// <param name="bBrokerageOfASale">Flag if the brokerage is a part of a share sale</param>
+        /// <param name="bPartOfABuy">Flag if the brokerage is a part of a share buy</param>
+        /// <param name="bPartOfASale">Flag if the brokerage is a part of a share sale</param>
         /// <param name="cultureInfo">Culture info of the share</param>
         /// <param name="strGuidBuySale">Guid of the buy or sale</param>
         /// <param name="strDate">Pay date of the new brokerage list entry</param>
-        /// <param name="decValue">Paid brokerage value</param>
+        /// <param name="decProvisionValue">Provision value</param>
+        /// <param name="decBrokerFreeValue">Broker fee value</param>
+        /// <param name="decTraderPlaceFeeValue">Trader place fee value</param>
+        /// <param name="decReductionValue">Reduction value</param>
         /// <param name="strDoc">Document of the brokerage</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddBrokerageObject(string strGuid, bool bBrokerageOfABuy, bool bBrokerageOfASale, CultureInfo cultureInfo, string strGuidBuySale, string strDate, decimal decValue, string strDoc = "")
+        public bool AddBrokerageReductionObject(string strGuid, bool bPartOfABuy, bool bPartOfASale, CultureInfo cultureInfo, string strGuidBuySale,
+            string strDate, decimal decProvisionValue, decimal decBrokerFreeValue, decimal decTraderPlaceFeeValue, decimal decReductionValue, string strDoc = "")
         {
 #if DEBUG_BROKERAGE
             Console.WriteLine(@"");
-            Console.WriteLine(@"AddBrokerageObject");
+            Console.WriteLine(@"AddBrokerageReductionObject");
 #endif
             try
             {
                 // Set culture info of the share
-                BrokerageCultureInfo = cultureInfo;
+                BrokerageReductionCultureInfo = cultureInfo;
 
                 // Create new BrokerageObject
-                var addObject = new BrokerageObject(strGuid, bBrokerageOfABuy, bBrokerageOfASale, cultureInfo, strGuidBuySale, strDate, decValue, strDoc);
+                var addObject = new BrokerageReductionObject(strGuid, bPartOfABuy, bPartOfASale, cultureInfo, strGuidBuySale, strDate, decProvisionValue, decBrokerFreeValue, decTraderPlaceFeeValue, decReductionValue, strDoc);
 
                 // Add object to the list
-                BrokerageListYear.Add(addObject);
-                BrokerageListYear.Sort(new BrokerageObjectComparer());
+                BrokerageReductionListYear.Add(addObject);
+                BrokerageReductionListYear.Sort(new BrokerageReductionObjectComparer());
 
                 // Set year
                 DateTime.TryParse(strDate, out var dateTime);
@@ -102,8 +111,14 @@ namespace SharePortfolioManager
                     BrokerageValueYear = 0;
                 BrokerageValueYear += addObject.BrokerageValue;
 
+                // Calculate brokerage minus reduction value
+                if (BrokerageWithReductionValueYear == -1)
+                    BrokerageWithReductionValueYear = 0;
+                BrokerageWithReductionValueYear += addObject.BrokerageWithReductionValue;
+
 #if DEBUG_BROKERAGE
                 Console.WriteLine(@"BrokerageValueYear: {0}", BrokerageValueYear);
+                Console.WriteLine(@"BrokerageWithReductionValueYear: {0}", BrokerageWithReductionValueYear);
                 Console.WriteLine(@"");
 #endif
             }
@@ -121,30 +136,34 @@ namespace SharePortfolioManager
         /// </summary>
         /// <param name="strGuid">Pay date of the brokerage object which should be removed</param>
         /// <returns>Flag if the remove was successfully</returns>
-        public bool RemoveBrokerageObject(string strGuid)
+        public bool RemoveBrokerageReductionObject(string strGuid)
         {
 #if DEBUG_BROKERAGE
-            Console.WriteLine(@"RemoveBrokerageObject");
+            Console.WriteLine(@"RemoveBrokerageReductionObject");
 #endif
             try
             {
                 // Search for the remove object
                 var iFoundIndex = -1;
-                foreach (var brokerageObject in BrokerageListYear)
+                foreach (var brokerageReductionObject in BrokerageReductionListYear)
                 {
-                    if (brokerageObject.Guid != strGuid) continue;
+                    if (brokerageReductionObject.Guid != strGuid) continue;
 
-                    iFoundIndex = BrokerageListYear.IndexOf(brokerageObject);
+                    iFoundIndex = BrokerageReductionListYear.IndexOf(brokerageReductionObject);
                     break;
                 }
-                // Save remove object
-                var removeObject = BrokerageListYear[iFoundIndex];
+
+                // Set remove object
+                var removeObject = BrokerageReductionListYear[iFoundIndex];
 
                 // Remove object from the list
-                BrokerageListYear.Remove(removeObject);
+                BrokerageReductionListYear.Remove(removeObject);
 
                 // Calculate brokerage value
                 BrokerageValueYear -= removeObject.BrokerageValue;
+
+                // Calculate brokerage minus reduction value
+                BrokerageWithReductionValueYear -= removeObject.BrokerageWithReductionValue;
 
 #if DEBUG_BROKERAGE
                 Console.WriteLine(@"BrokerageValueYear: {0}", BrokerageValueYear);
@@ -162,16 +181,16 @@ namespace SharePortfolioManager
         #endregion Methods
     }
 
-    public class BrokerageYearOfTheShareComparer : IComparer<BrokerageYearOfTheShare>
+    public class BrokerageWithReductionYearOfTheShareComparer : IComparer<BrokerageReductionYearOfTheShare>
     {
-        public int Compare(BrokerageYearOfTheShare object1, BrokerageYearOfTheShare object2)
+        public int Compare(BrokerageReductionYearOfTheShare object1, BrokerageReductionYearOfTheShare object2)
         {
             if (object1 == null) return 0;
             if (object2 == null) return 0;
 
-            if (Convert.ToInt16(object2.BrokerageListYear) == Convert.ToInt16(object1.BrokerageListYear))
+            if (Convert.ToInt16(object2.BrokerageReductionListYear) == Convert.ToInt16(object1.BrokerageReductionListYear))
                 return 0;
-            if (Convert.ToInt16(object2.BrokerageListYear) > Convert.ToInt16(object1.BrokerageListYear))
+            if (Convert.ToInt16(object2.BrokerageReductionListYear) > Convert.ToInt16(object1.BrokerageReductionListYear))
                 return 1;
             
             return -1;

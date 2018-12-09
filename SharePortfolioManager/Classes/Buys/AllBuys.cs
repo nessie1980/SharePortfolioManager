@@ -24,6 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using SharePortfolioManager.Classes.Costs;
 
 namespace SharePortfolioManager.Classes.Buys
 {
@@ -51,15 +52,11 @@ namespace SharePortfolioManager.Classes.Buys
 
         public string BuyValueTotalAsStrUnit => Helper.FormatDecimal(BuyValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
 
-        public decimal BuyValueReductionTotal { get; internal set; }
+        public decimal BuyValueBrokerageTotal { get; internal set; }
 
-        public string BuyValueReductionTotalAsStr => Helper.FormatDecimal(BuyValueReductionTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength);
+        public string BuyValueBrokerageTotalAsStr => Helper.FormatDecimal(BuyValueBrokerageTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength);
 
-        public decimal BuyValueReductionBrokerageTotal { get; internal set; }
-
-        public string BuyValueReductionBrokerageTotalAsStr => Helper.FormatDecimal(BuyValueReductionBrokerageTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength);
-
-        public string BuyValueReductionBrokerageTotalAsStrUnit => Helper.FormatDecimal(BuyValueReductionBrokerageTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
+        public string BuyValueBrokerageTotalAsStrUnit => Helper.FormatDecimal(BuyValueBrokerageTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
 
         public decimal BuyVolumeTotal { get; internal set; }
 
@@ -84,13 +81,13 @@ namespace SharePortfolioManager.Classes.Buys
         /// <param name="strGuid">Guid of the buy</param>
         /// <param name="strDate">Date and time of the buy</param>
         /// <param name="decVolume">Volume of the buy</param>
-        /// <param name="decVolumeSold">Volmue of the buy which is already sold</param>
+        /// <param name="decVolumeSold">Volume of the buy which is already sold</param>
         /// <param name="decSharePrice">Price for one share</param>
-        /// <param name="decReduction">Reduction value of the buy</param>
-        /// <param name="decBrokerage">Brokerage of the buy</param>
+        /// <param name="brokerageObject">Brokerage of the buy</param>
         /// <param name="strDoc">Document of the buy</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddBuy(string strGuid, string strDate, decimal decVolume, decimal decVolumeSold, decimal decSharePrice, decimal decReduction, decimal decBrokerage, string strDoc = "")
+        public bool AddBuy(string strGuid, string strDate, decimal decVolume, decimal decVolumeSold, decimal decSharePrice,
+            BrokerageReductionObject brokerageObject, string strDoc = "")
         {
 #if DEBUG_BUY
             Console.WriteLine(@"");
@@ -106,7 +103,8 @@ namespace SharePortfolioManager.Classes.Buys
                 // Search if a buy for the given year already exists if not add it
                 if (AllBuysOfTheShareDictionary.TryGetValue(year, out var searchObject))
                 {
-                    if (!searchObject.AddBuyObject(BuyCultureInfo, strGuid, strDate, decVolume, decVolumeSold, decSharePrice, decReduction, decBrokerage, strDoc))
+                    if (!searchObject.AddBuyObject(BuyCultureInfo, strGuid, strDate, decVolume, decVolumeSold, decSharePrice,
+                        brokerageObject, strDoc))
                         return false;
                 }
                 else
@@ -114,7 +112,8 @@ namespace SharePortfolioManager.Classes.Buys
                     // Add new year buy object for the buy with a new year
                     var addObject = new BuysYearOfTheShare();
                     // Add buy with the new year to the buy year list
-                    if (addObject.AddBuyObject(BuyCultureInfo, strGuid, strDate, decVolume, decVolumeSold, decSharePrice, decReduction, decBrokerage, strDoc))
+                    if (addObject.AddBuyObject(BuyCultureInfo, strGuid, strDate, decVolume, decVolumeSold, decSharePrice,
+                        brokerageObject, strDoc))
                     {
                         AllBuysOfTheShareDictionary.Add(year, addObject);
                     }
@@ -125,16 +124,14 @@ namespace SharePortfolioManager.Classes.Buys
                 // Calculate the total buy value and total buy volume
                 // Reset total buy value and buy volume
                 BuyValueTotal = 0;
-                BuyValueReductionTotal = 0;
-                BuyValueReductionBrokerageTotal = 0;
+                BuyValueBrokerageTotal = 0;
                 BuyVolumeTotal = 0;
 
                 // Calculate the new total buy value and buy volume
                 foreach (var calcObject in AllBuysOfTheShareDictionary.Values)
                 {
                     BuyValueTotal += calcObject.BuyValueYear;
-                    BuyValueReductionTotal += calcObject.BuyValueReductionYear;
-                    BuyValueReductionBrokerageTotal += calcObject.BuyValueReductionBrokerageYear;
+                    BuyValueBrokerageTotal += calcObject.BuyValueBrokerageYear;
                     BuyVolumeTotal += calcObject.BuyVolumeYear;
                 }
 
@@ -191,16 +188,14 @@ namespace SharePortfolioManager.Classes.Buys
 
                 // Calculate the total buy value and volume
                 // Reset total buy value and volume
-                BuyValueReductionBrokerageTotal = 0;
-                BuyValueReductionTotal = 0;
+                BuyValueBrokerageTotal = 0;
                 BuyValueTotal = 0;
                 BuyVolumeTotal = 0;
 
                 // Calculate the new total buy value and volume
                 foreach (var calcObject in AllBuysOfTheShareDictionary.Values)
                 {
-                    BuyValueReductionBrokerageTotal += calcObject.BuyValueReductionBrokerageYear;
-                    BuyValueReductionTotal += calcObject.BuyValueReductionYear;
+                    BuyValueBrokerageTotal += calcObject.BuyValueBrokerageYear;
                     BuyValueTotal += calcObject.BuyValueYear;
                     BuyVolumeTotal += calcObject.BuyVolumeYear;
                 }
@@ -211,6 +206,45 @@ namespace SharePortfolioManager.Classes.Buys
                 Console.WriteLine(@"BuyValueReductionBrokerageTotal:{0}", BuyValueReductionBrokerageTotal);
                 Console.WriteLine(@"VolumeTotal:{0}", BuyVolumeTotal);
 #endif
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// This function sets the document of a buy with the given Guid and date and time
+        /// from the dictionary
+        /// </summary>
+        /// <param name="strGuid">Guid of the buy which should be modified</param>
+        /// <param name="strDate">Date and time of the buy which should be modified</param>
+        /// <param name="strDocument">Document of the buy</param>
+        /// <returns></returns>
+        public bool SetDocumentBuy(string strGuid, string strDate, string strDocument)
+        {
+#if DEBUG_BUY
+            Console.WriteLine(@"Remove SetDocumentBuy");
+#endif
+            try
+            {
+                // Get year of the date of the buy which should be modified
+                GetYearOfDate(strDate, out var year);
+                if (year == null)
+                    return false;
+
+                // Search if the buy for the given year exists
+                if (AllBuysOfTheShareDictionary.TryGetValue(year, out var searchObject))
+                {
+                    if (!searchObject.SetDocumentBuyObject(strGuid, strDocument))
+                        return false;
+                }
+                else
+                {
+                    return false;
+                }
             }
             catch
             {

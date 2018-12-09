@@ -22,10 +22,11 @@
 
 using System;
 using System.IO;
-#if DEBUG
+#if DEBUG_BUY || DEBUG
 using System.Windows.Forms;
 #endif
 using SharePortfolioManager.Classes;
+using SharePortfolioManager.Classes.Costs;
 using SharePortfolioManager.Forms.BuysForm.Model;
 using SharePortfolioManager.Forms.BuysForm.View;
 
@@ -58,9 +59,13 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
             _view.VolumeSold = _model.VolumeSold;
             _view.Price = _model.SharePrice;
             _view.MarketValue = _model.MarketValue;
-            _view.Brokerage = _model.Brokerage;
+            _view.Provision = _model.Provision;
+            _view.BrokerFee = _model.BrokerFee;
+            _view.TraderPlaceFee = _model.TraderPlaceFee;
             _view.Reduction = _model.Reduction;
-            _view.FinalValue = _model.FinalValue;
+            _view.Brokerage = _model.Brokerage;
+            _view.BrokerageWithReduction = _model.BrokerageWithReduction;
+            _view.Deposit = _model.Deposit;
             _view.Document = _model.Document;
         }
 
@@ -97,9 +102,13 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
             _model.VolumeSold = _view.VolumeSold;
             _model.SharePrice = _view.Price;
             _model.MarketValue = _view.MarketValue;
-            _model.Brokerage = _view.Brokerage;
+            _model.Provision = _view.Provision;
+            _model.BrokerFee = _view.BrokerFee;
+            _model.TraderPlaceFee = _view.TraderPlaceFee;
             _model.Reduction = _view.Reduction;
-            _model.FinalValue = _view.FinalValue;
+            _model.Brokerage = _view.Brokerage;
+            _model.BrokerageWithReduction = _view.BrokerageWithReduction;
+            _model.Deposit = _view.Deposit;
             _model.Document = _view.Document;
 
             CalculateMarketValueAndFinalValue();
@@ -114,6 +123,7 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
             if (!CheckInputValues(_model.UpdateBuy))
             {
                 var bErrorFlag = false;
+                BrokerageReductionObject brokerage = null;
 
                 // Set date
                 var strDateTime = _model.Date + " " + _model.Time;
@@ -121,21 +131,28 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
                 // Generate Guid
                 var strGuidBuy = Guid.NewGuid().ToString();
 
-                // Brokerage entry if the brokerage value is not 0
-                if (_model.BrokerageDec > 0)
+                // Brokerage entry if any brokerage value is not 0
+                if (_model.ProvisionDec != 0 || _model.BrokerFeeDec != 0 || _model.TraderPlaceFeeDec != 0 || _model.ReductionDec != 0)
                 {
                     // Generate Guid
                     var strGuidBrokerage = Guid.NewGuid().ToString();
 
-                    // Calculate brokerage
-                    var brokerage = _model.BrokerageDec - _model.ReductionDec;
-                    bErrorFlag = !_model.ShareObjectFinalValue.AddBrokerage(strGuidBrokerage, true, false, strGuidBuy, strDateTime, brokerage,
+                    // Add brokerage
+                    bErrorFlag = !_model.ShareObjectFinalValue.AddBrokerage(strGuidBrokerage, true, false, strGuidBuy,
+                        strDateTime, _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec,
                         _model.Document);
+
+                    // Get brokerage object
+                    brokerage =
+                        _model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByGuid(strGuidBrokerage, strDateTime);
                 }
                 
-                if (_model.ShareObjectFinalValue.AddBuy(strGuidBuy, strDateTime, _model.VolumeDec, _model.VolumeSoldDec, _model.SharePriceDec, _model.ReductionDec, _model.BrokerageDec, _model.Document) &&
+                // Add buy
+                if (bErrorFlag == false &&
+                    _model.ShareObjectFinalValue.AddBuy(strGuidBuy, strDateTime, _model.VolumeDec, _model.VolumeSoldDec, _model.SharePriceDec,
+                        brokerage, _model.Document) &&
                     _model.ShareObjectMarketValue.AddBuy(strGuidBuy, strDateTime, _model.VolumeDec, _model.VolumeSoldDec, _model.SharePriceDec, _model.Document)
-                    && bErrorFlag == false)
+                    )
                 {
                     _model.ErrorCode = BuyErrorCode.AddSuccessful;
                 }
@@ -158,37 +175,39 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
                 // Set date
                 var strDateTime = _model.Date + " " + _model.Time;
 
-                if (_model.ShareObjectFinalValue.RemoveBuy(_model.SelectedGuid, _model.SelectedDate) &&
-                    _model.ShareObjectFinalValue.AddBuy(_model.SelectedGuid, strDateTime, _model.VolumeDec, _model.VolumeSoldDec, _model.SharePriceDec, _model.ReductionDec, _model.BrokerageDec, _model.Document) &&
+                var bFlagBrokerageEdit = true;
+                var guidBrokerage = @"";
+
+                // Check if an old brokerage entry must be deleted
+                if (_model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByBuyGuid(_model.SelectedGuid,
+                        strDateTime) != null)
+                {
+                    // Get brokerage GUID
+                    guidBrokerage = _model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByBuyGuid(
+                        _model.SelectedGuid,
+                        strDateTime).Guid;
+                    bFlagBrokerageEdit = _model.ShareObjectFinalValue.RemoveBrokerage(guidBrokerage, strDateTime);
+                }
+
+                // Check if a new brokerage entry must be made
+                if (bFlagBrokerageEdit && (_model.ProvisionDec != 0 || _model.BrokerFeeDec != 0 || _model.TraderPlaceFeeDec != 0 || _model.ReductionDec != 0))
+                {
+                    bFlagBrokerageEdit = _model.ShareObjectFinalValue.AddBrokerage(guidBrokerage, true, false, _model.SelectedGuid, strDateTime,
+                        _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec, _model.Document);
+                }
+
+                // Get brokerage object
+                var brokerage = _model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByGuid(guidBrokerage, strDateTime);
+
+                if (bFlagBrokerageEdit)
+                {
+
+                    if (_model.ShareObjectFinalValue.RemoveBuy(_model.SelectedGuid, _model.SelectedDate) &&
+                    _model.ShareObjectFinalValue.AddBuy(_model.SelectedGuid, strDateTime, _model.VolumeDec, _model.VolumeSoldDec, _model.SharePriceDec,
+                        brokerage, _model.Document) &&
                     _model.ShareObjectMarketValue.RemoveBuy(_model.SelectedGuid, _model.SelectedDate) &&
                     _model.ShareObjectMarketValue.AddBuy(_model.SelectedGuid, strDateTime, _model.VolumeDec, _model.VolumeSoldDec, _model.SharePriceDec, _model.Document)
                     )
-                {
-                    var bFlagBrokerageEdit = true;
-
-                    var guidBrokerage = @"";
-
-                    // Check if an old brokerage entry must be deleted
-                    if (_model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByBuyGuid(_model.SelectedGuid,
-                            strDateTime) != null)
-                    {
-                        // Get brokerage GUID
-                        guidBrokerage = _model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByBuyGuid(
-                            _model.SelectedGuid,
-                            strDateTime).Guid;
-                        bFlagBrokerageEdit = _model.ShareObjectFinalValue.RemoveBrokerage(guidBrokerage, strDateTime);
-                    }
-
-                    // Check if a new brokerage entry must be made
-                    if (bFlagBrokerageEdit && _model.BrokerageDec > 0)
-                    {
-                        // Calculate brokerage
-                        var brokerage = _model.BrokerageDec - _model.ReductionDec;
-                        bFlagBrokerageEdit = _model.ShareObjectFinalValue.AddBrokerage(guidBrokerage, true, false, _model.SelectedGuid, strDateTime,
-                            brokerage, _model.Document);
-                    }
-
-                    if (bFlagBrokerageEdit)
                     {
                         _model.ErrorCode = BuyErrorCode.EditSuccessful;
                     }
@@ -251,16 +270,23 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
         {
             try
             {
-                const string strFilter = "pdf (*.pdf)|*.pdf|txt (*.txt)|.txt|doc (*.doc)|.doc|docx (*.docx)|.docx";
-                _model.Document = Helper.SetDocument(_model.Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/OpenFileDialog/Title", _model.LanguageName), strFilter, _model.Document);
+                var strCurrentFile = _model.Document;
 
-                UpdateViewWithModel();
+                const string strFilter = "pdf (*.pdf)|*.pdf|txt (*.txt)|.txt|doc (*.doc)|.doc|docx (*.docx)|.docx";
+                if (Helper.SetDocument(
+                        _model.Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/OpenFileDialog/Title",
+                            _model.LanguageName), strFilter, ref strCurrentFile) == DialogResult.OK)
+                {
+                    _model.Document = strCurrentFile;
+
+                    UpdateViewWithModel();
+                }
 
                 _view.DocumentBrowseFinish();
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_BUY || DEBUG
                 var message = $"OnDocumentBrowse()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -278,23 +304,33 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
         {
             try
             {
-                Helper.CalcBuyValues(_model.VolumeDec, _model.SharePriceDec, _model.BrokerageDec,
-                    _model.ReductionDec, out var decMarketValue, out var decPurchaseValue, out var decFinalValue, out var decBrokerageReduction);
+                Helper.CalcBuyValues(_model.VolumeDec, _model.SharePriceDec,
+                    _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec,
+                    out var decMarketValue, out var decDeposit, out var decBrokerage, out var decBrokerageWithReduction);
 
                 _model.MarketValueDec = decMarketValue;
-                _model.PurchaseValueDec = decPurchaseValue;
-                _model.FinalValueDec = decFinalValue;
-                _model.BrokerageDec = decBrokerageReduction;
+                _model.DepositDec = decDeposit;
+                _model.BrokerageDec = decBrokerage;
+                _model.BrokerageWithReductionDec = decBrokerageWithReduction;
+
+#if DEBUG_BUY || DEBUG
+                Console.WriteLine(@"MarketValueDec: {0}", _model.MarketValueDec);
+                Console.WriteLine(@"DepositDec: {0}", _model.DepositDec);
+                Console.WriteLine(@"BrokerageDec: {0}", _model.BrokerageDec);
+                Console.WriteLine(@"BrokerageWithReductionDec: {0}", _model.BrokerageWithReductionDec);
+#endif
             }
             catch (Exception ex)
             {
-#if DEBUG
+#if DEBUG_BUY || DEBUG
                 var message = $"CalculateMarketValueAndFinalValue()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 _model.MarketValueDec = 0;
-                _model.FinalValueDec = 0;
+                _model.DepositDec = 0;
+                _model.BrokerageDec = 0;
+                _model.BrokerageWithReductionDec = 0;
             }
         }
 
@@ -351,21 +387,55 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
                 else if (bErrorFlag == false)
                     _model.SharePriceDec = decPrice;
 
-                // Brokerage input check
-                if (_model.Brokerage != "" && bErrorFlag == false)
+                // Provision input check
+                if (_model.Provision != "" && bErrorFlag == false)
                 {
-                    if (!decimal.TryParse(_model.Brokerage, out var decBrokerage))
+                    if (!decimal.TryParse(_model.Provision, out var decProvision))
                     {
-                        _model.ErrorCode = BuyErrorCode.BrokerageWrongFormat;
+                        _model.ErrorCode = BuyErrorCode.ProvisionWrongFormat;
                         bErrorFlag = true;
                     }
-                    else if (decBrokerage < 0)
+                    else if (decProvision < 0)
                     {
-                        _model.ErrorCode = BuyErrorCode.BrokerageWrongValue;
+                        _model.ErrorCode = BuyErrorCode.ProvisionWrongValue;
                         bErrorFlag = true;
                     }
                     else
-                        _model.BrokerageDec = decBrokerage;
+                        _model.ProvisionDec = decProvision;
+                }
+
+                // Broker fee input check
+                if (_model.BrokerFee != "" && bErrorFlag == false)
+                {
+                    if (!decimal.TryParse(_model.BrokerFee, out var decBrokerFee))
+                    {
+                        _model.ErrorCode = BuyErrorCode.BrokerFeeWrongFormat;
+                        bErrorFlag = true;
+                    }
+                    else if (decBrokerFee < 0)
+                    {
+                        _model.ErrorCode = BuyErrorCode.BrokerFeeWrongValue;
+                        bErrorFlag = true;
+                    }
+                    else
+                        _model.BrokerFeeDec = decBrokerFee;
+                }
+
+                // Trader place fee input check
+                if (_model.TraderPlaceFee != "" && bErrorFlag == false)
+                {
+                    if (!decimal.TryParse(_model.TraderPlaceFee, out var decTraderPlaceFee))
+                    {
+                        _model.ErrorCode = BuyErrorCode.TraderPlaceFeeWrongFormat;
+                        bErrorFlag = true;
+                    }
+                    else if (decTraderPlaceFee < 0)
+                    {
+                        _model.ErrorCode = BuyErrorCode.TraderPlaceFeeWrongValue;
+                        bErrorFlag = true;
+                    }
+                    else
+                        _model.TraderPlaceFeeDec = decTraderPlaceFee;
                 }
 
                 // Reduction input check
@@ -384,6 +454,25 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
                     else
                         _model.ReductionDec = decReduction;
                 }
+
+                // Brokerage input check
+                if (_model.Brokerage == @"")
+                {
+                    _model.ErrorCode = BuyErrorCode.BrokerageEmpty;
+                    bErrorFlag = true;
+                }
+                else if (!decimal.TryParse(_model.Brokerage, out var decBrokerage))
+                {
+                    _model.ErrorCode = BuyErrorCode.BrokerageWrongFormat;
+                    bErrorFlag = true;
+                }
+                else if (decBrokerage < 0)
+                {
+                    _model.ErrorCode = BuyErrorCode.BrokerageWrongValue;
+                    bErrorFlag = true;
+                }
+                else
+                    _model.BrokerageDec = decBrokerage;
 
                 // Check if a given document exists
                 if (_model.Document == null)

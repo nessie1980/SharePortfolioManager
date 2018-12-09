@@ -26,6 +26,7 @@ using SharePortfolioManager.Forms.ShareAddForm.View;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using SharePortfolioManager.Classes.ShareObjects;
 
@@ -41,9 +42,9 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             _view = view;
             _model = model;
 
-            view.PropertyChanged += OnViewCchange;
-            view.ShareAdd += OnShareAdd;
-            view.FormatInputValues += OnViewFormatInputValues;
+            view.PropertyChanged += OnViewChange;
+            view.ShareAddEventHandler += OnShareAdd;
+            view.FormatInputValuesEventHandler += OnViewFormatInputValues;
         }
 
         private void UpdateViewWithModel()
@@ -60,9 +61,12 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             _view.Volume = _model.Volume;
             _view.SharePrice = _model.SharePrice;
             _view.MarketValue = _model.MarketValue;
-            _view.Brokerage = _model.Brokerage;
+            _view.Provision = _model.Provision;
+            _view.BrokerFee = _model.BrokerFee;
+            _view.TraderPlaceFee = _model.TraderPlaceFee;
             _view.Reduction = _model.Reduction;
-            _view.GrandTotal = _model.FinalValue;
+            _view.Brokerage = _model.Brokerage;
+            _view.GrandTotal = _model.Deposit;
             _view.WebSite = _model.WebSite;
             _view.Document = _model.Document;
         }
@@ -76,12 +80,12 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             _model.UpdateViewFormatted = false;
         }
 
-        private void OnViewCchange(object sender, EventArgs e)
+        private void OnViewChange(object sender, EventArgs e)
         {
-            UpdateModelwithView();
+            UpdateModelWithView();
         }
 
-        private void UpdateModelwithView()
+        private void UpdateModelWithView()
         {
             _model.ShareObjectMarketValue = _view.ShareObjectMarketValue;
             _model.ShareObjectListMarketValue = _view.ShareObjectListMarketValue;
@@ -99,9 +103,12 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             _model.Volume = _view.Volume;
             _model.SharePrice = _view.SharePrice;
             _model.MarketValue = _view.MarketValue;
-            _model.Brokerage = _view.Brokerage;
+            _model.Provision = _view.Provision;
+            _model.BrokerFee = _view.BrokerFee;
+            _model.TraderPlaceFee = _view.TraderPlaceFee;
             _model.Reduction = _view.Reduction;
-            _model.FinalValue = _view.GrandTotal;
+            _model.Brokerage = _view.Brokerage;
+            _model.Deposit = _view.GrandTotal;
             _model.WebSite = _view.WebSite;
             _model.CultureInfo = _view.CultureInfo;
             _model.DividendPayoutInterval = _view.DividendPayoutInterval;
@@ -122,12 +129,14 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
         {
             try
             {
-                Helper.CalcBuyValues(_model.Volumedec, _model.SharePricedec, _model.Brokeragedec,
-                    _model.Reductiondec, out var decMarketValue, out var decPurchaseValue, out var decFinalValue, out var decBrokerageReduction);
+                Helper.CalcBuyValues(_model.VolumeDec, _model.SharePriceDec,
+                    _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec,
+                    out var decMarketValue, out var decDeposit, out var decBrokerage, out var decBrokerageWithReduction);
 
-                _model.MarketValuedec = decMarketValue;
-                _model.FinalValuedec = decFinalValue;
-                _model.Brokeragedec = decBrokerageReduction;
+                _model.MarketValueDec = decMarketValue;
+                _model.DepositDec = decDeposit;
+                _model.BrokerageDec = decBrokerage;
+                _model.BrokerageWithReductionDec = decBrokerageWithReduction;
             }
             catch (Exception ex)
             {
@@ -136,8 +145,9 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
-                _model.MarketValuedec = 0;
-                _model.FinalValuedec = 0;
+                _model.MarketValueDec = 0;
+                _model.DepositDec = 0;
+                _model.BrokerageDec = 0;
             }
         }
 
@@ -160,7 +170,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                         DateTime.MinValue,
                         DateTime.MinValue,
                         0,
-                        _model.Volumedec,
+                        _model.VolumeDec,
                         0,
                         _model.WebSite,
                         _model.ImageList,
@@ -183,10 +193,12 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                         DateTime.MinValue,
                         DateTime.MinValue,
                         0,
-                        _model.Volumedec,
+                        _model.VolumeDec,
                         0,
-                        _model.Reductiondec,
-                        _model.Brokeragedec,
+                        _model.ProvisionDec,
+                        _model.BrokerFeeDec,
+                        _model.TraderPlaceFeeDec,
+                        _model.ReductionDec,
                         _model.WebSite,
                         _model.ImageList,
                         null,
@@ -214,8 +226,8 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                         DateTime.MinValue,
                         DateTime.MinValue,
                         DateTime.MinValue,
-                        _model.SharePricedec,
-                        _model.Volumedec,
+                        _model.SharePriceDec,
+                        _model.VolumeDec,
                         0,
                         _model.WebSite,
                         _model.ImageList,
@@ -234,11 +246,13 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                         DateTime.MinValue,
                         DateTime.MinValue,
                         DateTime.MinValue,
-                        _model.SharePricedec,
-                        _model.Volumedec,
+                        _model.SharePriceDec,
+                        _model.VolumeDec,
                         0,
-                        _model.Reductiondec,
-                        _model.Brokeragedec,
+                        _model.ProvisionDec,
+                        _model.BrokerFeeDec,
+                        _model.TraderPlaceFeeDec,
+                        _model.ReductionDec,
                         _model.WebSite,
                         _model.ImageList,
                         null,
@@ -259,17 +273,16 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                     _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1].SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList);
                     _model.ShareObjectFinalValue = _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1];
 
-                    // Brokerage entry if the brokerage value is not 0
-                    if (_model.Brokeragedec > 0)
+                    // Brokerage entry if any brokerage value is not 0
+                    if (_model.ProvisionDec != 0 || _model.BrokerFeeDec != 0 || _model.TraderPlaceFeeDec != 0 || _model.ReductionDec != 0)
                     {
                         // Generate Guid
-                        var strGuidBrokerage = Guid.NewGuid().ToString();
-
-                        // Calculate brokerage
-                        var brokerage = _model.Brokeragedec - _model.Reductiondec;
+                        var strGuidBrokerage = _model
+                            .ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1].AllBuyEntries
+                            .AllBuysOfTheShareDictionary.Values.Last().BuyListYear.Last().BrokerageGuid;
 
                         _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1].AddBrokerage(strGuidBrokerage, true,
-                            false, guid , strDateTime, brokerage, _model.Document);
+                            false, guid , strDateTime, _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec, _model.Document);
                     }
 
                     // Sort portfolio list in order of the share names
@@ -385,7 +398,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                 bErrorFlag = true;
             }
             else if (bErrorFlag == false)
-                _model.Volumedec = decVolume;
+                _model.VolumeDec = decVolume;
 
             // Check if a correct price for the buy is given
             if (_model.SharePrice == @"" && bErrorFlag == false)
@@ -404,23 +417,57 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                 bErrorFlag = true;
             }
             else if (bErrorFlag == false)
-                _model.SharePricedec = decPrice;
+                _model.SharePriceDec = decPrice;
 
-            // Brokerage input check
-            if (_model.Brokerage != "" && bErrorFlag == false)
+            // Provision input check
+            if (_model.Provision != "" && bErrorFlag == false)
             {
-                if (!decimal.TryParse(_model.Brokerage, out var decBrokerage))
+                if (!decimal.TryParse(_model.Provision, out var decProvision))
                 {
-                    _model.ErrorCode = ShareAddErrorCode.BrokerageWrongFormat;
+                    _model.ErrorCode = ShareAddErrorCode.ProvisionWrongFormat;
                     bErrorFlag = true;
                 }
-                else if (decBrokerage < 0)
+                else if (decProvision < 0)
                 {
-                    _model.ErrorCode = ShareAddErrorCode.BrokerageWrongValue;
+                    _model.ErrorCode = ShareAddErrorCode.ProvisionWrongValue;
                     bErrorFlag = true;
                 }
                 else
-                    _model.Brokeragedec = decBrokerage;
+                    _model.ProvisionDec = decProvision;
+            }
+
+            // Broker fee input check
+            if (_model.BrokerFee != "" && bErrorFlag == false)
+            {
+                if (!decimal.TryParse(_model.BrokerFee, out var decBrokerFee))
+                {
+                    _model.ErrorCode = ShareAddErrorCode.BrokerFeeWrongFormat;
+                    bErrorFlag = true;
+                }
+                else if (decBrokerFee < 0)
+                {
+                    _model.ErrorCode = ShareAddErrorCode.BrokerFeeWrongValue;
+                    bErrorFlag = true;
+                }
+                else
+                    _model.BrokerFeeDec = decBrokerFee;
+            }
+
+            // Trader place fee input check
+            if (_model.TraderPlaceFee != "" && bErrorFlag == false)
+            {
+                if (!decimal.TryParse(_model.TraderPlaceFee, out var decTraderPlaceFee))
+                {
+                    _model.ErrorCode = ShareAddErrorCode.TraderPlaceFeeWrongFormat;
+                    bErrorFlag = true;
+                }
+                else if (decTraderPlaceFee < 0)
+                {
+                    _model.ErrorCode = ShareAddErrorCode.TraderPlaceFeeWrongValue;
+                    bErrorFlag = true;
+                }
+                else
+                    _model.TraderPlaceFeeDec = decTraderPlaceFee;
             }
 
             // Reduction input check
@@ -437,8 +484,27 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                     bErrorFlag = true;
                 }
                 else
-                    _model.Reductiondec = decReduction;
+                    _model.ReductionDec = decReduction;
             }
+
+            // Brokerage input check
+            if (_model.Brokerage == @"")
+            {
+                _model.ErrorCode = ShareAddErrorCode.BrokerageEmpty;
+                bErrorFlag = true;
+            }
+            else if (!decimal.TryParse(_model.Brokerage, out var decBrokerage))
+            {
+                _model.ErrorCode = ShareAddErrorCode.BrokerageWrongFormat;
+                bErrorFlag = true;
+            }
+            else if (decBrokerage < 0)
+            {
+                _model.ErrorCode = ShareAddErrorCode.BrokerageWrongValue;
+                bErrorFlag = true;
+            }
+            else
+                _model.BrokerageDec = decBrokerage;
 
             // Check website input
             if (_model.WebSite == @"" && bErrorFlag == false)

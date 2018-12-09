@@ -76,7 +76,7 @@ namespace SharePortfolioManager
                  SelectedDataGridViewShareIndex = MarketValueOverviewTabSelected ? dgvPortfolioMarketValue.SelectedRows[0].Index : dgvPortfolioFinalValue.SelectedRows[0].Index;
 
                 // Refresh share
-                Refresh();
+                RefreshOne();
             }
             else
             {
@@ -98,7 +98,7 @@ namespace SharePortfolioManager
 
                 // Create add share form
                 IModelShareAdd model = new ModelShareAdd();
-                IViewShareAdd view = new ViewShareAdd(this, Logger, Language, LanguageName, WebSiteRegexList);
+                IViewShareAdd view = new ViewShareAdd(this, Logger, Language, LanguageName, WebSiteConfiguration.WebSiteRegexList);
                 var presenterBuyEdit = new PresenterShareAdd(view, model);
 
                 if (view.ShowDialog() != DialogResult.OK) return;
@@ -146,7 +146,7 @@ namespace SharePortfolioManager
                 }
 
                 // Check if the DataBinding is already done and
-                // than set the new share to the DataGridvVew
+                // than set the new share to the DataGridView
                 if (DgvPortfolioBindingSourceFinalValue.DataSource == null && dgvPortfolioFinalValue.DataSource == null)
                 {
                     DgvPortfolioBindingSourceFinalValue.DataSource = ShareObjectListFinalValue;

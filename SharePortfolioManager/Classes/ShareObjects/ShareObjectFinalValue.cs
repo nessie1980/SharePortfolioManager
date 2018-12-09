@@ -32,11 +32,14 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using System.Xml;
 using SharePortfolioManager.Classes.Sales;
-using WebParser;
+using Parser;
+using SharePortfolioManager.Classes.Costs;
 
 namespace SharePortfolioManager.Classes.ShareObjects
 {
-    /// <inheritdoc />
+    /// <inheritdoc>
+    ///     <cref>ShareObject</cref>
+    /// </inheritdoc>
     /// <summary>
     /// This class stores the final value of the share portfolio.
     /// It includes the dividends and brokerage.
@@ -313,7 +316,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// List of all brokerages of this share
         /// </summary>
         [Browsable(false)]
-        public AllBrokerageOfTheShare AllBrokerageEntries { get; set; } = new AllBrokerageOfTheShare();
+        public AllBrokerageReductionOfTheShare AllBrokerageEntries { get; set; } = new AllBrokerageReductionOfTheShare();
 
         #endregion Brokerage properties
 
@@ -703,8 +706,10 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="price">Current price of the share</param>
         /// <param name="volume">Volume of the share</param>
         /// <param name="volumeSold">Volume of the share which is already sold</param>
+        /// <param name="provision">Provision of the buy</param>
+        /// <param name="brokerFee">Broker fee of the buy</param>
+        /// <param name="traderPlaceFee">Trader place fee of the buy</param>
         /// <param name="reduction">Reduction of the share</param>
-        /// <param name="brokerage">Brokerage of the buy</param>
         /// <param name="webSite">Website address of the share</param>
         /// <param name="imageListForDayBeforePerformance">Images for the performance indication</param>
         /// <param name="regexList">RegEx list for the share</param>
@@ -715,14 +720,27 @@ namespace SharePortfolioManager.Classes.ShareObjects
         public ShareObjectFinalValue(
             string guid, string wkn, string addDateTime, string name,
             DateTime lastUpdateInternet, DateTime lastUpdateShareDate, DateTime lastUpdateShareTime,
-            decimal price, decimal volume, decimal volumeSold, decimal reduction, decimal brokerage,
+            decimal price, decimal volume, decimal volumeSold, decimal provision, decimal brokerFee, decimal traderPlaceFee, decimal reduction,
             string webSite, List<Image> imageListForDayBeforePerformance, RegExList regexList, CultureInfo cultureInfo,
             int dividendPayoutInterval, int shareType, string document)
             : base(wkn, addDateTime, name, lastUpdateInternet, lastUpdateShareDate, lastUpdateShareTime,
                     price, webSite, imageListForDayBeforePerformance,
                     regexList, cultureInfo, shareType)
         {
-            AddBuy(guid, AddDateTime, volume, volumeSold, price, reduction, brokerage, document);
+            BrokerageReductionObject tempBrokerageObject = null;
+            // Check if a brokerage must be added
+            if (provision > 0 || brokerFee > 0 || traderPlaceFee > 0 || reduction > 0)
+            {
+                // Generate Guid
+                var strGuidBrokerage = Guid.NewGuid().ToString();
+
+                tempBrokerageObject = new BrokerageReductionObject(strGuidBrokerage, true, false, cultureInfo, guid,
+                    addDateTime,
+                    provision, brokerFee, traderPlaceFee, reduction, document);
+            }
+
+            AddBuy(guid, AddDateTime, volume, volumeSold, price,
+                tempBrokerageObject, document);
 
             DividendPayoutInterval = dividendPayoutInterval;
         }
@@ -742,6 +760,134 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
         #endregion Destructor
 
+        #region Brokerage methods
+
+        /// <summary>
+        /// This function adds the brokerage for the share to the dictionary
+        /// </summary>
+        /// <param name="strGuid">Guid of the brokerage</param>
+        /// <param name="bBrokerageOfABuy">Flag if the brokerage is part of a buy</param>
+        /// <param name="bBrokerageOfASale">Flag if the brokerage is part of a Sale</param>
+        /// <param name="strGuidBuySale">Guid of the buy or sale</param>
+        /// <param name="strDateTime">Date and time of the brokerage</param>
+        /// <param name="decProvisionValue">Provision value</param>
+        /// <param name="decBrokerFeeValue">Broker fee value</param>
+        /// <param name="decTraderPlaceFeeValue">Trader place fee value</param>
+        /// <param name="decReductionValue">Reduction value</param>
+        /// <param name="strDoc">Doc of the brokerage</param>
+        /// <returns>Flag if the add was successful</returns>
+        public bool AddBrokerage(string strGuid, bool bBrokerageOfABuy, bool bBrokerageOfASale, string strGuidBuySale,
+            string strDateTime, decimal decProvisionValue, decimal decBrokerFeeValue, decimal decTraderPlaceFeeValue, decimal decReductionValue, string strDoc = "")
+        {
+            try
+            {
+#if DEBUG_SHAREOBJECT_FINAL
+                Console.WriteLine(@"");
+                Console.WriteLine(@"AddBrokerage() / FinalValue");
+                Console.WriteLine(@"bBrokerageOfABuy: {0}", bBrokerageOfABuy);
+                Console.WriteLine(@"bBrokerageOfASale: {0}", bBrokerageOfASale);
+                Console.WriteLine(@"strGuidBuySale: {0}", strGuidBuySale);
+                Console.WriteLine(@"strDateTime: {0}", strDateTime);
+                Console.WriteLine(@"decValue: {0}", decValue);
+                Console.WriteLine(@"strDoc: {0}", strDoc);
+#endif
+                // Remove current brokerage of the share from the brokerage of all shares
+                PortfolioBrokerage -= BrokerageValueTotal;
+
+                if (!AllBrokerageEntries.AddBrokerageReduction(strGuid, bBrokerageOfABuy, bBrokerageOfASale, strGuidBuySale,
+                    strDateTime, decProvisionValue, decBrokerFeeValue, decTraderPlaceFeeValue, decReductionValue, strDoc))
+                    return false;
+
+                // Set brokerage of the share
+                BrokerageValueTotal = AllBrokerageEntries.BrokerageValueTotal;
+
+                // Add new brokerage of the share to the brokerage of all shares
+                PortfolioBrokerage += BrokerageValueTotal;
+
+                // Recalculate the total sum of the share
+                CalculateFinalValue();
+
+                // Recalculate the profit or lose of the share
+                CalculateProfitLoss();
+
+                // Recalculate the appreciation
+                CalculatePerformance();
+
+                // Recalculate the performance of all shares
+                CalculatePortfolioPerformance();
+
+                // Recalculate the profit or lose of all shares
+                CalculatePortfolioProfitLoss();
+
+#if DEBUG_SHAREOBJECT_FINAL
+                Console.WriteLine(@"BrokerageValueTotal: {0}", BrokerageValueTotal);
+                Console.WriteLine(@"");
+#endif
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// This function removes a brokerage for the share from the dictionary
+        /// </summary>
+        /// <param name="strGuid">Guid of the brokerage</param>
+        /// <param name="strDateTime">Date of the brokerage remove</param>
+        /// <returns>Flag if the remove was successful</returns>
+        public bool RemoveBrokerage(string strGuid, string strDateTime)
+        {
+            try
+            {
+#if DEBUG_SHAREOBJECT_FINAL
+                Console.WriteLine(@"");
+                Console.WriteLine(@"RemoveBrokerage() / FinalValue");
+                Console.WriteLine(@"strDateTime: {0}", strDateTime);
+#endif
+                // Remove current brokerage the share to the brokerage of all shares
+                PortfolioBrokerage -= AllBrokerageEntries.BrokerageValueTotal;
+
+                // Remove brokerage by date
+                if (!AllBrokerageEntries.RemoveBrokerageReduction(strGuid, strDateTime))
+                    return false;
+
+                // Set brokerage of the share
+                BrokerageValueTotal = AllBrokerageEntries.BrokerageValueTotal;
+
+                // Add new brokerage of the share to the brokerage of all shares
+                PortfolioBrokerage += AllBrokerageEntries.BrokerageValueTotal;
+
+                // Recalculate the total sum of the share
+                CalculateFinalValue();
+
+                // Recalculate the profit or lose of the share
+                CalculateProfitLoss();
+
+                // Recalculate the appreciation
+                CalculatePerformance();
+
+                // Recalculate the performance of all shares
+                CalculatePortfolioPerformance();
+
+                // Recalculate the profit or lose of all shares
+                CalculatePortfolioProfitLoss();
+
+#if DEBUG_SHAREOBJECT_FINAL
+                Console.WriteLine(@"BrokerageValueTotal: {0}", BrokerageValueTotal);
+                Console.WriteLine(@"");
+#endif
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        #endregion Brokerage methods
+
         #region Buy methods
 
         /// <summary>
@@ -752,11 +898,11 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="decVolume">Buy volume</param>
         /// <param name="decVolumeSold">Buy volume which is already sold</param>
         /// <param name="decPrice">Price for one share</param>
-        /// <param name="decReduction">Reduction of the buy</param>
-        /// <param name="decBrokerage">Brokerage of the buy</param>
+        /// <param name="brokerageObject">Brokerage object of the buy</param>
         /// <param name="strDoc">Document of the buy</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddBuy(string strGuid, string strDateTime, decimal decVolume, decimal decVolumeSold, decimal decPrice, decimal decReduction, decimal decBrokerage, string strDoc = "")
+        public bool AddBuy(string strGuid, string strDateTime, decimal decVolume, decimal decVolumeSold, decimal decPrice,
+            BrokerageReductionObject brokerageObject, string strDoc = "")
         {
             try
             {
@@ -767,12 +913,14 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 Console.WriteLine(@"strDateTime: {0}", strDateTime);
                 Console.WriteLine(@"decVolume: {0}", decVolume);
                 Console.WriteLine(@"decPrice: {0}", decPrice);
+                Console.WriteLine(@"decProvision: {0}", decProvision);
+                Console.WriteLine(@"decBrokerFee: {0}", decBrokerFee);
+                Console.WriteLine(@"decTraderPlaceFee: {0}", decTraderPlaceFee);
                 Console.WriteLine(@"decReduction: {0}", decReduction);
-                Console.WriteLine(@"decBrokerage: {0}", decBrokerage);
                 Console.WriteLine(@"strDoc: {0}", strDoc);
 #endif
-
-                if (!AllBuyEntries.AddBuy(strGuid, strDateTime, decVolume, decVolumeSold, decPrice, decReduction, decBrokerage, strDoc))
+                if (!AllBuyEntries.AddBuy(strGuid, strDateTime, decVolume, decVolumeSold, decPrice,
+                    brokerageObject, strDoc))
                     return false;
 
                 // Set buy value of the share
@@ -786,7 +934,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 // Recalculate purchase price
                 if (PurchaseValue == decimal.MinValue / 2)
                     PurchaseValue = 0;
-                PurchaseValue += AllBuyEntries.GetBuyObjectByGuidDate(strGuid, strDateTime).BuyValueReductionBrokerage;
+                PurchaseValue += AllBuyEntries.GetBuyObjectByGuidDate(strGuid, strDateTime).BuyValueBrokerage;
 
 #if DEBUG_SHAREOBJECT_FINAL || DEBUG_BUY
                 Console.WriteLine(@"Volume: {0}", Volume);
@@ -823,7 +971,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 if (buyObject != null)
                 {
                     Volume -= buyObject.Volume;
-                    PurchaseValue -= buyObject.BuyValueReductionBrokerage;
+                    PurchaseValue -= buyObject.BuyValueBrokerage;
                     PurchaseValueTotal = AllBuyEntries.BuyValueTotal;
 
 #if DEBUG_SHAREOBJECT_FINAL || DEBUG_BUY
@@ -834,6 +982,44 @@ namespace SharePortfolioManager.Classes.ShareObjects
 #endif
                     // Remove buy by Guid and date and time
                     if (!AllBuyEntries.RemoveBuy(strGuid, strDateTime))
+                        return false;
+                }
+                else
+                    return false;
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// This function sets the document of the buy of the given Guid and datetime
+        /// </summary>
+        /// <param name="strGuid">Guid of the buy which should be modified</param>
+        /// <param name="strDateTime">Date time of the buy which should be modified</param>
+        /// <param name="strDocument">Document which should be set</param>
+        /// <returns></returns>
+        public bool SetDocument(string strGuid, string strDateTime, string strDocument)
+        {
+            try
+            {
+#if DEBUG_SHAREOBJECT_FINAL || DEBUG_BUY
+                Console.WriteLine(@"");
+                Console.WriteLine(@"SetDocument() / FinalValue");
+                Console.WriteLine(@"strGuid: {0}", strGuid);
+                Console.WriteLine(@"strDateTime: {0}", strDateTime);
+                Console.WriteLine(@"strDocument: {0}", strDocument);
+#endif
+                // Get BuyObject by Guid and date and time and set the new document
+                var buyObject = AllBuyEntries.GetBuyObjectByGuidDate(strGuid, strDateTime);
+                if (buyObject != null)
+                {
+                    // Set document of the buy by Guid and date and time
+                    if (!AllBuyEntries.SetDocumentBuy(strGuid, strDateTime, strDocument))
                         return false;
                 }
                 else
@@ -972,129 +1158,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
         }
 
         #endregion Sale methods
-
-        #region Brokerage methods
-
-        /// <summary>
-        /// This function adds the brokerage for the share to the dictionary
-        /// </summary>
-        /// <param name="strGuid">Guid of the brokerage</param>
-        /// <param name="bBrokerageOfABuy">Flag if the brokerage is part of a buy</param>
-        /// <param name="bBrokerageOfASale">Flag if the brokerage is part of a Sale</param>
-        /// <param name="strGuidBuySale">Guid of the buy or sale</param>
-        /// <param name="strDateTime">Date and time of the brokerage</param>
-        /// <param name="decValue">Brokerage value</param>
-        /// <param name="strDoc">Doc of the brokerage</param>
-        /// <returns>Flag if the add was successful</returns>
-        public bool AddBrokerage(string strGuid, bool bBrokerageOfABuy, bool bBrokerageOfASale, string strGuidBuySale, string strDateTime, decimal decValue, string strDoc = "")
-        {
-            try
-            {
-#if DEBUG_SHAREOBJECT_FINAL
-                Console.WriteLine(@"");
-                Console.WriteLine(@"AddBrokerage() / FinalValue");
-                Console.WriteLine(@"bBrokerageOfABuy: {0}", bBrokerageOfABuy);
-                Console.WriteLine(@"bBrokerageOfASale: {0}", bBrokerageOfASale);
-                Console.WriteLine(@"strGuidBuySale: {0}", strGuidBuySale);
-                Console.WriteLine(@"strDateTime: {0}", strDateTime);
-                Console.WriteLine(@"decValue: {0}", decValue);
-                Console.WriteLine(@"strDoc: {0}", strDoc);
-#endif
-                // Remove current brokerage of the share from the brokerage of all shares
-                PortfolioBrokerage -= BrokerageValueTotal;
-
-                if (!AllBrokerageEntries.AddBrokerage(strGuid, bBrokerageOfABuy, bBrokerageOfASale, strGuidBuySale, strDateTime, decValue, strDoc))
-                    return false;
-
-                // Set brokerage of the share
-                BrokerageValueTotal = AllBrokerageEntries.BrokerageValueTotal;
-
-                // Add new brokerage of the share to the brokerage of all shares
-                PortfolioBrokerage += BrokerageValueTotal;
-
-                // Recalculate the total sum of the share
-                CalculateFinalValue();
-
-                // Recalculate the profit or lose of the share
-                CalculateProfitLoss();
-
-                // Recalculate the appreciation
-                CalculatePerformance();
-
-                // Recalculate the performance of all shares
-                CalculatePortfolioPerformance();
-
-                // Recalculate the profit or lose of all shares
-                CalculatePortfolioProfitLoss();
-
-#if DEBUG_SHAREOBJECT_FINAL
-                Console.WriteLine(@"BrokerageValueTotal: {0}", BrokerageValueTotal);
-                Console.WriteLine(@"");
-#endif
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// This function removes a brokerage for the share from the dictionary
-        /// </summary>
-        /// <param name="strGuid">Guid of the brokerage</param>
-        /// <param name="strDateTime">Date of the brokerage remove</param>
-        /// <returns>Flag if the remove was successful</returns>
-        public bool RemoveBrokerage(string strGuid, string strDateTime)
-        {
-            try
-            {
-#if DEBUG_SHAREOBJECT_FINAL
-                Console.WriteLine(@"");
-                Console.WriteLine(@"RemoveBrokerage() / FinalValue");
-                Console.WriteLine(@"strDateTime: {0}", strDateTime);
-#endif
-                // Remove current brokerage the share to the brokerage of all shares
-                PortfolioBrokerage -= AllBrokerageEntries.BrokerageValueTotal;
-
-                // Remove brokerage by date
-                if (!AllBrokerageEntries.RemoveBrokerage(strGuid, strDateTime))
-                    return false;
-
-                // Set brokerage of the share
-                BrokerageValueTotal = AllBrokerageEntries.BrokerageValueTotal;
-
-                // Add new brokerage of the share to the brokerage of all shares
-                PortfolioBrokerage += AllBrokerageEntries.BrokerageValueTotal;
-
-                // Recalculate the total sum of the share
-                CalculateFinalValue();
-
-                // Recalculate the profit or lose of the share
-                CalculateProfitLoss();
-
-                // Recalculate the appreciation
-                CalculatePerformance();
-
-                // Recalculate the performance of all shares
-                CalculatePortfolioPerformance();
-
-                // Recalculate the profit or lose of all shares
-                CalculatePortfolioProfitLoss();
-
-#if DEBUG_SHAREOBJECT_FINAL
-                Console.WriteLine(@"BrokerageValueTotal: {0}", BrokerageValueTotal);
-                Console.WriteLine(@"");
-#endif
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        #endregion Brokerage methods
 
         #region Dividend methods
 
@@ -1350,8 +1413,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
                             return false;
                         }
 
-                        nodeElement.Attributes[ShareObject.GeneralWknAttrName].InnerText = shareObject.Wkn;
-                        nodeElement.Attributes[ShareObject.GeneralNameAttrName].InnerText = shareObject.NameAsStr;
+                        nodeElement.Attributes[GeneralWknAttrName].InnerText = shareObject.Wkn;
+                        nodeElement.Attributes[GeneralNameAttrName].InnerText = shareObject.NameAsStr;
 
                         for (var i = 0; i < nodeElement.ChildNodes.Count; i++)
                         {
@@ -1359,45 +1422,83 @@ namespace SharePortfolioManager.Classes.ShareObjects
                             {
                                 #region General
 
-                                case 0:
+                                case (int)FrmMain.PortfolioParts.LastInternetUpdate:
                                     nodeElement.ChildNodes[i].InnerText =
                                         $@"{shareObject.LastUpdateInternet.ToShortDateString()} {
                                             shareObject.LastUpdateInternet.ToShortTimeString()
                                         }";
                                     break;
-                                case 1:
+                                case (int)FrmMain.PortfolioParts.LastUpdateShareDate:
                                     nodeElement.ChildNodes[i].InnerText =
                                         $@"{shareObject.LastUpdateDate.ToShortDateString()} {
                                             shareObject.LastUpdateDate.ToShortTimeString()
                                         }";
                                     break;
-                                case 2:
+                                case (int)FrmMain.PortfolioParts.LastUpdateTime:
                                     nodeElement.ChildNodes[i].InnerText =
                                         $@"{shareObject.LastUpdateTime.ToShortDateString()} {
                                             shareObject.LastUpdateTime.ToShortTimeString()
                                         }";
                                     break;
-                                case 3:
+                                case (int)FrmMain.PortfolioParts.SharePrice:
                                     nodeElement.ChildNodes[i].InnerText = shareObject.CurPriceAsStr;
                                     break;
-                                case 4:
+                                case (int)FrmMain.PortfolioParts.SharePriceBefore:
                                     nodeElement.ChildNodes[i].InnerText = shareObject.PrevDayPriceAsStr;
                                     break;
-                                case 5:
+                                case (int)FrmMain.PortfolioParts.WebSite:
                                     nodeElement.ChildNodes[i].InnerText = shareObject.WebSite;
                                     break;
-                                case 6:
+                                case (int)FrmMain.PortfolioParts.Culture:
                                     nodeElement.ChildNodes[i].InnerXml = shareObject.CultureInfoAsStr;
                                     break;
-                                case 7:
+                                case (int)FrmMain.PortfolioParts.ShareType:
                                     nodeElement.ChildNodes[i].InnerXml = shareObject.ShareType.ToString();
                                     break;
 
                                 #endregion General
 
+                                #region Brokerage
+
+                                case (int)FrmMain.PortfolioParts.Brokerages:
+                                    // Remove old brokerage
+                                    nodeElement.ChildNodes[i].RemoveAll();
+                                    // Remove old brokerage
+                                    nodeElement.ChildNodes[i].RemoveAll();
+                                    foreach (var brokerageElementYear in shareObject.AllBrokerageEntries
+                                        .GetAllBrokerageOfTheShare())
+                                    {
+                                        var newBrokerageElement =
+                                            xmlPortfolio.CreateElement(BrokerageTagNamePre);
+                                        newBrokerageElement.SetAttribute(BrokerageGuidAttrName,
+                                            brokerageElementYear.Guid);
+                                        newBrokerageElement.SetAttribute(BrokerageBuyPartAttrName,
+                                            brokerageElementYear.PartOfABuyAsStr);
+                                        newBrokerageElement.SetAttribute(BrokerageSalePartAttrName,
+                                            brokerageElementYear.PartOfASaleAsStr);
+                                        newBrokerageElement.SetAttribute(BrokerageGuidBuySaleAttrName,
+                                            brokerageElementYear.GuidBuySale);
+                                        newBrokerageElement.SetAttribute(BrokerageDateAttrName,
+                                            brokerageElementYear.DateAsStr);
+                                        newBrokerageElement.SetAttribute(BrokerageProvisionAttrName,
+                                            brokerageElementYear.ProvisionValueAsStr);
+                                        newBrokerageElement.SetAttribute(BrokerageBrokerFeeAttrName,
+                                            brokerageElementYear.BrokerFeeValueAsStr);
+                                        newBrokerageElement.SetAttribute(BrokerageTraderPlaceFeeAttrName,
+                                            brokerageElementYear.TraderPlaceFeeValueAsStr);
+                                        newBrokerageElement.SetAttribute(BrokerageReductionAttrName,
+                                            brokerageElementYear.ReductionValueAsStr);
+                                        newBrokerageElement.SetAttribute(BrokerageDocumentAttrName,
+                                            brokerageElementYear.BrokerageDocument);
+                                        nodeElement.ChildNodes[i].AppendChild(newBrokerageElement);
+                                    }
+                                    break;
+
+                                #endregion Brokerage
+
                                 #region Buys
 
-                                case 8:
+                                case (int)FrmMain.PortfolioParts.Buys:
                                     // Remove old buys
                                     nodeElement.ChildNodes[i].RemoveAll();
                                     foreach (var buyElementYear in shareObject.AllBuyEntries
@@ -1415,10 +1516,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                             buyElementYear.VolumeSoldAsStr);
                                         newBuyElement.SetAttribute(BuyPriceAttrName,
                                             buyElementYear.SharePriceAsStr);
-                                        newBuyElement.SetAttribute(BuyBrokerageAttrName,
-                                            buyElementYear.BrokerageAsStr);
-                                        newBuyElement.SetAttribute(BuyReductionAttrName,
-                                            buyElementYear.ReductionAsStr);
+                                        newBuyElement.SetAttribute(BuyBrokerageGuidAttrName,
+                                            buyElementYear.BrokerageGuid);
                                         newBuyElement.SetAttribute(BuyDocumentAttrName,
                                             buyElementYear.Document);
                                         nodeElement.ChildNodes[i].AppendChild(newBuyElement);
@@ -1429,7 +1528,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
                                 #region Sales
 
-                                case 9:
+                                case (int)FrmMain.PortfolioParts.Sales:
                                     // Remove old sales
                                     nodeElement.ChildNodes[i].RemoveAll();
                                     foreach (var saleElementYear in shareObject.AllSaleEntries
@@ -1494,41 +1593,9 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
                                 #endregion Sales
 
-                                #region Brokerage
-
-                                case 10:
-                                    // Remove old brokerage
-                                    nodeElement.ChildNodes[i].RemoveAll();
-                                    // Remove old brokerage
-                                    nodeElement.ChildNodes[i].RemoveAll();
-                                    foreach (var brokerageElementYear in shareObject.AllBrokerageEntries
-                                        .GetAllBrokerageOfTheShare())
-                                    {
-                                        var newBrokerageElement =
-                                            xmlPortfolio.CreateElement(BrokerageTagNamePre);
-                                        newBrokerageElement.SetAttribute(BrokerageGuidAttrName,
-                                            brokerageElementYear.Guid);
-                                        newBrokerageElement.SetAttribute(BrokerageBuyPartAttrName,
-                                            brokerageElementYear.BrokerageOfABuyAsStr);
-                                        newBrokerageElement.SetAttribute(BrokerageSalePartAttrName,
-                                            brokerageElementYear.BrokerageOfASaleAsStr);
-                                        newBrokerageElement.SetAttribute(BrokerageGuidBuySaleAttrName,
-                                            brokerageElementYear.GuidBuySale);
-                                        newBrokerageElement.SetAttribute(BrokerageDateAttrName,
-                                            brokerageElementYear.BrokerageDateAsStr);
-                                        newBrokerageElement.SetAttribute(BrokerageValueAttrName,
-                                            brokerageElementYear.BrokerageValueAsStr);
-                                        newBrokerageElement.SetAttribute(BrokerageDocumentAttrName,
-                                            brokerageElementYear.BrokerageDocument);
-                                        nodeElement.ChildNodes[i].AppendChild(newBrokerageElement);
-                                    }
-                                    break;
-
-                                #endregion Brokerage
-
                                 #region Dividends
 
-                                case 11:
+                                case (int)FrmMain.PortfolioParts.Dividends:
                                     // Remove old dividends
                                     nodeElement.ChildNodes[i].RemoveAll();
                                     ((XmlElement) nodeElement.ChildNodes[i]).SetAttribute(
@@ -1689,6 +1756,24 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
                         #region Buys / Sales / Brokerage / Dividends
 
+                        // Add child nodes (brokerage)
+                        var newBrokerage = xmlPortfolio.CreateElement(@"Brokerage");
+                        newShareNode.AppendChild(newBrokerage);
+                        foreach (var brokerageElementYear in shareObject.AllBrokerageEntries.GetAllBrokerageOfTheShare())
+                        {
+                            var newBrokerageElement = xmlPortfolio.CreateElement(BrokerageTagNamePre);
+                            newBrokerageElement.SetAttribute(BrokerageGuidAttrName, brokerageElementYear.Guid);
+                            newBrokerageElement.SetAttribute(BrokerageBuyPartAttrName,
+                                brokerageElementYear.PartOfABuyAsStr);
+                            newBrokerageElement.SetAttribute(BrokerageDateAttrName, brokerageElementYear.DateAsStr);
+                            newBrokerageElement.SetAttribute(BrokerageProvisionAttrName, brokerageElementYear.ProvisionValueAsStr);
+                            newBrokerageElement.SetAttribute(BrokerageBrokerFeeAttrName, brokerageElementYear.BrokerFeeValueAsStr);
+                            newBrokerageElement.SetAttribute(BrokerageTraderPlaceFeeAttrName, brokerageElementYear.TraderPlaceFeeValueAsStr);
+                            newBrokerageElement.SetAttribute(BrokerageReductionAttrName, brokerageElementYear.ReductionValueAsStr);
+                            newBrokerageElement.SetAttribute(BuyDocumentAttrName, brokerageElementYear.BrokerageDocument);
+                            newBrokerage.AppendChild(newBrokerageElement);
+                        }
+
                         // Add child nodes (buys)
                         var newBuys = xmlPortfolio.CreateElement(@"Buys");
                         newShareNode.AppendChild(newBuys);
@@ -1700,8 +1785,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                             newBuyElement.SetAttribute(BuyVolumeAttrName, buyElementYear.VolumeAsStr);
                             newBuyElement.SetAttribute(BuyVolumeSoldAttrName, @"0");
                             newBuyElement.SetAttribute(BuyPriceAttrName, buyElementYear.SharePriceAsStr);
-                            newBuyElement.SetAttribute(BuyBrokerageAttrName, buyElementYear.BrokerageAsStr);
-                            newBuyElement.SetAttribute(BuyReductionAttrName, buyElementYear.ReductionAsStr);
+                            newBuyElement.SetAttribute(BuyBrokerageGuidAttrName, buyElementYear.BrokerageGuid);
                             newBuyElement.SetAttribute(BuyDocumentAttrName, buyElementYear.Document);
                             newBuys.AppendChild(newBuyElement);
                         }
@@ -1709,21 +1793,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
                         // Add child nodes (sales)
                         var newSales = xmlPortfolio.CreateElement(@"Sales");
                         newShareNode.AppendChild(newSales);
-
-                        // Add child nodes (brokerage)
-                        var newBrokerage = xmlPortfolio.CreateElement(@"Brokerage");
-                        newShareNode.AppendChild(newBrokerage);
-                        foreach (var brokerageElementYear in shareObject.AllBrokerageEntries.GetAllBrokerageOfTheShare())
-                        {
-                            var newBrokerageElement = xmlPortfolio.CreateElement(BrokerageTagNamePre);
-                            newBrokerageElement.SetAttribute(BrokerageGuidAttrName, brokerageElementYear.Guid);
-                            newBrokerageElement.SetAttribute(BrokerageBuyPartAttrName,
-                                brokerageElementYear.BrokerageOfABuyAsStr);
-                            newBrokerageElement.SetAttribute(BrokerageDateAttrName, brokerageElementYear.BrokerageDateAsStr);
-                            newBrokerageElement.SetAttribute(BrokerageValueAttrName, brokerageElementYear.BrokerageValueAsStr);
-                            newBrokerageElement.SetAttribute(BuyDocumentAttrName, brokerageElementYear.BrokerageDocument);
-                            newBrokerage.AppendChild(newBrokerageElement);
-                        }
 
                         // Add child nodes (dividend)
                         var newDividend = xmlPortfolio.CreateElement(@"Dividends");
@@ -1859,14 +1928,12 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
             using (var stream = new MemoryStream())
             {
-                if (this.GetType().IsSerializable)
-                {
-                    var formatter = new BinaryFormatter();
-                    formatter.Serialize(stream, this);
-                    stream.Position = 0;
-                    return formatter.Deserialize(stream);
-                }
-                return null;
+                if (!GetType().IsSerializable) return null;
+
+                var formatter = new BinaryFormatter();
+                formatter.Serialize(stream, this);
+                stream.Position = 0;
+                return formatter.Deserialize(stream);
             }
         }
 

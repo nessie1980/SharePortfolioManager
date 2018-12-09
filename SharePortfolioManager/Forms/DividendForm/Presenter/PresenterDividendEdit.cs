@@ -256,11 +256,30 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
         {
             try
             {
+                var strCurrentFile = string.Empty;
+
                 const string strFilter = "pdf (*.pdf)|*.pdf|txt (*.txt)|.txt|doc (*.doc)|.doc|docx (*.docx)|.docx";
                 if (_model.DividendObject != null)
-                    _model.DividendObject.Document = Helper.SetDocument(_model.Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/OpenFileDialog/Title", _model.LanguageName), strFilter, _model.DividendObject.Document);
+                {
+                    strCurrentFile = _model.DividendObject.Document;
+
+                    if (Helper.SetDocument(
+                            _model.Language.GetLanguageTextByXPath(
+                                @"/AddEditFormDividend/GrpBoxAddEdit/OpenFileDialog/Title", _model.LanguageName),
+                            strFilter,
+                            ref strCurrentFile) == DialogResult.OK)
+                        _model.DividendObject.Document = strCurrentFile;
+                }
                 else
-                    _model.Document = Helper.SetDocument(_model.Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/OpenFileDialog/Title", _model.LanguageName), strFilter, _model.Document);
+                {
+                    strCurrentFile = _model.Document;
+
+                    if (Helper.SetDocument(
+                            _model.Language.GetLanguageTextByXPath(
+                                @"/AddEditFormDividend/GrpBoxAddEdit/OpenFileDialog/Title", _model.LanguageName),
+                            strFilter, ref strCurrentFile) == DialogResult.OK)
+                        _model.Document = strCurrentFile;
+                }
 
                 UpdateViewWithModel();
 

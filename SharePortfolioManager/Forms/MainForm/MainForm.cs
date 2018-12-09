@@ -27,7 +27,6 @@ using SharePortfolioManager.Classes.ShareObjects;
 using SharePortfolioManager.Properties;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml;
@@ -102,7 +101,7 @@ namespace SharePortfolioManager
         public enum EComponentLevels
         {
             Application = Logger.ELoggerComponentLevels.Component1,
-            WebParser = Logger.ELoggerComponentLevels.Component2,
+            Parser = Logger.ELoggerComponentLevels.Component2,
             LanguageHandler = Logger.ELoggerComponentLevels.Component3
         }
 
@@ -129,9 +128,6 @@ namespace SharePortfolioManager
 
         private const string SettingsFileName = @"Settings\Settings.XML";
 
-
-        private const string WebSitesFileName = @"Settings\WebSites.XML";
-
         private XmlReaderSettings _readerSettingsPortfolio;
         private XmlDocument _portfolio;
         private XmlReader _readerPortfolio;
@@ -143,22 +139,9 @@ namespace SharePortfolioManager
 
         #endregion Flags
 
-        #region WebParser
-
-        #endregion WebParser
-
         #region Share / share list
 
         #endregion Share / share list
-
-        #region WebSite configuration
-
-        /// <summary>
-        /// Stores the count of the website object tags in the XML
-        /// </summary>
-        private const short WebSiteTagCount = 4;
-
-        #endregion WebSite configuration
 
         #endregion Variables
 
@@ -188,7 +171,7 @@ namespace SharePortfolioManager
 
         public int LoggerGuiEntriesSize { get; set; } = 25;
 
-        public List<string> LoggerStatelList { get; set; } = new List<string>();
+        public List<string> LoggerStateList { get; set; } = new List<string>();
 
         public List<string> LoggerComponentNamesList { get; set; } = new List<string>();
 
@@ -242,17 +225,27 @@ namespace SharePortfolioManager
 
         public Language Language { get; set; }
 
+        #region Settings
+
         public XmlReaderSettings ReaderSettingsSettings { get; set; }
 
         public XmlDocument Settings { get; set; }
 
         public XmlReader ReaderSettings { get; set; }
 
-        public XmlReaderSettings ReaderSettingsWebSites { get; set; }
+        #endregion Settings
 
-        public XmlDocument WebSites { get; set; }
+        #region Documents
 
-        public XmlReader ReaderWebSites { get; set; }
+        public XmlReaderSettings ReaderSettingsDocuments { get; set; }
+
+        public XmlDocument Documents { get; set; }
+
+        public XmlReader ReaderDocuments { get; set; }
+
+        #endregion Documents
+
+        #region Portfolio
 
         public XmlReaderSettings ReaderSettingsPortfolio
         {
@@ -271,6 +264,8 @@ namespace SharePortfolioManager
             get => _readerPortfolio;
             set => _readerPortfolio = value;
         }
+
+        #endregion Portfolio
 
         #endregion XML files settings
 
@@ -318,9 +313,7 @@ namespace SharePortfolioManager
 
         #region WebParser
 
-        public WebParser.WebParser WebParser { get; } = new WebParser.WebParser();
-
-        public List<WebSiteRegex> WebSiteRegexList { get; set; } = new List<WebSiteRegex>();
+        public Parser.Parser WebParser { get; } = new Parser.Parser();
 
         #endregion WebParser
 
@@ -367,7 +360,7 @@ namespace SharePortfolioManager
         /// - load settings
         /// - load language
         /// - initialize logger
-        /// - initialize WebParser
+        /// - initialize Parser
         /// - configure DataGridView´s
         /// - load website configuration
         /// - load share configuration
@@ -418,7 +411,7 @@ namespace SharePortfolioManager
                 if (InitFlag)
                 {
                     // Initialize logger
-                    Logger.LoggerInitialize(LoggerStateLevel, LoggerComponentLevel, LoggerStatelList, LoggerComponentNamesList, LoggerConsoleColorList, LoggerLogToFileEnabled, LoggerGuiEntriesSize, LoggerPathFileName, null, true);
+                    Logger.LoggerInitialize(LoggerStateLevel, LoggerComponentLevel, LoggerStateList, LoggerComponentNamesList, LoggerConsoleColorList, LoggerLogToFileEnabled, LoggerGuiEntriesSize, LoggerPathFileName, null, true);
 
                     // Check if the logger initialization was not successful
                     if (Logger.InitState != Logger.EInitState.Initialized)
@@ -453,11 +446,203 @@ namespace SharePortfolioManager
 
                 #endregion dgvPortfolioFooter configuration (like row style, header style, font, colors)
 
-                #region Load website RegEx configuration from XML
+                #region Load website and document RegEx configuration from XML
 
-                LoadWebSiteConfigurations();
+                WebSiteConfiguration.LoadWebSiteConfigurations(InitFlag);
 
-                #endregion Load website RegEx configuration from XML
+                InitFlag = WebSiteConfiguration.InitFlag;
+
+                // Add status message
+                switch (WebSiteConfiguration.ErrorCode)
+                {
+                    case WebSiteConfiguration.WebSiteErrorCode.ConfigurationEmpty:
+                    {
+                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/ConfigurationListEmpty_1",
+                                LanguageName)
+                            + WebSiteConfiguration.WebSiteFileName +
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/ConfigurationListEmpty_2",
+                                LanguageName)
+                            + " " +
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/ConfigurationListLoadFailed_1",
+                                LanguageName)
+                            + WebSiteConfiguration.WebSiteFileName +
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/ConfigurationListLoadFailed_2",
+                                LanguageName),
+                            Language,
+                            LanguageName,
+                            Color.DarkRed, Logger, (int)EStateLevels.FatalError,
+                            (int)EComponentLevels.Application
+                        );
+                    }
+                        break;
+                    case WebSiteConfiguration.WebSiteErrorCode.ConfigurationAttributeError:
+                    {
+                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_1",
+                                LanguageName)
+                            + WebSiteConfiguration.WebSiteFileName +
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_2",
+                                LanguageName)
+                            + " " +
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/ConfigurationListLoadFailed_1",
+                                LanguageName)
+                            + WebSiteConfiguration.WebSiteFileName +
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/ConfigurationListLoadFailed_2",
+                                LanguageName),
+                            Language,
+                            LanguageName,
+                            Color.DarkRed, Logger, (int)EStateLevels.FatalError,
+                            (int)EComponentLevels.Application
+                            );
+                    }
+                    break;
+                    case WebSiteConfiguration.WebSiteErrorCode.ConfigurationSyntaxError:
+                    {
+                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_1",
+                                LanguageName)
+                            + WebSiteConfiguration.WebSiteFileName + 
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_2",
+                                LanguageName)
+                            + " " + 
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/XMLSyntaxFailure_1",
+                                LanguageName)
+                            + WebSiteConfiguration.WebSiteFileName +
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/XMLSyntaxFailure_2",
+                                LanguageName),
+                            Language,
+                            LanguageName,
+                            Color.DarkRed, Logger, (int)EStateLevels.FatalError,
+                            (int) EComponentLevels.Application
+                            );
+                    }
+                    break;
+                    case WebSiteConfiguration.WebSiteErrorCode.ConfigurationLoadFailed:
+                    {
+                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_1",
+                                LanguageName)
+                            + WebSiteConfiguration.WebSiteFileName +
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_2",
+                                LanguageName)
+                            + " " +
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/ConfigurationListLoadFailed_1",
+                                LanguageName)
+                            + WebSiteConfiguration.WebSiteFileName +
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/ConfigurationListLoadFailed_2",
+                                LanguageName),
+                            Language,
+                            LanguageName,
+                            Color.DarkRed, Logger, (int)EStateLevels.FatalError,
+                            (int)EComponentLevels.Application
+                            );
+                    }
+                    break;
+                    case WebSiteConfiguration.WebSiteErrorCode.ConfigurationLoadSuccessful:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                DocumentParsingConfiguration.LoadDocumentParsingConfigurations(InitFlag);
+
+                InitFlag = DocumentParsingConfiguration.InitFlag;
+
+                // Add status message
+                switch (DocumentParsingConfiguration.ErrorCode)
+                {
+                    case DocumentParsingConfiguration.DocumentParsingErrorCode.ConfigurationEmpty:
+                        {
+                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                Language.GetLanguageTextByXPath(@"/MainForm/Errors/ConfigurationListEmpty_1",
+                                    LanguageName)
+                                + DocumentParsingConfiguration.DocumentParsingFileName +
+                                Language.GetLanguageTextByXPath(@"/MainForm/Errors/ConfigurationListEmpty_2",
+                                    LanguageName)
+                                + " " +
+                                Language.GetLanguageTextByXPath(@"/MainForm/Errors/ConfigurationListLoadFailed_1",
+                                    LanguageName)
+                                + DocumentParsingConfiguration.DocumentParsingFileName +
+                                Language.GetLanguageTextByXPath(@"/MainForm/Errors/ConfigurationListLoadFailed_2",
+                                    LanguageName),
+                                Language,
+                                LanguageName,
+                                Color.DarkRed, Logger, (int)EStateLevels.FatalError,
+                                (int)EComponentLevels.Application
+                            );
+                        }
+                        break;
+                    case DocumentParsingConfiguration.DocumentParsingErrorCode.ConfigurationAttributeError:
+                        {
+                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_1",
+                                    LanguageName)
+                                + DocumentParsingConfiguration.DocumentParsingFileName +
+                                Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_2",
+                                    LanguageName)
+                                + " " +
+                                Language.GetLanguageTextByXPath(@"/MainForm/Errors/ConfigurationListLoadFailed_1",
+                                    LanguageName)
+                                + DocumentParsingConfiguration.DocumentParsingFileName +
+                                Language.GetLanguageTextByXPath(@"/MainForm/Errors/ConfigurationListLoadFailed_2",
+                                    LanguageName),
+                                Language,
+                                LanguageName,
+                                Color.DarkRed, Logger, (int)EStateLevels.FatalError,
+                                (int)EComponentLevels.Application
+                            );
+                        }
+                        break;
+                    case DocumentParsingConfiguration.DocumentParsingErrorCode.ConfigurationSyntaxError:
+                        {
+                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_1",
+                                    LanguageName)
+                                + DocumentParsingConfiguration.DocumentParsingFileName +
+                                Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_2",
+                                    LanguageName)
+                                + " " +
+                                Language.GetLanguageTextByXPath(@"/MainForm/Errors/XMLSyntaxFailure_1",
+                                    LanguageName)
+                                + DocumentParsingConfiguration.DocumentParsingFileName +
+                                Language.GetLanguageTextByXPath(@"/MainForm/Errors/XMLSyntaxFailure_2",
+                                    LanguageName),
+                                Language,
+                                LanguageName,
+                                Color.DarkRed, Logger, (int)EStateLevels.FatalError,
+                                (int)EComponentLevels.Application
+                            );
+                        }
+                        break;
+                    case DocumentParsingConfiguration.DocumentParsingErrorCode.ConfigurationLoadFailed:
+                        {
+                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_1",
+                                    LanguageName)
+                                + DocumentParsingConfiguration.DocumentParsingFileName +
+                                Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_2",
+                                    LanguageName)
+                                + " " +
+                                Language.GetLanguageTextByXPath(@"/MainForm/Errors/ConfigurationListLoadFailed_1",
+                                    LanguageName)
+                                + DocumentParsingConfiguration.DocumentParsingFileName +
+                                Language.GetLanguageTextByXPath(@"/MainForm/Errors/ConfigurationListLoadFailed_2",
+                                    LanguageName),
+                                Language,
+                                LanguageName,
+                                Color.DarkRed, Logger, (int)EStateLevels.FatalError,
+                                (int)EComponentLevels.Application
+                            );
+                        }
+                        break;
+                    case DocumentParsingConfiguration.DocumentParsingErrorCode.ConfigurationLoadSuccessful:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                #endregion Load website and document RegEx configuration from XML
 
                 #region Set language values to the control
 
@@ -541,9 +726,9 @@ namespace SharePortfolioManager
 
                             // Add status message
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists1", LanguageName)
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists_1", LanguageName)
                             + _portfolioFileName
-                            + Language.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists2", LanguageName),
+                            + Language.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists_2", LanguageName),
                             Language, LanguageName,
                             Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
 
@@ -568,7 +753,7 @@ namespace SharePortfolioManager
                         Language, LanguageName,
                         Color.OrangeRed, Logger, (int)EStateLevels.Warning, (int)EComponentLevels.Application);
 
-                    // Disable menustrip menu point "Save as..."
+                    // Disable menu strip menu point "Save as..."
                     saveAsToolStripMenuItem.Enabled = false;
 
                     EnableDisableControlNames.Clear();
@@ -740,12 +925,12 @@ namespace SharePortfolioManager
 
                 // Save current window size
                 var nodeWidth = Settings.SelectSingleNode("/Settings/Window/Width");
-                var nodeHeigth = Settings.SelectSingleNode("/Settings/Window/Height");
+                var nodeHeight = Settings.SelectSingleNode("/Settings/Window/Height");
 
                 if (nodeWidth != null)
                     nodeWidth.InnerXml = NormalWindowSize.Width.ToString();
-                if (nodeHeigth != null)
-                    nodeHeigth.InnerXml = NormalWindowSize.Height.ToString();
+                if (nodeHeight != null)
+                    nodeHeight.InnerXml = NormalWindowSize.Height.ToString();
 
                 // Save window state
                 var nodeWindowState = Settings.SelectSingleNode("/Settings/Window/State");
@@ -853,10 +1038,10 @@ namespace SharePortfolioManager
             _notifyContextMenuStrip = new ContextMenuStrip();
             _notifyContextMenuStrip.Items.Add(
                 Language.GetLanguageTextByXPath(@"/NotifyIcon/Show", LanguageName),
-                Resources.black_show, Show_Click);
+                Resources.show_window_24, Show_Click);
             _notifyContextMenuStrip.Items.Add(
                 Language.GetLanguageTextByXPath(@"/NotifyIcon/Exit", LanguageName),
-                Resources.black_exit, Exit_Click);
+                Resources.button_exit_24, Exit_Click);
 
             // Set created context menu to the notify icon
             _notifyIcon.ContextMenuStrip = _notifyContextMenuStrip;

@@ -110,7 +110,7 @@ namespace SharePortfolioManager
 
                 grpBoxComponents.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogComponents/Caption", LanguageName);
                 chkBoxApplication.Text = Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Application", LanguageName);
-                chkBoxWebParser.Text = Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/WebParser", LanguageName);
+                chkBoxParser.Text = Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Parser", LanguageName);
                 chkBoxLanguageHander.Text = Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/LanguageHandler", LanguageName);
 
                 grpBoxLogLevel.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogLevels/Caption", LanguageName);
@@ -164,7 +164,7 @@ namespace SharePortfolioManager
 
                 chkBoxApplication.Checked = (ParentWindow.LoggerComponentLevel & 1) == 1;
 
-                chkBoxWebParser.Checked = (ParentWindow.LoggerComponentLevel & 2) == 2;
+                chkBoxParser.Checked = (ParentWindow.LoggerComponentLevel & 2) == 2;
 
                 chkBoxLanguageHander.Checked = (ParentWindow.LoggerComponentLevel & 4) == 4;
 
@@ -445,7 +445,7 @@ namespace SharePortfolioManager
                         var iLogComponents = 0;
                         if (chkBoxApplication.Checked)
                             iLogComponents += 1;
-                        if (chkBoxWebParser.Checked)
+                        if (chkBoxParser.Checked)
                             iLogComponents += 2;
                         if (chkBoxLanguageHander.Checked)
                             iLogComponents += 4;

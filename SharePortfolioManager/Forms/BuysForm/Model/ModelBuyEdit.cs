@@ -54,17 +54,24 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
         decimal VolumeDec { get; set; }
         string VolumeSold { get; set; }
         decimal VolumeSoldDec { get; set; }
-        string MarketValue { get; set; }
-        decimal MarketValueDec { get; set; }
-        string Reduction { get; set; }
-        decimal ReductionDec { get; set; }
-        decimal PurchaseValueDec { get; set; }
-        string Brokerage { get; set; }
-        decimal BrokerageDec { get; set; }
-        string FinalValue { get; set; }
-        decimal FinalValueDec { get; set; }
         string SharePrice { get; set; }
         decimal SharePriceDec { get; set; }
+        string MarketValue { get; set; }
+        decimal MarketValueDec { get; set; }
+        string Provision { get; set; }
+        decimal ProvisionDec { get; set; }
+        string BrokerFee { get; set; }
+        decimal BrokerFeeDec { get; set; }
+        string TraderPlaceFee { get; set; }
+        decimal TraderPlaceFeeDec { get; set; }
+        string Reduction { get; set; }
+        decimal ReductionDec { get; set; }
+        string Brokerage { get; set; }
+        decimal BrokerageDec { get; set; }
+        string BrokerageWithReduction { get; set; }
+        decimal BrokerageWithReductionDec { get; set; }
+        string Deposit { get; set; }
+        decimal DepositDec { get; set; }
         string Document { get; set; }
     }
 
@@ -86,13 +93,20 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
         private decimal _sharePriceDec;
         private string _marketValue;
         private decimal _marketValueDec;
-        private string _brokerage;
-        private decimal _brokerageDec;
+        private string _provision;
+        private decimal _provisionDec;
+        private string _brokerFee;
+        private decimal _brokerFeeDec;
+        private string _traderPlaceFee;
+        private decimal _traderPlaceFeeDec;
         private string _reduction;
         private decimal _reductionDec;
-        private decimal _purchaseValueDec;
-        private string _finalValue;
-        private decimal _finalValueDec;
+        private string _brokerage;
+        private decimal _brokerageDec;
+        private string _brokerageWithReduction;
+        private decimal _brokerageWithReductionDec;
+        private string _deposit;
+        private decimal _depositDec;
         private string _document;
 
         #endregion Fields
@@ -272,37 +286,105 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
             }
         }
 
-        public string Brokerage
+        public string Provision
         {
             get
             {
-                if (!decimal.TryParse(_brokerage, out _brokerageDec))
-                    _brokerageDec = 0;
+                if (!decimal.TryParse(_provision, out _provisionDec))
+                    _provisionDec = 0;
 
                 if (UpdateViewFormatted)
-                    return _brokerageDec > 0 ? Helper.FormatDecimal(_brokerageDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _brokerage;
+                    return _provisionDec > 0 ? Helper.FormatDecimal(_provisionDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _provision;
 
-                return _brokerage;
+                return _provision;
             }
             set
             {
-                if (Equals(_brokerage, value))
+                if (Equals(_provision, value))
                     return;
-                _brokerage = value;
+                _provision = value;
 
-                if (!decimal.TryParse(_brokerage, out _brokerageDec))
-                    _brokerageDec = 0;
+                if (!decimal.TryParse(_provision, out _provisionDec))
+                    _provisionDec = 0;
             }
         }
 
-        public decimal BrokerageDec
+        public decimal ProvisionDec
         {
-            get => _brokerageDec;
+            get => _provisionDec;
             set
             {
-                if (Equals(_brokerageDec, value))
+                if (Equals(_provisionDec, value))
                     return;
-                _brokerageDec = value;
+                _provisionDec = value;
+            }
+        }
+
+        public string BrokerFee
+        {
+            get
+            {
+                if (!decimal.TryParse(_brokerFee, out _brokerFeeDec))
+                    _brokerFeeDec = 0;
+
+                if (UpdateViewFormatted)
+                    return _brokerFeeDec > 0 ? Helper.FormatDecimal(_brokerFeeDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _brokerFee;
+
+                return _brokerFee;
+            }
+            set
+            {
+                if (Equals(_brokerFee, value))
+                    return;
+                _brokerFee = value;
+
+                if (!decimal.TryParse(_brokerFee, out _brokerFeeDec))
+                    _brokerFeeDec = 0;
+            }
+        }
+
+        public decimal BrokerFeeDec
+        {
+            get => _brokerFeeDec;
+            set
+            {
+                if (Equals(_brokerFeeDec, value))
+                    return;
+                _brokerFeeDec = value;
+            }
+        }
+
+        public string TraderPlaceFee
+        {
+            get
+            {
+                if (!decimal.TryParse(_traderPlaceFee, out _traderPlaceFeeDec))
+                    _traderPlaceFeeDec = 0;
+
+                if (UpdateViewFormatted)
+                    return _traderPlaceFeeDec > 0 ? Helper.FormatDecimal(_traderPlaceFeeDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _traderPlaceFee;
+
+                return _traderPlaceFee;
+            }
+            set
+            {
+                if (Equals(_traderPlaceFee, value))
+                    return;
+                _traderPlaceFee = value;
+
+                if (!decimal.TryParse(_traderPlaceFee, out _traderPlaceFeeDec))
+                    _traderPlaceFeeDec = 0;
+            }
+        }
+
+        public decimal TraderPlaceFeeDec
+        {
+            get => _traderPlaceFeeDec;
+            set
+            {
+                if (Equals(_traderPlaceFeeDec, value))
+                    return;
+                _traderPlaceFeeDec = value;
             }
         }
 
@@ -340,39 +422,78 @@ namespace SharePortfolioManager.Forms.BuysForm.Model
             }
         }
 
-        public decimal PurchaseValueDec
+        public string Brokerage
         {
-            get => _purchaseValueDec;
+            get => _brokerageDec >= 0 ? Helper.FormatDecimal(_brokerageDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _brokerage;
             set
             {
-                if (Equals(_purchaseValueDec, value))
+                if (Equals(_brokerage, value))
                     return;
-                _purchaseValueDec = value;
+                _brokerage = value;
+
+                if (!decimal.TryParse(_brokerage, out _brokerageDec))
+                    _brokerageDec = 0;
             }
         }
 
-        public string FinalValue
+        public decimal BrokerageDec
         {
-            get => _finalValueDec >= 0 ? Helper.FormatDecimal(_finalValueDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _finalValue;
+            get => _brokerageDec;
             set
             {
-                if (Equals(_finalValue, value))
+                if (Equals(_brokerageDec, value))
                     return;
-                _finalValue = value;
-
-                if (!decimal.TryParse(_finalValue, out _finalValueDec))
-                    FinalValueDec = 0;
+                _brokerageDec = value;
             }
         }
 
-        public decimal FinalValueDec
+        public string BrokerageWithReduction
         {
-            get => _finalValueDec;
+            get => _brokerageWithReductionDec >= 0 ? Helper.FormatDecimal(_brokerageWithReductionDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _brokerageWithReduction;
             set
             {
-                if (Equals(_finalValueDec, value))
+                if (Equals(_brokerageWithReduction, value))
                     return;
-                _finalValueDec = value;
+                _brokerageWithReduction = value;
+
+                if (!decimal.TryParse(_brokerageWithReduction, out _brokerageWithReductionDec))
+                    _brokerageWithReductionDec = 0;
+            }
+        }
+
+        public decimal BrokerageWithReductionDec
+        {
+            get => _brokerageWithReductionDec;
+            set
+            {
+                if (Equals(_brokerageWithReductionDec, value))
+                    return;
+                _brokerageWithReductionDec = value;
+            }
+        }
+
+        public string Deposit
+        {
+            get => _depositDec >= 0 ? Helper.FormatDecimal(_depositDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _deposit;
+            set
+            {
+                if (Equals(_deposit, value))
+                    return;
+                _deposit = value;
+
+                if (!decimal.TryParse(_deposit, out _depositDec))
+                    DepositDec = 0;
+            }
+        }
+
+        public decimal DepositDec
+        {
+            get => _depositDec;
+            set
+            {
+                if (Equals(_depositDec, value))
+                    return;
+                _depositDec = value;
             }
         }
 

@@ -540,7 +540,7 @@ namespace SharePortfolioManager
 
         [Browsable(true)]
         [DisplayName(@"Document")]
-        public Image DocumentGrid => Document == @"-" ? null : Resources.black_logger;
+        public Image DocumentGrid => Helper.GetImageForFile(Document);
 
         #endregion Properties
 

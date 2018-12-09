@@ -21,27 +21,32 @@
 //SOFTWARE.
 
 using System;
-using SharePortfolioManager.Classes;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
-namespace SharePortfolioManager
+namespace SharePortfolioManager.Classes.Costs
 {
     [Serializable]
-    public class AllBrokerageOfTheShare
+    public class AllBrokerageReductionOfTheShare
     {
         #region Properties
 
-        public CultureInfo BrokerageCultureInfo { get; internal set; }
+        public CultureInfo CultureInfo { get; internal set; }
 
         public decimal BrokerageValueTotal { get; internal set; }
 
-        public string BrokerageValueTotalAsStr => Helper.FormatDecimal(BrokerageValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BrokerageCultureInfo);
+        public string BrokerageValueTotalAsStr => Helper.FormatDecimal(BrokerageValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CultureInfo);
 
-        public string BrokerageValueTotalWithUnitAsStr => Helper.FormatDecimal(BrokerageValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BrokerageCultureInfo);
+        public string BrokerageValueTotalWithUnitAsStr => Helper.FormatDecimal(BrokerageValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CultureInfo);
 
-        public SortedDictionary<string, BrokerageYearOfTheShare> AllBrokerageOfTheShareDictionary { get; } = new SortedDictionary<string, BrokerageYearOfTheShare>();
+        public decimal BrokerageWithReductionValueTotal { get; internal set; }
+
+        public string BrokerageWithReductionValueTotalAsStr => Helper.FormatDecimal(BrokerageWithReductionValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CultureInfo);
+
+        public string BrokerageWithReductionValueTotalWithUnitAsStr => Helper.FormatDecimal(BrokerageWithReductionValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CultureInfo);
+
+        public SortedDictionary<string, BrokerageReductionYearOfTheShare> AllBrokerageReductionOfTheShareDictionary { get; } = new SortedDictionary<string, BrokerageReductionYearOfTheShare>();
 
         #endregion Properties
 
@@ -53,24 +58,28 @@ namespace SharePortfolioManager
         /// <param name="cultureInfo"></param>
         public void SetCultureInfo(CultureInfo cultureInfo)
         {
-            BrokerageCultureInfo = cultureInfo;
+            CultureInfo = cultureInfo;
         }
 
         /// <summary>
         /// This function adds a brokerage to the list
         /// </summary>
         /// <param name="strGuid">Guid of the brokerage</param>
-        /// <param name="bBrokerageOfABuy">Flag if the brokerage is part of a buy</param>
-        /// <param name="bBrokerageOfASale">Flag if the brokerage is part of a Sale</param>
+        /// <param name="bPartOfABuy">Flag if the brokerage is part of a buy</param>
+        /// <param name="bPartOfASale">Flag if the brokerage is part of a Sale</param>
         /// <param name="strGuidBuySale">Guid of the buy or sale</param>
         /// <param name="strDateTime">Date and time of the brokerage</param>
-        /// <param name="decValue">Value of the brokerage</param>
+        /// <param name="decProvisionValue">Provision value</param>
+        /// <param name="decBrokerFeeValue">Broker fee value</param>
+        /// <param name="decTraderPlaceFeeValue">Trader place fee value</param>
+        /// <param name="decReductionValue">Reduction value</param>
         /// <param name="strDoc">Document of the brokerage</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddBrokerage(string strGuid, bool bBrokerageOfABuy, bool bBrokerageOfASale, string strGuidBuySale, string strDateTime, decimal decValue, string strDoc = "")
+        public bool AddBrokerageReduction(string strGuid, bool bPartOfABuy, bool bPartOfASale, string strGuidBuySale,
+            string strDateTime, decimal decProvisionValue, decimal decBrokerFeeValue, decimal decTraderPlaceFeeValue, decimal decReductionValue, string strDoc = "")
         {
 #if DEBUG_BROKERAGE
-            Console.WriteLine(@"Add BrokerageYearOfTheShare");
+            Console.WriteLine(@"Add BrokerageWithReductionYearOfTheShare");
 #endif
             try
             {
@@ -80,19 +89,21 @@ namespace SharePortfolioManager
                     return false;
 
                 // Search if a brokerage for the given year already exists if not add it
-                if (AllBrokerageOfTheShareDictionary.TryGetValue(year, out var searchObject))
+                if (AllBrokerageReductionOfTheShareDictionary.TryGetValue(year, out var searchObject))
                 {
-                    if (!searchObject.AddBrokerageObject(strGuid, bBrokerageOfABuy, bBrokerageOfASale, BrokerageCultureInfo, strGuidBuySale, strDateTime, decValue, strDoc))
+                    if (!searchObject.AddBrokerageReductionObject(strGuid, bPartOfABuy, bPartOfASale, CultureInfo, strGuidBuySale,
+                        strDateTime, decProvisionValue, decBrokerFeeValue, decTraderPlaceFeeValue, decReductionValue, strDoc))
                         return false;
                 }
                 else
                 {
                     // Add new year brokerage object for the brokerage with a new year
-                    var addObject = new BrokerageYearOfTheShare();
+                    var addObject = new BrokerageReductionYearOfTheShare();
                     // Add brokerage with the new year to the brokerage year list
-                    if (addObject.AddBrokerageObject(strGuid, bBrokerageOfABuy, bBrokerageOfASale, BrokerageCultureInfo, strGuidBuySale, strDateTime, decValue, strDoc))
+                    if (addObject.AddBrokerageReductionObject(strGuid, bPartOfABuy, bPartOfASale, CultureInfo, strGuidBuySale,
+                        strDateTime, decProvisionValue, decBrokerFeeValue, decTraderPlaceFeeValue, decReductionValue, strDoc))
                     {
-                        AllBrokerageOfTheShareDictionary.Add(year, addObject);
+                        AllBrokerageReductionOfTheShareDictionary.Add(year, addObject);
                     }
                     else
                         return false;
@@ -101,14 +112,17 @@ namespace SharePortfolioManager
                 // Calculate the total brokerage values
                 // Reset total brokerage values
                 BrokerageValueTotal = 0;
+                BrokerageWithReductionValueTotal = 0;
 
                 // Calculate the new total brokerage value
-                foreach (var calcObject in AllBrokerageOfTheShareDictionary.Values)
+                foreach (var calcObject in AllBrokerageReductionOfTheShareDictionary.Values)
                 {
                     BrokerageValueTotal += calcObject.BrokerageValueYear;
+                    BrokerageWithReductionValueTotal += calcObject.BrokerageWithReductionValueYear;
                 }
 #if DEBUG_BROKERAGE
                 Console.WriteLine(@"BrokerageValueTotal:{0}", BrokerageValueTotal);
+                Console.WriteLine(@"BrokerageWithReductionValueTotal:{0}", BrokerageWithReductionValueTotal);
 #endif
             }
             catch
@@ -125,10 +139,10 @@ namespace SharePortfolioManager
         /// <param name="strGuid">Guid of the brokerage which should be removed</param>
         /// <param name="strDate">Date of the brokerage entry which should be removed</param>
         /// <returns></returns>
-        public bool RemoveBrokerage(string strGuid, string strDate)
+        public bool RemoveBrokerageReduction(string strGuid, string strDate)
         {
 #if DEBUG_BROKERAGE
-            Console.WriteLine(@"Remove BrokerageYearOfTheShare");
+            Console.WriteLine(@"Remove BrokerageWithReductionYearOfTheShare");
 #endif
             try
             {
@@ -138,14 +152,14 @@ namespace SharePortfolioManager
                     return false;
 
                 // Search if a brokerage for the given year already exists if not no remove will be made
-                if (AllBrokerageOfTheShareDictionary.TryGetValue(year, out var searchObject))
+                if (AllBrokerageReductionOfTheShareDictionary.TryGetValue(year, out var searchObject))
                 {
-                    if (!searchObject.RemoveBrokerageObject(strGuid))
+                    if (!searchObject.RemoveBrokerageReductionObject(strGuid))
                         return false;
 
-                    if (searchObject.BrokerageListYear.Count == 0)
+                    if (searchObject.BrokerageReductionListYear.Count == 0)
                     {
-                        if (!AllBrokerageOfTheShareDictionary.Remove(year))
+                        if (!AllBrokerageReductionOfTheShareDictionary.Remove(year))
                             return false;
                     }
                 }
@@ -157,15 +171,18 @@ namespace SharePortfolioManager
                 // Calculate the total brokerage values
                 // Reset total brokerage values
                 BrokerageValueTotal = 0;
+                BrokerageWithReductionValueTotal = 0;
 
                 // Calculate the new total brokerage value
-                foreach (var calcObject in AllBrokerageOfTheShareDictionary.Values)
+                foreach (var calcObject in AllBrokerageReductionOfTheShareDictionary.Values)
                 {
                     BrokerageValueTotal += calcObject.BrokerageValueYear;
+                    BrokerageWithReductionValueTotal += calcObject.BrokerageWithReductionValueYear;
                 }
 
 #if DEBUG_BROKERAGE
                 Console.WriteLine(@"BrokerageValueTotal:{0}", BrokerageValueTotal);
+                Console.WriteLine(@"BrokerageWithReductionValueTotal:{0}", BrokerageWithReductionValueTotal);
 #endif
             }
             catch
@@ -180,13 +197,13 @@ namespace SharePortfolioManager
         /// This function creates a list of all brokerage objects of the share
         /// </summary>
         /// <returns>List of BrokerageObjects or a empty list if no BrokerageObjects exists</returns>
-        public List<BrokerageObject> GetAllBrokerageOfTheShare()
+        public List<BrokerageReductionObject> GetAllBrokerageOfTheShare()
         {
-            var allBrokerageOfTheShare = new List<BrokerageObject>();
+            var allBrokerageOfTheShare = new List<BrokerageReductionObject>();
 
-            foreach(var brokerageYearOfTheShareObject in AllBrokerageOfTheShareDictionary.Values)
+            foreach(var brokerageYearOfTheShareObject in AllBrokerageReductionOfTheShareDictionary.Values)
             {
-                foreach(var brokerageObject in brokerageYearOfTheShareObject.BrokerageListYear)
+                foreach(var brokerageObject in brokerageYearOfTheShareObject.BrokerageReductionListYear)
                 {
                     allBrokerageOfTheShare.Add(brokerageObject);
                 }
@@ -199,13 +216,13 @@ namespace SharePortfolioManager
         /// and the total brokerage of the years
         /// </summary>
         /// <returns>Dictionary with the years and the brokerage values of the year or empty dictionary if no year exist.</returns>
-        public List<BrokerageYearOfTheShare> GetAllBrokerageTotalValues()
+        public List<BrokerageReductionYearOfTheShare> GetAllBrokerageTotalValues()
         {
-            var allBrokerageOfTheShare = new List<BrokerageYearOfTheShare>();
+            var allBrokerageOfTheShare = new List<BrokerageReductionYearOfTheShare>();
 
-            foreach (var key in AllBrokerageOfTheShareDictionary.Keys)
+            foreach (var key in AllBrokerageReductionOfTheShareDictionary.Keys)
             {
-                allBrokerageOfTheShare.Add(AllBrokerageOfTheShareDictionary[key]);
+                allBrokerageOfTheShare.Add(AllBrokerageReductionOfTheShareDictionary[key]);
             }
             return allBrokerageOfTheShare;
         }
@@ -216,15 +233,15 @@ namespace SharePortfolioManager
         /// <param name="strGuid">Guid of the brokerage</param>
         /// <param name="strDateTime">Date and time of the buy</param>
         /// <returns>BrokerageObject or null if the search failed</returns>
-        public BrokerageObject GetBrokerageObjectByGuid(string strGuid, string strDateTime)
+        public BrokerageReductionObject GetBrokerageObjectByGuid(string strGuid, string strDateTime)
         {
             GetYearOfDate(strDateTime, out var year);
 
             if (year == null) return null;
 
-            if (!AllBrokerageOfTheShareDictionary.ContainsKey(year)) return null;
+            if (!AllBrokerageReductionOfTheShareDictionary.ContainsKey(year)) return null;
 
-            foreach (var brokerageObject in AllBrokerageOfTheShareDictionary[year].BrokerageListYear)
+            foreach (var brokerageObject in AllBrokerageReductionOfTheShareDictionary[year].BrokerageReductionListYear)
             {
                 if (brokerageObject.Guid == strGuid)
                 {
@@ -241,15 +258,15 @@ namespace SharePortfolioManager
         /// <param name="strGuid">Guid of the buy of the brokerage</param>
         /// <param name="strDateTime">Date and time of the buy</param>
         /// <returns>BrokerageObject or null if the search failed</returns>
-        public BrokerageObject GetBrokerageObjectByBuyGuid(string strGuid, string strDateTime)
+        public BrokerageReductionObject GetBrokerageObjectByBuyGuid(string strGuid, string strDateTime)
         {
             GetYearOfDate(strDateTime, out var year);
 
             if (year == null) return null;
 
-            if (!AllBrokerageOfTheShareDictionary.ContainsKey(year)) return null;
+            if (!AllBrokerageReductionOfTheShareDictionary.ContainsKey(year)) return null;
 
-            foreach (var brokerageObject in AllBrokerageOfTheShareDictionary[year].BrokerageListYear)
+            foreach (var brokerageObject in AllBrokerageReductionOfTheShareDictionary[year].BrokerageReductionListYear)
             {
                 if (brokerageObject.GuidBuySale == strGuid)
                 {

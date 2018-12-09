@@ -28,7 +28,6 @@ using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.ShareObjects;
-using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager
 {
@@ -98,15 +97,15 @@ namespace SharePortfolioManager
                     #region Load logger language
 
                     // Add state names
-                    LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Start", LanguageName));
-                    LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Info", LanguageName));
-                    LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Warning", LanguageName));
-                    LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Error", LanguageName));
-                    LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/FatalError", LanguageName));
+                    LoggerStateList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Start", LanguageName));
+                    LoggerStateList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Info", LanguageName));
+                    LoggerStateList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Warning", LanguageName));
+                    LoggerStateList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Error", LanguageName));
+                    LoggerStateList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/FatalError", LanguageName));
 
                     // Add component names
                     LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Application", LanguageName));
-                    LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/WebParser", LanguageName));
+                    LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Parser", LanguageName));
                     LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/LanguageHandler", LanguageName));
                     LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Logger", LanguageName));
 
@@ -125,8 +124,20 @@ namespace SharePortfolioManager
                     // Add available to the menu
                     foreach (var strLanguage in strLanguages)
                     {
-                        var tmiLanguageAdd = new ToolStripMenuItem(strLanguage, null, LanguageClick,
+                        var tmiLanguageAdd = new ToolStripMenuItem(strLanguage, null, OnLanguageClick,
                             $"languageToolStripMenuItem{strLanguage}");
+
+                        switch (strLanguage)
+                        {
+                            case "German":
+                                tmiLanguageAdd.Image = Properties.Resources.menu_flag_german_24;
+                                break;
+                            case "English":
+                                tmiLanguageAdd.Image = Properties.Resources.menu_flag_usa_24;
+                                break;
+                        }
+
+                        tmiLanguageAdd.ImageScaling = ToolStripItemImageScaling.None;
 
                         if (strLanguage == LanguageName)
                             tmiLanguageAdd.Checked = true;
@@ -457,21 +468,21 @@ namespace SharePortfolioManager
                 #region Logger language
 
                 // Clear state list
-                LoggerStatelList.Clear();
+                LoggerStateList.Clear();
 
                 // Add state names
-                LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Start", LanguageName));
-                LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Info", LanguageName));
-                LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Warning", LanguageName));
-                LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Error", LanguageName));
-                LoggerStatelList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/FatalError", LanguageName));
+                LoggerStateList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Start", LanguageName));
+                LoggerStateList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Info", LanguageName));
+                LoggerStateList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Warning", LanguageName));
+                LoggerStateList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Error", LanguageName));
+                LoggerStateList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/FatalError", LanguageName));
 
                 // Clear component names
                 LoggerComponentNamesList.Clear();
 
                 // Add component names
                 LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Application", LanguageName));
-                LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/WebParser", LanguageName));
+                LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Parser", LanguageName));
                 LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/LanguageHandler", LanguageName));
                 LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Logger", LanguageName));
 

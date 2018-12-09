@@ -22,7 +22,7 @@
 			<Item1 text="annual" />
 			<Item2 text="semiannual" />
 			<Item3 text="quarterly" />
-		</ComboBoxItemsPayout>				
+		</ComboBoxItemsPayout>
 
 		<!-- Combo box items for the share type -->
 		<ComboBoxItemsShareType>
@@ -45,7 +45,7 @@
 			<!-- Component names -->
 			<ComponentNames>
 				<Application text="Application" />
-				<WebParser text="WebParser" />
+				<Parser text="Parser" />
 				<LanguageHandler text="LanguageHandler" />
 				<Logger text="Logger" />
 			</ComponentNames>
@@ -110,7 +110,7 @@
 							<ColHeader_PrevDay text="Pre. day" />
 							<ColHeader_Volume text="Volume"/>
 							<ColHeader_Performance text="Perf." />
-							<ColHeader_BrokerageDividend text="  Brokerage / Dividends" />
+							<ColHeader_BrokerageDividend text="  Brok. / Dividends" />
 							<ColHeader_PurchaseMarketValue text="  Purchase / Market" />
 						</DgvPortfolio>
 						<DgvPortfolio_Error>
@@ -163,14 +163,14 @@
 				
 				<!-- Buttons -->
 				<Buttons>
-					<RefreshAll text="   Update all" />
-					<RefreshAllCancel text="   Cancel" />
-					<Refresh text="   Update" />
-					<RefreshCancel text="   Cancel" />
-					<Add text="   Add" />
-					<Edit text="   Edit" />
-					<Delete text="   Delete" />
-					<ResetLogger text="   Clear Logger" />
+					<RefreshAll text="Update all" />
+					<RefreshAllCancel text="Cancel" />
+					<Refresh text="Update" />
+					<RefreshCancel text="Cancel" />
+					<Add text="Add" />
+					<Edit text="Edit" />
+					<Delete text="Delete" />
+					<ResetLogger text="Clear Logger" />
 				</Buttons>				
 			</GrpBoxPortfolio>
 			
@@ -299,28 +299,28 @@
 			
 			<!-- Update messages -->
 			<UpdateMessages>
-				<Start1 text="Update of the share '"/>
-				<Start2 text="' started." />
+				<Start_1 text="Update of the share '"/>
+				<Start_2 text="' started." />
 				<ContentLoadStarted text="Website content will be loaded." />
 				<ContentLoaded text="Website content loaded." />
 				<SearchStarted text="Search process has been started." />
 				<SearchRunning text="Search process running." />
 				<SearchFinish text="Search process finished." />
-				<Finish1 text="Update of the share'" />
-				<Finish2 text="' successfully finished." />
+				<Finish_1 text="Update of the share'" />
+				<Finish_2 text="' successfully finished." />
 			</UpdateMessages>
 
 			<!-- Update errors -->
 			<UpdateErrors>
-				<StartFailed text="Start of the WebParser failed." />
-				<BusyFailed text="WebParser is already busy." />
+				<StartFailed text="Start of the Parser failed." />
+				<BusyFailed text="Parser is already busy." />
 				<InvalidWebSiteGiven text="The website address is invalid." />
 				<NoRegexListGiven text="No regular expression list given." />
 				<ContentLoadedFailed text="Load of the website content failed." />
-				<ParsingFailed1 text="Parsing of the key '" />
-				<ParsingFailed2 text="' failed." />
-				<CancelThread1 text="Update of the share '" />
-				<CancelThread2 text="' has been cancelled." />
+				<ParsingFailed_1 text="Parsing of the key '" />
+				<ParsingFailed_2 text="' failed." />
+				<CancelThread_1 text="Update of the share '" />
+				<CancelThread_2 text="' has been cancelled." />
 				<UpdateFailed text="Update failed!" />
 				<Failure text="Update has been failed. Error: " />
 			</UpdateErrors>
@@ -337,16 +337,18 @@
 			
 			<!-- Error messages -->
 			<Errors>
-				<FileDoesNotExists1 text="File '" />
-				<FileDoesNotExists2 text="' does not exists any more! Create a new portfolio." />
-				<CouldNotLoadFile1 text="Could not load file '" />
-				<CouldNotLoadFile2 text="'!" />
-				<XMLSyntaxFailure1 text="A XML syntax error exists in the file '" />
-				<XMLSyntaxFailure2 text="'!" />
+				<FileDoesNotExists_1 text="File '" />
+				<FileDoesNotExists_2 text="' does not exists any more! Create a new portfolio." />
+				<CouldNotLoadFile_1 text="Could not load file '" />
+				<CouldNotLoadFile_2 text="'!" />
+				<XMLSyntaxFailure_1 text="A XML syntax error exists in the file '" />
+				<XMLSyntaxFailure_2 text="'!" />
+				<ConfigurationListEmpty_1 text="No configuration available in file '" />
+				<ConfigurationListEmpty_2 text="'!" />
+				<ConfigurationListLoadFailed_1 text="Configuration file'" />
+				<ConfigurationListLoadFailed_2 text="' incomplete!"/>
 				<ChangingPortfolioFailed text="Changing the portfolio failed!" />
 				<CouldNotLoadAllLanguageKeys text="Could not load all language keys!" />
-				<WebSiteConfigurationListEmpty text="No website configuration available!" />
-				<WebSiteConfigurationListLoadFailed text="Configuration incomplete!"/>
 				<WebSiteRegexNotFound1_1 text="No parse configuration for the share with the WKN " />
 				<WebSiteRegexNotFound1_2 text=" available!" />
 				<WebSiteRegexNotFound2_1 text="No parse configuration for the shares with the WKN " />
@@ -378,18 +380,22 @@
 				<!-- Labels -->
 				<Labels>
 					<WKN text="WKN:" />
-					<Date text="Date:" />
 					<Name text="Name:" />
+					<ShareType text="Type:" />
+					<PayoutInterval text="Dividend payout interval:" />
+					<CultureInfo text="Country info:" />
+					<WebSite text="Web page address:" />
+					<Date text="Date:" />
+					<Time text="Time:" />
 					<Volume text="Volume:" />
 					<SharePrice text="Market price:" />
 					<MarketValue text="Market value:" />
-					<Brokerage text="Brokerage:" />
+					<Provision text="Provision:" />
+					<BrokerFee text="Broker fee:" />
+					<TraderPlaceFee text="Trader place fee:" />
 					<Reduction text="Reduction:" />
+					<Brokerage text="Total brokerage:" />
 					<FinalValue text="Final value:" />
-					<WebSite text="Web page address:" />
-					<CultureInfo text="Country info:" />
-					<PayoutInterval text="Dividend payout interval:" />
-					<ShareType text="Type:" />
 					<Document text="Document:" />
 				</Labels>
 			</GrpBoxGeneral>
@@ -401,9 +407,14 @@
 			
 			<!-- Buttons -->
 			<Buttons>
-				<Save text="   Save" />
-				<Cancel text="   Cancel" />
+				<Save text="Save" />
+				<Cancel text="Cancel" />
 			</Buttons>
+			
+			<!-- Buy add / edit state messages -->
+			<StateMessages>
+				<AddSuccess text="Buy has been added." />
+			</StateMessages>
 			
 			<!-- Errors -->
 			<Errors>
@@ -417,18 +428,31 @@
 				<SharePriceEmpty text="Please enter a market price." />
 				<SharePriceWrongFormat text="The format for the entered market price is not valid." />
 				<SharePriceWrongValue text="The value for the entered market price must be greater than '0'." />
-				<BrokerageWrongFormat text="The format for the entered brokerage is not valid." />
-				<BrokerageWrongValue text="The value for the entered brokerage must be greater than '0'." />
+				<ProvisionWrongFormat text="The format for the entered provision is not valid." />
+				<ProvisionWrongValue text="The value for the entered provision must be greater than '0'." />
+				<BrokerFeeWrongFormat text="The format for the entered broker fee is not valid." />
+				<BrokerFeeWrongValue text="The value for the entered broker fee must be greater than '0'." />
+				<TraderPlaceFeeWrongFormat text="The format for the entered trader place fee is not valid." />
+				<TraderPlaceFeeWrongValue text="The value for the entered trader place fee must be greater than '0'." />
 				<ReductionWrongFormat text="The format for the entered reduction is not valid." />
 				<ReductionWrongValue text="The value for the entered reduction must be greater than '0'." />
+				<BrokerageEmpty text="Please insert a value for the brokerage." />
+				<BrokerageWrongFormat text="Format for the value 'Brokerage' is invalid." />
+				<BrokerageWrongValue text="The value for 'Brokerage' must be higher than '0'." />
 				<WebSiteEmpty text="Please enter a web page address." />
 				<WebSiteWrongFormat text="The web page address you entered is invalid or unreachable. Try again" />
 				<WebSiteExists text="The entered web page address already exists." />
 				<WebSiteRegexNotFound text="No parser configuration available for the specified web page address!" />
+				<AddFailed text="Buy add has been failed!" />
 				<AddSaveFailed text="An error occurred. Adding share failed!" />
 				<ChoseDocumentFailed text="An error occurred. Failed to select file!" />
 				<DirectoryDoesNotExist text="The specified directory does not exist!" />
 				<FileDoesNotExist text="The specified file does not exist!" />
+				<ParsingStarted text="Document parsing running..." />
+				<BankFoundParsingValues text="Bank found. Values will be parsed." />
+				<BankNotFound text="Bank not found." />
+				<ParsingFailed text="Documnet parsing failed!" />
+				<ParsingSuccessful text="Documnet parsing was successful!" />
 			</Errors>
 		</AddFormShare>
 		
@@ -479,8 +503,8 @@
 			
 			<!-- Buttons -->
 			<Buttons>
-				<Save text="   Save" />
-				<Cancel text="   Return" />
+				<Save text="Save" />
+				<Cancel text="Return" />
 			</Buttons>
 		
 			<!-- Errors -->
@@ -517,8 +541,11 @@
 					<VolumeSold text="Already sold volume:" />
 					<Price text="Market price:" />
 					<MarketValue text="Market value:" />
-					<Brokerage text="Brokerage:" />
+					<Provision text="Provision:" />
+					<BrokerFee text="Broker fee:" />
+					<TraderPlaceFee text="Trader place fee:" />
 					<Reduction text="Reduction:" />
+					<Brokerage text="Total brokerage:" />
 					<FinalValue text="Final value:" />
 					<Document text="Document:" />
 				</Labels>
@@ -530,11 +557,11 @@
 
 				<!-- Buttons -->
 				<Buttons>
-					<Add text="   Add" />
-					<Save text="   Save" />
-					<Delete text="   Delete" />
-					<Reset text="   Reset" />
-					<Cancel text="   Return" />
+					<Add text="Add" />
+					<Save text="Save" />
+					<Delete text="Delete" />
+					<Reset text="Reset" />
+					<Cancel text="Return" />
 				</Buttons>
 			</GrpBoxAddEdit>
 			
@@ -557,7 +584,7 @@
 						<ColHeader_Volume text="Volume" />
 						<ColHeader_Price text="Price" />
 						<ColHeader_Brokerage text="Brokerage" />
-						<ColHeader_Reduction text="Reduction" />
+						<ColHeader_Deposit text="Deposit" />
 						<ColHeader_Document text="Document" />
 					</DgvBuyOverview>
 				</TabCtrl>
@@ -582,10 +609,17 @@
 				<SharePriceEmpty text="Please insert a market price." />
 				<SharePriceWrongFormat text="Format for the value 'Market price' is invalid." />
 				<SharePriceWrongValue text="The value for 'Market price' must be higher than '0'." />
+				<ProvisionWrongFormat text="The format for the entered provision is not valid." />
+				<ProvisionWrongValue text="The value for the entered provision must be greater than '0'." />
+				<BrokerFeeWrongFormat text="The format for the entered broker fee is not valid." />
+				<BrokerFeeWrongValue text="The value for the entered broker fee must be greater than '0'." />
+				<TraderPlaceFeeWrongFormat text="The format for the entered trader place fee is not valid." />
+				<TraderPlaceFeeWrongValue text="The value for the entered trader place fee must be greater than '0'." />
+				<ReductionWrongFormat text="The format for the entered reduction is not valid." />
+				<ReductionWrongValue text="The value for the entered reduction must be greater than '0'." />
+				<BrokerageEmpty text="Please insert a value for the brokerage." />
 				<BrokerageWrongFormat text="Format for the value 'Brokerage' is invalid." />
 				<BrokerageWrongValue text="The value for 'Brokerage' must be higher than '0'." />
-				<ReductionWrongFormat text="Format for the value 'Reduction' is invalid." />
-				<ReductionWrongValue text="The value for 'Reduction' must be higher than '0'." />
 				<AddFailed text="Buy add has been failed!" />
 				<EditFailed text="Buy changes save has been failed!" />
 				<DeleteFailed text="Delete of the buy entry has been failed!" />
@@ -596,6 +630,12 @@
 				<DirectoryDoesNotExist text="The directory does not exist!" />
 				<FileDoesNotExist text="The given file does not exist!" />
 				<DocumentShowFailed text="Show of the document failed!" />
+				<ParsingStarted text="Document parsing running..." />
+				<BankFoundParsingValues text="Bank found. Values will be parsed." />
+				<BankNotFound text="Bank not found." />
+				<ParsingWrongWkn text="The wrong WKN has been found in the document!" />
+				<ParsingFailed text="Documnet parsing failed!" />
+				<ParsingSuccessful text="Documnet parsing was successful!" />
 			</Errors>
 		</AddEditFormBuy>
 		
@@ -611,6 +651,7 @@
 				<!-- Labels -->
 				<Labels>
 					<Date text="Date of the sale:" />
+					<Time text="Time of the sale:" />
 <!--					<ForeignCurrencyActivation text="Activate foreign currency input:" /> -->
 <!--					<ForeignCurrencyFactor text="Calculation factor:" /> -->
 					<Volume text="Sale volume:" />
@@ -620,8 +661,11 @@
 					<TaxAtSource text="Tax at source:" />
 					<CapitalGainsTax text="Capital gains tax:" />
 					<SolidarityTax text="Solidarity tax:" />
-					<Brokerage text="Brokerage:" />
+					<Provision text="Provision:" />
+					<BrokerFee text="Broker fee:" />
+					<TraderPlaceFee text="Trader place fee:" />
 					<Reduction text="Reduction:" />
+					<Brokerage text="Brokerage:" />
 					<ProfitLoss text="Profit / loss:" />
 					<Payout text="Payout:" />
 					<Document text="Document:" />
@@ -634,11 +678,11 @@
 
 				<!-- Buttons -->
 				<Buttons>
-					<Add text="   Add" />
-					<Save text="   Save" />
-					<Delete text="   Delete" />
-					<Reset text="   Reset" />
-					<Cancel text="   Return" />
+					<Add text="Add" />
+					<Save text="Save" />
+					<Delete text="Delete" />
+					<Reset text="Reset" />
+					<Cancel text="Return" />
 				</Buttons>
 			</GrpBoxAddEdit>
 			
@@ -695,6 +739,15 @@
 				<CapitalGainsTaxWrongValue text="The value for 'Capital gains tax' must be higher than '0'." />
 				<SolidarityTaxWrongFormat text="Format for the value 'Solidarity tax' is invalid." />
 				<SolidarityTaxWrongValue text="The value for 'Solidarity tax' must be higher than '0'." />
+				<ProvisionWrongFormat text="The format for the entered provision is not valid." />
+				<ProvisionWrongValue text="The value for the entered provision must be greater than '0'." />
+				<BrokerFeeWrongFormat text="The format for the entered broker fee is not valid." />
+				<BrokerFeeWrongValue text="The value for the entered broker fee must be greater than '0'." />
+				<TraderPlaceFeeWrongFormat text="The format for the entered trader place fee is not valid." />
+				<TraderPlaceFeeWrongValue text="The value for the entered trader place fee must be greater than '0'." />
+				<ReductionWrongFormat text="The format for the entered reduction is not valid." />
+				<ReductionWrongValue text="The value for the entered reduction must be greater than '0'." />
+				<BrokerageEmpty text="Please insert a value for the brokerage." />
 				<BrokerageWrongFormat text="Format for the value 'Brokerage' is invalid." />
 				<BrokerageWrongValue text="The value for 'Brokerage' must be higher than '0'." />
 				<AddFailed text="Sale add has been failed!" />
@@ -706,6 +759,12 @@
 				<DirectoryDoesNotExist text="The directory does not exist!" />
 				<FileDoesNotExist text="The given file does not exist!" />
 				<DocumentShowFailed text="Show of the document failed!" />
+				<ParsingStarted text="Document parsing running..." />
+				<BankFoundParsingValues text="Bank found. Values will be parsed." />
+				<BankNotFound text="Bank not found." />
+				<ParsingWrongWkn text="The wrong WKN has been found in the document!" />
+				<ParsingFailed text="Documnet parsing failed!" />
+				<ParsingSuccessful text="Documnet parsing was successful!" />
 			</Errors>
 			
 			<UsedBuyDetailsForm>	
@@ -732,6 +791,7 @@
 				<!-- Labels -->
 				<Labels>
 					<Date text="Date of the payout:" />
+					<Time text="Time of the payout:" />
 					<EnableForeignCurrency text="Activate foreign currency input:" />
 					<ExchangeRatio text="Exchange rate:" />
 					<DividendRate text="Dividend rate:" />
@@ -754,11 +814,11 @@
 
 				<!-- Buttons -->
 				<Buttons>
-					<Add text="   Add" />
-					<Save text="   Save" />
-					<Delete text="   Delete" />
-					<Reset text="   Reset" />
-					<Cancel text="   Return" />
+					<Add text="Add" />
+					<Save text="Save" />
+					<Delete text="Delete" />
+					<Reset text="Reset" />
+					<Cancel text="Return" />
 				</Buttons>
 			</GrpBoxAddEdit>
 			
@@ -828,6 +888,12 @@
 				<DirectoryDoesNotExist text="The directory does not exist!" />
 				<FileDoesNotExist text="The given file does not exist!" />
 				<DocumentShowFailed text="Show of the document failed!" />
+				<ParsingStarted text="Document parsing running..." />
+				<BankFoundParsingValues text="Bank found. Values will be parsed." />
+				<BankNotFound text="Bank not found." />
+				<ParsingWrongWkn text="The wrong WKN has been found in the document!" />
+				<ParsingFailed text="Documnet parsing failed!" />
+				<ParsingSuccessful text="Documnet parsing was successful!" />
 			</Errors>
 		</AddEditFormDividend>
 
@@ -845,6 +911,10 @@
 					<Date text="Date:" />
 					<BuyPart text="Part of a purchase" />
 					<SalePart text="Part of a sale" />
+					<Provision text="Provision:" />
+					<BrokerFee text="Broker fee:" />
+					<TraderPlaceFee text="Trader place fee:" />
+					<Reduction text="Reduction:" />
 					<Brokerage text="Brokerage:" />
 					<Document text="Document:" />
 				</Labels>
@@ -856,11 +926,11 @@
 
 				<!-- Buttons -->
 				<Buttons>
-					<Add text="   Add" />
-					<Save text="   Save" />
-					<Delete text="   Delete" />
-					<Reset text="   Reset" />
-					<Cancel text="   Return" />
+					<Add text="Add" />
+					<Save text="Save" />
+					<Delete text="Delete" />
+					<Reset text="Reset" />
+					<Cancel text="Return" />
 				</Buttons>				
 			</GrpBoxAddEdit>
 			
@@ -899,6 +969,14 @@
 				<DeselectFailed text="Deselect of the selected rows failed!" />
 				<RenameColHeaderFailed text="Renaming of the column headers failed!" />
 				<SelectionChangeFailed text="The selection change failed!" />
+				<ProvisionWrongFormat text="The format for the entered provision is not valid." />
+				<ProvisionWrongValue text="The value for the entered provision must be greater than '0'." />
+				<BrokerFeeWrongFormat text="The format for the entered broker fee is not valid." />
+				<BrokerFeeWrongValue text="The value for the entered broker fee must be greater than '0'." />
+				<TraderPlaceFeeWrongFormat text="The format for the entered trader place fee is not valid." />
+				<TraderPlaceFeeWrongValue text="The value for the entered trader place fee must be greater than '0'." />
+				<ReductionWrongFormat text="The format for the entered reduction is not valid." />
+				<ReductionWrongValue text="The value for the entered reduction must be greater than '0'." />
 				<BrokerageEmpty text="Please insert a value for the brokerage." />
 				<BrokerageWrongFormat text="Format for the value 'Brokerage' is invalid." />
 				<BrokerageWrongValue text="The value for 'Brokerage' must be higher than '0'." />
@@ -911,6 +989,12 @@
 				<FileDoesNotExist text="The given file does not exist!" />
 				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
 				<DocumentShowFailed text="Show of the document failed!" />
+				<ParsingStarted text="Document parsing running..." />
+				<BankFoundParsingValues text="Bank found. Values will be parsed." />
+				<BankNotFound text="Bank not found." />
+				<ParsingWrongWkn text="The wrong WKN has been found in the document!" />
+				<ParsingFailed text="Documnet parsing failed!" />
+				<ParsingSuccessful text="Documnet parsing was successful!" />
 			</Errors>
 		</AddEditFormBrokerage>
 		
@@ -976,8 +1060,8 @@
 			<!-- Buttons -->
 			<Buttons>
 				<CleanUp text="Clean up" />
-				<Save text="     Save" />
-				<Cancel text="     Cancel" />
+				<Save text="  Save" />
+				<Cancel text="  Cancel" />
 			</Buttons>
 			
 			<!-- Errors -->
@@ -1029,7 +1113,7 @@
 			<Labels>
 				<Version text="Versions" />
 				<ApplicationVersion text="Application version:" />
-				<WebParserDLLVersion text="Webparser DLL version:" />
+				<ParserDLLVersion text="Parser DLL version:" />
 				<LanguageDLLVersion text="Language DLL version:" />
 				<LoggerDLLVersion text="Logger DLL version:" />
 			</Labels>
@@ -1090,7 +1174,7 @@
 			<!-- Component names -->
 			<ComponentNames>
 				<Application text="Programm" />
-				<WebParser text="WebParser" />
+				<Parser text="Parser" />
 				<LanguageHandler text="LanguageHandler" />
 				<Logger text="Logger" />
 			</ComponentNames>
@@ -1208,14 +1292,14 @@
 					
 				<!-- Buttons -->
 				<Buttons>
-					<RefreshAll text="   Alle aktualisieren" />
-					<RefreshAllCancel text="   Abbrechen" />
-					<Refresh text="   Aktualisieren" />
-					<RefreshCancel text="   Abbrechen" />
-					<Add text="   Hinzufügen" />
-					<Edit text="   Editieren" />
-					<Delete text="   Entfernen" />
-					<ResetLogger text="   Logger leeren" />
+					<RefreshAll text="Alle aktualisieren" />
+					<RefreshAllCancel text="Abbrechen" />
+					<Refresh text="Aktualisieren" />
+					<RefreshCancel text="Abbrechen" />
+					<Add text="Hinzufügen" />
+					<Edit text="Editieren" />
+					<Delete text="Entfernen" />
+					<ResetLogger text="Logger leeren" />
 				</Buttons>				
 			</GrpBoxPortfolio>
 			
@@ -1344,28 +1428,28 @@
 	
 			<!-- Update messages -->
 			<UpdateMessages>
-				<Start1 text="Aktualisierung der Aktie'" />
-				<Start2 text="' gestartet." />
+				<Start_1 text="Aktualisierung der Aktie'" />
+				<Start_2 text="' gestartet." />
 				<ContentLoadStarted text="Webseiten- Inhalt wird geladen." />
 				<ContentLoaded text="Webseiten- Inhalt geladen." />
 				<SearchStarted text="Such- Vorgang wurde gestartet." />
 				<SearchRunning text="Such- Vorgang läuft." />
 				<SearchFinish text="Such- Vorgang beendet." />
-				<Finish1 text="Aktualisierung der Aktie'" />
-				<Finish2 text="' wurde erfolgreich beendet." />
+				<Finish_1 text="Aktualisierung der Aktie'" />
+				<Finish_2 text="' wurde erfolgreich beendet." />
 			</UpdateMessages>
 
 			<!-- Update errors -->
 			<UpdateErrors>
-				<StartFailed text="Starten des WebParser ist fehlgeschlagen." />
-				<BusyFailed text="WebParser ist bereits in Verwendung." />
+				<StartFailed text="Starten des Parser ist fehlgeschlagen." />
+				<BusyFailed text="Parser ist bereits in Verwendung." />
 				<InvalidWebSiteGiven text="Die Websiten- Adresse ist ungültig." />
 				<NoRegexListGiven text="Es wurde kein regulärer Ausdruck übergeben." />
 				<ContentLoadedFailed text="Laden des Webseiten- Inhalts ist fehlgeschlagen." />
-				<ParsingFailed1 text="Parsen des Schlüssels '" />
-				<ParsingFailed2 text="' ist fehlgeschlagen." />
-				<CancelThread1 text="Aktualisierung der Aktie'" />
-				<CancelThread2 text="' wurde abgebrochen." />
+				<ParsingFailed_1 text="Parsen des Schlüssels '" />F
+				<ParsingFailed_2 text="' ist fehlgeschlagen." />
+				<CancelThread_1 text="Aktualisierung der Aktie'" />
+				<CancelThread_2 text="' wurde abgebrochen." />
 				<UpdateFailed text="Aktualisieren ist fehlgeschlagen!" />
 				<Failure text="Aktualisierung ist fehlgeschalgen. Fehler: " />
 			</UpdateErrors>
@@ -1382,17 +1466,19 @@
 			
 			<!-- Error messages -->
 			<Errors>
-				<FileDoesNotExists1 text="Datei '" />
-				<FileDoesNotExists2 text="' existiert nicht mehr! Legen Sie ein neues Portfolio an." />
-				<CouldNotLoadFile1 text="Datei '" />
-				<CouldNotLoadFile2 text="' konnte nicht geladen werden!" />
-				<XMLSyntaxFailure1 text="Es ist ein XML- Syntax- Fehler in der Datei '" />
-				<XMLSyntaxFailure2 text="' vorhanden!" />
+				<FileDoesNotExists_1 text="Datei '" />
+				<FileDoesNotExists_2 text="' existiert nicht mehr! Legen Sie ein neues Portfolio an." />
+				<CouldNotLoadFile_1 text="Datei '" />
+				<CouldNotLoadFile_2 text="' konnte nicht geladen werden!" />
+				<XMLSyntaxFailure_1 text="Es ist ein XML- Syntax- Fehler in der Datei '" />
+				<XMLSyntaxFailure_2 text="' vorhanden!" />
+				<ConfigurationListEmpty_1 text="Keine Konfigurationen in Datei '" />
+				<ConfigurationListEmpty_2 text="' vorhanden!" />
+				<ConfigurationListLoadFailed_1 text="Konfigurations- Datei '" />
+				<ConfigurationListLoadFailed_2 text="' unvollständig!"/>
 				<ChangingPortfolioFailed text="Wechseln des Portfolios ist fehlgeschlagen!" />
 				<CouldNotLoadAllLanguageKeys text="Es konnten nicht alle Sprach- Elemente geladen werden!" />
-				<WebSiteConfigurationListEmpty text="Keine Webseiten- Konfigurationen verfügbar!" />
-				<WebSiteConfigurationListLoadFailed text="Konfiguration unvollständig!"/>
-				<WebSiteRegexNotFound1_1 text="Keine Parser- Konfiguartion für die Aktie mit der WKN " />
+				<WebSiteRegexNotFound1_1 text="Keine Parser- Konfiguration für die Aktie mit der WKN " />
 				<WebSiteRegexNotFound1_2 text=" verfügbar!" />
 				<WebSiteRegexNotFound2_1 text="Kein Parser-Konfiguration für die Aktien mit den WKN " />
 				<WebSiteRegexNotFound2_2 text=" verfügbar!" />
@@ -1423,18 +1509,22 @@
 				<!-- Labels -->
 				<Labels>
 					<WKN text="WKN:" />
-					<Date text="Datum:" />
 					<Name text="Name:" />
+					<ShareType text="Typ:" />
+					<PayoutInterval text="Dividendenauszahlungs- Interval:" />
+					<CultureInfo text="Länder- Info:" />
+					<WebSite text="Webseiten- Adresse:" />
+					<Date text="Datum:" />
+					<Time text="Zeit:" />
 					<Volume text="Anteile:" />
 					<SharePrice text="Kurs:" />
 					<MarketValue text="Kurswert:" />
-					<Brokerage text="Provision:" />
+					<Provision text="Provision:" />
+					<BrokerFee text="Courtage:" />
+					<TraderPlaceFee text="Handelsplatzgebühr:" />
 					<Reduction text="Rabatt:" />
+					<Brokerage text="Ges. Gebühren:" />
 					<FinalValue text="Endbetrag:" />
-					<WebSite text="Webseiten- Adresse:" />
-					<CultureInfo text="Länder- Info:" />
-					<PayoutInterval text="Dividendenauszahlungs- Interval:" />
-					<ShareType text="Typ:" />
 					<Document text="Dokument:" />
 				</Labels>
 			</GrpBoxGeneral>
@@ -1446,10 +1536,15 @@
 
 			<!-- Buttons -->
 			<Buttons>
-				<Save text="   Speichern" />
-				<Cancel text="   Abbrechen" />
+				<Save text="Speichern" />
+				<Cancel text="Abbrechen" />
 			</Buttons>
 			
+			<!-- Add share state messages -->
+			<StateMessages>
+				<AddSuccess text="Kauf wurde hinzugefügt." />
+			</StateMessages>
+	
 			<!-- Errors -->
 			<Errors>
 				<WKNEmpty text="Bitte geben Sie eine WKN- Nummer ein." />
@@ -1462,18 +1557,31 @@
 				<SharePriceEmpty text="Bitte geben Sie einen Kurs ein." />
 				<SharePriceWrongFormat text="Das Format für den eingegebenen Kurs ist ungültig." />
 				<SharePriceWrongValue text="Der Wert für eingegebenen Kurs muss größer als '0' sein." />
-				<BrokerageWrongFormat text="Das Format für die eingegebene Provision ist ungültig." />
-				<BrokerageWrongValue text="Der Wert für die eingebene Provision muss größer '0' sein." />
+				<ProvisionWrongFormat text="Das Format für die eingegebene Provision ist ungültig." />
+				<ProvisionWrongValue text="Der Wert für die eingegebene Provision muss größer '0' sein." />
+				<BrokerFeeWrongFormat text="Das Format für die eingegebene Courtage ist ungültig." />
+				<BrokerFeeWrongValue text="Der Wert für die eingegebene Courtage muss größer '0' sein." />
+				<TraderPlaceFeeWrongFormat text="Das Format für die eingegebene Handelsplatzgebühr ist ungültig." />
+				<TraderPlaceFeeWrongValue text="Der Wert für die eingegebene Handelsplatzgebühr muss größer '0' sein." />				
 				<ReductionWrongFormat text="Das Format für den eingegebenen Rabatt ist ungültig." />
 				<ReductionWrongValue text="Der Wert für den eingegebenen Rabatt muss größer '0' sein." />
+				<BrokerageWrongFormat text="Das Format für die eingegebene Provision ist ungültig." />
+				<BrokerageWrongValue text="Der Wert für 'Kosten' muss größer als '0' sein." />
+				<BrokerageWrongValue text="Der Wert für 'Kosten' muss größer als '0' sein." />
 				<WebSiteEmpty text="Bitte geben Sie eine Webseiten- Adresse ein." />
 				<WebSiteWrongFormat text="Die eingegebene Webseiten- Adresse ist ungültig oder nicht erreichbar. Versuchen Sie es noch einmal." />
 				<WebSiteExists text="Die eingegebene Webseite existiert bereits." />
 				<WebSiteRegexNotFound text="Keine Parser-Konfiguration für die angegebene Web- Addresse verfügbar!" />
+				<AddFailed text="Hinzufügen des Kaufs ist fehlgeschlagen!" />
 				<AddSaveFailed text="Es trat ein Fehler auf. Hinzufügen der Aktien ist fehlgeschlagen!" />
 				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
 				<DirectoryDoesNotExist text="Das angegebene Verzeichnis existiert nicht!" />
-				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
+				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />				
+				<ParsingStarted text="Dokument- Analyze läuft..." />
+				<BankFoundParsingValues text="Bank erkannt. Werte werden ermittelt." />
+				<BankNotFound text="Bank nicht erkannt." />
+				<ParsingFailed text="Dokument- Analyze ist fehlgeschlagen!" />
+				<ParsingSuccessful text="Dokument- Analyze war erfolgreich." />
 			</Errors>
 		</AddFormShare>
 		
@@ -1524,8 +1632,8 @@
 
 			<!-- Buttons -->
 			<Buttons>
-				<Save text="   Speichern" />
-				<Cancel text="   Zurück" />
+				<Save text="Speichern" />
+				<Cancel text="Zurück" />
 			</Buttons>
 		
 			<!-- Errors -->
@@ -1562,8 +1670,11 @@
 					<VolumeSold text="Bereits verkaufte Anteile:" />
 					<Price text="Kurs:" />
 					<MarketValue text="Kurswert:" />
-					<Brokerage text="Provision:" />
+					<Provision text="Provision:" />
+					<BrokerFee text="Courtage:" />
+					<TraderPlaceFee text="Handelsplatzgebühr:" />
 					<Reduction text="Rabatt:" />
+					<Brokerage text="Ges. Gebühren:" />
 					<FinalValue text="Endbetrag:" />
 					<Document text="Dokument:" />
 				</Labels>
@@ -1575,11 +1686,11 @@
 
 				<!-- Buttons -->
 				<Buttons>
-					<Add text="   Hinzufügen" />
-					<Save text="   Speichern" />
-					<Delete text="   Entfernen" />
-					<Reset text="   Reset" />
-					<Cancel text="   Zurück" />
+					<Add text="Hinzufügen" />
+					<Save text="Speichern" />
+					<Delete text="Entfernen" />
+					<Reset text="Reset" />
+					<Cancel text="Zurück" />
 				</Buttons>
 			</GrpBoxAddEdit>
 			
@@ -1600,9 +1711,9 @@
 						<ColHeader_Year text="Jahr" />
 						<ColHeader_Date text="Datum" />
 						<ColHeader_Volume text="Anteile" />
-						<ColHeader_Price text="Kurs" />
-						<ColHeader_Brokerage text="Provision" />
-						<ColHeader_Reduction text="Rabatt" />
+						<ColHeader_Price text="Kurswert" />
+						<ColHeader_Brokerage text="Gebühren" />
+						<ColHeader_Deposit text="Einzahlung" />
 						<ColHeader_Document text="Dokument" />
 					</DgvBuyOverview>
 				</TabCtrl>
@@ -1627,10 +1738,17 @@
 				<SharePriceEmpty text="Bitte geben Sie einen Kurs ein." />
 				<SharePriceWrongFormat text="Format für den 'Kurs'- Wert ist ungültig." />
 				<SharePriceWrongValue text="Der Wert für 'Kurs' muss größer als '0' sein." />
-				<BrokerageWrongFormat text="Format für den 'Provisions'- Wert ist ungültig." />
-				<BrokerageWrongValue text="Der Wert für 'Provision' muss größer als '0' sein." />
-				<ReductionWrongFormat text="Format für den 'Rabatt'- Wert ist ungültig." />
-				<ReductionWrongValue text="Der Wert für 'Rabatt' muss größer als '0' sein." />
+				<ProvisionWrongFormat text="Das Format für die eingegebene Provision ist ungültig." />
+				<ProvisionWrongValue text="Der Wert für die eingegebene Provision muss größer '0' sein." />
+				<BrokerFeeWrongFormat text="Das Format für die eingegebene Courtage ist ungültig." />
+				<BrokerFeeWrongValue text="Der Wert für die eingegebene Courtage muss größer '0' sein." />
+				<TraderPlaceFeeWrongFormat text="Das Format für die eingegebene Handelsplatzgebühr ist ungültig." />
+				<TraderPlaceFeeWrongValue text="Der Wert für die eingegebene Handelsplatzgebühr muss größer '0' sein." />				
+				<ReductionWrongFormat text="Das Format für den eingegebenen Rabatt ist ungültig." />
+				<ReductionWrongValue text="Der Wert für den eingegebenen Rabatt muss größer '0' sein." />				
+				<BrokerageEmpty text="Bitte geben Sie die Kosten ein." />
+				<BrokerageWrongFormat text="Format für den 'Kosten'- Wert ist ungültig." />
+				<BrokerageWrongValue text="Der Wert für 'Kosten' muss größer als '0' sein." />
 				<AddFailed text="Hinzufügen des Kaufs ist fehlgeschlagen!" />
 				<EditFailed text="Speichern der Kauf- Änderung ist fehlgeschlagen!" />
 				<DeleteFailed text="Entfernen des Kauf- Eintrags ist fehlgeschlagen!" />
@@ -1641,6 +1759,12 @@
 				<DirectoryDoesNotExist text="Das angegebene Verzeichnis existiert nicht!" />
 				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
 				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
+				<ParsingStarted text="Dokument- Analyze läuft..." />
+				<BankFoundParsingValues text="Bank erkannt. Werte werden ermittelt." />
+				<BankNotFound text="Bank nicht erkannt." />
+				<ParsingWrongWkn text="Es wurde die falsche WKN im Dokument gefunden!" />
+				<ParsingFailed text="Dokument- Analyze ist fehlgeschlagen!" />
+				<ParsingSuccessful text="Dokument- Analyze war erfolgreich." />				
 			</Errors>
 		</AddEditFormBuy>
 			
@@ -1656,6 +1780,7 @@
 				<!-- Labels -->
 				<Labels>
 					<Date text="Datum des Verkaufs:" />
+					<Time text="Zeit des Verkaufs:" />
 <!--					<ForeignCurrencyActivation text="Fremdwährungseingabe aktivieren:" /> -->
 <!--					<ForeignCurrencyFactor text="Umrechnungsfaktor:" /> -->
 					<Volume text="Verkaufte Anteile:" />
@@ -1665,8 +1790,11 @@
 					<TaxAtSource text="Quellsteuer:" />
 					<CapitalGainsTax text="Kapitalertragssteuer:" />
 					<SolidarityTax text="Solidaritätszuschlag:" />
-					<Brokerage text="Provision:" />
+					<Provision text="Provision:" />
+					<BrokerFee text="Courtage:" />
+					<TraderPlaceFee text="Handelsplatzgebühr:" />
 					<Reduction text="Rabatt:" />
+					<Brokerage text="Provision:" />
 					<ProfitLoss text="Gewinn / Verlust:" />
 					<Payout text="Auszahlung:" />
 					<Document text="Dokument:" />
@@ -1679,11 +1807,11 @@
 
 				<!-- Buttons -->
 				<Buttons>
-					<Add text="   Hinzufügen" />
-					<Save text="   Speichern" />
-					<Delete text="   Entfernen" />
-					<Reset text="   Reset" />
-					<Cancel text="   Zurück" />
+					<Add text="Hinzufügen" />
+					<Save text="Speichern" />
+					<Delete text="Entfernen" />
+					<Reset text="Reset" />
+					<Cancel text="Zurück" />
 				</Buttons>
 			</GrpBoxAddEdit>
 			
@@ -1740,8 +1868,17 @@
 				<CapitalGainsTaxWrongValue text="Der Wert für 'Kapitalertragssteuer' muss größer als '0' sein." />
 				<SolidarityTaxWrongFormat text="Format für den 'Solidaritätszuschlag'- Wert ist ungültig." />
 				<SolidarityTaxWrongValue text="Der Wert für 'Solidaritätszuschlag' muss größer als '0' sein." />
-				<BrokerageWrongFormat text="Format für den 'Provisions'- Wert ist ungültig." />
-				<BrokerageWrongValue text="Der Wert für 'Provision' muss größer '0' sein." />
+				<ProvisionWrongFormat text="Das Format für die eingegebene Provision ist ungültig." />
+				<ProvisionWrongValue text="Der Wert für die eingegebene Provision muss größer '0' sein." />
+				<BrokerFeeWrongFormat text="Das Format für die eingegebene Courtage ist ungültig." />
+				<BrokerFeeWrongValue text="Der Wert für die eingegebene Courtage muss größer '0' sein." />
+				<TraderPlaceFeeWrongFormat text="Das Format für die eingegebene Handelsplatzgebühr ist ungültig." />
+				<TraderPlaceFeeWrongValue text="Der Wert für die eingegebene Handelsplatzgebühr muss größer '0' sein." />				
+				<ReductionWrongFormat text="Das Format für den eingegebenen Rabatt ist ungültig." />
+				<ReductionWrongValue text="Der Wert für den eingegebenen Rabatt muss größer '0' sein." />				
+				<BrokerageEmpty text="Bitte geben Sie die Kosten ein." />
+				<BrokerageWrongFormat text="Format für den 'Kosten'- Wert ist ungültig." />
+				<BrokerageWrongValue text="Der Wert für 'Kosten' muss größer als '0' sein." />
 				<AddFailed text="Hinzufügen des Kaufs ist fehlgeschlagen!" />
 				<EditFailed text="Speichern der Kauf- Änderung ist fehlgeschlagen!" />
 				<DeleteFailed text="Entfernen des Kauf- Eintrags ist fehlgeschlagen!" />
@@ -1751,6 +1888,12 @@
 				<DirectoryDoesNotExist text="Das angegebene Verzeichnis existiert nicht!" />
 				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
 				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
+				<ParsingStarted text="Dokument- Analyze läuft..." />
+				<BankFoundParsingValues text="Bank erkannt. Werte werden ermittelt." />
+				<BankNotFound text="Bank nicht erkannt." />
+				<ParsingWrongWkn text="Es wurde die falsche WKN im Dokument gefunden!" />
+				<ParsingFailed text="Dokument- Analyze ist fehlgeschlagen!" />
+				<ParsingSuccessful text="Dokument- Analyze war erfolgreich." />				
 			</Errors>
 			
 			<UsedBuyDetailsForm>	
@@ -1777,6 +1920,7 @@
 				<!-- Labels -->
 				<Labels>
 					<Date text="Datum der Auszahlung:" />
+					<Time text="Zeit der Auszahlung:" />
 					<EnableForeignCurrency text="Fremdwährungseingabe aktivieren:" />
 					<ExchangeRatio text="Devisenkurs:" />
 					<DividendRate text="Dividendensatz:" />
@@ -1799,11 +1943,11 @@
 
 				<!-- Buttons -->
 				<Buttons>
-					<Add text="   Hinzufügen" />
-					<Save text="   Speichern" />
-					<Delete text="   Entfernen" />
-					<Reset text="   Reset" />
-					<Cancel text="   Zurück" />
+					<Add text="Hinzufügen" />
+					<Save text="Speichern" />
+					<Delete text="Entfernen" />
+					<Reset text="Reset" />
+					<Cancel text="Zurück" />
 				</Buttons>
 			</GrpBoxAddEdit>
 			
@@ -1873,6 +2017,12 @@
 				<DirectoryDoesNotExist text="Das angegebene Verzeichnis existiert nicht!" />
 				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
 				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
+				<ParsingStarted text="Dokument- Analyze läuft..." />
+				<BankFoundParsingValues text="Bank erkannt. Werte werden ermittelt." />
+				<BankNotFound text="Bank nicht erkannt." />
+				<ParsingWrongWkn text="Es wurde die falsche WKN im Dokument gefunden!" />
+				<ParsingFailed text="Dokument- Analyze ist fehlgeschlagen!" />
+				<ParsingSuccessful text="Dokument- Analyze war erfolgreich." />				
 			</Errors>
 		</AddEditFormDividend>
 		
@@ -1890,6 +2040,10 @@
 					<Date text="Datum:" />
 					<BuyPart text="Bestandteil eines Kaufs" />
 					<SalePart text="Bestandteil eines Verkaufs" />
+					<Provision text="Provision:" />
+					<BrokerFee text="Courtage:" />
+					<TraderPlaceFee text="Handelsplatzgebühr:" />
+					<Reduction text="Rabatt:" />
 					<Brokerage text="Kosten:" />
 					<Document text="Dokument:" />
 				</Labels>
@@ -1901,11 +2055,11 @@
 
 				<!-- Buttons -->
 				<Buttons>
-					<Add text="   Hinzufügen" />
-					<Save text="   Speichern" />
-					<Delete text="   Entfernen" />
-					<Reset text="   Reset" />
-					<Cancel text="   Zurück" />
+					<Add text="Hinzufügen" />
+					<Save text="Speichern" />
+					<Delete text="Entfernen" />
+					<Reset text="Reset" />
+					<Cancel text="Zurück" />
 				</Buttons>				
 			</GrpBoxAddEdit>
 			
@@ -1943,6 +2097,14 @@
 				<DeselectFailed text="Deselektieren der selektierten Zeile ist fehlgeschlagen!" />
 				<RenameColHeaderFailed text="Umbennenen der Spalten- Namen ist fehlgeschlagen!" />
 				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
+				<ProvisionWrongFormat text="Das Format für die eingegebene Provision ist ungültig." />
+				<ProvisionWrongValue text="Der Wert für die eingegebene Provision muss größer '0' sein." />
+				<BrokerFeeWrongFormat text="Das Format für die eingegebene Courtage ist ungültig." />
+				<BrokerFeeWrongValue text="Der Wert für die eingegebene Courtage muss größer '0' sein." />
+				<TraderPlaceFeeWrongFormat text="Das Format für die eingegebene Handelsplatzgebühr ist ungültig." />
+				<TraderPlaceFeeWrongValue text="Der Wert für die eingegebene Handelsplatzgebühr muss größer '0' sein." />				
+				<ReductionWrongFormat text="Das Format für den eingegebenen Rabatt ist ungültig." />
+				<ReductionWrongValue text="Der Wert für den eingegebenen Rabatt muss größer '0' sein." />				
 				<BrokerageEmpty text="Bitte geben Sie die Kosten ein." />
 				<BrokerageWrongFormat text="Format für den 'Kosten'- Wert ist ungültig." />
 				<BrokerageWrongValue text="Der Wert für 'Kosten' muss größer als '0' sein." />
@@ -1955,6 +2117,12 @@
 				<DirectoryDoesNotExist text="Das angegebene Verzeichnis existiert nicht!" />
 				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
 				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
+				<ParsingStarted text="Dokument- Analyze läuft..." />
+				<BankFoundParsingValues text="Bank erkannt. Werte werden ermittelt." />
+				<BankNotFound text="Bank nicht erkannt." />
+				<ParsingWrongWkn text="Es wurde die falsche WKN im Dokument gefunden!" />
+				<ParsingFailed text="Dokument- Analyze ist fehlgeschlagen!" />
+				<ParsingSuccessful text="Dokument- Analyze war erfolgreich." />				
 			</Errors>
 		</AddEditFormBrokerage>
 
@@ -2020,8 +2188,8 @@
 			<!-- Buttons -->
 			<Buttons>
 				<CleanUp text="Aufräumen" />
-				<Save text="   Speichern" />
-				<Cancel text="   Abbrechen" />
+				<Save text="Speichern" />
+				<Cancel text="Abbrechen" />
 			</Buttons>
 			
 			<!-- Errors -->
@@ -2073,7 +2241,7 @@
 			<Labels>
 				<Version text="Versionen" />
 				<ApplicationVersion text="Programm- Version:" />
-				<WebParserDLLVersion text="Webparser- DLL- Version:" />
+				<ParserDLLVersion text="Parser- DLL- Version:" />
 				<LanguageDLLVersion text="Sprach- DLL- Version:" />
 				<LoggerDLLVersion text="Logger- DLL- Version:" />
 			</Labels>

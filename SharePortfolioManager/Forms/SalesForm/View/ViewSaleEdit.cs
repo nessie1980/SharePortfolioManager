@@ -28,15 +28,18 @@ using System.Windows.Forms;
 using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Classes;
-using SharePortfolioManager.Properties;
-using System.Linq;
+using SharePortfolioManager.Properties;using System.Linq;
 using System.IO;
 using System.ComponentModel;
+using System.Text;
+using System.Threading;
+using Parser;
 using SharePortfolioManager.Classes.Sales;
 using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager.Forms.SalesForm.View
 {
+    // Error codes of the SaleEdit
     public enum SaleErrorCode
     {
         AddSuccessful,
@@ -60,6 +63,15 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         CapitalGainsTaxWrongValue,
         SolidarityTaxWrongFormat,
         SolidarityTaxWrongValue,
+        ProvisionWrongFormat,
+        ProvisionWrongValue,
+        BrokerFeeWrongFormat,
+        BrokerFeeWrongValue,
+        TraderPlaceFeeWrongFormat,
+        TraderPlaceFeeWrongValue,
+        ReductionWrongFormat,
+        ReductionWrongValue,
+        BrokerageEmpty,
         BrokerageWrongFormat,
         BrokerageWrongValue,
         DirectoryDoesNotExists,
@@ -68,6 +80,16 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         DocumentDirectoryDoesNotExits,
         DocumentFileDoesNotExists
     };
+
+    // Error codes for the document parsing
+    public enum ParsingErrorCode
+    {
+        ParsingFailed = -3,
+        ParsingDocumentValuesFailed = -2,
+        ParsingDocumentTypeFailed = -1,
+        ParsingStarted = 0,
+        ParsingDocumentTypeSuccessful = 1,
+    }
 
     /// <inheritdoc />
     /// <summary>
@@ -107,8 +129,11 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         string TaxAtSource { get; set; }
         string CapitalGainsTax { get; set; }
         string SolidarityTax { get; set; }
-        string Brokerage { get; set; }
+        string Provision { get; set; }
+        string BrokerFee { get; set; }
+        string TraderPlaceFee { get; set; }
         string Reduction { get; set; }
+        string Brokerage { get; set; }
         string ProfitLoss { get; set; }
         string Payout { get; set; }
         string Document { get; set; }
@@ -142,6 +167,40 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// </summary>
         private Control _focusedControl;
 
+        #region Parsing Fields
+
+        /// <summary>
+        /// Flag if a parsing start is allows ( document browse / drag and drop )
+        /// </summary>
+        private bool _parsingStartAllow;
+
+        /// <summary>
+        /// Counter for the check bank type configurations
+        /// </summary>
+        private int _bankCounter;
+
+        /// <summary>
+        /// Flag if the bank type of the given document could be found in the document configurations
+        /// </summary>
+        private bool _bankTypeFound;
+
+        /// <summary>
+        /// Flag if the parsing was successful
+        /// </summary>
+        private bool _parsingResult;
+
+        /// <summary>
+        /// Flag if the parsing with the Parser.dll is done
+        /// </summary>
+        private bool _parsingThreadFinished;
+
+        /// <summary>
+        /// BackGroundWorker for the document parsing
+        /// </summary>
+        private readonly BackgroundWorker _parsingBackgroundWorker = new BackgroundWorker();
+
+        #endregion Parsing Fields
+
         #endregion Fields
 
         #region Properties
@@ -169,6 +228,20 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         #endregion Flags
 
         public DataGridView SelectedDataGridView { get; internal set; }
+
+        #region Parsing
+
+        public DocumentParsingConfiguration.DocumentTypes DocumentType { get; internal set; }
+
+        public Parser.Parser DocumentTypeParser;
+
+        public string ParsingDocumentFileName { get; } = @".//Tools//Parsing.txt";
+
+        public string ParsingText { get; internal set; }
+
+        public Dictionary<string, List<string>> DictionaryParsingResult;
+
+        #endregion Parsing
 
         #endregion Properties
 
@@ -252,23 +325,23 @@ namespace SharePortfolioManager.Forms.SalesForm.View
 
         public string Date
         {
-            get => datePickerDate.Text;
+            get => dateTimePickerDate.Text;
             set
             {
-                if (datePickerDate.Text == value)
+                if (dateTimePickerDate.Text == value)
                     return;
-                datePickerDate.Text = value;
+                dateTimePickerDate.Text = value;
             }
         }
 
         public string Time
         {
-            get => datePickerTime.Text;
+            get => dateTimePickerTime.Text;
             set
             {
-                if (datePickerTime.Text == value)
+                if (dateTimePickerTime.Text == value)
                     return;
-                datePickerTime.Text = value;
+                dateTimePickerTime.Text = value;
             }
         }
 
@@ -340,14 +413,36 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             }
         }
 
-        public string Brokerage
+        public string Provision
         {
-            get => txtBoxBrokerage.Text;
+            get => txtBoxProvision.Text;
             set
             {
-                if (txtBoxBrokerage.Text == value)
+                if (txtBoxProvision.Text == value)
                     return;
-                txtBoxBrokerage.Text = value;
+                txtBoxProvision.Text = value;
+            }
+        }
+
+        public string BrokerFee
+        {
+            get => txtBoxBrokerFee.Text;
+            set
+            {
+                if (txtBoxBrokerFee.Text == value)
+                    return;
+                txtBoxBrokerFee.Text = value;
+            }
+        }
+
+        public string TraderPlaceFee
+        {
+            get => txtBoxTraderPlaceFee.Text;
+            set
+            {
+                if (txtBoxTraderPlaceFee.Text == value)
+                    return;
+                txtBoxTraderPlaceFee.Text = value;
             }
         }
 
@@ -359,6 +454,17 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 if (txtBoxReduction.Text == value)
                     return;
                 txtBoxReduction.Text = value;
+            }
+        }
+
+        public string Brokerage
+        {
+            get => txtBoxBrokerage.Text;
+            set
+            {
+                if (txtBoxBrokerage.Text == value)
+                    return;
+                txtBoxBrokerage.Text = value;
             }
         }
 
@@ -439,7 +545,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         btnAddSave.Text =
                             Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Buttons/Add",
                                 LanguageName);
-                        btnAddSave.Image = Resources.black_add;
+                        btnAddSave.Image = Resources.button_add_24;
                         // Disable button(s)
                         btnReset.Enabled = false;
                         btnDelete.Enabled = false;
@@ -485,7 +591,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
 
                         // Enable button(s)
                         btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Buttons/Add", LanguageName);
-                        btnAddSave.Image = Resources.black_add;
+                        btnAddSave.Image = Resources.button_add_24;
 
                         // Reset add flag
                         AddSale = false;
@@ -578,7 +684,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         {
                             strMessage =
                                 Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/VolumeMaxValue_1", LanguageName) +
-                                (ShareObjectFinalValue.Volume + ShareObjectFinalValue.AllSaleEntries.GetSaleObjectByDateTime(datePickerDate.Text + " " + datePickerTime.Text).Volume) +
+                                (ShareObjectFinalValue.Volume + ShareObjectFinalValue.AllSaleEntries.GetSaleObjectByDateTime(dateTimePickerDate.Text + " " + dateTimePickerTime.Text).Volume) +
                                 Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/VolumeMaxValue_2", LanguageName);
                         }
                         clrMessage = Color.Red;
@@ -697,6 +803,114 @@ namespace SharePortfolioManager.Forms.SalesForm.View
 
                         break;
                     }
+                case SaleErrorCode.ProvisionWrongFormat:
+                    {
+                        strMessage =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/ProvisionWrongFormat", LanguageName);
+                        clrMessage = Color.Red;
+                        stateLevel = FrmMain.EStateLevels.Error;
+
+                        Enabled = true;
+                        txtBoxBrokerage.Focus();
+
+                        break;
+                    }
+                case SaleErrorCode.ProvisionWrongValue:
+                    {
+                        strMessage =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/ProvisionWrongValue", LanguageName);
+                        clrMessage = Color.Red;
+                        stateLevel = FrmMain.EStateLevels.Error;
+
+                        Enabled = true;
+                        txtBoxBrokerage.Focus();
+
+                        break;
+                    }
+                case SaleErrorCode.BrokerFeeWrongFormat:
+                    {
+                        strMessage =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/BrokerFeeWrongFormat", LanguageName);
+                        clrMessage = Color.Red;
+                        stateLevel = FrmMain.EStateLevels.Error;
+
+                        Enabled = true;
+                        txtBoxBrokerage.Focus();
+
+                        break;
+                    }
+                case SaleErrorCode.BrokerFeeWrongValue:
+                    {
+                        strMessage =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/BrokerFeeWrongValue", LanguageName);
+                        clrMessage = Color.Red;
+                        stateLevel = FrmMain.EStateLevels.Error;
+
+                        Enabled = true;
+                        txtBoxBrokerage.Focus();
+
+                        break;
+                    }
+                case SaleErrorCode.TraderPlaceFeeWrongFormat:
+                    {
+                        strMessage =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/TraderPlaceFeeWrongFormat", LanguageName);
+                        clrMessage = Color.Red;
+                        stateLevel = FrmMain.EStateLevels.Error;
+
+                        Enabled = true;
+                        txtBoxBrokerage.Focus();
+
+                        break;
+                    }
+                case SaleErrorCode.TraderPlaceFeeWrongValue:
+                    {
+                        strMessage =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/TraderPlaceFeeWrongValue", LanguageName);
+                        clrMessage = Color.Red;
+                        stateLevel = FrmMain.EStateLevels.Error;
+
+                        Enabled = true;
+                        txtBoxBrokerage.Focus();
+
+                        break;
+                    }
+                case SaleErrorCode.ReductionWrongFormat:
+                    {
+                        strMessage =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/ReductionWrongFormat", LanguageName);
+                        clrMessage = Color.Red;
+                        stateLevel = FrmMain.EStateLevels.Error;
+
+                        Enabled = true;
+                        txtBoxBrokerage.Focus();
+
+                        break;
+                    }
+                case SaleErrorCode.ReductionWrongValue:
+                    {
+                        strMessage =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/ReductionWrongValue", LanguageName);
+                        clrMessage = Color.Red;
+                        stateLevel = FrmMain.EStateLevels.Error;
+
+                        Enabled = true;
+                        txtBoxBrokerage.Focus();
+
+                        break;
+                    }
+                case SaleErrorCode.BrokerageEmpty:
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/BrokerageEmpty", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+
+                    Enabled = true;
+                    txtBoxBrokerage.Focus();
+
+                    break;
+                }
                 case SaleErrorCode.BrokerageWrongFormat:
                     {
                         strMessage =
@@ -828,6 +1042,17 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             _focusedControl = txtBoxVolume;
 
             SaveFlag = false;
+
+            #region Parsing backgroundworker
+
+            _parsingBackgroundWorker.WorkerReportsProgress = true;
+            _parsingBackgroundWorker.WorkerSupportsCancellation = true;
+
+            _parsingBackgroundWorker.DoWork += DocumentParsing;
+            _parsingBackgroundWorker.ProgressChanged += OnDocumentParsingProgressChanged;
+            _parsingBackgroundWorker.RunWorkerCompleted += OnDocumentParsingRunWorkerCompleted;
+
+            #endregion Parsing backgroundworker
         }
 
         /// <summary>
@@ -851,6 +1076,9 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 lblAddSaleDate.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Labels/Date",
                     LanguageName);
+                lblAddSaleTime.Text =
+                    Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Labels/Time",
+                        LanguageName);
                 lblVolume.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Labels/Volume",
                         LanguageName);
@@ -872,11 +1100,20 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 lblSolidarityTax.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Labels/SolidarityTax",
                         LanguageName);
-                lblBrokerage.Text =
-                    Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Labels/Brokerage",
+                lblProvision.Text =
+                    Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Labels/Provision",
+                        LanguageName);
+                lblBrokerFee.Text =
+                    Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Labels/BrokerFee",
+                        LanguageName);
+                lblTraderPlaceFee.Text =
+                    Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Labels/TraderPlaceFee",
                         LanguageName);
                 lblReduction.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Labels/Reduction",
+                        LanguageName);
+                lblBrokerage.Text =
+                    Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Labels/Brokerage",
                         LanguageName);
                 lblProfitLoss.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Labels/ProfitLoss",
@@ -910,8 +1147,11 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 lblTaxAtSourceUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                 lblCapitalGainsTaxUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                 lblSolidarityTaxUnit.Text = ShareObjectFinalValue.CurrencyUnit;
-                lblBrokerageUnit.Text = ShareObjectFinalValue.CurrencyUnit;
+                lblProvisionUnit.Text = ShareObjectFinalValue.CurrencyUnit;
+                lblBrokerFeeUnit.Text = ShareObjectFinalValue.CurrencyUnit;
+                lblTraderPlaceFeeUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                 lblReductionUnit.Text = ShareObjectFinalValue.CurrencyUnit;
+                lblBrokerageUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                 lblProfitLossUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                 lblPayoutUnit.Text = ShareObjectFinalValue.CurrencyUnit;
 
@@ -920,10 +1160,10 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 #region Image configuration
 
                 // Load button images
-                btnAddSave.Image = Resources.black_add;
-                btnDelete.Image = Resources.black_delete;
-                btnReset.Image = Resources.black_cancel;
-                btnCancel.Image = Resources.black_cancel;
+                btnAddSave.Image = Resources.button_add_24;
+                btnDelete.Image = Resources.button_recycle_bin_24;
+                btnReset.Image = Resources.button_reset_24;
+                btnCancel.Image = Resources.button_back_24;
 
                 #endregion Image configuration
 
@@ -962,8 +1202,8 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         private void ResetInputValues()
         {
             // Reset date time picker
-            datePickerDate.Value = DateTime.Now;
-            datePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+            dateTimePickerDate.Value = DateTime.Now;
+            dateTimePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
 
             // Reset text boxes
             txtBoxVolume.Text = @"";
@@ -990,8 +1230,8 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 // Set current share price
                 txtBoxSalePrice.Text = ShareObjectFinalValue.CurPriceAsStr;
 
-                datePickerDate.Enabled = true;
-                datePickerTime.Enabled = true;
+                dateTimePickerDate.Enabled = true;
+                dateTimePickerTime.Enabled = true;
 
                 txtBoxVolume.Enabled = true;
                 txtBoxSalePrice.Enabled = true;
@@ -1012,8 +1252,8 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             }
             else
             {
-                datePickerDate.Enabled = false;
-                datePickerTime.Enabled = false;
+                dateTimePickerDate.Enabled = false;
+                dateTimePickerTime.Enabled = false;
 
                 txtBoxVolume.Enabled = false;
                 txtBoxSalePrice.Enabled = false;
@@ -1076,7 +1316,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// <param name="e">EventArgs</param>
         private void OnDatePickerDate_Enter(object sender, EventArgs e)
         {
-            _focusedControl = datePickerDate;
+            _focusedControl = dateTimePickerDate;
         }
 
         /// <summary>
@@ -1106,7 +1346,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// <param name="e">EventArgs</param>
         private void OnDatePickerTime_Enter(object sender, EventArgs e)
         {
-            _focusedControl = datePickerTime;
+            _focusedControl = dateTimePickerTime;
 
         }
 
@@ -1270,9 +1510,9 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void OnTxtBoxBrokerage_TextChanged(object sender, EventArgs e)
+        private void OnTxtBoxProvision_TextChanged(object sender, EventArgs e)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Brokerage"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Provision"));
         }
 
         /// <summary>
@@ -1280,7 +1520,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void OnTxtBoxBrokerageLeave(object sender, EventArgs e)
+        private void OnTxtBoxProvision_Leave(object sender, EventArgs e)
         {
             FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
         }
@@ -1290,9 +1530,69 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void OnTxtBoxBrokerage_Enter(object sender, EventArgs e)
+        private void OnTxtBoxProvision_Enter(object sender, EventArgs e)
         {
-            _focusedControl = txtBoxBrokerage;
+            _focusedControl = txtBoxProvision;
+        }
+
+        /// <summary>
+        /// This function updates the model if the text has changed
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxBrokerFee_TextChanged(object sender, EventArgs e)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("BrokerFee"));
+        }
+
+        /// <summary>
+        /// This function updates the view with the formatted value
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxBrokerFee_Leave(object sender, EventArgs e)
+        {
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxBrokerFee_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = txtBoxBrokerFee;
+        }
+
+        /// <summary>
+        /// This function updates the model if the text has changed
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxTraderPlaceFee_TextChanged(object sender, EventArgs e)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TraderPlaceFee"));
+        }
+
+        /// <summary>
+        /// This function updates the view with the formatted value
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxTraderPlaceFee_Leave(object sender, EventArgs e)
+        {
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxTraderPlaceFee_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = txtBoxTraderPlaceFee;
         }
 
         /// <summary>
@@ -1326,6 +1626,36 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         }
 
         /// <summary>
+        /// This function updates the model if the text has changed
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxBrokerage_TextChanged(object sender, EventArgs e)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Brokerage"));
+        }
+
+        /// <summary>
+        /// This function updates the view with the formatted value
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxBrokerageLeave(object sender, EventArgs e)
+        {
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxBrokerage_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = txtBoxBrokerage;
+        }
+
+        /// <summary>
         /// This function only sets the document of the model to the view
         /// </summary>
         /// <param name="sender">Text box</param>
@@ -1333,6 +1663,21 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         private void OnTxtBoxDocument_TextChanged(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Document"));
+
+            if (_parsingStartAllow)
+            {
+                if (_parsingBackgroundWorker.IsBusy)
+                {
+                    _parsingBackgroundWorker.CancelAsync();
+                }
+                else
+                {
+                    ResetValues();
+                    _parsingBackgroundWorker.RunWorkerAsync();
+                }
+            }
+
+            _parsingStartAllow = false;
         }
 
         /// <summary>
@@ -1350,19 +1695,9 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void txtBoxDocument_Enter(object sender, EventArgs e)
+        private void OnTxtBoxDocument_Enter(object sender, EventArgs e)
         {
             _focusedControl = txtBoxDocument;
-        }
-
-        /// <summary>
-        /// This function shows the Drop sign
-        /// </summary>
-        /// <param name="sender">Text box</param>
-        /// <param name="e">EventArgs</param>
-        private void OnTxtBoxDocument_DragDrop(object sender, DragEventArgs e)
-        {
-            e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
         }
 
         /// <summary>
@@ -1372,19 +1707,64 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxDocument_DragEnter(object sender, DragEventArgs e)
         {
-            if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
+            e.Effect = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
+        }
 
-            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            if (files.Length <= 0 || files.Length > 1) return;
+        /// <summary>
+        /// This function shows the Drop sign
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxDocument_DragDrop(object sender, DragEventArgs e)
+        {
+            try
+            {
+                if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
 
-            txtBoxDocument.Text = files[0];
+                _parsingStartAllow = true;
 
-            // TODO Parse PDF and set values to the form
-            //var pdf = new PdfDocument(new PdfReader(txtBoxDocument.Text));
-            //var text = PdfTextExtractor.GetTextFromPage(pdf.GetPage(1), new LocationTextExtractionStrategy());
-            //pdf.Close();
-            //Console.WriteLine(@"Extracted text:");
-            //Console.WriteLine(text);
+                var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                if (files.Length <= 0 || files.Length > 1) return;
+
+                txtBoxDocument.Text = files[0];
+
+                // Check if the document is a PDF
+                var extenstion = Path.GetExtension(txtBoxDocument.Text);
+
+                if (string.Compare(extenstion, ".PDF", StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    if (_parsingBackgroundWorker.IsBusy)
+                    {
+                        _parsingBackgroundWorker.CancelAsync();
+                    }
+                    else
+                    {
+                        ResetValues();
+                        _parsingBackgroundWorker.RunWorkerAsync();
+                    }
+                }
+
+                _parsingStartAllow = false;
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+#endif
+                toolStripStatusLabelMessageSaleDocumentParsing.ForeColor = Color.Red;
+                toolStripStatusLabelMessageSaleDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/ParsingFailed", LanguageName);
+
+                toolStripProgressBarSaleDocumentParsing.Visible = false;
+                grpBoxAdd.Enabled = true;
+                grpBoxSales.Enabled = true;
+
+                DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                _parsingThreadFinished = true;
+                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentTypeFailed);
+            }
         }
 
         #endregion TextBoxes
@@ -1534,7 +1914,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
 
                 // Enable button(s)
                 btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Buttons/Add", LanguageName);
-                btnAddSave.Image = Resources.black_add;
+                btnAddSave.Image = Resources.button_add_24;
 
                 // Reset add flag
                 AddSale = false;
@@ -1597,6 +1977,11 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// <param name="e">EventArgs</param>
         private void OnBtnBuyDocumentBrowse_Click(object sender, EventArgs e)
         {
+            toolStripStatusLabelMessageSaleEdit.Text = string.Empty;
+            toolStripStatusLabelMessageSaleDocumentParsing.Text = string.Empty;
+
+            _parsingStartAllow = true;
+
             DocumentBrowseEventHandler?.Invoke(this, new EventArgs());
         }
 
@@ -2242,8 +2627,8 @@ namespace SharePortfolioManager.Forms.SalesForm.View
 
                     if (selectedSaleObject != null)
                     {
-                        datePickerDate.Value = Convert.ToDateTime(selectedSaleObject.Date);
-                        datePickerTime.Value = Convert.ToDateTime(selectedSaleObject.Date);
+                        dateTimePickerDate.Value = Convert.ToDateTime(selectedSaleObject.Date);
+                        dateTimePickerTime.Value = Convert.ToDateTime(selectedSaleObject.Date);
                         txtBoxVolume.Text = selectedSaleObject.VolumeAsStr;
                         txtBoxSalePrice.Text = selectedSaleObject.SalePriceAsStr;
                         txtBoxTaxAtSource.Text = selectedSaleObject.TaxAtSourceAsStr;
@@ -2258,8 +2643,8 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                     else
                     {
                         // TODO
-                        datePickerDate.Value = Convert.ToDateTime(curItem[0].Cells[0].Value.ToString());
-                        datePickerTime.Value = Convert.ToDateTime(curItem[0].Cells[0].Value.ToString());
+                        dateTimePickerDate.Value = Convert.ToDateTime(curItem[0].Cells[0].Value.ToString());
+                        dateTimePickerTime.Value = Convert.ToDateTime(curItem[0].Cells[0].Value.ToString());
                         txtBoxVolume.Text = curItem[0].Cells[1].Value.ToString();
                         txtBoxProfitLoss.Text = curItem[0].Cells[3].Value.ToString();
                         txtBoxPayout.Text = curItem[0].Cells[4].Value.ToString();
@@ -2271,8 +2656,8 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         btnDelete.Enabled = ShareObjectFinalValue.AllSaleEntries.GetAllSalesOfTheShare().Count > 1;
 
                         // Enable text box(es)
-                        datePickerDate.Enabled = true;
-                        datePickerTime.Enabled = true;
+                        dateTimePickerDate.Enabled = true;
+                        dateTimePickerTime.Enabled = true;
                         txtBoxVolume.Enabled = true;
                         txtBoxSalePrice.Enabled = true;
                         txtBoxTaxAtSource.Enabled = true;
@@ -2286,8 +2671,8 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         // Disable Button(s)
                         btnDelete.Enabled = false;
                         // Disable TextBox(es)
-                        datePickerDate.Enabled = false;
-                        datePickerTime.Enabled = false;
+                        dateTimePickerDate.Enabled = false;
+                        dateTimePickerTime.Enabled = false;
                         txtBoxVolume.Enabled = false;
                         txtBoxSalePrice.Enabled = false;
                         txtBoxTaxAtSource.Enabled = false;
@@ -2300,7 +2685,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                     // Rename button
                     btnAddSave.Text = 
                         Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Buttons/Save", LanguageName);
-                    btnAddSave.Image = Resources.black_edit;
+                    btnAddSave.Image = Resources.button_pencil_24;
 
                     // Rename group box
                     grpBoxAdd.Text = 
@@ -2317,7 +2702,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                     // Rename button
                     btnAddSave.Text = 
                         Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Buttons/Add", LanguageName);
-                    btnAddSave.Image = Resources.black_add;
+                    btnAddSave.Image = Resources.button_add_24;
 
                     // Rename group box
                     grpBoxAdd.Text = 
@@ -2330,8 +2715,8 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                     btnAddSave.Enabled = true;
 
                     // Enable text box(es)
-                    datePickerDate.Enabled = true;
-                    datePickerTime.Enabled = true;
+                    dateTimePickerDate.Enabled = true;
+                    dateTimePickerTime.Enabled = true;
                     txtBoxVolume.Enabled = true;
                     txtBoxSalePrice.Enabled = true;
                     txtBoxTaxAtSource.Enabled = true;
@@ -2464,7 +2849,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             catch (Exception ex)
             {
 #if DEBUG_SALE || DEBUG
-                var message = $"dataGridViewSalesOfAYear_CellContentdecimalClick()\n\n{ex.Message}";
+                var message = $"dataGridViewSalesOfAYear_CellContentDecimalClick()\n\n{ex.Message}";
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -2481,7 +2866,523 @@ namespace SharePortfolioManager.Forms.SalesForm.View
 
         #endregion Data grid view
 
+        #region Parsing
+
+        private void DocumentParsing(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                // Reset parsing variables
+                _parsingResult = true;
+                _parsingThreadFinished = false;
+                _bankCounter = 0;
+                _bankTypeFound = false;
+
+                ParsingText = string.Empty;
+
+                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingStarted);
+
+                DocumentType = DocumentParsingConfiguration.DocumentTypes.SaleDocument;
+                DocumentTypeParser = null;
+                DictionaryParsingResult = null;
+
+                Helper.RunProcess(".//Tools//pdftotext.exe", $"-simple \"{txtBoxDocument.Text}\" {ParsingDocumentFileName}");
+
+                // This text is added only once to the file.
+                if (File.Exists(ParsingDocumentFileName))
+                {
+                    ParsingText = File.ReadAllText(ParsingDocumentFileName, Encoding.Default);
+
+                    DocumentTypeParsing();
+                }
+
+                while (!_parsingThreadFinished)
+                {
+                    Thread.Sleep(100);
+                }
+            }
+            catch (OperationCanceledException ex)
+            {
+#if DEBUG
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error 1", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+#endif
+                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentTypeFailed);
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error 2", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+#endif
+                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentTypeFailed);
+            }
+        }
+
+        /// <summary>
+        /// This function starts the document parsing process
+        /// which checks if the document typ is correct
+        /// </summary>
+        private void DocumentTypeParsing()
+        {
+            try
+            {
+                if (DocumentParsingConfiguration.InitFlag)
+                {
+                    if (DocumentTypeParser == null)
+                        DocumentTypeParser = new Parser.Parser(false, ParsingText,
+                            DocumentParsingConfiguration.BankRegexList[_bankCounter].BankRegexList,
+                            DocumentParsingConfiguration.BankRegexList[_bankCounter].BankEncodingType);
+                    // Check if the Parser is in idle mode
+                    if (DocumentTypeParser != null && DocumentTypeParser.ParserInfoState.State == ParserState.Idle)
+                    {
+                        DocumentTypeParser.OnParserUpdate += DocumentTypeParser_UpdateGUI;
+
+                        // Start document parsing
+                        DocumentTypeParser.StartParsing();
+                    }
+                    else
+                    {
+                        DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                        _parsingThreadFinished = true;
+                        _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingFailed);
+                    }
+                }
+                else
+                {
+                    _parsingThreadFinished = true;
+                    _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingFailed);
+                }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+#endif
+                _parsingThreadFinished = true;
+                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingFailed);
+            }
+        }
+
+        /// <summary>
+        /// This event handler updates the progress while checking the document type
+        /// </summary>
+        /// <param name="sender">BackGroundWorker</param>
+        /// <param name="e">ProgressChangedEventArgs</param>
+        private void DocumentTypeParser_UpdateGUI(object sender, OnParserUpdateEventArgs e)
+        {
+            try
+            {
+                if (InvokeRequired)
+                {
+                    Invoke(new Action(() => DocumentTypeParser_UpdateGUI(sender, e)));
+                }
+                else
+                {
+                    try
+                    {
+                        //Console.WriteLine(@"Percentage: {0}", e.ParserInfoState.Percentage);
+                        switch (e.ParserInfoState.LastErrorCode)
+                        {
+                            case ParserErrorCodes.Finished:
+                                {
+                                    //if (e.ParserInfoState.SearchResult != null)
+                                    //{
+                                    //    foreach (var result in e.ParserInfoState.SearchResult)
+                                    //    {
+                                    //        Console.Write(@"{0}:", result.Key);
+                                    //        if (result.Value != null && result.Value.Count > 0)
+                                    //            Console.WriteLine(@"{0}", result.Value[0]);
+                                    //        else
+                                    //            Console.WriteLine(@"-");
+                                    //    }
+                                    //}
+                                    break;
+                                }
+                            case ParserErrorCodes.SearchFinished:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.SearchRunning:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.SearchStarted:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.ContentLoadFinished:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.ContentLoadStarted:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.Started:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.Starting:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.NoError:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.StartFailed:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.BusyFailed:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.InvalidWebSiteGiven:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.NoRegexListGiven:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.NoWebContentLoaded:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.ParsingFailed:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.CancelThread:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.WebExceptionOccured:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.ExceptionOccured:
+                                {
+                                    break;
+                                }
+                        }
+
+                        if (DocumentTypeParser.ParserErrorCode > 0)
+                            Thread.Sleep(100);
+
+                        // Check if a error occurred or the process has been finished
+                        if (e.ParserInfoState.LastErrorCode < 0 || e.ParserInfoState.LastErrorCode == ParserErrorCodes.Finished)
+                        {
+                            if (e.ParserInfoState.LastErrorCode < 0)
+                            {
+                                // Set fail message
+                                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingFailed);
+                            }
+                            else
+                            {
+                                //Check if the correct bank has been found so search for the document values
+                                if (e.ParserInfoState.SearchResult != null &&
+                                    e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration.BankIdentifierTagName) &&
+                                    e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration.SaleIdentifierTagName))
+                                {
+                                    _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentTypeSuccessful);
+                                    _bankTypeFound = true;
+
+                                    // Get the correct parsing options for the given document type
+                                    switch (DocumentType)
+                                    {
+                                        case DocumentParsingConfiguration.DocumentTypes.BuyDocument:
+                                            {
+                                                DocumentTypeParser.RegexList = DocumentParsingConfiguration
+                                                    .BankRegexList[_bankCounter]
+                                                    .DictionaryDocumentRegex[DocumentParsingConfiguration.DocumentTypeSale].DocumentRegexList;
+                                                DocumentTypeParser.StartParsing();
+                                                break;
+                                            }
+                                        case DocumentParsingConfiguration.DocumentTypes.SaleDocument:
+                                            {
+                                                DocumentTypeParser.RegexList = DocumentParsingConfiguration
+                                                    .BankRegexList[_bankCounter]
+                                                    .DictionaryDocumentRegex[DocumentParsingConfiguration.DocumentTypeSale].DocumentRegexList;
+                                                DocumentTypeParser.StartParsing();
+                                                break;
+                                            }
+                                        case DocumentParsingConfiguration.DocumentTypes.DividendDocument:
+                                            {
+                                                DocumentTypeParser.RegexList = DocumentParsingConfiguration
+                                                    .BankRegexList[_bankCounter]
+                                                    .DictionaryDocumentRegex[DocumentParsingConfiguration.DocumentTypeDividend].DocumentRegexList;
+                                                DocumentTypeParser.StartParsing();
+                                                break;
+                                            }
+                                        case DocumentParsingConfiguration.DocumentTypes.BrokerageDocument:
+                                            {
+                                                DocumentTypeParser.RegexList = DocumentParsingConfiguration
+                                                    .BankRegexList[_bankCounter]
+                                                    .DictionaryDocumentRegex[DocumentParsingConfiguration.DocumentTypeBrokerage].DocumentRegexList;
+                                                DocumentTypeParser.StartParsing();
+                                                break;
+                                            }
+                                    }
+                                }
+                                else
+                                {
+                                    _bankCounter++;
+
+                                    // Check if another bank configuration should be checked
+                                    if (_bankCounter < DocumentParsingConfiguration.BankRegexList.Count && _bankTypeFound == false)
+                                    {
+                                        DocumentTypeParser.RegexList = DocumentParsingConfiguration.BankRegexList[_bankCounter].BankRegexList;
+                                        DocumentTypeParser.StartParsing();
+                                    }
+                                    else
+                                    {
+                                        if (_bankTypeFound == false)
+                                        {
+                                            DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                                            _parsingThreadFinished = true;
+                                            _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentValuesFailed);
+                                        }
+                                        else
+                                        {
+                                            DictionaryParsingResult = new Dictionary<string, List<string>>(DocumentTypeParser.ParsingResult);
+                                        }
+
+                                        DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                                        _parsingThreadFinished = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+#if DEBUG
+                        var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                        MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+#endif
+                        DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                        _parsingThreadFinished = true;
+                        _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentTypeFailed);
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+#if DEBUG
+                var message = $"{Helper.GetMyMethodName()}\n\n{exception.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+#endif
+                DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                _parsingThreadFinished = true;
+                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentTypeFailed);
+            }
+        }
+
+        private void OnDocumentParsingProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            switch (e.ProgressPercentage)
+            {
+                case (int)ParsingErrorCode.ParsingDocumentValuesFailed:
+                    toolStripStatusLabelMessageSaleDocumentParsing.ForeColor = Color.Red;
+                    toolStripStatusLabelMessageSaleDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/ParsingFailed", LanguageName);
+
+                    toolStripProgressBarSaleDocumentParsing.Visible = false;
+                    grpBoxAdd.Enabled = true;
+                    grpBoxSales.Enabled = true;
+                    break;
+                case (int)ParsingErrorCode.ParsingDocumentTypeFailed:
+                    toolStripStatusLabelMessageSaleDocumentParsing.ForeColor = Color.Red;
+                    toolStripStatusLabelMessageSaleDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/ParsingFailed", LanguageName);
+
+                    toolStripProgressBarSaleDocumentParsing.Visible = false;
+                    grpBoxAdd.Enabled = true;
+                    grpBoxSales.Enabled = true;
+                    break;
+                case (int)ParsingErrorCode.ParsingStarted:
+                    toolStripStatusLabelMessageSaleDocumentParsing.ForeColor = Color.Black;
+                    toolStripStatusLabelMessageSaleDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/ParsingStarted", LanguageName);
+
+                    toolStripProgressBarSaleDocumentParsing.Visible = true;
+                    grpBoxAdd.Enabled = false;
+                    grpBoxSales.Enabled = false;
+                    break;
+                case (int)ParsingErrorCode.ParsingDocumentTypeSuccessful:
+                    toolStripStatusLabelMessageSaleDocumentParsing.ForeColor = Color.Black;
+                    toolStripStatusLabelMessageSaleDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/BankFoundParsingValues", LanguageName);
+                    break;
+            }
+        }
+
+        private void OnDocumentParsingRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (DictionaryParsingResult != null)
+            {
+                // Check if the WKN has been found and if the WKN is the right one
+                if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration
+                    .DocumentTypeSaleWkn) || DictionaryParsingResult[DocumentParsingConfiguration
+                        .DocumentTypeSaleWkn][0] != ShareObjectFinalValue.WknAsStr)
+                {
+                    toolStripStatusLabelMessageSaleDocumentParsing.ForeColor = Color.Red;
+                    toolStripStatusLabelMessageSaleDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/ParsingWrongWkn", LanguageName);
+                }
+                else
+                {
+                    foreach (var resultEntry in DictionaryParsingResult)
+                    {
+                        switch (resultEntry.Key)
+                        {
+                            case DocumentParsingConfiguration.DocumentTypeSaleDate:
+                                picBoxDateParseState.Image = Resources.search_ok_24;
+                                dateTimePickerDate.Text = resultEntry.Value[0].Trim();
+                                break;
+                            case DocumentParsingConfiguration.DocumentTypeSaleTime:
+                                picBoxTimeParseState.Image = Resources.search_ok_24;
+                                dateTimePickerTime.Text = resultEntry.Value[0].Trim();
+                                break;
+                            case DocumentParsingConfiguration.DocumentTypeSaleVolume:
+                                picBoxVolumeParseState.Image = Resources.search_ok_24;
+                                txtBoxVolume.Text = resultEntry.Value[0].Trim();
+                                break;
+                            case DocumentParsingConfiguration.DocumentTypeSalePrice:
+                                picBoxPriceParseState.Image = Resources.search_ok_24;
+                                txtBoxSalePrice.Text = resultEntry.Value[0].Trim();
+                                break;
+                            case DocumentParsingConfiguration.DocumentTypeSaleTaxAtSource:
+                                picBoxTaxAtSourceParseState.Image = Resources.search_ok_24;
+                                txtBoxTaxAtSource.Text = resultEntry.Value[0].Trim();
+                                break;
+                            case DocumentParsingConfiguration.DocumentTypeSaleCapitalGainTax:
+                                picBoxCapitalGainTaxParseState.Image = Resources.search_ok_24;
+                                txtBoxCapitalGainsTax.Text = resultEntry.Value[0].Trim();
+                                break;
+                            case DocumentParsingConfiguration.DocumentTypeSaleSolidarity:
+                                picBoxSolidarityTaxParseState.Image = Resources.search_ok_24;
+                                txtBoxSolidarityTax.Text = resultEntry.Value[0].Trim();
+                                break;
+                            case DocumentParsingConfiguration.DocumentTypeSaleProvision:
+                                picBoxProvisionParseState.Image = Resources.search_ok_24;
+                                txtBoxProvision.Text = resultEntry.Value[0].Trim();
+                                break;
+                            case DocumentParsingConfiguration.DocumentTypeSaleBrokerFee:
+                                picBoxBrokerFeeParseState.Image = Resources.search_ok_24;
+                                txtBoxBrokerFee.Text = resultEntry.Value[0].Trim();
+                                break;
+                            case DocumentParsingConfiguration.DocumentTypeSaleTraderPlaceFee:
+                                picBoxTraderPlaceFeeParseState.Image = Resources.search_ok_24;
+                                txtBoxTraderPlaceFee.Text = resultEntry.Value[0].Trim();
+                                break;
+                            case DocumentParsingConfiguration.DocumentTypeSaleReduction:
+                                picBoxReductionParseState.Image = Resources.search_ok_24;
+                                txtBoxReduction.Text = resultEntry.Value[0].Trim();
+                                break;
+                        }
+                    }
+
+                    // Which values are not found
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration
+                        .DocumentTypeSaleDate))
+                    {
+                        picBoxDateParseState.Image = Resources.search_failed_24;
+                        dateTimePickerDate.Value = DateTime.Now;
+                        dateTimePickerTime.Value =
+                            new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+                        _parsingResult = false;
+                    }
+
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration
+                        .DocumentTypeSaleTime))
+                    {
+                        dateTimePickerTime.Value =
+                            new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+                    }
+
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration
+                        .DocumentTypeSaleVolume))
+                    {
+                        picBoxVolumeParseState.Image = Resources.search_failed_24;
+                        txtBoxVolume.Text = @"";
+                        _parsingResult = false;
+                    }
+
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration
+                        .DocumentTypeSalePrice))
+                    {
+                        picBoxVolumeParseState.Image = Resources.search_failed_24;
+                        txtBoxSalePrice.Text = @"";
+                        _parsingResult = false;
+                    }
+
+                    if (!_parsingResult)
+                    {
+                        toolStripStatusLabelMessageSaleDocumentParsing.ForeColor = Color.Red;
+                        toolStripStatusLabelMessageSaleDocumentParsing.Text =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/ParsingFailed", LanguageName);
+                    }
+                    else
+                    {
+                        toolStripStatusLabelMessageSaleDocumentParsing.ForeColor = Color.Black;
+                        toolStripStatusLabelMessageSaleDocumentParsing.Text =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/ParsingSuccessful", LanguageName);
+                    }
+                }
+            }
+            else
+            {
+                toolStripStatusLabelMessageSaleDocumentParsing.ForeColor = Color.Red;
+                toolStripStatusLabelMessageSaleDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ParsingFailed", LanguageName);
+            }
+
+            toolStripProgressBarSaleDocumentParsing.Visible = false;
+            grpBoxAdd.Enabled = true;
+            grpBoxSales.Enabled = true;
+        }
+
+        private void ResetValues()
+        {
+            // Reset state pictures
+            picBoxDateParseState.Image = Resources.empty_arrow;
+            picBoxTimeParseState.Image = Resources.empty_arrow;
+            picBoxVolumeParseState.Image = Resources.empty_arrow;
+            picBoxPriceParseState.Image = Resources.empty_arrow;
+            picBoxTaxAtSourceParseState.Image = Resources.empty_arrow;
+            picBoxCapitalGainTaxParseState.Image = Resources.empty_arrow;
+            picBoxSolidarityTaxParseState.Image = Resources.empty_arrow;
+            picBoxProvisionParseState.Image = Resources.empty_arrow;
+            picBoxBrokerFeeParseState.Image = Resources.empty_arrow;
+            picBoxTraderPlaceFeeParseState.Image = Resources.empty_arrow;
+            picBoxReductionParseState.Image = Resources.empty_arrow;
+
+            // Reset textboxes
+            dateTimePickerDate.Value = DateTime.Now;
+            dateTimePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+            txtBoxVolume.Text = string.Empty;
+            txtBoxSalePrice.Text = string.Empty;
+            txtBoxTaxAtSource.Text = string.Empty;
+            txtBoxCapitalGainsTax.Text = string.Empty;
+            txtBoxSolidarityTax.Text = string.Empty;
+            txtBoxProvision.Text = string.Empty;
+            txtBoxBrokerFee.Text = string.Empty;
+            txtBoxTraderPlaceFee.Text = string.Empty;
+            txtBoxReduction.Text = string.Empty;
+
+            toolStripStatusLabelMessageSaleEdit.Text = string.Empty;
+            toolStripStatusLabelMessageSaleDocumentParsing.Text = string.Empty;
+            toolStripProgressBarSaleDocumentParsing.Visible = false;
+        }
+
+        #endregion Parsing
+
         #endregion Methods
+
     }
 }
 

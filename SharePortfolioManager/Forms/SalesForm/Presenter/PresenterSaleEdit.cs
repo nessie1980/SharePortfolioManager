@@ -65,6 +65,9 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
             _view.TaxAtSource = _model.TaxAtSource;
             _view.CapitalGainsTax = _model.CapitalGainsTax;
             _view.SolidarityTax = _model.SolidarityTax;
+            _view.Provision = _model.Provision;
+            _view.BrokerFee = _model.BrokerFee;
+            _view.TraderPlaceFee = _model.TraderPlaceFee;
             _view.Brokerage = _model.Brokerage;
             _view.Reduction = _model.Reduction;
             _view.ProfitLoss = _model.ProfitLoss;
@@ -110,8 +113,11 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
             _model.TaxAtSource = _view.TaxAtSource;
             _model.CapitalGainsTax = _view.CapitalGainsTax;
             _model.SolidarityTax = _view.SolidarityTax;
-            _model.Brokerage = _view.Brokerage;
+            _model.Provision = _view.Provision;
+            _model.BrokerFee = _view.BrokerFee;
+            _model.TraderPlaceFee = _view.TraderPlaceFee;
             _model.Reduction = _view.Reduction;
+            _model.Brokerage = _view.Brokerage;
             _model.ProfitLoss = _view.ProfitLoss;
             _model.Payout = _view.Payout;
             _model.Document = _view.Document;
@@ -139,7 +145,8 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
 
                 // Brokerage entry if the brokerage value is not 0
                 if (_model.BrokerageDec > 0)
-                    bErrorFlag = !_model.ShareObjectFinalValue.AddBrokerage(strGuidBrokerage, false, true, strGuidSale, strDateTime, _model.BrokerageDec, _model.Document);
+                    bErrorFlag = !_model.ShareObjectFinalValue.AddBrokerage(strGuidBrokerage, false, true, strGuidSale, strDateTime,
+                        _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec, _model.Document);
 
                 // Update buys with the sale volumes
                 foreach (var usedBuyDetail in _model.UsedBuyDetails)
@@ -245,7 +252,8 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
 
                     // Check if a new brokerage entry must be made
                     if (bFlagBrokerageEdit && _model.BrokerageDec > 0)
-                        bFlagBrokerageEdit = _model.ShareObjectFinalValue.AddBrokerage(strGuidBrokerage, false, true, _model.SelectedGuid, strDateTime, _model.BrokerageDec, _model.Document);
+                        bFlagBrokerageEdit = _model.ShareObjectFinalValue.AddBrokerage(strGuidBrokerage, false, true, _model.SelectedGuid, strDateTime,
+                            _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec, _model.Document);
 
                     if (bFlagBrokerageEdit)
                     {
@@ -334,8 +342,15 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
         {
             try
             {
+                var strCurrentFile = _model.Document;
+
                 const string strFilter = "pdf (*.pdf)|*.pdf|txt (*.txt)|.txt|doc (*.doc)|.doc|docx (*.docx)|.docx";
-                _model.Document = Helper.SetDocument(_model.Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/OpenFileDialog/Title", _model.LanguageName), strFilter, _model.Document);
+                if (Helper.SetDocument(
+                        _model.Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/OpenFileDialog/Title",
+                            _model.LanguageName), strFilter, ref strCurrentFile) == DialogResult.OK)
+                {
+                    _model.Document = strCurrentFile;
+                }
 
                 UpdateViewWithModel();
 
@@ -612,21 +627,23 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                     _model.SalePriceDec = decSalePrice;
 
                 // Brokerage input check
-                if (_model.Brokerage != "" && bErrorFlag == false)
+                if (_model.Brokerage == @"")
                 {
-                    if (!decimal.TryParse(_model.Brokerage, out var decBrokerage))
-                    {
-                        _model.ErrorCode = SaleErrorCode.BrokerageWrongFormat;
-                        bErrorFlag = true;
-                    }
-                    else if (decBrokerage < 0)
-                    {
-                        _model.ErrorCode = SaleErrorCode.BrokerageWrongValue;
-                        bErrorFlag = true;
-                    }
-                    else
-                        _model.BrokerageDec = decBrokerage;
+                    _model.ErrorCode = SaleErrorCode.BrokerageEmpty;
+                    bErrorFlag = true;
                 }
+                else if (!decimal.TryParse(_model.Brokerage, out var decBrokerage))
+                {
+                    _model.ErrorCode = SaleErrorCode.BrokerageWrongFormat;
+                    bErrorFlag = true;
+                }
+                else if (decBrokerage < 0)
+                {
+                    _model.ErrorCode = SaleErrorCode.BrokerageWrongValue;
+                    bErrorFlag = true;
+                }
+                else
+                    _model.BrokerageDec = decBrokerage;
 
                 // Check if a given document exists
                 if (_model.Document == null)

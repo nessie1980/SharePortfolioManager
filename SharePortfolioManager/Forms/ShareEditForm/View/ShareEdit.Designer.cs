@@ -293,14 +293,14 @@
             // 
             this.btnShareBuysEdit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnShareBuysEdit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnShareBuysEdit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnShareBuysEdit.Image = global::SharePortfolioManager.Properties.Resources.button_pencil_16;
             this.btnShareBuysEdit.Location = new System.Drawing.Point(250, 0);
             this.btnShareBuysEdit.Margin = new System.Windows.Forms.Padding(0);
             this.btnShareBuysEdit.Name = "btnShareBuysEdit";
             this.btnShareBuysEdit.Size = new System.Drawing.Size(40, 24);
             this.btnShareBuysEdit.TabIndex = 5;
-            this.btnShareBuysEdit.Text = "_buys";
             this.btnShareBuysEdit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnShareBuysEdit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnShareBuysEdit.UseVisualStyleBackColor = true;
             this.btnShareBuysEdit.Click += new System.EventHandler(this.OnBtnShareBuysEdit_Click);
             // 
@@ -348,14 +348,14 @@
             // 
             this.btnShareSalesEdit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnShareSalesEdit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnShareSalesEdit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnShareSalesEdit.Image = global::SharePortfolioManager.Properties.Resources.button_pencil_16;
             this.btnShareSalesEdit.Location = new System.Drawing.Point(250, 24);
             this.btnShareSalesEdit.Margin = new System.Windows.Forms.Padding(0);
             this.btnShareSalesEdit.Name = "btnShareSalesEdit";
             this.btnShareSalesEdit.Size = new System.Drawing.Size(40, 24);
             this.btnShareSalesEdit.TabIndex = 6;
-            this.btnShareSalesEdit.Text = "_sales";
             this.btnShareSalesEdit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnShareSalesEdit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnShareSalesEdit.UseVisualStyleBackColor = true;
             this.btnShareSalesEdit.Click += new System.EventHandler(this.OnBtnShareSalesEdit_Click);
             // 
@@ -395,6 +395,7 @@
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCancel.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnCancel.Image = global::SharePortfolioManager.Properties.Resources.button_back_24;
             this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnCancel.Location = new System.Drawing.Point(640, 1);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(1);
@@ -403,6 +404,7 @@
             this.btnCancel.TabIndex = 40;
             this.btnCancel.Text = "_Cancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnCancel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.OnBtnCancel_Click);
             // 
@@ -411,6 +413,7 @@
             this.btnSave.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnSave.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSave.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSave.Image = global::SharePortfolioManager.Properties.Resources.button_save_24;
             this.btnSave.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSave.Location = new System.Drawing.Point(460, 1);
             this.btnSave.Margin = new System.Windows.Forms.Padding(1);
@@ -419,6 +422,7 @@
             this.btnSave.TabIndex = 39;
             this.btnSave.Text = "_Save";
             this.btnSave.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnSave.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.OnBtnSave_Click);
             // 
@@ -672,14 +676,14 @@
             // 
             this.btnShareBrokerageEdit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnShareBrokerageEdit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnShareBrokerageEdit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnShareBrokerageEdit.Image = global::SharePortfolioManager.Properties.Resources.button_pencil_16;
             this.btnShareBrokerageEdit.Location = new System.Drawing.Point(250, 96);
             this.btnShareBrokerageEdit.Margin = new System.Windows.Forms.Padding(0);
             this.btnShareBrokerageEdit.Name = "btnShareBrokerageEdit";
             this.btnShareBrokerageEdit.Size = new System.Drawing.Size(40, 24);
             this.btnShareBrokerageEdit.TabIndex = 8;
-            this.btnShareBrokerageEdit.Text = "_brokerage";
             this.btnShareBrokerageEdit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnShareBrokerageEdit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnShareBrokerageEdit.UseVisualStyleBackColor = true;
             this.btnShareBrokerageEdit.Click += new System.EventHandler(this.OnBtnShareBrokerageEdit_Click);
             // 
@@ -687,14 +691,14 @@
             // 
             this.btnShareDividendsEdit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnShareDividendsEdit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnShareDividendsEdit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnShareDividendsEdit.Image = global::SharePortfolioManager.Properties.Resources.button_pencil_16;
             this.btnShareDividendsEdit.Location = new System.Drawing.Point(250, 72);
             this.btnShareDividendsEdit.Margin = new System.Windows.Forms.Padding(0);
             this.btnShareDividendsEdit.Name = "btnShareDividendsEdit";
             this.btnShareDividendsEdit.Size = new System.Drawing.Size(40, 24);
             this.btnShareDividendsEdit.TabIndex = 7;
-            this.btnShareDividendsEdit.Text = "_dividends";
             this.btnShareDividendsEdit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnShareDividendsEdit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnShareDividendsEdit.UseVisualStyleBackColor = true;
             this.btnShareDividendsEdit.Click += new System.EventHandler(this.OnBtnShareDividendsEdit_Click);
             // 
@@ -782,7 +786,7 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.editShareStatusLabelMessage});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 431);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 430);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(834, 22);
             this.statusStrip1.TabIndex = 41;
@@ -799,7 +803,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.ClientSize = new System.Drawing.Size(834, 453);
+            this.ClientSize = new System.Drawing.Size(834, 452);
             this.ControlBox = false;
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.grpBoxEarningsExpenditure);

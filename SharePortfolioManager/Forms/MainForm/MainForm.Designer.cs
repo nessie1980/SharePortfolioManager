@@ -185,39 +185,43 @@ namespace SharePortfolioManager
             // 
             // newToolStripMenuItem
             // 
-            this.newToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.black_new;
+            this.newToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.menu_file_add2_24;
+            this.newToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(131, 30);
             this.newToolStripMenuItem.Text = "New_";
-            this.newToolStripMenuItem.Click += new System.EventHandler(this.NewToolStripMenuItem_Click);
+            this.newToolStripMenuItem.Click += new System.EventHandler(this.OnNewToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
-            this.openToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.black_open;
+            this.openToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.menu_folder_open_24;
+            this.openToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(131, 30);
             this.openToolStripMenuItem.Text = "Open_";
-            this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItem_Click);
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.OnOpenToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
-            this.saveAsToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.black_save;
+            this.saveAsToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.button_save_as_24;
+            this.saveAsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(131, 30);
             this.saveAsToolStripMenuItem.Text = "SaveAs_";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(120, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(128, 6);
             // 
             // exitToolStripMenuItem
             // 
-            this.exitToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.black_exit;
+            this.exitToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.button_exit_24;
+            this.exitToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(131, 30);
             this.exitToolStripMenuItem.Text = "&Quit_";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.BeendenToolStripMenuItem_Click);
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.OnExitToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
@@ -231,16 +235,17 @@ namespace SharePortfolioManager
             // languageToolStripMenuItem
             // 
             this.languageToolStripMenuItem.Name = "languageToolStripMenuItem";
-            this.languageToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.languageToolStripMenuItem.Size = new System.Drawing.Size(145, 30);
             this.languageToolStripMenuItem.Text = "_Language";
             // 
             // loggerToolStripMenuItem
             // 
-            this.loggerToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.black_logger;
+            this.loggerToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.menu_eventlog_24;
+            this.loggerToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.loggerToolStripMenuItem.Name = "loggerToolStripMenuItem";
-            this.loggerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.loggerToolStripMenuItem.Size = new System.Drawing.Size(145, 30);
             this.loggerToolStripMenuItem.Text = "_Logger";
-            this.loggerToolStripMenuItem.Click += new System.EventHandler(this.LoggerToolStripMenuItem_Click);
+            this.loggerToolStripMenuItem.Click += new System.EventHandler(this.OnLoggerToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -253,10 +258,12 @@ namespace SharePortfolioManager
             // 
             // aboutToolStripMenuItem
             // 
+            this.aboutToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.menu_about_24;
+            this.aboutToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(124, 30);
             this.aboutToolStripMenuItem.Text = "&About_";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.OnAboutToolStripMenuItem_Click);
             // 
             // grpBoxSharePortfolio
             // 
@@ -304,9 +311,10 @@ namespace SharePortfolioManager
             // 
             // btnRefreshAll
             // 
+            this.btnRefreshAll.AutoSize = true;
             this.btnRefreshAll.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnRefreshAll.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRefreshAll.Image = ((System.Drawing.Image)(resources.GetObject("btnRefreshAll.Image")));
+            this.btnRefreshAll.Image = global::SharePortfolioManager.Properties.Resources.button_update_all_24;
             this.btnRefreshAll.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnRefreshAll.Location = new System.Drawing.Point(1, 361);
             this.btnRefreshAll.Margin = new System.Windows.Forms.Padding(1);
@@ -315,6 +323,7 @@ namespace SharePortfolioManager
             this.btnRefreshAll.TabIndex = 8;
             this.btnRefreshAll.Text = "&Update all_";
             this.btnRefreshAll.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnRefreshAll.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnRefreshAll.UseVisualStyleBackColor = true;
             this.btnRefreshAll.Click += new System.EventHandler(this.OnBtnRefreshAll_Click);
             // 
@@ -322,7 +331,7 @@ namespace SharePortfolioManager
             // 
             this.btnEdit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnEdit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEdit.Image = ((System.Drawing.Image)(resources.GetObject("btnEdit.Image")));
+            this.btnEdit.Image = global::SharePortfolioManager.Properties.Resources.button_pencil_24;
             this.btnEdit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnEdit.Location = new System.Drawing.Point(541, 361);
             this.btnEdit.Margin = new System.Windows.Forms.Padding(1);
@@ -331,6 +340,7 @@ namespace SharePortfolioManager
             this.btnEdit.TabIndex = 5;
             this.btnEdit.Text = "&Edit_";
             this.btnEdit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnEdit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnEdit.UseVisualStyleBackColor = true;
             this.btnEdit.Click += new System.EventHandler(this.OnBtnEdit_Click);
             // 
@@ -338,7 +348,7 @@ namespace SharePortfolioManager
             // 
             this.btnAdd.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnAdd.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnAdd.Image")));
+            this.btnAdd.Image = global::SharePortfolioManager.Properties.Resources.button_add_24;
             this.btnAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnAdd.Location = new System.Drawing.Point(361, 361);
             this.btnAdd.Margin = new System.Windows.Forms.Padding(1);
@@ -347,6 +357,7 @@ namespace SharePortfolioManager
             this.btnAdd.TabIndex = 4;
             this.btnAdd.Text = "&Add_";
             this.btnAdd.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnAdd.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.OnBtnAdd_Click);
             // 
@@ -354,7 +365,7 @@ namespace SharePortfolioManager
             // 
             this.btnRefresh.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnRefresh.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRefresh.Image = ((System.Drawing.Image)(resources.GetObject("btnRefresh.Image")));
+            this.btnRefresh.Image = global::SharePortfolioManager.Properties.Resources.button_update_24;
             this.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnRefresh.Location = new System.Drawing.Point(181, 361);
             this.btnRefresh.Margin = new System.Windows.Forms.Padding(1);
@@ -363,6 +374,7 @@ namespace SharePortfolioManager
             this.btnRefresh.TabIndex = 3;
             this.btnRefresh.Text = "&Update_";
             this.btnRefresh.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnRefresh.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnRefresh.UseVisualStyleBackColor = true;
             this.btnRefresh.Click += new System.EventHandler(this.OnBtnRefresh_Click);
             // 
@@ -519,7 +531,7 @@ namespace SharePortfolioManager
             // 
             this.btnDelete.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnDelete.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDelete.Image = ((System.Drawing.Image)(resources.GetObject("btnDelete.Image")));
+            this.btnDelete.Image = global::SharePortfolioManager.Properties.Resources.button_recycle_bin_24;
             this.btnDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnDelete.Location = new System.Drawing.Point(721, 361);
             this.btnDelete.Margin = new System.Windows.Forms.Padding(1);
@@ -528,6 +540,7 @@ namespace SharePortfolioManager
             this.btnDelete.TabIndex = 6;
             this.btnDelete.Text = "&Remove_";
             this.btnDelete.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnDelete.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.OnBtnDelete_Click);
             // 
@@ -1586,6 +1599,7 @@ namespace SharePortfolioManager
             this.menuStrip1.PerformLayout();
             this.grpBoxSharePortfolio.ResumeLayout(false);
             this.tblLayPnlShareOverviews.ResumeLayout(false);
+            this.tblLayPnlShareOverviews.PerformLayout();
             this.tabCtrlShareOverviews.ResumeLayout(false);
             this.tabPgFinalValue.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvPortfolioFinalValue)).EndInit();

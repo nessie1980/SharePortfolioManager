@@ -113,7 +113,7 @@ namespace SharePortfolioManager
                     lblWknValue.Text = ShareObjectFinalValue.Wkn;
                     lblDateValue.Text = ShareObjectFinalValue.AllBuyEntries.AllBuysOfTheShareDictionary.Values.First().BuyListYear.First().Date;
                     txtBoxName.Text = ShareObjectFinalValue.Name;
-                    lblPurchaseValue.Text = ShareObjectFinalValue.AllBuyEntries.BuyValueReductionBrokerageTotalAsStr;
+                    lblPurchaseValue.Text = ShareObjectFinalValue.AllBuyEntries.BuyValueBrokerageTotalAsStr;
                     lblDepositUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                     lblVolumeValue.Text = ShareObjectFinalValue.VolumeAsStr;
                     lblVolumeUnit.Text = ShareObject.PieceUnit;
@@ -152,7 +152,7 @@ namespace SharePortfolioManager
                     
                     #region GroupBox EarningsExpenditure
 
-                    lblBuysValue.Text = ShareObjectFinalValue.AllBuyEntries.BuyValueTotalAsStrUnit;
+                    lblBuysValue.Text = ShareObjectFinalValue.AllBuyEntries.BuyValueBrokerageTotalAsStrUnit;
                     lblBuysUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                     lblSalesValue.Text = ShareObjectFinalValue.AllSaleEntries.SalePayoutTotalAsStr;
                     lblSalesUnit.Text = ShareObjectFinalValue.CurrencyUnit;
@@ -186,10 +186,10 @@ namespace SharePortfolioManager
 
                 lblDividendPayoutInterval.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/PayoutInterval", LanguageName);
                 // Add dividend payout interval values
-                cbxDividendPayoutInterval.Items.AddRange(Helper.GetComboBoxItmes(@"/ComboBoxItemsPayout/*", LanguageName, Language));
+                cbxDividendPayoutInterval.Items.AddRange(Helper.GetComboBoxItems(@"/ComboBoxItemsPayout/*", LanguageName, Language));
                 lblShareType.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/ShareType", LanguageName);
                 // Add share type values
-                cbxShareType.Items.AddRange(Helper.GetComboBoxItmes(@"/ComboBoxItemsShareType/*", LanguageName, Language));
+                cbxShareType.Items.AddRange(Helper.GetComboBoxItems(@"/ComboBoxItemsShareType/*", LanguageName, Language));
 
                 // Select the payout interval for the dividend
                 cbxDividendPayoutInterval.SelectedIndex = ShareObjectFinalValue.DividendPayoutInterval;
@@ -222,10 +222,10 @@ namespace SharePortfolioManager
                     LanguageName);
 
                 // Load button images
-                btnShareBuysEdit.Image = Resources.black_edit;
-                btnShareSalesEdit.Image = Resources.black_edit;
-                btnShareBrokerageEdit.Image = Resources.black_edit;
-                btnShareDividendsEdit.Image = Resources.black_edit;
+                btnShareBuysEdit.Image = Resources.button_pencil_16;
+                btnShareSalesEdit.Image = Resources.button_pencil_16;
+                btnShareBrokerageEdit.Image = Resources.button_pencil_16;
+                btnShareDividendsEdit.Image = Resources.button_pencil_16;
 
                 #endregion GroupBox EarningsExpenditure
 
@@ -233,8 +233,8 @@ namespace SharePortfolioManager
                 btnCancel.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/Buttons/Cancel", LanguageName);
 
                 // Load button images
-                btnSave.Image = Resources.black_save;
-                btnCancel.Image = Resources.black_cancel;
+                btnSave.Image = Resources.button_save_24;
+                btnCancel.Image = Resources.button_cancel_24;
 
                 #endregion Language configuration
 
@@ -600,7 +600,7 @@ namespace SharePortfolioManager
         {
             lblVolumeValue.Text = ShareObjectFinalValue.VolumeAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.Volume, Helper.Volumefivelength, false, Helper.Volumetwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
             lblPurchaseValue.Text = ShareObjectFinalValue.PurchaseValueAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.PurchaseValue, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
-            lblBuysValue.Text = ShareObjectFinalValue.AllBuyEntries.BuyValueTotalAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.AllBuyEntries.BuyMarketValueReductionTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
+            lblBuysValue.Text = ShareObjectFinalValue.AllBuyEntries.BuyValueBrokerageTotalAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.AllBuyEntries.BuyMarketValueReductionTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
             lblSalesValue.Text = ShareObjectFinalValue.AllSaleEntries.SalePayoutTotalAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.AllSaleEntries.SalePayoutTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
             lblBrokerageValue.Text = ShareObjectFinalValue.BrokerageValueTotalAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.AllBrokerageEntries.BrokerageValueTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
             lblProfitLossValue.Text = ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotalAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);

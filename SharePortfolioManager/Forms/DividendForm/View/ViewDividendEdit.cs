@@ -438,7 +438,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                         btnAddSave.Text =
                             Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Add",
                                 LanguageName);
-                        btnAddSave.Image = Resources.black_add;
+                        btnAddSave.Image = Resources.button_add_24;
                         // Disable button(s)
                         btnDelete.Enabled = false;
 
@@ -478,7 +478,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
                         // Enable button(s)
                         btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Add", LanguageName);
-                        btnAddSave.Image = Resources.black_add;
+                        btnAddSave.Image = Resources.button_add_24;
 
                         // Disable button(s)
                         btnDelete.Enabled = false;
@@ -864,6 +864,8 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                         LanguageName);
                 lblDate.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Labels/Date",
                     LanguageName);
+                lblTime.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Labels/Time",
+                    LanguageName);
                 lblEnableForeignCurrency.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Labels/EnableForeignCurrency",
                     LanguageName);
                 lblDividendExchangeRatio.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Labels/ExchangeRatio",
@@ -914,10 +916,10 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                         LanguageName);
 
                 // Load button images
-                btnAddSave.Image = Resources.black_add;
-                btnDelete.Image = Resources.black_delete;
-                btnReset.Image = Resources.black_cancel;
-                btnCancel.Image = Resources.black_cancel;
+                btnAddSave.Image = Resources.button_add_24;
+                btnDelete.Image = Resources.button_recycle_bin_24;
+                btnReset.Image = Resources.button_reset_24;
+                btnCancel.Image = Resources.button_back_24;
 
                 // Set dividend units to the edit boxes
                 lblDividendRateUnit.Text = ShareObjectFinalValue.CurrencyUnit;
@@ -1020,7 +1022,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             // Enable button(s)
             btnAddSave.Text = 
                 Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Add", LanguageName);
-            btnAddSave.Image = Resources.black_add;
+            btnAddSave.Image = Resources.button_add_24;
 
             // Disable button(s)
             btnDelete.Enabled = false;
@@ -1532,7 +1534,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
                 // Enable button(s)
                 btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Add", LanguageName);
-                btnAddSave.Image = Resources.black_add;
+                btnAddSave.Image = Resources.button_add_24;
 
                 // Rename group box
                 grpBoxAddDividend.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", LanguageName);
@@ -2246,7 +2248,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     // Rename button
                     btnAddSave.Text = 
                         Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Save", LanguageName);
-                    btnAddSave.Image = Resources.black_edit;
+                    btnAddSave.Image = Resources.button_pencil_24;
 
                     // Rename group box
                     grpBoxAddDividend.Text = 
@@ -2263,7 +2265,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     // Rename button
                     btnAddSave.Text = 
                         Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Add", LanguageName);
-                    btnAddSave.Image = Resources.black_add;
+                    btnAddSave.Image = Resources.button_add_24;
 
                     // Rename group box
                     grpBoxAddDividend.Text = 

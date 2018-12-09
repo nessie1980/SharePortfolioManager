@@ -33,6 +33,10 @@ using LanguageHandler;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
 using System.Net;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using SharePortfolioManager.Properties;
 using MenuItem = System.Windows.Forms.MenuItem;
 
 namespace SharePortfolioManager.Classes
@@ -286,7 +290,7 @@ namespace SharePortfolioManager.Classes
                     // Set state message
                     castControl.Text = stateMessage;
                     // Reset color
-                    castControl.ForeColor = oldColor;
+                    //castControl.ForeColor = oldColor;
 
                     return true;
                 }
@@ -388,6 +392,19 @@ namespace SharePortfolioManager.Classes
                             EnableDisableControls(flag, castControl, listControlNames);
                     }
 
+                    // DataGridView
+                    if (control.GetType() == typeof(TableLayoutPanel))
+                    {
+                        var castControl = (TableLayoutPanel)control;
+                        Console.WriteLine(castControl.Name);
+
+                        if (listControlNames.Contains(castControl.Name))
+                            castControl.Enabled = flag;
+
+                        if (castControl.Controls.Count > 0)
+                            EnableDisableControls(flag, castControl, listControlNames);
+                    }
+
                     // TabControl
                     if (control.GetType() != typeof(TabControl)) continue;
                     {
@@ -410,6 +427,37 @@ namespace SharePortfolioManager.Classes
         }
 
         #endregion Enable or disable controls
+
+        #region Get image for the given file
+
+        public static Image GetImageForFile(string strFile)
+        {
+            // Get extension of the given file
+            var strExtension = Path.GetExtension(strFile);
+
+            if (string.Compare(strExtension, @"pdf", StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                return Resources.doc_pdf_image_24;
+            }
+
+            if(string.Compare(strExtension, @"xlsx", StringComparison.OrdinalIgnoreCase) == 0 ||
+               string.Compare(strExtension, @"xls", StringComparison.OrdinalIgnoreCase) == 0
+            )
+            {
+                return Resources.doc_excel_image_24;
+            }
+
+            if (string.Compare(strExtension, @"docx", StringComparison.OrdinalIgnoreCase) == 0 ||
+                string.Compare(strExtension, @"doc", StringComparison.OrdinalIgnoreCase) == 0
+            )
+            {
+                return Resources.doc_excel_image_24;
+            }
+
+            return Resources.empty_arrow;
+        }
+
+        #endregion Get image for the given file
 
         // TODO
         //#region Enable or disable item
@@ -507,7 +555,7 @@ namespace SharePortfolioManager.Classes
 
 #endregion Scroll DataGridView to given index
 
-#region Formatting functions
+        #region Formatting functions
 
         /// <summary>
         /// This function formats the given decimal value
@@ -683,9 +731,9 @@ namespace SharePortfolioManager.Classes
             return strResult;
         }
 
-#endregion Formatting functions
+        #endregion Formatting functions
 
-#region Get RegEx options
+        #region Get RegEx options
 
         /// <summary>
         /// This function returns a list of "RegexOptions" of a given string
@@ -741,9 +789,9 @@ namespace SharePortfolioManager.Classes
                 return regexOptionsList.Count > 0 ? regexOptionsList : null;
             }
 
-#endregion Get RegEx options
+        #endregion Get RegEx options
 
-#region Open file dialog for setting document
+        #region Open file dialog for setting document
 
         /// <summary>
         /// This function show a open file dialog
@@ -753,7 +801,7 @@ namespace SharePortfolioManager.Classes
         /// <param name="strFilter">Filter for the open file dialog</param>
         /// <param name="strCurrentDocument">Given current document</param>
         /// <returns></returns>
-        public static string SetDocument(string strTitle, string strFilter, string strCurrentDocument)
+        public static DialogResult SetDocument(string strTitle, string strFilter, ref string strCurrentDocument)
         {
             // Open file dialog
             OpenFileDialog openFileDlg;
@@ -792,12 +840,12 @@ namespace SharePortfolioManager.Classes
 
             strCurrentDocument = dlgResult == DialogResult.OK ? openFileDlg.FileName : strOldDocument;
 
-            return strCurrentDocument;
+            return dlgResult;
         }
 
-#endregion Open file dialog for setting document
+        #endregion Open file dialog for setting document
 
-#region Open file dialog for loading portfolio
+        #region Open file dialog for loading portfolio
 
         /// <summary>
         /// This function show a open file dialog
@@ -828,9 +876,9 @@ namespace SharePortfolioManager.Classes
 
             return strCurrentPortfolio;
         }
-#endregion Open file dialog for loading portfolio
+        #endregion Open file dialog for loading portfolio
 
-#region Get file name of the given path
+        #region Get file name of the given path
 
         /// <summary>
         /// This function return the file name of the given path
@@ -845,9 +893,9 @@ namespace SharePortfolioManager.Classes
             return @"-";
         }
 
-#endregion Get file name of the given path
+        #endregion Get file name of the given path
 
-#region Get currency list
+        #region Get currency list
 
         /// <summary>
         /// This function returns a list of all currency
@@ -877,9 +925,9 @@ namespace SharePortfolioManager.Classes
             ListNameCultureInfoCurrencySymbol = ListNameCultureInfoCurrencySymbol.OrderBy(ci => ci.Key);
         }
 
-#endregion Get currency list
+        #endregion Get currency list
 
-#region Get culture info by name
+        #region Get culture info by name
 
         public static CultureInfo GetCultureByName(string name)
         {
@@ -893,38 +941,47 @@ namespace SharePortfolioManager.Classes
             return null;
         }
 
-#endregion Get culture info by name
+        #endregion Get culture info by name
 
-#region Calculate market value, market value minus reduction and market value minus reduction and plus brokerage
+        #region Calculate market value, market value plus brokerage
 
-        public static void CalcBuyValues(decimal decVolume, decimal decSharePrice, decimal decBrokerage, decimal decReduction,
-            out decimal decMarketValue, out decimal decMarketValueReduction, out decimal decMarketValueReductionBrokerage, out decimal decBrokerageOut)
+        public static void CalcBuyValues(decimal decVolume, decimal decSharePrice,
+            decimal decProvision, decimal decBrokerFee, decimal decTraderPlaceFee, decimal decReduction,
+            out decimal decMarketValue, out decimal decDeposit, out decimal decBrokerage, out decimal decBrokerageWithReduction)
         {
-            decBrokerageOut = 0;
+            decBrokerage = 0;
+            decBrokerageWithReduction = 0;
 
+            // Calculate brokerage
+            CalcBrokerageValues(decProvision, decBrokerFee, decTraderPlaceFee, decReduction, out decBrokerage, out decBrokerageWithReduction);
+
+            // Calculate market value and deposit ( market value + brokerage )
             if (decVolume > 0 && decSharePrice > 0)
             {
                 decMarketValue = Math.Round(decVolume * decSharePrice, 2);
-                decMarketValueReduction = decMarketValue;
-                if (decReduction > 0)
-                    decMarketValueReduction -= decReduction;
-
-                decMarketValueReductionBrokerage = decMarketValueReduction;
-
-                if (decBrokerage > 0)
-                    decMarketValueReductionBrokerage += decBrokerage;
+                decDeposit = decMarketValue + decBrokerageWithReduction;
             }
             else
             {
                 decMarketValue = 0;
-                decMarketValueReduction = 0;
-                decMarketValueReductionBrokerage = 0;
+                decDeposit = 0;
             }
-
-            decBrokerageOut = decBrokerage - decReduction;
         }
 
-        #endregion  Calculate market value, market value minus reduction and market value minus reduction and plus brokerage
+        #endregion   Calculate market value, market value plus brokerage
+
+        #region Calculate brokerage value
+
+        public static void CalcBrokerageValues(decimal decProvision, decimal decBrokerFee, decimal decTraderPlaceFee, decimal decReduction,
+            out decimal decBrokerage, out decimal decBrokerageWithReduction)
+        {
+            // Calculate brokerage
+            decBrokerage = decProvision + decBrokerFee + decTraderPlaceFee;
+            // Calculate brokerage minus reduction
+            decBrokerageWithReduction = decProvision + decBrokerFee + decTraderPlaceFee - decReduction;
+        }
+
+        #endregion Calculate brokerage value
 
         #region URL checker
 
@@ -955,19 +1012,99 @@ namespace SharePortfolioManager.Classes
 
 #endregion URL checker
 
-#region Get combo box items
+        #region Get combo box items
 
-        public static object[] GetComboBoxItmes(string xPath, string languageName, Language language)
+        public static object[] GetComboBoxItems(string xPath, string languageName, Language language)
         {
             return language.GetLanguageTextListByXPath(xPath, languageName).ToArray();
         }
 
-#endregion  Get combo box items
+        #endregion  Get combo box items
 
-#endregion Methods
+        #region Remove double whitespaces and line feeds ( \n \r )
+
+        public static string RemoveDoubleWhiteSpaces(string strInput)
+        {
+            if (strInput == null) { return null; }
+
+            var builder = new StringBuilder();
+            var ignoreWhitespace = false;
+            foreach (var c in strInput)
+            {
+                if ((!ignoreWhitespace || c != ' ') && c != '\n' && c != '\r')
+                {
+                    builder.Append(c);
+                }
+                ignoreWhitespace = c == ' ';
+            }
+            return builder.ToString();
+        }
+
+        #endregion Remove double whitespaces and line feeds ( \n \r )
+
+        #region Async process
+
+        public static int RunProcess(string fileName, string args)
+        {
+            try
+            {
+                using (var process = new Process
+                {
+                    StartInfo =
+                    {
+                        FileName = fileName,
+                        Arguments = args,
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true
+                    },
+                    EnableRaisingEvents = true
+                })
+                {
+                    return RunProcess(process);
+                }
+            }
+            catch (OperationCanceledException ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
+            catch(InvalidOperationException ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
+        }
+
+        private static int RunProcess(Process process)
+        {
+            var tcs = new TaskCompletionSource<int>();
+
+            process.Exited += (s, ea) => tcs.SetResult(process.ExitCode);
+            process.OutputDataReceived += (s, ea) => Console.WriteLine(ea.Data);
+            process.ErrorDataReceived += (s, ea) => Console.WriteLine("ERR: " + ea.Data);
+
+            var started = process.Start();
+            if (!started)
+            {
+                //you may allow for the process to be re-used (started = false) 
+                //but I'm not sure about the guarantees of the Exited event in such a case
+                throw new InvalidOperationException("Could not start process: " + process);
+            }
+
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+
+            return tcs.Task.Result;
+        }
+
+        #endregion Async process
+
+        #endregion Methods
     }
 
-    // This class stores the informations of a culture info
+    // This class stores the information of a culture info
     public class CultureInformation
     {
         public string CurrencySymbol { get; set; }

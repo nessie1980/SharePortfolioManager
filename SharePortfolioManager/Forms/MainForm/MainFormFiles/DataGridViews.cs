@@ -108,9 +108,9 @@ namespace SharePortfolioManager
         public List<Image> ImageList { get; } = new List<Image>
         {
             Resources.empty_arrow,
-            Resources.red_down_arrow,
-            Resources.gray_neutral_arrow,
-            Resources.green_up_arrow
+            Resources.negativ_development_24,
+            Resources.neutral_development_24,
+            Resources.positiv_development_24
         };
 
         #endregion Properties
@@ -1172,6 +1172,8 @@ namespace SharePortfolioManager
         {
             try
             {
+                if (e.Value == null) return;
+
                 var splitString = e.Value.ToString().Split(' ');
                 if (e.ColumnIndex != (int) ColumnIndicesPortfolioMarketValue.ESharePerformanceDayBeforeColumnIndex &&
                     e.ColumnIndex != (int) ColumnIndicesPortfolioMarketValue.ESharePerformanceColumnIndex) return;
@@ -1218,6 +1220,8 @@ namespace SharePortfolioManager
         {
             try
             {
+                if (e.Value == null) return;
+
                 var splitString = e.Value.ToString().Split(' ');
                 if (e.ColumnIndex != (int) ColumnIndicesPortfolioFinalValue.ESharePerformanceDayBeforeColumnIndex &&
                     e.ColumnIndex != (int) ColumnIndicesPortfolioFinalValue.ESharePerformanceColumnIndex) return;
@@ -1631,7 +1635,7 @@ namespace SharePortfolioManager
                     dgvPortfolioFooterMarketValue.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
                 }
 
-                if (dgvPortfolioFooterMarketValue.Rows.Count == 3)
+                if (dgvPortfolioFooterMarketValue.Rows.Count == 3 && ShareObjectListMarketValue.Count > 0 && ShareObjectListMarketValue[0] != null)
                 {
                     // Set deposit of all shares
                     dgvPortfolioFooterMarketValue.Rows[0].Cells[
@@ -1662,23 +1666,28 @@ namespace SharePortfolioManager
                     dgvPortfolioFooterFinalValue.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
                 }
 
-                if (dgvPortfolioFooterFinalValue.Rows.Count != 3) return;
+                if (dgvPortfolioFooterFinalValue.Rows.Count == 3 && ShareObjectListFinalValue.Count > 0 && ShareObjectListFinalValue[0] != null)
+                {
+                    // Set deposit of all shares
+                    dgvPortfolioFooterFinalValue.Rows[0].Cells[
+                            (int) ColumnIndicesPortfolioFooterFinalValue.ESumColumnIndex].Value =
+                        ShareObjectListFinalValue[0].PortfolioPurchaseValueAsStrUnit;
 
-                // Set deposit of all shares
-                dgvPortfolioFooterFinalValue.Rows[0].Cells[
-                    (int)ColumnIndicesPortfolioFooterFinalValue.ESumColumnIndex].Value = ShareObjectListFinalValue[0].PortfolioPurchaseValueAsStrUnit;
+                    // Set brokerage and dividend of all shares
+                    dgvPortfolioFooterFinalValue.Rows[1].Cells[
+                            (int) ColumnIndicesPortfolioFooterFinalValue.EBrokerageDividendIndex].Value =
+                        ShareObjectListFinalValue[0].BrokerageDividendPortfolioValueAsStr;
 
-                // Set brokerage and dividend of all shares
-                dgvPortfolioFooterFinalValue.Rows[1].Cells[
-                    (int)ColumnIndicesPortfolioFooterFinalValue.EBrokerageDividendIndex].Value = ShareObjectListFinalValue[0].BrokerageDividendPortfolioValueAsStr;
+                    // Set performance of all shares
+                    dgvPortfolioFooterFinalValue.Rows[1].Cells[
+                            (int) ColumnIndicesPortfolioFooterFinalValue.EPerformanceColumnIndex].Value =
+                        ShareObjectListFinalValue[0].ProfitLossPerformancePortfolioValueAsStr;
 
-                // Set performance of all shares
-                dgvPortfolioFooterFinalValue.Rows[1].Cells[
-                    (int)ColumnIndicesPortfolioFooterFinalValue.EPerformanceColumnIndex].Value = ShareObjectListFinalValue[0].ProfitLossPerformancePortfolioValueAsStr;
-
-                // Set value of the shares
-                dgvPortfolioFooterFinalValue.Rows[2].Cells[
-                    (int)ColumnIndicesPortfolioFooterFinalValue.ESumColumnIndex].Value = ShareObjectListFinalValue[0].PortfolioFinalValueAsStrUnit;
+                    // Set value of the shares
+                    dgvPortfolioFooterFinalValue.Rows[2].Cells[
+                            (int) ColumnIndicesPortfolioFooterFinalValue.ESumColumnIndex].Value =
+                        ShareObjectListFinalValue[0].PortfolioFinalValueAsStrUnit;
+                }
 
                 #endregion dgvPortfolioFinalValue
             }

@@ -222,7 +222,7 @@ namespace SharePortfolioManager
                                                   Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/ShareType",
                                                       LanguageName) +
                                                   @" " +
-                                                  Helper.GetComboBoxItmes(@" / ComboBoxItemsShareType/*", LanguageName,
+                                                  Helper.GetComboBoxItems(@" / ComboBoxItemsShareType/*", LanguageName,
                                                       Language)[ShareObjectMarketValue.ShareType] +
                                                   @" / " +
                                                   Language.GetLanguageTextByXPath(
@@ -238,7 +238,7 @@ namespace SharePortfolioManager
                                                   Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/ShareType",
                                                       LanguageName) +
                                                   @" " +
-                                                  Helper.GetComboBoxItmes(@" / ComboBoxItemsShareType/*", LanguageName,
+                                                  Helper.GetComboBoxItems(@" / ComboBoxItemsShareType/*", LanguageName,
                                                       Language)[ShareObjectMarketValue.ShareType] +
                                                   @" / " +
                                                   Language.GetLanguageTextByXPath(
@@ -370,7 +370,7 @@ namespace SharePortfolioManager
                                                   Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/ShareType",
                                                       LanguageName) +
                                                   @" " +
-                                                  Helper.GetComboBoxItmes(@" / ComboBoxItemsShareType/*", LanguageName,
+                                                  Helper.GetComboBoxItems(@" / ComboBoxItemsShareType/*", LanguageName,
                                                       Language)[ShareObjectFinalValue.ShareType] +
                                                   @" / " +
                                                   Language.GetLanguageTextByXPath(
@@ -386,7 +386,7 @@ namespace SharePortfolioManager
                                                   Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/ShareType",
                                                       LanguageName) +
                                                   @" " +
-                                                  Helper.GetComboBoxItmes(@" / ComboBoxItemsShareType/*", LanguageName,
+                                                  Helper.GetComboBoxItems(@" / ComboBoxItemsShareType/*", LanguageName,
                                                       Language)[ShareObjectFinalValue.ShareType] +
                                                   @" / " +
                                                   Language.GetLanguageTextByXPath(
@@ -1581,11 +1581,11 @@ namespace SharePortfolioManager
                     newTabPageOverviewYears.Parent = tabCtrlBrokerage;
 
                     // Check if brokerage pays exists
-                    if (ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageOfTheShareDictionary.Count > 0)
+                    if (ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageReductionOfTheShareDictionary.Count > 0)
                     {
                         // Loop through the years of the brokerage pays
                         foreach (
-                            var keyName in ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageOfTheShareDictionary.Keys.Reverse()
+                            var keyName in ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageReductionOfTheShareDictionary.Keys.Reverse()
                         )
                         {
                             // Create TabPage
@@ -1593,7 +1593,7 @@ namespace SharePortfolioManager
                             {
                                 Name = keyName,
                                 Text = keyName +
-                                       $@" ({ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageOfTheShareDictionary[keyName].BrokerageValueYearWithUnitAsStr})"
+                                       $@" ({ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageReductionOfTheShareDictionary[keyName].BrokerageValueYearWithUnitAsStr})"
                             };
                             // Set TabPage name
 
@@ -1601,8 +1601,8 @@ namespace SharePortfolioManager
                             var bindingSource = new BindingSource
                             {
                                 DataSource =
-                                    ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageOfTheShareDictionary[keyName]
-                                        .BrokerageListYear
+                                    ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageReductionOfTheShareDictionary[keyName]
+                                        .BrokerageReductionListYear
                             };
 
                             // Create DataGridView

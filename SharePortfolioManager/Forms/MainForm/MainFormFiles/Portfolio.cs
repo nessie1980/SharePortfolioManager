@@ -49,9 +49,9 @@ namespace SharePortfolioManager
             WebSite,
             Culture,
             ShareType,
+            Brokerages,
             Buys,
             Sales,
-            Brokerage,
             Dividends
         };
 
@@ -74,12 +74,12 @@ namespace SharePortfolioManager
                 // Reset market value share object
                 ShareObjectMarketValue = null;
 
-                // Reset the datagridview market value
+                // Reset the DataGridView market value
                 dgvPortfolioMarketValue.Rows.Clear();
                 dgvPortfolioMarketValue.Refresh();
                 dgvPortfolioMarketValue.ColumnHeadersVisible = false;
 
-                // Reset the datagridview market value footer
+                // Reset the DataGridView market value footer
                 dgvPortfolioFooterMarketValue.Rows.Clear();
                 dgvPortfolioFooterMarketValue.Refresh();
                 dgvPortfolioFooterMarketValue.ColumnHeadersVisible = false;
@@ -91,12 +91,12 @@ namespace SharePortfolioManager
                 // Reset final value share object
                 ShareObjectFinalValue = null;
 
-                // Reset the datagridview final value
+                // Reset the DataGridView final value
                 dgvPortfolioFinalValue.Rows.Clear();
                 dgvPortfolioFinalValue.Refresh();
                 dgvPortfolioFinalValue.ColumnHeadersVisible = false;
 
-                // Reset the datagridview final value footer
+                // Reset the DataGridView final value footer
                 dgvPortfolioFooterFinalValue.Rows.Clear();
                 dgvPortfolioFooterFinalValue.Refresh();
                 dgvPortfolioFooterFinalValue.ColumnHeadersVisible = false;
@@ -199,9 +199,9 @@ namespace SharePortfolioManager
 
                             // Add status message
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists1", LanguageName)
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists_1", LanguageName)
                             + _portfolioFileName
-                            + Language.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists2", LanguageName),
+                            + Language.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists_2", LanguageName),
                             Language, LanguageName,
                             Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
 
@@ -413,6 +413,48 @@ namespace SharePortfolioManager
 
                                         #endregion General
 
+                                        #region Brokerage
+
+                                        case (int)PortfolioParts.Brokerages:
+                                            foreach (XmlElement nodeList in nodeElement.ChildNodes[i].ChildNodes)
+                                            {
+                                                // Check if the node has the right count of attributes
+                                                if (nodeList != null &&
+                                                    nodeList.Attributes.Count ==
+                                                    ShareObject.BrokerageAttrCount)
+                                                {
+                                                    if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].AddBrokerage(
+                                                        nodeList.Attributes[ShareObject.BrokerageGuidAttrName].Value,               // Guid
+                                                        Convert.ToBoolean(
+                                                            nodeList.Attributes[ShareObject.BrokerageBuyPartAttrName].Value         // Flag if part of a buy
+                                                        ),
+                                                        Convert.ToBoolean(
+                                                            nodeList.Attributes[ShareObject.BrokerageSalePartAttrName].Value        // Flag if part of a sale
+                                                        ),
+                                                        nodeList.Attributes[ShareObject.BrokerageGuidBuySaleAttrName].Value,        // Guid of the buy or sale
+                                                        nodeList.Attributes[ShareObject.BrokerageDateAttrName].Value,               // Date
+                                                        Convert.ToDecimal(
+                                                            nodeList.Attributes[ShareObject.BrokerageProvisionAttrName].Value       // Provision
+                                                        ),
+                                                        Convert.ToDecimal(
+                                                            nodeList.Attributes[ShareObject.BrokerageBrokerFeeAttrName].Value       // BrokerFee
+                                                        ),
+                                                        Convert.ToDecimal(
+                                                            nodeList.Attributes[ShareObject.BrokerageTraderPlaceFeeAttrName].Value  // TraderPlaceFee
+                                                        ),
+                                                        Convert.ToDecimal(
+                                                            nodeList.Attributes[ShareObject.BrokerageReductionAttrName].Value       // Reduction
+                                                        ),
+                                                        nodeList.Attributes[ShareObject.BrokerageDocumentAttrName].Value))          // Document
+                                                        bLoadPortfolio = false;
+                                                }
+                                                else
+                                                    bLoadPortfolio = false;
+                                            }
+                                            break;
+
+                                        #endregion Brokerage
+
                                         #region Buys
 
                                         case (int)PortfolioParts.Buys:
@@ -435,6 +477,12 @@ namespace SharePortfolioManager
                                                         nodeList.Attributes[ShareObject.BuyDocumentAttrName].Value))            // Document
                                                         bLoadPortfolio = false;
 
+                                                    // Get brokerage object
+                                                    var brokerage = ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].AllBrokerageEntries.GetBrokerageObjectByGuid(
+                                                        nodeList.Attributes[ShareObject.BuyBrokerageGuidAttrName].Value,
+                                                        nodeList.Attributes[ShareObject.BuyDateAttrName].Value
+                                                        );
+
                                                     if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].AddBuy(
                                                         nodeList.Attributes[ShareObject.BuyGuidAttrName].Value,                 // Guid
                                                         nodeList.Attributes[ShareObject.BuyDateAttrName].Value,                 // Date
@@ -444,10 +492,7 @@ namespace SharePortfolioManager
                                                             nodeList.Attributes[ShareObject.BuyVolumeSoldAttrName].Value),      // Volume already sold
                                                         Convert.ToDecimal(
                                                             nodeList.Attributes[ShareObject.BuyPriceAttrName].Value),           // Price
-                                                        Convert.ToDecimal(
-                                                            nodeList.Attributes[ShareObject.BuyReductionAttrName].Value),       // Reduction
-                                                        Convert.ToDecimal(
-                                                            nodeList.Attributes[ShareObject.BuyBrokerageAttrName].Value),       // Brokerage
+                                                        brokerage,                                                              // Brokerage object
                                                         nodeList.Attributes[ShareObject.BuyDocumentAttrName].Value))            // Document
                                                         bLoadPortfolio = false;
                                                 }
@@ -620,137 +665,6 @@ namespace SharePortfolioManager
 
                                         #endregion Sales
 
-                                        #region Brokerage
-
-                                        case (int)PortfolioParts.Brokerage:
-                                            foreach (XmlElement nodeList in nodeElement.ChildNodes[i].ChildNodes)
-                                            {
-                                                // Check if the node has the right count of attributes
-                                                if (nodeList != null &&
-                                                    nodeList.Attributes.Count ==
-                                                    ShareObject.BrokerageAttrCount)
-                                                {
-                                                    if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].AddBrokerage(
-                                                        nodeList.Attributes[ShareObject.BrokerageGuidAttrName].Value,            // Guid
-                                                        Convert.ToBoolean(
-                                                            nodeList.Attributes[ShareObject.BrokerageBuyPartAttrName].Value     // Flag if part of a buy
-                                                        ),
-                                                        Convert.ToBoolean(
-                                                            nodeList.Attributes[ShareObject.BrokerageSalePartAttrName].Value    // Flag if part of a sale
-                                                        ),
-                                                        nodeList.Attributes[ShareObject.BrokerageGuidBuySaleAttrName].Value,    // Guid of the buy or sale
-                                                        nodeList.Attributes[ShareObject.BrokerageDateAttrName].Value,           // Date
-                                                        Convert.ToDecimal(
-                                                            nodeList.Attributes[ShareObject.BrokerageValueAttrName].Value       // Value
-                                                        ),                                                                                                  
-                                                        nodeList.Attributes[ShareObject.BrokerageDocumentAttrName].Value))      // Document
-                                                        bLoadPortfolio = false;
-
-                                                    //// Check if the brokerage is part of a buy
-                                                    //if (bLoadPortfolio &&
-                                                    //    Convert.ToBoolean(
-                                                    //        nodeList.Attributes[ShareObject.BrokerageBuyPartAttrName].Value // Flag if part of a buy
-                                                    //    )
-                                                    //)
-                                                    //{
-                                                    //    var tempBuyObject = ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].AllBuyEntries.GetBuyObjectByDateTime(nodeList.Attributes[ShareObject.BrokerageDateAttrName].Value);
-
-                                                    //    // Check if a buy object has been found
-                                                    //    if (tempBuyObject != null)
-                                                    //    {
-                                                    //        if (ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].RemoveBuy(nodeList.Attributes[ShareObject.BrokerageDateAttrName].Value))
-                                                    //        {
-                                                    //            if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].AddBuy(
-                                                    //                nodeList.Attributes[ShareObject.BrokerageDateAttrName].Value,
-                                                    //                tempBuyObject.Volume,
-                                                    //                tempBuyObject.SharePrice,
-                                                    //                tempBuyObject.Reduction,
-                                                    //                Convert.ToDecimal(
-                                                    //                    nodeList.Attributes[ShareObject.BrokerageValueAttrName].Value   // Value
-                                                    //                ),
-                                                    //                tempBuyObject.Document))
-                                                    //                bLoadPortfolio = false;
-                                                    //        }
-                                                    //        else
-                                                    //            bLoadPortfolio = false;
-
-                                                    //        if (ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].RemoveBuy(nodeList.Attributes[ShareObject.BrokerageDateAttrName].Value))
-                                                    //        {
-                                                    //            if (!ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].AddBuy(
-                                                    //                nodeList.Attributes[ShareObject.BrokerageDateAttrName].Value,
-                                                    //                tempBuyObject.Volume,
-                                                    //                tempBuyObject.SharePrice,
-                                                    //                tempBuyObject.Reduction,
-                                                    //                Convert.ToDecimal(
-                                                    //                    nodeList.Attributes[ShareObject.BrokerageValueAttrName].Value   // Value
-                                                    //                ),
-                                                    //                tempBuyObject.Document))
-                                                    //                bLoadPortfolio = false;
-                                                    //        }
-                                                    //        else
-                                                    //            bLoadPortfolio = false;
-                                                    //    }
-                                                    //}
-
-                                                    //// Check if the brokerage is part of a sale
-                                                    //if (bLoadPortfolio &&
-                                                    //    Convert.ToBoolean(
-                                                    //        nodeList.Attributes[ShareObject.BrokerageSalePartAttrName].Value // Flag if part of a sale
-                                                    //    )
-                                                    //)
-                                                    //{
-                                                    //    var tempSaleObject = ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].AllSaleEntries.GetSaleObjectByDateTime(nodeList.Attributes[ShareObject.BrokerageDateAttrName].Value);
-
-                                                    //    // Check if a sale object has been found
-                                                    //    if (tempSaleObject != null)
-                                                    //    {
-                                                    //        if (ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].RemoveSale(nodeList.Attributes[ShareObject.BrokerageDateAttrName].Value))
-                                                    //        {
-                                                    //            if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].AddSale(
-                                                    //                nodeList.Attributes[ShareObject.BrokerageDateAttrName].Value,
-                                                    //                tempSaleObject.Volume,
-                                                    //                tempSaleObject.BuyPrice,
-                                                    //                tempSaleObject.SalePrice,
-                                                    //                tempSaleObject.TaxAtSource,
-                                                    //                tempSaleObject.CapitalGainsTax,
-                                                    //                tempSaleObject.SolidarityTax,
-                                                    //                Convert.ToDecimal(
-                                                    //                    nodeList.Attributes[ShareObject.BrokerageValueAttrName].Value   // Value
-                                                    //                ),
-                                                    //                tempSaleObject.Document))
-                                                    //                bLoadPortfolio = false;
-                                                    //        }
-                                                    //        else
-                                                    //            bLoadPortfolio = false;
-
-                                                    //        if (ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].RemoveSale(nodeList.Attributes[ShareObject.BrokerageDateAttrName].Value))
-                                                    //        {
-                                                    //            if (!ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].AddSale(
-                                                    //                nodeList.Attributes[ShareObject.BrokerageDateAttrName].Value,
-                                                    //                tempSaleObject.Volume,
-                                                    //                tempSaleObject.BuyPrice,
-                                                    //                tempSaleObject.SalePrice,
-                                                    //                tempSaleObject.TaxAtSource,
-                                                    //                tempSaleObject.CapitalGainsTax,
-                                                    //                tempSaleObject.SolidarityTax,
-                                                    //                Convert.ToDecimal(
-                                                    //                    nodeList.Attributes[ShareObject.BrokerageValueAttrName].Value   // Value
-                                                    //                ),
-                                                    //                tempSaleObject.Document))
-                                                    //                bLoadPortfolio = false;
-                                                    //        }
-                                                    //        else
-                                                    //            bLoadPortfolio = false;
-                                                    //    }
-                                                    //}
-                                                }
-                                                else
-                                                    bLoadPortfolio = false;
-                                            }
-                                            break;
-
-                                        #endregion Brokerage
-
                                         #region Dividends
 
                                         case (int)PortfolioParts.Dividends:
@@ -822,10 +736,10 @@ namespace SharePortfolioManager
                                 }
                                 
                                 // Set website configuration and encoding to the share object.
-                                // The encoding is necessary for the WebParser for encoding the download result.
-                                if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].SetWebSiteRegexListAndEncoding(WebSiteRegexList))
+                                // The encoding is necessary for the Parser for encoding the download result.
+                                if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList))
                                     RegexSearchFailedList.Add(ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].Wkn);
-                                if (!ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].SetWebSiteRegexListAndEncoding(WebSiteRegexList))
+                                if (!ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList))
                                     RegexSearchFailedList.Add(ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].Wkn);
                             }
                         }
@@ -838,7 +752,7 @@ namespace SharePortfolioManager
                         // Close portfolio reader
                         ReaderPortfolio?.Close();
 
-                        // Remove added share object because the read was not sucessful
+                        // Remove added share object because the read was not successful
                         ShareObjectListMarketValue.RemoveAt(ShareObjectListMarketValue.Count - 1);
                         ShareObjectListFinalValue.RemoveAt(ShareObjectListFinalValue.Count - 1);
 
@@ -848,9 +762,9 @@ namespace SharePortfolioManager
 
                         // Add status message
                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile1", LanguageName)
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_1", LanguageName)
                             + _portfolioFileName
-                            + Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile2", LanguageName)
+                            + Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_2", LanguageName)
                             + " " + Language.GetLanguageTextByXPath(@"/MainForm/Errors/PortfolioConfigurationListLoadFailed", LanguageName),
                             Language, LanguageName,
                             Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
@@ -896,12 +810,12 @@ namespace SharePortfolioManager
 
                 // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile1", LanguageName)
+                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_1", LanguageName)
                     + _portfolioFileName
-                    + Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile2", LanguageName)
-                    + " " + Language.GetLanguageTextByXPath(@"/MainForm/Errors/XMLSyntaxFailure1", LanguageName)
+                    + Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_2", LanguageName)
+                    + " " + Language.GetLanguageTextByXPath(@"/MainForm/Errors/XMLSyntaxFailure_1", LanguageName)
                     + _portfolioFileName
-                    + Language.GetLanguageTextByXPath(@"/MainForm/Errors/XMLSyntaxFailure2", LanguageName),
+                    + Language.GetLanguageTextByXPath(@"/MainForm/Errors/XMLSyntaxFailure_2", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
 
@@ -929,10 +843,9 @@ namespace SharePortfolioManager
 
                 // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile1", LanguageName)
+                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_1", LanguageName)
                     + _portfolioFileName
-                    + Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile2", LanguageName)
-                    + " " + Language.GetLanguageTextByXPath(@"/MainForm/Errors/WebSiteConfigurationListLoadFailed", LanguageName),
+                    + Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_2", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
 
@@ -954,7 +867,7 @@ namespace SharePortfolioManager
                 var nodeElement = Portfolio.SelectSingleNode($"/Portfolio/Share[@WKN=\"{wkn}\"]");
                 if (nodeElement == null) return 0;
 
-                foreach (XmlElement nodeList in nodeElement.ChildNodes[(int) PortfolioParts.Brokerage].ChildNodes)
+                foreach (XmlElement nodeList in nodeElement.ChildNodes[(int) PortfolioParts.Brokerages].ChildNodes)
                 {
                     // Check if the node has the right count of attributes
                     if (nodeList == null || nodeList.Attributes.Count != ShareObject.BrokerageAttrCount) return 0;
@@ -968,8 +881,22 @@ namespace SharePortfolioManager
                     if (xmlGuid == guid &&
                         xmlDateTime == dateTime &&
                         (xmlBuyPart == isBuyPart || xmlSalePart == isSalePart)
-                        )
-                        return Convert.ToDecimal(nodeList.Attributes[ShareObject.BrokerageValueAttrName].Value);
+                    )
+                    {
+                        var decProvision =
+                            Convert.ToDecimal(nodeList.Attributes[ShareObject.BrokerageProvisionAttrName].Value);
+                        var decBrokerFee =
+                            Convert.ToDecimal(nodeList.Attributes[ShareObject.BrokerageBrokerFeeAttrName].Value);
+                        var decTraderPlaceFee =
+                            Convert.ToDecimal(nodeList.Attributes[ShareObject.BrokerageTraderPlaceFeeAttrName].Value);
+                        var decReduction =
+                            Convert.ToDecimal(nodeList.Attributes[ShareObject.BrokerageReductionAttrName].Value);
+
+                        Helper.CalcBrokerageValues(decProvision, decBrokerFee, decTraderPlaceFee, decReduction,
+                            out var decBrokerage, out var decBrokerageWithReduction);
+
+                        return decBrokerage;
+                    }
                 }
 
                 return 0;
@@ -990,7 +917,7 @@ namespace SharePortfolioManager
                 var nodeElement = Portfolio.SelectSingleNode($"/Portfolio/Share[@WKN=\"{wkn}\"]");
                 if (nodeElement == null) return 0;
 
-                foreach (XmlElement nodeList in nodeElement.ChildNodes[(int)PortfolioParts.Brokerage].ChildNodes)
+                foreach (XmlElement nodeList in nodeElement.ChildNodes[(int)PortfolioParts.Brokerages].ChildNodes)
                 {
                     // Check if the node has the right count of attributes
                     if (nodeList == null || nodeList.Attributes.Count != ShareObject.BrokerageAttrCount) return 0;
@@ -1005,7 +932,20 @@ namespace SharePortfolioManager
                         xmlDateTime == dateTime &&
                         (xmlBuyPart == isBuyPart || xmlSalePart == isSalePart)
                     )
-                        return Convert.ToDecimal(nodeList.Attributes[ShareObject.BrokerageValueAttrName].Value);
+                    {
+                        var decProvision =
+                            Convert.ToDecimal(nodeList.Attributes[ShareObject.BrokerageProvisionAttrName].Value);
+                        var decBrokerFee =
+                            Convert.ToDecimal(nodeList.Attributes[ShareObject.BrokerageBrokerFeeAttrName].Value);
+                        var decTraderPlaceFee =
+                            Convert.ToDecimal(nodeList.Attributes[ShareObject.BrokerageTraderPlaceFeeAttrName].Value);
+                        var decReduction =
+                            Convert.ToDecimal(nodeList.Attributes[ShareObject.BrokerageReductionAttrName].Value);
+
+                        Helper.CalcBrokerageValues(decProvision, decBrokerFee, decTraderPlaceFee, decReduction, out var decBrokerage, out var decBrokerageWithReduction);
+
+                        return decBrokerage;
+                    }
                 }
 
                 return 0;

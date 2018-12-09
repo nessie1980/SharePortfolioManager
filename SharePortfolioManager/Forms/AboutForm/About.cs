@@ -20,11 +20,11 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using LanguageHandler;
 using System;
 using System.Windows.Forms;
+using LanguageHandler;
 
-namespace SharePortfolioManager
+namespace SharePortfolioManager.Forms.AboutForm
 {
     public partial class FrmAbout : Form
     {
@@ -69,7 +69,7 @@ namespace SharePortfolioManager
             Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Caption", _strLanguage);
             grpBoxVersions.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/Version", _strLanguage);
             lblApplicationVersion.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/ApplicationVersion", _strLanguage);
-            lblWebParserDllVersion.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/WebParserDLLVersion", _strLanguage);
+            lblParserDllVersion.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/ParserDLLVersion", _strLanguage);
             lblLanguageDllVersion.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/LanguageDLLVersion", _strLanguage);
             lblLoggerDllVersion.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/LoggerDLLVersion", _strLanguage);
 
@@ -83,11 +83,11 @@ namespace SharePortfolioManager
 
             lblApplicationVersionValue.Text = verApp.ToString();
 
-            var assWebParser = typeof(WebParser.WebParser).Assembly;
-            var assWebParserName = assWebParser.GetName();
-            var verWebParser = assWebParserName.Version;
+            var assParser = typeof(Parser.Parser).Assembly;
+            var assParserName = assParser.GetName();
+            var verParser = assParserName.Version;
 
-            lblWebParserDllVersionValue.Text = verWebParser.ToString();
+            lblParserDllVersionValue.Text = verParser.ToString();
 
             var assLanguage = typeof(Language).Assembly;
             var assLanguageName = assLanguage.GetName();

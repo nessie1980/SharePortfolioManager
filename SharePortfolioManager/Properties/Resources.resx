@@ -118,55 +118,127 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="black_add" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\black_add.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="SPM" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SPM.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="black_cancel" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\black_cancel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="button_add_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\button_add_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="black_delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\black_delete.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="button_back_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\button_back_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="black_edit" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\black_edit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="button_cancel_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\button_cancel_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="black_save" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\black_save.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="button_exit_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\button_exit_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="black_update" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\black_update.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="button_pencil_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\button_pencil_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="black_update_all" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\black_update_all.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="button_recycle_bin_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\button_recycle_bin_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="button_reset_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\button_reset_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="button_save_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\button_save_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="button_save_as_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\button_save_as_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="button_update_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\button_update_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="button_update_all_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\button_update_all_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="doc_excel_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\doc_excel_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="doc_excel_image_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\doc_excel_image_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="doc_pdf_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\doc_pdf_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="doc_pdf_image_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\doc_pdf_image_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="doc_word_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\doc_word_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="doc_word_image_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\doc_word_image_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="menu_about_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\menu_about_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="menu_eventlog_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\menu_eventlog_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="menu_file_add2_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\menu_file_add2_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="menu_file_add3_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\menu_file_add3_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="menu_file_add_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\menu_file_add_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="menu_flag_german_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\menu_flag_german_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="menu_flag_usa_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\menu_flag_usa_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="menu_folder_add_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\menu_folder_add_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="menu_folder_open_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\menu_folder_open_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="menu_settings_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\menu_settings_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="negativ_development_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_16\negativ_development_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="negativ_development_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\negativ_development_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="neutral_development_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_16\neutral_development_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="neutral_development_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\neutral_development_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="positiv_development_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_16\positiv_development_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="positiv_development_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\positiv_development_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="search_failed_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\search_failed_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="search_info_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\search_info_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="search_ok_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\search_ok_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="button_pencil_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_16\button_pencil_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="empty_arrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\empty_arrow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="gray_neutral_arrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\gray_neutral_arrow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="menu_folder_open_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_16\menu_folder_open_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="green_up_arrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\green_up_arrow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="red_down_arrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\red_down_arrow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="SPM" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SPM.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="black_exit" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\black_exit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="black_logger" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\black_logger.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="black_new" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\black_new.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="black_open" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\black_open.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="black_show" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\black_show.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="show_window_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\show_window_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

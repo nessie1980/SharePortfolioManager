@@ -54,6 +54,9 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.Presenter
             _view.ErrorCode = _model.ErrorCode;
             _view.Date = _model.Date;
             _view.Time = _model.Time;
+            _view.Provision = _model.Provision;
+            _view.BrokerFee = _model.BrokerFee;
+            _view.TraderPlaceFee = _model.TraderPlaceFee;
             _view.Brokerage = _model.Brokerage;
             _view.Document = _model.Document;
         }
@@ -89,6 +92,9 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.Presenter
             _model.PartOfASale = _view.PartOfASale;
             _model.Date = _view.Date;
             _model.Time = _view.Time;
+            _model.Provision = _view.Provision;
+            _model.BrokerFee = _view.BrokerFee;
+            _model.TraderPlaceFee = _view.TraderPlaceFee;
             _model.Brokerage = _view.Brokerage;
             _model.Document = _view.Document;
 
@@ -110,7 +116,8 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.Presenter
                 // Generate Guid
                 var strGuid = Guid.NewGuid().ToString();
 
-                _model.ErrorCode = _model.ShareObjectFinalValue.AddBrokerage(_model.SelectedGuid, false, false, strGuid, strDateTime, _model.BrokerageDec, _model.Document) ? BrokerageErrorCode.AddSuccessful : BrokerageErrorCode.AddFailed;
+                _model.ErrorCode = _model.ShareObjectFinalValue.AddBrokerage(_model.SelectedGuid, false, false, strGuid,
+                    strDateTime, _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec, _model.Document) ? BrokerageErrorCode.AddSuccessful : BrokerageErrorCode.AddFailed;
             }
 
             UpdateViewWithModel();
@@ -129,7 +136,8 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.Presenter
                 // Generate Guid
                 var strGuid = Guid.NewGuid().ToString();
 
-                if (_model.ShareObjectFinalValue.RemoveBrokerage(_model.SelectedGuid, _model.SelectedDate) && _model.ShareObjectFinalValue.AddBrokerage(_model.SelectedGuid, _model.PartOfABuy, _model.PartOfASale, strGuid, strDateTime, _model.BrokerageDec, _model.Document))
+                if (_model.ShareObjectFinalValue.RemoveBrokerage(_model.SelectedGuid, _model.SelectedDate) && _model.ShareObjectFinalValue.AddBrokerage(_model.SelectedGuid, _model.PartOfABuy, _model.PartOfASale, strGuid,
+                        strDateTime, _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec, _model.Document))
                 {
                     _model.ErrorCode = BrokerageErrorCode.EditSuccessful;
 
@@ -166,8 +174,16 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.Presenter
         {
             try
             {
+                var strCurrentFile = _model.Document;
+
                 const string strFilter = "pdf (*.pdf)|*.pdf|txt (*.txt)|.txt|doc (*.doc)|.doc|docx (*.docx)|.docx";
-                _model.Document = Helper.SetDocument(_model.Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/OpenFileDialog/Title", _model.LanguageName), strFilter, _model.Document);
+                if (Helper.SetDocument(
+                        _model.Language.GetLanguageTextByXPath(
+                            @"/AddEditFormBrokerage/GrpBoxAddEdit/OpenFileDialog/Title", _model.LanguageName),
+                        strFilter, ref strCurrentFile) == DialogResult.OK)
+                {
+                    _model.Document = strCurrentFile;
+                }
 
                 UpdateViewWithModel();
 
@@ -199,6 +215,62 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.Presenter
                 var bErrorFlag = false;
 
                 _model.ErrorCode = bFlagEdit ? BrokerageErrorCode.EditSuccessful : BrokerageErrorCode.AddSuccessful;
+
+                // Provision input check
+                if (!decimal.TryParse(_model.Provision, out var decProvision))
+                {
+                    _model.ErrorCode = BrokerageErrorCode.ProvisionWrongFormat;
+                    bErrorFlag = true;
+                }
+                else if (decProvision < 0)
+                {
+                    _model.ErrorCode = BrokerageErrorCode.ProvisionWrongValue;
+                    bErrorFlag = true;
+                }
+                else
+                    _model.ProvisionDec = decProvision;
+
+                // Broker fee input check
+                if (!decimal.TryParse(_model.BrokerFee, out var decBrokerFee))
+                {
+                    _model.ErrorCode = BrokerageErrorCode.BrokerFeeWrongFormat;
+                    bErrorFlag = true;
+                }
+                else if (decBrokerFee < 0)
+                {
+                    _model.ErrorCode = BrokerageErrorCode.BrokerFeeWrongValue;
+                    bErrorFlag = true;
+                }
+                else
+                    _model.BrokerFeeDec = decBrokerFee;
+
+                // Trader place fee input check
+                if (!decimal.TryParse(_model.TraderPlaceFee, out var decTraderPlaceFee))
+                {
+                    _model.ErrorCode = BrokerageErrorCode.TraderPlaceFeeWrongFormat;
+                    bErrorFlag = true;
+                }
+                else if (decTraderPlaceFee < 0)
+                {
+                    _model.ErrorCode = BrokerageErrorCode.TraderPlaceFeeWrongValue;
+                    bErrorFlag = true;
+                }
+                else
+                    _model.BrokerFeeDec = decTraderPlaceFee;
+
+                // Reduction input check
+                if (!decimal.TryParse(_model.Reduction, out var decReduction))
+                {
+                    _model.ErrorCode = BrokerageErrorCode.ReductionWrongFormat;
+                    bErrorFlag = true;
+                }
+                else if (decReduction < 0)
+                {
+                    _model.ErrorCode = BrokerageErrorCode.ReductionWrongValue;
+                    bErrorFlag = true;
+                }
+                else
+                    _model.ReductionDec = decReduction;
 
                 // Brokerage input check
                 if (_model.Brokerage == @"")

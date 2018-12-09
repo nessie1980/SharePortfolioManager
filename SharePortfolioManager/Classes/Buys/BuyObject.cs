@@ -20,15 +20,15 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using SharePortfolioManager.Classes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
+using SharePortfolioManager.Classes.Costs;
 using SharePortfolioManager.Properties;
 
-namespace SharePortfolioManager
+namespace SharePortfolioManager.Classes.Buys
 {
     [Serializable]
     public class BuyObject
@@ -38,27 +38,56 @@ namespace SharePortfolioManager
         /// <summary>
         /// Stores the buy volume
         /// </summary>
-        private decimal _volume = -1;
+        private decimal _volume;
 
         /// <summary>
-        /// Stores the alreday sold volume of the share
+        /// Stores the already sold volume of the share
         /// </summary>
-        private decimal _volumeAlreadySold = -1;
+        private decimal _volumeAlreadySold;
 
         /// <summary>
         /// Stores the price of the share
         /// </summary>
-        private decimal _sharePrice = -1;
+        private decimal _sharePrice;
+
+        #region Brokerage values
 
         /// <summary>
-        /// Stores the discount value of the buy
+        /// Stores the Guid of the brokerage value of the brokerage object
         /// </summary>
-        private decimal _reduction = -1;
+        private string _brokerageGuid = @"";
+
+        /// <summary>
+        /// Stores the provision value of the buy
+        /// </summary>
+        private decimal _provision;
+
+        /// <summary>
+        /// Stores the broker fee value of the buy
+        /// </summary>
+        private decimal _brokerFee;
+
+        /// <summary>
+        /// Stores the trader place fee value of the buy
+        /// </summary>
+        private decimal _traderPlaceFee;
+
+        /// <summary>
+        /// Stores the reduction value of the buy
+        /// </summary>
+        private decimal _reduction;
 
         /// <summary>
         /// Stores the brokerage value of the buy
         /// </summary>
-        private decimal _brokerage = -1;
+        private decimal _brokerage;
+
+        /// <summary>
+        /// Stores the brokerage minus reduction value of the buy
+        /// </summary>
+        private decimal _brokerageWithReduction;
+
+        #endregion Brokerage values
 
         #endregion Variables
 
@@ -82,12 +111,9 @@ namespace SharePortfolioManager
             get => _volume;
             internal set
             {
-                if (_volume == value)
+                if (_volume.Equals(value))
                     return;
                 _volume = value;
-
-                // Calculate the values
-                CalculateMarketValues();
             }
         }
 
@@ -100,12 +126,9 @@ namespace SharePortfolioManager
             get => _volumeAlreadySold;
             internal set
             {
-                if (_volumeAlreadySold == value)
+                if (_volumeAlreadySold.Equals(value))
                     return;
                 _volumeAlreadySold = value;
-
-                // Calculate the values
-                CalculateMarketValues();
             }
         }
 
@@ -118,35 +141,73 @@ namespace SharePortfolioManager
             get => _sharePrice;
             internal set
             {
-                if (_sharePrice == value)
+                if (_sharePrice.Equals(value))
                     return;
                 _sharePrice = value;
-
-                // Calculate the values
-                CalculateMarketValues();
             }
         }
 
         [Browsable(false)]
         public string SharePriceAsStr => Helper.FormatDecimal(SharePrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
 
+        #region Brokerage values
+
         [Browsable(false)]
-        public decimal Brokerage
+        public string BrokerageGuid
         {
-            get => _brokerage;
+            get => _brokerageGuid;
             internal set
             {
-                if (_brokerage == value)
+                if (_brokerageGuid.Equals(value))
                     return;
-                _brokerage = value;
-
-                // Calculate the market values
-                CalculateMarketValues();
+                _brokerageGuid = value;
             }
         }
 
         [Browsable(false)]
-        public string BrokerageAsStr => Helper.FormatDecimal(Brokerage, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
+        public decimal Provision
+        {
+            get => _provision;
+            internal set
+            {
+                if (_provision.Equals(value))
+                    return;
+                _provision = value;
+            }
+        }
+
+        [Browsable(false)]
+        public string ProvisionAsStr => Helper.FormatDecimal(Provision, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
+
+        [Browsable(false)]
+        public decimal BrokerFee
+        {
+            get => _brokerFee;
+            internal set
+            {
+                if (_brokerFee.Equals(value))
+                    return;
+                _brokerFee = value;
+            }
+        }
+
+        [Browsable(false)]
+        public string BrokerFeeAsStr => Helper.FormatDecimal(BrokerFee, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
+
+        [Browsable(false)]
+        public decimal TraderPlaceFee
+        {
+            get => _traderPlaceFee;
+            internal set
+            {
+                if (_traderPlaceFee.Equals(value))
+                    return;
+                _traderPlaceFee = value;
+            }
+        }
+
+        [Browsable(false)]
+        public string TraderPlaceFeeAsStr => Helper.FormatDecimal(TraderPlaceFee, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
 
         [Browsable(false)]
         public decimal Reduction
@@ -154,12 +215,9 @@ namespace SharePortfolioManager
             get => _reduction;
             internal set
             {
-                if (_reduction == value)
+                if (_reduction.Equals(value))
                     return;
                 _reduction = value;
-
-                // Calculate the values
-                CalculateMarketValues();
             }
         }
 
@@ -167,16 +225,45 @@ namespace SharePortfolioManager
         public string ReductionAsStr => Helper.FormatDecimal(Reduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
 
         [Browsable(false)]
+        public decimal Brokerage
+        {
+            get => _brokerage;
+            internal set
+            {
+                if (_brokerage.Equals(value))
+                    return;
+                _brokerage = value;
+            }
+        }
+
+        [Browsable(false)]
+        public string BrokerageAsStr => Helper.FormatDecimal(Brokerage, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
+
+        [Browsable(false)]
+        public decimal BrokerageWithReduction
+        {
+            get => _brokerageWithReduction;
+            internal set
+            {
+                if (_brokerageWithReduction.Equals(value))
+                    return;
+                _brokerageWithReduction = value;
+            }
+        }
+
+        [Browsable(false)]
+        public string BrokerageWithReductionAsStr => Helper.FormatDecimal(BrokerageWithReduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
+
+        #endregion Brokerage values
+
+        [Browsable(false)]
         public decimal BuyValue { get; internal set; } = -1;
 
         [Browsable(false)]
-        public decimal BuyValueReduction { get; internal set; } = -1;
+        public decimal BuyValueBrokerage { get; internal set; } = -1;
 
         [Browsable(false)]
-        public decimal BuyValueReductionBrokerage { get; internal set; } = -1;
-
-        [Browsable(false)]
-        public string MarketValueReductionBrokerageAsStr => Helper.FormatDecimal(BuyValueReductionBrokerage, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
+        public string BuyValueBrokerageAsStr => Helper.FormatDecimal(BuyValueBrokerage, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
 
         [Browsable(false)]
         public string Document { get; internal set; }
@@ -187,31 +274,38 @@ namespace SharePortfolioManager
 
         [Browsable(true)]
         [DisplayName(@"Guid")]
+        // ReSharper disable once UnusedMember.Global
         public string DgvGuid => Guid;
 
         [Browsable(true)]
         [DisplayName(@"Date")]
+        // ReSharper disable once UnusedMember.Global
         public string DgvDateAsStr => DateAsStr;
 
         [Browsable(true)]
         [DisplayName(@"Volume")]
+        // ReSharper disable once UnusedMember.Global
         public string DgvVolumeAsStr => VolumeAsStr;
 
         [Browsable(true)]
         [DisplayName(@"Price")]
+        // ReSharper disable once UnusedMember.Global
         public string DgvSharePriceAsStr => SharePriceAsStr;
 
         [Browsable(true)]
         [DisplayName(@"Brokerage")]
-        public string DgvBrokerageAsStr => BrokerageAsStr;
+        // ReSharper disable once UnusedMember.Global
+        public string DgvBrokerageWithReductionAsStr => BrokerageWithReductionAsStr;
 
         [Browsable(true)]
-        [DisplayName(@"Reduction")]
-        public string DgvReductionAsStr => ReductionAsStr;
+        [DisplayName(@"Deposit")]
+        // ReSharper disable once UnusedMember.Global
+        public string DgvDepositAsStr => BuyValueBrokerageAsStr;
 
         [Browsable(true)]
         [DisplayName(@"Document")]
-        public Image DocumentGrid => Document == @"-" ? null : Resources.black_logger;
+        // ReSharper disable once UnusedMember.Global
+        public Image DocumentGrid => Helper.GetImageForFile( Document);
 
         #endregion Data grid view properties
 
@@ -226,20 +320,34 @@ namespace SharePortfolioManager
         /// <param name="decVolume">Volume of the bought shares</param>
         /// <param name="decVolumeSold">Volume of the bought shares which already sold</param>
         /// <param name="decSharePrice">Price for one share</param>
-        /// <param name="decReduction">Reduction of the buy</param>
-        /// <param name="decBrokerage">Brokerage of the buy</param>
+        /// <param name="brokerageObject">Brokerage of the buy</param>
         /// <param name="strDoc">Document of the share buy</param>
-        public BuyObject(CultureInfo cultureInfo, string strGuid, string strDate, decimal decVolume, decimal decVolumeSold, decimal decSharePrice, decimal decReduction, decimal decBrokerage, string strDoc = "")
+        public BuyObject(CultureInfo cultureInfo, string strGuid, string strDate, decimal decVolume, decimal decVolumeSold, decimal decSharePrice,
+            BrokerageReductionObject brokerageObject, string strDoc = "")
         {
             Guid = strGuid;
             BuyCultureInfo = cultureInfo;
             Date = strDate;
             Volume = decVolume;
             VolumeSold = decVolumeSold;
-            Reduction = decReduction;
-            Brokerage = decBrokerage;
             SharePrice = decSharePrice;
+            if (brokerageObject != null)
+            {
+                BrokerageGuid = brokerageObject.Guid;
+                Provision = brokerageObject.ProvisionValue;
+                BrokerFee = brokerageObject.BrokerFeeValue;
+                TraderPlaceFee = brokerageObject.TraderPlaceFeeValue;
+                Reduction = brokerageObject.ReductionValue;
+            }
+            else
+            {
+                BrokerageGuid = @"";
+            }
+
             Document = strDoc;
+
+            // Calculate the market values and brokerage
+            CalculateValues();
 
 #if DEBUG_BUY
             Console.WriteLine(@"");
@@ -265,14 +373,23 @@ namespace SharePortfolioManager
         /// - the brokerage value
         /// with the given volume and share price of the buy
         /// </summary>
-        private void CalculateMarketValues()
+        private void CalculateValues()
         {
-            Helper.CalcBuyValues( Volume, SharePrice, Brokerage,
-                Reduction, out var decMarketValue, out var decMarketValueReduction, out var decMarketValueReductionBrokerage, out var decBrokerageReduction);
+            Helper.CalcBuyValues( Volume, SharePrice,
+                Provision, BrokerFee, TraderPlaceFee, Reduction,
+                out var decMarketValue, out var decDeposit, out var decBrokerage, out var decBrokerageWithReduction);
 
             BuyValue = decMarketValue;
-            BuyValueReduction = decMarketValueReduction;
-            BuyValueReductionBrokerage = decMarketValueReductionBrokerage;
+            BuyValueBrokerage = decDeposit;
+            Brokerage = decBrokerage;
+            BrokerageWithReduction = decBrokerageWithReduction;
+
+#if DEBUG_BUY
+            Console.WriteLine(@"BuyValue: {0}", BuyValue);
+            Console.WriteLine(@"BuyValueBrokerage: {0}", BuyValueBrokerage);
+            Console.WriteLine(@"Brokerage: {0}", Brokerage);
+            Console.WriteLine(@"BrokerageWithReduction: {0}", BrokerageWithReduction);
+#endif
         }
 
         #endregion Methods

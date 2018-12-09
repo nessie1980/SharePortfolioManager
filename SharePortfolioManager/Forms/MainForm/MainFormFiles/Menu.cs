@@ -26,6 +26,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml;
+using SharePortfolioManager.Forms.AboutForm;
 
 namespace SharePortfolioManager
 {
@@ -38,7 +39,7 @@ namespace SharePortfolioManager
         /// </summary>
         /// <param name="sender">Menu button</param>
         /// <param name="e">EventArgs</param>
-        private void NewToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OnNewToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Save old portfolio filename
             var oldPortfolioFileName = _portfolioFileName;
@@ -106,7 +107,7 @@ namespace SharePortfolioManager
         /// </summary>
         /// <param name="sender">Menu button</param>
         /// <param name="e">EventArgs</param>
-        private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OnOpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var strOldPortfolioFileName = _portfolioFileName;
 
@@ -126,7 +127,7 @@ namespace SharePortfolioManager
         /// </summary>
         /// <param name="sender">Menu button</param>
         /// <param name="e">EventArgs</param>
-        private void BeendenToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OnExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
         }
@@ -136,7 +137,7 @@ namespace SharePortfolioManager
         /// </summary>
         /// <param name="sender">MenuStrip language</param>
         /// <param name="e">EventArgs</param>
-        public void LanguageClick(object sender, EventArgs e)
+        public void OnLanguageClick(object sender, EventArgs e)
         {
             try
             {
@@ -231,7 +232,7 @@ namespace SharePortfolioManager
         /// </summary>
         /// <param name="sender">MenuStrip logger</param>
         /// <param name="e">EventArgs</param>
-        private void LoggerToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OnLoggerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
@@ -273,7 +274,7 @@ namespace SharePortfolioManager
         /// </summary>
         /// <param name="sender">Menu button</param>
         /// <param name="e">EventArgs</param>
-        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OnAboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {

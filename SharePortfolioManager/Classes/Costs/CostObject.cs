@@ -20,7 +20,6 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using SharePortfolioManager.Classes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,15 +27,15 @@ using System.Drawing;
 using System.Globalization;
 using SharePortfolioManager.Properties;
 
-namespace SharePortfolioManager
+namespace SharePortfolioManager.Classes.Costs
 {
     [Serializable]
-    public class BrokerageObject
+    public class BrokerageReductionObject
     {
         #region Properties
 
         [Browsable(false)]
-        public CultureInfo BrokerageCultureInfo { get; internal set; }
+        public CultureInfo CultureInfo { get; internal set; }
 
         [Browsable(false)]
         public string Guid { get; internal set; }
@@ -45,28 +44,59 @@ namespace SharePortfolioManager
         public string GuidBuySale { get; internal set; }
 
         [Browsable(false)]
-        public bool BrokerageOfABuy { get; set; }
+        public bool PartOfABuy { get; set; }
 
         [Browsable(false)]
-        public bool BrokerageOfASale { get; set; }
+        public bool PartOfASale { get; set; }
 
         [Browsable(false)]
-        public string BrokerageOfABuyAsStr => BrokerageOfABuy.ToString();
+        public string PartOfABuyAsStr => PartOfABuy.ToString();
 
         [Browsable(false)]
-        public string BrokerageOfASaleAsStr => BrokerageOfASale.ToString();
+        public string PartOfASaleAsStr => PartOfASale.ToString();
 
         [Browsable(false)]
-        public string BrokerageDate { get; set; }
+        public string Date { get; set; }
 
         [Browsable(false)]
-        public string BrokerageDateAsStr => BrokerageDate;
+        public string DateAsStr => Date;
+
+        [Browsable(false)]
+        public decimal ProvisionValue { get; set; }
+
+        [Browsable(false)]
+        public string ProvisionValueAsStr => Helper.FormatDecimal(ProvisionValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", CultureInfo);
+
+        [Browsable(false)]
+        public decimal BrokerFeeValue { get; set; }
+
+        [Browsable(false)]
+        public string BrokerFeeValueAsStr => Helper.FormatDecimal(BrokerFeeValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", CultureInfo);
+
+        [Browsable(false)]
+        public decimal TraderPlaceFeeValue { get; set; }
+
+        [Browsable(false)]
+        public string TraderPlaceFeeValueAsStr => Helper.FormatDecimal(TraderPlaceFeeValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", CultureInfo);
+
+        [Browsable(false)]
+        public decimal ReductionValue { get; set; }
+
+        [Browsable(false)]
+        public string ReductionValueAsStr => Helper.FormatDecimal(ReductionValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", CultureInfo);
 
         [Browsable(false)]
         public decimal BrokerageValue { get; set; }
 
         [Browsable(false)]
-        public string BrokerageValueAsStr => Helper.FormatDecimal(BrokerageValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", BrokerageCultureInfo);
+        public string BrokerageValueAsStr => Helper.FormatDecimal(BrokerageValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", CultureInfo);
+
+        [Browsable(false)]
+        public decimal BrokerageWithReductionValue { get; set; }
+
+        [Browsable(false)]
+        public string BrokerageWithReductionValueAsStr => Helper.FormatDecimal(BrokerageWithReductionValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", CultureInfo);
+
 
         [Browsable(false)]
         public string BrokerageDocument { get; set; }
@@ -82,13 +112,13 @@ namespace SharePortfolioManager
         public string DgvGuid => Guid;
 
         [Browsable(true)]
-        public string DgvBrokerageDate => BrokerageDateAsStr;
+        public string DgvBrokerageDate => DateAsStr;
 
         [Browsable(true)]
-        public string DgvBrokerageValueAsStr => BrokerageValueAsStr;
+        public string DgvBrokerageWithReductionValueAsStr => BrokerageWithReductionValueAsStr;
 
         [Browsable(true)]
-        public Image DocumentGrid => BrokerageDocument == @"-" ? null : Resources.black_logger;
+        public Image DocumentGrid => Helper.GetImageForFile(BrokerageDocument);
 
 
         #endregion Data grid view properties
@@ -104,18 +134,30 @@ namespace SharePortfolioManager
         /// <param name="cultureInfo">Culture info of the share</param>
         /// <param name="strGuidBuySale">Guid of the buy or sale</param>
         /// <param name="strDate">Date of the brokerage pay</param>
-        /// <param name="decValue">Value of the brokerage</param>
+        /// <param name="decProvisionValue">Provision of the brokerage</param>
+        /// <param name="decBrokerFeeValue">Broker fee of the brokerage</param>
+        /// <param name="decTraderPlaceFeeValue">Trader place fee of the brokerage</param>
+        /// <param name="decReductionValue">Reduction of the brokerage</param>
         /// <param name="strDoc">Document of the brokerage</param>
-        public BrokerageObject(string strGuid, bool bBrokerageOfABuy, bool bBrokerageOfASale, CultureInfo cultureInfo, string strGuidBuySale, string strDate, decimal decValue, string strDoc = "")
+        public BrokerageReductionObject(string strGuid, bool bBrokerageOfABuy, bool bBrokerageOfASale, CultureInfo cultureInfo, string strGuidBuySale,
+            string strDate, decimal decProvisionValue, decimal decBrokerFeeValue, decimal decTraderPlaceFeeValue, decimal decReductionValue, string strDoc = "")
         {
             Guid = strGuid;
             GuidBuySale = strGuidBuySale;
-            BrokerageOfABuy = bBrokerageOfABuy;
-            BrokerageOfASale = bBrokerageOfASale;
-            BrokerageCultureInfo = cultureInfo;
-            BrokerageDate = strDate;
-            BrokerageValue = decValue;
+            PartOfABuy = bBrokerageOfABuy;
+            PartOfASale = bBrokerageOfASale;
+            CultureInfo = cultureInfo;
+            Date = strDate;
+            ProvisionValue = decProvisionValue;
+            BrokerFeeValue = decBrokerFeeValue;
+            TraderPlaceFeeValue = decTraderPlaceFeeValue;
+            ReductionValue = decReductionValue;
             BrokerageDocument = strDoc;
+
+            // Calculate and set brokerage value
+            Helper.CalcBrokerageValues(decProvisionValue, decBrokerFeeValue, decTraderPlaceFeeValue, ReductionValue, out var brokerageValue, out var brokerageWithReductionValue);
+            BrokerageValue = brokerageValue;
+            BrokerageWithReductionValue = brokerageWithReductionValue;
 
 #if DEBUG_BROKERAGE
             Console.WriteLine(@"");
@@ -124,7 +166,12 @@ namespace SharePortfolioManager
             Console.WriteLine(@"BrokerageOfABuy: {0}", BrokerageOfABuy);
             Console.WriteLine(@"bBrokerageOfASale: {0}", bBrokerageOfASale);
             Console.WriteLine(@"Date: {0}", strDate);
-            Console.WriteLine(@"Value: {0}", decValue);
+            Console.WriteLine(@"Provision: {0}", decProvisionValue);
+            Console.WriteLine(@"BrokerFeeValue: {0}", decBrokerFeeValue);
+            Console.WriteLine(@"TraderPlaceFeeValue: {0}", decTraderPlaceFeeValue);
+            Console.WriteLine(@"ReductionValue: {0}", decReductionValue);
+            Console.WriteLine(@"Brokerage: {0}", BrokerageValue);
+            Console.WriteLine(@"brokerageWithReductionValue: {0}", brokerageWithReductionValue);
             Console.WriteLine(@"Document: {0}", strDoc);
             Console.WriteLine(@"");
 #endif
@@ -138,16 +185,16 @@ namespace SharePortfolioManager
     /// This is the comparer class for the BrokerageObject.
     /// It is used for the sort for the brokerage lists.
     /// </summary>
-    public class BrokerageObjectComparer : IComparer<BrokerageObject>
+    public class BrokerageReductionObjectComparer : IComparer<BrokerageReductionObject>
     {
         #region Methods
 
-        public int Compare(BrokerageObject brokerageObject1, BrokerageObject brokerageObject2)
+        public int Compare(BrokerageReductionObject brokerageReductionObject1, BrokerageReductionObject brokerageReductionObject2)
         {
-            if (brokerageObject1 == null) return 0;
-            if (brokerageObject2 == null) return 0;
+            if (brokerageReductionObject1 == null) return 0;
+            if (brokerageReductionObject2 == null) return 0;
 
-            return DateTime.Compare(Convert.ToDateTime(brokerageObject1.BrokerageDate), Convert.ToDateTime(brokerageObject2.BrokerageDate));
+            return DateTime.Compare(Convert.ToDateTime(brokerageReductionObject1.Date), Convert.ToDateTime(brokerageReductionObject2.Date));
         }
 
         #endregion Methods

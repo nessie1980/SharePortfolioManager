@@ -27,12 +27,10 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Xml;
-using SharePortfolioManager.Classes;
+using Parser;
 using SharePortfolioManager.Classes.Sales;
-using SharePortfolioManager.Classes.ShareObjects;
-using WebParser;
 
-namespace SharePortfolioManager
+namespace SharePortfolioManager.Classes.ShareObjects
 {
     /// <inheritdoc />
     /// <summary>
@@ -628,12 +626,10 @@ namespace SharePortfolioManager
                 Console.WriteLine(@"decVolume: {0}", decVolume);
                 Console.WriteLine(@"decVolumeSold: {0}", decVolumeSold);
                 Console.WriteLine(@"decPrice: {0}", decPrice);
-                Console.WriteLine(@"decReduction: {0}", decReduction);
-                Console.WriteLine(@"decBrokerage: {0}", decBrokerage);
                 Console.WriteLine(@"strDoc: {0}", strDoc);
 #endif
                 // Add buy without reductions and brokerage
-                if (!AllBuyEntries.AddBuy(strGuid, strDateTime, decVolume, decVolumeSold, decPrice, 0, 0, strDoc))
+                if (!AllBuyEntries.AddBuy(strGuid, strDateTime, decVolume, decVolumeSold, decPrice, null, strDoc))
                     return false;
 
                 // Set buy value of the share
@@ -694,6 +690,44 @@ namespace SharePortfolioManager
 #endif
                     // Remove buy by date and time
                     if (!AllBuyEntries.RemoveBuy(strGuid, strDateTime))
+                        return false;
+                }
+                else
+                    return false;
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// This function sets the document of the buy of the given Guid and datetime
+        /// </summary>
+        /// <param name="strGuid">Guid of the buy which should be modified</param>
+        /// <param name="strDateTime">Date time of the buy which should be modified</param>
+        /// <param name="strDocument">Document which should be set</param>
+        /// <returns></returns>
+        public bool SetDocument(string strGuid, string strDateTime, string strDocument)
+        {
+            try
+            {
+#if DEBUG_SHAREOBJECT_FINAL || DEBUG_BUY
+                Console.WriteLine(@"");
+                Console.WriteLine(@"SetDocument() / FinalValue");
+                Console.WriteLine(@"strGuid: {0}", strGuid);
+                Console.WriteLine(@"strDateTime: {0}", strDateTime);
+                Console.WriteLine(@"strDocument: {0}", strDocument);
+#endif
+                // Get BuyObject by Guid and date and time and set the new document
+                var buyObject = AllBuyEntries.GetBuyObjectByGuidDate(strGuid, strDateTime);
+                if (buyObject != null)
+                {
+                    // Set document of the buy by Guid and date and time
+                    if (!AllBuyEntries.SetDocumentBuy(strGuid, strDateTime, strDocument))
                         return false;
                 }
                 else
@@ -945,45 +979,67 @@ namespace SharePortfolioManager
                             {
                                 #region General
 
-                                case 0:
+                                case (int)FrmMain.PortfolioParts.LastInternetUpdate:
                                     nodeElement.ChildNodes[i].InnerText =
                                         $@"{shareObject.LastUpdateInternet.ToShortDateString()} {
                                                 shareObject.LastUpdateInternet.ToShortTimeString()
                                             }";
                                     break;
-                                case 1:
+                                case (int)FrmMain.PortfolioParts.LastUpdateShareDate:
                                     nodeElement.ChildNodes[i].InnerText =
                                         $@"{shareObject.LastUpdateDate.ToShortDateString()} {
                                                 shareObject.LastUpdateDate.ToShortTimeString()
                                             }";
                                     break;
-                                case 2:
+                                case (int)FrmMain.PortfolioParts.LastUpdateTime:
                                     nodeElement.ChildNodes[i].InnerText =
                                         $@"{shareObject.LastUpdateTime.ToShortDateString()} {
                                                 shareObject.LastUpdateTime.ToShortTimeString()
                                             }";
                                     break;
-                                case 3:
+                                case (int)FrmMain.PortfolioParts.SharePrice:
                                     nodeElement.ChildNodes[i].InnerText = shareObject.CurPriceAsStr;
                                     break;
-                                case 4:
+                                case (int)FrmMain.PortfolioParts.SharePriceBefore:
                                     nodeElement.ChildNodes[i].InnerText = shareObject.PrevDayPriceAsStr;
                                     break;
-                                case 5:
+                                case (int)FrmMain.PortfolioParts.WebSite:
                                     nodeElement.ChildNodes[i].InnerText = shareObject.WebSite;
                                     break;
-                                case 6:
+                                case (int)FrmMain.PortfolioParts.Culture:
                                     nodeElement.ChildNodes[i].InnerXml = shareObject.CultureInfoAsStr;
                                     break;
-                                case 7:
+                                case (int)FrmMain.PortfolioParts.ShareType:
                                     nodeElement.ChildNodes[i].InnerXml = shareObject.ShareType.ToString();
                                     break;
 
                                 #endregion General
 
+                                #region Brokerage
+
+                                case (int)FrmMain.PortfolioParts.Brokerages:
+                                    // Remove old brokerage
+                                    nodeElement.ChildNodes[i].RemoveAll();
+                                    foreach (var brokerageElementYear in shareObject.AllBrokerageEntries
+                                        .GetAllBrokerageOfTheShare())
+                                    {
+                                        var newBrokerageElement = xmlPortfolio.CreateElement(BrokerageTagNamePre);
+                                        newBrokerageElement.SetAttribute(BrokerageBuyPartAttrName, brokerageElementYear.PartOfABuyAsStr);
+                                        newBrokerageElement.SetAttribute(BrokerageDateAttrName, brokerageElementYear.DateAsStr);
+                                        newBrokerageElement.SetAttribute(BrokerageProvisionAttrName, brokerageElementYear.ProvisionValueAsStr);
+                                        newBrokerageElement.SetAttribute(BrokerageBrokerFeeAttrName, brokerageElementYear.BrokerFeeValueAsStr);
+                                        newBrokerageElement.SetAttribute(BrokerageTraderPlaceFeeAttrName, brokerageElementYear.TraderPlaceFeeValueAsStr);
+                                        newBrokerageElement.SetAttribute(BrokerageReductionAttrName, brokerageElementYear.ReductionValueAsStr);
+                                        newBrokerageElement.SetAttribute(BuyDocumentAttrName, brokerageElementYear.BrokerageDocument);
+                                        nodeElement.ChildNodes[i].AppendChild(newBrokerageElement);
+                                    }
+                                    break;
+
+                                #endregion Brokerage
+
                                 #region Buys
 
-                                case 8:
+                                case (int)FrmMain.PortfolioParts.Buys:
                                     // Remove old buys
                                     nodeElement.ChildNodes[i].RemoveAll();
                                     foreach (var buyElementYear in shareObject.AllBuyEntries
@@ -997,7 +1053,7 @@ namespace SharePortfolioManager
                                             buyElementYear.VolumeSoldAsStr);
                                         newBuyElement.SetAttribute(BuyPriceAttrName,
                                             buyElementYear.SharePriceAsStr);
-                                        newBuyElement.SetAttribute(BuyReductionAttrName,
+                                        newBuyElement.SetAttribute(BuyBrokerageGuidAttrName,
                                             buyElementYear.ReductionAsStr);
                                         newBuyElement.SetAttribute(BuyDocumentAttrName,
                                             buyElementYear.Document);
@@ -1009,7 +1065,7 @@ namespace SharePortfolioManager
 
                                 #region Sales
 
-                                case 9:
+                                case (int)FrmMain.PortfolioParts.Sales:
                                     // Remove old sales
                                     nodeElement.ChildNodes[i].RemoveAll();
                                     foreach (var saleElementYear in shareObject.AllSaleEntries
@@ -1068,29 +1124,6 @@ namespace SharePortfolioManager
                                     break;
 
                                 #endregion Sales
-
-                                #region Brokerage
-
-                                case 10:
-                                    // Remove old brokerage
-                                    nodeElement.ChildNodes[i].RemoveAll();
-                                    foreach (var brokerageElementYear in shareObject.AllBrokerageEntries
-                                        .GetAllBrokerageOfTheShare())
-                                    {
-                                        var newBrokerageElement = xmlPortfolio.CreateElement(BrokerageTagNamePre);
-                                        newBrokerageElement.SetAttribute(BrokerageBuyPartAttrName,
-                                            brokerageElementYear.BrokerageOfABuyAsStr);
-                                        newBrokerageElement.SetAttribute(BrokerageDateAttrName,
-                                            brokerageElementYear.BrokerageDateAsStr);
-                                        newBrokerageElement.SetAttribute(BrokerageValueAttrName,
-                                            brokerageElementYear.BrokerageValueAsStr);
-                                        newBrokerageElement.SetAttribute(BuyDocumentAttrName,
-                                            brokerageElementYear.BrokerageDocument);
-                                        nodeElement.ChildNodes[i].AppendChild(newBrokerageElement);
-                                    }
-                                    break;
-
-                                #endregion Brokerage
 
                                 default:
                                     break;
@@ -1185,26 +1218,6 @@ namespace SharePortfolioManager
 
                         #region Buys / Sales / Brokerage / Dividends
 
-                        // Add child nodes (buys)
-                        var newBuys = xmlPortfolio.CreateElement(@"Buys");
-                        newShareNode.AppendChild(newBuys);
-                        foreach (var buyElementYear in shareObject.AllBuyEntries.GetAllBuysOfTheShare())
-                        {
-                            XmlElement newBuyElement = xmlPortfolio.CreateElement(BuyTagNamePre);
-                            newBuyElement.SetAttribute(BuyGuidAttrName, buyElementYear.Guid);
-                            newBuyElement.SetAttribute(BuyDateAttrName, buyElementYear.DateAsStr);
-                            newBuyElement.SetAttribute(BuyVolumeAttrName, buyElementYear.VolumeAsStr);
-                            newBuyElement.SetAttribute(BuyVolumeSoldAttrName, @"0");
-                            newBuyElement.SetAttribute(BuyPriceAttrName, buyElementYear.SharePriceAsStr);
-                            newBuyElement.SetAttribute(BuyReductionAttrName, buyElementYear.ReductionAsStr);
-                            newBuyElement.SetAttribute(BuyDocumentAttrName, buyElementYear.Document);
-                            newBuys.AppendChild(newBuyElement);
-                        }
-
-                        // Add child nodes (sales)
-                        var newSales = xmlPortfolio.CreateElement(@"Sales");
-                        newShareNode.AppendChild(newSales);
-
                         // Add child nodes (brokerage)
                         var newBrokerage = xmlPortfolio.CreateElement(@"Brokerage");
                         newShareNode.AppendChild(newBrokerage);
@@ -1212,12 +1225,35 @@ namespace SharePortfolioManager
                         {
                             var newBrokerageElement = xmlPortfolio.CreateElement(BrokerageTagNamePre);
                             newBrokerageElement.SetAttribute(BrokerageGuidAttrName, brokerageElementYear.Guid);
-                            newBrokerageElement.SetAttribute(BrokerageBuyPartAttrName, brokerageElementYear.BrokerageOfABuyAsStr);
-                            newBrokerageElement.SetAttribute(BrokerageDateAttrName, brokerageElementYear.BrokerageDateAsStr);
-                            newBrokerageElement.SetAttribute(BrokerageValueAttrName, brokerageElementYear.BrokerageValueAsStr);
+                            newBrokerageElement.SetAttribute(BrokerageBuyPartAttrName, brokerageElementYear.PartOfABuyAsStr);
+                            newBrokerageElement.SetAttribute(BrokerageDateAttrName, brokerageElementYear.DateAsStr);
+                            newBrokerageElement.SetAttribute(BrokerageProvisionAttrName, brokerageElementYear.ProvisionValueAsStr);
+                            newBrokerageElement.SetAttribute(BrokerageBrokerFeeAttrName, brokerageElementYear.BrokerFeeValueAsStr);
+                            newBrokerageElement.SetAttribute(BrokerageTraderPlaceFeeAttrName, brokerageElementYear.TraderPlaceFeeValueAsStr);
+                            newBrokerageElement.SetAttribute(BrokerageReductionAttrName, brokerageElementYear.ReductionValueAsStr);
                             newBrokerageElement.SetAttribute(BuyDocumentAttrName, brokerageElementYear.BrokerageDocument);
                             newBrokerage.AppendChild(newBrokerageElement);
                         }
+
+                        // Add child nodes (buys)
+                        var newBuys = xmlPortfolio.CreateElement(@"Buys");
+                        newShareNode.AppendChild(newBuys);
+                        foreach (var buyElementYear in shareObject.AllBuyEntries.GetAllBuysOfTheShare())
+                        {
+                            var newBuyElement = xmlPortfolio.CreateElement(BuyTagNamePre);
+                            newBuyElement.SetAttribute(BuyGuidAttrName, buyElementYear.Guid);
+                            newBuyElement.SetAttribute(BuyDateAttrName, buyElementYear.DateAsStr);
+                            newBuyElement.SetAttribute(BuyVolumeAttrName, buyElementYear.VolumeAsStr);
+                            newBuyElement.SetAttribute(BuyVolumeSoldAttrName, @"0");
+                            newBuyElement.SetAttribute(BuyPriceAttrName, buyElementYear.SharePriceAsStr);
+                            newBuyElement.SetAttribute(BuyBrokerageGuidAttrName, buyElementYear.BrokerageGuid);
+                            newBuyElement.SetAttribute(BuyDocumentAttrName, buyElementYear.Document);
+                            newBuys.AppendChild(newBuyElement);
+                        }
+
+                        // Add child nodes (sales)
+                        var newSales = xmlPortfolio.CreateElement(@"Sales");
+                        newShareNode.AppendChild(newSales);
 
                         // Add child nodes (dividend)
                         var newDividend = xmlPortfolio.CreateElement(@"Dividends");
