@@ -45,7 +45,7 @@
 			<!-- Component names -->
 			<ComponentNames>
 				<Application text="Application" />
-				<WebParser text="WebParser" />
+				<Parser text="Parser" />
 				<LanguageHandler text="LanguageHandler" />
 				<Logger text="Logger" />
 			</ComponentNames>
@@ -110,7 +110,7 @@
 							<ColHeader_PrevDay text="Pre. day" />
 							<ColHeader_Volume text="Volume"/>
 							<ColHeader_Performance text="Perf." />
-							<ColHeader_BrokerageDividend text="  Brokerage / Dividends" />
+							<ColHeader_BrokerageDividend text="  Brok. / Dividends" />
 							<ColHeader_PurchaseMarketValue text="  Purchase / Market" />
 						</DgvPortfolio>
 						<DgvPortfolio_Error>
@@ -312,8 +312,8 @@
 
 			<!-- Update errors -->
 			<UpdateErrors>
-				<StartFailed text="Start of the WebParser failed." />
-				<BusyFailed text="WebParser is already busy." />
+				<StartFailed text="Start of the Parser failed." />
+				<BusyFailed text="Parser is already busy." />
 				<InvalidWebSiteGiven text="The website address is invalid." />
 				<NoRegexListGiven text="No regular expression list given." />
 				<ContentLoadedFailed text="Load of the website content failed." />
@@ -1029,7 +1029,7 @@
 			<Labels>
 				<Version text="Versions" />
 				<ApplicationVersion text="Application version:" />
-				<WebParserDLLVersion text="Webparser DLL version:" />
+				<ParserDLLVersion text="Parser DLL version:" />
 				<LanguageDLLVersion text="Language DLL version:" />
 				<LoggerDLLVersion text="Logger DLL version:" />
 			</Labels>
@@ -1090,7 +1090,7 @@
 			<!-- Component names -->
 			<ComponentNames>
 				<Application text="Programm" />
-				<WebParser text="WebParser" />
+				<Parser text="Parser" />
 				<LanguageHandler text="LanguageHandler" />
 				<Logger text="Logger" />
 			</ComponentNames>
@@ -1357,8 +1357,8 @@
 
 			<!-- Update errors -->
 			<UpdateErrors>
-				<StartFailed text="Starten des WebParser ist fehlgeschlagen." />
-				<BusyFailed text="WebParser ist bereits in Verwendung." />
+				<StartFailed text="Starten des Parser ist fehlgeschlagen." />
+				<BusyFailed text="Parser ist bereits in Verwendung." />
 				<InvalidWebSiteGiven text="Die Websiten- Adresse ist ungültig." />
 				<NoRegexListGiven text="Es wurde kein regulärer Ausdruck übergeben." />
 				<ContentLoadedFailed text="Laden des Webseiten- Inhalts ist fehlgeschlagen." />
@@ -2073,7 +2073,7 @@
 			<Labels>
 				<Version text="Versionen" />
 				<ApplicationVersion text="Programm- Version:" />
-				<WebParserDLLVersion text="Webparser- DLL- Version:" />
+				<ParserDLLVersion text="Parser- DLL- Version:" />
 				<LanguageDLLVersion text="Sprach- DLL- Version:" />
 				<LoggerDLLVersion text="Logger- DLL- Version:" />
 			</Labels>

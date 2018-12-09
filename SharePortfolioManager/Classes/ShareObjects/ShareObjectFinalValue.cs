@@ -32,7 +32,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using System.Xml;
 using SharePortfolioManager.Classes.Sales;
-using WebParser;
+using Parser;
 
 namespace SharePortfolioManager.Classes.ShareObjects
 {

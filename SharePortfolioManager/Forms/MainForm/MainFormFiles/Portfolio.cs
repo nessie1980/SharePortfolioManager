@@ -74,12 +74,12 @@ namespace SharePortfolioManager
                 // Reset market value share object
                 ShareObjectMarketValue = null;
 
-                // Reset the datagridview market value
+                // Reset the DataGridView market value
                 dgvPortfolioMarketValue.Rows.Clear();
                 dgvPortfolioMarketValue.Refresh();
                 dgvPortfolioMarketValue.ColumnHeadersVisible = false;
 
-                // Reset the datagridview market value footer
+                // Reset the DataGridView market value footer
                 dgvPortfolioFooterMarketValue.Rows.Clear();
                 dgvPortfolioFooterMarketValue.Refresh();
                 dgvPortfolioFooterMarketValue.ColumnHeadersVisible = false;
@@ -91,12 +91,12 @@ namespace SharePortfolioManager
                 // Reset final value share object
                 ShareObjectFinalValue = null;
 
-                // Reset the datagridview final value
+                // Reset the DataGridView final value
                 dgvPortfolioFinalValue.Rows.Clear();
                 dgvPortfolioFinalValue.Refresh();
                 dgvPortfolioFinalValue.ColumnHeadersVisible = false;
 
-                // Reset the datagridview final value footer
+                // Reset the DataGridView final value footer
                 dgvPortfolioFooterFinalValue.Rows.Clear();
                 dgvPortfolioFooterFinalValue.Refresh();
                 dgvPortfolioFooterFinalValue.ColumnHeadersVisible = false;
@@ -822,7 +822,7 @@ namespace SharePortfolioManager
                                 }
                                 
                                 // Set website configuration and encoding to the share object.
-                                // The encoding is necessary for the WebParser for encoding the download result.
+                                // The encoding is necessary for the Parser for encoding the download result.
                                 if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].SetWebSiteRegexListAndEncoding(WebSiteRegexList))
                                     RegexSearchFailedList.Add(ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].Wkn);
                                 if (!ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].SetWebSiteRegexListAndEncoding(WebSiteRegexList))
@@ -838,7 +838,7 @@ namespace SharePortfolioManager
                         // Close portfolio reader
                         ReaderPortfolio?.Close();
 
-                        // Remove added share object because the read was not sucessful
+                        // Remove added share object because the read was not successful
                         ShareObjectListMarketValue.RemoveAt(ShareObjectListMarketValue.Count - 1);
                         ShareObjectListFinalValue.RemoveAt(ShareObjectListFinalValue.Count - 1);
 

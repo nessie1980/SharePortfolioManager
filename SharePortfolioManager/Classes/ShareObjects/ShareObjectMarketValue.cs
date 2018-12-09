@@ -30,7 +30,7 @@ using System.Xml;
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.Sales;
 using SharePortfolioManager.Classes.ShareObjects;
-using WebParser;
+using Parser;
 
 namespace SharePortfolioManager
 {

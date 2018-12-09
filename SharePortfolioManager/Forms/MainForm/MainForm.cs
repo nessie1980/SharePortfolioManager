@@ -102,7 +102,7 @@ namespace SharePortfolioManager
         public enum EComponentLevels
         {
             Application = Logger.ELoggerComponentLevels.Component1,
-            WebParser = Logger.ELoggerComponentLevels.Component2,
+            Parser = Logger.ELoggerComponentLevels.Component2,
             LanguageHandler = Logger.ELoggerComponentLevels.Component3
         }
 
@@ -142,10 +142,6 @@ namespace SharePortfolioManager
         #region Flags
 
         #endregion Flags
-
-        #region WebParser
-
-        #endregion WebParser
 
         #region Share / share list
 
@@ -316,13 +312,13 @@ namespace SharePortfolioManager
 
         #endregion Flags
 
-        #region WebParser
+        #region Parser
 
-        public WebParser.WebParser WebParser { get; } = new WebParser.WebParser();
+        public Parser.Parser Parser { get; } = new Parser.Parser();
 
         public List<WebSiteRegex> WebSiteRegexList { get; set; } = new List<WebSiteRegex>();
 
-        #endregion WebParser
+        #endregion Parser
 
         #region Share objects
 
@@ -367,7 +363,7 @@ namespace SharePortfolioManager
         /// - load settings
         /// - load language
         /// - initialize logger
-        /// - initialize WebParser
+        /// - initialize Parser
         /// - configure DataGridView´s
         /// - load website configuration
         /// - load share configuration
@@ -435,11 +431,11 @@ namespace SharePortfolioManager
 
                 #endregion Logger
 
-                #region WebParser
+                #region Parser
 
-                InitializeWebParser();
+                InitializeParser();
 
-                #endregion WebParser
+                #endregion Parser
 
                 #region dgvPortfolio configuration (like row style, header style, font, colors)
 

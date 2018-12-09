@@ -22,12 +22,10 @@
 
 using System;
 using System.Drawing;
-using System.IO;
 using System.Windows.Forms;
 using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Classes;
-using SharePortfolioManager.Classes.ShareObjects;
 using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager
@@ -106,7 +104,7 @@ namespace SharePortfolioManager
 
                     // Add component names
                     LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Application", LanguageName));
-                    LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/WebParser", LanguageName));
+                    LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Parser", LanguageName));
                     LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/LanguageHandler", LanguageName));
                     LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Logger", LanguageName));
 
@@ -125,7 +123,7 @@ namespace SharePortfolioManager
                     // Add available to the menu
                     foreach (var strLanguage in strLanguages)
                     {
-                        var tmiLanguageAdd = new ToolStripMenuItem(strLanguage, null, LanguageClick,
+                        var tmiLanguageAdd = new ToolStripMenuItem(strLanguage, null, OnLanguageClick,
                             $"languageToolStripMenuItem{strLanguage}");
 
                         if (strLanguage == LanguageName)
@@ -471,7 +469,7 @@ namespace SharePortfolioManager
 
                 // Add component names
                 LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Application", LanguageName));
-                LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/WebParser", LanguageName));
+                LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Parser", LanguageName));
                 LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/LanguageHandler", LanguageName));
                 LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Logger", LanguageName));
 

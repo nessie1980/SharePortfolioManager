@@ -667,7 +667,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
         /// </summary>
         /// <param name="sender">DateTime picker</param>
         /// <param name="e">EventArgs</param>
-        private void datePickerTime_Leave(object sender, EventArgs e)
+        private void OnDatePickerTime_Leave(object sender, EventArgs e)
         {
             FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
         }

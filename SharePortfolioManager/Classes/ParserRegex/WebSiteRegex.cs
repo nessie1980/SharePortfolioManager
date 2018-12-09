@@ -21,7 +21,7 @@
 //SOFTWARE.
 
 using System;
-using WebParser;
+using Parser;
 
 namespace SharePortfolioManager
 {

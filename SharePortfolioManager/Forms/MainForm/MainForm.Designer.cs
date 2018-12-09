@@ -189,7 +189,7 @@ namespace SharePortfolioManager
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.newToolStripMenuItem.Text = "New_";
-            this.newToolStripMenuItem.Click += new System.EventHandler(this.NewToolStripMenuItem_Click);
+            this.newToolStripMenuItem.Click += new System.EventHandler(this.OnNewToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
@@ -197,7 +197,7 @@ namespace SharePortfolioManager
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.openToolStripMenuItem.Text = "Open_";
-            this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItem_Click);
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.OnOpenToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
@@ -217,7 +217,7 @@ namespace SharePortfolioManager
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.exitToolStripMenuItem.Text = "&Quit_";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.BeendenToolStripMenuItem_Click);
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.OnExitToolStripMenuItem_Click);
             // 
             // settingsToolStripMenuItem
             // 
@@ -240,7 +240,7 @@ namespace SharePortfolioManager
             this.loggerToolStripMenuItem.Name = "loggerToolStripMenuItem";
             this.loggerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.loggerToolStripMenuItem.Text = "_Logger";
-            this.loggerToolStripMenuItem.Click += new System.EventHandler(this.LoggerToolStripMenuItem_Click);
+            this.loggerToolStripMenuItem.Click += new System.EventHandler(this.OnLoggerToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -256,7 +256,7 @@ namespace SharePortfolioManager
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.aboutToolStripMenuItem.Text = "&About_";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.OnAboutToolStripMenuItem_Click);
             // 
             // grpBoxSharePortfolio
             // 

@@ -155,6 +155,9 @@
       <HintPath>DLLs\Logger.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Parser">
+      <HintPath>DLLs\Parser.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -167,10 +170,6 @@
     <Reference Include="System.Deployment" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="WebParser, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>DLLs\WebParser.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\ApplicationController.cs" />
@@ -183,6 +182,8 @@
     <Compile Include="Classes\Dividend\DividendObject.cs" />
     <Compile Include="Classes\Dividend\AllDividends.cs" />
     <Compile Include="Classes\Dividend\DividendsOfAYear.cs" />
+    <Compile Include="Classes\ParserRegex\BankRegex.cs" />
+    <Compile Include="Classes\ParserRegex\DocumentRegex.cs" />
     <Compile Include="Classes\Sales\SaleObject.cs" />
     <Compile Include="Classes\Sales\AllSales.cs" />
     <Compile Include="Classes\Sales\SalesOfAYear.cs" />
@@ -298,7 +299,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Classes\WebSite\WebSiteRegex.cs" />
+    <Compile Include="Classes\ParserRegex\WebSiteRegex.cs" />
     <Compile Include="Forms\MainForm\MainFormFiles\WebSitesConfiguration.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -376,6 +377,7 @@
     <None Include="Resources\gray_neutral_arrow.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Classes\WebSite\" />
     <Folder Include="Forms\ShareEditForm\Model\" />
     <Folder Include="Forms\ShareEditForm\Presenter\" />
   </ItemGroup>

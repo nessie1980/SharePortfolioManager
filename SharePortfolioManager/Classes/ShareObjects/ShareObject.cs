@@ -30,7 +30,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using SharePortfolioManager.Classes.Buys;
-using WebParser;
+using Parser;
 
 namespace SharePortfolioManager.Classes.ShareObjects
 {

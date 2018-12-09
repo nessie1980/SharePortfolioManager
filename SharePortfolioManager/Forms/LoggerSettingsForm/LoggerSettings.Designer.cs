@@ -50,7 +50,7 @@ namespace SharePortfolioManager
             this.lblColorStart = new System.Windows.Forms.Label();
             this.grpBoxComponents = new System.Windows.Forms.GroupBox();
             this.chkBoxLanguageHander = new System.Windows.Forms.CheckBox();
-            this.chkBoxWebParser = new System.Windows.Forms.CheckBox();
+            this.chkBoxParser = new System.Windows.Forms.CheckBox();
             this.chkBoxApplication = new System.Windows.Forms.CheckBox();
             this.grpBoxEnableFileLogging = new System.Windows.Forms.GroupBox();
             this.chkBoxEnableFileLogging = new System.Windows.Forms.CheckBox();
@@ -273,7 +273,7 @@ namespace SharePortfolioManager
             // grpBoxComponents
             // 
             this.grpBoxComponents.Controls.Add(this.chkBoxLanguageHander);
-            this.grpBoxComponents.Controls.Add(this.chkBoxWebParser);
+            this.grpBoxComponents.Controls.Add(this.chkBoxParser);
             this.grpBoxComponents.Controls.Add(this.chkBoxApplication);
             this.grpBoxComponents.Location = new System.Drawing.Point(8, 125);
             this.grpBoxComponents.Name = "grpBoxComponents";
@@ -291,14 +291,14 @@ namespace SharePortfolioManager
             this.chkBoxLanguageHander.Text = "_chkBoxLanguageHandler";
             this.chkBoxLanguageHander.UseVisualStyleBackColor = true;
             // 
-            // chkBoxWebParser
+            // chkBoxParser
             // 
-            this.chkBoxWebParser.Location = new System.Drawing.Point(10, 49);
-            this.chkBoxWebParser.Name = "chkBoxWebParser";
-            this.chkBoxWebParser.Size = new System.Drawing.Size(175, 19);
-            this.chkBoxWebParser.TabIndex = 6;
-            this.chkBoxWebParser.Text = "_chkBoxWebParser";
-            this.chkBoxWebParser.UseVisualStyleBackColor = true;
+            this.chkBoxParser.Location = new System.Drawing.Point(10, 49);
+            this.chkBoxParser.Name = "chkBoxParser";
+            this.chkBoxParser.Size = new System.Drawing.Size(175, 19);
+            this.chkBoxParser.TabIndex = 6;
+            this.chkBoxParser.Text = "_chkBoxParser";
+            this.chkBoxParser.UseVisualStyleBackColor = true;
             // 
             // chkBoxApplication
             // 
@@ -506,7 +506,7 @@ namespace SharePortfolioManager
         private System.Windows.Forms.Label lblColorStart;
         private System.Windows.Forms.GroupBox grpBoxComponents;
         private System.Windows.Forms.CheckBox chkBoxLanguageHander;
-        private System.Windows.Forms.CheckBox chkBoxWebParser;
+        private System.Windows.Forms.CheckBox chkBoxParser;
         private System.Windows.Forms.CheckBox chkBoxApplication;
         private System.Windows.Forms.GroupBox grpBoxEnableFileLogging;
         private System.Windows.Forms.CheckBox chkBoxEnableFileLogging;

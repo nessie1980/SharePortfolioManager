@@ -337,7 +337,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
             this.datePickerTime.TabIndex = 18;
             this.datePickerTime.ValueChanged += new System.EventHandler(this.OnDatePickerTime_ValueChanged);
             this.datePickerTime.Enter += new System.EventHandler(this.OnDatePickerTime_Enter);
-            this.datePickerTime.Leave += new System.EventHandler(this.datePickerTime_Leave);
+            this.datePickerTime.Leave += new System.EventHandler(this.OnDatePickerTime_Leave);
             // 
             // txtBoxBrokerage
             // 

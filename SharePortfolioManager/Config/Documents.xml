@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Documents>
+	<Bank Name="DKB" BankIdentifierValue="" TypeValue=""  Encoding="UTF-8">
+		<BankIdentifier Name="BankIdentifier" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></BankIdentifier>
+		<TypeIdentifier Name="TypeIdentifier" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></TypeIdentifier>
+		<Buy>
+			<Date Name="Date" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Date>
+			<Time Name="Time" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Time>
+			<Volume Name="Volume" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Volume>
+			<Price Name="Price" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Price>
+			<Brokerage Name="Brokerage" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Brokerage>
+			<Reduction Name="Reduction" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Reduction>
+		</Buy>
+		<Sale>
+			<Date Name="Date" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Date>
+			<Time Name="Time" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Time>
+			<Volume Name="Volume" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Volume>
+			<Price Name="Price" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Price>
+			<TaxAtSource Name="TaxAtSource" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></TaxAtSource>
+			<CapitalGainTax Name="CapitalGainTax" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></CapitalGainTax>
+			<SolidarityTax Name="SolidarityTax" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></SolidarityTax>
+			<Brokerage Name="Brokerage" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Brokerage>
+			<Reduction Name="Reduction" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Reduction>
+		</Sale>
+	</Bank>
+	<Bank Name="ING" BankIdentifierValue="" TypeValue=""  Encoding="UTF-8">
+		<BankIdentifier Name="BankIdentifier" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></BankIdentifier>
+		<TypeIdentifier Name="TypeIdentifier" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></TypeIdentifier>
+		<Buy>
+			<Date Name="Date" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Date>
+			<Time Name="Time" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Time>
+			<Volume Name="Volume" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Volume>
+			<Price Name="Price" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Price>
+			<Brokerage Name="Brokerage" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Brokerage>
+			<Reduction Name="Reduction" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Reduction>
+		</Buy>
+		<Sale>
+			<Date Name="Date" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Date>
+			<Time Name="Time" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Time>
+			<Volume Name="Volume" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Volume>
+			<Price Name="Price" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Price>
+			<TaxAtSource Name="TaxAtSource" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></TaxAtSource>
+			<CapitalGainTax Name="CapitalGainTax" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></CapitalGainTax>
+			<SolidarityTax Name="SolidarityTax" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></SolidarityTax>
+			<Brokerage Name="Brokerage" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Brokerage>
+			<Reduction Name="Reduction" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Reduction>
+		</Sale>
+	</Bank>
+</Documents>
