@@ -45,6 +45,11 @@ namespace SharePortfolioManager.Forms.AboutForm
         /// </summary>
         private bool _stopFomClosing;
 
+        /// <summary>
+        /// Link to the used icons
+        /// </summary>
+        private const string IconLink = "https://icons8.de/icons/color";
+
         #endregion Variables
 
         #region Form
@@ -72,7 +77,9 @@ namespace SharePortfolioManager.Forms.AboutForm
             lblParserDllVersion.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/ParserDLLVersion", _strLanguage);
             lblLanguageDllVersion.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/LanguageDLLVersion", _strLanguage);
             lblLoggerDllVersion.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/LoggerDLLVersion", _strLanguage);
-
+            grpBoxIconSet.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/IconSet", _strLanguage);
+            lblIconSetInfo.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/IconSetInfo", _strLanguage);
+            lblIconSetInfoLink.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/IconSetInfoLink", _strLanguage);
             btnOk.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Buttons/Ok", _strLanguage);
 
             #endregion Language configuration
@@ -137,5 +144,15 @@ namespace SharePortfolioManager.Forms.AboutForm
         }
 
         #endregion Button
+
+        #region Link to the icon set
+
+        private void OnLblIconSetInfoLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            lblIconSetInfoLink.LinkVisited = true;
+            System.Diagnostics.Process.Start(IconLink);
+        }
+
+        #endregion Link to the icon set
     }
 }

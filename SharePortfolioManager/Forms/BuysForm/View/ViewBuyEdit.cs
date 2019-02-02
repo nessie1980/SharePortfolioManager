@@ -75,12 +75,13 @@ namespace SharePortfolioManager.Forms.BuysForm.View
     // Error codes for the document parsing
     public enum ParsingErrorCode
     {
-        ParsingFailed = -3,
-        ParsingDocumentValuesFailed = -2,
-        ParsingDocumentTypeFailed = -1,
+        ParsingFailed = -5,
+        ParsingDocumentNotImplemented = -4,
+        ParsingDocumentTypeIdentifierFailed = -3,
+        ParsingBankIdentifierFailed = -2,
+        ParsingDocumentFailed = -1,
         ParsingStarted = 0,
-        ParsingDocumentTypeSuccessful = 1,
-
+        ParsingIdentifierValuesFound = 1
     }
 
     /// <inheritdoc />
@@ -162,9 +163,24 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         private int _bankCounter;
 
         /// <summary>
-        /// Flag if the bank type of the given document could be found in the document configurations
+        /// Flag if the bank identifier of the given document could be found in the document configurations
         /// </summary>
-        private bool _bankTypeFound;
+        private bool _bankIdentifierFound;
+
+        /// <summary>
+        /// Flag if the buy identifier type of the given document could be found in the document configurations
+        /// </summary>
+        private bool _buyIdentifierFound;
+
+        /// <summary>
+        /// Flag if the document type is not implemented yet
+        /// </summary>
+        private bool _documentTypNotImplemented;
+
+        /// <summary>
+        /// Flag if the document values parsing is running
+        /// </summary>
+        private bool _documentValuesRunning;
 
         /// <summary>
         /// Flag if the parsing was successful
@@ -882,6 +898,8 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                         LanguageName);
                 lblDate.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Labels/Date",
                     LanguageName);
+                lblTime.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Labels/Time",
+                    LanguageName);
                 lblVolume.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Labels/Volume",
                         LanguageName);
@@ -992,6 +1010,16 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// </summary>
         private void ResetInputValues()
         {
+            // Reset state pictures
+            picBoxDateParseState.Image = Resources.empty_arrow;
+            picBoxTimeParseState.Image = Resources.empty_arrow;
+            picBoxVolumeParseState.Image = Resources.empty_arrow;
+            picBoxPriceParseState.Image = Resources.empty_arrow;
+            picBoxProvisionParseState.Image = Resources.empty_arrow;
+            picBoxBrokerFeeParseState.Image = Resources.empty_arrow;
+            picBoxTraderPlaceFeeParseState.Image = Resources.empty_arrow;
+            picBoxReductionParseState.Image = Resources.empty_arrow;
+
             // Reset and enable date time picker
             dateTimePickerDate.Value = DateTime.Now;
             dateTimePickerDate.Enabled = true;
@@ -999,23 +1027,24 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             dateTimePickerTime.Enabled = true;
 
             // Reset and enable text boxes
-            txtBoxVolume.Text = @"";
+            txtBoxVolume.Text = string.Empty;
             txtBoxVolume.Enabled = true;
-            txtBoxVolumeSold.Text = @"";
-            txtBoxSharePrice.Text = @"";
+            txtBoxVolumeSold.Text = string.Empty;
+            txtBoxSharePrice.Text = string.Empty;
             txtBoxSharePrice.Enabled = true;
-            txtBoxProvision.Text = @"";
+            txtBoxProvision.Text = string.Empty;
             txtBoxProvision.Enabled = true;
-            txtBoxBrokerFee.Text = @"";
+            txtBoxBrokerFee.Text = string.Empty;
             txtBoxBrokerFee.Enabled = true;
-            txtBoxTraderPlaceFee.Text = @"";
+            txtBoxTraderPlaceFee.Text = string.Empty;
             txtBoxTraderPlaceFee.Enabled = true;
-            txtBoxReduction.Text = @"";
+            txtBoxReduction.Text = string.Empty;
             txtBoxReduction.Enabled = true;
-            txtBoxDocument.Text = @"";
+            txtBoxDocument.Text = string.Empty;
 
-            toolStripStatusLabelMessageBuyEdit.Text = @"";
-            toolStripStatusLabelMessageBuyDocumentParsing.Text = @"";
+            toolStripStatusLabelMessageBuyEdit.Text = string.Empty;
+            toolStripStatusLabelMessageBuyDocumentParsing.Text = string.Empty;
+            toolStripProgressBarBuyDocumentParsing.Visible = false;
 
             // Enable button(s)
             btnAddSave.Text =
@@ -1444,7 +1473,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
 
 #endif
                 toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Red;
-                toolStripStatusLabelMessageBuyDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ParsingFailed", LanguageName);
+                toolStripStatusLabelMessageBuyDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingErrors/ParsingFailed", LanguageName);
 
                 toolStripProgressBarBuyDocumentParsing.Visible = false;
                 grpBoxAdd.Enabled = true;
@@ -1452,7 +1481,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
 
                 DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
                 _parsingThreadFinished = true;
-                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentTypeFailed);
+                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
             }
         }
 
@@ -2508,7 +2537,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 _parsingResult = true;
                 _parsingThreadFinished = false;
                 _bankCounter = 0;
-                _bankTypeFound = false;
+                _bankIdentifierFound = false;
+                _buyIdentifierFound = false;
+                _documentTypNotImplemented = true;
+                _documentValuesRunning = false;
 
                 ParsingText = string.Empty;
 
@@ -2540,7 +2572,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 MessageBox.Show(message, @"Error 1", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
-                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentTypeFailed);
+                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
             }
             catch (Exception ex)
             {
@@ -2549,7 +2581,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 MessageBox.Show(message, @"Error 2", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
-                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentTypeFailed);
+                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
             }
         }
 
@@ -2718,76 +2750,138 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                             }
                             else
                             {
-                                //Check if the correct bank has been found so search for the document values
+                                //Check if the correct bank identifier and document identifier may have been found so search for the document values
                                 if (e.ParserInfoState.SearchResult != null &&
-                                    e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration.BankIdentifierTagName) &&
-                                    e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration.BuyIdentifierTagName))
+                                    (
+                                        e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
+                                            .BankIdentifierTagName) ||
+                                        e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
+                                            .BuyIdentifierTagName))
+                                )
                                 {
-                                    _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentTypeSuccessful);
-                                    _bankTypeFound = true;
+                                    // Check if the bank identifier has been found
+                                    if (e.ParserInfoState.SearchResult != null &&
+                                        e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
+                                            .BankIdentifierTagName))
+                                        _bankIdentifierFound = true;
+                                    // Check if the buy identifier has been found
+                                    if (e.ParserInfoState.SearchResult != null &&
+                                        e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
+                                            .BuyIdentifierTagName))
+                                        _buyIdentifierFound = true;
 
-                                    // Get the correct parsing options for the given document type
-                                    switch (DocumentType)
+                                    if (e.ParserInfoState.SearchResult != null &&
+                                        e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
+                                            .BankIdentifierTagName) &&
+                                        e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
+                                            .BuyIdentifierTagName))
                                     {
-                                        case DocumentParsingConfiguration.DocumentTypes.BuyDocument:
+                                        _parsingBackgroundWorker.ReportProgress(
+                                            (int) ParsingErrorCode.ParsingIdentifierValuesFound);
+
+                                        _documentValuesRunning = true;
+
+                                        // Get the correct parsing options for the given document type
+                                        switch (DocumentType)
+                                        {
+                                            case DocumentParsingConfiguration.DocumentTypes.BuyDocument:
                                             {
                                                 DocumentTypeParser.RegexList = DocumentParsingConfiguration
                                                     .BankRegexList[_bankCounter]
-                                                    .DictionaryDocumentRegex[DocumentParsingConfiguration.DocumentTypeBuy].DocumentRegexList;
+                                                    .DictionaryDocumentRegex[
+                                                        DocumentParsingConfiguration.DocumentTypeBuy].DocumentRegexList;
                                                 DocumentTypeParser.StartParsing();
                                                 break;
                                             }
-                                        case DocumentParsingConfiguration.DocumentTypes.SaleDocument:
+                                            case DocumentParsingConfiguration.DocumentTypes.SaleDocument:
                                             {
                                                 DocumentTypeParser.RegexList = DocumentParsingConfiguration
                                                     .BankRegexList[_bankCounter]
-                                                    .DictionaryDocumentRegex[DocumentParsingConfiguration.DocumentTypeSale].DocumentRegexList;
+                                                    .DictionaryDocumentRegex[
+                                                        DocumentParsingConfiguration.DocumentTypeSale]
+                                                    .DocumentRegexList;
                                                 DocumentTypeParser.StartParsing();
                                                 break;
                                             }
-                                        case DocumentParsingConfiguration.DocumentTypes.DividendDocument:
+                                            case DocumentParsingConfiguration.DocumentTypes.DividendDocument:
                                             {
                                                 DocumentTypeParser.RegexList = DocumentParsingConfiguration
                                                     .BankRegexList[_bankCounter]
-                                                    .DictionaryDocumentRegex[DocumentParsingConfiguration.DocumentTypeDividend].DocumentRegexList;
+                                                    .DictionaryDocumentRegex[
+                                                        DocumentParsingConfiguration.DocumentTypeDividend]
+                                                    .DocumentRegexList;
                                                 DocumentTypeParser.StartParsing();
                                                 break;
                                             }
-                                        case DocumentParsingConfiguration.DocumentTypes.BrokerageDocument:
+                                            case DocumentParsingConfiguration.DocumentTypes.BrokerageDocument:
                                             {
                                                 DocumentTypeParser.RegexList = DocumentParsingConfiguration
                                                     .BankRegexList[_bankCounter]
-                                                    .DictionaryDocumentRegex[DocumentParsingConfiguration.DocumentTypeBrokerage].DocumentRegexList;
+                                                    .DictionaryDocumentRegex[
+                                                        DocumentParsingConfiguration.DocumentTypeBrokerage]
+                                                    .DocumentRegexList;
                                                 DocumentTypeParser.StartParsing();
                                                 break;
                                             }
+                                            default:
+                                            {
+                                                _documentTypNotImplemented = false;
+                                                break;
+                                            }
+                                        }
                                     }
+                                }
+
+                                _bankCounter++;
+
+                                // Check if another bank configuration should be checked
+                                if (_bankCounter < DocumentParsingConfiguration.BankRegexList.Count &&
+                                    _bankIdentifierFound == false)
+                                {
+                                    DocumentTypeParser.RegexList = DocumentParsingConfiguration
+                                        .BankRegexList[_bankCounter].BankRegexList;
+                                    DocumentTypeParser.StartParsing();
                                 }
                                 else
                                 {
-                                    _bankCounter++;
-
-                                    // Check if another bank configuration should be checked
-                                    if (_bankCounter < DocumentParsingConfiguration.BankRegexList.Count && _bankTypeFound == false)
+                                    if (_bankIdentifierFound == false)
                                     {
-                                        DocumentTypeParser.RegexList = DocumentParsingConfiguration.BankRegexList[_bankCounter].BankRegexList;
-                                        DocumentTypeParser.StartParsing();
-                                    }
-                                    else
-                                    {
-                                        if (_bankTypeFound == false)
-                                        {
-                                            DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
-                                            _parsingThreadFinished = true;
-                                            _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentValuesFailed);
-                                        }
-                                        else
-                                        {
-                                            DictionaryParsingResult = new Dictionary<string, List<string>>(DocumentTypeParser.ParsingResult);
-                                        }
+                                        _parsingBackgroundWorker.ReportProgress(
+                                            (int)ParsingErrorCode.ParsingBankIdentifierFailed);
 
                                         DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
                                         _parsingThreadFinished = true;
+                                    }
+                                    else if (_buyIdentifierFound == false)
+                                    {
+                                        _parsingBackgroundWorker.ReportProgress(
+                                            (int)ParsingErrorCode.ParsingDocumentTypeIdentifierFailed);
+
+                                        DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                                        _parsingThreadFinished = true;
+                                    }
+                                    else if (_documentTypNotImplemented == false)
+                                    {
+                                        _parsingBackgroundWorker.ReportProgress(
+                                            (int)ParsingErrorCode.ParsingDocumentNotImplemented);
+
+                                        DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                                        _parsingThreadFinished = true;
+                                    }
+                                    else
+                                    {
+                                        if (_documentValuesRunning)
+                                        {
+                                            if (DocumentTypeParser.ParsingResult != null)
+                                            {
+                                                DictionaryParsingResult =
+                                                    new Dictionary<string, List<string>>(DocumentTypeParser
+                                                        .ParsingResult);
+
+                                                DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                                                _parsingThreadFinished = true;
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -2802,7 +2896,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
 #endif
                         DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
                         _parsingThreadFinished = true;
-                        _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentTypeFailed);
+                        _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
                     }
                 }
             }
@@ -2815,7 +2909,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
 #endif
                 DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
                 _parsingThreadFinished = true;
-                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentTypeFailed);
+                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
             }
         }
 
@@ -2823,34 +2917,85 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         {
             switch (e.ProgressPercentage)
             {
-                case (int)ParsingErrorCode.ParsingDocumentValuesFailed:
-                    toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Red;
-                    toolStripStatusLabelMessageBuyDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ParsingFailed", LanguageName);
-
-                    toolStripProgressBarBuyDocumentParsing.Visible = false;
-                    grpBoxAdd.Enabled = true;
-                    grpBoxBuys.Enabled = true;
-                    break;
-                case (int)ParsingErrorCode.ParsingDocumentTypeFailed:
-                    toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Red;
-                    toolStripStatusLabelMessageBuyDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ParsingFailed", LanguageName);
-
-                    toolStripProgressBarBuyDocumentParsing.Visible = false;
-                    grpBoxAdd.Enabled = true;
-                    grpBoxBuys.Enabled = true;
-                    break;
-                case (int)ParsingErrorCode.ParsingStarted:
+                case (int) ParsingErrorCode.ParsingStarted:
+                {
                     toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Black;
-                    toolStripStatusLabelMessageBuyDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ParsingStarted", LanguageName);
+                    toolStripStatusLabelMessageBuyDocumentParsing.Text =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingStateMessages/ParsingStarted",
+                            LanguageName);
 
                     toolStripProgressBarBuyDocumentParsing.Visible = true;
                     grpBoxAdd.Enabled = false;
                     grpBoxBuys.Enabled = false;
                     break;
-                case (int)ParsingErrorCode.ParsingDocumentTypeSuccessful:
-                    toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Black;
-                    toolStripStatusLabelMessageBuyDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/BankFoundParsingValues", LanguageName);
+                }
+                case (int) ParsingErrorCode.ParsingFailed:
+                {
+                    toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Red;
+                    toolStripStatusLabelMessageBuyDocumentParsing.Text =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingErrors/ParsingFailed", LanguageName);
+
+                    toolStripProgressBarBuyDocumentParsing.Visible = false;
+                    grpBoxAdd.Enabled = true;
+                    grpBoxBuys.Enabled = true;
                     break;
+                }
+                case (int) ParsingErrorCode.ParsingDocumentNotImplemented:
+                {
+                    toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Red;
+                    toolStripStatusLabelMessageBuyDocumentParsing.Text =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/ParsingErrors/ParsingDocumentNotImplemented",
+                            LanguageName);
+
+                    toolStripProgressBarBuyDocumentParsing.Visible = false;
+                    grpBoxAdd.Enabled = true;
+                    grpBoxBuys.Enabled = true;
+                    break;
+                }
+                case (int) ParsingErrorCode.ParsingBankIdentifierFailed:
+                {
+                    toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Red;
+                    toolStripStatusLabelMessageBuyDocumentParsing.Text =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingErrors/ParsingBankIdentifierFailed",
+                            LanguageName);
+
+                    toolStripProgressBarBuyDocumentParsing.Visible = false;
+                    grpBoxAdd.Enabled = true;
+                    grpBoxBuys.Enabled = true;
+                    break;
+                }
+                case (int) ParsingErrorCode.ParsingDocumentTypeIdentifierFailed:
+                {
+                    toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Red;
+                    toolStripStatusLabelMessageBuyDocumentParsing.Text =
+                        Language.GetLanguageTextByXPath(
+                            @"/AddEditFormBuy/ParsingErrors/ParsingDocumentTypeIdentifierFailed", LanguageName);
+
+                    toolStripProgressBarBuyDocumentParsing.Visible = false;
+                    grpBoxAdd.Enabled = true;
+                    grpBoxBuys.Enabled = true;
+                    break;
+                }
+                case (int) ParsingErrorCode.ParsingDocumentFailed:
+                {
+                    toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Red;
+                    toolStripStatusLabelMessageBuyDocumentParsing.Text =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingErrors/ParsingDocumentFailed",
+                            LanguageName);
+
+                    toolStripProgressBarBuyDocumentParsing.Visible = false;
+                    grpBoxAdd.Enabled = true;
+                    grpBoxBuys.Enabled = true;
+                    break;
+                }
+                case (int) ParsingErrorCode.ParsingIdentifierValuesFound:
+                {
+                    toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Black;
+                    toolStripStatusLabelMessageBuyDocumentParsing.Text =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingErrors/ParsingIdentifierValuesFound",
+                            LanguageName);
+                    break;
+                }
             }
         }
 
@@ -2864,10 +3009,12 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                         .DocumentTypeBuyWkn][0] != ShareObjectFinalValue.WknAsStr)
                 {
                     toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Red;
-                    toolStripStatusLabelMessageBuyDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ParsingWrongWkn", LanguageName);
+                    toolStripStatusLabelMessageBuyDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingErrors/ParsingWrongWkn", LanguageName);
                 }
                 else
                 {
+                    #region Check which values are found
+
                     foreach (var resultEntry in DictionaryParsingResult)
                     {
                         switch (resultEntry.Key)
@@ -2907,6 +3054,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                         }
                     }
 
+                    #endregion Check which values are found
+
+                    #region Not found values
+
                     // Which values are not found
                     if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration
                         .DocumentTypeBuyDate))
@@ -2915,6 +3066,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                         dateTimePickerDate.Value = DateTime.Now;
                         dateTimePickerTime.Value =
                             new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+                        picBoxDateParseState.Image = Resources.search_failed_24;
                         _parsingResult = false;
                     }
 
@@ -2923,6 +3075,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     {
                         dateTimePickerTime.Value =
                             new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+                        picBoxTimeParseState.Image = Resources.search_info_24;
                     }
 
                     if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration
@@ -2941,24 +3094,51 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                         _parsingResult = false;
                     }
 
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.
+                        DocumentTypeBuyProvision))
+                    {
+                        picBoxProvisionParseState.Image = Resources.search_info_24;
+                    }
+
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.
+                        DocumentTypeBuyBrokerFee))
+                    {
+                        picBoxBrokerFeeParseState.Image = Resources.search_info_24;
+                    }
+
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.
+                        DocumentTypeBuyBrokerFee))
+                    {
+                        picBoxBrokerFeeParseState.Image = Resources.search_info_24;
+                    }
+
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.
+                        DocumentTypeBuyTraderPlaceFee))
+                    {
+                        picBoxTraderPlaceFeeParseState.Image = Resources.search_info_24;
+                    }
+
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.
+                        DocumentTypeBuyReduction))
+                    {
+                        picBoxReductionParseState.Image = Resources.search_info_24;
+                    }
+
+                    #endregion Not found values
+
                     if (!_parsingResult)
                     {
                         toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Red;
                         toolStripStatusLabelMessageBuyDocumentParsing.Text =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ParsingFailed", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingErrors/ParsingFailed", LanguageName);
                     }
                     else
                     {
                         toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Black;
                         toolStripStatusLabelMessageBuyDocumentParsing.Text =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ParsingSuccessful", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingStateMessages/ParsingDocumentSuccessful", LanguageName);
                     }
                 }
-            }
-            else
-            {
-                toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Red;
-                toolStripStatusLabelMessageBuyDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ParsingFailed", LanguageName);
             }
 
             toolStripProgressBarBuyDocumentParsing.Visible = false;
@@ -2987,6 +3167,11 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             txtBoxBrokerFee.Text = string.Empty;
             txtBoxTraderPlaceFee.Text = string.Empty;
             txtBoxReduction.Text = string.Empty;
+
+            // Reset status strip
+            toolStripStatusLabelMessageBuyEdit.Text = string.Empty;
+            toolStripStatusLabelMessageBuyDocumentParsing.Text = string.Empty;
+            toolStripProgressBarBuyDocumentParsing.Visible = false;
         }
 
         #endregion Parsing

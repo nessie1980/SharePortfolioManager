@@ -928,6 +928,7 @@
             this.dateTimePickerDate.Size = new System.Drawing.Size(508, 22);
             this.dateTimePickerDate.TabIndex = 55;
             this.dateTimePickerDate.TextChanged += new System.EventHandler(this.DatePickerTime_ValueChanged);
+            this.dateTimePickerDate.ValueChanged += new System.EventHandler(this.DatePickerDate_ValueChanged);
             // 
             // dateTimePickerTime
             // 

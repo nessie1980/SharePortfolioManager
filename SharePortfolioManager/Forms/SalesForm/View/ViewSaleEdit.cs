@@ -3338,7 +3338,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             else
             {
                 toolStripStatusLabelMessageSaleDocumentParsing.ForeColor = Color.Red;
-                toolStripStatusLabelMessageSaleDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ParsingFailed", LanguageName);
+                toolStripStatusLabelMessageSaleDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/ParsingFailed", LanguageName);
             }
 
             toolStripProgressBarSaleDocumentParsing.Visible = false;

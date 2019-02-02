@@ -40,9 +40,15 @@
             this.lblLoggerDllVersion = new System.Windows.Forms.Label();
             this.lblLanguageDllVersionValue = new System.Windows.Forms.Label();
             this.lblLanguageDllVersion = new System.Windows.Forms.Label();
+            this.lblIconSetInfo = new System.Windows.Forms.Label();
+            this.lblIconSetInfoLink = new System.Windows.Forms.LinkLabel();
+            this.grpBoxIconSet = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.grpBoxVersions.SuspendLayout();
             this.tblLayPnlButton.SuspendLayout();
             this.tblLayPnlVersions.SuspendLayout();
+            this.grpBoxIconSet.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnOk
@@ -52,7 +58,7 @@
             this.btnOk.Location = new System.Drawing.Point(137, 1);
             this.btnOk.Margin = new System.Windows.Forms.Padding(1);
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(178, 31);
+            this.btnOk.Size = new System.Drawing.Size(178, 33);
             this.btnOk.TabIndex = 0;
             this.btnOk.Text = "_Ok";
             this.btnOk.UseVisualStyleBackColor = true;
@@ -116,12 +122,11 @@
             // 
             this.grpBoxVersions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.grpBoxVersions.Controls.Add(this.tblLayPnlButton);
             this.grpBoxVersions.Controls.Add(this.tblLayPnlVersions);
             this.grpBoxVersions.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grpBoxVersions.Location = new System.Drawing.Point(5, 5);
             this.grpBoxVersions.Name = "grpBoxVersions";
-            this.grpBoxVersions.Size = new System.Drawing.Size(322, 149);
+            this.grpBoxVersions.Size = new System.Drawing.Size(322, 121);
             this.grpBoxVersions.TabIndex = 6;
             this.grpBoxVersions.TabStop = false;
             this.grpBoxVersions.Text = "_grpBoxVersions";
@@ -132,12 +137,11 @@
             this.tblLayPnlButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblLayPnlButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
             this.tblLayPnlButton.Controls.Add(this.btnOk, 1, 0);
-            this.tblLayPnlButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tblLayPnlButton.Location = new System.Drawing.Point(3, 114);
+            this.tblLayPnlButton.Location = new System.Drawing.Point(8, 209);
             this.tblLayPnlButton.Name = "tblLayPnlButton";
             this.tblLayPnlButton.RowCount = 1;
             this.tblLayPnlButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblLayPnlButton.Size = new System.Drawing.Size(316, 33);
+            this.tblLayPnlButton.Size = new System.Drawing.Size(316, 35);
             this.tblLayPnlButton.TabIndex = 1;
             // 
             // tblLayPnlVersions
@@ -162,6 +166,8 @@
             this.tblLayPnlVersions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tblLayPnlVersions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tblLayPnlVersions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlVersions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tblLayPnlVersions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tblLayPnlVersions.Size = new System.Drawing.Size(316, 96);
             this.tblLayPnlVersions.TabIndex = 0;
             // 
@@ -219,12 +225,68 @@
             this.lblLanguageDllVersion.Text = "_Language dll:";
             this.lblLanguageDllVersion.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // lblIconSetInfo
+            // 
+            this.lblIconSetInfo.BackColor = System.Drawing.Color.LightGray;
+            this.lblIconSetInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblIconSetInfo.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblIconSetInfo.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblIconSetInfo.Location = new System.Drawing.Point(1, 1);
+            this.lblIconSetInfo.Margin = new System.Windows.Forms.Padding(1);
+            this.lblIconSetInfo.Name = "lblIconSetInfo";
+            this.lblIconSetInfo.Size = new System.Drawing.Size(313, 22);
+            this.lblIconSetInfo.TabIndex = 10;
+            this.lblIconSetInfo.Text = "_iconSetInfo";
+            this.lblIconSetInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblIconSetInfoLink
+            // 
+            this.lblIconSetInfoLink.BackColor = System.Drawing.Color.LightGray;
+            this.lblIconSetInfoLink.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblIconSetInfoLink.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblIconSetInfoLink.Location = new System.Drawing.Point(1, 25);
+            this.lblIconSetInfoLink.Margin = new System.Windows.Forms.Padding(1);
+            this.lblIconSetInfoLink.Name = "lblIconSetInfoLink";
+            this.lblIconSetInfoLink.Size = new System.Drawing.Size(313, 23);
+            this.lblIconSetInfoLink.TabIndex = 11;
+            this.lblIconSetInfoLink.TabStop = true;
+            this.lblIconSetInfoLink.Text = "_iconSetInfoLink";
+            this.lblIconSetInfoLink.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblIconSetInfoLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnLblIconSetInfoLink_LinkClicked);
+            // 
+            // grpBoxIconSet
+            // 
+            this.grpBoxIconSet.Controls.Add(this.tableLayoutPanel1);
+            this.grpBoxIconSet.Location = new System.Drawing.Point(5, 132);
+            this.grpBoxIconSet.Name = "grpBoxIconSet";
+            this.grpBoxIconSet.Size = new System.Drawing.Size(322, 73);
+            this.grpBoxIconSet.TabIndex = 7;
+            this.grpBoxIconSet.TabStop = false;
+            this.grpBoxIconSet.Text = "_grpBoxIconSet";
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Controls.Add(this.lblIconSetInfo, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.lblIconSetInfoLink, 0, 1);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 18);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(315, 49);
+            this.tableLayoutPanel1.TabIndex = 0;
+            // 
             // FrmAbout
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.ClientSize = new System.Drawing.Size(330, 157);
+            this.ClientSize = new System.Drawing.Size(330, 248);
+            this.Controls.Add(this.tblLayPnlButton);
+            this.Controls.Add(this.grpBoxIconSet);
             this.Controls.Add(this.grpBoxVersions);
             this.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -239,6 +301,8 @@
             this.grpBoxVersions.ResumeLayout(false);
             this.tblLayPnlButton.ResumeLayout(false);
             this.tblLayPnlVersions.ResumeLayout(false);
+            this.grpBoxIconSet.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -257,5 +321,9 @@
         private System.Windows.Forms.Label lblLoggerDllVersion;
         private System.Windows.Forms.TableLayoutPanel tblLayPnlButton;
         public System.Windows.Forms.TableLayoutPanel tblLayPnlVersions;
+        private System.Windows.Forms.Label lblIconSetInfo;
+        private System.Windows.Forms.LinkLabel lblIconSetInfoLink;
+        private System.Windows.Forms.GroupBox grpBoxIconSet;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     }
 }

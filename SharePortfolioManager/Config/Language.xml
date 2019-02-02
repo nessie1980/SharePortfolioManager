@@ -343,10 +343,6 @@
 				<CouldNotLoadFile_2 text="'!" />
 				<XMLSyntaxFailure_1 text="A XML syntax error exists in the file '" />
 				<XMLSyntaxFailure_2 text="'!" />
-				<ConfigurationListEmpty_1 text="No configuration available in file '" />
-				<ConfigurationListEmpty_2 text="'!" />
-				<ConfigurationListLoadFailed_1 text="Configuration file'" />
-				<ConfigurationListLoadFailed_2 text="' incomplete!"/>
 				<ChangingPortfolioFailed text="Changing the portfolio failed!" />
 				<CouldNotLoadAllLanguageKeys text="Could not load all language keys!" />
 				<WebSiteRegexNotFound1_1 text="No parse configuration for the share with the WKN " />
@@ -415,7 +411,11 @@
 			<StateMessages>
 				<AddSuccess text="Buy has been added." />
 			</StateMessages>
-			
+			<ParsingStateMessages>
+				<ParsingStarted text="Document parsing running..." />
+				<ParsingDocumentSuccessful text="Document parsing was successful!" />
+			</ParsingStateMessages>
+
 			<!-- Errors -->
 			<Errors>
 				<WKNEmpty text="Please enter a WKN number." />
@@ -448,12 +448,15 @@
 				<ChoseDocumentFailed text="An error occurred. Failed to select file!" />
 				<DirectoryDoesNotExist text="The specified directory does not exist!" />
 				<FileDoesNotExist text="The specified file does not exist!" />
-				<ParsingStarted text="Document parsing running..." />
-				<BankFoundParsingValues text="Bank found. Values will be parsed." />
-				<BankNotFound text="Bank not found." />
-				<ParsingFailed text="Documnet parsing failed!" />
-				<ParsingSuccessful text="Documnet parsing was successful!" />
 			</Errors>
+			<ParsingErrors>
+				<ParsingBankIdentifierFailed text="Bank identifier not found!" />
+				<ParsingDocumentTypeIdentifierFailed text="Dokument identifier not found!" />
+				<ParsingDocumentNotImplemented text="Dokument type not implemented!" />
+				<ParsingFailed text="Parsing failed!" />
+				<ParsingDocumentFailed text="Document parsing failed!" />
+				<ParsingIdentifierValuesFound text="Document identifier values found. Parsing buy values started..." />			
+			</ParsingErrors>
 		</AddFormShare>
 		
 		<!-- Edit window -->
@@ -537,6 +540,7 @@
 				<!-- Labels -->
 				<Labels>
 					<Date text="Date:" />
+					<Time text="Time:" />
 					<Volume text="Volume:" />
 					<VolumeSold text="Already sold volume:" />
 					<Price text="Market price:" />
@@ -596,6 +600,10 @@
 				<EditSuccess text="Buy changes has been saved." />
 				<DeleteSuccess text="Buy entry has been deleted!" />			
 			</StateMessages>
+			<ParsingStateMessages>
+				<ParsingStarted text="Document parsing running..." />
+				<ParsingDocumentSuccessful text="Document parsing was successful!" />
+			</ParsingStateMessages>
 			
 			<!-- Buy add / edit errors -->
 			<Errors>
@@ -630,13 +638,15 @@
 				<DirectoryDoesNotExist text="The directory does not exist!" />
 				<FileDoesNotExist text="The given file does not exist!" />
 				<DocumentShowFailed text="Show of the document failed!" />
-				<ParsingStarted text="Document parsing running..." />
-				<BankFoundParsingValues text="Bank found. Values will be parsed." />
-				<BankNotFound text="Bank not found." />
-				<ParsingWrongWkn text="The wrong WKN has been found in the document!" />
-				<ParsingFailed text="Documnet parsing failed!" />
-				<ParsingSuccessful text="Documnet parsing was successful!" />
 			</Errors>
+			<ParsingErrors>
+				<ParsingBankIdentifierFailed text="Bank identifier not found!" />
+				<ParsingDocumentTypeIdentifierFailed text="Dokument identifier not found!" />
+				<ParsingWrongWkn text="The wrong WKN has been found in the document!" />
+				<ParsingFailed text="Parsing failed!" />
+				<ParsingDocumentFailed text="Document parsing failed!" />
+				<ParsingIdentifierValuesFound text="Document identifier values found. Parsing buy values started..." />			
+			</ParsingErrors>
 		</AddEditFormBuy>
 		
 		<!-- Sale add / edit -->
@@ -763,8 +773,8 @@
 				<BankFoundParsingValues text="Bank found. Values will be parsed." />
 				<BankNotFound text="Bank not found." />
 				<ParsingWrongWkn text="The wrong WKN has been found in the document!" />
-				<ParsingFailed text="Documnet parsing failed!" />
-				<ParsingSuccessful text="Documnet parsing was successful!" />
+				<ParsingFailed text="Document parsing failed!" />
+				<ParsingSuccessful text="Document parsing was successful!" />
 			</Errors>
 			
 			<UsedBuyDetailsForm>	
@@ -888,12 +898,6 @@
 				<DirectoryDoesNotExist text="The directory does not exist!" />
 				<FileDoesNotExist text="The given file does not exist!" />
 				<DocumentShowFailed text="Show of the document failed!" />
-				<ParsingStarted text="Document parsing running..." />
-				<BankFoundParsingValues text="Bank found. Values will be parsed." />
-				<BankNotFound text="Bank not found." />
-				<ParsingWrongWkn text="The wrong WKN has been found in the document!" />
-				<ParsingFailed text="Documnet parsing failed!" />
-				<ParsingSuccessful text="Documnet parsing was successful!" />
 			</Errors>
 		</AddEditFormDividend>
 
@@ -989,12 +993,6 @@
 				<FileDoesNotExist text="The given file does not exist!" />
 				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
 				<DocumentShowFailed text="Show of the document failed!" />
-				<ParsingStarted text="Document parsing running..." />
-				<BankFoundParsingValues text="Bank found. Values will be parsed." />
-				<BankNotFound text="Bank not found." />
-				<ParsingWrongWkn text="The wrong WKN has been found in the document!" />
-				<ParsingFailed text="Documnet parsing failed!" />
-				<ParsingSuccessful text="Documnet parsing was successful!" />
 			</Errors>
 		</AddEditFormBrokerage>
 		
@@ -1116,6 +1114,9 @@
 				<ParserDLLVersion text="Parser DLL version:" />
 				<LanguageDLLVersion text="Language DLL version:" />
 				<LoggerDLLVersion text="Logger DLL version:" />
+				<IconSet text="Icons" />
+				<IconSetInfo text="The used icons are taken from:" />
+				<IconSetInfoLink text="Link to Icon8" />
 			</Labels>
 			
 			<!-- Buttons -->
@@ -1472,10 +1473,6 @@
 				<CouldNotLoadFile_2 text="' konnte nicht geladen werden!" />
 				<XMLSyntaxFailure_1 text="Es ist ein XML- Syntax- Fehler in der Datei '" />
 				<XMLSyntaxFailure_2 text="' vorhanden!" />
-				<ConfigurationListEmpty_1 text="Keine Konfigurationen in Datei '" />
-				<ConfigurationListEmpty_2 text="' vorhanden!" />
-				<ConfigurationListLoadFailed_1 text="Konfigurations- Datei '" />
-				<ConfigurationListLoadFailed_2 text="' unvollständig!"/>
 				<ChangingPortfolioFailed text="Wechseln des Portfolios ist fehlgeschlagen!" />
 				<CouldNotLoadAllLanguageKeys text="Es konnten nicht alle Sprach- Elemente geladen werden!" />
 				<WebSiteRegexNotFound1_1 text="Keine Parser- Konfiguration für die Aktie mit der WKN " />
@@ -1544,6 +1541,10 @@
 			<StateMessages>
 				<AddSuccess text="Kauf wurde hinzugefügt." />
 			</StateMessages>
+			<ParsingStateMessages>
+				<ParsingStarted text="Dokument- Analyze läuft..." />
+				<ParsingDocumentSuccessful text="Dokument- Analyze war erfolgreich." />
+			</ParsingStateMessages>
 	
 			<!-- Errors -->
 			<Errors>
@@ -1565,8 +1566,8 @@
 				<TraderPlaceFeeWrongValue text="Der Wert für die eingegebene Handelsplatzgebühr muss größer '0' sein." />				
 				<ReductionWrongFormat text="Das Format für den eingegebenen Rabatt ist ungültig." />
 				<ReductionWrongValue text="Der Wert für den eingegebenen Rabatt muss größer '0' sein." />
+				<BrokerageEmpty text="Bitte geben Sie die Kosten ein." />
 				<BrokerageWrongFormat text="Das Format für die eingegebene Provision ist ungültig." />
-				<BrokerageWrongValue text="Der Wert für 'Kosten' muss größer als '0' sein." />
 				<BrokerageWrongValue text="Der Wert für 'Kosten' muss größer als '0' sein." />
 				<WebSiteEmpty text="Bitte geben Sie eine Webseiten- Adresse ein." />
 				<WebSiteWrongFormat text="Die eingegebene Webseiten- Adresse ist ungültig oder nicht erreichbar. Versuchen Sie es noch einmal." />
@@ -1577,12 +1578,15 @@
 				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
 				<DirectoryDoesNotExist text="Das angegebene Verzeichnis existiert nicht!" />
 				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />				
-				<ParsingStarted text="Dokument- Analyze läuft..." />
-				<BankFoundParsingValues text="Bank erkannt. Werte werden ermittelt." />
-				<BankNotFound text="Bank nicht erkannt." />
-				<ParsingFailed text="Dokument- Analyze ist fehlgeschlagen!" />
-				<ParsingSuccessful text="Dokument- Analyze war erfolgreich." />
 			</Errors>
+			<ParsingErrors>
+				<ParsingBankIdentifierFailed text="Banken-Typ nicht gefunden!" />
+				<ParsingDocumentTypeIdentifierFailed text="Dokument-Typ nicht gefunden!" />
+				<ParsingDocumentNotImplemented text="Dokument-Typ ist nicht implementiert!" />
+				<ParsingFailed text="Analyze ist fehlgeschlagen!" />
+				<ParsingDocumentFailed text="Dokument- Analyze ist fehlgeschlagen!" />
+				<ParsingIdentifierValuesFound text="Dokument-Typ wurde gefunden. Analyze der Kaufwerte wurde gestartet..." />			
+			</ParsingErrors>
 		</AddFormShare>
 		
 		<!-- Edit window -->
@@ -1665,7 +1669,8 @@
 				
 				<!-- Labels -->
 				<Labels>
-					<Date text="Datum des Kaufs:" />
+					<Date text="Datum:" />
+					<Time text="Zeit:" />
 					<Volume text="Gekaufte Anteile:" />
 					<VolumeSold text="Bereits verkaufte Anteile:" />
 					<Price text="Kurs:" />
@@ -1725,6 +1730,10 @@
 				<EditSuccess text="Kauf- Änderung wurde gespeichert." />
 				<DeleteSuccess text="Kauf- Eintrag wurde gelöscht!" />			
 			</StateMessages>
+			<ParsingStateMessages>
+				<ParsingStarted text="Dokument- Analyze läuft..." />
+				<ParsingDocumentSuccessful text="Dokument- Analyze war erfolgreich." />
+			</ParsingStateMessages>
 			
 			<!-- Buy add / edit errors -->
 			<Errors>
@@ -1759,13 +1768,15 @@
 				<DirectoryDoesNotExist text="Das angegebene Verzeichnis existiert nicht!" />
 				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
 				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
-				<ParsingStarted text="Dokument- Analyze läuft..." />
-				<BankFoundParsingValues text="Bank erkannt. Werte werden ermittelt." />
-				<BankNotFound text="Bank nicht erkannt." />
-				<ParsingWrongWkn text="Es wurde die falsche WKN im Dokument gefunden!" />
-				<ParsingFailed text="Dokument- Analyze ist fehlgeschlagen!" />
-				<ParsingSuccessful text="Dokument- Analyze war erfolgreich." />				
 			</Errors>
+			<ParsingErrors>
+				<ParsingBankIdentifierFailed text="Banken-Typ nicht gefunden!" />
+				<ParsingDocumentTypeIdentifierFailed text="Dokument-Typ nicht gefunden!" />
+				<ParsingWrongWkn text="Die falsche WKN wurde gefunden!" />
+				<ParsingFailed text="Analyze ist fehlgeschlagen!" />
+				<ParsingDocumentFailed text="Dokument- Analyze ist fehlgeschlagen!" />
+				<ParsingIdentifierValuesFound text="Dokument-Typ wurde gefunden. Analyze der Kaufwerte wurde gestartet..." />			
+			</ParsingErrors>
 		</AddEditFormBuy>
 			
 		<!-- Sale add / edit -->
@@ -2017,12 +2028,6 @@
 				<DirectoryDoesNotExist text="Das angegebene Verzeichnis existiert nicht!" />
 				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
 				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
-				<ParsingStarted text="Dokument- Analyze läuft..." />
-				<BankFoundParsingValues text="Bank erkannt. Werte werden ermittelt." />
-				<BankNotFound text="Bank nicht erkannt." />
-				<ParsingWrongWkn text="Es wurde die falsche WKN im Dokument gefunden!" />
-				<ParsingFailed text="Dokument- Analyze ist fehlgeschlagen!" />
-				<ParsingSuccessful text="Dokument- Analyze war erfolgreich." />				
 			</Errors>
 		</AddEditFormDividend>
 		
@@ -2117,12 +2122,6 @@
 				<DirectoryDoesNotExist text="Das angegebene Verzeichnis existiert nicht!" />
 				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
 				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
-				<ParsingStarted text="Dokument- Analyze läuft..." />
-				<BankFoundParsingValues text="Bank erkannt. Werte werden ermittelt." />
-				<BankNotFound text="Bank nicht erkannt." />
-				<ParsingWrongWkn text="Es wurde die falsche WKN im Dokument gefunden!" />
-				<ParsingFailed text="Dokument- Analyze ist fehlgeschlagen!" />
-				<ParsingSuccessful text="Dokument- Analyze war erfolgreich." />				
 			</Errors>
 		</AddEditFormBrokerage>
 
@@ -2244,6 +2243,9 @@
 				<ParserDLLVersion text="Parser- DLL- Version:" />
 				<LanguageDLLVersion text="Sprach- DLL- Version:" />
 				<LoggerDLLVersion text="Logger- DLL- Version:" />
+				<IconSet text="Icons" />
+				<IconSetInfo text="Die benutzten Icons stammt von:" />
+				<IconSetInfoLink text="Link zu Icon8" />
 			</Labels>
 			
 			<!-- Buttons -->

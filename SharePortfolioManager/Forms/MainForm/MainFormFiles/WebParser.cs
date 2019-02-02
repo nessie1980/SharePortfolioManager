@@ -38,10 +38,10 @@ namespace SharePortfolioManager
         /// Set up the Parser object for the web parsing by
         /// attaching event handlers.
         /// </summary>
-        private void InitializeWebParser()
+        private void InitializeParser()
         {
-            if (InitFlag && WebParser != null)
-                WebParser.OnParserUpdate += WebParser_UpdateGUI;
+            if (InitFlag && Parser != null)
+                Parser.OnParserUpdate += WebParser_UpdateGUI;
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace SharePortfolioManager
             try
             {
                 // Check if the Parser is in idle mode
-                if (WebParser != null && WebParser.ParserInfoState.State == ParserState.Idle)
+                if (Parser != null && Parser.ParserInfoState.State == ParserState.Idle)
                 {
                     // Set flag for updating all shares
                     UpdateAllFlag = true;
@@ -85,11 +85,11 @@ namespace SharePortfolioManager
                         Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
 
                         // Start the asynchronous operation of the Parser
-                        WebParser.WebParsing = true;
-                        WebParser.WebSiteUrl = ShareObjectMarketValue.WebSite;
-                        WebParser.RegexList = ShareObjectMarketValue.RegexList;
-                        WebParser.EncodingType = ShareObjectMarketValue.WebSiteEncodingType;
-                        WebParser.StartParsing();
+                        Parser.WebParsing = true;
+                        Parser.WebSiteUrl = ShareObjectMarketValue.WebSite;
+                        Parser.RegexList = ShareObjectMarketValue.RegexList;
+                        Parser.EncodingType = ShareObjectMarketValue.WebSiteEncodingType;
+                        Parser.StartParsing();
                     }
                     else
                     {
@@ -103,11 +103,11 @@ namespace SharePortfolioManager
                         Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
 
                         // Start the asynchronous operation of the Parser
-                        WebParser.WebParsing = true;
-                        WebParser.WebSiteUrl = ShareObjectFinalValue.WebSite;
-                        WebParser.RegexList = ShareObjectFinalValue.RegexList;
-                        WebParser.EncodingType = ShareObjectFinalValue.WebSiteEncodingType;
-                        WebParser.StartParsing();
+                        Parser.WebParsing = true;
+                        Parser.WebSiteUrl = ShareObjectFinalValue.WebSite;
+                        Parser.RegexList = ShareObjectFinalValue.RegexList;
+                        Parser.EncodingType = ShareObjectFinalValue.WebSiteEncodingType;
+                        Parser.StartParsing();
                     }
                 }
                 else
@@ -142,7 +142,7 @@ namespace SharePortfolioManager
             try
             {
                 // Check if the Parser is in idle mode
-                if (WebParser != null && WebParser.ParserInfoState.State == ParserState.Idle)
+                if (Parser != null && Parser.ParserInfoState.State == ParserState.Idle)
                 {
                     // Check if a share is selected
                     if (MarketValueOverviewTabSelected == false && dgvPortfolioFinalValue.SelectedCells.Count != 0 && dgvPortfolioFinalValue.SelectedCells[0].Value.ToString() != "" ||
@@ -171,20 +171,20 @@ namespace SharePortfolioManager
                         if (MarketValueOverviewTabSelected)
                         {
                             // Start the asynchronous operation.
-                            WebParser.WebParsing = true;
-                            WebParser.WebSiteUrl = ShareObjectListMarketValue[dgvPortfolioMarketValue.SelectedCells[0].RowIndex].WebSite;
-                            WebParser.RegexList = ShareObjectListMarketValue[dgvPortfolioMarketValue.SelectedCells[0].RowIndex].RegexList;
-                            WebParser.EncodingType = ShareObjectListMarketValue[dgvPortfolioMarketValue.SelectedCells[0].RowIndex].WebSiteEncodingType;
-                            WebParser.StartParsing();
+                            Parser.WebParsing = true;
+                            Parser.WebSiteUrl = ShareObjectListMarketValue[dgvPortfolioMarketValue.SelectedCells[0].RowIndex].WebSite;
+                            Parser.RegexList = ShareObjectListMarketValue[dgvPortfolioMarketValue.SelectedCells[0].RowIndex].RegexList;
+                            Parser.EncodingType = ShareObjectListMarketValue[dgvPortfolioMarketValue.SelectedCells[0].RowIndex].WebSiteEncodingType;
+                            Parser.StartParsing();
                         }
                         else
                         {
                             // Start the asynchronous operation.
-                            WebParser.WebParsing = true;
-                            WebParser.WebSiteUrl = ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedCells[0].RowIndex].WebSite;
-                            WebParser.RegexList = ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedCells[0].RowIndex].RegexList;
-                            WebParser.EncodingType = ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedCells[0].RowIndex].WebSiteEncodingType;
-                            WebParser.StartParsing();
+                            Parser.WebParsing = true;
+                            Parser.WebSiteUrl = ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedCells[0].RowIndex].WebSite;
+                            Parser.RegexList = ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedCells[0].RowIndex].RegexList;
+                            Parser.EncodingType = ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedCells[0].RowIndex].WebSiteEncodingType;
+                            Parser.StartParsing();
                         }
                     }
                     else
@@ -225,8 +225,8 @@ namespace SharePortfolioManager
         /// </summary>
         private void CancelWebParser()
         {
-            if (WebParser != null)
-                WebParser.CancelThread = true;
+            if (Parser != null)
+                Parser.CancelThread = true;
         }
 
         /// <summary>
@@ -357,12 +357,12 @@ namespace SharePortfolioManager
                                             // Start the asynchronous parsing operation.
                                             if (ShareObjectMarketValue != null)
                                             {
-                                                WebParser.WebParsing = true;
-                                                WebParser.WebSiteUrl = ShareObjectMarketValue.WebSite;
-                                                WebParser.RegexList = ShareObjectMarketValue.RegexList;
-                                                WebParser.EncodingType = ShareObjectMarketValue.WebSiteEncodingType;
+                                                Parser.WebParsing = true;
+                                                Parser.WebSiteUrl = ShareObjectMarketValue.WebSite;
+                                                Parser.RegexList = ShareObjectMarketValue.RegexList;
+                                                Parser.EncodingType = ShareObjectMarketValue.WebSiteEncodingType;
                                             }
-                                            WebParser.StartParsing();
+                                            Parser.StartParsing();
                                         }
                                         else
                                         {
@@ -378,12 +378,12 @@ namespace SharePortfolioManager
                                             // Start the asynchronous parsing operation.
                                             if (ShareObjectFinalValue != null)
                                             {
-                                                WebParser.WebParsing = true;
-                                                WebParser.WebSiteUrl = ShareObjectFinalValue.WebSite;
-                                                WebParser.RegexList = ShareObjectFinalValue.RegexList;
-                                                WebParser.EncodingType = ShareObjectFinalValue.WebSiteEncodingType;
+                                                Parser.WebParsing = true;
+                                                Parser.WebSiteUrl = ShareObjectFinalValue.WebSite;
+                                                Parser.RegexList = ShareObjectFinalValue.RegexList;
+                                                Parser.EncodingType = ShareObjectFinalValue.WebSiteEncodingType;
                                             }
-                                            WebParser.StartParsing();
+                                            Parser.StartParsing();
                                         }
                                     }
                                     else
@@ -594,7 +594,7 @@ namespace SharePortfolioManager
                             }
                     }
 
-                    if (WebParser.ParserErrorCode > 0)
+                    if (Parser.ParserErrorCode > 0)
                         Thread.Sleep(100);
 
                     // Check if a error occurred or the process has been finished
