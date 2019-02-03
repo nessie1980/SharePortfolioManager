@@ -48,9 +48,14 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Model
         List<WebSiteRegex> WebSiteRegexList { get; set; }
 
         string Wkn { get; set; }
+        string Name { get; set; }
+        int ShareType { get; set; }
+        int DividendPayoutInterval { get; set; }
+        CultureInfo CultureInfo { get; set; }
+        string WebSite { get; set; }
         string Date { get; set; }
         string Time { get; set; }
-        string Name { get; set; }
+        string OrderNumber { get; set; }
         string Volume { get; set; }
         decimal VolumeDec { get; set; }
         string SharePrice { get; set; }
@@ -69,12 +74,8 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Model
         decimal BrokerageDec { get; set; }
         string BrokerageWithReduction { get; set; }
         decimal BrokerageWithReductionDec { get; set; }
-        string Deposit { get; set; }
-        decimal DepositDec { get; set; }
-        string WebSite { get; set; }
-        CultureInfo CultureInfo { get; set; }
-        int DividendPayoutInterval { get; set; }
-        int ShareType { get; set; }
+        string FinalValue { get; set; }
+        decimal FinalValueDec { get; set; }
         string Document { get; set; }
     }
 
@@ -87,9 +88,14 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Model
         #region Fields
 
         private string _wkn;
+        private string _name;
+        private int _shareType;
+        private int _dividendPayoutInterval;
+        private CultureInfo _cultureInfo;
+        private string _webSite;
         private string _date;
         private string _time;
-        private string _name;
+        private string _orderNumber;
         private string _volume;
         private decimal _volumeDec;
         private string _sharePrice;
@@ -108,12 +114,8 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Model
         private decimal _brokerageDec;
         private string _brokerageWithReduction;
         private decimal _brokerageWithReductionDec;
-        private string _deposit;
-        private decimal _depositDec;
-        private string _webSite;
-        private CultureInfo _cultureInfo;
-        private int _dividendPayoutInterval;
-        private int _shareType;
+        private string _finalValue;
+        private decimal _finalValueDec;
         private string _document;
 
         #endregion Fields
@@ -149,6 +151,61 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Model
             }
         }
 
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                if (Equals(_name, value))
+                    return;
+                _name = value;
+            }
+        }
+
+        public int ShareType
+        {
+            get => _shareType;
+            set
+            {
+                if (Equals(_shareType, value))
+                    return;
+                _shareType = value;
+            }
+        }
+
+        public int DividendPayoutInterval
+        {
+            get => _dividendPayoutInterval;
+            set
+            {
+                if (Equals(_dividendPayoutInterval, value))
+                    return;
+                _dividendPayoutInterval = value;
+            }
+        }
+
+        public CultureInfo CultureInfo
+        {
+            get => _cultureInfo;
+            set
+            {
+                if (Equals(_cultureInfo, value))
+                    return;
+                _cultureInfo = value;
+            }
+        }
+
+        public string WebSite
+        {
+            get => _webSite;
+            set
+            {
+                if (Equals(_webSite, value))
+                    return;
+                _webSite = value;
+            }
+        }
+
         public string Date
         {
             get => _date;
@@ -171,14 +228,14 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Model
             }
         }
 
-        public string Name
+        public string OrderNumber
         {
-            get => _name;
+            get => _orderNumber;
             set
             {
-                if (Equals(_name, value))
+                if (Equals(_orderNumber, value))
                     return;
-                _name = value;
+                _orderNumber = value;
             }
         }
 
@@ -462,69 +519,25 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Model
             }
         }
 
-        public string Deposit
+        public string FinalValue
         {
-            get => _depositDec >= 0 ? Helper.FormatDecimal(_depositDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : _deposit;
+            get => _finalValueDec >= 0 ? Helper.FormatDecimal(_finalValueDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : _finalValue;
             set
             {
-                if (Equals(_deposit, value))
+                if (Equals(_finalValue, value))
                     return;
-                _deposit = value;
+                _finalValue = value;
             }
         }
 
-        public decimal DepositDec
+        public decimal FinalValueDec
         {
-            get => _depositDec;
+            get => _finalValueDec;
             set
             {
-                if (Equals(_depositDec, value))
+                if (Equals(_finalValueDec, value))
                     return;
-                _depositDec = value;
-            }
-        }
-
-        public string WebSite
-        {
-            get => _webSite;
-            set
-            {
-                if (Equals(_webSite, value))
-                    return;
-                _webSite = value;
-            }
-        }
-
-        public CultureInfo CultureInfo
-        {
-            get => _cultureInfo;
-            set
-            {
-                if (Equals(_cultureInfo, value))
-                    return;
-                _cultureInfo = value;
-            }
-        }
-
-        public int DividendPayoutInterval
-        {
-            get => _dividendPayoutInterval;
-            set
-            {
-                if (Equals(_dividendPayoutInterval, value))
-                    return;
-                _dividendPayoutInterval = value;
-            }
-        }
-
-        public int ShareType
-        {
-            get => _shareType;
-            set
-            {
-                if (Equals(_shareType, value))
-                    return;
-                _shareType = value;
+                _finalValueDec = value;
             }
         }
 

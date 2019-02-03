@@ -86,6 +86,7 @@ namespace SharePortfolioManager
         /// </summary>
         /// <param name="cultureInfo">Culture info of the buy</param>
         /// <param name="strGuid">Guid of the buy</param>
+        /// <param name="strOrderNumber">Order number of the buy</param>
         /// <param name="strDate">Buy date of the new buy list entry</param>
         /// <param name="decVolume">Volume of the buy</param>
         /// <param name="decVolumeSold">Volume of the buy which is already sold</param>
@@ -93,7 +94,7 @@ namespace SharePortfolioManager
         /// <param name="brokerageObject">Brokerage of the buy</param>
         /// <param name="strDoc">Document of the buy</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddBuyObject(CultureInfo cultureInfo, string strGuid, string strDate, decimal decVolume, decimal decVolumeSold, decimal decSharePrice,
+        public bool AddBuyObject(CultureInfo cultureInfo, string strGuid, string strOrderNumber, string strDate, decimal decVolume, decimal decVolumeSold, decimal decSharePrice,
             BrokerageReductionObject brokerageObject, string strDoc = "")
         {
 #if DEBUG_BUY
@@ -106,7 +107,7 @@ namespace SharePortfolioManager
                 BuyCultureInfo = cultureInfo;
 
                 // Create new BuyObject
-                var addObject = new BuyObject(cultureInfo, strGuid, strDate, decVolume, decVolumeSold, decSharePrice,
+                var addObject = new BuyObject(cultureInfo, strGuid, strOrderNumber, strDate, decVolume, decVolumeSold, decSharePrice,
                     brokerageObject, strDoc);
 
                 // Add object to the list

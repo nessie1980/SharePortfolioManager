@@ -467,6 +467,7 @@ namespace SharePortfolioManager
                                                 {
                                                     if (!ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].AddBuy(
                                                         nodeList.Attributes[ShareObject.BuyGuidAttrName].Value,                 // Guid
+                                                        nodeList.Attributes[ShareObject.BuyOrderNumberAttrName].Value,          // Order number
                                                         nodeList.Attributes[ShareObject.BuyDateAttrName].Value,                 // Date
                                                         Convert.ToDecimal(
                                                             nodeList.Attributes[ShareObject.BuyVolumeAttrName].Value),          // Volume
@@ -485,6 +486,7 @@ namespace SharePortfolioManager
 
                                                     if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].AddBuy(
                                                         nodeList.Attributes[ShareObject.BuyGuidAttrName].Value,                 // Guid
+                                                        nodeList.Attributes[ShareObject.BuyOrderNumberAttrName].Value,          // Order number
                                                         nodeList.Attributes[ShareObject.BuyDateAttrName].Value,                 // Date
                                                         Convert.ToDecimal(
                                                             nodeList.Attributes[ShareObject.BuyVolumeAttrName].Value),          // Volume

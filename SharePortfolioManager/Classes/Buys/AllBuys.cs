@@ -79,6 +79,7 @@ namespace SharePortfolioManager.Classes.Buys
         /// This function adds a buy to the list
         /// </summary>
         /// <param name="strGuid">Guid of the buy</param>
+        /// <param name="strOrderNumber">Order number of the buy</param>
         /// <param name="strDate">Date and time of the buy</param>
         /// <param name="decVolume">Volume of the buy</param>
         /// <param name="decVolumeSold">Volume of the buy which is already sold</param>
@@ -86,7 +87,7 @@ namespace SharePortfolioManager.Classes.Buys
         /// <param name="brokerageObject">Brokerage of the buy</param>
         /// <param name="strDoc">Document of the buy</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddBuy(string strGuid, string strDate, decimal decVolume, decimal decVolumeSold, decimal decSharePrice,
+        public bool AddBuy(string strGuid, string strOrderNumber, string strDate, decimal decVolume, decimal decVolumeSold, decimal decSharePrice,
             BrokerageReductionObject brokerageObject, string strDoc = "")
         {
 #if DEBUG_BUY
@@ -103,7 +104,7 @@ namespace SharePortfolioManager.Classes.Buys
                 // Search if a buy for the given year already exists if not add it
                 if (AllBuysOfTheShareDictionary.TryGetValue(year, out var searchObject))
                 {
-                    if (!searchObject.AddBuyObject(BuyCultureInfo, strGuid, strDate, decVolume, decVolumeSold, decSharePrice,
+                    if (!searchObject.AddBuyObject(BuyCultureInfo, strGuid, strOrderNumber, strDate, decVolume, decVolumeSold, decSharePrice,
                         brokerageObject, strDoc))
                         return false;
                 }
@@ -112,7 +113,7 @@ namespace SharePortfolioManager.Classes.Buys
                     // Add new year buy object for the buy with a new year
                     var addObject = new BuysYearOfTheShare();
                     // Add buy with the new year to the buy year list
-                    if (addObject.AddBuyObject(BuyCultureInfo, strGuid, strDate, decVolume, decVolumeSold, decSharePrice,
+                    if (addObject.AddBuyObject(BuyCultureInfo, strGuid, strOrderNumber, strDate, decVolume, decVolumeSold, decSharePrice,
                         brokerageObject, strDoc))
                     {
                         AllBuysOfTheShareDictionary.Add(year, addObject);
@@ -392,7 +393,7 @@ namespace SharePortfolioManager.Classes.Buys
         /// <summary>
         /// This function checks if the buy with the given Guid is the last buy of the entries
         /// </summary>
-        /// <param name="strGuid">Given date and time</param>
+        /// <param name="strGuid">Given GUID</param>
         /// <returns></returns>
         public bool IsLastBuy(string strGuid)
         {
@@ -404,6 +405,25 @@ namespace SharePortfolioManager.Classes.Buys
 
             if (lastYearEntries.BuyListYear.Last().Guid == strGuid)
                 return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// This function checks if the buy with the given order number already exists
+        /// </summary>
+        /// <param name="strOrderNumber">Given order number</param>
+        /// <returns></returns>
+        public bool OrderNumberAlreadyExists(string strOrderNumber)
+        {
+            foreach (var buyList in _allBuysOfTheShareDictionary.Values)
+            {
+                foreach (var buy in buyList.BuyListYear)
+                {
+                    if (strOrderNumber == buy.OrderNumber)
+                        return true;
+                }
+            }
 
             return false;
         }

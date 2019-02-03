@@ -564,6 +564,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="wkn">WKN number of the share</param>
         /// <param name="addDateTime">Date and time of the add</param>
         /// <param name="name">Name of the share</param>
+        /// <param name="orderNumber">order number of the first buy</param>
         /// <param name="lastUpdateInternet">Date and time of the last update from the Internet</param>
         /// <param name="lastUpdateShareDate">Date of the last update on the Internet site of the share</param>
         /// <param name="lastUpdateShareTime">Time of the last update on the Internet site of the share</param>
@@ -577,7 +578,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="shareType">Type of the share</param>
         /// <param name="document">Document of the first buy</param>
         public ShareObjectMarketValue(
-            string guid, string wkn, string addDateTime, string name,
+            string guid, string wkn, string addDateTime, string name, string orderNumber,
             DateTime lastUpdateInternet, DateTime lastUpdateShareDate, DateTime lastUpdateShareTime,
             decimal price, decimal volume, decimal volumeSold, string webSite, List<Image> imageListForDayBeforePerformance,
             RegExList regexList, CultureInfo cultureInfo, int shareType, string document) 
@@ -585,7 +586,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                     price, webSite, imageListForDayBeforePerformance, regexList,
                     cultureInfo, shareType)
         {
-            AddBuy(guid, AddDateTime, volume, volumeSold, price, document);
+            AddBuy(guid, orderNumber, AddDateTime, volume, volumeSold, price, document);
         }
 
         #endregion Constructors
@@ -609,19 +610,22 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// This function adds the buy for the share to the dictionary
         /// </summary>
         /// <param name="strGuid">Guid of the buy</param>
+        /// <param name="strOrderNumber">Order number of the buy</param>
         /// <param name="strDateTime">Date and time of the buy</param>
         /// <param name="decVolume">Buy volume</param>
         /// <param name="decVolumeSold">Buy volume which is already sold</param>
         /// <param name="decPrice">Price for one share</param>
         /// <param name="strDoc">Document of the buy</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddBuy(string strGuid, string strDateTime, decimal decVolume, decimal decVolumeSold, decimal decPrice, string strDoc = "")
+        public bool AddBuy(string strGuid, string strOrderNumber, string strDateTime, decimal decVolume, decimal decVolumeSold, decimal decPrice, string strDoc = "")
         {
             try
             {
 #if DEBUG_SHAREOBJECT_MARKET
                 Console.WriteLine(@"");
                 Console.WriteLine(@"AddBuy() / MarketValue");
+                Console.WriteLine(@"strGuid: {0}", strGuid);
+                Console.WriteLine(@"strOrderNumber: {0}", strOrderNumber);
                 Console.WriteLine(@"strDateTime: {0}", strDateTime);
                 Console.WriteLine(@"decVolume: {0}", decVolume);
                 Console.WriteLine(@"decVolumeSold: {0}", decVolumeSold);
@@ -629,7 +633,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 Console.WriteLine(@"strDoc: {0}", strDoc);
 #endif
                 // Add buy without reductions and brokerage
-                if (!AllBuyEntries.AddBuy(strGuid, strDateTime, decVolume, decVolumeSold, decPrice, null, strDoc))
+                if (!AllBuyEntries.AddBuy(strGuid, strOrderNumber, strDateTime, decVolume, decVolumeSold, decPrice, null, strDoc))
                     return false;
 
                 // Set buy value of the share
@@ -1046,7 +1050,12 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                         .GetAllBuysOfTheShare())
                                     {
                                         var newBuyElement = xmlPortfolio.CreateElement(BuyTagNamePre);
-                                        newBuyElement.SetAttribute(BuyDateAttrName, buyElementYear.DateAsStr);
+                                        newBuyElement.SetAttribute(BuyGuidAttrName,
+                                            buyElementYear.Guid);
+                                        newBuyElement.SetAttribute(BuyDateAttrName,
+                                            buyElementYear.DateAsStr);
+                                        newBuyElement.SetAttribute(BuyOrderNumberAttrName,
+                                            buyElementYear.OrderNumber);
                                         newBuyElement.SetAttribute(BuyVolumeAttrName,
                                             buyElementYear.VolumeAsStr);
                                         newBuyElement.SetAttribute(BuyVolumeSoldAttrName,
@@ -1242,6 +1251,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                         {
                             var newBuyElement = xmlPortfolio.CreateElement(BuyTagNamePre);
                             newBuyElement.SetAttribute(BuyGuidAttrName, buyElementYear.Guid);
+                            newBuyElement.SetAttribute(BuyOrderNumberAttrName, buyElementYear.OrderNumber);
                             newBuyElement.SetAttribute(BuyDateAttrName, buyElementYear.DateAsStr);
                             newBuyElement.SetAttribute(BuyVolumeAttrName, buyElementYear.VolumeAsStr);
                             newBuyElement.SetAttribute(BuyVolumeSoldAttrName, @"0");

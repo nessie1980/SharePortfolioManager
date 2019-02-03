@@ -48,6 +48,8 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         WknExists,
         NameEmpty,
         NameExists,
+        OrderNumberEmpty,
+        OrderNumberExists,
         VolumeEmpty,
         VolumeWrongFormat,
         VolumeWrongValue,
@@ -106,9 +108,10 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         List<WebSiteRegex> WebSiteRegexList { get; }
 
         string Wkn { get; set; }
+        string ShareName { get; set; }
         string Date { get; set; }
         string Time { get; set; }
-        string ShareName { get; set; }
+        string OrderNumber { get; set; }
         string Volume { get; set; }
         string SharePrice { get; set; }
         string MarketValue { get; set; }
@@ -117,7 +120,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         string TraderPlaceFee { get; set; }
         string Reduction { get; set; }
         string Brokerage { get; set; }
-        string GrandTotal { get; set; }
+        string FinalValue { get; set; }
         string WebSite { get; set; }
         CultureInfo CultureInfo { get; }
         int DividendPayoutInterval { get; set; }
@@ -247,6 +250,59 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
             }
         }
 
+        public string ShareName
+        {
+            get => txtBoxName.Text;
+            set
+            {
+                if (txtBoxName.Text == value)
+                    return;
+                txtBoxName.Text = value;
+            }
+        }
+
+        public int ShareType
+        {
+            get => cbxShareType.SelectedIndex;
+            set
+            {
+                if (cbxShareType.SelectedIndex == value)
+                    return;
+                cbxShareType.SelectedIndex = value;
+            }
+        }
+
+        public int DividendPayoutInterval
+        {
+            get => cbxDividendPayoutInterval.SelectedIndex;
+            set
+            {
+                if (cbxDividendPayoutInterval.SelectedIndex == value)
+                    return;
+                cbxDividendPayoutInterval.SelectedIndex = value;
+            }
+        }
+
+        public CultureInfo CultureInfo
+        {
+            get
+            {
+                var cultureName = cboBoxCultureInfo.SelectedItem.ToString();
+                return Helper.GetCultureByName(cultureName);
+            }
+        }
+
+        public string WebSite
+        {
+            get => txtBoxWebSite.Text;
+            set
+            {
+                if (txtBoxWebSite.Text == value)
+                    return;
+                txtBoxWebSite.Text = value;
+            }
+        }
+
         public string Date
         {
             get => dateTimePickerDate.Text;
@@ -269,14 +325,14 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
             }
         }
 
-        public string ShareName
+        public string OrderNumber
         {
-            get => txtBoxName.Text;
+            get => txtBoxOrderNumber.Text;
             set
             {
-                if (txtBoxName.Text == value)
+                if (txtBoxOrderNumber.Text == value)
                     return;
-                txtBoxName.Text = value;
+                txtBoxOrderNumber.Text = value;
             }
         }
 
@@ -368,7 +424,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
             }
         }
 
-        public string GrandTotal
+        public string FinalValue
         {
             get => txtBoxFinalValue.Text;
             set
@@ -376,48 +432,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 if (txtBoxFinalValue.Text == value)
                     return;
                 txtBoxFinalValue.Text = value;
-            }
-        }
-
-        public string WebSite
-        {
-            get => txtBoxWebSite.Text;
-            set
-            {
-                if (txtBoxWebSite.Text == value)
-                    return;
-                txtBoxWebSite.Text = value;
-            }
-        }
-
-        public CultureInfo CultureInfo
-        {
-            get
-            {
-                var cultureName = cboBoxCultureInfo.SelectedItem.ToString();
-                return Helper.GetCultureByName(cultureName);
-            }
-        }
-
-        public int DividendPayoutInterval
-        {
-            get => cbxDividendPayoutInterval.SelectedIndex;
-            set
-            {
-                if (cbxDividendPayoutInterval.SelectedIndex == value)
-                    return;
-                cbxDividendPayoutInterval.SelectedIndex = value;
-            }
-        }
-
-        public int ShareType
-        {
-            get => cbxShareType.SelectedIndex;
-            set
-            {
-                if (cbxShareType.SelectedIndex == value)
-                    return;
-                cbxShareType.SelectedIndex = value;
             }
         }
 
@@ -449,184 +463,204 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
             switch (ErrorCode)
             {
                 case ShareAddErrorCode.AddSuccessful:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/StateMessages/AddSuccess", LanguageName);
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/StateMessages/AddSuccess", LanguageName);
 
-                        StopFomClosingFlag = false;
-                        break;
-                    }
+                    StopFomClosingFlag = false;
+                    break;
+                }
                 case ShareAddErrorCode.AddFailed:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/AddFailed", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxVolume.Focus();
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/AddFailed", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxVolume.Focus();
+                    break;
+                }
                 case ShareAddErrorCode.WknEmpty:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WKNEmpty", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxWkn.Focus();
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WKNEmpty", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxWkn.Focus();
+                    break;
+                }
                 case ShareAddErrorCode.WknExists:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WKNExists", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxWkn.Focus();
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WKNExists", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxWkn.Focus();
+                    break;
+                }
                 case ShareAddErrorCode.NameEmpty:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/NameEmpty", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxName.Focus();
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/NameEmpty", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxName.Focus();
+                    break;
+                }
                 case ShareAddErrorCode.NameExists:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/NameExists", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxName.Focus();
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/NameExists", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxName.Focus();
+                    break;
+                }
+                case ShareAddErrorCode.OrderNumberEmpty:
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/OrderNumberEmpty", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxVolume.Focus();
+                    break;
+                }
+                case ShareAddErrorCode.OrderNumberExists:
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/OrderNumberExists", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxVolume.Focus();
+                    break;
+                }
+
                 case ShareAddErrorCode.VolumeEmpty:
-                    {
-                        strMessage =
-                             Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/VolumeEmpty", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxVolume.Focus();
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/VolumeEmpty", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxVolume.Focus();
+                    break;
+                }
                 case ShareAddErrorCode.VolumeWrongFormat:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/VolumeWrongFormat", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxVolume.Focus();
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/VolumeWrongFormat", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxVolume.Focus();
+                    break;
+                }
                 case ShareAddErrorCode.VolumeWrongValue:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/VolumeWrongValue", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxVolume.Focus();
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/VolumeWrongValue", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxVolume.Focus();
+                    break;
+                }
                 case ShareAddErrorCode.SharePriceEmpty:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/SharePriceEmpty", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxSharePrice.Focus();
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/SharePriceEmpty", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxSharePrice.Focus();
+                    break;
+                }
                 case ShareAddErrorCode.SharePriceWrongFormat:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/SharePriceWrongFormat", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxSharePrice.Focus();
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/SharePriceWrongFormat", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxSharePrice.Focus();
+                    break;
+                }
                 case ShareAddErrorCode.SharePriceWrongValue:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/SharePriceWrongValue", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxSharePrice.Focus();
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/SharePriceWrongValue", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxSharePrice.Focus();
+                    break;
+                }
                 case ShareAddErrorCode.ProvisionWrongFormat:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ProvisionWrongFormat", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxProvision.Focus();
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ProvisionWrongFormat", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxProvision.Focus();
+                    break;
+                }
                 case ShareAddErrorCode.ProvisionWrongValue:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ProvisionWrongValue", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxProvision.Focus();
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ProvisionWrongValue", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxProvision.Focus();
+                    break;
+                }
                 case ShareAddErrorCode.BrokerFeeWrongFormat:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/BrokerFeeWrongFormat", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxBrokerFee.Focus();
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/BrokerFeeWrongFormat", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxBrokerFee.Focus();
+                    break;
+                }
                 case ShareAddErrorCode.BrokerFeeWrongValue:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/BrokerFeeWrongValue", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxBrokerFee.Focus();
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/BrokerFeeWrongValue", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxBrokerFee.Focus();
+                    break;
+                }
                 case ShareAddErrorCode.TraderPlaceFeeWrongFormat:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/TraderPlaceFeeWrongFormat", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxTraderPlaceFee.Focus();
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/TraderPlaceFeeWrongFormat",
+                            LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxTraderPlaceFee.Focus();
+                    break;
+                }
                 case ShareAddErrorCode.TraderPlaceFeeWrongValue:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/TraderPlaceFeeWrongValue", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxTraderPlaceFee.Focus();
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/TraderPlaceFeeWrongValue", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxTraderPlaceFee.Focus();
+                    break;
+                }
                 case ShareAddErrorCode.ReductionWrongFormat:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ReductionWrongFormat", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxReduction.Focus();
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ReductionWrongFormat", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxReduction.Focus();
+                    break;
+                }
                 case ShareAddErrorCode.ReductionWrongValue:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ReductionWrongValue", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxReduction.Focus();
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ReductionWrongValue", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxReduction.Focus();
+                    break;
+                }
                 case ShareAddErrorCode.BrokerageEmpty:
                 {
                     strMessage =
@@ -637,82 +671,82 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                     break;
                 }
                 case ShareAddErrorCode.BrokerageWrongFormat:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/BrokerageWrongFormat", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxBrokerage.Focus();
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/BrokerageWrongFormat", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxBrokerage.Focus();
+                    break;
+                }
                 case ShareAddErrorCode.BrokerageWrongValue:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/BrokerageWrongValue", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxBrokerage.Focus();
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/BrokerageWrongValue", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxBrokerage.Focus();
+                    break;
+                }
                 case ShareAddErrorCode.WebSiteEmpty:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WebSiteEmpty", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxWebSite.Focus();
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WebSiteEmpty", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxWebSite.Focus();
+                    break;
+                }
                 case ShareAddErrorCode.WebSiteWrongFormat:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WebSiteWrongFormat", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxWebSite.Focus();
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WebSiteWrongFormat", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxWebSite.Focus();
+                    break;
+                }
                 case ShareAddErrorCode.WebSiteExists:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WebSiteExists", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        txtBoxWebSite.Focus();
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WebSiteExists", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxWebSite.Focus();
+                    break;
+                }
                 case ShareAddErrorCode.DocumentDirectoryDoesNotExists:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DirectoryDoesNotExist", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DirectoryDoesNotExist", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    break;
+                }
                 case ShareAddErrorCode.DocumentFileDoesNotExists:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/FileDoesNotExist", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/FileDoesNotExist", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    break;
+                }
                 case ShareAddErrorCode.WebSiteRegexNotFound:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WebSiteRegexNotFound", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WebSiteRegexNotFound", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    break;
+                }
                 default:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/UnknowState", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-                        break;
-                    }
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/UnknowState", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    break;
+                }
             }
 
             Helper.AddStatusMessage(toolStripStatusLabelMessageaAddShare,
@@ -811,6 +845,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                     Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/CultureInfo", LanguageName);
 
                 lblWebSite.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/WebSite", LanguageName);
+                lblOrderNumber.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/OrderNumber", LanguageName);
                 lblDate.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Date", LanguageName);
                 lblTime.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Time", LanguageName);
                 lblVolume.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Volume", LanguageName);
@@ -1017,6 +1052,16 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Name"));
         }
 
+        private void OnTxtBoxWebSite_TextChanged(object sender, EventArgs e)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WebSite"));
+        }
+
+        private void OntTxtBoxOrderNumber_TextChanged(object sender, EventArgs e)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OrderNumber"));
+        }
+
         private void OnTxtBoxVolume_TextChanged(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Volume"));
@@ -1085,11 +1130,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         private void OnTxtBoxBrokerage_Leave(object sender, EventArgs e)
         {
             FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
-        }
-
-        private void OnTxtBoxWebSite_TextChanged(object sender, EventArgs e)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WebSite"));
         }
 
         private void OnTxtBoxDocument_TextChanged(object sender, EventArgs e)
@@ -1644,46 +1684,72 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                     switch (resultEntry.Key)
                     {
                         case DocumentParsingConfiguration.DocumentTypeBuyWkn:
+                        {
                             picBoxWknParseState.Image = Resources.search_ok_24;
                             txtBoxWkn.Text = resultEntry.Value[0].Trim();
                             break;
+                        }
+                        case DocumentParsingConfiguration.DocumentTypeBuyOrderNumber:
+                        {
+                            picBoxOrderNumberParseState.Image = Resources.search_ok_24;
+                            txtBoxOrderNumber.Text = resultEntry.Value[0].Trim();
+                            break;
+                        }
                         case DocumentParsingConfiguration.DocumentTypeBuyName:
+                        {
                             picBoxNameParseState.Image = Resources.search_ok_24;
                             txtBoxName.Text =
                                 Helper.RemoveDoubleWhiteSpaces(resultEntry.Value[0].Trim());
                             break;
+                        }
                         case DocumentParsingConfiguration.DocumentTypeBuyDate:
+                        {
                             picBoxDateParseState.Image = Resources.search_ok_24;
                             dateTimePickerDate.Text = resultEntry.Value[0].Trim();
                             break;
+                        }
                         case DocumentParsingConfiguration.DocumentTypeBuyTime:
+                        {
                             picBoxTimeParseState.Image = Resources.search_ok_24;
                             dateTimePickerTime.Text = resultEntry.Value[0].Trim();
                             break;
+                        }
                         case DocumentParsingConfiguration.DocumentTypeBuyVolume:
+                        {
                             picBoxVolumeParseState.Image = Resources.search_ok_24;
                             txtBoxVolume.Text = resultEntry.Value[0].Trim();
                             break;
+                        }
                         case DocumentParsingConfiguration.DocumentTypeBuyPrice:
+                        {
                             picBoxPriceParseState.Image = Resources.search_ok_24;
                             txtBoxSharePrice.Text = resultEntry.Value[0].Trim();
                             break;
+                        }
                         case DocumentParsingConfiguration.DocumentTypeBuyProvision:
+                        {
                             picBoxProvisionParseState.Image = Resources.search_ok_24;
                             txtBoxProvision.Text = resultEntry.Value[0].Trim();
                             break;
+                        }
                         case DocumentParsingConfiguration.DocumentTypeBuyBrokerFee:
+                        {
                             picBoxBrokerFeeParseState.Image = Resources.search_ok_24;
                             txtBoxBrokerFee.Text = resultEntry.Value[0].Trim();
                             break;
+                        }
                         case DocumentParsingConfiguration.DocumentTypeBuyTraderPlaceFee:
+                        {
                             picBoxTraderPlaceFeeParseState.Image = Resources.search_ok_24;
                             txtBoxTraderPlaceFee.Text = resultEntry.Value[0].Trim();
                             break;
+                        }
                         case DocumentParsingConfiguration.DocumentTypeBuyReduction:
+                        {
                             picBoxReductionParseState.Image = Resources.search_ok_24;
                             txtBoxReduction.Text = resultEntry.Value[0].Trim();
                             break;
+                        }
                     }
                 }
 
@@ -1696,7 +1762,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                     .DocumentTypeBuyWkn))
                 {
                     picBoxWknParseState.Image = Resources.search_failed_24;
-                    txtBoxWkn.Text = @"";
+                    txtBoxWkn.Text = string.Empty;
                     _parsingResult = false;
                 }
 
@@ -1704,7 +1770,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                     .DocumentTypeBuyName))
                 {
                     picBoxNameParseState.Image = Resources.search_failed_24;
-                    txtBoxName.Text = @"";
+                    txtBoxName.Text = string.Empty;
                     _parsingResult = false;
                 }
 
@@ -1726,10 +1792,18 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 }
 
                 if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration
+                    .DocumentTypeBuyOrderNumber))
+                {
+                    picBoxOrderNumberParseState.Image = Resources.search_failed_24;
+                    txtBoxOrderNumber.Text = string.Empty;
+                    _parsingResult = false;
+                }
+
+                if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration
                     .DocumentTypeBuyVolume))
                 {
                     picBoxVolumeParseState.Image = Resources.search_failed_24;
-                    txtBoxVolume.Text = @"";
+                    txtBoxVolume.Text = string.Empty;
                     _parsingResult = false;
                 }
 
@@ -1737,7 +1811,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                     .DocumentTypeBuyPrice))
                 {
                     picBoxPriceParseState.Image = Resources.search_failed_24;
-                    txtBoxSharePrice.Text = @"";
+                    txtBoxSharePrice.Text = string.Empty;
                     _parsingResult = false;
                 }
 
@@ -1795,6 +1869,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         private void ResetValues()
         {
             // Reset state pictures
+            picBoxOrderNumberParseState.Image = Resources.empty_arrow;
             picBoxWknParseState.Image = Resources.empty_arrow;
             picBoxNameParseState.Image = Resources.empty_arrow;
             picBoxDateParseState.Image = Resources.empty_arrow;
@@ -1809,6 +1884,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
             // Reset textboxes
             txtBoxWkn.Text = string.Empty;
             txtBoxName.Text = string.Empty;
+            txtBoxOrderNumber.Text = string.Empty;
             txtBoxWebSite.Text = string.Empty;
             dateTimePickerDate.Value = DateTime.Now;
             dateTimePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);

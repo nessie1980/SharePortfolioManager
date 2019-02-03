@@ -102,6 +102,11 @@ namespace SharePortfolioManager.Classes.ShareObjects
         internal const string BuyGuidAttrName = "Guid";
 
         /// <summary>
+        /// Stores the XML attribute name for the buy order number
+        /// </summary>
+        internal const string BuyOrderNumberAttrName = "OrderNumber";
+
+        /// <summary>
         /// Stores the XML attribute name for the buy date
         /// </summary>
         internal const string BuyDateAttrName = "Date";
@@ -134,7 +139,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <summary>
         /// Stores the attribute count for the buy
         /// </summary>
-        internal const short BuyAttrCount = 7;
+        internal const short BuyAttrCount = 8;
 
         #endregion Buy XML variables
 

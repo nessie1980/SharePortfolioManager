@@ -121,6 +121,7 @@ namespace SharePortfolioManager.Classes
 
         public const string DocumentTypeBuy = "Buy";
         public const string DocumentTypeBuyWkn = "Wkn";
+        public const string DocumentTypeBuyOrderNumber = "OrderNumber";
         public const string DocumentTypeBuyName = "Name";
         public const string DocumentTypeBuyDate = "Date";
         public const string DocumentTypeBuyTime = "Time";
@@ -137,6 +138,7 @@ namespace SharePortfolioManager.Classes
 
         public const string DocumentTypeSale = "Sale";
         public const string DocumentTypeSaleWkn = "Wkn";
+        public const string DocumentTypeSaleOrderNumber = "OrderNumber";
         public const string DocumentTypeSaleName = "Name";
         public const string DocumentTypeSaleDate = "Date";
         public const string DocumentTypeSaleTime = "Time";
@@ -144,7 +146,7 @@ namespace SharePortfolioManager.Classes
         public const string DocumentTypeSalePrice = "Price";
         public const string DocumentTypeSaleTaxAtSource = "TaxAtSource";
         public const string DocumentTypeSaleCapitalGainTax = "CapitalGainTax";
-        public const string DocumentTypeSaleSolidarity = "SolidatityTax";
+        public const string DocumentTypeSaleSolidarity = "SolidarityTax";
         public const string DocumentTypeSaleProvision = "Provision";
         public const string DocumentTypeSaleBrokerFee = "BrokerFee";
         public const string DocumentTypeSaleTraderPlaceFee = "TraderPlaceFee";

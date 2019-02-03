@@ -50,6 +50,8 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         DeleteFailed,
         DeleteFailedUnerasable,
         InputValuesInvalid,
+        OrderNumberEmpty,
+        OrderNumberExists,
         VolumeEmpty,
         VolumeWrongFormat,
         VolumeWrongValue,
@@ -111,6 +113,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         string SelectedDate { get; set; }
         string Date { get; set; }
         string Time { get; set; }
+        string OrderNumber { get; set; }
         string Volume { get; set; }
         string VolumeSold { get; set; }
         string Price { get; set; }
@@ -121,7 +124,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         string TraderPlaceFee { get; set; }
         string Brokerage { get; set; }
         string BrokerageWithReduction { get; set; }
-        string Deposit { get; set; }
+        string FinalValue { get; set; }
         string Document { get; set; }
 
         DialogResult ShowDialog();
@@ -302,6 +305,17 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             }
         }
 
+        public string OrderNumber
+        {
+            get => txtBoxOrderNumber.Text;
+            set
+            {
+                if (txtBoxOrderNumber.Text == value)
+                    return;
+                txtBoxOrderNumber.Text = value;
+            }
+        }
+
         public string Volume
         {
             get => txtBoxVolume.Text;
@@ -403,7 +417,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             }
         }
 
-        public string Deposit
+        public string FinalValue
         {
             get => txtBoxDeposit.Text;
             set
@@ -430,7 +444,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         public void AddEditDeleteFinish()
         {
             // Set messages
-            var strMessage = @"";
+            var strMessage = string.Empty;
             var clrMessage = Color.Black;
             var stateLevel = FrmMain.EStateLevels.Info;
 
@@ -456,7 +470,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     stateLevel = FrmMain.EStateLevels.Error;
 
                     Enabled = true;
-                    txtBoxVolume.Focus();
+                    txtBoxOrderNumber.Focus();
 
                     break;
                 }
@@ -493,7 +507,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     stateLevel = FrmMain.EStateLevels.Error;
 
                     Enabled = true;
-                    txtBoxVolume.Focus();
+                    txtBoxOrderNumber.Focus();
 
                     break;
                 }
@@ -529,7 +543,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     stateLevel = FrmMain.EStateLevels.Error;
 
                     Enabled = true;
-                    txtBoxVolume.Focus();
+                    txtBoxOrderNumber.Focus();
 
                     break;
                 }
@@ -541,7 +555,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     stateLevel = FrmMain.EStateLevels.Error;
 
                     Enabled = true;
-                    txtBoxVolume.Focus();
+                    txtBoxOrderNumber.Focus();
 
                     break;
                 }
@@ -553,7 +567,31 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     stateLevel = FrmMain.EStateLevels.Error;
 
                     Enabled = true;
-                    txtBoxVolume.Focus();
+                    txtBoxOrderNumber.Focus();
+
+                    break;
+                }
+                case BuyErrorCode.OrderNumberEmpty:
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/OrderNumberEmpty", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+
+                    Enabled = true;
+                    txtBoxOrderNumber.Focus();
+
+                    break;
+                }
+                case BuyErrorCode.OrderNumberExists:
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/OrderNumberExists", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+
+                    Enabled = true;
+                    txtBoxOrderNumber.Focus();
 
                     break;
                 }
@@ -797,7 +835,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         public void DocumentBrowseFinish()
         {
             // Set messages
-            var strMessage = @"";
+            var strMessage = string.Empty;
             var clrMessage = Color.Black;
             const FrmMain.EStateLevels stateLevel = FrmMain.EStateLevels.Info;
 
@@ -862,7 +900,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             Language = language;
             LanguageName = languageName;
 
-            _focusedControl = txtBoxVolume;
+            _focusedControl = txtBoxOrderNumber;
 
             SaveFlag = false;
 
@@ -899,6 +937,8 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 lblDate.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Labels/Date",
                     LanguageName);
                 lblTime.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Labels/Time",
+                    LanguageName);
+                lblOrderNumber.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Labels/OrderNumber",
                     LanguageName);
                 lblVolume.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Labels/Volume",
@@ -975,7 +1015,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 // Load buys of the share
                 OnShowBuys();
 
-                txtBoxVolume.Focus();
+                txtBoxOrderNumber.Focus();
             }
             catch (Exception ex)
             {
@@ -1027,6 +1067,8 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             dateTimePickerTime.Enabled = true;
 
             // Reset and enable text boxes
+            txtBoxOrderNumber.Text = string.Empty;
+            txtBoxOrderNumber.Enabled = true;
             txtBoxVolume.Text = string.Empty;
             txtBoxVolume.Enabled = true;
             txtBoxVolumeSold.Text = string.Empty;
@@ -1068,7 +1110,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             if (tabCtrlBuys.TabPages.Count > 0)
                 tabCtrlBuys.SelectTab(0);
 
-            txtBoxVolume.Focus();
+            txtBoxOrderNumber.Focus();
 
             FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
         }
@@ -1141,6 +1183,26 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         #endregion Date Time
 
         #region TextBoxes
+
+        /// <summary>
+        /// This function updates the model if the text has changed
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxOrderNumber_TextChanged(object sender, EventArgs e)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OrderNumber"));
+        }
+
+        /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxOrderNumber_Leave(object sender, EventArgs e)
+        {
+            _focusedControl = txtBoxOrderNumber;
+        }
 
         /// <summary>
         /// This function updates the model if the text has changed
@@ -1503,6 +1565,11 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             // Disable controls
             Enabled = false;
 
+            // Reset status strip
+            toolStripStatusLabelMessageBuyEdit.Text = string.Empty;
+            toolStripStatusLabelMessageBuyDocumentParsing.Text = string.Empty;
+            toolStripProgressBarBuyDocumentParsing.Visible = false;
+
             if (btnAddSave.Text ==
                 Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", LanguageName))
             {
@@ -1548,7 +1615,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 // Disable controls
                 Enabled = false;
 
-                toolStripStatusLabelMessageBuyEdit.Text = @"";
+                // Reset status strip
+                toolStripStatusLabelMessageBuyEdit.Text = string.Empty;
+                toolStripStatusLabelMessageBuyDocumentParsing.Text = string.Empty;
+                toolStripProgressBarBuyDocumentParsing.Visible = false;
 
                 var strCaption = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Info", LanguageName);
                 var strMessage = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/BuyDelete",
@@ -2288,6 +2358,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     {
                         dateTimePickerDate.Value = Convert.ToDateTime(selectedBuyObject.Date);
                         dateTimePickerTime.Value = Convert.ToDateTime(selectedBuyObject.Date);
+                        txtBoxOrderNumber.Text = selectedBuyObject.OrderNumber;
                         txtBoxVolume.Text = selectedBuyObject.VolumeAsStr;
                         txtBoxVolumeSold.Text = selectedBuyObject.VolumeSoldAsStr;
                         txtBoxSharePrice.Text = selectedBuyObject.SharePriceAsStr;
@@ -2303,7 +2374,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                         dateTimePickerTime.Value = Convert.ToDateTime(SelectedDate);
                         txtBoxVolume.Text = curItem[0].Cells[1].Value.ToString();
                         txtBoxSharePrice.Text = curItem[0].Cells[2].Value.ToString();
-                        txtBoxReduction.Text = @"";
+                        txtBoxReduction.Text = string.Empty;
                         txtBoxDeposit.Text = curItem[0].Cells[3].Value.ToString();
                         txtBoxDocument.Text = curItem[0].Cells[4].Value.ToString();
                     }
@@ -2317,10 +2388,14 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                         // Enable TextBox(es)
                         dateTimePickerDate.Enabled = true;
                         dateTimePickerTime.Enabled = true;
+                        txtBoxOrderNumber.Enabled = true;
                         txtBoxVolume.Enabled = true;
                         txtBoxVolumeSold.Enabled = true;
                         txtBoxSharePrice.Enabled = true;
                         txtBoxMarketValue.Enabled = true;
+                        txtBoxProvision.Enabled = true;
+                        txtBoxBrokerFee.Enabled = true;
+                        txtBoxTraderPlaceFee.Enabled = true;
                         txtBoxBrokerage.Enabled = true;
                         txtBoxReduction.Enabled = true;
                         txtBoxDeposit.Enabled = true;
@@ -2332,10 +2407,14 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                         // Disable TextBox(es)
                         dateTimePickerDate.Enabled = false;
                         dateTimePickerTime.Enabled = false;
+                        txtBoxOrderNumber.Enabled = false;
                         txtBoxVolume.Enabled = false;
                         txtBoxVolumeSold.Enabled = false;
                         txtBoxSharePrice.Enabled = false;
                         txtBoxMarketValue.Enabled = false;
+                        txtBoxProvision.Enabled = false;
+                        txtBoxBrokerFee.Enabled = false;
+                        txtBoxTraderPlaceFee.Enabled = false;
                         txtBoxBrokerage.Enabled = false;
                         txtBoxReduction.Enabled = false;
                         txtBoxDeposit.Enabled = false;
@@ -2476,8 +2555,8 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                             if (messageBox.ShowDialog() == DialogResult.OK)
                             {
                                 // Remove move document from the buy objects
-                                if (ShareObjectFinalValue.SetDocument(strGuid, temp.Date, @"") &&
-                                    ShareObjectMarketValue.SetDocument(strGuid, temp.Date, @""))
+                                if (ShareObjectFinalValue.SetDocument(strGuid, temp.Date, string.Empty) &&
+                                    ShareObjectMarketValue.SetDocument(strGuid, temp.Date, string.Empty))
                                 {
                                     // Set flag to save the share object.
                                     SaveFlag = true;
@@ -2933,7 +3012,8 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 {
                     toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Red;
                     toolStripStatusLabelMessageBuyDocumentParsing.Text =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingErrors/ParsingFailed", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingErrors/ParsingFailed",
+                            LanguageName);
 
                     toolStripProgressBarBuyDocumentParsing.Visible = false;
                     grpBoxAdd.Enabled = true;
@@ -2944,7 +3024,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 {
                     toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Red;
                     toolStripStatusLabelMessageBuyDocumentParsing.Text =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/ParsingErrors/ParsingDocumentNotImplemented",
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingErrors/ParsingDocumentNotImplemented",
                             LanguageName);
 
                     toolStripProgressBarBuyDocumentParsing.Visible = false;
@@ -2969,7 +3049,8 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Red;
                     toolStripStatusLabelMessageBuyDocumentParsing.Text =
                         Language.GetLanguageTextByXPath(
-                            @"/AddEditFormBuy/ParsingErrors/ParsingDocumentTypeIdentifierFailed", LanguageName);
+                            @"/AddEditFormBuy/ParsingErrors/ParsingDocumentTypeIdentifierFailed",
+                            LanguageName);
 
                     toolStripProgressBarBuyDocumentParsing.Visible = false;
                     grpBoxAdd.Enabled = true;
@@ -3009,7 +3090,9 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                         .DocumentTypeBuyWkn][0] != ShareObjectFinalValue.WknAsStr)
                 {
                     toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Red;
-                    toolStripStatusLabelMessageBuyDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingErrors/ParsingWrongWkn", LanguageName);
+                    toolStripStatusLabelMessageBuyDocumentParsing.Text = 
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingErrors/ParsingWrongWkn",
+                            LanguageName);
                 }
                 else
                 {
@@ -3019,6 +3102,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     {
                         switch (resultEntry.Key)
                         {
+                            case DocumentParsingConfiguration.DocumentTypeBuyOrderNumber:
+                                picBoxOrderNumberParseState.Image = Resources.search_ok_24;
+                                txtBoxOrderNumber.Text = resultEntry.Value[0].Trim();
+                                break;
                             case DocumentParsingConfiguration.DocumentTypeBuyDate:
                                 picBoxDateParseState.Image = Resources.search_ok_24;
                                 dateTimePickerDate.Text = resultEntry.Value[0].Trim();
@@ -3060,6 +3147,14 @@ namespace SharePortfolioManager.Forms.BuysForm.View
 
                     // Which values are not found
                     if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration
+                        .DocumentTypeBuyOrderNumber))
+                    {
+                        picBoxOrderNumberParseState.Image = Resources.search_failed_24;
+                        txtBoxOrderNumber.Text = string.Empty;
+                        _parsingResult = false;
+                    }
+
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration
                         .DocumentTypeBuyDate))
                     {
                         picBoxDateParseState.Image = Resources.search_failed_24;
@@ -3082,7 +3177,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                         .DocumentTypeBuyVolume))
                     {
                         picBoxVolumeParseState.Image = Resources.search_failed_24;
-                        txtBoxVolume.Text = @"";
+                        txtBoxVolume.Text = string.Empty;
                         _parsingResult = false;
                     }
 
@@ -3090,7 +3185,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                         .DocumentTypeBuyPrice))
                     {
                         picBoxVolumeParseState.Image = Resources.search_failed_24;
-                        txtBoxSharePrice.Text = @"";
+                        txtBoxSharePrice.Text = string.Empty;
                         _parsingResult = false;
                     }
 
@@ -3130,13 +3225,15 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     {
                         toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Red;
                         toolStripStatusLabelMessageBuyDocumentParsing.Text =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingErrors/ParsingFailed", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingErrors/ParsingFailed",
+                                LanguageName);
                     }
                     else
                     {
                         toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Black;
                         toolStripStatusLabelMessageBuyDocumentParsing.Text =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingStateMessages/ParsingDocumentSuccessful", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingStateMessages/ParsingDocumentSuccessful",
+                                LanguageName);
                     }
                 }
             }
@@ -3177,6 +3274,5 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         #endregion Parsing
 
         #endregion Methods
-
     }
 }

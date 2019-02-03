@@ -55,9 +55,11 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             _view.ErrorCode = _model.ErrorCode;
 
             _view.Wkn = _model.Wkn;
+            _view.ShareName = _model.Name;
+            _view.WebSite = _model.WebSite;
             _view.Date = _model.Date;
             _view.Time = _model.Time;
-            _view.ShareName = _model.Name;
+            _view.OrderNumber = _model.OrderNumber;
             _view.Volume = _model.Volume;
             _view.SharePrice = _model.SharePrice;
             _view.MarketValue = _model.MarketValue;
@@ -66,8 +68,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             _view.TraderPlaceFee = _model.TraderPlaceFee;
             _view.Reduction = _model.Reduction;
             _view.Brokerage = _model.Brokerage;
-            _view.GrandTotal = _model.Deposit;
-            _view.WebSite = _model.WebSite;
+            _view.FinalValue = _model.FinalValue;
             _view.Document = _model.Document;
         }
 
@@ -97,9 +98,14 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             _model.ErrorCode = _view.ErrorCode;
 
             _model.Wkn = _view.Wkn;
+            _model.Name = _view.ShareName;
+            _model.ShareType = _view.ShareType;
+            _model.DividendPayoutInterval = _view.DividendPayoutInterval;
+            _model.CultureInfo = _view.CultureInfo;
+            _model.WebSite = _view.WebSite;
             _model.Date = _view.Date;
             _model.Time = _view.Time;
-            _model.Name = _view.ShareName;
+            _model.OrderNumber = _view.OrderNumber;
             _model.Volume = _view.Volume;
             _model.SharePrice = _view.SharePrice;
             _model.MarketValue = _view.MarketValue;
@@ -108,11 +114,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             _model.TraderPlaceFee = _view.TraderPlaceFee;
             _model.Reduction = _view.Reduction;
             _model.Brokerage = _view.Brokerage;
-            _model.Deposit = _view.GrandTotal;
-            _model.WebSite = _view.WebSite;
-            _model.CultureInfo = _view.CultureInfo;
-            _model.DividendPayoutInterval = _view.DividendPayoutInterval;
-            _model.ShareType = _view.ShareType;
+            _model.FinalValue = _view.FinalValue;
             _model.Document = _view.Document;
 
             CalculateMarketValueAndFinalValue();
@@ -134,7 +136,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                     out var decMarketValue, out var decDeposit, out var decBrokerage, out var decBrokerageWithReduction);
 
                 _model.MarketValueDec = decMarketValue;
-                _model.DepositDec = decDeposit;
+                _model.FinalValueDec = decDeposit;
                 _model.BrokerageDec = decBrokerage;
                 _model.BrokerageWithReductionDec = decBrokerageWithReduction;
             }
@@ -146,7 +148,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                     MessageBoxIcon.Error);
 #endif
                 _model.MarketValueDec = 0;
-                _model.DepositDec = 0;
+                _model.FinalValueDec = 0;
                 _model.BrokerageDec = 0;
             }
         }
@@ -164,6 +166,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                     new ShareObjectMarketValue(
                         @"",
                         _model.Wkn,
+                        _model.OrderNumber,
                         strDateTime,
                         _model.Name,
                         DateTime.MinValue,
@@ -187,6 +190,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                     new ShareObjectFinalValue(
                         @"",
                         _model.Wkn,
+                        _model.OrderNumber,
                         strDateTime,
                         _model.Name,
                         DateTime.MinValue,
@@ -221,6 +225,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                     _model.ShareObjectListMarketValue.Add(new ShareObjectMarketValue(
                         guid,
                         _model.Wkn,
+                        _model.OrderNumber,
                         strDateTime,
                         _model.Name,
                         DateTime.MinValue,
@@ -241,6 +246,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                     _model.ShareObjectListFinalValue.Add(new ShareObjectFinalValue(
                         guid,
                         _model.Wkn,
+                        _model.OrderNumber,
                         strDateTime,
                         _model.Name,
                         DateTime.MinValue,

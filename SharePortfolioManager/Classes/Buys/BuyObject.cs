@@ -26,7 +26,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using SharePortfolioManager.Classes.Costs;
-using SharePortfolioManager.Properties;
 
 namespace SharePortfolioManager.Classes.Buys
 {
@@ -98,6 +97,9 @@ namespace SharePortfolioManager.Classes.Buys
 
         [Browsable(false)]
         public string Guid { get; internal set; }
+
+        [Browsable(false)]
+        public string OrderNumber { get; internal set; }
 
         [Browsable(false)]
         public string Date { get; internal set; }
@@ -316,16 +318,18 @@ namespace SharePortfolioManager.Classes.Buys
         /// </summary>
         /// <param name="cultureInfo">Culture info of the share</param>
         /// <param name="strGuid">Guid of the share buy</param>
+        /// <param name="strOrderNumber">Order number of the share buy</param>
         /// <param name="strDate">Date of the share buy</param>
         /// <param name="decVolume">Volume of the bought shares</param>
         /// <param name="decVolumeSold">Volume of the bought shares which already sold</param>
         /// <param name="decSharePrice">Price for one share</param>
         /// <param name="brokerageObject">Brokerage of the buy</param>
         /// <param name="strDoc">Document of the share buy</param>
-        public BuyObject(CultureInfo cultureInfo, string strGuid, string strDate, decimal decVolume, decimal decVolumeSold, decimal decSharePrice,
+        public BuyObject(CultureInfo cultureInfo, string strGuid, string strOrderNumber, string strDate, decimal decVolume, decimal decVolumeSold, decimal decSharePrice,
             BrokerageReductionObject brokerageObject, string strDoc = "")
         {
             Guid = strGuid;
+            OrderNumber = strOrderNumber;
             BuyCultureInfo = cultureInfo;
             Date = strDate;
             Volume = decVolume;
