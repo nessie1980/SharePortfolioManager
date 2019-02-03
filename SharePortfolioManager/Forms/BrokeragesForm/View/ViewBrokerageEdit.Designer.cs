@@ -114,9 +114,10 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
             this.tabCtrlBrokerage.SelectedIndex = 0;
             this.tabCtrlBrokerage.Size = new System.Drawing.Size(813, 84);
             this.tabCtrlBrokerage.TabIndex = 0;
-            this.tabCtrlBrokerage.SelectedIndexChanged += new System.EventHandler(this.TabCtrlBrokerage_SelectedIndexChanged);
+            this.tabCtrlBrokerage.SelectedIndexChanged += new System.EventHandler(this.OnTabCtrlBrokerage_SelectedIndexChanged);
             this.tabCtrlBrokerage.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnTabCtrlBrokerage_KeyDown);
             this.tabCtrlBrokerage.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.OnTabCtrlBrokerage_KeyPress);
+            this.tabCtrlBrokerage.MouseLeave += new System.EventHandler(this.OnTabCtrlBrokerage_MouseLeave);
             // 
             // grpBoxAdd
             // 

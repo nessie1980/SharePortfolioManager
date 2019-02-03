@@ -1611,7 +1611,15 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
         private void OnGrpBoxDividends_MouseLeave(object sender, EventArgs e)
         {
-            _focusedControl?.Focus();
+            if (_focusedControl is TextBox box)
+            {
+                box.Select();
+                box.Select(box.Text.Length, 0); // To set cursor at the end of TextBox
+            }
+            else
+            {
+                _focusedControl?.Focus();
+            }
         }
 
         #endregion Group box overview
@@ -2045,7 +2053,15 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// <param name="e">EventArgs</param>
         private void OnTabCtrlDividends_MouseLeave(object sender, EventArgs e)
         {
-            _focusedControl?.Focus();
+            if (_focusedControl is TextBox box)
+            {
+                box.Select();
+                box.Select(box.Text.Length, 0); // To set cursor at the end of TextBox
+            }
+            else
+            {
+                _focusedControl?.Focus();
+            }
         }
 
         /// <summary>
@@ -2055,7 +2071,15 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// <param name="e">EventArgs</param>
         private void OnTabCtrlDividends_KeyDown(object sender, KeyEventArgs e)
         {
-            _focusedControl?.Focus();
+            if (_focusedControl is TextBox box)
+            {
+                box.Select();
+                box.Select(box.Text.Length, 0); // To set cursor at the end of TextBox
+            }
+            else
+            {
+                _focusedControl?.Focus();
+            }
         }
 
         /// <summary>

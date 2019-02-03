@@ -1185,7 +1185,15 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
 
         private void OnGrpBoxOverview_MouseLeave(object sender, EventArgs e)
         {
-            _focusedControl?.Focus();
+            if (_focusedControl is TextBox box)
+            {
+                box.Select();
+                box.Select(box.Text.Length, 0); // To set cursor at the end of TextBox
+            }
+            else
+            {
+                _focusedControl?.Focus();
+            }
         }
 
         #endregion Group box overview
@@ -1573,7 +1581,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
         /// </summary>
         /// <param name="sender">Tab control</param>
         /// <param name="e">EventArgs</param>
-        private void TabCtrlBrokerage_SelectedIndexChanged(object sender, EventArgs e)
+        private void OnTabCtrlBrokerage_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (tabCtrlBrokerage.SelectedTab == null) return;
 
@@ -1593,13 +1601,39 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
         }
 
         /// <summary>
+        /// This function sets the focus back to the last focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTabCtrlBrokerage_MouseLeave(object sender, EventArgs e)
+        {
+            if (_focusedControl is TextBox box)
+            {
+                box.Select();
+                box.Select(box.Text.Length, 0); // To set cursor at the end of TextBox
+            }
+            else
+            {
+                _focusedControl?.Focus();
+            }
+        }
+
+        /// <summary>
         /// This function sets the focus on the last focused control
         /// </summary>
         /// <param name="sender">Tab control</param>
         /// <param name="e">EventArgs</param>
         private void OnTabCtrlBrokerage_KeyDown(object sender, KeyEventArgs e)
         {
-            _focusedControl?.Focus();
+            if (_focusedControl is TextBox box)
+            {
+                box.Select();
+                box.Select(box.Text.Length, 0); // To set cursor at the end of TextBox
+            }
+            else
+            {
+                _focusedControl?.Focus();
+            }
         }
 
         /// <summary>
@@ -1994,6 +2028,5 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
         #endregion Data grid view
 
         #endregion Methods
-
     }
 }

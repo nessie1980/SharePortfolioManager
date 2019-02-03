@@ -746,7 +746,7 @@
             this.txtBoxOrderNumber.Size = new System.Drawing.Size(466, 22);
             this.txtBoxOrderNumber.TabIndex = 51;
             this.txtBoxOrderNumber.TextChanged += new System.EventHandler(this.OnTxtBoxOrderNumber_TextChanged);
-            this.txtBoxOrderNumber.Leave += new System.EventHandler(this.OnTxtBoxOrderNumber_Leave);
+            this.txtBoxOrderNumber.Enter += new System.EventHandler(this.OnTxtBoxOrderNumber_Enter);
             // 
             // lblDepositUnit
             // 
@@ -1011,7 +1011,7 @@
             this.tabCtrlBuys.Size = new System.Drawing.Size(813, 100);
             this.tabCtrlBuys.TabIndex = 0;
             this.tabCtrlBuys.TabStop = false;
-            this.tabCtrlBuys.SelectedIndexChanged += new System.EventHandler(this.TabCtrlBuys_SelectedIndexChanged);
+            this.tabCtrlBuys.SelectedIndexChanged += new System.EventHandler(this.OnTabCtrlBuys_SelectedIndexChanged);
             this.tabCtrlBuys.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnTabCtrlBuys_KeyDown);
             this.tabCtrlBuys.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.OnTabCtrlBuys_KeyPress);
             this.tabCtrlBuys.MouseLeave += new System.EventHandler(this.OnTabCtrlBuys_MouseLeave);

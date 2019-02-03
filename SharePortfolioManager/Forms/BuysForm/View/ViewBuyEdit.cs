@@ -1199,7 +1199,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
-        private void OnTxtBoxOrderNumber_Leave(object sender, EventArgs e)
+        private void OnTxtBoxOrderNumber_Enter(object sender, EventArgs e)
         {
             _focusedControl = txtBoxOrderNumber;
         }
@@ -1738,7 +1738,15 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// <param name="e">EventArgs</param>
         private void OnGrpBoxOverview_MouseLeave(object sender, EventArgs e)
         {
-            _focusedControl?.Focus();
+            if (_focusedControl is TextBox box)
+            {
+                box.Select();
+                box.Select(box.Text.Length, 0); // To set cursor at the end of TextBox
+            }
+            else
+            {
+                _focusedControl?.Focus();
+            }
         }
 
         #endregion Group box overview
@@ -2155,7 +2163,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// </summary>
         /// <param name="sender">Tab control</param>
         /// <param name="e">EventArgs</param>
-        private void TabCtrlBuys_SelectedIndexChanged(object sender, EventArgs e)
+        private void OnTabCtrlBuys_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {
@@ -2164,19 +2172,17 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 // Loop trough the controls of the selected tab page and set focus on the data grid view
                 foreach (Control control in tabCtrlBuys.SelectedTab.Controls)
                 {
-                    if (control is DataGridView view)
+                    if (!(control is DataGridView view)) continue;
+                    if (view.Rows.Count > 0 && view.Name != @"Overview")
                     {
-                        if (view.Rows.Count > 0 && view.Name != @"Overview")
-                        {
-                            if (view.Rows[0].Cells.Count > 0)
-                                view.Rows[0].Selected = true;
-                        }
-
-                        view.Focus();
-
-                        if (view.Name == @"Overview")
-                            ResetInputValues();
+                        if (view.Rows[0].Cells.Count > 0)
+                            view.Rows[0].Selected = true;
                     }
+
+                    view.Focus();
+
+                    if (view.Name == @"Overview")
+                        ResetInputValues();
                 }
             }
             catch (Exception ex)
@@ -2202,7 +2208,15 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// <param name="e">EventArgs</param>
         private void OnTabCtrlBuys_MouseLeave(object sender, EventArgs e)
         {
-            _focusedControl?.Focus();
+            if (_focusedControl is TextBox box)
+            {
+                box.Select();
+                box.Select(box.Text.Length, 0); // To set cursor at the end of TextBox
+            }  
+            else
+            {
+                _focusedControl?.Focus();
+            }
         }
 
         /// <summary>
@@ -2212,7 +2226,15 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// <param name="e">EventArgs</param>
         private void OnTabCtrlBuys_KeyDown(object sender, KeyEventArgs e)
         {
-            _focusedControl?.Focus();
+            if (_focusedControl is TextBox box)
+            {
+                box.Select();
+                box.Select(box.Text.Length, 0); // To set cursor at the end of TextBox
+            }
+            else
+            {
+                _focusedControl?.Focus();
+            }
         }
 
         /// <summary>
@@ -2222,30 +2244,32 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         /// <param name="e">EventArgs</param>
         private void OnTabCtrlBuys_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // Check if the last focused control was a text box so set the
-            // key value ( char ) to the text box and then set the cursor behind the text
-            if (_focusedControl is TextBox textBox)
+            switch (_focusedControl)
             {
-                textBox.Text = e.KeyChar.ToString();
-                textBox.Select(textBox.Text.Length, 0);
-            }
-
-            // Check if the last focused control was a date time picker
-            if (_focusedControl is DateTimePicker dateTimePicker)
-            {
-                // Check if the pressed key was a numeric key
-                if (e.KeyChar == '0' ||
-                    e.KeyChar == '1' ||
-                    e.KeyChar == '2' ||
-                    e.KeyChar == '3' ||
-                    e.KeyChar == '4' ||
-                    e.KeyChar == '5' ||
-                    e.KeyChar == '6' ||
-                    e.KeyChar == '7' ||
-                    e.KeyChar == '8' ||
-                    e.KeyChar == '9'
-                )
-                    dateTimePicker.Text = e.KeyChar.ToString();
+                // Check if the last focused control was a text box so set the
+                // key value ( char ) to the text box and then set the cursor behind the text
+                case TextBox textBox:
+                    textBox.Text = e.KeyChar.ToString();
+                    textBox.Select(textBox.Text.Length, 0);
+                    break;
+                // Check if the last focused control was a date time picker
+                case DateTimePicker dateTimePicker:
+                {
+                    // Check if the pressed key was a numeric key
+                    if (e.KeyChar == '0' ||
+                        e.KeyChar == '1' ||
+                        e.KeyChar == '2' ||
+                        e.KeyChar == '3' ||
+                        e.KeyChar == '4' ||
+                        e.KeyChar == '5' ||
+                        e.KeyChar == '6' ||
+                        e.KeyChar == '7' ||
+                        e.KeyChar == '8' ||
+                        e.KeyChar == '9'
+                    )
+                        dateTimePicker.Text = e.KeyChar.ToString();
+                    break;
+                }
             }
         }
 

@@ -131,6 +131,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.grpBoxSales.TabIndex = 3;
             this.grpBoxSales.TabStop = false;
             this.grpBoxSales.Text = "_grpBoxSales";
+            this.grpBoxSales.MouseLeave += new System.EventHandler(this.OnGrpBoxOverview_MouseLeave);
             // 
             // tblLayPnlOverviewTabControl
             // 

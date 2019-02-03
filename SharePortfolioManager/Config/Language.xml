@@ -780,12 +780,6 @@
 				<DirectoryDoesNotExist text="The directory does not exist!" />
 				<FileDoesNotExist text="The given file does not exist!" />
 				<DocumentShowFailed text="Show of the document failed!" />
-				<ParsingStarted text="Document parsing running..." />
-				<BankFoundParsingValues text="Bank found. Values will be parsed." />
-				<BankNotFound text="Bank not found." />
-				<ParsingWrongWkn text="The wrong WKN has been found in the document!" />
-				<ParsingFailed text="Document parsing failed!" />
-				<ParsingSuccessful text="Document parsing was successful!" />
 			</Errors>
 			<ParsingErrors>
 				<ParsingBankIdentifierFailed text="Bank identifier not found!" />
@@ -1928,12 +1922,6 @@
 				<DirectoryDoesNotExist text="Das angegebene Verzeichnis existiert nicht!" />
 				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
 				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
-				<ParsingStarted text="Dokument- Analyze läuft..." />
-				<BankFoundParsingValues text="Bank erkannt. Werte werden ermittelt." />
-				<BankNotFound text="Bank nicht erkannt." />
-				<ParsingWrongWkn text="Es wurde die falsche WKN im Dokument gefunden!" />
-				<ParsingFailed text="Dokument- Analyze ist fehlgeschlagen!" />
-				<ParsingSuccessful text="Dokument- Analyze war erfolgreich." />				
 			</Errors>
 			<ParsingErrors>
 				<ParsingBankIdentifierFailed text="Banken-Typ nicht gefunden!" />

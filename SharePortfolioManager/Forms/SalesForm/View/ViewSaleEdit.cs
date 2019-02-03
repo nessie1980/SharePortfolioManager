@@ -2030,7 +2030,15 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// <param name="e">EventArgs</param>
         private void OnGrpBoxOverview_MouseLeave(object sender, EventArgs e)
         {
-            _focusedControl?.Focus();
+            if (_focusedControl is TextBox box)
+            {
+                box.Select();
+                box.Select(box.Text.Length, 0); // To set cursor at the end of TextBox
+            }
+            else
+            {
+                _focusedControl?.Focus();
+            }
         }
 
         #endregion Group box overview
@@ -2508,7 +2516,15 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// <param name="e">EventArgs</param>
         private void TabCtrlSales_MouseLeave(object sender, EventArgs e)
         {
-            _focusedControl?.Focus();
+            if (_focusedControl is TextBox box)
+            {
+                box.Select();
+                box.Select(box.Text.Length, 0); // To set cursor at the end of TextBox
+            }
+            else
+            {
+                _focusedControl?.Focus();
+            }
         }
 
         /// <summary>
@@ -2518,7 +2534,15 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// <param name="e">EventArgs</param>
         private void OnTabCtrlSales_KeyDown(object sender, KeyEventArgs e)
         {
-            _focusedControl?.Focus();
+            if (_focusedControl is TextBox box)
+            {
+                box.Select();
+                box.Select(box.Text.Length, 0); // To set cursor at the end of TextBox
+            }
+            else
+            {
+                _focusedControl?.Focus();
+            }
         }
 
         /// <summary>
@@ -3397,49 +3421,71 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         switch (resultEntry.Key)
                         {
                             case DocumentParsingConfiguration.DocumentTypeSaleDate:
+                            {
                                 picBoxDateParseState.Image = Resources.search_ok_24;
                                 dateTimePickerDate.Text = resultEntry.Value[0].Trim();
                                 break;
+                            }
                             case DocumentParsingConfiguration.DocumentTypeSaleTime:
+                            {
                                 picBoxTimeParseState.Image = Resources.search_ok_24;
                                 dateTimePickerTime.Text = resultEntry.Value[0].Trim();
                                 break;
+                            }
                             case DocumentParsingConfiguration.DocumentTypeSaleVolume:
+                            {
                                 picBoxVolumeParseState.Image = Resources.search_ok_24;
                                 txtBoxVolume.Text = resultEntry.Value[0].Trim();
                                 break;
+                            }
                             case DocumentParsingConfiguration.DocumentTypeSalePrice:
+                            {
                                 picBoxPriceParseState.Image = Resources.search_ok_24;
                                 txtBoxSalePrice.Text = resultEntry.Value[0].Trim();
                                 break;
+                            }
                             case DocumentParsingConfiguration.DocumentTypeSaleTaxAtSource:
+                            {
                                 picBoxTaxAtSourceParseState.Image = Resources.search_ok_24;
                                 txtBoxTaxAtSource.Text = resultEntry.Value[0].Trim();
                                 break;
+                            }
                             case DocumentParsingConfiguration.DocumentTypeSaleCapitalGainTax:
+                            {
                                 picBoxCapitalGainTaxParseState.Image = Resources.search_ok_24;
                                 txtBoxCapitalGainsTax.Text = resultEntry.Value[0].Trim();
                                 break;
+                            }
                             case DocumentParsingConfiguration.DocumentTypeSaleSolidarity:
+                            {
                                 picBoxSolidarityTaxParseState.Image = Resources.search_ok_24;
                                 txtBoxSolidarityTax.Text = resultEntry.Value[0].Trim();
                                 break;
+                            }
                             case DocumentParsingConfiguration.DocumentTypeSaleProvision:
+                            {
                                 picBoxProvisionParseState.Image = Resources.search_ok_24;
                                 txtBoxProvision.Text = resultEntry.Value[0].Trim();
                                 break;
+                            }
                             case DocumentParsingConfiguration.DocumentTypeSaleBrokerFee:
+                            {
                                 picBoxBrokerFeeParseState.Image = Resources.search_ok_24;
                                 txtBoxBrokerFee.Text = resultEntry.Value[0].Trim();
                                 break;
+                            }
                             case DocumentParsingConfiguration.DocumentTypeSaleTraderPlaceFee:
+                            {
                                 picBoxTraderPlaceFeeParseState.Image = Resources.search_ok_24;
                                 txtBoxTraderPlaceFee.Text = resultEntry.Value[0].Trim();
                                 break;
+                            }
                             case DocumentParsingConfiguration.DocumentTypeSaleReduction:
+                            {
                                 picBoxReductionParseState.Image = Resources.search_ok_24;
                                 txtBoxReduction.Text = resultEntry.Value[0].Trim();
                                 break;
+                            }
                         }
                     }
 
@@ -3551,7 +3597,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             else
             {
                 toolStripStatusLabelMessageSaleDocumentParsing.ForeColor = Color.Red;
-                toolStripStatusLabelMessageSaleDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/ParsingFailed", LanguageName);
+                toolStripStatusLabelMessageSaleDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormSale/ParsingErrors/ParsingFailed", LanguageName);
             }
 
             toolStripProgressBarSaleDocumentParsing.Visible = false;
