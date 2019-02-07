@@ -56,6 +56,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
         {
             _view.ErrorCode = _model.ErrorCode;
             _view.Date = _model.Date;
+            _view.OrderNumber = _model.OrderNumber;
             _view.SelectedGuidLast = _model.SelectedGuidLast;
             _view.Time = _model.Time;
             _view.Volume = _model.Volume;
@@ -108,6 +109,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
 
             _model.Date = _view.Date;
             _model.Time = _view.Time;
+            _model.OrderNumber = _view.OrderNumber;
             _model.Volume = _view.Volume;
             _model.SalePrice = _view.SalePrice;
             _model.TaxAtSource = _view.TaxAtSource;
@@ -159,9 +161,9 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                 }
 
                 // When the sale volume has been changed the UseBuyDetails must be updated
-                if (_model.ShareObjectFinalValue.AddSale(strGuidSale, strDateTime, _model.VolumeDec, _model.SalePriceDec, _model.UsedBuyDetails,
+                if (_model.ShareObjectFinalValue.AddSale(strGuidSale, strDateTime, _model.OrderNumber, _model.VolumeDec, _model.SalePriceDec, _model.UsedBuyDetails,
                         _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, _model.BrokerageDec, _model.ReductionDec, _model.Document) &&
-                    _model.ShareObjectMarketValue.AddSale(strGuidSale, strDateTime, _model.VolumeDec, _model.SalePriceDec, _model.UsedBuyDetails,
+                    _model.ShareObjectMarketValue.AddSale(strGuidSale, strDateTime, _model.OrderNumber, _model.VolumeDec, _model.SalePriceDec, _model.UsedBuyDetails,
                         _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, _model.BrokerageDec, _model.ReductionDec, _model.Document) &&
                     bErrorFlag == false)
                 {
@@ -238,9 +240,9 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                 // Generate Guid
                 var strGuidBrokerage = Guid.NewGuid().ToString();
 
-                if (_model.ShareObjectFinalValue.RemoveSale(_model.SelectedGuid, _model.SelectedDate) && _model.ShareObjectFinalValue.AddSale(_model.SelectedGuid, strDateTime, _model.VolumeDec, _model.SalePriceDec,
+                if (_model.ShareObjectFinalValue.RemoveSale(_model.SelectedGuid, _model.SelectedDate) && _model.ShareObjectFinalValue.AddSale(_model.SelectedGuid, strDateTime, _model.OrderNumber, _model.VolumeDec, _model.SalePriceDec,
                     _model.UsedBuyDetails, _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, _model.BrokerageDec, _model.ReductionDec, _model.Document) &&
-                    _model.ShareObjectMarketValue.RemoveSale(_model.SelectedGuid, _model.SelectedDate) && _model.ShareObjectMarketValue.AddSale(_model.SelectedGuid, strDateTime, _model.VolumeDec, _model.SalePriceDec,
+                    _model.ShareObjectMarketValue.RemoveSale(_model.SelectedGuid, _model.SelectedDate) && _model.ShareObjectMarketValue.AddSale(_model.SelectedGuid, strDateTime, _model.OrderNumber, _model.VolumeDec, _model.SalePriceDec,
                         _model.UsedBuyDetails, _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, _model.BrokerageDec, _model.ReductionDec, _model.Document)
                     )
                 {
@@ -571,18 +573,30 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
 
                 var strDate = _model.Date + " " + _model.Time;
 
+                // Check if a order number for the buy is given
+                if (_model.OrderNumber == @"")
+                {
+                    _model.ErrorCode = SaleErrorCode.OrderNumberEmpty;
+                    bErrorFlag = true;
+                }
+                else if (_model.ShareObjectFinalValue.AllBuyEntries.OrderNumberAlreadyExists(_model.OrderNumber))
+                {
+                    _model.ErrorCode = SaleErrorCode.OrderNumberExists;
+                    bErrorFlag = true;
+                }
+
                 // Check if a correct volume for the sale is given
-                if (_model.Volume == @"")
+                if (_model.Volume == @"" && bErrorFlag == false)
                 {
                     _model.ErrorCode = SaleErrorCode.VolumeEmpty;
                     bErrorFlag = true;
                 }
-                else if (!decimal.TryParse(_model.Volume, out var decVolume))
+                else if (!decimal.TryParse(_model.Volume, out var decVolume) && bErrorFlag == false)
                 {
                     _model.ErrorCode = SaleErrorCode.VolumeWrongFormat;
                     bErrorFlag = true;
                 }
-                else if (decVolume <= 0)
+                else if (decVolume <= 0 && bErrorFlag == false)
                 {
                     _model.ErrorCode = SaleErrorCode.VolumeWrongValue;
                     bErrorFlag = true;
@@ -627,17 +641,17 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                     _model.SalePriceDec = decSalePrice;
 
                 // Brokerage input check
-                if (_model.Brokerage == @"")
+                if (_model.Brokerage == @"" && bErrorFlag == false)
                 {
                     _model.ErrorCode = SaleErrorCode.BrokerageEmpty;
                     bErrorFlag = true;
                 }
-                else if (!decimal.TryParse(_model.Brokerage, out var decBrokerage))
+                else if (!decimal.TryParse(_model.Brokerage, out var decBrokerage) && bErrorFlag == false)
                 {
                     _model.ErrorCode = SaleErrorCode.BrokerageWrongFormat;
                     bErrorFlag = true;
                 }
-                else if (decBrokerage < 0)
+                else if (decBrokerage < 0 && bErrorFlag == false)
                 {
                     _model.ErrorCode = SaleErrorCode.BrokerageWrongValue;
                     bErrorFlag = true;

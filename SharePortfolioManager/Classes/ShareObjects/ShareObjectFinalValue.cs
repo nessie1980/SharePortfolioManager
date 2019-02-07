@@ -1045,6 +1045,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         /// <param name="strGuid">Guid of the share sale</param>
         /// <param name="strDate">Date of the share sale</param>
+        /// <param name="strOrderNumber">Order number of the share sale</param>
         /// <param name="decVolume">Volume of the sale</param>
         /// <param name="decSalePrice">Sale price of the share</param>
         /// <param name="usedBuyDetails">Details of the used buys for the sale</param>
@@ -1055,7 +1056,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="decReduction">Reduction of the sale</param>
         /// <param name="strDoc">Document of the sale</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddSale(string strGuid, string strDate, decimal decVolume, decimal decSalePrice, List<SaleBuyDetails> usedBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
+        public bool AddSale(string strGuid, string strDate, string strOrderNumber, decimal decVolume, decimal decSalePrice, List<SaleBuyDetails> usedBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
              decimal decSolidarityTax, decimal decBrokerage, decimal decReduction, string strDoc = "")
         {
             try
@@ -1072,7 +1073,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 Console.WriteLine(@"decBrokerage: {0}", decBrokerage);
                 Console.WriteLine(@"strDoc: {0}", strDoc);
 #endif
-                if (!AllSaleEntries.AddSale(strGuid, strDate, decVolume, decSalePrice, usedBuyDetails, decTaxAtSource, decCapitalGainsTax,
+                if (!AllSaleEntries.AddSale(strGuid, strDate, strOrderNumber, decVolume, decSalePrice, usedBuyDetails, decTaxAtSource, decCapitalGainsTax,
                                             decSolidarityTax, decBrokerage, decReduction, strDoc))
                     return false;
 
@@ -1544,6 +1545,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                             saleElementYear.Guid);
                                         newSaleElement.SetAttribute(SaleDateAttrName,
                                             saleElementYear.DateAsStr);
+                                        newSaleElement.SetAttribute(SaleOrderNumberAttrName,
+                                            saleElementYear.OrderNumberAsStr);
                                         newSaleElement.SetAttribute(SaleVolumeAttrName,
                                             saleElementYear.VolumeAsStr);
                                         newSaleElement.SetAttribute(SaleSalePriceAttrName,

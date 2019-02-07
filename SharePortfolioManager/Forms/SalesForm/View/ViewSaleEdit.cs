@@ -51,6 +51,8 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         DeleteFailed,
         DeleteFailedUnErasable,
         InputValuesInvalid,
+        OrderNumberEmpty,
+        OrderNumberExists,
         VolumeEmpty,
         VolumeWrongFormat,
         VolumeWrongValue,
@@ -125,6 +127,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         string SelectedDate { get; set; }
         string Date { get; set; }
         string Time { get; set; }
+        string OrderNumber { get; set; }
         string Volume { get; set; }
         string SalePrice { get; set; }
         string SaleBuyValue { get; set; }
@@ -360,6 +363,17 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 if (dateTimePickerTime.Text == value)
                     return;
                 dateTimePickerTime.Text = value;
+            }
+        }
+
+        public string OrderNumber
+        {
+            get => txtBoxOrderNumber.Text;
+            set
+            {
+                if (txtBoxOrderNumber.Text == value)
+                    return;
+                txtBoxOrderNumber.Text = value;
             }
         }
 
@@ -653,6 +667,30 @@ namespace SharePortfolioManager.Forms.SalesForm.View
 
                         break;
                     }
+                case SaleErrorCode.OrderNumberEmpty:
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/OrderNumberEmpty", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+
+                    Enabled = true;
+                    txtBoxOrderNumber.Focus();
+
+                    break;
+                }
+                case SaleErrorCode.OrderNumberExists:
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/OrderNumberExists", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+
+                    Enabled = true;
+                    txtBoxOrderNumber.Focus();
+
+                    break;
+                }
                 case SaleErrorCode.VolumeEmpty:
                     {
                         strMessage =
@@ -1057,7 +1095,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             Language = xmlLanguage;
             LanguageName = language;
 
-            _focusedControl = txtBoxVolume;
+            _focusedControl = txtBoxOrderNumber;
 
             SaveFlag = false;
 
@@ -1096,6 +1134,9 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                     LanguageName);
                 lblAddSaleTime.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Labels/Time",
+                        LanguageName);
+                lblSalesOrderNumber.Text =
+                    Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Labels/OrderNumber",
                         LanguageName);
                 lblVolume.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Labels/Volume",
@@ -1222,6 +1263,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             // Reset state pictures
             picBoxDateParseState.Image = Resources.empty_arrow;
             picBoxTimeParseState.Image = Resources.empty_arrow;
+            picBoxOrderNumberParserState.Image = Resources.empty_arrow;
             picBoxVolumeParseState.Image = Resources.empty_arrow;
             picBoxPriceParseState.Image = Resources.empty_arrow;
             picBoxTaxAtSourceParseState.Image = Resources.empty_arrow;
@@ -1237,6 +1279,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             dateTimePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
 
             // Reset text boxes
+            txtBoxOrderNumber.Text = string.Empty;
             txtBoxVolume.Text = string.Empty;
             txtBoxSalePrice.Text = string.Empty;
             txtBoxSaleBuyValue.Text = string.Empty;
@@ -1268,6 +1311,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 dateTimePickerDate.Enabled = true;
                 dateTimePickerTime.Enabled = true;
 
+                txtBoxOrderNumber.Enabled = true;
                 txtBoxVolume.Enabled = true;
                 txtBoxSalePrice.Enabled = true;
 
@@ -1290,6 +1334,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 dateTimePickerDate.Enabled = false;
                 dateTimePickerTime.Enabled = false;
 
+                txtBoxOrderNumber.Enabled = false;
                 txtBoxVolume.Enabled = false;
                 txtBoxSalePrice.Enabled = false;
 
@@ -1387,6 +1432,36 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         #endregion Date Time
 
         #region TextBoxes
+        /// <summary>
+        /// This function updates the model if the text has changed
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxAddOrderNumber_TextChanged(object sender, EventArgs e)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("OrderNumber"));
+        }
+
+        /// <summary>
+        /// This function updates the view with the formatted value
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxOrderNumber_Leave(object sender, EventArgs e)
+        {
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the text box to the focused control
+        /// </summary>
+        /// <param name="sender">Text box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxOrderNumber_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = txtBoxOrderNumber;
+        }
+
 
         /// <summary>
         /// This function updates the model if the text has changed
@@ -2872,7 +2947,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         {
                             // Remove sale object and add it with no document
                             if (ShareObjectFinalValue.RemoveSale(temp.Guid, temp.Date) &&
-                                ShareObjectFinalValue.AddSale(strGuid, temp.Date, temp.Volume,
+                                ShareObjectFinalValue.AddSale(strGuid, temp.Date, temp.OrderNumber, temp.Volume,
                                     temp.SalePrice, temp.SaleBuyDetails, temp.TaxAtSource, temp.CapitalGainsTax,
                                     temp.SolidarityTax, temp.Brokerage, temp.Reduction))
                             {
@@ -3432,6 +3507,12 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                                 dateTimePickerTime.Text = resultEntry.Value[0].Trim();
                                 break;
                             }
+                            case DocumentParsingConfiguration.DocumentTypeSaleOrderNumber:
+                            {
+                                picBoxOrderNumberParserState.Image = Resources.search_ok_24;
+                                txtBoxOrderNumber.Text = resultEntry.Value[0].Trim();
+                                break;
+                            }
                             case DocumentParsingConfiguration.DocumentTypeSaleVolume:
                             {
                                 picBoxVolumeParseState.Image = Resources.search_ok_24;
@@ -3510,6 +3591,14 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         dateTimePickerTime.Value =
                             new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
                         picBoxTimeParseState.Image = Resources.search_info_24;
+                    }
+
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration
+                        .DocumentTypeSaleOrderNumber))
+                    {
+                        picBoxOrderNumberParserState.Image = Resources.search_failed_24;
+                        txtBoxOrderNumber.Text = string.Empty;
+                        _parsingResult = false;
                     }
 
                     if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration
@@ -3610,6 +3699,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             // Reset state pictures
             picBoxDateParseState.Image = Resources.empty_arrow;
             picBoxTimeParseState.Image = Resources.empty_arrow;
+            picBoxOrderNumberParserState.InitialImage = Resources.empty_arrow;
             picBoxVolumeParseState.Image = Resources.empty_arrow;
             picBoxPriceParseState.Image = Resources.empty_arrow;
             picBoxTaxAtSourceParseState.Image = Resources.empty_arrow;
@@ -3623,6 +3713,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             // Reset textboxes
             dateTimePickerDate.Value = DateTime.Now;
             dateTimePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+            txtBoxOrderNumber.Text = string.Empty;
             txtBoxVolume.Text = string.Empty;
             txtBoxSalePrice.Text = string.Empty;
             txtBoxTaxAtSource.Text = string.Empty;

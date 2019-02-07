@@ -79,12 +79,15 @@ namespace SharePortfolioManager.Classes.Sales
         #region Data grid view properties
 
         [Browsable(true)]
+        [DisplayName(@"Year")]
         public string DgvSaleYear => SaleYear;
 
         [Browsable(true)]
+        [DisplayName(@"YearVolume")]
         public string DgvSaleVolumeYear => SaleVolumeYearAsStr;
         
         [Browsable(true)]
+        [DisplayName(@"YearPayout")]
         public string DgvSalePayoutYearAsStr => SalePayoutYearAsStr;
 
         #endregion Data grid view properties
@@ -98,6 +101,7 @@ namespace SharePortfolioManager.Classes.Sales
         /// <param name="cultureInfo">Culture info of the sale</param>
         /// <param name="strGuid">Guid of the sale</param>
         /// <param name="strDate">Date of the share sale</param>
+        /// <param name="strOrderNumber">Order number of the share sale</param>
         /// <param name="decVolume">Volume of the sale</param>
         /// <param name="decSalePrice">Sale price of the share</param>
         /// <param name="usedBuyDetails">Details of the used buys for the sale</param>
@@ -108,7 +112,7 @@ namespace SharePortfolioManager.Classes.Sales
         /// <param name="decReduction">Reduction of the sale</param>
         /// <param name="strDoc">Document of the sale</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddSaleObject(CultureInfo cultureInfo,  string strGuid, string strDate, decimal decVolume, decimal decSalePrice, List<SaleBuyDetails> usedBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
+        public bool AddSaleObject(CultureInfo cultureInfo,  string strGuid, string strDate, string strOrderNumber, decimal decVolume, decimal decSalePrice, List<SaleBuyDetails> usedBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
              decimal decSolidarityTax, decimal decBrokerage, decimal decReduction, string strDoc = "")
         {
 #if DEBUG_SALE
@@ -120,7 +124,7 @@ namespace SharePortfolioManager.Classes.Sales
                 SaleCultureInfo = cultureInfo;
 
                 // Create new SaleObject
-                var addObject = new SaleObject(cultureInfo, strGuid, strDate, decVolume, decSalePrice, usedBuyDetails, decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decBrokerage, decReduction, strDoc);
+                var addObject = new SaleObject(cultureInfo, strGuid, strDate, strOrderNumber, decVolume, decSalePrice, usedBuyDetails, decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decBrokerage, decReduction, strDoc);
 
                 var addProfitLossObject = new ProfitLossObject(cultureInfo, strGuid, strDate, addObject.ProfitLoss, strDoc);
 

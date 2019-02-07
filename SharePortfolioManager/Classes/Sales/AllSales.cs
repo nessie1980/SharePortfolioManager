@@ -20,14 +20,12 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using SharePortfolioManager.Classes;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using SharePortfolioManager.Classes.Sales;
 
-namespace SharePortfolioManager
+namespace SharePortfolioManager.Classes.Sales
 {
     [Serializable]
     public class AllSalesOfTheShare
@@ -85,6 +83,7 @@ namespace SharePortfolioManager
         /// </summary>
         /// <param name="strGuid">Guid of the share sale</param>
         /// <param name="strDate">Date of the share sale</param>
+        /// <param name="strOrderNumber">Order number of the share sale</param>
         /// <param name="decVolume">Volume of the sale</param>
         /// <param name="decSalePrice">Sale price of the share</param>
         /// <param name="usedBuyDetails">Details of the used buys for the sale</param>
@@ -95,7 +94,7 @@ namespace SharePortfolioManager
         /// <param name="decReduction">Reduction of the sale</param>
         /// <param name="strDoc">Document of the sale</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddSale(string strGuid, string strDate, decimal decVolume, decimal decSalePrice, List<SaleBuyDetails> usedBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
+        public bool AddSale(string strGuid, string strDate, string strOrderNumber, decimal decVolume, decimal decSalePrice, List<SaleBuyDetails> usedBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
              decimal decSolidarityTax, decimal decBrokerage, decimal decReduction, string strDoc = "")
         {
 #if DEBUG_SALE
@@ -111,7 +110,7 @@ namespace SharePortfolioManager
                 // Search if a sale for the given year already exists if not add it
                 if (AllSalesOfTheShareDictionary.TryGetValue(year, out var searchObject))
                 {
-                    if (!searchObject.AddSaleObject(SaleCultureInfo, strGuid, strDate, decVolume, decSalePrice, usedBuyDetails, decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decBrokerage, decReduction, strDoc))
+                    if (!searchObject.AddSaleObject(SaleCultureInfo, strGuid, strDate, strOrderNumber, decVolume, decSalePrice, usedBuyDetails, decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decBrokerage, decReduction, strDoc))
                         return false;
                 }
                 else
@@ -119,7 +118,7 @@ namespace SharePortfolioManager
                     // Add new year sale object for the sale with a new year
                     var addObject = new SalesYearOfTheShare();
                     // Add sale with the new year to the sale year list
-                    if (addObject.AddSaleObject(SaleCultureInfo, strGuid, strDate, decVolume, decSalePrice, usedBuyDetails ,decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decBrokerage, decReduction, strDoc))
+                    if (addObject.AddSaleObject(SaleCultureInfo, strGuid, strDate, strOrderNumber, decVolume, decSalePrice, usedBuyDetails ,decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decBrokerage, decReduction, strDoc))
                     {
                         AllSalesOfTheShareDictionary.Add(year, addObject);
                     }

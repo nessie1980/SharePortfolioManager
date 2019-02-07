@@ -31,6 +31,7 @@ using System.Text;
 using System.Threading;
 using SharePortfolioManager.Classes.Buys;
 using Parser;
+using SharePortfolioManager.Classes.Sales;
 
 namespace SharePortfolioManager.Classes.ShareObjects
 {
@@ -161,6 +162,11 @@ namespace SharePortfolioManager.Classes.ShareObjects
         internal const string SaleDateAttrName = "Date";
 
         /// <summary>
+        /// Stores the XML attribute name for the sale date
+        /// </summary>
+        internal const string SaleOrderNumberAttrName = "OrderNumber";
+
+        /// <summary>
         /// Stores the XML attribute name for the buy volume of a sale
         /// </summary>
         internal const string SaleVolumeAttrName = "Volume";
@@ -228,7 +234,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <summary>
         /// Stores the attribute count for the dividend
         /// </summary>
-        internal const short SaleAttrCount = 9;
+        internal const short SaleAttrCount = 10;
 
         /// <summary>
         /// Stores the used buys count for the sale

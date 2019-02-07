@@ -26,7 +26,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using SharePortfolioManager.Properties;
 
 namespace SharePortfolioManager.Classes.Sales
 {
@@ -90,6 +89,12 @@ namespace SharePortfolioManager.Classes.Sales
 
         [Browsable(false)]
         public string DateAsStr => Date;
+
+        [Browsable(false)]
+        public string OrderNumber { get; internal set; }
+
+        [Browsable(false)]
+        public string OrderNumberAsStr => OrderNumber;
 
         [Browsable(false)]
         public decimal Volume
@@ -293,6 +298,7 @@ namespace SharePortfolioManager.Classes.Sales
         /// <param name="cultureInfo">Culture info of the share</param>
         /// <param name="strGuid">Guid of the share sale</param>
         /// <param name="strDate">Date of the share sale</param>
+        /// <param name="strOrderNumber">Order number of the share sale</param>
         /// <param name="decVolume">Volume of the sale</param>
         /// <param name="decSalePrice">Sale price of the share</param>
         /// <param name="saleBuyDetails">Buys which are sold for this sale</param>
@@ -302,12 +308,13 @@ namespace SharePortfolioManager.Classes.Sales
         /// <param name="decBrokerage">Brokerage of the sale</param>
         /// <param name="decReduction">Reduction of the sale</param>
         /// <param name="strDoc">Document of the sale</param>
-        public SaleObject(CultureInfo cultureInfo, string strGuid, string strDate, decimal decVolume, decimal decSalePrice, List<SaleBuyDetails> saleBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
+        public SaleObject(CultureInfo cultureInfo, string strGuid, string strDate, string strOrderNumber, decimal decVolume, decimal decSalePrice, List<SaleBuyDetails> saleBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
              decimal decSolidarityTax, decimal decBrokerage, decimal decReduction, string strDoc = "")
         {
             Guid = strGuid;
             SaleCultureInfo = cultureInfo;
             Date = strDate;
+            OrderNumber = strOrderNumber;
             Volume = decVolume;
 
             foreach (var saleBuyDetail in saleBuyDetails)
@@ -328,6 +335,7 @@ namespace SharePortfolioManager.Classes.Sales
             Console.WriteLine(@"");
             Console.WriteLine(@"New sale created");
             Console.WriteLine(@"Date: {0}", Date);
+            Console.WriteLine(@"OrderNumber: {0}", OrderNumber);
             Console.WriteLine(@"Volume: {0}", Volume);
             Console.WriteLine(@"BuyPrice: {0}", BuyPrice);
             Console.WriteLine(@"SalePrice: {0}", SalePrice);

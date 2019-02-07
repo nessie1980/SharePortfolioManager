@@ -679,7 +679,7 @@ namespace SharePortfolioManager
                                 DataGridViewProfitLossOfAYear_SelectionChanged;
                             // Set cell decimal click event
                             dataGridViewProfitLossOfAYear.CellContentDoubleClick +=
-                                DataGridViewProfitLossOfAYear_CellContentdecimalClick;
+                                DataGridViewProfitLossOfAYear_CellContentDoubleClick;
 
                             // Advanced configuration DataGridView profit or loss
                             var style = dataGridViewProfitLossOfAYear.ColumnHeadersDefaultCellStyle;
@@ -815,7 +815,7 @@ namespace SharePortfolioManager
         /// </summary>
         /// <param name="sender">DataGridView</param>
         /// <param name="e">DataGridViewCellEventArgs</param>
-        private void DataGridViewProfitLossOfAYear_CellContentdecimalClick(object sender, DataGridViewCellEventArgs e)
+        private void DataGridViewProfitLossOfAYear_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
@@ -868,7 +868,7 @@ namespace SharePortfolioManager
                         {
                             // Remove sale object and add it with no document
                             if (ShareObjectFinalValue.RemoveSale(temp.Guid, temp.Date) &&
-                                ShareObjectFinalValue.AddSale(temp.Guid, strDateTime, temp.Volume, temp.SalePrice, temp.SaleBuyDetails, temp.TaxAtSource, temp.CapitalGainsTax, temp.SolidarityTax, temp.Brokerage, temp.Reduction))
+                                ShareObjectFinalValue.AddSale(temp.Guid, strDateTime, temp.OrderNumber, temp.Volume, temp.SalePrice, temp.SaleBuyDetails, temp.TaxAtSource, temp.CapitalGainsTax, temp.SolidarityTax, temp.Brokerage, temp.Reduction))
                             {
                                 // TODO Refresh profit or loss
                                 //Show();

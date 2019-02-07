@@ -671,6 +671,7 @@
 					<Time text="Time:" />
 <!--					<ForeignCurrencyActivation text="Activate foreign currency input:" /> -->
 <!--					<ForeignCurrencyFactor text="Calculation factor:" /> -->
+					<OrderNumber text="Order number:" />
 					<Volume text="Sale volume:" />
 					<SalesPrice text="Sale price of one share:" />
 					<BuyValue text="Sold buy value:" />
@@ -746,6 +747,8 @@
 				<DeselectFailed text="Deselect of the selected rows failed!" />
 				<RenameColHeaderFailed text="Renaming of the column headers failed!" />
 				<SelectionChangeFailed text="The selection change failed!" />
+				<OrderNumberEmpty text="Please enter a order number." />
+				<OrderNumberExists text="The order number already exists." />
 				<VolumeEmpty text="Please insert a volume." />
 				<VolumeWrongFormat text="Format for the value 'Volume' is invalid." />
 				<VolumeWrongValue text="The value for 'Volume' must be higher than '0'." />
@@ -1131,6 +1134,9 @@
 				<IconSet text="Icons" />
 				<IconSetInfo text="The used icons are taken from:" />
 				<IconSetInfoLink text="Link to Icon8" />
+				<PdfConverter text="PDF converter" />
+				<PdfConverterInfo text="The used PDF converter is taken from:" />
+				<PdfConverterInfoLink text="Link to XpdfReader" />
 			</Labels>
 			
 			<!-- Buttons -->
@@ -1813,6 +1819,7 @@
 				<Labels>
 					<Date text="Datum:" />
 					<Time text="Zeit:" />
+					<OrderNumber text="Ordernummer:" />
 					<Volume text="Verkaufte Anteile:" />
 					<BuyValue text="Verkaufter Kaufwert:" />
 					<BuyValueDetails text="Details" />
@@ -1888,6 +1895,8 @@
 				<DeselectFailed text="Deselektieren der selektierten Zeile ist fehlgeschlagen!" />
 				<RenameColHeaderFailed text="Umbennenen der Spalten- Namen ist fehlgeschlagen!" />
 				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
+				<OrderNumberEmpty text="Bitte geben Sie eine Ordernummer ein." />
+				<OrderNumberExists text="Die eingegebene Ordernummer existiert bereits." />
 				<VolumeEmpty text="Bitte geben Sie einen Anteile- Wert ein." />
 				<VolumeWrongFormat text="Format für den 'Anteile'- Wert ist ungültig." />
 				<VolumeWrongValue text="Der Wert für 'Anteile' muss größer als '0' sein." />
@@ -2272,6 +2281,9 @@
 				<IconSet text="Icons" />
 				<IconSetInfo text="Die benutzten Icons stammt von:" />
 				<IconSetInfoLink text="Link zu Icon8" />
+				<PdfConverter text="PDF- Konverter" />
+				<PdfConverterInfo text="Der benutzte PDF- Konverter stammt von:" />
+				<PdfConverterInfoLink text="Link zum XpdfReader" />
 			</Labels>
 			
 			<!-- Buttons -->

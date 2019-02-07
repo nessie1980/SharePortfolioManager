@@ -50,6 +50,11 @@ namespace SharePortfolioManager.Forms.AboutForm
         /// </summary>
         private const string IconLink = "https://icons8.de/icons/color";
 
+        /// <summary>
+        /// Link to the used icons
+        /// </summary>
+        private const string PdfConverterLink = "http://www.xpdfreader.com/index.html";
+
         #endregion Variables
 
         #region Form
@@ -80,6 +85,9 @@ namespace SharePortfolioManager.Forms.AboutForm
             grpBoxIconSet.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/IconSet", _strLanguage);
             lblIconSetInfo.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/IconSetInfo", _strLanguage);
             lblIconSetInfoLink.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/IconSetInfoLink", _strLanguage);
+            grpBoxPdfConverter.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/PdfConverter", _strLanguage);
+            lblPdfConverterInfo.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/PdfConverterInfo", _strLanguage);
+            lblPdfConverterInfoLink.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/PdfConverterInfoLink", _strLanguage);
             btnOk.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Buttons/Ok", _strLanguage);
 
             #endregion Language configuration
@@ -154,5 +162,15 @@ namespace SharePortfolioManager.Forms.AboutForm
         }
 
         #endregion Link to the icon set
+
+        #region Link to the PDF converter tool
+
+        private void OnLblPdfConverterInfoLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            lblPdfConverterInfoLink.LinkVisited = true;
+            System.Diagnostics.Process.Start(PdfConverterLink);
+        }
+
+        #endregion Link to the PDF converter tool
     }
 }

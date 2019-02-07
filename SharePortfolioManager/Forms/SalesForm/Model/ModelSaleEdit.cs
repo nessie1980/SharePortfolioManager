@@ -57,6 +57,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
 
         string Date { get; set; }
         string Time { get; set; }
+        string OrderNumber { get; set; }
         string Volume { get; set; }
         decimal VolumeDec { get; set; }
         string SalePrice { get; set; }
@@ -97,6 +98,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
 
         private string _date;
         private string _time;
+        private string _orderNumber;
         private string _volume;
         private decimal _volumeDec;
         private string _salePrice;
@@ -180,6 +182,17 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
                     return;
 
                 _time = value;
+            }
+        }
+
+        public string OrderNumber
+        {
+            get => _orderNumber;
+            set
+            {
+                if (_orderNumber != null && _document == value)
+                    return;
+                _orderNumber = value;
             }
         }
 

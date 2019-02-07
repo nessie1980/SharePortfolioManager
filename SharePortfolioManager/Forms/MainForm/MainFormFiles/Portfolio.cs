@@ -580,8 +580,9 @@ namespace SharePortfolioManager
                                                         if (!ShareObjectListMarketValue[
                                                             ShareObjectListMarketValue.Count - 1].AddSale(
                                                             nodeList.Attributes[ShareObject.SaleGuidAttrName].Value,    // Guid
-
                                                             nodeList.Attributes[ShareObject.SaleDateAttrName]
+                                                                .Value,                                                 // Date
+                                                            nodeList.Attributes[ShareObject.SaleOrderNumberAttrName]    // Order number
                                                                 .Value,                                                 // Date
                                                             Convert.ToDecimal(
                                                                 nodeList.Attributes[ShareObject.SaleVolumeAttrName]
@@ -624,6 +625,8 @@ namespace SharePortfolioManager
                                                             nodeList.Attributes[ShareObject.SaleGuidAttrName].Value,    // Guid
                                                             nodeList.Attributes[ShareObject.SaleDateAttrName]
                                                                 .Value,                                                 // Date
+                                                            nodeList.Attributes[ShareObject.SaleOrderNumberAttrName]
+                                                                .Value,                                                 // Order number
                                                             Convert.ToDecimal(
                                                                 nodeList.Attributes[ShareObject.SaleVolumeAttrName]
                                                                     .Value),                                            // Volume
