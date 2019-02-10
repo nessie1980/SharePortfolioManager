@@ -57,7 +57,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
         BrokerageWrongFormat,
         BrokerageWrongValue,
         DocumentBrowseFailed,
-        DocumentDirectoryDoesNotExits,
+        DocumentDirectoryDoesNotExists,
         DocumentFileDoesNotExists
     };
 
@@ -532,10 +532,10 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
 
                     break;
                 }
-                case BrokerageErrorCode.DocumentDirectoryDoesNotExits:
+                case BrokerageErrorCode.DocumentDirectoryDoesNotExists:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/DirectoryDoesNotExist", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/DocumentDirectoryDoesNotExists", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -544,7 +544,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
                 case BrokerageErrorCode.DocumentFileDoesNotExists:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/FileDoesNotExist", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/DocumentFileDoesNotExists", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 

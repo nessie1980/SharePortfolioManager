@@ -56,7 +56,7 @@
 			<Time Name="Time" FoundIndex="0" ResultEmpty="true" RegexOptions="None">([0-9]{1,2}[:][0-9]{1,2}[:][0-9]{1,2})</Time>
 			<Volume Name="Volume" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Stück (.*\s+.*\s+)Kurs</Volume>
 			<Price Name="Price" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Kurs(?:[ ]{1,})EUR([0-9,. ]{1,})</Price>
-			<TaxAtSource Name="TaxAtSource" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Kapitalertragsteuer 25,00 %(?:[ ]{1,})EUR([0-9,. ]{1,})</TaxAtSource>
+			<TaxAtSource Name="TaxAtSource" FoundIndex="0" ResultEmpty="true" RegexOptions="None">QuSt 15,00 %(?:[ ]{1,})EUR([0-9,. ]{1,})</TaxAtSource>
 			<CapitalGainTax Name="CapitalGainTax" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Kapitalertragsteuer (?:[0-9]{0,}[,][0-9]{1,}) %(?:[ ]{1,})EUR([0-9,. ]{1,})</CapitalGainTax>
 			<SolidarityTax Name="SolidarityTax" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Solidaritätszuschlag (?:[0-9]{0,}[,][0-9]{1,}) %(?:[ ]{1,})EUR([0-9,. ]{1,})</SolidarityTax>
 			<Provision Name="Provision" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Provision(?:[ ]{1,})EUR([0-9,. ]{1,})</Provision>

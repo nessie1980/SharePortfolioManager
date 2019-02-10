@@ -70,7 +70,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         BrokerageWrongValue,
         BrokerageWrongFormat,
         DocumentBrowseFailed,
-        DocumentDirectoryDoesNotExits,
+        DocumentDirectoryDoesNotExists,
         DocumentFileDoesNotExists
     };
 
@@ -799,10 +799,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
 
                     break;
                 }
-                case BuyErrorCode.DocumentDirectoryDoesNotExits:
+                case BuyErrorCode.DocumentDirectoryDoesNotExists:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DirectoryDoesNotExist", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DocumentDirectoryDoesNotExists", LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -814,7 +814,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 case BuyErrorCode.DocumentFileDoesNotExists:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/FileDoesNotExist", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DocumentFileDoesNotExists", LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -1053,6 +1053,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             // Reset state pictures
             picBoxDateParseState.Image = Resources.empty_arrow;
             picBoxTimeParseState.Image = Resources.empty_arrow;
+            picBoxOrderNumberParseState.Image = Resources.empty_arrow;
             picBoxVolumeParseState.Image = Resources.empty_arrow;
             picBoxPriceParseState.Image = Resources.empty_arrow;
             picBoxProvisionParseState.Image = Resources.empty_arrow;
@@ -1620,11 +1621,14 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 toolStripStatusLabelMessageBuyDocumentParsing.Text = string.Empty;
                 toolStripProgressBarBuyDocumentParsing.Visible = false;
 
-                var strCaption = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Info", LanguageName);
+                var strCaption = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Info",
+                    LanguageName);
                 var strMessage = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/BuyDelete",
                     LanguageName);
-                var strOk = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", LanguageName);
-                var strCancel = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", LanguageName);
+                var strOk = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok",
+                    LanguageName);
+                var strCancel = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel",
+                    LanguageName);
 
                 var messageBox = new OwnMessageBox(strCaption, strMessage, strOk, strCancel);
 
@@ -1655,7 +1659,6 @@ namespace SharePortfolioManager.Forms.BuysForm.View
 
                 // Refresh the dividend list
                 OnShowBuys();
-
             }
             catch (Exception ex)
             {
@@ -2579,8 +2582,8 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                             if (messageBox.ShowDialog() == DialogResult.OK)
                             {
                                 // Remove move document from the buy objects
-                                if (ShareObjectFinalValue.SetDocument(strGuid, temp.Date, string.Empty) &&
-                                    ShareObjectMarketValue.SetDocument(strGuid, temp.Date, string.Empty))
+                                if (ShareObjectFinalValue.SetBuyDocument(strGuid, temp.Date, string.Empty) &&
+                                    ShareObjectMarketValue.SetBuyDocument(strGuid, temp.Date, string.Empty))
                                 {
                                     // Set flag to save the share object.
                                     SaveFlag = true;
@@ -3272,6 +3275,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             // Reset state pictures
             picBoxDateParseState.Image = Resources.empty_arrow;
             picBoxTimeParseState.Image = Resources.empty_arrow;
+            picBoxOrderNumberParseState.Image = Resources.empty_arrow;
             picBoxVolumeParseState.Image = Resources.empty_arrow;
             picBoxPriceParseState.Image = Resources.empty_arrow;
             picBoxProvisionParseState.Image = Resources.empty_arrow;
@@ -3282,6 +3286,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             // Reset textboxes
             dateTimePickerDate.Value = DateTime.Now;
             dateTimePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+            txtBoxOrderNumber.Text = string.Empty;
             txtBoxVolume.Text = string.Empty;
             txtBoxSharePrice.Text = string.Empty;
             txtBoxProvision.Text = string.Empty;

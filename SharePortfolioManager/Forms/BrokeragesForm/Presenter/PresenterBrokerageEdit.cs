@@ -296,7 +296,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.Presenter
                     _model.Document = @"";
                 else if (_model.Document != @"" && _model.Document != @"-" && !Directory.Exists(Path.GetDirectoryName(_model.Document)))
                 {
-                    _model.ErrorCode = BrokerageErrorCode.DocumentDirectoryDoesNotExits;
+                    _model.ErrorCode = BrokerageErrorCode.DocumentDirectoryDoesNotExists;
                     bErrorFlag = true;
                 }
                 else if (_model.Document != @"" && _model.Document != @"-" && !File.Exists(_model.Document) && bErrorFlag == false)

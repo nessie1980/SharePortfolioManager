@@ -866,47 +866,47 @@ namespace SharePortfolioManager
                             strCancel);
                         if (messageBox.ShowDialog() == DialogResult.OK)
                         {
-                            // Remove sale object and add it with no document
-                            if (ShareObjectFinalValue.RemoveSale(temp.Guid, temp.Date) &&
-                                ShareObjectFinalValue.AddSale(temp.Guid, strDateTime, temp.OrderNumber, temp.Volume, temp.SalePrice, temp.SaleBuyDetails, temp.TaxAtSource, temp.CapitalGainsTax, temp.SolidarityTax, temp.Brokerage, temp.Reduction))
-                            {
-                                // TODO Refresh profit or loss
-                                //Show();
+                            //// Remove sale object and add it with no document
+                            //if (ShareObjectFinalValue.RemoveSale(temp.Guid, temp.Date) &&
+                            //    ShareObjectFinalValue.AddSale(temp.Guid, strDateTime, temp.OrderNumber, temp.Volume, temp.SalePrice, temp.SaleBuyDetails, temp.TaxAtSource, temp.CapitalGainsTax, temp.SolidarityTax, temp.Brokerage, temp.Reduction))
+                            //{
+                            //    // TODO Refresh profit or loss
+                            //    //Show();
 
-                                // Add status message
-                                Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                    Language.GetLanguageTextByXPath(@"/AddEditFormSale/StateMessages/EditSuccess", LanguageName),
-                                    Language, LanguageName,
-                                    Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
+                            //    // Add status message
+                            //    Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                            //        Language.GetLanguageTextByXPath(@"/AddEditFormSale/StateMessages/EditSuccess", LanguageName),
+                            //        Language, LanguageName,
+                            //        Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
 
-                                // Save the share values to the XML
-                                if (ShareObjectFinalValue.SaveShareObject(ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedRows[0].Index], ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio, _portfolioFileName, out var exception))
-                                {
-                                    // Add status message
-                                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                        Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/EditSaveSuccessful", LanguageName),
-                                        Language, LanguageName,
-                                        Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
+                            //    // Save the share values to the XML
+                            //    if (ShareObjectFinalValue.SaveShareObject(ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedRows[0].Index], ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio, _portfolioFileName, out var exception))
+                            //    {
+                            //        // Add status message
+                            //        Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                            //            Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/EditSaveSuccessful", LanguageName),
+                            //            Language, LanguageName,
+                            //            Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
 
-                                    // Reset / refresh DataGridView portfolio binding source
-                                    DgvPortfolioBindingSourceFinalValue.ResetBindings(false);
-                                }
-                                else
-                                {
-                                    // Add status message
-                                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                        Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
-                                        Language, LanguageName,
-                                        Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
-                                }
-                            }
-                            else
-                            {
-                                Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                    Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/EditFailed", LanguageName),
-                                    Language, LanguageName,
-                                    Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
-                            }
+                            //        // Reset / refresh DataGridView portfolio binding source
+                            //        DgvPortfolioBindingSourceFinalValue.ResetBindings(false);
+                            //    }
+                            //    else
+                            //    {
+                            //        // Add status message
+                            //        Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                            //            Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
+                            //            Language, LanguageName,
+                            //            Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
+                            //    }
+                            //}
+                            //else
+                            //{
+                            //    Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                            //        Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/EditFailed", LanguageName),
+                            //        Language, LanguageName,
+                            //        Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
+                            //}
                         }
                     }
 
@@ -1077,7 +1077,7 @@ namespace SharePortfolioManager
 
                             view.SelectionChanged -= DataGridViewDividendsOfYears_SelectionChanged;
                             view.SelectionChanged -= DataGridViewDividendsOfAYear_SelectionChanged;
-                            view.DataBindingComplete -= DataGridViewDividensOfAYear_DataBindingComplete;
+                            view.DataBindingComplete -= DataGridViewDividendsOfAYear_DataBindingComplete;
                         }
                         tabPage.Controls.Clear();
                         tabCtrlDividends.TabPages.Remove(tabPage);
@@ -1117,7 +1117,7 @@ namespace SharePortfolioManager
 
                     // Set the delegate for the DataBindingComplete event
                     dataGridViewDividendsOverviewOfAYears.DataBindingComplete +=
-                        DataGridViewDividensOfAYear_DataBindingComplete;
+                        DataGridViewDividendsOfAYear_DataBindingComplete;
 
                     // Set row select event
                     dataGridViewDividendsOverviewOfAYears.SelectionChanged +=
@@ -1194,7 +1194,7 @@ namespace SharePortfolioManager
 
                             // Set the delegate for the DataBindingComplete event
                             dataGridViewDividendsOfAYear.DataBindingComplete +=
-                                DataGridViewDividensOfAYear_DataBindingComplete;
+                                DataGridViewDividendsOfAYear_DataBindingComplete;
 
                             // Set row select event
                             dataGridViewDividendsOfAYear.SelectionChanged +=
@@ -1334,7 +1334,7 @@ namespace SharePortfolioManager
         /// </summary>
         /// <param name="sender">DataGridView</param>
         /// <param name="e">DataGridViewBindingCompleteEventArgs</param>
-        private void DataGridViewDividensOfAYear_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        private void DataGridViewDividendsOfAYear_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             try
             {

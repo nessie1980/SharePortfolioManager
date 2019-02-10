@@ -718,7 +718,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 case ShareAddErrorCode.DocumentDirectoryDoesNotExists:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DirectoryDoesNotExist", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DocumentDirectoryDoesNotExists", LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     break;
@@ -726,7 +726,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 case ShareAddErrorCode.DocumentFileDoesNotExists:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/FileDoesNotExist", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DocumentFileDoesNotExists", LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     break;

@@ -21,6 +21,7 @@
 //SOFTWARE.
 
 using SharePortfolioManager.Classes;
+using SharePortfolioManager.Classes.Costs;
 using SharePortfolioManager.Classes.Sales;
 using SharePortfolioManager.Forms.SalesForm.Model;
 using SharePortfolioManager.Forms.SalesForm.View;
@@ -136,19 +137,31 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
             if (!CheckInputValues(_model.UpdateSale))
             {
                 var bErrorFlag = false;
+                BrokerageReductionObject brokerage = null;
 
+                // Set date
                 var strDateTime = _model.Date + " " + _model.Time;
-
-                // Generate Guid
-                var strGuidBrokerage = Guid.NewGuid().ToString();
 
                 // Generate Guid
                 var strGuidSale = Guid.NewGuid().ToString();
 
-                // Brokerage entry if the brokerage value is not 0
-                if (_model.BrokerageDec > 0)
-                    bErrorFlag = !_model.ShareObjectFinalValue.AddBrokerage(strGuidBrokerage, false, true, strGuidSale, strDateTime,
-                        _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec, _model.Document);
+                // Brokerage entry if any brokerage value is not 0
+                if (_model.ProvisionDec != 0 || _model.BrokerFeeDec != 0 || _model.TraderPlaceFeeDec != 0 ||
+                    _model.ReductionDec != 0)
+                {
+                    // Generate Guid
+                    var strGuidBrokerage = Guid.NewGuid().ToString();
+
+                    bErrorFlag = !_model.ShareObjectFinalValue.AddBrokerage(strGuidBrokerage, false, true, strGuidSale,
+                        strDateTime,
+                        _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec,
+                        _model.Document);
+
+                    // Get brokerage object
+                    brokerage =
+                        _model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByGuid(strGuidBrokerage, strDateTime);
+
+                }
 
                 // Update buys with the sale volumes
                 foreach (var usedBuyDetail in _model.UsedBuyDetails)
@@ -161,11 +174,11 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                 }
 
                 // When the sale volume has been changed the UseBuyDetails must be updated
-                if (_model.ShareObjectFinalValue.AddSale(strGuidSale, strDateTime, _model.OrderNumber, _model.VolumeDec, _model.SalePriceDec, _model.UsedBuyDetails,
-                        _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, _model.BrokerageDec, _model.ReductionDec, _model.Document) &&
+                if (bErrorFlag == false &&
+                    _model.ShareObjectFinalValue.AddSale(strGuidSale, strDateTime, _model.OrderNumber, _model.VolumeDec, _model.SalePriceDec, _model.UsedBuyDetails,
+                        _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, brokerage, _model.Document) &&
                     _model.ShareObjectMarketValue.AddSale(strGuidSale, strDateTime, _model.OrderNumber, _model.VolumeDec, _model.SalePriceDec, _model.UsedBuyDetails,
-                        _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, _model.BrokerageDec, _model.ReductionDec, _model.Document) &&
-                    bErrorFlag == false)
+                        _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, _model.Document))
                 {
                     _model.ErrorCode = SaleErrorCode.AddSuccessful;
                 }
@@ -174,8 +187,6 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                     _model.ErrorCode = SaleErrorCode.AddFailed;
                 }
             }
-
-            _model.UsedBuyDetails.Clear();
 
             UpdateViewWithModel();
 
@@ -187,7 +198,22 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
             // Check the input values
             if (!CheckInputValues(_model.UpdateSale))
             {
+                // Set date
                 var strDateTime = _model.Date + " " + _model.Time;
+
+                var bFlagBrokerageEdit = true;
+                var guidBrokerage = @"";
+
+                // Check if an old brokerage entry must be deleted
+                if (_model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByBuyGuid(_model.SelectedGuid,
+                        strDateTime) != null)
+                {
+                    // Get brokerage GUID
+                    guidBrokerage = _model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByBuyGuid(
+                        _model.SelectedGuid,
+                        strDateTime).Guid;
+                    bFlagBrokerageEdit = _model.ShareObjectFinalValue.RemoveBrokerage(guidBrokerage, strDateTime);
+                }
 
                 // Remove old sale volumes from the old used buys
                 foreach (var sales in _model.ShareObjectFinalValue.AllSaleEntries.AllSalesOfTheShareDictionary.Values)
@@ -237,27 +263,29 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                         usedBuyDetail.DecVolume);
                 }
 
-                // Generate Guid
-                var strGuidBrokerage = Guid.NewGuid().ToString();
-
-                if (_model.ShareObjectFinalValue.RemoveSale(_model.SelectedGuid, _model.SelectedDate) && _model.ShareObjectFinalValue.AddSale(_model.SelectedGuid, strDateTime, _model.OrderNumber, _model.VolumeDec, _model.SalePriceDec,
-                    _model.UsedBuyDetails, _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, _model.BrokerageDec, _model.ReductionDec, _model.Document) &&
-                    _model.ShareObjectMarketValue.RemoveSale(_model.SelectedGuid, _model.SelectedDate) && _model.ShareObjectMarketValue.AddSale(_model.SelectedGuid, strDateTime, _model.OrderNumber, _model.VolumeDec, _model.SalePriceDec,
-                        _model.UsedBuyDetails, _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, _model.BrokerageDec, _model.ReductionDec, _model.Document)
-                    )
+                // Check if a new brokerage entry must be made
+                if (bFlagBrokerageEdit && (_model.ProvisionDec != 0 || _model.BrokerFeeDec != 0 || _model.TraderPlaceFeeDec != 0 || _model.ReductionDec != 0))
                 {
-                    var bFlagBrokerageEdit = true;
+                    bFlagBrokerageEdit = _model.ShareObjectFinalValue.AddBrokerage(guidBrokerage, true, false, _model.SelectedGuid, strDateTime,
+                        _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec, _model.Document);
+                }
 
-                    // Check if an old brokerage entry must be deleted
-                    if (_model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByGuid(_model.SelectedGuid, strDateTime) != null)
-                        bFlagBrokerageEdit = _model.ShareObjectFinalValue.RemoveBrokerage(_model.SelectedGuid, strDateTime);
+                // Get brokerage object
+                var brokerage = _model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByGuid(guidBrokerage, strDateTime);
 
-                    // Check if a new brokerage entry must be made
-                    if (bFlagBrokerageEdit && _model.BrokerageDec > 0)
-                        bFlagBrokerageEdit = _model.ShareObjectFinalValue.AddBrokerage(strGuidBrokerage, false, true, _model.SelectedGuid, strDateTime,
-                            _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec, _model.Document);
-
-                    if (bFlagBrokerageEdit)
+                if (bFlagBrokerageEdit)
+                {
+                    if (_model.ShareObjectFinalValue.RemoveSale(_model.SelectedGuid, _model.SelectedDate) &&
+                        _model.ShareObjectFinalValue.AddSale(_model.SelectedGuid, strDateTime, _model.OrderNumber,
+                            _model.VolumeDec, _model.SalePriceDec,
+                            _model.UsedBuyDetails, _model.TaxAtSourceDec, _model.CapitalGainsTaxDec,
+                            _model.SolidarityTaxDec, brokerage, _model.Document) &&
+                        _model.ShareObjectMarketValue.RemoveSale(_model.SelectedGuid, _model.SelectedDate) &&
+                        _model.ShareObjectMarketValue.AddSale(_model.SelectedGuid, strDateTime, _model.OrderNumber,
+                            _model.VolumeDec, _model.SalePriceDec,
+                            _model.UsedBuyDetails, _model.TaxAtSourceDec, _model.CapitalGainsTaxDec,
+                            _model.SolidarityTaxDec, _model.Document)
+                    )
                     {
                         _model.ErrorCode = SaleErrorCode.EditSuccessful;
                     }
@@ -270,7 +298,6 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                 }
             }
 
-            //_model.ErrorCode = SaleErrorCode.EditFailed;
             UpdateViewWithModel();
 
             _view.AddEditDeleteFinish();
@@ -381,7 +408,15 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                 Console.WriteLine(@"AddSale:                 {0}", _model.AddSale);
                 Console.WriteLine(@"_model.SelectedGuid:     {0}", _model.SelectedGuid);
                 Console.WriteLine(@"_model.SelectedGuidLast: {0}", _model.SelectedGuidLast);
-                Console.WriteLine();
+
+                if (_model.UsedBuyDetails != null)
+                foreach (var temp in _model.UsedBuyDetails)
+                {
+                    Console.WriteLine(@"BuyGuid:                 {0}", temp.BuyGuid);
+                    Console.WriteLine(@"DecVolume:               {0}", temp.DecVolume);
+                    Console.WriteLine(@"DecBuyPrice:             {0}", temp.DecBuyPrice);
+                    Console.WriteLine(@"SaleBuyDetailsAdded:     {0}", temp.SaleBuyDetailsAdded);
+                }
 
                 var soldVolume = new decimal(0.0);
 
@@ -495,6 +530,8 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                             }
                         }
 
+                        Console.WriteLine(@"Clear details");
+
                         _model.UsedBuyDetails.Clear();
                     }
                 //}
@@ -540,11 +577,17 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                 }
 
                 var decProfitLoss = _model.SalePriceDec * _model.VolumeDec - _model.UsedBuyDetails.Sum(x => x.SaleBuyValue);
-                var decPayout = decProfitLoss - _model.TaxAtSourceDec - _model.CapitalGainsTaxDec - _model.SolidarityTaxDec - _model.BrokerageDec + _model.ReductionDec;
+                var decBrokerage = _model.ProvisionDec + _model.BrokerFeeDec + _model.TraderPlaceFeeDec -
+                                      _model.ReductionDec;
+                var decPayout = decProfitLoss - _model.TaxAtSourceDec - _model.CapitalGainsTaxDec - _model.SolidarityTaxDec - _model.BrokerageDec;
 
                 _model.SaleBuyValueDec = Math.Round(_model.UsedBuyDetails.Sum(x => x.SaleBuyValue), 2);
                 _model.ProfitLossDec = decProfitLoss;
+                _model.BrokerageDec = decBrokerage;
                 _model.PayoutDec = decPayout;
+
+                Console.WriteLine();
+
             }
             catch (Exception ex)
             {
@@ -579,7 +622,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                     _model.ErrorCode = SaleErrorCode.OrderNumberEmpty;
                     bErrorFlag = true;
                 }
-                else if (_model.ShareObjectFinalValue.AllBuyEntries.OrderNumberAlreadyExists(_model.OrderNumber))
+                else if (_model.ShareObjectFinalValue.AllSaleEntries.OrderNumberAlreadyExists(_model.OrderNumber))
                 {
                     _model.ErrorCode = SaleErrorCode.OrderNumberExists;
                     bErrorFlag = true;
@@ -613,7 +656,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                     }
                     else
                     {
-                        if (decVolume > _model.ShareObjectFinalValue.AllSaleEntries.GetSaleObjectByDateTime(strDate).Volume + _model.ShareObjectFinalValue.Volume)
+                        if (decVolume > _model.ShareObjectFinalValue.AllSaleEntries.GetSaleObjectByGuidDate(_model.SelectedGuid, strDate).Volume + _model.ShareObjectFinalValue.Volume)
                         {
                             _model.ErrorCode = SaleErrorCode.VolumeMaxValue;
                             bErrorFlag = true;
@@ -664,13 +707,13 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                     _model.Document = @"";
                 else if (_model.Document != @"" && _model.Document != @"-" && !Directory.Exists(Path.GetDirectoryName(_model.Document)))
                 {
-                    _model.ErrorCode = SaleErrorCode.DirectoryDoesNotExists;
+                    _model.ErrorCode = SaleErrorCode.DocumentDirectoryDoesNotExists;
                     bErrorFlag = true;
                 }
                 else if (_model.Document != @"" && _model.Document != @"-" && !File.Exists(_model.Document) && bErrorFlag == false)
                 {
                     _model.Document = @"";
-                    _model.ErrorCode = SaleErrorCode.FileDoesNotExists;
+                    _model.ErrorCode = SaleErrorCode.DocumentFileDoesNotExists;
                     bErrorFlag = true;
                 }
 

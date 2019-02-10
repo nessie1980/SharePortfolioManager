@@ -24,6 +24,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using SharePortfolioManager.Classes.Costs;
 
 namespace SharePortfolioManager.Classes.Sales
 {
@@ -90,12 +91,11 @@ namespace SharePortfolioManager.Classes.Sales
         /// <param name="decTaxAtSource">Tax at source of the sale</param>
         /// <param name="decCapitalGainsTax">Capital gains tax of the sale</param>
         /// <param name="decSolidarityTax">Solidarity tax of the sale</param>
-        /// <param name="decBrokerage">Brokerage of the sale</param>
-        /// <param name="decReduction">Reduction of the sale</param>
+        /// <param name="brokerageObject">Brokerage of the sale</param>
         /// <param name="strDoc">Document of the sale</param>
         /// <returns>Flag if the add was successful</returns>
         public bool AddSale(string strGuid, string strDate, string strOrderNumber, decimal decVolume, decimal decSalePrice, List<SaleBuyDetails> usedBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
-             decimal decSolidarityTax, decimal decBrokerage, decimal decReduction, string strDoc = "")
+             decimal decSolidarityTax, BrokerageReductionObject brokerageObject, string strDoc = "")
         {
 #if DEBUG_SALE
             Console.WriteLine(@"Add AllSalesOfTheShare");
@@ -110,7 +110,7 @@ namespace SharePortfolioManager.Classes.Sales
                 // Search if a sale for the given year already exists if not add it
                 if (AllSalesOfTheShareDictionary.TryGetValue(year, out var searchObject))
                 {
-                    if (!searchObject.AddSaleObject(SaleCultureInfo, strGuid, strDate, strOrderNumber, decVolume, decSalePrice, usedBuyDetails, decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decBrokerage, decReduction, strDoc))
+                    if (!searchObject.AddSaleObject(SaleCultureInfo, strGuid, strDate, strOrderNumber, decVolume, decSalePrice, usedBuyDetails, decTaxAtSource, decCapitalGainsTax, decSolidarityTax, brokerageObject, strDoc))
                         return false;
                 }
                 else
@@ -118,7 +118,7 @@ namespace SharePortfolioManager.Classes.Sales
                     // Add new year sale object for the sale with a new year
                     var addObject = new SalesYearOfTheShare();
                     // Add sale with the new year to the sale year list
-                    if (addObject.AddSaleObject(SaleCultureInfo, strGuid, strDate, strOrderNumber, decVolume, decSalePrice, usedBuyDetails ,decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decBrokerage, decReduction, strDoc))
+                    if (addObject.AddSaleObject(SaleCultureInfo, strGuid, strDate, strOrderNumber, decVolume, decSalePrice, usedBuyDetails ,decTaxAtSource, decCapitalGainsTax, decSolidarityTax, brokerageObject, strDoc))
                     {
                         AllSalesOfTheShareDictionary.Add(year, addObject);
                     }
@@ -235,6 +235,45 @@ namespace SharePortfolioManager.Classes.Sales
         }
 
         /// <summary>
+        /// This function sets the document of a sale with the given Guid and date and time
+        /// from the dictionary
+        /// </summary>
+        /// <param name="strGuid">Guid of the sale which should be modified</param>
+        /// <param name="strDate">Date and time of the sale which should be modified</param>
+        /// <param name="strDocument">Document of the sale</param>
+        /// <returns></returns>
+        public bool SetDocumentSale(string strGuid, string strDate, string strDocument)
+        {
+#if DEBUG_BUY
+            Console.WriteLine(@"Remove SetDocumentSale");
+#endif
+            try
+            {
+                // Get year of the date of the sale which should be modified
+                GetYearOfDate(strDate, out var year);
+                if (year == null)
+                    return false;
+
+                // Search if the sale for the given year exists
+                if (AllSalesOfTheShareDictionary.TryGetValue(year, out var searchObject))
+                {
+                    if (!searchObject.SetDocumentSaleObject(strGuid, strDocument))
+                        return false;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// This function creates a list of all sale objects of the share
         /// </summary>
         /// <returns>List of SaleObjects or a empty list if no SaleObjects exists</returns>
@@ -271,22 +310,6 @@ namespace SharePortfolioManager.Classes.Sales
 
         /// <summary>
         /// This function creates a dictionary with the years
-        /// and the total sales values without brokerage of the years
-        /// </summary>
-        /// <returns>Dictionary with the years and the sales values without brokerage of the year or empty dictionary if no year exist.</returns>
-        public Dictionary<string, string> GetAllSalesWithoutBrokerageTotalValues()
-        {
-            var allSalesOfTheShare = new Dictionary<string, string>();
-
-            foreach (var key in AllSalesOfTheShareDictionary.Keys)
-            {
-                allSalesOfTheShare.Add(key, Helper.FormatDecimal(AllSalesOfTheShareDictionary[key].SalePayoutWithoutBrokerageYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo));
-            }
-            return allSalesOfTheShare;
-        }
-
-        /// <summary>
-        /// This function creates a dictionary with the years
         /// and the total profit / loss value with brokerage of the years
         /// </summary>
         /// <returns>Dictionary with the years and the profit / loss values with brokerage of the year or empty dictionary if no year exist.</returns>
@@ -302,29 +325,14 @@ namespace SharePortfolioManager.Classes.Sales
         }
 
         /// <summary>
-        /// This function creates a dictionary with the years
-        /// and the total profit / loss value without brokerage of the years
-        /// </summary>
-        /// <returns>Dictionary with the years and the profit / loss values of the year or empty dictionary if no year exist.</returns>
-        public Dictionary<string, string> GetAllProfitLossWithoutBrokerageTotalValues()
-        {
-            var allProfitLossOfTheShare = new Dictionary<string, string>();
-
-            foreach (var key in AllSalesOfTheShareDictionary.Keys)
-            {
-                allProfitLossOfTheShare.Add(key, Helper.FormatDecimal(AllSalesOfTheShareDictionary[key].SaleProfitLossWithoutBrokerageYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo));
-            }
-            return allProfitLossOfTheShare;
-        }
-
-        /// <summary>
         /// This function returns the sale object of the given date and time
         /// </summary>
-        /// <param name="strDateTime">Date and time of the sale</param>
+        /// <param name="strGuid">Guid of the sale</param>
+        /// <param name="strDate">Date and time of the sale</param>
         /// <returns>SaleObject or null if the search failed</returns>
-        public SaleObject GetSaleObjectByDateTime(string strDateTime)
+        public SaleObject GetSaleObjectByGuidDate(string strGuid, string strDate)
         {
-            GetYearOfDate(strDateTime, out var year);
+            GetYearOfDate(strDate, out var year);
 
             if (year == null) return null;
 
@@ -332,7 +340,7 @@ namespace SharePortfolioManager.Classes.Sales
 
             foreach (var saleObject in AllSalesOfTheShareDictionary[year].SaleListYear)
             {
-                if (saleObject.Date == strDateTime)
+                if (saleObject.Guid == strGuid)
                 {
                     return saleObject;
                 }
@@ -342,23 +350,38 @@ namespace SharePortfolioManager.Classes.Sales
         }
 
         /// <summary>
-        /// This function checks if the given date is the last date of the entries
+        /// This function checks if the sale with the given order number already exists
         /// </summary>
-        /// <param name="strDateTime">Given date and time</param>
+        /// <param name="strOrderNumber">Given order number</param>
         /// <returns></returns>
-        public bool IsDateLastDate(string strDateTime)
+        public bool OrderNumberAlreadyExists(string strOrderNumber)
         {
-            if (_allSalesOfTheShareDictionary.Count <= 0) return true;
+            foreach (var saleList in _allSalesOfTheShareDictionary.Values)
+            {
+                foreach (var sale in saleList.SaleListYear)
+                {
+                    if (strOrderNumber == sale.OrderNumber)
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// This function checks if the sale with the given Guid is the last sale of the entries
+        /// </summary>
+        /// <param name="strGuid">Given GUID</param>
+        /// <returns></returns>
+        public bool IsLastSale(string strGuid)
+        {
+            if (_allSalesOfTheShareDictionary.Count <= 0) return false;
 
             var lastYearEntries = _allSalesOfTheShareDictionary.Last().Value;
-            {
-                if (lastYearEntries.SaleListYear.Count <= 0) return true;
 
-                var tempTimeDate = Convert.ToDateTime(lastYearEntries.SaleListYear.Last().Date);
-                var givenTimeDate = Convert.ToDateTime(strDateTime);
+            if (lastYearEntries.SaleListYear.Count <= 0) return false;
 
-                return givenTimeDate >= tempTimeDate;
-            }
+            return lastYearEntries.SaleListYear.Last().Guid == strGuid;
         }
 
         /// <summary>

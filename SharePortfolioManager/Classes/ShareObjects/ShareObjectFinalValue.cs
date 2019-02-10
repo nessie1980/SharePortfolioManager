@@ -1005,13 +1005,13 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="strDateTime">Date time of the buy which should be modified</param>
         /// <param name="strDocument">Document which should be set</param>
         /// <returns></returns>
-        public bool SetDocument(string strGuid, string strDateTime, string strDocument)
+        public bool SetBuyDocument(string strGuid, string strDateTime, string strDocument)
         {
             try
             {
 #if DEBUG_SHAREOBJECT_FINAL || DEBUG_BUY
                 Console.WriteLine(@"");
-                Console.WriteLine(@"SetDocument() / FinalValue");
+                Console.WriteLine(@"SetBuyDocument() / FinalValue");
                 Console.WriteLine(@"strGuid: {0}", strGuid);
                 Console.WriteLine(@"strDateTime: {0}", strDateTime);
                 Console.WriteLine(@"strDocument: {0}", strDocument);
@@ -1052,12 +1052,11 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="decTaxAtSource">Tax at source of the sale</param>
         /// <param name="decCapitalGainsTax">Capital gains tax of the sale</param>
         /// <param name="decSolidarityTax">Solidarity tax of the sale</param>
-        /// <param name="decBrokerage">Brokerage of the sale</param>
-        /// <param name="decReduction">Reduction of the sale</param>
+        /// <param name="brokerageObject">Brokerage object of the sale</param>
         /// <param name="strDoc">Document of the sale</param>
         /// <returns>Flag if the add was successful</returns>
         public bool AddSale(string strGuid, string strDate, string strOrderNumber, decimal decVolume, decimal decSalePrice, List<SaleBuyDetails> usedBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
-             decimal decSolidarityTax, decimal decBrokerage, decimal decReduction, string strDoc = "")
+             decimal decSolidarityTax, BrokerageReductionObject brokerageObject, string strDoc = "")
         {
             try
             {
@@ -1074,7 +1073,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 Console.WriteLine(@"strDoc: {0}", strDoc);
 #endif
                 if (!AllSaleEntries.AddSale(strGuid, strDate, strOrderNumber, decVolume, decSalePrice, usedBuyDetails, decTaxAtSource, decCapitalGainsTax,
-                                            decSolidarityTax, decBrokerage, decReduction, strDoc))
+                                            decSolidarityTax, brokerageObject, strDoc))
                     return false;
 
                 // Set new volume
@@ -1129,10 +1128,11 @@ namespace SharePortfolioManager.Classes.ShareObjects
 #if DEBUG_SHAREOBJECT_FINAL
                 Console.WriteLine(@"");
                 Console.WriteLine(@"RemoveSale() / FinalValue");
+                Console.WriteLine(@"strGuid: {0}", strGuid);
                 Console.WriteLine(@"strDateTime: {0}", strDateTime);
 #endif
                 // Get SaleObject by date and time and add the sale deposit and value to the share
-                var saleObject = AllSaleEntries.GetSaleObjectByDateTime(strDateTime);
+                var saleObject = AllSaleEntries.GetSaleObjectByGuidDate(strGuid, strDateTime);
                 if (saleObject != null)
                 {
                     Volume += saleObject.Volume;
@@ -1156,6 +1156,44 @@ namespace SharePortfolioManager.Classes.ShareObjects
             }
             catch
             {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// This function sets the document of the sale of the given Guid and datetime
+        /// </summary>
+        /// <param name="strGuid">Guid of the buy which should be modified</param>
+        /// <param name="strDateTime">Date time of the buy which should be modified</param>
+        /// <param name="strDocument">Document which should be set</param>
+        /// <returns></returns>
+        public bool SetSaleDocument(string strGuid, string strDateTime, string strDocument)
+        {
+            try
+            {
+#if DEBUG_SHAREOBJECT_FINAL || DEBUG_SALE
+                Console.WriteLine(@"");
+                Console.WriteLine(@"SetSaleDocument() / FinalValue");
+                Console.WriteLine(@"strGuid: {0}", strGuid);
+                Console.WriteLine(@"strDateTime: {0}", strDateTime);
+                Console.WriteLine(@"strDocument: {0}", strDocument);
+#endif
+                // Get SaleObject by Guid and date and time and set the new document
+                var saleObject = AllSaleEntries.GetSaleObjectByGuidDate(strGuid, strDateTime);
+                if (saleObject != null)
+                {
+                    // Set document of the sale by Guid and date and time
+                    if (!AllSaleEntries.SetDocumentSale(strGuid, strDateTime, strDocument))
+                        return false;
+                }
+                else
+                    return false;
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
                 return false;
             }
         }
@@ -1559,6 +1597,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                             saleElementYear.SolidarityTaxAsStr);
                                         newSaleElement.SetAttribute(SaleReductionAttrName,
                                             saleElementYear.ReductionAsStr);
+                                        newSaleElement.SetAttribute(SaleBrokerageGuidAttrName,
+                                            saleElementYear.BrokerageGuid);
                                         newSaleElement.SetAttribute(SaleDocumentAttrName,
                                             saleElementYear.Document);
 

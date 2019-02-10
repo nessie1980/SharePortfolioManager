@@ -748,7 +748,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 case DividendErrorCode.DocumentDirectoryDoesNotExists:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DirectoryDoesNotExist", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DocumentDirectoryDoesNotExists", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -760,7 +760,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 case DividendErrorCode.DocumentFileDoesNotExists:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/FileDoesNotExist", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DocumentFileDoesNotExists", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 

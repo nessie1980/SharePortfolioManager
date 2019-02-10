@@ -190,7 +190,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
             get => _orderNumber;
             set
             {
-                if (_orderNumber != null && _document == value)
+                if (_orderNumber != null && _orderNumber == value)
                     return;
                 _orderNumber = value;
             }
@@ -580,16 +580,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
 
         public string Brokerage
         {
-            get
-            {
-                if (!decimal.TryParse(_brokerage, out _brokerageDec))
-                    _brokerageDec = 0;
-
-                if (UpdateViewFormatted)
-                    return _brokerageDec > 0 ? Helper.FormatDecimal(_brokerageDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : _brokerage;
-
-                return _brokerage;
-            }
+            get => Helper.FormatDecimal(_brokerageDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength);
             set
             {
                 if (Equals(_brokerage, value))

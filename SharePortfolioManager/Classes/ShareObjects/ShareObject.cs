@@ -123,14 +123,14 @@ namespace SharePortfolioManager.Classes.ShareObjects
         internal const string BuyVolumeSoldAttrName = "VolumeSold";
 
         /// <summary>
-        /// Stores the XML attribute name for the brokerage Guid of a buy
-        /// </summary>
-        internal const string BuyBrokerageGuidAttrName = "BrokerageGuid";
-
-        /// <summary>
         /// Stores the XML attribute name for buy price of a share of a buy
         /// </summary>
         internal const string BuyPriceAttrName = "Price";
+
+        /// <summary>
+        /// Stores the XML attribute name for the brokerage Guid of a buy
+        /// </summary>
+        internal const string BuyBrokerageGuidAttrName = "BrokerageGuid";
 
         /// <summary>
         /// Stores the XML attribute name for the document of a buy
@@ -192,9 +192,14 @@ namespace SharePortfolioManager.Classes.ShareObjects
         internal const string SaleSolidarityTaxAttrName = "SolidarityTax";
 
         /// <summary>
-        /// Stores the XML attribute name for the redction of a sale
+        /// Stores the XML attribute name for the reduction of a sale
         /// </summary>
         internal const string SaleReductionAttrName = "Reduction";
+
+        /// <summary>
+        /// Stores the XML attribute name for the brokerage Guid of a sale
+        /// </summary>
+        internal const string SaleBrokerageGuidAttrName = "BrokerageGuid";
 
         /// <summary>
         /// Stores the XML attribute name for the document of a sale
@@ -232,9 +237,9 @@ namespace SharePortfolioManager.Classes.ShareObjects
         internal const string SaleBuyGuidAttrName = "BuyGuid";
 
         /// <summary>
-        /// Stores the attribute count for the dividend
+        /// Stores the attribute count for the sale
         /// </summary>
-        internal const short SaleAttrCount = 10;
+        internal const short SaleAttrCount = 11;
 
         /// <summary>
         /// Stores the used buys count for the sale

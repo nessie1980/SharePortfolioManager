@@ -77,11 +77,9 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         BrokerageEmpty,
         BrokerageWrongFormat,
         BrokerageWrongValue,
-        DirectoryDoesNotExists,
-        FileDoesNotExists,
+        DocumentDirectoryDoesNotExists,
+        DocumentFileDoesNotExists,
         DocumentBrowseFailed,
-        DocumentDirectoryDoesNotExits,
-        DocumentFileDoesNotExists
     };
 
     // Error codes for the document parsing
@@ -555,7 +553,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         AddSale = false;
 
                         // Refresh the sale list
-                        OnSalesShow();
+                        OnShowSales();
 
                         break;
                     }
@@ -597,7 +595,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         SaveFlag = true;
 
                         // Refresh the sale list
-                        OnSalesShow();
+                        OnShowSales();
 
                         break;
                     }
@@ -639,7 +637,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Add_Caption", LanguageName);
 
                         // Refresh the sale list
-                        OnSalesShow();
+                        OnShowSales();
 
                         break;
                     }
@@ -664,7 +662,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
 
                         Enabled = true;
                         txtBoxVolume.Focus();
-
+                        
                         break;
                     }
                 case SaleErrorCode.OrderNumberEmpty:
@@ -740,7 +738,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         {
                             strMessage =
                                 Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/VolumeMaxValue_1", LanguageName) +
-                                (ShareObjectFinalValue.Volume + ShareObjectFinalValue.AllSaleEntries.GetSaleObjectByDateTime(dateTimePickerDate.Text + " " + dateTimePickerTime.Text).Volume) +
+                                (ShareObjectFinalValue.Volume + ShareObjectFinalValue.AllSaleEntries.GetSaleObjectByGuidDate(SelectedGuid, dateTimePickerDate.Text + " " + dateTimePickerTime.Text).Volume) +
                                 Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/VolumeMaxValue_2", LanguageName);
                         }
                         clrMessage = Color.Red;
@@ -867,7 +865,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         stateLevel = FrmMain.EStateLevels.Error;
 
                         Enabled = true;
-                        txtBoxBrokerage.Focus();
+                        txtBoxProvision.Focus();
 
                         break;
                     }
@@ -879,7 +877,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         stateLevel = FrmMain.EStateLevels.Error;
 
                         Enabled = true;
-                        txtBoxBrokerage.Focus();
+                        txtBoxProvision.Focus();
 
                         break;
                     }
@@ -891,7 +889,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         stateLevel = FrmMain.EStateLevels.Error;
 
                         Enabled = true;
-                        txtBoxBrokerage.Focus();
+                        txtBoxBrokerFee.Focus();
 
                         break;
                     }
@@ -903,7 +901,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         stateLevel = FrmMain.EStateLevels.Error;
 
                         Enabled = true;
-                        txtBoxBrokerage.Focus();
+                        txtBoxBrokerFee.Focus();
 
                         break;
                     }
@@ -915,7 +913,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         stateLevel = FrmMain.EStateLevels.Error;
 
                         Enabled = true;
-                        txtBoxBrokerage.Focus();
+                        txtBoxTraderPlaceFee.Focus();
 
                         break;
                     }
@@ -927,7 +925,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         stateLevel = FrmMain.EStateLevels.Error;
 
                         Enabled = true;
-                        txtBoxBrokerage.Focus();
+                        txtBoxTraderPlaceFee.Focus();
 
                         break;
                     }
@@ -939,7 +937,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         stateLevel = FrmMain.EStateLevels.Error;
 
                         Enabled = true;
-                        txtBoxBrokerage.Focus();
+                        txtBoxReduction.Focus();
 
                         break;
                     }
@@ -951,7 +949,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         stateLevel = FrmMain.EStateLevels.Error;
 
                         Enabled = true;
-                        txtBoxBrokerage.Focus();
+                        txtBoxReduction.Focus();
 
                         break;
                     }
@@ -991,10 +989,10 @@ namespace SharePortfolioManager.Forms.SalesForm.View
 
                         break;
                     }
-                case SaleErrorCode.DirectoryDoesNotExists:
+                case SaleErrorCode.DocumentDirectoryDoesNotExists:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/DirectoryDoesNotExist", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/DocumentDirectoryDoesNotExists", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -1003,10 +1001,10 @@ namespace SharePortfolioManager.Forms.SalesForm.View
 
                         break;
                     }
-                case SaleErrorCode.FileDoesNotExists:
+                case SaleErrorCode.DocumentFileDoesNotExists:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/FileDoesNotExist", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/DocumentFileDoesNotExists", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -1226,7 +1224,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
 
                 #endregion Image configuration
 
-                OnSalesShow();
+                OnShowSales();
             }
             catch (Exception ex)
             {
@@ -1289,9 +1287,12 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             txtBoxCapitalGainsTax.Text = string.Empty;
             txtBoxSolidarityTax.Text = string.Empty;
 
+            txtBoxProvision.Text = string.Empty;
+            txtBoxBrokerFee.Text = string.Empty;
+            txtBoxTraderPlaceFee.Text = string.Empty;
+            txtBoxReduction.Text = string.Empty;
             txtBoxBrokerage.Text = string.Empty;
-            txtBoxReduction.Text = string.Empty; 
-            
+
             txtBoxPayout.Text = string.Empty;
             txtBoxDocument.Text = string.Empty;
 
@@ -1321,7 +1322,9 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 txtBoxCapitalGainsTax.Enabled = true;
                 txtBoxSolidarityTax.Enabled = true;
 
-                txtBoxBrokerage.Enabled = true;
+                txtBoxProvision.Enabled = true;
+                txtBoxBrokerFee.Enabled = true;
+                txtBoxTraderPlaceFee.Enabled = true;
                 txtBoxReduction.Enabled = true;
 
                 txtBoxDocument.Enabled = true;
@@ -1344,7 +1347,9 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 txtBoxCapitalGainsTax.Enabled = false;
                 txtBoxSolidarityTax.Enabled = false;
 
-                txtBoxBrokerage.Enabled = false;
+                txtBoxProvision.Enabled = false;
+                txtBoxBrokerFee.Enabled = false;
+                txtBoxTraderPlaceFee.Enabled = false;
                 txtBoxReduction.Enabled = false;
 
                 txtBoxDocument.Enabled = false;
@@ -1353,13 +1358,29 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 btnAddSave.Enabled = false;
             }
 
-            // TODO Renaming of the buttons and so on
+            // Enable button(s)
+            btnAddSave.Text = 
+                Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Buttons/Add", LanguageName);
+            btnAddSave.Image = Resources.button_add_24;
+
+            // Disable button(s)
+            btnDelete.Enabled = false;
+
+            // Rename group box
+            grpBoxAdd.Text =
+                Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Add_Caption", LanguageName);
+
+            // Deselect rows
+            DeselectRowsOfDataGridViews(null);
+
+            // Reset stored DataGridView instance
+            SelectedDataGridView = null;
 
             // Select overview tab
             if (tabCtrlSales.TabPages.Count > 0)
                 tabCtrlSales.SelectTab(0);
 
-            txtBoxVolume.Focus();
+            txtBoxOrderNumber.Focus();
 
             FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
         }
@@ -1432,6 +1453,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         #endregion Date Time
 
         #region TextBoxes
+
         /// <summary>
         /// This function updates the model if the text has changed
         /// </summary>
@@ -1933,6 +1955,11 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 // Disable controls
                 Enabled = false;
 
+                // Reset status strip
+                toolStripStatusLabelMessageSaleEdit.Text = string.Empty;
+                toolStripStatusLabelMessageSaleDocumentParsing.Text = string.Empty;
+                toolStripProgressBarSaleDocumentParsing.Visible = false;
+
                 if (btnAddSave.Text == Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", LanguageName))
                 {
                     AddSale = true;
@@ -1942,7 +1969,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 }
                 else
                 {
-                    AddSale = true;
+                    AddSale = false;
                     UpdateSale = true;
 
                     EditSaleEventHandler?.Invoke(this, null);
@@ -1978,22 +2005,49 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 // Disable controls
                 Enabled = false;
 
+                // Reset status strip
                 toolStripStatusLabelMessageSaleEdit.Text = string.Empty;
+                toolStripStatusLabelMessageSaleDocumentParsing.Text = string.Empty;
+                toolStripProgressBarSaleDocumentParsing.Text = string.Empty;
 
-                var strCaption = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Info", LanguageName);
+                var strCaption = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Info",
+                    LanguageName);
                 var strMessage = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/SaleDelete",
                     LanguageName);
-                var strOk = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", LanguageName);
-                var strCancel = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", LanguageName);
+                var strOk = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok",
+                    LanguageName);
+                var strCancel = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel",
+                    LanguageName);
 
                 var messageBox = new OwnMessageBox(strCaption, strMessage, strOk, strCancel);
 
                 var dlgResult = messageBox.ShowDialog();
 
-                if (dlgResult == DialogResult.OK)
+                if (dlgResult != DialogResult.OK) return;
+
+                // Set flag to save the share object.
+                SaveFlag = true;
+
+                // Check if a row is selected
+                if (SelectedDataGridView != null && SelectedDataGridView.SelectedRows.Count == 1)
                 {
                     DeleteSaleEventHandler?.Invoke(this, null);
                 }
+
+                // Reset values
+                ResetInputValues();
+
+                // Enable button(s)
+                btnAddSave.Text =
+                    Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Buttons/Add", LanguageName);
+                btnAddSave.Image = Resources.button_add_24;
+
+                // Rename group box
+                grpBoxAdd.Text =
+                    Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Add_Caption", LanguageName);
+
+                // Refresh the dividend list
+                OnShowSales();
             }
             catch (Exception ex)
             {
@@ -2019,39 +2073,14 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         {
             try
             {
-                toolStripStatusLabelMessageSaleEdit.Text = string.Empty;
-
-                // Enable button(s)
-                btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Buttons/Add", LanguageName);
-                btnAddSave.Image = Resources.button_add_24;
-
                 // Reset add flag
                 AddSale = false;
 
                 // Reset update flag
                 UpdateSale = false;
 
-                // Disable button(s)
-                btnDelete.Enabled = false;
-
-                // Rename group box
-                grpBoxAdd.Text =
-                    Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Add_Caption", LanguageName);
-
-                // Deselect rows
-                DeselectRowsOfDataGridViews(null);
-
-                // Reset stored DataGridView instance
-                SelectedDataGridView = null;
-
-                // Select overview tab
-                if (
-                    tabCtrlSales.TabPages.ContainsKey(
-                        Language.GetLanguageTextByXPath(
-                            @"/AddEditFormSale/GrpBoxSale/TabCtrl/TabPgOverview/Overview", LanguageName)))
-                    tabCtrlSales.SelectTab(
-                        Language.GetLanguageTextByXPath(
-                            @"/AddEditFormSale/GrpBoxSale/TabCtrl/TabPgOverview/Overview", LanguageName));
+                // Reset values
+                ResetInputValues();
             }
             catch (Exception ex)
             {
@@ -2123,7 +2152,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
         /// <summary>
         /// This function paints the sale list of the share
         /// </summary>
-        private void OnSalesShow()
+        private void OnShowSales()
         {
             try
             {
@@ -2762,12 +2791,15 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                     {
                         dateTimePickerDate.Value = Convert.ToDateTime(selectedSaleObject.Date);
                         dateTimePickerTime.Value = Convert.ToDateTime(selectedSaleObject.Date);
+                        txtBoxOrderNumber.Text = selectedSaleObject.OrderNumberAsStr;
                         txtBoxVolume.Text = selectedSaleObject.VolumeAsStr;
                         txtBoxSalePrice.Text = selectedSaleObject.SalePriceAsStr;
                         txtBoxTaxAtSource.Text = selectedSaleObject.TaxAtSourceAsStr;
                         txtBoxCapitalGainsTax.Text = selectedSaleObject.CapitalGainsTaxAsStr;
                         txtBoxSolidarityTax.Text = selectedSaleObject.SolidarityTaxAsStr;
-                        txtBoxBrokerage.Text = selectedSaleObject.BrokerageAsStr;
+                        txtBoxProvision.Text = selectedSaleObject.ProvisionAsStr;
+                        txtBoxBrokerFee.Text = selectedSaleObject.BrokerFeeAsStr;
+                        txtBoxTraderPlaceFee.Text = selectedSaleObject.TraderPlaceFeeAsStr;
                         txtBoxReduction.Text = selectedSaleObject.ReductionAsStr;
                         txtBoxProfitLoss.Text = selectedSaleObject.ProfitLossAsStr;
                         txtBoxPayout.Text = selectedSaleObject.PayoutAsStr;
@@ -2784,19 +2816,22 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         txtBoxDocument.Text = curItem[0].Cells[5].Value.ToString();
                     }
 
-                    if (ShareObjectFinalValue.AllSaleEntries.IsDateLastDate(SelectedDate))
+                    if (ShareObjectFinalValue.AllSaleEntries.IsLastSale(SelectedGuid))
                     {
                         btnDelete.Enabled = ShareObjectFinalValue.AllSaleEntries.GetAllSalesOfTheShare().Count > 1;
 
                         // Enable text box(es)
                         dateTimePickerDate.Enabled = true;
                         dateTimePickerTime.Enabled = true;
+                        txtBoxOrderNumber.Enabled = true;
                         txtBoxVolume.Enabled = true;
                         txtBoxSalePrice.Enabled = true;
                         txtBoxTaxAtSource.Enabled = true;
                         txtBoxCapitalGainsTax.Enabled = true;
                         txtBoxSolidarityTax.Enabled = true;
-                        txtBoxBrokerage.Enabled = true;
+                        txtBoxProvision.Enabled = true;
+                        txtBoxBrokerFee.Enabled = true;
+                        txtBoxTraderPlaceFee.Enabled = true;
                         txtBoxReduction.Enabled = true;
                     }
                     else
@@ -2806,12 +2841,15 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         // Disable TextBox(es)
                         dateTimePickerDate.Enabled = false;
                         dateTimePickerTime.Enabled = false;
+                        txtBoxOrderNumber.Enabled = false;
                         txtBoxVolume.Enabled = false;
                         txtBoxSalePrice.Enabled = false;
                         txtBoxTaxAtSource.Enabled = false;
                         txtBoxCapitalGainsTax.Enabled = false;
                         txtBoxSolidarityTax.Enabled = false;
-                        txtBoxBrokerage.Enabled = false;
+                        txtBoxProvision.Enabled = false;
+                        txtBoxBrokerFee.Enabled = false;
+                        txtBoxTraderPlaceFee.Enabled = false;
                         txtBoxReduction.Enabled = false;
                     }
 
@@ -2855,7 +2893,10 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                     txtBoxTaxAtSource.Enabled = true;
                     txtBoxCapitalGainsTax.Enabled = true;
                     txtBoxSolidarityTax.Enabled = true;
-                    txtBoxBrokerage.Enabled = true;
+                    txtBoxProvision.Enabled = true;
+                    txtBoxBrokerFee.Enabled = true;
+                    txtBoxTraderPlaceFee.Enabled = true;
+                    txtBoxReduction.Enabled = true;
 
                     // Reset update flag
                     UpdateSale = false;
@@ -2946,15 +2987,13 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                         if (messageBox.ShowDialog() == DialogResult.OK)
                         {
                             // Remove sale object and add it with no document
-                            if (ShareObjectFinalValue.RemoveSale(temp.Guid, temp.Date) &&
-                                ShareObjectFinalValue.AddSale(strGuid, temp.Date, temp.OrderNumber, temp.Volume,
-                                    temp.SalePrice, temp.SaleBuyDetails, temp.TaxAtSource, temp.CapitalGainsTax,
-                                    temp.SolidarityTax, temp.Brokerage, temp.Reduction))
+                            if (ShareObjectFinalValue.SetSaleDocument(strGuid, temp.Date, string.Empty) &&
+                                ShareObjectMarketValue.SetSaleDocument(strGuid, temp.Date, string.Empty))
                             {
                                 // Set flag to save the share object.
                                 SaveFlag = true;
 
-                                OnSalesShow();
+                                OnShowSales();
 
                                 // Add status message
                                 Helper.AddStatusMessage(toolStripStatusLabelMessageSaleEdit,

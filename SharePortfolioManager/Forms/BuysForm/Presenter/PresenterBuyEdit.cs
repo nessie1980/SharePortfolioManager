@@ -141,7 +141,8 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
 
                     // Add brokerage
                     bErrorFlag = !_model.ShareObjectFinalValue.AddBrokerage(strGuidBrokerage, true, false, strGuidBuy,
-                        strDateTime, _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec,
+                        strDateTime,
+                        _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec,
                         _model.Document);
 
                     // Get brokerage object
@@ -203,7 +204,6 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
 
                 if (bFlagBrokerageEdit)
                 {
-
                     if (_model.ShareObjectFinalValue.RemoveBuy(_model.SelectedGuid, _model.SelectedDate) &&
                     _model.ShareObjectFinalValue.AddBuy(_model.SelectedGuid, _model.OrderNumber, strDateTime, _model.VolumeDec, _model.VolumeSoldDec, _model.SharePriceDec,
                         brokerage, _model.Document) &&
@@ -493,7 +493,7 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
                     _model.Document = @"";
                 else if(_model.Document != @"" && _model.Document != @"-" && !Directory.Exists(Path.GetDirectoryName(_model.Document)))
                 {
-                    _model.ErrorCode = BuyErrorCode.DocumentDirectoryDoesNotExits;
+                    _model.ErrorCode = BuyErrorCode.DocumentDirectoryDoesNotExists;
                     bErrorFlag = true;
                 }
                 else if(_model.Document != @"" && _model.Document != @"-" && !File.Exists(_model.Document) && bErrorFlag == false)

@@ -26,6 +26,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using SharePortfolioManager.Classes.Costs;
 
 namespace SharePortfolioManager.Classes.Sales
 {
@@ -64,15 +65,44 @@ namespace SharePortfolioManager.Classes.Sales
         /// </summary>
         private decimal _taxSum;
 
-        /// <summary>
-        /// Stores the brokerage of the sale
-        /// </summary>
-        private decimal _brokerage = -1;
+        #region Brokerage values
 
         /// <summary>
-        /// Stores the reduction of the sale
+        /// Stores the Guid of the brokerage value of the brokerage object
         /// </summary>
-        private decimal _reduction = -1;
+        private string _brokerageGuid = @"";
+
+        /// <summary>
+        /// Stores the provision value of the buy
+        /// </summary>
+        private decimal _provision;
+
+        /// <summary>
+        /// Stores the broker fee value of the buy
+        /// </summary>
+        private decimal _brokerFee;
+
+        /// <summary>
+        /// Stores the trader place fee value of the buy
+        /// </summary>
+        private decimal _traderPlaceFee;
+
+        /// <summary>
+        /// Stores the reduction value of the buy
+        /// </summary>
+        private decimal _reduction;
+
+        /// <summary>
+        /// Stores the brokerage value of the buy
+        /// </summary>
+        private decimal _brokerage;
+
+        /// <summary>
+        /// Stores the brokerage minus reduction value of the buy
+        /// </summary>
+        private decimal _brokerageWithReduction;
+
+        #endregion Brokerage values
 
         #endregion Variables
 
@@ -201,21 +231,64 @@ namespace SharePortfolioManager.Classes.Sales
             }
         }
 
+        #region Brokerage values
+
         [Browsable(false)]
-        public decimal Brokerage
+        public string BrokerageGuid
         {
-            get => _brokerage;
+            get => _brokerageGuid;
             internal set
             {
-                _brokerage = value;
-
-                // Calculate profit / loss and payout
-                CalculateProfitLossAndPayout();
+                if (_brokerageGuid.Equals(value))
+                    return;
+                _brokerageGuid = value;
             }
         }
 
         [Browsable(false)]
-        public string BrokerageAsStr => Helper.FormatDecimal(_brokerage, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
+        public decimal Provision
+        {
+            get => _provision;
+            internal set
+            {
+                if (_provision.Equals(value))
+                    return;
+                _provision = value;
+            }
+        }
+
+        [Browsable(false)]
+        public string ProvisionAsStr => Helper.FormatDecimal(Provision, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
+
+        [Browsable(false)]
+        public decimal BrokerFee
+        {
+            get => _brokerFee;
+            internal set
+            {
+                if (_brokerFee.Equals(value))
+                    return;
+                _brokerFee = value;
+            }
+        }
+
+        [Browsable(false)]
+        public string BrokerFeeAsStr => Helper.FormatDecimal(BrokerFee, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
+
+        [Browsable(false)]
+        public decimal TraderPlaceFee
+        {
+            get => _traderPlaceFee;
+            internal set
+            {
+                if (_traderPlaceFee.Equals(value))
+                    return;
+                _traderPlaceFee = value;
+            }
+        }
+
+        [Browsable(false)]
+        public string TraderPlaceFeeAsStr => Helper.FormatDecimal(TraderPlaceFee, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
 
         [Browsable(false)]
         public decimal Reduction
@@ -223,15 +296,46 @@ namespace SharePortfolioManager.Classes.Sales
             get => _reduction;
             internal set
             {
+                if (_reduction.Equals(value))
+                    return;
                 _reduction = value;
-
-                // Calculate profit / loss and payout
-                CalculateProfitLossAndPayout();
             }
         }
 
         [Browsable(false)]
-        public string ReductionAsStr => Helper.FormatDecimal(_reduction, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
+        public string ReductionAsStr => Helper.FormatDecimal(Reduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
+
+        [Browsable(false)]
+        public decimal Brokerage
+        {
+            get => _brokerage;
+            internal set
+            {
+                if (_brokerage.Equals(value))
+                    return;
+                _brokerage = value;
+            }
+        }
+
+        [Browsable(false)]
+        public string BrokerageAsStr => Helper.FormatDecimal(Brokerage, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
+
+        [Browsable(false)]
+        public decimal BrokerageWithReduction
+        {
+            get => _brokerageWithReduction;
+            internal set
+            {
+                if (_brokerageWithReduction.Equals(value))
+                    return;
+                _brokerageWithReduction = value;
+            }
+        }
+
+        [Browsable(false)]
+        public string BrokerageWithReductionAsStr => Helper.FormatDecimal(BrokerageWithReduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
+
+        #endregion Brokerage values
 
         [Browsable(false)]
         public decimal PurchaseValue { get; internal set; } = -1;
@@ -266,26 +370,32 @@ namespace SharePortfolioManager.Classes.Sales
 
         [Browsable(true)]
         [DisplayName(@"Guid")]
+        // ReSharper disable once UnusedMember.Global
         public string DgvGuid => Guid;
 
         [Browsable(true)]
         [DisplayName(@"Date")]
+        // ReSharper disable once UnusedMember.Global
         public string DgvDateAsStr => DateAsStr;
 
         [Browsable(true)]
         [DisplayName(@"Purchase")]
+        // ReSharper disable once UnusedMember.Global
         public string DgvPurchaseValueAsStr => PurchaseValueAsStr;
 
         [Browsable(true)]
         [DisplayName(@"ProfitLoss")]
+        // ReSharper disable once UnusedMember.Global
         public string DgvProfitLossAsStr => ProfitLossAsStr;
 
         [Browsable(true)]
         [DisplayName(@"Payout")]
+        // ReSharper disable once UnusedMember.Global
         public string DgvPayoutAsStr => PayoutAsStr;
 
         [Browsable(true)]
         [DisplayName(@"Document")]
+        // ReSharper disable once UnusedMember.Global
         public Image DocumentGrid => Helper.GetImageForFile(Document);
 
         #endregion Data grid view properties
@@ -305,16 +415,15 @@ namespace SharePortfolioManager.Classes.Sales
         /// <param name="decTaxAtSource">Tax at source of the sale</param>
         /// <param name="decCapitalGainsTax">Capital gains tax of the sale</param>
         /// <param name="decSolidarityTax">Solidarity tax of the sale</param>
-        /// <param name="decBrokerage">Brokerage of the sale</param>
-        /// <param name="decReduction">Reduction of the sale</param>
+        /// <param name="brokerageObject">Brokerage of the sale</param>
         /// <param name="strDoc">Document of the sale</param>
-        public SaleObject(CultureInfo cultureInfo, string strGuid, string strDate, string strOrderNumber, decimal decVolume, decimal decSalePrice, List<SaleBuyDetails> saleBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
-             decimal decSolidarityTax, decimal decBrokerage, decimal decReduction, string strDoc = "")
+        public SaleObject(CultureInfo cultureInfo, string strGuid, string strDate, string strOrderNumber, decimal decVolume, decimal decSalePrice, IEnumerable<SaleBuyDetails> saleBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
+             decimal decSolidarityTax, BrokerageReductionObject brokerageObject, string strDoc = "")
         {
             Guid = strGuid;
+            OrderNumber = strOrderNumber;
             SaleCultureInfo = cultureInfo;
             Date = strDate;
-            OrderNumber = strOrderNumber;
             Volume = decVolume;
 
             foreach (var saleBuyDetail in saleBuyDetails)
@@ -327,8 +436,19 @@ namespace SharePortfolioManager.Classes.Sales
             TaxAtSource = decTaxAtSource;
             CapitalGainsTax = decCapitalGainsTax;
             SolidarityTax = decSolidarityTax;
-            Brokerage = decBrokerage;
-            Reduction = decReduction;
+            if (brokerageObject != null)
+            {
+                BrokerageGuid = brokerageObject.Guid;
+                Provision = brokerageObject.ProvisionValue;
+                BrokerFee = brokerageObject.BrokerFeeValue;
+                TraderPlaceFee = brokerageObject.TraderPlaceFeeValue;
+                Reduction = brokerageObject.ReductionValue;
+            }
+            else
+            {
+                BrokerageGuid = @"";
+            }
+
             Document = strDoc;
 
 #if DEBUG_SALE
@@ -342,7 +462,9 @@ namespace SharePortfolioManager.Classes.Sales
             Console.WriteLine(@"TaxAtSource: {0}", TaxAtSource);
             Console.WriteLine(@"CapitalGainsTax: {0}", CapitalGainsTax);
             Console.WriteLine(@"SolidarityTax: {0}", SolidarityTax);
+            Console.WriteLine(@"Reduction: {0}", Reduction);
             Console.WriteLine(@"Brokerage: {0}", Brokerage);
+            Console.WriteLine(@"BrokerageReduction: {0}", Brokerage);
             Console.WriteLine(@"Document: {0}", Document);
             Console.WriteLine(@"");
 #endif

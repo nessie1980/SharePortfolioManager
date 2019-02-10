@@ -403,10 +403,7 @@ namespace SharePortfolioManager.Classes.Buys
 
             if (lastYearEntries.BuyListYear.Count <= 0) return false;
 
-            if (lastYearEntries.BuyListYear.Last().Guid == strGuid)
-                return true;
-
-            return false;
+            return lastYearEntries.BuyListYear.Last().Guid == strGuid;
         }
 
         /// <summary>

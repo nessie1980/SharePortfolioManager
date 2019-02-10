@@ -514,20 +514,21 @@ namespace SharePortfolioManager
                                                 if (nodeList != null &&
                                                     nodeList.Attributes.Count ==
                                                     ShareObject.SaleAttrCount)
-
+                                                {
                                                     // Check if the sales values are correct
                                                     // and if the buy values are correct
-                                                    if (nodeList != null &&                                                             // Sale
+                                                    if (nodeList != null && // Sale
                                                         nodeList.ChildNodes.Count == ShareObject.SaleUsedBuysCount &&
-                                                        nodeList.ChildNodes[0].ChildNodes != null &&                                    // Used buys
+                                                        nodeList.ChildNodes[0].ChildNodes != null && // Used buys
                                                         nodeList.ChildNodes[0].ChildNodes.Count > 0
-                                                        )
+                                                    )
                                                     {
                                                         var usedBuyDetails =
                                                             new List<SaleBuyDetails>();
 
                                                         // Check if the used buy entries have the correct attributes
-                                                        foreach (XmlElement buyAttributes in nodeList.ChildNodes[0].ChildNodes)
+                                                        foreach (XmlElement buyAttributes in nodeList.ChildNodes[0]
+                                                            .ChildNodes)
                                                         {
                                                             // Check if the used buy values are correct
                                                             if (buyAttributes.Attributes.Count !=
@@ -553,20 +554,21 @@ namespace SharePortfolioManager
                                                                     usedBuyDetails.Add(new SaleBuyDetails(
                                                                         ShareObjectListMarketValue[
                                                                                 ShareObjectListMarketValue.Count - 1]
-                                                                            .CultureInfo,       // CultureInfo
+                                                                            .CultureInfo, // CultureInfo
                                                                         buyAttributes.Attributes[
                                                                                 ShareObject.SaleBuyDateAttrName]
-                                                                                .Value,           // Volume of the used buy
+                                                                            .Value, // Volume of the used buy
                                                                         Convert.ToDecimal(
                                                                             buyAttributes.Attributes[
                                                                                     ShareObject.SaleBuyVolumeAttrName]
-                                                                             .Value),           // Volume of the used buy
+                                                                                .Value), // Volume of the used buy
                                                                         Convert.ToDecimal(
                                                                             buyAttributes.Attributes[
                                                                                     ShareObject.SaleBuyPriceAttrName]
-                                                                             .Value),           // Buy price of the used buy
-                                                                        buyAttributes.Attributes[ShareObject.SaleBuyGuidAttrName]
-                                                                             .Value             // Guid of the used buy
+                                                                                .Value), // Buy price of the used buy
+                                                                        buyAttributes
+                                                                            .Attributes[ShareObject.SaleBuyGuidAttrName]
+                                                                            .Value // Guid of the used buy
                                                                     ));
                                                                     continue;
                                                                 }
@@ -577,92 +579,87 @@ namespace SharePortfolioManager
                                                         }
 
                                                         if (!bLoadPortfolio) continue;
+
+                                                        // Get brokerage object
+                                                        var brokerage =
+                                                            ShareObjectListFinalValue[
+                                                                    ShareObjectListFinalValue.Count - 1]
+                                                                .AllBrokerageEntries
+                                                                .GetBrokerageObjectByGuid(
+                                                                    nodeList.Attributes[
+                                                                        ShareObject.SaleBrokerageGuidAttrName].Value,
+                                                                    nodeList.Attributes[ShareObject.SaleDateAttrName]
+                                                                        .Value
+                                                                );
+
                                                         if (!ShareObjectListMarketValue[
                                                             ShareObjectListMarketValue.Count - 1].AddSale(
-                                                            nodeList.Attributes[ShareObject.SaleGuidAttrName].Value,    // Guid
+                                                            nodeList.Attributes[ShareObject.SaleGuidAttrName]
+                                                                .Value, // Guid
                                                             nodeList.Attributes[ShareObject.SaleDateAttrName]
-                                                                .Value,                                                 // Date
-                                                            nodeList.Attributes[ShareObject.SaleOrderNumberAttrName]    // Order number
-                                                                .Value,                                                 // Date
+                                                                .Value, // Date
+                                                            nodeList
+                                                                .Attributes[
+                                                                    ShareObject.SaleOrderNumberAttrName] // Order number
+                                                                .Value, // Date
                                                             Convert.ToDecimal(
                                                                 nodeList.Attributes[ShareObject.SaleVolumeAttrName]
-                                                                    .Value),                                            // Volume
+                                                                    .Value), // Volume
                                                             Convert.ToDecimal(
                                                                 nodeList.Attributes[
                                                                         ShareObject.SaleSalePriceAttrName]
-                                                                    .Value),                                            // Sale price of a share
-                                                            usedBuyDetails,                                             // Buy which are used for this sale
+                                                                    .Value), // Sale price of a share
+                                                            usedBuyDetails, // Buy which are used for this sale
                                                             Convert.ToDecimal(
                                                                 nodeList.Attributes[
                                                                         ShareObject.SaleTaxAtSourceAttrName]
-                                                                    .Value),                                            // Tax at source
+                                                                    .Value), // Tax at source
                                                             Convert.ToDecimal(
                                                                 nodeList.Attributes[
                                                                         ShareObject.SaleCapitalGainsTaxAttrName]
-                                                                    .Value),                                            // Capital gains tax
+                                                                    .Value), // Capital gains tax
                                                             Convert.ToDecimal(
                                                                 nodeList.Attributes[
                                                                         ShareObject.SaleSolidarityTaxAttrName]
-                                                                    .Value),                                            // Solidarity tax
-                                                            GetBrokerageOfShareObjectBySaleBuyGuidDate(                 // Brokerage
-                                                                nodeElement.Attributes[ShareObject.GeneralWknAttrName].InnerText,
-                                                                nodeList.Attributes[ShareObject.BrokerageGuidAttrName].InnerText,
-                                                                nodeList.Attributes[ShareObject.BuyDateAttrName]
-                                                                    .Value,
-                                                                true,
-                                                                false
-                                                            ),
-                                                            Convert.ToDecimal(
-                                                                nodeList.Attributes[
-                                                                        ShareObject.SaleReductionAttrName]
-                                                                    .Value),                                            // Reduction
+                                                                    .Value), // Solidarity tax
                                                             nodeList.Attributes[ShareObject.SaleDocumentAttrName]
-                                                                .Value))                                                // Document
+                                                                .Value)) // Document
                                                             bLoadPortfolio = false;
 
                                                         if (!ShareObjectListFinalValue[
                                                             ShareObjectListFinalValue.Count - 1].AddSale(
-                                                            nodeList.Attributes[ShareObject.SaleGuidAttrName].Value,    // Guid
+                                                            nodeList.Attributes[ShareObject.SaleGuidAttrName]
+                                                                .Value, // Guid
                                                             nodeList.Attributes[ShareObject.SaleDateAttrName]
-                                                                .Value,                                                 // Date
+                                                                .Value, // Date
                                                             nodeList.Attributes[ShareObject.SaleOrderNumberAttrName]
-                                                                .Value,                                                 // Order number
+                                                                .Value, // Order number
                                                             Convert.ToDecimal(
                                                                 nodeList.Attributes[ShareObject.SaleVolumeAttrName]
-                                                                    .Value),                                            // Volume
+                                                                    .Value), // Volume
                                                             Convert.ToDecimal(
                                                                 nodeList.Attributes[
                                                                         ShareObject.SaleSalePriceAttrName]
-                                                                    .Value),                                            // Sale price of a share
-                                                            usedBuyDetails,                                             // Buy which are used for this sale
+                                                                    .Value), // Sale price of a share
+                                                            usedBuyDetails, // Buy which are used for this sale
                                                             Convert.ToDecimal(
                                                                 nodeList.Attributes[
                                                                         ShareObject.SaleTaxAtSourceAttrName]
-                                                                    .Value),                                            // Tax at source
+                                                                    .Value), // Tax at source
                                                             Convert.ToDecimal(
                                                                 nodeList.Attributes[
                                                                         ShareObject.SaleCapitalGainsTaxAttrName]
-                                                                    .Value),                                            // Capital gains tax
+                                                                    .Value), // Capital gains tax
                                                             Convert.ToDecimal(
                                                                 nodeList.Attributes[
                                                                         ShareObject.SaleSolidarityTaxAttrName]
-                                                                    .Value),                                            // Solidarity tax
-                                                            GetBrokerageOfShareObjectBySaleBuyGuidDate(                 // Brokerage
-                                                                nodeElement.Attributes[ShareObject.GeneralWknAttrName].InnerText,
-                                                                nodeList.Attributes[ShareObject.BrokerageGuidAttrName].InnerText,
-                                                                nodeList.Attributes[ShareObject.BuyDateAttrName]
-                                                                    .Value,
-                                                                true,
-                                                                false
-                                                            ),
-                                                            Convert.ToDecimal(
-                                                                nodeList.Attributes[
-                                                                        ShareObject.SaleReductionAttrName]
-                                                                    .Value),                                            // Reduction
+                                                                    .Value), // Solidarity tax
+                                                            brokerage, // Brokerage
                                                             nodeList.Attributes[ShareObject.SaleDocumentAttrName]
-                                                                .Value))                                                // Document
+                                                                .Value)) // Document
                                                             bLoadPortfolio = false;
                                                     }
+                                                }
                                                 else
                                                     bLoadPortfolio = false;
                                             }

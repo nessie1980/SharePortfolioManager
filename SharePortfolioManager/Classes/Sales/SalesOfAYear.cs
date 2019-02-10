@@ -20,6 +20,7 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+using SharePortfolioManager.Classes.Costs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -108,12 +109,11 @@ namespace SharePortfolioManager.Classes.Sales
         /// <param name="decTaxAtSource">Tax at source of the sale</param>
         /// <param name="decCapitalGainsTax">Capital gains tax of the sale</param>
         /// <param name="decSolidarityTax">Solidarity tax of the sale</param>
-        /// <param name="decBrokerage">Brokerage of the sale</param>
-        /// <param name="decReduction">Reduction of the sale</param>
+        /// <param name="brokerageObject">Brokerage of the sale</param>
         /// <param name="strDoc">Document of the sale</param>
         /// <returns>Flag if the add was successful</returns>
         public bool AddSaleObject(CultureInfo cultureInfo,  string strGuid, string strDate, string strOrderNumber, decimal decVolume, decimal decSalePrice, List<SaleBuyDetails> usedBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
-             decimal decSolidarityTax, decimal decBrokerage, decimal decReduction, string strDoc = "")
+             decimal decSolidarityTax, BrokerageReductionObject brokerageObject, string strDoc = "")
         {
 #if DEBUG_SALE
             Console.WriteLine(@"AddSaleObject");
@@ -124,7 +124,7 @@ namespace SharePortfolioManager.Classes.Sales
                 SaleCultureInfo = cultureInfo;
 
                 // Create new SaleObject
-                var addObject = new SaleObject(cultureInfo, strGuid, strDate, strOrderNumber, decVolume, decSalePrice, usedBuyDetails, decTaxAtSource, decCapitalGainsTax, decSolidarityTax, decBrokerage, decReduction, strDoc);
+                var addObject = new SaleObject(cultureInfo, strGuid, strDate, strOrderNumber, decVolume, decSalePrice, usedBuyDetails, decTaxAtSource, decCapitalGainsTax, decSolidarityTax, brokerageObject, strDoc);
 
                 var addProfitLossObject = new ProfitLossObject(cultureInfo, strGuid, strDate, addObject.ProfitLoss, strDoc);
 
@@ -252,6 +252,37 @@ namespace SharePortfolioManager.Classes.Sales
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// This function sets the document the sale object with the given Guid
+        /// </summary>
+        /// <param name="strGuid">Guid of the sale object which should be removed</param>
+        /// <param name="strDocument">Document of the sale object</param>
+        /// <returns>Flag if the set was successfully</returns>
+        public bool SetDocumentSaleObject(string strGuid, string strDocument)
+        {
+#if DEBUG_BUY
+            Console.WriteLine(@"SetDocumentSaleObject");
+#endif
+            try
+            {
+                // Search for the buy object
+                foreach (var saleObject in SaleListYear)
+                {
+                    if (saleObject.Guid != strGuid) continue;
+
+                    saleObject.Document = strDocument;
+
+                    return true;
+                }
+
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         #endregion Methods

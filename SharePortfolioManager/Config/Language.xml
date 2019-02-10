@@ -449,8 +449,8 @@
 				<AddFailed text="Buy add has been failed!" />
 				<AddSaveFailed text="An error occurred. Adding share failed!" />
 				<ChoseDocumentFailed text="An error occurred. Failed to select file!" />
-				<DirectoryDoesNotExist text="The specified directory does not exist!" />
-				<FileDoesNotExist text="The specified file does not exist!" />
+				<DocumentDirectoryDoesNotExists text="The specified directory does not exist!" />
+				<DocumentFileDoesNotExists text="The specified file does not exist!" />
 			</Errors>
 			<ParsingErrors>
 				<ParsingBankIdentifierFailed text="Bank identifier not found!" />
@@ -641,8 +641,8 @@
 				<CancelFailure text="An error occurred while the cancel should be done!" />
 				<CheckInputFailure text="An error occurred while the input check should be done!" />
 				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
-				<DirectoryDoesNotExist text="The directory does not exist!" />
-				<FileDoesNotExist text="The given file does not exist!" />
+				<DocumentDirectoryDoesNotExists text="The directory does not exist!" />
+				<DocumentFileDoesNotExists text="The given file does not exist!" />
 				<DocumentShowFailed text="Show of the document failed!" />
 			</Errors>
 			<ParsingErrors>
@@ -752,7 +752,7 @@
 				<VolumeEmpty text="Please insert a volume." />
 				<VolumeWrongFormat text="Format for the value 'Volume' is invalid." />
 				<VolumeWrongValue text="The value for 'Volume' must be higher than '0'." />
-				<VolumeMaxValue_1 text="The value for 'Volume' is to high. The maximum value for 'Volume' is '" />
+				<VolumeMaxValue_1 text="The value for 'Volume' is too high. The maximum value for 'Volume' is '" />
 				<VolumeMaxValue_2 text="'!" />
 				<SalePriceEmpty text="Please insert a sale price." />
 				<SalePriceWrongFormat text="Format for the value 'Sale price' is invalid." />
@@ -780,8 +780,8 @@
 				<CancelFailure text="An error occurred while the cancel should be done!" />
 				<CheckInputFailure text="An error occurred while the input check should be done!" />
 				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
-				<DirectoryDoesNotExist text="The directory does not exist!" />
-				<FileDoesNotExist text="The given file does not exist!" />
+				<DocumentDirectoryDoesNotExists text="The directory does not exist!" />
+				<DocumentFileDoesNotExists text="The given file does not exist!" />
 				<DocumentShowFailed text="Show of the document failed!" />
 			</Errors>
 			<ParsingErrors>
@@ -904,7 +904,7 @@
 				<VolumeEmpty text="Please insert a volume." />
 				<VolumeWrongFormat text="Format for the value 'Volume' is invalid." />
 				<VolumeWrongValue text="The value for 'Volume' must be higher than '0'." />
-				<VolumeMaxValue_1 text="The value for 'Volume' is to high. The maximum value for 'Volume' is '" />
+				<VolumeMaxValue_1 text="The value for 'Volume' is too high. The maximum value for 'Volume' is '" />
 				<VolumeMaxValue_2 text="'!" />
 				<AddFailed text="Dividend add has been failed!" />
 				<EditFailed text="Dividend changes save has been failed!" />
@@ -912,8 +912,8 @@
 				<CancelFailure text="An error occurred while the cancel should be done!" />
 				<CheckInputFailure text="An error occurred while the input check should be done!" />
 				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
-				<DirectoryDoesNotExist text="The directory does not exist!" />
-				<FileDoesNotExist text="The given file does not exist!" />
+				<DocumentDirectoryDoesNotExists text="The directory does not exist!" />
+				<DocumentFileDoesNotExists text="The given file does not exist!" />
 				<DocumentShowFailed text="Show of the document failed!" />
 			</Errors>
 		</AddEditFormDividend>
@@ -1006,8 +1006,8 @@
 				<DeleteFailed text="Delete of the brokerage entry failed!" />
 				<CancelFailure text="An error occurred while the cancel should be done!" />
 				<CheckInputFailure text="An error occurred while the input check should be done!" />
-				<DirectoryDoesNotExist text="The directory does not exist!" />
-				<FileDoesNotExist text="The given file does not exist!" />
+				<DocumentDirectoryDoesNotExists text="The directory does not exist!" />
+				<DocumentFileDoesNotExists text="The given file does not exist!" />
 				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
 				<DocumentShowFailed text="Show of the document failed!" />
 			</Errors>
@@ -1599,8 +1599,8 @@
 				<AddFailed text="Hinzufügen des Kaufs ist fehlgeschlagen!" />
 				<AddSaveFailed text="Es trat ein Fehler auf. Hinzufügen der Aktien ist fehlgeschlagen!" />
 				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
-				<DirectoryDoesNotExist text="Das angegebene Verzeichnis existiert nicht!" />
-				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />				
+				<DocumentDirectoryDoesNotExists text="Das angegebene Verzeichnis existiert nicht!" />
+				<DocumentFileDoesNotExists text="Die angegebene Datei existiert nicht!" />				
 			</Errors>
 			<ParsingErrors>
 				<ParsingBankIdentifierFailed text="Banken-Typ nicht gefunden!" />
@@ -1791,8 +1791,8 @@
 				<CancelFailure text="Es ist ein Fehler aufgetreten beim Abbrechen!" />
 				<CheckInputFailure text="Es ist ein Fehler aufgetreten beim der Eingabenprüfung!" />
 				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
-				<DirectoryDoesNotExist text="Das angegebene Verzeichnis existiert nicht!" />
-				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
+				<DocumentDirectoryDoesNotExists text="Das angegebene Verzeichnis existiert nicht!" />
+				<DocumentFileDoesNotExists text="Die angegebene Datei existiert nicht!" />
 				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
 			</Errors>
 			<ParsingErrors>
@@ -1928,8 +1928,8 @@
 				<CancelFailure text="Es ist ein Fehler aufgetreten beim Abbrechen!" />
 				<CheckInputFailure text="Es ist ein Fehler aufgetreten beim der Eingabenprüfung!" />
 				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
-				<DirectoryDoesNotExist text="Das angegebene Verzeichnis existiert nicht!" />
-				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
+				<DocumentDirectoryDoesNotExists text="Das angegebene Verzeichnis existiert nicht!" />
+				<DocumentFileDoesNotExists text="Die angegebene Datei existiert nicht!" />
 				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
 			</Errors>
 			<ParsingErrors>
@@ -2060,8 +2060,8 @@
 				<CancelFailure text="Es ist ein Fehler aufgetreten beim Abbrechen!" />
 				<CheckInputFailure text="Es ist ein Fehler aufgetreten beim der Eingabenprüfung!" />
 				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
-				<DirectoryDoesNotExist text="Das angegebene Verzeichnis existiert nicht!" />
-				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
+				<DocumentDirectoryDoesNotExists text="Das angegebene Verzeichnis existiert nicht!" />
+				<DocumentFileDoesNotExists text="Die angegebene Datei existiert nicht!" />
 				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
 			</Errors>
 		</AddEditFormDividend>
@@ -2154,8 +2154,8 @@
 				<CancelFailure text="Es ist ein Fehler aufgetreten beim Abbrechen!" />
 				<CheckInputFailure text="Es ist ein Fehler aufgetreten beim der Eingabenprüfung!" />
 				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
-				<DirectoryDoesNotExist text="Das angegebene Verzeichnis existiert nicht!" />
-				<FileDoesNotExist text="Die angegebene Datei existiert nicht!" />
+				<DocumentDirectoryDoesNotExists text="Das angegebene Verzeichnis existiert nicht!" />
+				<DocumentFileDoesNotExists text="Die angegebene Datei existiert nicht!" />
 				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
 			</Errors>
 		</AddEditFormBrokerage>

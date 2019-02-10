@@ -229,6 +229,7 @@ namespace SharePortfolioManager
                 return false;
             }
         }
+
         #endregion Methods
     }
 
