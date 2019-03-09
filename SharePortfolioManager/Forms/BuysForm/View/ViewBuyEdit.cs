@@ -2656,7 +2656,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 DocumentTypeParser = null;
                 DictionaryParsingResult = null;
 
-                Helper.RunProcess(".//Tools//pdftotext.exe", $"-simple \"{txtBoxDocument.Text}\" {ParsingDocumentFileName}");
+                Helper.RunProcess($"{Helper.PdfConverterApplication}", $"-simple \"{txtBoxDocument.Text}\" {ParsingDocumentFileName}");
 
                 // This text is added only once to the file.
                 if (File.Exists(ParsingDocumentFileName))

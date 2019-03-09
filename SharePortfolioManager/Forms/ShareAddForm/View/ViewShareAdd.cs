@@ -195,8 +195,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
         public Parser.Parser DocumentTypeParser;
 
-        public string ParsingDocumentFileName { get; } = @".//Tools//Parsing.txt";
-
         public string ParsingText { get; internal set; }
 
         public Dictionary<string, List<string>> DictionaryParsingResult;
@@ -1230,12 +1228,12 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 DocumentTypeParser = null;
                 DictionaryParsingResult = null;
 
-                Helper.RunProcess(".//Tools//pdftotext.exe", $"-simple \"{txtBoxDocument.Text}\" {ParsingDocumentFileName}");
+                Helper.RunProcess(Helper.PdfConverterApplication, $"-simple \"{txtBoxDocument.Text}\" {Helper.ParsingDocumentFileName}");
 
                 // This text is added only once to the file.
-                if (File.Exists(ParsingDocumentFileName))
+                if (File.Exists(Helper.ParsingDocumentFileName))
                 {
-                    ParsingText = File.ReadAllText(ParsingDocumentFileName, Encoding.Default);
+                    ParsingText = File.ReadAllText(Helper.ParsingDocumentFileName, Encoding.Default);
 
                     DocumentTypeParsing();
                 }
@@ -1256,11 +1254,12 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+//#if DEBUG               
+
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}\n\n{Helper.ParsingDocumentFileName}\n\n{ex.StackTrace}\n\n{ex.HelpLink}";
                 MessageBox.Show(message, @"Error 2", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-#endif
+//#endif
                 _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
             }
         }

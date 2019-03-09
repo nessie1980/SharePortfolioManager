@@ -22,6 +22,7 @@
 
 using System;
 using System.IO;
+using System.Windows.Forms;
 #if DEBUG
 using System.Windows.Forms;
 #endif

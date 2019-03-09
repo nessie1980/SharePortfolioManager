@@ -37,19 +37,20 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
     {
         bool UpdateView { get; set; }
         bool UpdateViewFormatted { get; set; }
-        bool UpdateSale { get; set; }
 
         SaleErrorCode ErrorCode { get; set; }
         string SelectedGuid { get; set; }
         string SelectedGuidLast { get; set; }
         string SelectedDate { get; set; }
 
-        bool ShowSales { get; set; }
         bool AddSale { get; set; }
+        bool UpdateSale { get; set; }
+        bool ShowSalesRunning { get; set; }
+        bool LoadSaleRunning { get; set; }
+        bool ResetRunning { get; set; }
 
         ShareObjectMarketValue ShareObjectMarketValue { get; set; }
         ShareObjectFinalValue ShareObjectFinalValue { get; set; }
-        ShareObjectFinalValue ShareObjectCalculation { get; set; }
 
         Logger Logger { get; set; }
         Language Language { get; set; }
@@ -137,7 +138,11 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
 
         public bool UpdateSale { get; set; }
 
-        public bool ShowSales { get; set; }
+        public bool ShowSalesRunning { get; set; }
+
+        public bool LoadSaleRunning { get; set; }
+
+        public bool ResetRunning { get; set; }
 
         public bool AddSale { get; set; }
 
@@ -152,8 +157,6 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
         public ShareObjectMarketValue ShareObjectMarketValue { get; set; }
 
         public ShareObjectFinalValue ShareObjectFinalValue { get; set; }
-
-        public ShareObjectFinalValue ShareObjectCalculation{ get; set; }
 
         public Logger Logger { get; set; }
 
@@ -319,8 +322,6 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
                 _profitLossDec = value;
 
                 ProfitLoss = _profitLossDec.ToString("G");
-
-                UpdateView = true;
             }
         }
 
@@ -629,8 +630,6 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
                 _payoutDec = value;
 
                 Payout = _payoutDec.ToString("G");
-
-                UpdateView = true;
             }
         }
 

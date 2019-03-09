@@ -353,14 +353,15 @@ namespace SharePortfolioManager.Classes.Sales
         /// This function checks if the sale with the given order number already exists
         /// </summary>
         /// <param name="strOrderNumber">Given order number</param>
+        /// <param name="strGuidSale">Guid of the current selected sale</param>
         /// <returns></returns>
-        public bool OrderNumberAlreadyExists(string strOrderNumber)
+        public bool OrderNumberAlreadyExists(string strOrderNumber, string strGuidSale)
         {
             foreach (var saleList in _allSalesOfTheShareDictionary.Values)
             {
                 foreach (var sale in saleList.SaleListYear)
                 {
-                    if (strOrderNumber == sale.OrderNumber)
+                    if (strOrderNumber == sale.OrderNumber && sale.Guid != strGuidSale)
                         return true;
                 }
             }

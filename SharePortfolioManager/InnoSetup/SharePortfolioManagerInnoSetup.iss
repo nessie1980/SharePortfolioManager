@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "SharePortfolioManager"
-#define MyAppVersion "0.1.1.1"
+#define MyAppVersion "0.1.0.0"
 #define MyAppPublisher "Thomas Barth"
 #define MyAppURL "https://github.com/nessie1980/SharePortfolioManager"
 #define MyAppExeName "SharePortfolioManager.exe"
@@ -19,8 +19,9 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={pf}\{#MyAppName}
+DefaultDirName={userpf}\{#MyAppName}
 DisableProgramGroupPage=yes
+PrivilegesRequired=lowest
 OutputDir=E:\Programmierung\GitHub\Repos\SharePortfolioManager\SharePortfolioManager\Installer
 OutputBaseFilename=SharePortfolioManagerInstaller_{#MyAppVersion}
 Compression=lzma
@@ -50,7 +51,7 @@ Source: "E:\Programmierung\GitHub\Repos\SharePortfolioManager\SharePortfolioMana
 Source: "E:\Programmierung\GitHub\Repos\SharePortfolioManager\SharePortfolioManager\Config\*"; DestDir: "{app}\Settings"; Components: main; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "E:\Programmierung\GitHub\Repos\SharePortfolioManager\SharePortfolioManager\DLLs\LanguageHandler.dll"; DestDir: "{app}"; Components: main; Flags: ignoreversion
 Source: "E:\Programmierung\GitHub\Repos\SharePortfolioManager\SharePortfolioManager\DLLs\Logger.dll"; DestDir: "{app}"; Components: main; Flags: ignoreversion
-Source: "E:\Programmierung\GitHub\Repos\SharePortfolioManager\SharePortfolioManager\DLLs\WebParser.dll"; DestDir: "{app}"; Components: main; Flags: ignoreversion
+Source: "E:\Programmierung\GitHub\Repos\SharePortfolioManager\SharePortfolioManager\DLLs\Parser.dll"; DestDir: "{app}"; Components: main; Flags: ignoreversion
 Source: "E:\Programmierung\GitHub\Repos\SharePortfolioManager\SharePortfolioManager\Tools\xpdf-tools-win-4.00\bin32\pdftotext.exe"; Components: tools; DestDir: "{app}\Tools\"; Flags: ignoreversion
 Source: "E:\Programmierung\GitHub\Repos\SharePortfolioManager\SharePortfolioManager\Tools\xpdf-tools-win-4.00\ANNOUNCE"; DestDir: "{app}\Tools"; Components: tools; Flags: ignoreversion
 Source: "E:\Programmierung\GitHub\Repos\SharePortfolioManager\SharePortfolioManager\Tools\xpdf-tools-win-4.00\CHANGES"; DestDir: "{app}\Tools"; Components: tools; Flags: ignoreversion

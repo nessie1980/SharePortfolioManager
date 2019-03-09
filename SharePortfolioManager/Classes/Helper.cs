@@ -128,6 +128,11 @@ namespace SharePortfolioManager.Classes
 
         #region Variables
 
+        public static string PdfConverterApplication =
+            Path.GetDirectoryName(Application.ExecutablePath) + "\\Tools\\pdftotext.exe";
+
+        public static string ParsingDocumentFileName = Path.GetDirectoryName(Application.ExecutablePath) + "\\Tools\\Parsing.txt";
+
         #endregion Variables
 
         #region Properties

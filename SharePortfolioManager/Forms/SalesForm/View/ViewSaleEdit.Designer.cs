@@ -719,9 +719,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.txtBoxBrokerage.ReadOnly = true;
             this.txtBoxBrokerage.Size = new System.Drawing.Size(506, 22);
             this.txtBoxBrokerage.TabIndex = 7;
-            this.txtBoxBrokerage.TextChanged += new System.EventHandler(this.OnTxtBoxBrokerage_TextChanged);
-            this.txtBoxBrokerage.Enter += new System.EventHandler(this.OnTxtBoxBrokerage_Enter);
-            this.txtBoxBrokerage.Leave += new System.EventHandler(this.OnTxtBoxBrokerageLeave);
             // 
             // txtBoxReduction
             // 
