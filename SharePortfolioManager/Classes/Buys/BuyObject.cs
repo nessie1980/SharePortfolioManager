@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -253,19 +253,28 @@ namespace SharePortfolioManager.Classes.Buys
             }
         }
 
-        [Browsable(false)]
-        public string BrokerageWithReductionAsStr => Helper.FormatDecimal(BrokerageWithReduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
-
         #endregion Brokerage values
 
         [Browsable(false)]
         public decimal BuyValue { get; internal set; } = -1;
 
         [Browsable(false)]
+        public decimal BuyValueReduction { get; internal set; } = -1;
+
+        [Browsable(false)]
+        public string BuyValueReductionAsStr => Helper.FormatDecimal(BuyValueReduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
+
+        [Browsable(false)]
         public decimal BuyValueBrokerage { get; internal set; } = -1;
 
         [Browsable(false)]
         public string BuyValueBrokerageAsStr => Helper.FormatDecimal(BuyValueBrokerage, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
+
+        [Browsable(false)]
+        public decimal BuyValueBrokerageReduction { get; internal set; } = -1;
+
+        [Browsable(false)]
+        public string BuyValueBrokerageReductionAsStr => Helper.FormatDecimal(BuyValueBrokerageReduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
 
         [Browsable(false)]
         public string Document { get; internal set; }
@@ -297,12 +306,12 @@ namespace SharePortfolioManager.Classes.Buys
         [Browsable(true)]
         [DisplayName(@"Brokerage")]
         // ReSharper disable once UnusedMember.Global
-        public string DgvBrokerageWithReductionAsStr => BrokerageWithReductionAsStr;
+        public string DgvBrokerageAsStr => BrokerageAsStr;
 
         [Browsable(true)]
-        [DisplayName(@"Deposit")]
+        [DisplayName(@"BuyValueReduction")]
         // ReSharper disable once UnusedMember.Global
-        public string DgvDepositAsStr => BuyValueBrokerageAsStr;
+        public string DgvBuyValueReductionAsStr => BuyValueReductionAsStr;
 
         [Browsable(true)]
         [DisplayName(@"Document")]
@@ -371,22 +380,26 @@ namespace SharePortfolioManager.Classes.Buys
 
         /// <summary>
         /// This function calculates four values.
-        /// - the market value
-        /// - the market value with reduction
-        /// - the market value with reduction and brokerage
+        /// - the buy value
+        /// - the buy value with reduction
+        /// - the buy value with brokerage
+        /// - the buy value with brokerage and reduction
         /// - the brokerage value
+        /// - the brokerage value with the reduction
         /// with the given volume and share price of the buy
         /// </summary>
         private void CalculateValues()
         {
             Helper.CalcBuyValues( Volume, SharePrice,
                 Provision, BrokerFee, TraderPlaceFee, Reduction,
-                out var decMarketValue, out var decDeposit, out var decBrokerage, out var decBrokerageWithReduction);
+                out var decBuyValue, out var decBuyValueReduction, out var decBuyValueBrokerage, out var decBuyValueWithBrokerageWithReduction, out var decBrokerage, out var decBrokerageReduction);
 
-            BuyValue = decMarketValue;
-            BuyValueBrokerage = decDeposit;
             Brokerage = decBrokerage;
-            BrokerageWithReduction = decBrokerageWithReduction;
+            BrokerageWithReduction = decBrokerageReduction;
+            BuyValue = decBuyValue;
+            BuyValueReduction = decBuyValueReduction;
+            BuyValueBrokerage = decBuyValueBrokerage;
+            BuyValueBrokerageReduction = decBuyValueWithBrokerageWithReduction;
 
 #if DEBUG_BUY
             Console.WriteLine(@"BuyValue: {0}", BuyValue);

@@ -131,7 +131,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.grpBoxSales.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grpBoxSales.Location = new System.Drawing.Point(5, 499);
             this.grpBoxSales.Name = "grpBoxSales";
-            this.grpBoxSales.Size = new System.Drawing.Size(825, 118);
+            this.grpBoxSales.Size = new System.Drawing.Size(825, 205);
             this.grpBoxSales.TabIndex = 3;
             this.grpBoxSales.TabStop = false;
             this.grpBoxSales.Text = "_grpBoxSales";
@@ -150,7 +150,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.tblLayPnlOverviewTabControl.RowCount = 1;
             this.tblLayPnlOverviewTabControl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblLayPnlOverviewTabControl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 97F));
-            this.tblLayPnlOverviewTabControl.Size = new System.Drawing.Size(819, 97);
+            this.tblLayPnlOverviewTabControl.Size = new System.Drawing.Size(819, 184);
             this.tblLayPnlOverviewTabControl.TabIndex = 0;
             // 
             // tabCtrlSales
@@ -161,7 +161,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.tabCtrlSales.Location = new System.Drawing.Point(3, 3);
             this.tabCtrlSales.Name = "tabCtrlSales";
             this.tabCtrlSales.SelectedIndex = 0;
-            this.tabCtrlSales.Size = new System.Drawing.Size(813, 91);
+            this.tabCtrlSales.Size = new System.Drawing.Size(813, 178);
             this.tabCtrlSales.TabIndex = 0;
             this.tabCtrlSales.SelectedIndexChanged += new System.EventHandler(this.TabCtrlSales_SelectedIndexChanged);
             this.tabCtrlSales.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnTabCtrlSales_KeyDown);
@@ -1199,19 +1199,20 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             this.AutoScroll = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.ClientSize = new System.Drawing.Size(834, 620);
+            this.ClientSize = new System.Drawing.Size(834, 711);
             this.ControlBox = false;
             this.Controls.Add(this.grpBoxSales);
             this.Controls.Add(this.grpBoxAdd);
             this.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(900, 659);
+            this.MaximumSize = new System.Drawing.Size(900, 800);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(800, 659);
+            this.MinimumSize = new System.Drawing.Size(800, 750);
             this.Name = "ViewSaleEdit";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "_shareSalesEdit";
+            this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ShareSalesEdit_FormClosing);
             this.Load += new System.EventHandler(this.ShareSalesEdit_Load);
             this.grpBoxSales.ResumeLayout(false);

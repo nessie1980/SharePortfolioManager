@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -38,9 +38,13 @@ namespace SharePortfolioManager.Classes
         {
             ConfigurationLoadSuccessful = 0,
             ConfigurationEmpty = -1,
-            ConfigurationAttributeError = -2,
-            ConfigurationSyntaxError = -3,
-            ConfigurationLoadFailed = -4
+            ConfigurationBankAttributesError = -2,
+            ConfigurationBankElementsError = -3,
+            ConfigurationDocumentElementsError = -4,
+            ConfigurationDocumentElementAttributeError = -5,
+            ConfigurationIdentifierAttributeError = -6,
+            ConfigurationSyntaxError = -7,
+            ConfigurationLoadFailed = -8
         };
 
         #endregion Error codes
@@ -80,8 +84,6 @@ namespace SharePortfolioManager.Classes
         /// </summary>
         private const string FileName = @"Settings\Documents.XML";
 
-        public static string DocumentParsingFileName => FileName;
-
         public static XmlReaderSettings ReaderSettings { get; set; }
 
         public static XmlDocument XmlDocument { get; set; }
@@ -97,7 +99,7 @@ namespace SharePortfolioManager.Classes
 
         #region Bank sections
 
-        public const short BankTagCount = 6;
+        public const short BankTagCount = 7; // BankIdentifier / BuyIdentifier / SaleIdentifier / DividendIdentifier + 3 x documents (BuyIdentifier / SaleIdentifier / DividendIdentifier)
 
         public const string BankNameAttrName = "Name";
         public const string BankIdentifierValueAttrName = "BankIdentifierValue";
@@ -139,7 +141,6 @@ namespace SharePortfolioManager.Classes
         public const string DocumentTypeSale = "Sale";
         public const string DocumentTypeSaleWkn = "Wkn";
         public const string DocumentTypeSaleOrderNumber = "OrderNumber";
-        public const string DocumentTypeSaleName = "Name";
         public const string DocumentTypeSaleDate = "Date";
         public const string DocumentTypeSaleTime = "Time";
         public const string DocumentTypeSaleVolume = "Volume";
@@ -154,7 +155,21 @@ namespace SharePortfolioManager.Classes
 
         #endregion Sale section values
 
+        #region Dividend section values
+
         public const string DocumentTypeDividend = "Dividend";
+        public const string DocumentTypeDividendWkn = "Wkn";
+        public const string DocumentTypeDividendDate = "Date";
+        public const string DocumentTypeDividendTime = "Time";
+        public const string DocumentTypeDividendExchangeRate = "ExchangeRate";
+        public const string DocumentTypeDividendDividendRate = "DividendRate";
+        public const string DocumentTypeDividendVolume = "Volume";
+        public const string DocumentTypeDividendTaxAtSource = "TaxAtSource";
+        public const string DocumentTypeDividendCapitalGainTax = "CapitalGainTax";
+        public const string DocumentTypeDividendSolidarityTax = "SolidarityTax";
+
+        #endregion Dividend section values
+
         public const string DocumentTypeBrokerage = "Brokerage";
 
         #endregion Document sections
@@ -230,11 +245,14 @@ namespace SharePortfolioManager.Classes
                             var bankRegexList = new RegExList();
 
                             // Check if all elements are available
-                            if (nodeElement.Attributes?[BankNameAttrName] == null || 
+                            if (nodeElement.Attributes?[BankNameAttrName] == null ||
                                 nodeElement.Attributes?[BankIdentifierValueAttrName] == null ||
                                 nodeElement.Attributes?[BankEncodingAttrName] == null
-                                )
+                            )
+                            {
+                                ErrorCode = DocumentParsingErrorCode.ConfigurationBankAttributesError;
                                 loadSettings = false;
+                            }
                             else
                             {
                                 var bankName = nodeElement.Attributes[BankNameAttrName].Value;
@@ -242,18 +260,20 @@ namespace SharePortfolioManager.Classes
                                 var bankEncoding = nodeElement.Attributes[BankEncodingAttrName].Value;
 
                                 if (!nodeElement.HasChildNodes || nodeElement.ChildNodes.Count != BankTagCount)
+                                {
+                                    ErrorCode = DocumentParsingErrorCode.ConfigurationBankElementsError;
                                     loadSettings = false;
+                                }
                                 else
                                 {
                                     var dictionaryDocumentLists = new Dictionary<string, DocumentRegex>();
-                                    //var documentRegexList = new List<DocumentRegex>();
 
                                     // Check if all attributes are available
                                     for (var i = 0; i < nodeElement.ChildNodes.Count; i++)
                                     {
 
-                                        // Check if a "Document" section should be read
-                                        // else read a "Bank" section
+                                        // Check if a "Document" section should be read ( BuyIdentifier / SaleIdentifier / DividendIdentifier )
+                                        // else read the identifier elements
                                         if (nodeElement.ChildNodes[i].Name == DocumentTagName &&
                                             nodeElement.ChildNodes[i].Attributes?[DocumentTypeAttrName] != null &&
                                             nodeElement.ChildNodes[i].Attributes?[DocumentIdentifierValueAttrName] != null &&
@@ -268,16 +288,24 @@ namespace SharePortfolioManager.Classes
 
                                             if (nodeElement.ChildNodes[i].HasChildNodes)
                                             {
-                                                // Check if all attributes are available
+                                                // Loop through all document elements
                                                 for (var j = 0; j < nodeElement.ChildNodes[i].ChildNodes.Count; j++)
                                                 {
-
+                                                    // Check if the current element contains all necessary attributes
                                                     if (nodeElement.ChildNodes[i].ChildNodes[j].Attributes == null
-                                                        || nodeElement.ChildNodes[i].ChildNodes[j].Attributes[NameAttrName] == null
-                                                        || nodeElement.ChildNodes[i].ChildNodes[j].Attributes[FoundIndexAttrName] == null
-                                                        || nodeElement.ChildNodes[i].ChildNodes[j].Attributes[ResultEmptyAttrName] == null
-                                                        || nodeElement.ChildNodes[i].ChildNodes[j].Attributes[RegexOptionsAttrName] == null)
+                                                        || nodeElement.ChildNodes[i].ChildNodes[j]
+                                                            .Attributes[NameAttrName] == null
+                                                        || nodeElement.ChildNodes[i].ChildNodes[j]
+                                                            .Attributes[FoundIndexAttrName] == null
+                                                        || nodeElement.ChildNodes[i].ChildNodes[j]
+                                                            .Attributes[ResultEmptyAttrName] == null
+                                                        || nodeElement.ChildNodes[i].ChildNodes[j]
+                                                            .Attributes[RegexOptionsAttrName] == null)
+                                                    {
+                                                        ErrorCode = DocumentParsingErrorCode
+                                                            .ConfigurationDocumentElementAttributeError;
                                                         loadSettings = false;
+                                                    }
                                                     else
                                                     {
                                                         var regexName = nodeElement.ChildNodes[i].ChildNodes[j].Attributes[NameAttrName]
@@ -309,6 +337,7 @@ namespace SharePortfolioManager.Classes
                                             }
                                             else
                                             {
+                                                ErrorCode = DocumentParsingErrorCode.ConfigurationDocumentElementsError;
                                                 loadSettings = false;
                                                 break;
                                             }
@@ -317,12 +346,17 @@ namespace SharePortfolioManager.Classes
                                         }
                                         else
                                         {
+                                            // Check if all identifier attributes are available
                                             if (nodeElement.ChildNodes[i].Attributes == null
                                                 || nodeElement.ChildNodes[i].Attributes[NameAttrName] == null
                                                 || nodeElement.ChildNodes[i].Attributes[FoundIndexAttrName] == null
                                                 || nodeElement.ChildNodes[i].Attributes[ResultEmptyAttrName] == null
                                                 || nodeElement.ChildNodes[i].Attributes[RegexOptionsAttrName] == null)
+                                            {
+                                                ErrorCode = DocumentParsingErrorCode
+                                                    .ConfigurationIdentifierAttributeError;
                                                 loadSettings = false;
+                                            }
                                             else
                                             {
                                                 var regexName = nodeElement.ChildNodes[i].Attributes[NameAttrName].Value;
@@ -376,6 +410,8 @@ namespace SharePortfolioManager.Classes
                     // Set error code
                     ErrorCode = DocumentParsingErrorCode.ConfigurationLoadSuccessful;
                 }
+
+
             }
             catch (XmlException ex)
             {

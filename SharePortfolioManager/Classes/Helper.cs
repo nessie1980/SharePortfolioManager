@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -34,8 +34,8 @@ using System.Runtime.CompilerServices;
 using System.Diagnostics;
 using System.Net;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
+using SharePortfolioManager.Classes.ShareObjects;
 using SharePortfolioManager.Properties;
 using MenuItem = System.Windows.Forms.MenuItem;
 
@@ -285,7 +285,7 @@ namespace SharePortfolioManager.Classes
                     var castControl = (ToolStripStatusLabel)showObject;
 
                     // Set color
-                    var oldColor = castControl.ForeColor;
+                   // var oldColor = castControl.ForeColor;
                     castControl.ForeColor = color;
 
                     // Check if the logger add failed
@@ -440,20 +440,20 @@ namespace SharePortfolioManager.Classes
             // Get extension of the given file
             var strExtension = Path.GetExtension(strFile);
 
-            if (string.Compare(strExtension, @"pdf", StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(strExtension, @".pdf", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 return Resources.doc_pdf_image_24;
             }
 
-            if(string.Compare(strExtension, @"xlsx", StringComparison.OrdinalIgnoreCase) == 0 ||
-               string.Compare(strExtension, @"xls", StringComparison.OrdinalIgnoreCase) == 0
+            if(string.Compare(strExtension, @".xlsx", StringComparison.OrdinalIgnoreCase) == 0 ||
+               string.Compare(strExtension, @".xls", StringComparison.OrdinalIgnoreCase) == 0
             )
             {
                 return Resources.doc_excel_image_24;
             }
 
-            if (string.Compare(strExtension, @"docx", StringComparison.OrdinalIgnoreCase) == 0 ||
-                string.Compare(strExtension, @"doc", StringComparison.OrdinalIgnoreCase) == 0
+            if (string.Compare(strExtension, @".docx", StringComparison.OrdinalIgnoreCase) == 0 ||
+                string.Compare(strExtension, @".doc", StringComparison.OrdinalIgnoreCase) == 0
             )
             {
                 return Resources.doc_excel_image_24;
@@ -952,24 +952,28 @@ namespace SharePortfolioManager.Classes
 
         public static void CalcBuyValues(decimal decVolume, decimal decSharePrice,
             decimal decProvision, decimal decBrokerFee, decimal decTraderPlaceFee, decimal decReduction,
-            out decimal decMarketValue, out decimal decDeposit, out decimal decBrokerage, out decimal decBrokerageWithReduction)
+            out decimal decBuyValue, out decimal decBuyValueReduction, out decimal decBuyValueBrokerage, out decimal decBuyValueBrokerageReduction, out decimal decBrokerage, out decimal decBrokerageReduction)
         {
             decBrokerage = 0;
-            decBrokerageWithReduction = 0;
+            decBrokerageReduction = 0;
 
             // Calculate brokerage
-            CalcBrokerageValues(decProvision, decBrokerFee, decTraderPlaceFee, decReduction, out decBrokerage, out decBrokerageWithReduction);
+            CalcBrokerageValues(decProvision, decBrokerFee, decTraderPlaceFee, decReduction, out decBrokerage, out decBrokerageReduction);
 
             // Calculate market value and deposit ( market value + brokerage )
             if (decVolume > 0 && decSharePrice > 0)
             {
-                decMarketValue = Math.Round(decVolume * decSharePrice, 2);
-                decDeposit = decMarketValue + decBrokerageWithReduction;
+                decBuyValue = Math.Round(decVolume * decSharePrice, 2, MidpointRounding.AwayFromZero);
+                decBuyValueReduction = decBuyValue - decReduction;
+                decBuyValueBrokerage = decBuyValue + decBrokerage;
+                decBuyValueBrokerageReduction = decBuyValue + decBrokerageReduction;
             }
             else
             {
-                decMarketValue = 0;
-                decDeposit = 0;
+                decBuyValue = 0;
+                decBuyValueReduction = 0;
+                decBuyValueBrokerage = 0;
+                decBuyValueBrokerageReduction = 0;
             }
         }
 
@@ -978,12 +982,12 @@ namespace SharePortfolioManager.Classes
         #region Calculate brokerage value
 
         public static void CalcBrokerageValues(decimal decProvision, decimal decBrokerFee, decimal decTraderPlaceFee, decimal decReduction,
-            out decimal decBrokerage, out decimal decBrokerageWithReduction)
+            out decimal decBrokerage, out decimal decBrokerageReduction)
         {
             // Calculate brokerage
             decBrokerage = decProvision + decBrokerFee + decTraderPlaceFee;
             // Calculate brokerage minus reduction
-            decBrokerageWithReduction = decProvision + decBrokerFee + decTraderPlaceFee - decReduction;
+            decBrokerageReduction = decBrokerage - decReduction;
         }
 
         #endregion Calculate brokerage value
@@ -1019,9 +1023,9 @@ namespace SharePortfolioManager.Classes
 
         #region Get combo box items
 
-        public static object[] GetComboBoxItems(string xPath, string languageName, Language language)
+        public static List<string> GetComboBoxItems(string xPath, string languageName, Language language)
         {
-            return language.GetLanguageTextListByXPath(xPath, languageName).ToArray();
+            return language.GetLanguageTextListByXPath(xPath, languageName);
         }
 
         #endregion  Get combo box items
@@ -1088,7 +1092,7 @@ namespace SharePortfolioManager.Classes
 
             process.Exited += (s, ea) => tcs.SetResult(process.ExitCode);
             process.OutputDataReceived += (s, ea) => Console.WriteLine(ea.Data);
-            process.ErrorDataReceived += (s, ea) => Console.WriteLine("ERR: " + ea.Data);
+            process.ErrorDataReceived += (s, ea) => Console.WriteLine(@"ERR: " + ea.Data);
 
             var started = process.Start();
             if (!started)

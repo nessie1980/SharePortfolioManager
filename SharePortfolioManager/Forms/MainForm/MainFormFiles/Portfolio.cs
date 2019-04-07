@@ -1,6 +1,6 @@
-﻿    //MIT License
+﻿//MIT License
 //
-//Copyright(c) 2017 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -21,15 +21,16 @@
 //SOFTWARE.
 
 using SharePortfolioManager.Classes;
+using SharePortfolioManager.Classes.Sales;
+using SharePortfolioManager.Classes.ShareObjects;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
-using SharePortfolioManager.Classes.Sales;
-using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager
 {
@@ -112,7 +113,7 @@ namespace SharePortfolioManager
                 // Check portfolio load state
                 switch (PortfolioLoadState)
                 {
-                    case EStatePortfolioLoad.LoadSucessful:
+                    case EStatePortfolioLoad.LoadSuccessful:
                         {
                             AddSharesToDataGridViews();
                             AddShareFooters();
@@ -140,7 +141,7 @@ namespace SharePortfolioManager
                                 Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
                         }
                         break;
-                    case EStatePortfolioLoad.PortfolioListEmtpy:
+                    case EStatePortfolioLoad.PortfolioListEmpty:
                         {
                             // Enable controls
                             EnableDisableControlNames.Clear();
@@ -345,15 +346,29 @@ namespace SharePortfolioManager
                                 bLoadPortfolio = false;
                             else
                             {
+                                // WKN of the share
                                 ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].Wkn =
                                     nodeElement.Attributes[ShareObject.GeneralWknAttrName].InnerText;
                                 ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].Wkn =
                                     nodeElement.Attributes[ShareObject.GeneralWknAttrName].InnerText;
 
+                                // Name of the share
                                 ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].Name =
                                     nodeElement.Attributes[ShareObject.GeneralNameAttrName].InnerText;
                                 ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].Name =
                                     nodeElement.Attributes[ShareObject.GeneralNameAttrName].InnerText;
+
+                                // Update flag of the share
+                                if (nodeElement.Attributes[ShareObject.GeneralUpdateAttrName].InnerText == @"True")
+                                {
+                                    ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].Update = true;
+                                    ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].Update = true;
+                                }
+                                else
+                                {
+                                    ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].Update = false;
+                                    ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].Update = false;
+                                }
 
                                 // Loop through the tags and set values to the ShareObject
                                 for (var i = 0; i < nodeElement.ChildNodes.Count; i++)
@@ -465,6 +480,12 @@ namespace SharePortfolioManager
                                                     nodeList.Attributes.Count ==
                                                     ShareObject.BuyAttrCount)
                                                 {
+                                                    // Get brokerage object
+                                                    var brokerage = ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].AllBrokerageEntries.GetBrokerageObjectByGuid(
+                                                        nodeList.Attributes[ShareObject.BuyBrokerageGuidAttrName].Value,
+                                                        nodeList.Attributes[ShareObject.BuyDateAttrName].Value
+                                                    );
+
                                                     if (!ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].AddBuy(
                                                         nodeList.Attributes[ShareObject.BuyGuidAttrName].Value,                 // Guid
                                                         nodeList.Attributes[ShareObject.BuyOrderNumberAttrName].Value,          // Order number
@@ -475,14 +496,9 @@ namespace SharePortfolioManager
                                                             nodeList.Attributes[ShareObject.BuyVolumeSoldAttrName].Value),      // Volume already sold
                                                         Convert.ToDecimal(
                                                             nodeList.Attributes[ShareObject.BuyPriceAttrName].Value),           // Price
+                                                        brokerage,                                                              // Brokerage object
                                                         nodeList.Attributes[ShareObject.BuyDocumentAttrName].Value))            // Document
                                                         bLoadPortfolio = false;
-
-                                                    // Get brokerage object
-                                                    var brokerage = ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].AllBrokerageEntries.GetBrokerageObjectByGuid(
-                                                        nodeList.Attributes[ShareObject.BuyBrokerageGuidAttrName].Value,
-                                                        nodeList.Attributes[ShareObject.BuyDateAttrName].Value
-                                                        );
 
                                                     if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].AddBuy(
                                                         nodeList.Attributes[ShareObject.BuyGuidAttrName].Value,                 // Guid
@@ -566,6 +582,10 @@ namespace SharePortfolioManager
                                                                             buyAttributes.Attributes[
                                                                                     ShareObject.SaleBuyPriceAttrName]
                                                                                 .Value), // Buy price of the used buy
+                                                                        Convert.ToDecimal(
+                                                                            buyAttributes.Attributes[
+                                                                                    ShareObject.SaleBrokerageReductionAttrName]
+                                                                                .Value), // Brokerage reduction of the used buy
                                                                         buyAttributes
                                                                             .Attributes[ShareObject.SaleBuyGuidAttrName]
                                                                             .Value // Guid of the used buy
@@ -739,10 +759,43 @@ namespace SharePortfolioManager
                                 
                                 // Set website configuration and encoding to the share object.
                                 // The encoding is necessary for the Parser for encoding the download result.
-                                if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList))
-                                    RegexSearchFailedList.Add(ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].Wkn);
-                                if (!ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList))
-                                    RegexSearchFailedList.Add(ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].Wkn);
+                                if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                    .SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList))
+                                {
+                                    if (!RegexSearchFailedList.Contains(
+                                            ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].Wkn) &&
+                                            ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].Update
+                                        )
+                                    {
+                                        RegexSearchFailedList.Add(
+                                            ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].Wkn);
+
+                                        // Set update flag to false
+                                        ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].WebSiteConfigurationValid = false;
+                                    }
+                                }
+                                else
+                                    // Set update flag to false
+                                    ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].WebSiteConfigurationValid = true;
+
+                                if (!ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
+                                    .SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList))
+                                {
+                                    if (!RegexSearchFailedList.Contains(
+                                            ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].Wkn) &&
+                                            ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].Update
+                                        )
+                                    {
+                                        RegexSearchFailedList.Add(
+                                            ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].Wkn);
+
+                                        // Set update flag to false
+                                        ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].WebSiteConfigurationValid = false;
+                                    }
+                                }
+                                else
+                                    // Set update flag to false
+                                    ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].WebSiteConfigurationValid = true;
                             }
                         }
                         else
@@ -776,10 +829,9 @@ namespace SharePortfolioManager
                     }
 
                     // Load was successful
-                    // TODO This shares with no available website configuration must be disable in the DataGridView!!!
                     if (InitFlag)
                     {
-                        PortfolioLoadState = EStatePortfolioLoad.LoadSucessful;
+                        PortfolioLoadState = EStatePortfolioLoad.LoadSuccessful;
 
                         // Show the invalid website configurations
                         ShowInvalidWebSiteConfigurations(RegexSearchFailedList);
@@ -787,7 +839,7 @@ namespace SharePortfolioManager
                 }
                 else
                     // Set empty portfolio list state
-                    PortfolioLoadState = EStatePortfolioLoad.PortfolioListEmtpy;
+                    PortfolioLoadState = EStatePortfolioLoad.PortfolioListEmpty;
  
                 // Set calculated log components value to the XML
                 nodePortfolioName.InnerXml = _portfolioFileName;
@@ -795,6 +847,9 @@ namespace SharePortfolioManager
                 // Sort portfolio list in order of the share names
                 ShareObjectListMarketValue.Sort(new ShareObjectListComparer());
                 ShareObjectListFinalValue.Sort(new ShareObjectListComparer());
+
+                // Check if any share set for updating so enable the refresh all button
+                btnRefreshAll.Enabled = ShareObjectListFinalValue.Count(p => p.Update && p.WebSiteConfigurationValid) >= 1;
             }
 #pragma warning disable 168
             catch (XmlException ex)

@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -22,16 +22,19 @@
 
 using LanguageHandler;
 using Logging;
+using Parser;
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.ShareObjects;
 using SharePortfolioManager.Properties;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -69,6 +72,19 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         DocumentBrowseFailed,
         DocumentDirectoryDoesNotExists,
         DocumentFileDoesNotExists
+    }
+
+    // Error codes for the document parsing
+    public enum ParsingErrorCode
+    {
+        ParsingFailed = -6,
+        ParsingDocumentNotImplemented = -5,
+        ParsingDocumentTypeIdentifierFailed = -4,
+        ParsingBankIdentifierFailed = -3,
+        ParsingDocumentFailed = -2,
+        ParsingParsingDocumentError = -1,
+        ParsingStarted = 0,
+        ParsingIdentifierValuesFound = 1
     }
 
     /// <inheritdoc />
@@ -139,6 +155,55 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
         #endregion Fields
 
+        #region Parsing Fields
+
+        /// <summary>
+        /// Flag if a parsing start is allows ( document browse / drag and drop )
+        /// </summary>
+        private bool _parsingStartAllow;
+
+        /// <summary>
+        /// Counter for the check bank type configurations
+        /// </summary>
+        private int _bankCounter;
+
+        /// <summary>
+        /// Flag if the bank identifier of the given document could be found in the document configurations
+        /// </summary>
+        private bool _bankIdentifierFound;
+
+        /// <summary>
+        /// Flag if the buy identifier type of the given document could be found in the document configurations
+        /// </summary>
+        private bool _dividendIdentifierFound;
+
+        /// <summary>
+        /// Flag if the document type is not implemented yet
+        /// </summary>
+        private bool _documentTypNotImplemented;
+
+        /// <summary>
+        /// Flag if the document values parsing is running
+        /// </summary>
+        private bool _documentValuesRunning;
+
+        /// <summary>
+        /// Flag if the parsing was successful
+        /// </summary>
+        private bool _parsingResult;
+
+        /// <summary>
+        /// Flag if the parsing with the Parser.dll is done
+        /// </summary>
+        private bool _parsingThreadFinished;
+
+        /// <summary>
+        /// BackGroundWorker for the document parsing
+        /// </summary>
+        private readonly BackgroundWorker _parsingBackgroundWorker = new BackgroundWorker();
+
+        #endregion Parsing Fields
+
         #region Properties
 
         #region Transfer parameter
@@ -162,6 +227,19 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         #endregion Flags
 
         public DataGridView SelectedDataGridView { get; internal set; }
+
+        #region Parsing
+
+        public DocumentParsingConfiguration.DocumentTypes DocumentType { get; internal set; }
+
+        public Parser.Parser DocumentTypeParser;
+
+        public string ParsingText { get; internal set; }
+
+        public Dictionary<string, List<string>> DictionaryParsingResult;
+
+        #endregion Parsing
+
 
         #endregion Properties
 
@@ -210,23 +288,23 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
         public string Date
         {
-            get => datePickerDate.Text;
+            get => dateTimePickerDate.Text;
             set
             {
-                if (datePickerDate.Text == value)
+                if (dateTimePickerDate.Text == value)
                     return;
-                datePickerDate.Text = value;
+                dateTimePickerDate.Text = value;
             }
         }
 
         public string Time
         {
-            get => datePickerTime.Text;
+            get => dateTimePickerTime.Text;
             set
             {
-                if (datePickerTime.Text == value)
+                if (dateTimePickerTime.Text == value)
                     return;
-                datePickerTime.Text = value;
+                dateTimePickerTime.Text = value;
             }
         }
 
@@ -267,12 +345,12 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
         public string Rate
         {
-            get => txtBoxRate.Text;
+            get => txtBoxDividendRate.Text;
             set
             {
-                if (txtBoxRate.Text == value)
+                if (txtBoxDividendRate.Text == value)
                     return;
-                txtBoxRate.Text = value;
+                txtBoxDividendRate.Text = value;
             }
         }
 
@@ -377,12 +455,12 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
         public string Price
         {
-            get => txtBoxPrice.Text;
+            get => txtBoxSharePrice.Text;
             set
             {
-                if (txtBoxPrice.Text == value)
+                if (txtBoxSharePrice.Text == value)
                     return;
-                txtBoxPrice.Text = value;
+                txtBoxSharePrice.Text = value;
             }
         }
 
@@ -559,7 +637,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                         stateLevel = FrmMain.EStateLevels.Error;
 
                         Enabled = true;
-                        txtBoxRate.Focus();
+                        txtBoxDividendRate.Focus();
 
                         break;
                     }
@@ -571,7 +649,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                         stateLevel = FrmMain.EStateLevels.Error;
 
                         Enabled = true;
-                        txtBoxRate.Focus();
+                        txtBoxDividendRate.Focus();
 
                         break;
                     }
@@ -583,7 +661,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                         stateLevel = FrmMain.EStateLevels.Error;
 
                         Enabled = true;
-                        txtBoxRate.Focus();
+                        txtBoxDividendRate.Focus();
 
                         break;
                     }
@@ -667,7 +745,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                         stateLevel = FrmMain.EStateLevels.Error;
 
                         Enabled = true;
-                        txtBoxPrice.Focus();
+                        txtBoxSharePrice.Focus();
 
                         break;
                     }
@@ -679,7 +757,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                         stateLevel = FrmMain.EStateLevels.Error;
 
                         Enabled = true;
-                        txtBoxPrice.Focus();
+                        txtBoxSharePrice.Focus();
 
                         break;
                     }
@@ -691,7 +769,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                         stateLevel = FrmMain.EStateLevels.Error;
 
                         Enabled = true;
-                        txtBoxPrice.Focus();
+                        txtBoxSharePrice.Focus();
 
                         break;
                     }
@@ -768,7 +846,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     }
             }
 
-            Helper.AddStatusMessage(toolStripStatusLabelMessage,
+            Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                strMessage,
                Language,
                LanguageName,
@@ -797,7 +875,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     }
             }
 
-            Helper.AddStatusMessage(toolStripStatusLabelMessage,
+            Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                strMessage,
                Language,
                LanguageName,
@@ -840,10 +918,24 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
             ShareObjectMarketValue = shareObjectMarketValue;
             ShareObjectFinalValue = shareObjectFinalValue;
+
             Logger = logger;
             Language = xmlLanguage;
             LanguageName = language;
+
             SaveFlag = false;
+
+            #region Parsing backgroundworker
+
+            _parsingBackgroundWorker.WorkerReportsProgress = true;
+            _parsingBackgroundWorker.WorkerSupportsCancellation = true;
+
+            _parsingBackgroundWorker.DoWork += DocumentParsing;
+            _parsingBackgroundWorker.ProgressChanged += OnDocumentParsingProgressChanged;
+            _parsingBackgroundWorker.RunWorkerCompleted += OnDocumentParsingRunWorkerCompleted;
+
+            #endregion Parsing backgroundworker
+
         }
 
         /// <summary>
@@ -954,7 +1046,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/ShowFailed", LanguageName),
                    Language, LanguageName,
                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
@@ -969,7 +1061,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// <param name="e"></param>
         private void ShareDividendEdit_Shown(object sender, EventArgs e)
         {
-            txtBoxRate.Focus();
+            txtBoxDividendRate.Focus();
         }
 
         /// <summary>
@@ -989,35 +1081,49 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// </summary>
         private void ResetInputValues()
         {
+            // Reset state pictures
+            picBoxDateParseState.Image = Resources.empty_arrow;
+            picBoxTimeParseState.Image = Resources.empty_arrow;
+            picBoxVolumeParserState.Image = Resources.empty_arrow;
+            picBoxExchangeRateBoxParseState.Image = Resources.empty_arrow;
+            picBoxDividendRateParserState.Image = Resources.empty_arrow;
+            picBoxTaxAtSourceParserState.Image = Resources.empty_arrow;
+            picBoxCapitalGainParserState.Image = Resources.empty_arrow;
+            picBoxSolidarityParserState.Image = Resources.empty_arrow;
+            picBoxSharePriceParserState.Image = Resources.empty_arrow;
+
             // Reset date time picker
-            datePickerDate.Value = DateTime.Now;
-            datePickerDate.Enabled = true;
-            datePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
-            datePickerTime.Enabled = true;
+            dateTimePickerDate.Value = DateTime.Now;
+            dateTimePickerDate.Enabled = true;
+            dateTimePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+            dateTimePickerTime.Enabled = true;
 
             // Reset text boxes
             chkBoxEnableFC.CheckState = CheckState.Unchecked;
             chkBoxEnableFC.Enabled = true;
-            txtBoxExchangeRatio.Text = @"";
-            txtBoxVolume.Text = @"";
+            txtBoxExchangeRatio.Text = string.Empty;
+            txtBoxExchangeRatio.Enabled = true;
+            txtBoxVolume.Text = string.Empty;
             txtBoxVolume.Enabled = true;
-            txtBoxRate.Text = @"";
-            txtBoxRate.Enabled = true;
-            txtBoxPayout.Text = @"";
-            txtBoxPayoutFC.Text = @"";
-            txtBoxTaxAtSource.Text = @"";
+            txtBoxDividendRate.Text = string.Empty;
+            txtBoxDividendRate.Enabled = true;
+            txtBoxPayout.Text = string.Empty;
+            txtBoxPayoutFC.Text = string.Empty;
+            txtBoxTaxAtSource.Text = string.Empty;
             txtBoxTaxAtSource.Enabled = true;
-            txtBoxCapitalGainsTax.Text = @"";
+            txtBoxCapitalGainsTax.Text = string.Empty;
             txtBoxCapitalGainsTax.Enabled = true;
-            txtBoxSolidarityTax.Text = @"";
+            txtBoxSolidarityTax.Text = string.Empty;
             txtBoxSolidarityTax.Enabled = true;
-            txtBoxTax.Text = @"";
-            txtBoxPayoutAfterTax.Text = @"";
-            txtBoxYield.Text = @"";
-            txtBoxPrice.Text = @"";
-            txtBoxDocument.Text = @"";
+            txtBoxTax.Text = string.Empty;
+            txtBoxPayoutAfterTax.Text = string.Empty;
+            txtBoxYield.Text = string.Empty;
+            txtBoxSharePrice.Text = string.Empty;
+            txtBoxDocument.Text = string.Empty;
 
-            toolStripStatusLabelMessage.Text = @"";
+            toolStripStatusLabelMessageDividendEdit.Text = string.Empty;
+            toolStripStatusLabelMessageDividendDocumentParsing.Text = string.Empty;
+            toolStripProgressBarDividendDocumentParsing.Visible = false;
 
             // Enable button(s)
             btnAddSave.Text = 
@@ -1047,7 +1153,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             if (tabCtrlDividends.TabPages.Count > 0)
                 tabCtrlDividends.SelectTab(0);
 
-            txtBoxRate.Focus();
+            txtBoxDividendRate.Focus();
 
             FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
         }
@@ -1136,7 +1242,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// <param name="e">EventArgs</param>
         private void OnDatePickerDate_Enter(object sender, EventArgs e)
         {
-            _focusedControl = datePickerDate;
+            _focusedControl = dateTimePickerDate;
         }
 
         /// <summary>
@@ -1166,7 +1272,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// <param name="e">EventArgs</param>
         private void OnDatePickerTime_Enter(object sender, EventArgs e)
         {
-            _focusedControl = datePickerTime;
+            _focusedControl = dateTimePickerTime;
 
         }
 
@@ -1231,7 +1337,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxRate_Enter(object sender, EventArgs e)
         {
-            _focusedControl = txtBoxRate;
+            _focusedControl = txtBoxDividendRate;
         }
 
         /// <summary>
@@ -1381,7 +1487,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxPrice_Enter(object sender, EventArgs e)
         {
-            _focusedControl = txtBoxPrice;
+            _focusedControl = txtBoxSharePrice;
         }
 
         /// <summary>
@@ -1392,6 +1498,21 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         private void OnTxtBoxDocument_TextChanged(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Document"));
+
+            if (_parsingStartAllow)
+            {
+                if (_parsingBackgroundWorker.IsBusy)
+                {
+                    _parsingBackgroundWorker.CancelAsync();
+                }
+                else
+                {
+                    ResetValues();
+                    _parsingBackgroundWorker.RunWorkerAsync();
+                }
+            }
+
+            _parsingStartAllow = false;
         }
 
         /// <summary>
@@ -1431,19 +1552,54 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxDocument_DragDrop(object sender, DragEventArgs e)
         {
-            if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
+            try
+            {
+                if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
 
-            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            if (files.Length <= 0 || files.Length > 1) return;
+                _parsingStartAllow = true;
 
-            txtBoxDocument.Text = files[0];
+                var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                if (files.Length <= 0 || files.Length > 1) return;
 
-            // TODO Parse PDF and set values to the form
-            //var pdf = new PdfDocument(new PdfReader(txtBoxDocument.Text));
-            //var text = PdfTextExtractor.GetTextFromPage(pdf.GetPage(1), new LocationTextExtractionStrategy());
-            //pdf.Close();
-            //Console.WriteLine(@"Extracted text:");
-            //Console.WriteLine(text);
+                txtBoxDocument.Text = files[0];
+
+                // Check if the document is a PDF
+                var extenstion = Path.GetExtension(txtBoxDocument.Text);
+
+                if (string.Compare(extenstion, ".PDF", StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    if (_parsingBackgroundWorker.IsBusy)
+                    {
+                        _parsingBackgroundWorker.CancelAsync();
+                    }
+                    else
+                    {
+                        ResetValues();
+                        _parsingBackgroundWorker.RunWorkerAsync();
+                    }
+                }
+
+                _parsingStartAllow = false;
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+#endif
+                toolStripStatusLabelMessageDividendDocumentParsing.ForeColor = Color.Red;
+                toolStripStatusLabelMessageDividendDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/ParsingErrors/ParsingFailed", LanguageName);
+
+                toolStripProgressBarDividendDocumentParsing.Visible = false;
+                grpBoxAddDividend.Enabled = true;
+                grpBoxDividends.Enabled = true;
+
+                DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                _parsingThreadFinished = true;
+                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
+            }
         }
 
         #endregion TextBoxes
@@ -1461,7 +1617,9 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         {
             try
             {
-                toolStripStatusLabelMessage.Text = @"";
+                toolStripStatusLabelMessageDividendEdit.Text = string.Empty;
+                toolStripStatusLabelMessageDividendDocumentParsing.Text = string.Empty;
+                toolStripProgressBarDividendDocumentParsing.Visible = false;
 
                 // Disable controls
                 Enabled = false;
@@ -1487,7 +1645,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/AddFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
@@ -1506,7 +1664,9 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         {
             try
             {
-                toolStripStatusLabelMessage.Text = @"";
+                toolStripStatusLabelMessageDividendEdit.Text = string.Empty;
+                toolStripStatusLabelMessageDividendDocumentParsing.Text = string.Empty;
+                toolStripProgressBarDividendDocumentParsing.Visible = false;
 
                 var strCaption = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Info", LanguageName);
                 var strMessage = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/DividendDelete",
@@ -1550,7 +1710,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DeleteFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
@@ -1577,7 +1737,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/CancelFailure", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
@@ -1602,6 +1762,11 @@ namespace SharePortfolioManager.Forms.DividendForm.View
         /// <param name="e">EventArgs</param>
         private void BtnDividendDocumentBrowse_Click(object sender, EventArgs e)
         {
+            toolStripStatusLabelMessageDividendEdit.Text = string.Empty;
+            toolStripStatusLabelMessageDividendDocumentParsing.Text = string.Empty;
+
+            _parsingStartAllow = true;
+
             DocumentBrowseEventHandler?.Invoke(this, new EventArgs());
         }
 
@@ -1692,7 +1857,6 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 // Create DataGridView
                 var dataGridViewDividendsOverviewOfAYears = new DataGridView
                 {
-                    // TODO correct
                     Name = @"Overview",
                     Dock = DockStyle.Fill,
 
@@ -1868,7 +2032,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/ShowFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
@@ -1914,7 +2078,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                             {
                                 ((DataGridView)sender).Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
-                                        @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Date",
+                                        @"/AddEditFormDividend/GrpBoxDividend/TabCtrl/DgvDividendOverview/ColHeader_Date",
                                         LanguageName);
                             }
                             break;
@@ -1971,7 +2135,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/RenameColHeaderFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
@@ -2009,7 +2173,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DeselectFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
@@ -2155,7 +2319,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
@@ -2205,7 +2369,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     else
                         return;
 
-                    // Get list of buys of a year
+                    // Get list of dividends of a year
                     DateTime.TryParse(SelectedDate, out var dateTime);
                     var dividendListYear = ShareObjectFinalValue.AllDividendEntries
                         .AllDividendsOfTheShareDictionary[dateTime.Year.ToString()]
@@ -2239,32 +2403,32 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                         }
                         else
                         {
-                            txtBoxRate.Text = selectedDividendObject.Rate;
+                            txtBoxDividendRate.Text = selectedDividendObject.Rate;
 
                             // Chose USD item
                             var iIndex = cbxBoxDividendFCUnit.FindString("en-US");
                             cbxBoxDividendFCUnit.SelectedIndex = iIndex;
                         }
 
-                        datePickerDate.Value = Convert.ToDateTime(selectedDividendObject.Date);
-                        datePickerTime.Value = Convert.ToDateTime(selectedDividendObject.Date);
-                        txtBoxRate.Text = selectedDividendObject.Rate;
+                        dateTimePickerDate.Value = Convert.ToDateTime(selectedDividendObject.Date);
+                        dateTimePickerTime.Value = Convert.ToDateTime(selectedDividendObject.Date);
+                        txtBoxDividendRate.Text = selectedDividendObject.Rate;
                         txtBoxVolume.Text = selectedDividendObject.Volume;
                         txtBoxTaxAtSource.Text = selectedDividendObject.TaxAtSource;
                         txtBoxCapitalGainsTax.Text = selectedDividendObject.CapitalGainsTax;
                         txtBoxSolidarityTax.Text = selectedDividendObject.SolidarityTax;
                         txtBoxYield.Text = selectedDividendObject.Yield;
-                        txtBoxPrice.Text = selectedDividendObject.Price;
+                        txtBoxSharePrice.Text = selectedDividendObject.Price;
                         txtBoxDocument.Text = selectedDividendObject.Document;
                     }
                     else
                     {
-                        datePickerDate.Value = Convert.ToDateTime(curItem[0].Cells[0].Value.ToString());
-                        datePickerTime.Value = Convert.ToDateTime(curItem[0].Cells[0].Value.ToString());
+                        dateTimePickerDate.Value = Convert.ToDateTime(curItem[0].Cells[0].Value.ToString());
+                        dateTimePickerTime.Value = Convert.ToDateTime(curItem[0].Cells[0].Value.ToString());
                         txtBoxPayout.Text = curItem[0].Cells[1].Value.ToString();
-                        txtBoxRate.Text = curItem[0].Cells[2].Value.ToString();
+                        txtBoxDividendRate.Text = curItem[0].Cells[2].Value.ToString();
                         txtBoxYield.Text = curItem[0].Cells[3].Value.ToString();
-                        txtBoxPrice.Text = curItem[0].Cells[4].Value.ToString();
+                        txtBoxSharePrice.Text = curItem[0].Cells[4].Value.ToString();
                         txtBoxVolume.Text = curItem[0].Cells[5].Value.ToString();
                         txtBoxDocument.Text = curItem[0].Cells[6].Value.ToString();
                     }
@@ -2283,6 +2447,9 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
                     // Format the input value
                     FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+
+                    // Enabled delete button
+                    btnDelete.Enabled = true;
                 }
                 else
                 {
@@ -2300,14 +2467,14 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
                     // TODO correct
                     // Enabled TextBox(es)
-                    datePickerDate.Enabled = true;
-                    datePickerTime.Enabled = true;
-                    txtBoxRate.Enabled = true;
+                    dateTimePickerDate.Enabled = true;
+                    dateTimePickerTime.Enabled = true;
+                    txtBoxDividendRate.Enabled = true;
                     txtBoxVolume.Enabled = true;
                     txtBoxTaxAtSource.Enabled = true;
                     txtBoxCapitalGainsTax.Enabled = true;
                     txtBoxSolidarityTax.Enabled = true;
-                    txtBoxPrice.Enabled = true;
+                    txtBoxSharePrice.Enabled = true;
 
                     // Reset stored DataGridView instance
                     SelectedDataGridView = null;
@@ -2321,7 +2488,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
@@ -2358,7 +2525,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
 
                 // Get the current selected row
                 var curItem = ((DataGridView)sender).SelectedRows;
-                // Get Guid of the selected buy item
+                // Get Guid of the selected dividend item
                 var strGuid = curItem[0].Cells[0].Value.ToString();
 
                 // Check if a document is set
@@ -2405,7 +2572,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                                 OnShowDividends();
 
                                 // Add status message
-                                Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                                Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormDividend/StateMessages/EditSuccess", LanguageName),
                                     Language, LanguageName,
@@ -2414,7 +2581,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                             }
                             else
                             {
-                                Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                                Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormDividend/Errors/EditFailed", LanguageName),
                                     Language, LanguageName,
@@ -2435,7 +2602,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DocumentShowFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError,
@@ -2467,7 +2634,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 {
                     txtBoxExchangeRatio.Text = @"";
                     txtBoxVolume.Text = @"";
-                    txtBoxRate.Text = @"";
+                    txtBoxDividendRate.Text = @"";
                     txtBoxPayout.Text = @"";
                     txtBoxPayoutFC.Text = @"";
                     txtBoxTaxAtSource.Text = @"";
@@ -2475,11 +2642,11 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     txtBoxSolidarityTax.Text = @"";
                     txtBoxTax.Text = @"";
                     txtBoxPayoutAfterTax.Text = @"";
-                    txtBoxPrice.Text = @"";
+                    txtBoxSharePrice.Text = @"";
                     txtBoxDocument.Text = @"";
 
                     // Reset status message
-                    toolStripStatusLabelMessage.Text = @"";
+                    toolStripStatusLabelMessageDividendEdit.Text = @"";
                 }
 
                 txtBoxExchangeRatio.Focus();
@@ -2496,7 +2663,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 {
                     txtBoxExchangeRatio.Text = @"";
                     txtBoxVolume.Text = @"";
-                    txtBoxRate.Text = @"";
+                    txtBoxDividendRate.Text = @"";
                     txtBoxPayout.Text = @"";
                     txtBoxPayoutFC.Text = @"";
                     txtBoxTaxAtSource.Text = @"";
@@ -2504,14 +2671,14 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     txtBoxSolidarityTax.Text = @"";
                     txtBoxTax.Text = @"";
                     txtBoxPayoutAfterTax.Text = @"";
-                    txtBoxPrice.Text = @"";
+                    txtBoxSharePrice.Text = @"";
                     txtBoxDocument.Text = @"";
 
                     // Reset status message
-                    toolStripStatusLabelMessage.Text = @"";
+                    toolStripStatusLabelMessageDividendEdit.Text = @"";
                 }
 
-                txtBoxRate.Focus();
+                txtBoxDividendRate.Focus();
             }
 
             // Check if any volume is present
@@ -2521,6 +2688,699 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 txtBoxVolume.Text = ShareObjectFinalValue.VolumeAsStr;
             }
         }
+
+        #region Parsing
+
+        private void DocumentParsing(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                // Reset parsing variables
+                _parsingResult = true;
+                _parsingThreadFinished = false;
+                _bankCounter = 0;
+                _bankIdentifierFound = false;
+                _dividendIdentifierFound = false;
+                _documentTypNotImplemented = false;
+                _documentValuesRunning = false;
+
+                ParsingText = string.Empty;
+
+                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingStarted);
+
+                DocumentType = DocumentParsingConfiguration.DocumentTypes.DividendDocument;
+                DocumentTypeParser = null;
+                DictionaryParsingResult = null;
+
+                Helper.RunProcess($"{Helper.PdfConverterApplication}", $"-simple \"{txtBoxDocument.Text}\" {Helper.ParsingDocumentFileName}");
+
+                // This text is added only once to the file.
+                if (File.Exists(Helper.ParsingDocumentFileName))
+                {
+                    ParsingText = File.ReadAllText(Helper.ParsingDocumentFileName, Encoding.Default);
+
+                    DocumentTypeParsing();
+                }
+
+                while (!_parsingThreadFinished)
+                {
+                    Thread.Sleep(100);
+                }
+            }
+            catch (OperationCanceledException ex)
+            {
+#if DEBUG
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error 1", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+#endif
+                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error 2", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+#endif
+                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
+            }
+        }
+
+        /// <summary>
+        /// This function starts the document parsing process
+        /// which checks if the document typ is correct
+        /// </summary>
+        private void DocumentTypeParsing()
+        {
+            try
+            {
+                if (DocumentParsingConfiguration.InitFlag)
+                {
+                    if (DocumentTypeParser == null)
+                        DocumentTypeParser = new Parser.Parser(false, ParsingText,
+                            DocumentParsingConfiguration.BankRegexList[_bankCounter].BankRegexList,
+                            DocumentParsingConfiguration.BankRegexList[_bankCounter].BankEncodingType);
+                    // Check if the Parser is in idle mode
+                    if (DocumentTypeParser != null && DocumentTypeParser.ParserInfoState.State == ParserState.Idle)
+                    {
+                        DocumentTypeParser.OnParserUpdate += DocumentTypeParser_UpdateGUI;
+
+                        // Reset flags
+                        _bankIdentifierFound = false;
+                        _dividendIdentifierFound = false;
+
+                        // Start document parsing
+                        DocumentTypeParser.StartParsing();
+                    }
+                    else
+                    {
+                        DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                        _parsingThreadFinished = true;
+                        _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingFailed);
+                    }
+                }
+                else
+                {
+                    _parsingThreadFinished = true;
+                    _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingParsingDocumentError);
+                }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+#endif
+                _parsingThreadFinished = true;
+                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingFailed);
+            }
+        }
+
+        /// <summary>
+        /// This event handler updates the progress while checking the document type
+        /// </summary>
+        /// <param name="sender">BackGroundWorker</param>
+        /// <param name="e">ProgressChangedEventArgs</param>
+        private void DocumentTypeParser_UpdateGUI(object sender, OnParserUpdateEventArgs e)
+        {
+            try
+            {
+                if (InvokeRequired)
+                {
+                    Invoke(new Action(() => DocumentTypeParser_UpdateGUI(sender, e)));
+                }
+                else
+                {
+                    try
+                    {
+                        //Console.WriteLine(@"Percentage: {0}", e.ParserInfoState.Percentage);
+                        switch (e.ParserInfoState.LastErrorCode)
+                        {
+                            case ParserErrorCodes.Finished:
+                                {
+                                    //if (e.ParserInfoState.SearchResult != null)
+                                    //{
+                                    //    foreach (var result in e.ParserInfoState.SearchResult)
+                                    //    {
+                                    //        Console.Write(@"{0}:", result.Key);
+                                    //        if (result.Value != null && result.Value.Count > 0)
+                                    //            Console.WriteLine(@"{0}", result.Value[0]);
+                                    //        else
+                                    //            Console.WriteLine(@"-");
+                                    //    }
+                                    //}
+                                    break;
+                                }
+                            case ParserErrorCodes.SearchFinished:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.SearchRunning:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.SearchStarted:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.ContentLoadFinished:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.ContentLoadStarted:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.Started:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.Starting:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.NoError:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.StartFailed:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.BusyFailed:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.InvalidWebSiteGiven:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.NoRegexListGiven:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.NoWebContentLoaded:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.ParsingFailed:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.CancelThread:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.WebExceptionOccured:
+                                {
+                                    break;
+                                }
+                            case ParserErrorCodes.ExceptionOccured:
+                                {
+                                    break;
+                                }
+                        }
+
+                        if (DocumentTypeParser.ParserErrorCode > 0)
+                            Thread.Sleep(100);
+
+                        // Check if a error occurred or the process has been finished
+                        if (e.ParserInfoState.LastErrorCode < 0 || e.ParserInfoState.LastErrorCode == ParserErrorCodes.Finished)
+                        {
+                            if (e.ParserInfoState.LastErrorCode < 0)
+                            {
+                                // Set fail message
+                                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingFailed);
+                            }
+                            else
+                            {
+                                //Check if the correct bank identifier and document identifier may have been found so search for the document values
+                                if (e.ParserInfoState.SearchResult != null &&
+                                    (
+                                        e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
+                                            .BankIdentifierTagName) ||
+                                        e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
+                                            .DividendIdentifierTagName))
+                                )
+                                {
+                                    // Check if the bank identifier has been found
+                                    if (e.ParserInfoState.SearchResult != null &&
+                                        e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
+                                            .BankIdentifierTagName))
+                                        _bankIdentifierFound = true;
+                                    // Check if the dividend identifier has been found
+                                    if (e.ParserInfoState.SearchResult != null &&
+                                        e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
+                                            .DividendIdentifierTagName))
+                                        _dividendIdentifierFound = true;
+
+                                    if (e.ParserInfoState.SearchResult != null &&
+                                        e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
+                                            .BankIdentifierTagName) &&
+                                        e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
+                                            .DividendIdentifierTagName))
+                                    {
+                                        _parsingBackgroundWorker.ReportProgress(
+                                            (int)ParsingErrorCode.ParsingIdentifierValuesFound);
+
+                                        _documentValuesRunning = true;
+
+                                        // Get the correct parsing options for the given document type
+                                        switch (DocumentType)
+                                        {
+                                            case DocumentParsingConfiguration.DocumentTypes.BuyDocument:
+                                                {
+                                                    DocumentTypeParser.RegexList = DocumentParsingConfiguration
+                                                        .BankRegexList[_bankCounter]
+                                                        .DictionaryDocumentRegex[
+                                                            DocumentParsingConfiguration.DocumentTypeBuy].DocumentRegexList;
+                                                    DocumentTypeParser.StartParsing();
+                                                    break;
+                                                }
+                                            case DocumentParsingConfiguration.DocumentTypes.SaleDocument:
+                                                {
+                                                    DocumentTypeParser.RegexList = DocumentParsingConfiguration
+                                                        .BankRegexList[_bankCounter]
+                                                        .DictionaryDocumentRegex[
+                                                            DocumentParsingConfiguration.DocumentTypeSale]
+                                                        .DocumentRegexList;
+                                                    DocumentTypeParser.StartParsing();
+                                                    break;
+                                                }
+                                            case DocumentParsingConfiguration.DocumentTypes.DividendDocument:
+                                                {
+                                                    DocumentTypeParser.RegexList = DocumentParsingConfiguration
+                                                        .BankRegexList[_bankCounter]
+                                                        .DictionaryDocumentRegex[
+                                                            DocumentParsingConfiguration.DocumentTypeDividend]
+                                                        .DocumentRegexList;
+                                                    DocumentTypeParser.StartParsing();
+                                                    break;
+                                                }
+                                            case DocumentParsingConfiguration.DocumentTypes.BrokerageDocument:
+                                                {
+                                                    DocumentTypeParser.RegexList = DocumentParsingConfiguration
+                                                        .BankRegexList[_bankCounter]
+                                                        .DictionaryDocumentRegex[
+                                                            DocumentParsingConfiguration.DocumentTypeBrokerage]
+                                                        .DocumentRegexList;
+                                                    DocumentTypeParser.StartParsing();
+                                                    break;
+                                                }
+                                            default:
+                                                {
+                                                    _documentTypNotImplemented = true;
+                                                    break;
+                                                }
+                                        }
+                                    }
+                                }
+
+                                _bankCounter++;
+
+                                // Check if another bank configuration should be checked
+                                if (_bankCounter < DocumentParsingConfiguration.BankRegexList.Count &&
+                                    _bankIdentifierFound == false)
+                                {
+                                    DocumentTypeParser.RegexList = DocumentParsingConfiguration
+                                        .BankRegexList[_bankCounter].BankRegexList;
+                                    DocumentTypeParser.StartParsing();
+                                }
+                                else
+                                {
+                                    if (_bankIdentifierFound == false)
+                                    {
+                                        _parsingBackgroundWorker.ReportProgress(
+                                            (int)ParsingErrorCode.ParsingBankIdentifierFailed);
+
+                                        DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                                        _parsingThreadFinished = true;
+                                    }
+                                    else if (_dividendIdentifierFound == false)
+                                    {
+                                        _parsingBackgroundWorker.ReportProgress(
+                                            (int)ParsingErrorCode.ParsingDocumentTypeIdentifierFailed);
+
+                                        DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                                        _parsingThreadFinished = true;
+                                    }
+                                    else if (_documentTypNotImplemented)
+                                    {
+                                        _parsingBackgroundWorker.ReportProgress(
+                                            (int)ParsingErrorCode.ParsingDocumentNotImplemented);
+
+                                        DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                                        _parsingThreadFinished = true;
+                                    }
+                                    else
+                                    {
+                                        if (_documentValuesRunning)
+                                        {
+                                            if (DocumentTypeParser.ParsingResult != null)
+                                            {
+                                                DictionaryParsingResult =
+                                                    new Dictionary<string, List<string>>(DocumentTypeParser
+                                                        .ParsingResult);
+
+                                                DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                                                _parsingThreadFinished = true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+#if DEBUG
+                        var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                        MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+#endif
+                        DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                        _parsingThreadFinished = true;
+                        _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+#if DEBUG
+                var message = $"{Helper.GetMyMethodName()}\n\n{exception.Message}";
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+#endif
+                DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                _parsingThreadFinished = true;
+                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
+            }
+        }
+
+        private void OnDocumentParsingProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            switch (e.ProgressPercentage)
+            {
+                case (int) ParsingErrorCode.ParsingStarted:
+                {
+                    toolStripStatusLabelMessageDividendDocumentParsing.ForeColor = Color.Black;
+                    toolStripStatusLabelMessageDividendDocumentParsing.Text =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormDividend/ParsingStateMessages/ParsingStarted",
+                            LanguageName);
+
+                    toolStripProgressBarDividendDocumentParsing.Visible = true;
+                    grpBoxAddDividend.Enabled = false;
+                    grpBoxDividends.Enabled = false;
+                    break;
+                }
+                case (int)ParsingErrorCode.ParsingParsingDocumentError:
+                {
+                    toolStripStatusLabelMessageDividendDocumentParsing.ForeColor = Color.Red;
+                    toolStripStatusLabelMessageDividendDocumentParsing.Text =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormDividend/ParsingErrors/ParsingParsingDocumentError",
+                            LanguageName);
+
+                    toolStripProgressBarDividendDocumentParsing.Visible = false;
+                    grpBoxAddDividend.Enabled = true;
+                    grpBoxDividends.Enabled = true;
+                    break;
+                }
+                case (int) ParsingErrorCode.ParsingFailed:
+                {
+                    toolStripStatusLabelMessageDividendDocumentParsing.ForeColor = Color.Red;
+                    toolStripStatusLabelMessageDividendDocumentParsing.Text =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormDividend/ParsingErrors/ParsingFailed",
+                            LanguageName);
+
+                    toolStripProgressBarDividendDocumentParsing.Visible = false;
+                    grpBoxAddDividend.Enabled = true;
+                    grpBoxDividends.Enabled = true;
+                    break;
+                }
+                case (int) ParsingErrorCode.ParsingDocumentNotImplemented:
+                {
+                    toolStripStatusLabelMessageDividendDocumentParsing.ForeColor = Color.Red;
+                    toolStripStatusLabelMessageDividendDocumentParsing.Text =
+                        Language.GetLanguageTextByXPath(
+                            @"/AddEditFormDividend/ParsingErrors/ParsingDocumentNotImplemented",
+                            LanguageName);
+
+                    toolStripProgressBarDividendDocumentParsing.Visible = false;
+                    grpBoxAddDividend.Enabled = true;
+                    grpBoxDividends.Enabled = true;
+                    break;
+                }
+                case (int) ParsingErrorCode.ParsingBankIdentifierFailed:
+                {
+                    toolStripStatusLabelMessageDividendDocumentParsing.ForeColor = Color.Red;
+                    toolStripStatusLabelMessageDividendDocumentParsing.Text =
+                        Language.GetLanguageTextByXPath(
+                            @"/AddEditFormDividend/ParsingErrors/ParsingBankIdentifierFailed",
+                            LanguageName);
+
+                    toolStripProgressBarDividendDocumentParsing.Visible = false;
+                    grpBoxAddDividend.Enabled = true;
+                    grpBoxDividends.Enabled = true;
+                    break;
+                }
+                case (int) ParsingErrorCode.ParsingDocumentTypeIdentifierFailed:
+                {
+                    toolStripStatusLabelMessageDividendDocumentParsing.ForeColor = Color.Red;
+                    toolStripStatusLabelMessageDividendDocumentParsing.Text =
+                        Language.GetLanguageTextByXPath(
+                            @"/AddEditFormDividend/ParsingErrors/ParsingDocumentTypeIdentifierFailed",
+                            LanguageName);
+
+                    toolStripProgressBarDividendDocumentParsing.Visible = false;
+                    grpBoxAddDividend.Enabled = true;
+                    grpBoxDividends.Enabled = true;
+                    break;
+                }
+                case (int) ParsingErrorCode.ParsingDocumentFailed:
+                {
+                    toolStripStatusLabelMessageDividendDocumentParsing.ForeColor = Color.Red;
+                    toolStripStatusLabelMessageDividendDocumentParsing.Text =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormDividend/ParsingErrors/ParsingDocumentFailed",
+                            LanguageName);
+
+                    toolStripProgressBarDividendDocumentParsing.Visible = false;
+                    grpBoxAddDividend.Enabled = true;
+                    grpBoxDividends.Enabled = true;
+                    break;
+                }
+                case (int) ParsingErrorCode.ParsingIdentifierValuesFound:
+                {
+                    toolStripStatusLabelMessageDividendDocumentParsing.ForeColor = Color.Black;
+                    toolStripStatusLabelMessageDividendDocumentParsing.Text =
+                        Language.GetLanguageTextByXPath(
+                            @"/AddEditFormDividend/ParsingErrors/ParsingIdentifierValuesFound",
+                            LanguageName);
+                    break;
+                }
+            }
+        }
+
+        private void OnDocumentParsingRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (DictionaryParsingResult != null)
+            {
+                // Check if the WKN has been found and if the WKN is the right one
+                if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration
+                    .DocumentTypeDividendWkn) || DictionaryParsingResult[DocumentParsingConfiguration
+                        .DocumentTypeDividendWkn][0] != ShareObjectFinalValue.WknAsStr)
+                {
+                    toolStripStatusLabelMessageDividendDocumentParsing.ForeColor = Color.Red;
+                    toolStripStatusLabelMessageDividendDocumentParsing.Text =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormDividend/ParsingErrors/ParsingWrongWkn",
+                            LanguageName);
+                }
+                else
+                {
+                    #region Check which values are found
+
+                    foreach (var resultEntry in DictionaryParsingResult)
+                    {
+                        if (resultEntry.Value.Count <= 0) continue;
+                        
+                        switch (resultEntry.Key)
+                        {
+                            case DocumentParsingConfiguration.DocumentTypeDividendExchangeRate:
+                                string strDocument = txtBoxDocument.Text;
+                                chkBoxEnableFC.CheckState = CheckState.Checked;                                
+                                picBoxExchangeRateBoxParseState.Image = Resources.search_ok_24;
+                                txtBoxExchangeRatio.Text = resultEntry.Value[0].Trim();
+                                txtBoxDocument.Text = strDocument;
+                                break;
+                            case DocumentParsingConfiguration.DocumentTypeDividendDate:
+                                picBoxDateParseState.Image = Resources.search_ok_24;
+                                dateTimePickerDate.Text = resultEntry.Value[0].Trim();
+                                break;
+                            case DocumentParsingConfiguration.DocumentTypeDividendTime:
+                                picBoxTimeParseState.Image = Resources.search_ok_24;
+                                dateTimePickerTime.Text = resultEntry.Value[0].Trim();
+                                break;
+                            case DocumentParsingConfiguration.DocumentTypeDividendVolume:
+                                picBoxVolumeParserState.Image = Resources.search_ok_24;
+                                txtBoxVolume.Text = resultEntry.Value[0].Trim();
+                                break;
+                            case DocumentParsingConfiguration.DocumentTypeDividendDividendRate:
+                                picBoxDividendRateParserState.Image = Resources.search_ok_24;
+                                txtBoxDividendRate.Text = resultEntry.Value[0].Trim();
+                                break;
+                            case DocumentParsingConfiguration.DocumentTypeDividendTaxAtSource:
+                                picBoxTaxAtSourceParserState.Image = Resources.search_ok_24;
+                                txtBoxTaxAtSource.Text = resultEntry.Value[0].Trim();
+                                break;
+                            case DocumentParsingConfiguration.DocumentTypeDividendCapitalGainTax:
+                                picBoxCapitalGainParserState.Image = Resources.search_ok_24;
+                                txtBoxCapitalGainsTax.Text = resultEntry.Value[0].Trim();
+                                break;
+                            case DocumentParsingConfiguration.DocumentTypeDividendSolidarityTax:
+                                picBoxSolidarityParserState.Image = Resources.search_ok_24;
+                                txtBoxSolidarityTax.Text = resultEntry.Value[0].Trim();
+                                break;
+                        }
+                    }
+
+                    #endregion Check which values are found
+
+                    #region Not found values
+
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeDividendDate) ||
+                        DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeDividendDate) &&
+                        DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeDividendDate].Count == 0
+                    )
+                    {
+                        picBoxDateParseState.Image = Resources.search_failed_24;
+                        dateTimePickerDate.Value = DateTime.Now;
+                        dateTimePickerTime.Value =
+                            new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+                        picBoxDateParseState.Image = Resources.search_failed_24;
+                        _parsingResult = false;
+                    }
+
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeDividendTime) ||
+                        DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeDividendTime) &&
+                        DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeDividendTime].Count == 0
+                    )
+                    {
+                        dateTimePickerTime.Value =
+                            new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+                        picBoxTimeParseState.Image = Resources.search_info_24;
+                    }
+
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeDividendExchangeRate) ||
+                        DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeDividendExchangeRate) &&
+                        DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeDividendExchangeRate].Count == 0
+                    )
+                    {
+                        picBoxExchangeRateBoxParseState.Image = Resources.search_ok_24;
+                        chkBoxEnableFC.CheckState = CheckState.Unchecked;
+                        txtBoxExchangeRatio.Text = string.Empty;
+                    }
+
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeDividendVolume) ||
+                        DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeDividendVolume) &&
+                        DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeDividendVolume].Count == 0
+                    )
+                    {
+                        picBoxVolumeParserState.Image = Resources.search_failed_24;
+                        txtBoxVolume.Text = string.Empty;
+                        _parsingResult = false;
+                    }
+
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeDividendDividendRate) ||
+                        DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeDividendDividendRate) &&
+                        DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeDividendDividendRate].Count == 0
+                    )
+                    {
+                        picBoxDividendRateParserState.Image = Resources.search_failed_24;
+                        txtBoxDividendRate.Text = string.Empty;
+                        _parsingResult = false;
+                    }
+
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeDividendTaxAtSource) ||
+                        DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeDividendTaxAtSource) &&
+                        DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeDividendTaxAtSource].Count == 0
+                    )
+                    {
+                        picBoxTaxAtSourceParserState.Image = Resources.search_info_24;
+                    }
+
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeDividendCapitalGainTax) ||
+                        DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeDividendCapitalGainTax) &&
+                        DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeDividendCapitalGainTax].Count == 0
+                    )
+                    {
+                        picBoxCapitalGainParserState.Image = Resources.search_info_24;
+                    }
+
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeDividendSolidarityTax) ||
+                        DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeDividendSolidarityTax) &&
+                        DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeDividendSolidarityTax].Count == 0
+                    )
+                    {
+                        picBoxSolidarityParserState.Image = Resources.search_info_24;
+                    }
+
+                    #endregion Not found values
+
+                    if (!_parsingResult)
+                    {
+                        toolStripStatusLabelMessageDividendDocumentParsing.ForeColor = Color.Red;
+                        toolStripStatusLabelMessageDividendDocumentParsing.Text =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/ParsingErrors/ParsingFailed",
+                                LanguageName);
+                    }
+                    else
+                    {
+                        toolStripStatusLabelMessageDividendDocumentParsing.ForeColor = Color.Black;
+                        toolStripStatusLabelMessageDividendDocumentParsing.Text =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/ParsingStateMessages/ParsingDocumentSuccessful",
+                                LanguageName);
+                    }
+                }
+            }
+
+            toolStripProgressBarDividendDocumentParsing.Visible = false;
+            grpBoxAddDividend.Enabled = true;
+            grpBoxDividends.Enabled = true;
+        }
+
+        private void ResetValues()
+        {
+            // Reset state pictures
+            // TODO
+            //picBoxDateParseState.Image = Resources.empty_arrow;
+            //picBoxTimeParseState.Image = Resources.empty_arrow;
+            //picBoxOrderNumberParseState.Image = Resources.empty_arrow;
+            //picBoxVolumeParseState.Image = Resources.empty_arrow;
+            //picBoxPriceParseState.Image = Resources.empty_arrow;
+            //picBoxProvisionParseState.Image = Resources.empty_arrow;
+            //picBoxBrokerFeeParseState.Image = Resources.empty_arrow;
+            //picBoxTraderPlaceFeeParseState.Image = Resources.empty_arrow;
+            //picBoxReductionParseState.Image = Resources.empty_arrow;
+
+            //// Reset textboxes
+            //dateTimePickerDate.Value = DateTime.Now;
+            //dateTimePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+            //txtBoxOrderNumber.Text = string.Empty;
+            //txtBoxVolume.Text = string.Empty;
+            //txtBoxSharePrice.Text = string.Empty;
+            //txtBoxProvision.Text = string.Empty;
+            //txtBoxBrokerFee.Text = string.Empty;
+            //txtBoxTraderPlaceFee.Text = string.Empty;
+            //txtBoxReduction.Text = string.Empty;
+
+            // Reset status strip
+            toolStripStatusLabelMessageDividendEdit.Text = string.Empty;
+            toolStripStatusLabelMessageDividendDocumentParsing.Text = string.Empty;
+            toolStripProgressBarDividendDocumentParsing.Visible = false;
+        }
+
+        #endregion Parsing
 
         #endregion Methods
     }

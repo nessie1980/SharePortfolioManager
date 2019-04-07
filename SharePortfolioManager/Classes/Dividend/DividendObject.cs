@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -610,14 +610,14 @@ namespace SharePortfolioManager
         /// </summary>
         private void CalculateDividendValues()
         {
-//#if DEBUG_DIVIDEND
+#if DEBUG_DIVIDEND
             Console.WriteLine(@"");
             Console.WriteLine(@"CalculateDividendValues");
             Console.WriteLine(@"RateDec: {0}", RateDec);
             Console.WriteLine(@"PriceDec: {0}", PriceDec);
-//#endif
+#endif
 
-            if (EnableFc == CheckState.Checked)
+        if (EnableFc == CheckState.Checked)
             {
                 // Calculate the payout
                 PayoutFcDec = Math.Round(RateDec * VolumeDec, 2, MidpointRounding.AwayFromZero);

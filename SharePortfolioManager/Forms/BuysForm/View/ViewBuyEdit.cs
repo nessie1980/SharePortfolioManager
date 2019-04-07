@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -77,11 +77,12 @@ namespace SharePortfolioManager.Forms.BuysForm.View
     // Error codes for the document parsing
     public enum ParsingErrorCode
     {
-        ParsingFailed = -5,
-        ParsingDocumentNotImplemented = -4,
-        ParsingDocumentTypeIdentifierFailed = -3,
-        ParsingBankIdentifierFailed = -2,
-        ParsingDocumentFailed = -1,
+        ParsingFailed = -6,
+        ParsingDocumentNotImplemented = -5,
+        ParsingDocumentTypeIdentifierFailed = -4,
+        ParsingBankIdentifierFailed = -3,
+        ParsingDocumentFailed = -2,
+        ParsingParsingDocumentError = -1,
         ParsingStarted = 0,
         ParsingIdentifierValuesFound = 1
     }
@@ -117,14 +118,14 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         string Volume { get; set; }
         string VolumeSold { get; set; }
         string Price { get; set; }
-        string MarketValue { get; set; }
         string Reduction { get; set; }
         string Provision { get; set; }
         string BrokerFee { get; set; }
         string TraderPlaceFee { get; set; }
         string Brokerage { get; set; }
         string BrokerageWithReduction { get; set; }
-        string FinalValue { get; set; }
+        string BuyValue { get; set; }
+        string BuyValueBrokerageReduction { get; set; }
         string Document { get; set; }
 
         DialogResult ShowDialog();
@@ -229,8 +230,6 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         public DocumentParsingConfiguration.DocumentTypes DocumentType { get; internal set; }
 
         public Parser.Parser DocumentTypeParser;
-
-        public string ParsingDocumentFileName { get; } = @".//Tools//Parsing.txt";
 
         public string ParsingText { get; internal set; }
 
@@ -349,17 +348,6 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             }
         }
 
-        public string MarketValue
-        {
-            get => txtBoxMarketValue.Text;
-            set
-            {
-                if (txtBoxMarketValue.Text == value)
-                    return;
-                txtBoxMarketValue.Text = value;
-            }
-        }
-
         public string Provision
         {
             get => txtBoxProvision.Text;
@@ -417,14 +405,25 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             }
         }
 
-        public string FinalValue
+        public string BuyValue
         {
-            get => txtBoxDeposit.Text;
+            get => txtBoxBuyValue.Text;
             set
             {
-                if (txtBoxDeposit.Text == value)
+                if (txtBoxBuyValue.Text == value)
                     return;
-                txtBoxDeposit.Text = value;
+                txtBoxBuyValue.Text = value;
+            }
+        }
+
+        public string BuyValueBrokerageReduction
+        {
+            get => txtBoxBuyValueBrokerageReduction.Text;
+            set
+            {
+                if (txtBoxBuyValueBrokerageReduction.Text == value)
+                    return;
+                txtBoxBuyValueBrokerageReduction.Text = value;
             }
         }
 
@@ -949,7 +948,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 lblBuyPrice.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Labels/Price",
                         LanguageName);
-                lblMarketValue.Text =
+                lblBuyValue.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Labels/MarketValue",
                         LanguageName);
                 lblProvision.Text =
@@ -967,7 +966,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 lblBrokerage.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Labels/Brokerage",
                         LanguageName);
-                lblDeposit.Text =
+                lblBuyValueBrokerageReduction.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Labels/FinalValue",
                         LanguageName);
                 lblDocument.Text =
@@ -997,7 +996,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 lblTraderPlaceFeeUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                 lblReductionUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                 lblBrokerageUnit.Text = ShareObjectFinalValue.CurrencyUnit;
-                lblMarketValueUnit.Text = ShareObjectFinalValue.CurrencyUnit;
+                lblBuyValueUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                 lblPriceUnit.Text = ShareObjectFinalValue.CurrencyUnit;
 
                 #endregion Unit configuration
@@ -1492,7 +1491,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         }
 
         /// <summary>
-        /// This function allows to sets via Drag and Drop a document for this brokerage
+        /// This function allows to sets via Drag and Drop a document for this buy
         /// </summary>
         /// <param name="sender">Text box</param>
         /// <param name="e">EventArgs</param>
@@ -1806,7 +1805,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     // Set TabPage caption
                     Text = Language.GetLanguageTextByXPath(
                                @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/TabPgOverview/Overview", LanguageName)
-                           + @" (" + ShareObjectFinalValue.AllBuyEntries.BuyValueBrokerageTotalAsStrUnit +
+                           + @" (" + ShareObjectFinalValue.AllBuyEntries.BuyValueBrokerageReductionTotalAsStrUnit +
                            @")"
                 };
 
@@ -1823,7 +1822,6 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 // Create DataGridView
                 var dataGridViewBuysOverviewOfAYears = new DataGridView
                 {
-                    // TODO correct
                     Name = @"Overview",
                     Dock = DockStyle.Fill,
 
@@ -1904,7 +1902,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                         // Set TabPage caption
                         Text = keyName + @" (" +
                                ShareObjectFinalValue.AllBuyEntries.AllBuysOfTheShareDictionary[keyName]
-                                   .BuyValueBrokerageYearAsStrUnit
+                                   .BuyValueBrokerageReductionYearAsStrUnit
                                + @")"
                     };
 
@@ -2402,7 +2400,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                         txtBoxVolume.Text = curItem[0].Cells[1].Value.ToString();
                         txtBoxSharePrice.Text = curItem[0].Cells[2].Value.ToString();
                         txtBoxReduction.Text = string.Empty;
-                        txtBoxDeposit.Text = curItem[0].Cells[3].Value.ToString();
+                        txtBoxBuyValueBrokerageReduction.Text = curItem[0].Cells[3].Value.ToString();
                         txtBoxDocument.Text = curItem[0].Cells[4].Value.ToString();
                     }
 
@@ -2419,13 +2417,13 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                         txtBoxVolume.Enabled = true;
                         txtBoxVolumeSold.Enabled = true;
                         txtBoxSharePrice.Enabled = true;
-                        txtBoxMarketValue.Enabled = true;
+                        txtBoxBuyValue.Enabled = true;
                         txtBoxProvision.Enabled = true;
                         txtBoxBrokerFee.Enabled = true;
                         txtBoxTraderPlaceFee.Enabled = true;
                         txtBoxBrokerage.Enabled = true;
                         txtBoxReduction.Enabled = true;
-                        txtBoxDeposit.Enabled = true;
+                        txtBoxBuyValueBrokerageReduction.Enabled = true;
                     }
                     else
                     {
@@ -2438,13 +2436,13 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                         txtBoxVolume.Enabled = false;
                         txtBoxVolumeSold.Enabled = false;
                         txtBoxSharePrice.Enabled = false;
-                        txtBoxMarketValue.Enabled = false;
+                        txtBoxBuyValue.Enabled = false;
                         txtBoxProvision.Enabled = false;
                         txtBoxBrokerFee.Enabled = false;
                         txtBoxTraderPlaceFee.Enabled = false;
                         txtBoxBrokerage.Enabled = false;
                         txtBoxReduction.Enabled = false;
-                        txtBoxDeposit.Enabled = false;
+                        txtBoxBuyValueBrokerageReduction.Enabled = false;
                     }
 
                     // Rename button
@@ -2485,10 +2483,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     txtBoxVolume.Enabled = true;
                     txtBoxVolumeSold.Enabled = true;
                     txtBoxSharePrice.Enabled = true;
-                    txtBoxMarketValue.Enabled = true;
+                    txtBoxBuyValue.Enabled = true;
                     txtBoxBrokerage.Enabled = true;
                     txtBoxReduction.Enabled = true;
-                    txtBoxDeposit.Enabled = true;
+                    txtBoxBuyValueBrokerageReduction.Enabled = true;
 
                     // Reset stored DataGridView instance
                     SelectedDataGridView = null;
@@ -2645,7 +2643,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 _bankCounter = 0;
                 _bankIdentifierFound = false;
                 _buyIdentifierFound = false;
-                _documentTypNotImplemented = true;
+                _documentTypNotImplemented = false;
                 _documentValuesRunning = false;
 
                 ParsingText = string.Empty;
@@ -2656,12 +2654,12 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 DocumentTypeParser = null;
                 DictionaryParsingResult = null;
 
-                Helper.RunProcess($"{Helper.PdfConverterApplication}", $"-simple \"{txtBoxDocument.Text}\" {ParsingDocumentFileName}");
+                Helper.RunProcess($"{Helper.PdfConverterApplication}", $"-simple \"{txtBoxDocument.Text}\" {Helper.ParsingDocumentFileName}");
 
                 // This text is added only once to the file.
-                if (File.Exists(ParsingDocumentFileName))
+                if (File.Exists(Helper.ParsingDocumentFileName))
                 {
-                    ParsingText = File.ReadAllText(ParsingDocumentFileName, Encoding.Default);
+                    ParsingText = File.ReadAllText(Helper.ParsingDocumentFileName, Encoding.Default);
 
                     DocumentTypeParsing();
                 }
@@ -2710,6 +2708,10 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     {
                         DocumentTypeParser.OnParserUpdate += DocumentTypeParser_UpdateGUI;
 
+                        // Reset flags
+                        _bankIdentifierFound = false;
+                        _buyIdentifierFound = false;
+
                         // Start document parsing
                         DocumentTypeParser.StartParsing();
                     }
@@ -2723,7 +2725,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 else
                 {
                     _parsingThreadFinished = true;
-                    _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingFailed);
+                    _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingParsingDocumentError);
                 }
             }
             catch (Exception ex)
@@ -2931,7 +2933,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                                             }
                                             default:
                                             {
-                                                _documentTypNotImplemented = false;
+                                                _documentTypNotImplemented = true;
                                                 break;
                                             }
                                         }
@@ -2966,7 +2968,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                                         DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
                                         _parsingThreadFinished = true;
                                     }
-                                    else if (_documentTypNotImplemented == false)
+                                    else if (_documentTypNotImplemented)
                                     {
                                         _parsingBackgroundWorker.ReportProgress(
                                             (int)ParsingErrorCode.ParsingDocumentNotImplemented);
@@ -3023,7 +3025,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
         {
             switch (e.ProgressPercentage)
             {
-                case (int) ParsingErrorCode.ParsingStarted:
+                case (int)ParsingErrorCode.ParsingStarted:
                 {
                     toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Black;
                     toolStripStatusLabelMessageBuyDocumentParsing.Text =
@@ -3035,7 +3037,19 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     grpBoxBuys.Enabled = false;
                     break;
                 }
-                case (int) ParsingErrorCode.ParsingFailed:
+                case (int)ParsingErrorCode.ParsingParsingDocumentError:
+                {
+                    toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Red;
+                    toolStripStatusLabelMessageBuyDocumentParsing.Text =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingErrors/ParsingParsingDocumentError",
+                            LanguageName);
+
+                    toolStripProgressBarBuyDocumentParsing.Visible = false;
+                    grpBoxAdd.Enabled = true;
+                    grpBoxBuys.Enabled = true;
+                    break;
+                }
+                case (int)ParsingErrorCode.ParsingFailed:
                 {
                     toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Red;
                     toolStripStatusLabelMessageBuyDocumentParsing.Text =
@@ -3047,7 +3061,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     grpBoxBuys.Enabled = true;
                     break;
                 }
-                case (int) ParsingErrorCode.ParsingDocumentNotImplemented:
+                case (int)ParsingErrorCode.ParsingDocumentNotImplemented:
                 {
                     toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Red;
                     toolStripStatusLabelMessageBuyDocumentParsing.Text =
@@ -3059,7 +3073,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     grpBoxBuys.Enabled = true;
                     break;
                 }
-                case (int) ParsingErrorCode.ParsingBankIdentifierFailed:
+                case (int)ParsingErrorCode.ParsingBankIdentifierFailed:
                 {
                     toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Red;
                     toolStripStatusLabelMessageBuyDocumentParsing.Text =
@@ -3071,7 +3085,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     grpBoxBuys.Enabled = true;
                     break;
                 }
-                case (int) ParsingErrorCode.ParsingDocumentTypeIdentifierFailed:
+                case (int)ParsingErrorCode.ParsingDocumentTypeIdentifierFailed:
                 {
                     toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Red;
                     toolStripStatusLabelMessageBuyDocumentParsing.Text =
@@ -3084,7 +3098,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     grpBoxBuys.Enabled = true;
                     break;
                 }
-                case (int) ParsingErrorCode.ParsingDocumentFailed:
+                case (int)ParsingErrorCode.ParsingDocumentFailed:
                 {
                     toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Red;
                     toolStripStatusLabelMessageBuyDocumentParsing.Text =
@@ -3096,7 +3110,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     grpBoxBuys.Enabled = true;
                     break;
                 }
-                case (int) ParsingErrorCode.ParsingIdentifierValuesFound:
+                case (int)ParsingErrorCode.ParsingIdentifierValuesFound:
                 {
                     toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Black;
                     toolStripStatusLabelMessageBuyDocumentParsing.Text =
@@ -3127,6 +3141,8 @@ namespace SharePortfolioManager.Forms.BuysForm.View
 
                     foreach (var resultEntry in DictionaryParsingResult)
                     {
+                        if (resultEntry.Value.Count <= 0) continue;
+
                         switch (resultEntry.Key)
                         {
                             case DocumentParsingConfiguration.DocumentTypeBuyOrderNumber:
@@ -3173,16 +3189,20 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     #region Not found values
 
                     // Which values are not found
-                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration
-                        .DocumentTypeBuyOrderNumber))
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyOrderNumber) ||
+                        DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyOrderNumber) &&
+                        DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeBuyOrderNumber].Count == 0
+                    )
                     {
                         picBoxOrderNumberParseState.Image = Resources.search_failed_24;
                         txtBoxOrderNumber.Text = string.Empty;
                         _parsingResult = false;
                     }
 
-                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration
-                        .DocumentTypeBuyDate))
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyDate) ||
+                        DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyDate) &&
+                        DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeBuyDate].Count == 0
+                    )
                     {
                         picBoxDateParseState.Image = Resources.search_failed_24;
                         dateTimePickerDate.Value = DateTime.Now;
@@ -3192,56 +3212,72 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                         _parsingResult = false;
                     }
 
-                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration
-                        .DocumentTypeBuyTime))
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyTime) ||
+                        DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyTime) &&
+                        DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeBuyTime].Count == 0
+                    )
                     {
                         dateTimePickerTime.Value =
                             new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
                         picBoxTimeParseState.Image = Resources.search_info_24;
                     }
 
-                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration
-                        .DocumentTypeBuyVolume))
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyVolume) ||
+                        DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyVolume) &&
+                        DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeBuyVolume].Count == 0
+                    )
                     {
                         picBoxVolumeParseState.Image = Resources.search_failed_24;
                         txtBoxVolume.Text = string.Empty;
                         _parsingResult = false;
                     }
 
-                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration
-                        .DocumentTypeBuyPrice))
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyPrice) ||
+                        DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyPrice) &&
+                        DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeBuyPrice].Count == 0
+                    )
                     {
                         picBoxVolumeParseState.Image = Resources.search_failed_24;
                         txtBoxSharePrice.Text = string.Empty;
                         _parsingResult = false;
                     }
 
-                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.
-                        DocumentTypeBuyProvision))
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyProvision) ||
+                        DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyProvision) &&
+                        DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeBuyProvision].Count == 0
+                    )
                     {
                         picBoxProvisionParseState.Image = Resources.search_info_24;
                     }
 
-                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.
-                        DocumentTypeBuyBrokerFee))
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyBrokerFee) ||
+                        DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyBrokerFee) &&
+                        DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeBuyBrokerFee].Count == 0
+                    )
                     {
                         picBoxBrokerFeeParseState.Image = Resources.search_info_24;
                     }
 
-                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.
-                        DocumentTypeBuyBrokerFee))
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyBrokerFee) ||
+                        DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyBrokerFee) &&
+                        DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeBuyBrokerFee].Count == 0
+                    )
                     {
                         picBoxBrokerFeeParseState.Image = Resources.search_info_24;
                     }
 
-                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.
-                        DocumentTypeBuyTraderPlaceFee))
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyTraderPlaceFee) ||
+                        DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyTraderPlaceFee) &&
+                        DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeBuyTraderPlaceFee].Count == 0
+                    )
                     {
                         picBoxTraderPlaceFeeParseState.Image = Resources.search_info_24;
                     }
 
-                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.
-                        DocumentTypeBuyReduction))
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyReduction) ||
+                        DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyReduction) &&
+                        DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeBuyReduction].Count == 0
+                    )
                     {
                         picBoxReductionParseState.Image = Resources.search_info_24;
                     }

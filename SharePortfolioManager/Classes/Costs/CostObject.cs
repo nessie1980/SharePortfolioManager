@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -92,11 +92,10 @@ namespace SharePortfolioManager.Classes.Costs
         public string BrokerageValueAsStr => Helper.FormatDecimal(BrokerageValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", CultureInfo);
 
         [Browsable(false)]
-        public decimal BrokerageWithReductionValue { get; set; }
+        public decimal BrokerageReductionValue { get; set; }
 
         [Browsable(false)]
-        public string BrokerageWithReductionValueAsStr => Helper.FormatDecimal(BrokerageWithReductionValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", CultureInfo);
-
+        public string BrokerageReductionValueAsStr => Helper.FormatDecimal(BrokerageReductionValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", CultureInfo);
 
         [Browsable(false)]
         public string BrokerageDocument { get; set; }
@@ -115,7 +114,7 @@ namespace SharePortfolioManager.Classes.Costs
         public string DgvBrokerageDate => DateAsStr;
 
         [Browsable(true)]
-        public string DgvBrokerageWithReductionValueAsStr => BrokerageWithReductionValueAsStr;
+        public string DgvBrokerageReductionValueAsStr => BrokerageReductionValueAsStr;
 
         [Browsable(true)]
         public Image DocumentGrid => Helper.GetImageForFile(BrokerageDocument);
@@ -157,7 +156,7 @@ namespace SharePortfolioManager.Classes.Costs
             // Calculate and set brokerage value
             Helper.CalcBrokerageValues(decProvisionValue, decBrokerFeeValue, decTraderPlaceFeeValue, ReductionValue, out var brokerageValue, out var brokerageWithReductionValue);
             BrokerageValue = brokerageValue;
-            BrokerageWithReductionValue = brokerageWithReductionValue;
+            BrokerageReductionValue = brokerageWithReductionValue;
 
 #if DEBUG_BROKERAGE
             Console.WriteLine(@"");

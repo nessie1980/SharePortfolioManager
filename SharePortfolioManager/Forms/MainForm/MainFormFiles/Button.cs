@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -21,15 +21,16 @@
 //SOFTWARE.
 
 using SharePortfolioManager.Classes;
+using SharePortfolioManager.Classes.ShareObjects;
 using SharePortfolioManager.Forms.ShareAddForm.Model;
 using SharePortfolioManager.Forms.ShareAddForm.Presenter;
 using SharePortfolioManager.Forms.ShareAddForm.View;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
-using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager
 {
@@ -99,6 +100,7 @@ namespace SharePortfolioManager
                 // Create add share form
                 IModelShareAdd model = new ModelShareAdd();
                 IViewShareAdd view = new ViewShareAdd(this, Logger, Language, LanguageName, WebSiteConfiguration.WebSiteRegexList);
+                // ReSharper disable once UnusedVariable
                 var presenterBuyEdit = new PresenterShareAdd(view, model);
 
                 if (view.ShowDialog() != DialogResult.OK) return;
@@ -144,6 +146,13 @@ namespace SharePortfolioManager
                         Helper.EnableDisableControls(true, tblLayPnlShareOverviews, additionalButtons);
                     }
                 }
+
+                // Check if any share set for updating so enable the refresh all button
+                btnRefreshAll.Enabled = ShareObjectListFinalValue.Count(p => p.Update && p.WebSiteConfigurationValid) >= 1;
+
+                // Throw exception which is thrown in the SaveShareObject function
+                if (exception != null)
+                    throw exception;
 
                 // Check if the DataBinding is already done and
                 // than set the new share to the DataGridView
@@ -265,6 +274,13 @@ namespace SharePortfolioManager
                             Language, LanguageName,
                             Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
                     }
+
+                    // Check if any share set for updating so enable the refresh all button
+                    btnRefreshAll.Enabled = ShareObjectListFinalValue.Count(p => p.Update && p.WebSiteConfigurationValid) >= 1;
+
+                    // Throw exception which is thrown in the SaveShareObject function
+                    if (exception != null)
+                        throw exception;
                 }
                 else
                 {
@@ -434,6 +450,9 @@ namespace SharePortfolioManager
                     // Update DataGridView
                     DgvPortfolioBindingSourceMarketValue.ResetBindings(false);
                     DgvPortfolioBindingSourceFinalValue.ResetBindings(false);
+
+                    // Check if any share set for updating so enable the refresh all button
+                    btnRefreshAll.Enabled = ShareObjectListFinalValue.Count(p => p.Update && p.WebSiteConfigurationValid) >= 1;
                 }
                 catch (Exception ex)
                 {

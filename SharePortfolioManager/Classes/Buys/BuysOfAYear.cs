@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -52,10 +52,22 @@ namespace SharePortfolioManager
         public string BuyValueYearAsStrUnit => Helper.FormatDecimal(BuyValueYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
 
         [Browsable(false)]
+        public decimal BuyValueReductionYear { get; internal set; } = -1;
+
+        [Browsable(false)]
+        public string BuyValueReductionYearAsStrUnit => Helper.FormatDecimal(BuyValueReductionYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
+
+        [Browsable(false)]
         public decimal BuyValueBrokerageYear { get; internal set; } = -1;
 
         [Browsable(false)]
         public string BuyValueBrokerageYearAsStrUnit => Helper.FormatDecimal(BuyValueBrokerageYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
+
+        [Browsable(false)]
+        public decimal BuyValueBrokerageReductionYear { get; internal set; } = -1;
+
+        [Browsable(false)]
+        public string BuyValueBrokerageReductionYearAsStrUnit => Helper.FormatDecimal(BuyValueBrokerageReductionYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
 
         [Browsable(false)]
         public List<BuyObject> BuyListYear { get; } = new List<BuyObject>();
@@ -74,7 +86,7 @@ namespace SharePortfolioManager
 
         [Browsable(true)]
         // ReSharper disable once UnusedMember.Global
-        public decimal DgvBuyValueBrokerageYear => BuyValueBrokerageYear;
+        public decimal DgvBuyValueBrokerageReductionYear => BuyValueBrokerageReductionYear;
 
         #endregion Data grid view properties
 
@@ -118,15 +130,25 @@ namespace SharePortfolioManager
                 DateTime.TryParse(strDate, out var dateTime);
                 BuyYear = dateTime.Year.ToString();
 
-                // Calculate buy value without reductions and brokerage
+                // Calculate buy value without brokerage and reduction
                 if (BuyValueYear == -1)
                     BuyValueYear = 0;
                 BuyValueYear += addObject.BuyValue;
+
+                // Calculate buy value with reduction
+                if (BuyValueReductionYear == -1)
+                    BuyValueReductionYear = 0;
+                BuyValueReductionYear += addObject.BuyValueReduction;
 
                 // Calculate buy value with brokerage
                 if (BuyValueBrokerageYear == -1)
                     BuyValueBrokerageYear = 0;
                 BuyValueBrokerageYear += addObject.BuyValueBrokerage;
+
+                // Calculate buy value with brokerage and reduction
+                if (BuyValueBrokerageReductionYear == -1)
+                    BuyValueBrokerageReductionYear = 0;
+                BuyValueBrokerageReductionYear += addObject.BuyValueBrokerageReduction;
 
                 // Calculate buy volume
                 if (BuyVolumeYear == -1)
@@ -135,9 +157,10 @@ namespace SharePortfolioManager
 
 #if DEBUG_BUY
                 Console.WriteLine(@"BuyValueYear: {0}", BuyValueYear);
-                Console.WriteLine(@"BuyValueReductionYear: {0}", BuyValueReductionYear);
-                Console.WriteLine(@"BuyValueReductionBrokerageYear: {0}", BuyValueReductionBrokerageYear);
                 Console.WriteLine(@"VolumeYear: {0}", BuyVolumeYear);
+                Console.WriteLine(@"BuyValueReductionYear: {0}", BuyValueReductionYear);
+                Console.WriteLine(@"BuyValueBrokerageYear: {0}", BuyValueBrokerageYear);
+                Console.WriteLine(@"BuyValueBrokerageReductionYear: {0}", BuyValueBrokerageReductionYear);
                 Console.WriteLine(@"");
 #endif
             }
@@ -177,17 +200,27 @@ namespace SharePortfolioManager
                 // Remove object from the list
                 BuyListYear.Remove(removeObject);
 
-                // Calculate buy value with reduction and brokerage
-                BuyValueBrokerageYear -= removeObject.BuyValueBrokerage;
-                // Calculate buy value without reduction and brokerage
-                BuyValueYear -= removeObject.BuyValue;
                 // Calculate buy volume
                 BuyVolumeYear -= removeObject.Volume;
 
+                // Calculate buy value without brokerage and reduction
+                BuyValueYear -= removeObject.BuyValue;
+
+                // Calculate buy value with reduction
+                BuyValueReductionYear -= removeObject.BuyValueReduction;
+
+                // Calculate buy value with brokerage
+                BuyValueBrokerageYear -= removeObject.BuyValueBrokerage;
+
+                // Calculate buy value with brokerage and reduction
+                BuyValueBrokerageReductionYear -= removeObject.BuyValueBrokerageReduction;
+
 #if DEBUG_BUY
                 Console.WriteLine(@"BuyValueYear: {0}", BuyValueYear);
-                Console.WriteLine(@"BuyValueBrokerageYear: {0}", BuyValueBrokerageYear);
                 Console.WriteLine(@"VolumeYear: {0}", BuyVolumeYear);
+                Console.WriteLine(@"BuyValueReductionYear: {0}", BuyValueReductionYear);
+                Console.WriteLine(@"BuyValueBrokerageYear: {0}", BuyValueBrokerageYear);
+                Console.WriteLine(@"BuyValueBrokerageReductionYear: {0}", BuyValueBrokerageReductionYear);
                 Console.WriteLine(@"");
 #endif
             }

@@ -458,6 +458,7 @@
 				<ParsingDocumentNotImplemented text="Dokument type not implemented!" />
 				<ParsingFailed text="Parsing failed!" />
 				<ParsingDocumentFailed text="Document parsing failed!" />
+				<ParsingParsingDocumentError text="Error in document parsing configuration file!"/>
 				<ParsingIdentifierValuesFound text="Document identifier values found. Parsing buy values started..." />			
 			</ParsingErrors>
 		</AddFormShare>
@@ -474,6 +475,7 @@
 				<Labels>
 					<WKN text="WKN:" />
 					<Name text="Name:" />
+					<Update text="Do update via internet:" />
 					<Date text="Date:" />
 					<Purchase text="Purchase:" />
 					<Volume text="Volume:" />
@@ -518,12 +520,6 @@
 				<ShowFailed text="An error occurred while the share should be shown!" />
 				<NameEmpty text="Please insert a name." />
 				<NameExists text="The name already exists." />
-				<DepositEmpty text="Please insert a deposit." />
-				<DepositWrongFormat text="Format for the value 'Deposit' is invalid." />
-				<DepositWrongValue text="The value for 'Deposit' must be equal or higher than '0'." />
-				<VolumeEmpty text="Please insert a volume." />
-				<VolumeWrongFormat text="Format for the value 'Volume' is invalid." />
-				<VolumeWrongValue text="The value for 'Volume' must be equal or higher than '0'." />
 				<WebSiteEmpty text="Please insert a website address." />
 				<WebSiteWrongFormat text="The website address has an invalid format or is not reachable. Try it again." />
 				<WebSiteExists text="The website already exists." />
@@ -652,6 +648,7 @@
 				<ParsingWrongWkn text="The wrong WKN has been found in the document!" />
 				<ParsingFailed text="Parsing failed!" />
 				<ParsingDocumentFailed text="Document parsing failed!" />
+				<ParsingParsingDocumentError text="Error in document parsing configuration file!"/>
 				<ParsingIdentifierValuesFound text="Document identifier values found. Parsing buy values started..." />			
 			</ParsingErrors>
 		</AddEditFormBuy>
@@ -791,6 +788,7 @@
 				<ParsingWrongWkn text="The wrong WKN has been found in the document!" />
 				<ParsingFailed text="Parsing failed!" />
 				<ParsingDocumentFailed text="Document parsing failed!" />
+				<ParsingParsingDocumentError text="Error in document parsing configuration file!"/>
 				<ParsingIdentifierValuesFound text="Document identifier values found. Parsing sales values started..." />			
 			</ParsingErrors>
 			
@@ -879,6 +877,10 @@
 				<EditSuccess text="Dividend changes has been saved." />
 				<DeleteSuccess text="Dividend entry has been deleted!" />			
 			</StateMessages>
+			<ParsingStateMessages>
+				<ParsingStarted text="Document parsing running..." />
+				<ParsingDocumentSuccessful text="Document parsing was successful!" />
+			</ParsingStateMessages>
 			
 			<!-- Dividend add / edit errors -->
 			<Errors>
@@ -916,6 +918,16 @@
 				<DocumentFileDoesNotExists text="The given file does not exist!" />
 				<DocumentShowFailed text="Show of the document failed!" />
 			</Errors>
+			<ParsingErrors>
+				<ParsingBankIdentifierFailed text="Bank identifier not found!" />
+				<ParsingDocumentTypeIdentifierFailed text="Dokument identifier not found!" />
+				<ParsingDocumentNotImplemented text="Dokument type not implemented!" />
+				<ParsingWrongWkn text="The wrong WKN has been found in the document!" />
+				<ParsingFailed text="Parsing failed!" />
+				<ParsingDocumentFailed text="Document parsing failed!" />
+				<ParsingParsingDocumentError text="Error in document parsing configuration file!"/>
+				<ParsingIdentifierValuesFound text="Document identifier values found. Parsing dividend values started..." />			
+			</ParsingErrors>
 		</AddEditFormDividend>
 
 		<!-- Brokerage add / edit -->
@@ -1608,6 +1620,7 @@
 				<ParsingDocumentNotImplemented text="Dokument-Typ ist nicht implementiert!" />
 				<ParsingFailed text="Analyze ist fehlgeschlagen!" />
 				<ParsingDocumentFailed text="Dokument- Analyze ist fehlgeschlagen!" />
+				<ParsingParsingDocumentError text="Fehler in der Dokumenten- Analizer- Konfigurations- Datei!"/>
 				<ParsingIdentifierValuesFound text="Dokument-Typ wurde gefunden. Analyze der Kaufwerte wurde gestartet..." />			
 			</ParsingErrors>
 		</AddFormShare>
@@ -1624,6 +1637,7 @@
 				<Labels>
 					<WKN text="WKN:" />
 					<Name text="Name:" />
+					<Update text="Update via Internet durchführen:" />
 					<Date text="Datum:" />
 					<Purchase text="Einzahlung:" />
 					<Volume text="Anteile:" />
@@ -1668,12 +1682,6 @@
 				<ShowFailed text="Es trat ein Fehler beim Anzeigen der Aktie auf!" />
 				<NameEmpty text="Bitte geben Sie einen Namen ein." />
 				<NameExists text="Der Name existiert bereits." />
-				<DepositEmpty text="Bitte geben Sie eine Einzahlung ein." />
-				<DepositWrongFormat text="Format für den 'Einzahlung'- Wert ist ungültig." />
-				<DepositWrongValue text="Der Wert für 'Einzahlung' muss gleich oder größer als '0' sein." />
-				<VolumeEmpty text="Bitte geben Sie einen Anteile- Wert ein." />
-				<VolumeWrongFormat text="Format für den 'Anteile'- Wert ist ungültig." />
-				<VolumeWrongValue text="Der Wert für 'Anteile' muss gleich oder größer '0' sein." />
 				<WebSiteEmpty text="Bitte geben Sie eine Webseiten- Adresse ein." />
 				<WebSiteWrongFormat text="Die eingegebene Webseiten- Adresse ist ungültig oder nicht erreichbar. Versuchen Sie es noch einmal." />
 				<WebSiteExists text="Die Webseite existiert bereits." />
@@ -1802,6 +1810,7 @@
 				<ParsingWrongWkn text="Die falsche WKN wurde gefunden!" />
 				<ParsingFailed text="Analyze ist fehlgeschlagen!" />
 				<ParsingDocumentFailed text="Dokument- Analyze ist fehlgeschlagen!" />
+				<ParsingParsingDocumentError text="Fehler in der Dokumenten- Analizer- Konfigurations- Datei!"/>
 				<ParsingIdentifierValuesFound text="Dokument-Typ wurde gefunden. Analyze der Kaufwerte wurde gestartet..." />			
 			</ParsingErrors>
 		</AddEditFormBuy>
@@ -1831,7 +1840,7 @@
 					<BrokerFee text="Courtage:" />
 					<TraderPlaceFee text="Handelsplatzgebühr:" />
 					<Reduction text="Rabatt:" />
-					<Brokerage text="Provision:" />
+					<Brokerage text="Ges. Gebühren:" />
 					<ProfitLoss text="Gewinn / Verlust:" />
 					<Payout text="Auszahlung:" />
 					<Document text="Dokument:" />
@@ -1939,7 +1948,8 @@
 				<ParsingWrongWkn text="Die falsche WKN wurde gefunden!" />
 				<ParsingFailed text="Analyze ist fehlgeschlagen!" />
 				<ParsingDocumentFailed text="Dokument- Analyze ist fehlgeschlagen!" />
-				<ParsingIdentifierValuesFound text="Dokument-Typ wurde gefunden. Analyze der Kaufwerte wurde gestartet..." />			
+				<ParsingParsingDocumentError text="Fehler in der Dokumenten- Analizer- Konfigurations- Datei!"/>
+				<ParsingIdentifierValuesFound text="Dokument-Typ wurde gefunden. Analyze der Verkaufswerte wurde gestartet..." />			
 			</ParsingErrors>
 			
 			<UsedBuyDetailsForm>	
@@ -2027,6 +2037,10 @@
 				<EditSuccess text="Dividenden- Änderung wurde gespeichert." />
 				<DeleteSuccess text="Dividenden- Eintrag wurde gelöscht!" />			
 			</StateMessages>
+			<ParsingStateMessages>
+				<ParsingStarted text="Dokument- Analyze läuft..." />
+				<ParsingDocumentSuccessful text="Dokument- Analyze war erfolgreich." />
+			</ParsingStateMessages>
 			
 			<!-- Dividend add / edit errors -->
 			<Errors>
@@ -2064,6 +2078,16 @@
 				<DocumentFileDoesNotExists text="Die angegebene Datei existiert nicht!" />
 				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
 			</Errors>
+			<ParsingErrors>
+				<ParsingBankIdentifierFailed text="Banken-Typ nicht gefunden!" />
+				<ParsingDocumentTypeIdentifierFailed text="Dokument-Typ nicht gefunden!" />
+				<ParsingDocumentNotImplemented text="Dokument-Typ ist nicht implementiert!" />
+				<ParsingWrongWkn text="Die falsche WKN wurde gefunden!" />
+				<ParsingFailed text="Analyze ist fehlgeschlagen!" />
+				<ParsingDocumentFailed text="Dokument- Analyze ist fehlgeschlagen!" />
+				<ParsingParsingDocumentError text="Fehler in der Dokumenten- Analizer- Konfigurations- Datei!"/>
+				<ParsingIdentifierValuesFound text="Dokument-Typ wurde gefunden. Analyze der Dividendenwerte wurde gestartet..." />			
+			</ParsingErrors>
 		</AddEditFormDividend>
 		
 		<!-- Brokerage add / edit -->

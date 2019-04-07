@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -45,6 +45,7 @@ using SharePortfolioManager.Forms.BrokeragesForm.View;
 using SharePortfolioManager.Forms.SalesForm.Model;
 using SharePortfolioManager.Forms.SalesForm.Presenter;
 
+// ReSharper disable once CheckNamespace
 namespace SharePortfolioManager
 {
     public partial class FrmShareEdit : Form
@@ -113,7 +114,8 @@ namespace SharePortfolioManager
                     lblWknValue.Text = ShareObjectFinalValue.Wkn;
                     lblDateValue.Text = ShareObjectFinalValue.AllBuyEntries.AllBuysOfTheShareDictionary.Values.First().BuyListYear.First().Date;
                     txtBoxName.Text = ShareObjectFinalValue.Name;
-                    lblPurchaseValue.Text = ShareObjectFinalValue.AllBuyEntries.BuyValueBrokerageTotalAsStr;
+                    chkBoxUpdate.CheckState = ShareObjectFinalValue.Update ? CheckState.Checked : CheckState.Unchecked;
+                    lblPurchaseValue.Text = ShareObjectFinalValue.PurchaseValueAsStr;
                     lblDepositUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                     lblVolumeValue.Text = ShareObjectFinalValue.VolumeAsStr;
                     lblVolumeUnit.Text = ShareObject.PieceUnit;
@@ -152,7 +154,7 @@ namespace SharePortfolioManager
                     
                     #region GroupBox EarningsExpenditure
 
-                    lblBuysValue.Text = ShareObjectFinalValue.AllBuyEntries.BuyValueBrokerageTotalAsStrUnit;
+                    lblBuysValue.Text = ShareObjectFinalValue.AllBuyEntries.BuyValueBrokerageReductionTotalAsStr;
                     lblBuysUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                     lblSalesValue.Text = ShareObjectFinalValue.AllSaleEntries.SalePayoutTotalAsStr;
                     lblSalesUnit.Text = ShareObjectFinalValue.CurrencyUnit;
@@ -179,6 +181,7 @@ namespace SharePortfolioManager
                 lblWkn.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/WKN", LanguageName);
                 lblDate.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Date", LanguageName);
                 lblName.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Name", LanguageName);
+                lblShareUpdate.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Update", LanguageName);
                 lblPurchase.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Purchase", LanguageName);
                 lblVolume.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Volume", LanguageName);
                 lblWebSite.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/WebSite", LanguageName);
@@ -186,10 +189,10 @@ namespace SharePortfolioManager
 
                 lblDividendPayoutInterval.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/PayoutInterval", LanguageName);
                 // Add dividend payout interval values
-                cbxDividendPayoutInterval.Items.AddRange(Helper.GetComboBoxItems(@"/ComboBoxItemsPayout/*", LanguageName, Language));
+                Helper.GetComboBoxItems(@"/ComboBoxItemsPayout/*", LanguageName, Language).ForEach(item => cbxDividendPayoutInterval.Items.Add(item));
                 lblShareType.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/ShareType", LanguageName);
                 // Add share type values
-                cbxShareType.Items.AddRange(Helper.GetComboBoxItems(@"/ComboBoxItemsShareType/*", LanguageName, Language));
+                Helper.GetComboBoxItems(@"/ComboBoxItemsShareType/*", LanguageName, Language).ForEach(item => cbxShareType.Items.Add(item));
 
                 // Select the payout interval for the dividend
                 cbxDividendPayoutInterval.SelectedIndex = ShareObjectFinalValue.DividendPayoutInterval;
@@ -237,7 +240,6 @@ namespace SharePortfolioManager
                 btnCancel.Image = Resources.button_cancel_24;
 
                 #endregion Language configuration
-
             }
             catch (Exception ex)
             {
@@ -292,8 +294,6 @@ namespace SharePortfolioManager
             {
                 StopFomClosingFlag = true;
                 var errorFlag = false;
-                decimal volume = 0;
-                decimal purchase = 0;
 
                 statusStrip1.ForeColor = Color.Red;
 
@@ -349,67 +349,7 @@ namespace SharePortfolioManager
                     }
                 }
 
-                if (lblPurchaseValue.Text == @"" && errorFlag == false)
-                {
-                    lblPurchaseValue.Focus();
-                    // Add status message
-                    Helper.AddStatusMessage(editShareStatusLabelMessage,
-                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DepositEmpty", LanguageName),
-                        Language, LanguageName,
-                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-                    errorFlag = true;
-                }
-                else if (!decimal.TryParse(lblPurchaseValue.Text, out purchase) && errorFlag == false)
-                {
-                    lblPurchaseValue.Focus();
-                    // Add status message
-                    Helper.AddStatusMessage(editShareStatusLabelMessage,
-                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DepositWrongFormat", LanguageName),
-                        Language, LanguageName,
-                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-                    errorFlag = true;
-                }
-                else if (purchase < 0 && errorFlag == false)
-                {
-                    lblPurchaseValue.Focus();
-                    // Add status message
-                    Helper.AddStatusMessage(editShareStatusLabelMessage,
-                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DepositWrongValue", LanguageName),
-                        Language, LanguageName,
-                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-                    errorFlag = true;
-                }
-                else if (lblVolumeValue.Text == @"" && errorFlag == false)
-                {
-                    lblVolumeValue.Focus();
-                    // Add status message
-                    Helper.AddStatusMessage(editShareStatusLabelMessage,
-                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/VolumeEmpty", LanguageName),
-                        Language, LanguageName,
-                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-                    errorFlag = true;
-                }
-                else if (!Decimal.TryParse(lblVolumeValue.Text, out volume) && errorFlag == false)
-                {
-                    lblVolumeValue.Focus();
-                    // Add status message
-                    Helper.AddStatusMessage(editShareStatusLabelMessage,
-                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/VolumeWrongFormat", LanguageName),
-                        Language, LanguageName,
-                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-                    errorFlag = true;
-                }
-                else if (volume < 0 && errorFlag == false)
-                {
-                    lblVolumeValue.Focus();
-                    // Add status message
-                    Helper.AddStatusMessage(editShareStatusLabelMessage,
-                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/VolumeWrongValue", LanguageName),
-                        Language, LanguageName,
-                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
-                    errorFlag = true;
-                }
-                else if (txtBoxWebSite.Text == @"" && errorFlag == false)
+                if (txtBoxWebSite.Text == @"" && chkBoxUpdate.CheckState == CheckState.Checked && errorFlag == false)
                 {
                     txtBoxWebSite.Focus();
                     // Add status message
@@ -419,7 +359,7 @@ namespace SharePortfolioManager
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                     errorFlag = true;
                 }
-                else if (!Helper.UrlChecker(ref decodedUrl, 10000))
+                else if (chkBoxUpdate.CheckState == CheckState.Checked && !Helper.UrlChecker(ref decodedUrl, 10000))
                 {
                     txtBoxWebSite.Focus();
                     // Add status message
@@ -431,10 +371,11 @@ namespace SharePortfolioManager
                 }
                 else if (errorFlag == false)
                 {
-                    // Check if a market value share with the given WKN number already exists
+                    // Check if a market value share with the given website already exists
                     foreach (var shareObjectMarketValue in ParentWindow.ShareObjectListMarketValue)
                     {
-                        if (shareObjectMarketValue.WebSite != txtBoxWebSite.Text ||
+                        if (txtBoxWebSite.Text == @"" ||
+                            shareObjectMarketValue.WebSite != txtBoxWebSite.Text ||
                             shareObjectMarketValue == ShareObjectMarketValue) continue;
 
                         errorFlag = true;
@@ -453,7 +394,8 @@ namespace SharePortfolioManager
                         // Check if a final value share with the given WKN number already exists
                         foreach (var shareObjectFinalValue in ParentWindow.ShareObjectListFinalValue)
                         {
-                            if (shareObjectFinalValue.WebSite != txtBoxWebSite.Text ||
+                            if (txtBoxWebSite.Text == @"" ||
+                                shareObjectFinalValue.WebSite != txtBoxWebSite.Text ||
                                 shareObjectFinalValue == ShareObjectFinalValue) continue;
 
                             errorFlag = true;
@@ -473,25 +415,21 @@ namespace SharePortfolioManager
 
                 txtBoxWebSite.Text = decodedUrl;
 
-                StopFomClosingFlag = false;
+                StopFomClosingFlag = false; 
                 Save = true;
 
                 var cultureInfo = new CultureInfo(cboBoxCultureInfo.GetItemText(cboBoxCultureInfo.SelectedItem));
 
                 // Market value share
-                ShareObjectMarketValue.Wkn = lblWknValue.Text;
                 ShareObjectMarketValue.Name = txtBoxName.Text;
-                ShareObjectMarketValue.Volume = volume;
-                ShareObjectMarketValue.PurchaseValue = purchase;
+                ShareObjectMarketValue.Update = chkBoxUpdate.Checked;
                 ShareObjectMarketValue.WebSite = txtBoxWebSite.Text;
                 ShareObjectMarketValue.CultureInfo = cultureInfo;
                 ShareObjectMarketValue.ShareType = cbxShareType.SelectedIndex;
 
                 // Final value share
-                ShareObjectFinalValue.Wkn = lblWknValue.Text;
                 ShareObjectFinalValue.Name = txtBoxName.Text;
-                ShareObjectFinalValue.Volume = volume;
-                ShareObjectFinalValue.PurchaseValue = purchase;
+                ShareObjectFinalValue.Update = chkBoxUpdate.Checked;
                 ShareObjectFinalValue.WebSite = txtBoxWebSite.Text;
                 ShareObjectFinalValue.CultureInfo = cultureInfo;
                 ShareObjectFinalValue.DividendPayoutInterval = cbxDividendPayoutInterval.SelectedIndex;
@@ -598,13 +536,13 @@ namespace SharePortfolioManager
         /// </summary>
         private void SetShareValuesToTextBoxes()
         {
-            lblVolumeValue.Text = ShareObjectFinalValue.VolumeAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.Volume, Helper.Volumefivelength, false, Helper.Volumetwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
-            lblPurchaseValue.Text = ShareObjectFinalValue.PurchaseValueAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.PurchaseValue, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
-            lblBuysValue.Text = ShareObjectFinalValue.AllBuyEntries.BuyValueBrokerageTotalAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.AllBuyEntries.BuyMarketValueReductionTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
-            lblSalesValue.Text = ShareObjectFinalValue.AllSaleEntries.SalePayoutTotalAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.AllSaleEntries.SalePayoutTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
-            lblBrokerageValue.Text = ShareObjectFinalValue.BrokerageValueTotalAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.AllBrokerageEntries.BrokerageValueTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
-            lblProfitLossValue.Text = ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotalAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotal, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
-            lblDividendValue.Text = ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesAsStr; // Helper.FormatDecimal(ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxes, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", ShareObjectFinalValue.CultureInfo);
+            lblVolumeValue.Text = ShareObjectFinalValue.VolumeAsStr;
+            lblPurchaseValue.Text = ShareObjectFinalValue.PurchaseValueAsStr;
+            lblBuysValue.Text = ShareObjectFinalValue.AllBuyEntries.BuyValueBrokerageReductionTotalAsStr;
+            lblSalesValue.Text = ShareObjectFinalValue.AllSaleEntries.SalePayoutTotalAsStr;
+            lblBrokerageValue.Text = ShareObjectFinalValue.BrokerageValueTotalAsStr;
+            lblProfitLossValue.Text = ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotalAsStr;
+            lblDividendValue.Text = ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesAsStr;
         }
 
         #endregion Button

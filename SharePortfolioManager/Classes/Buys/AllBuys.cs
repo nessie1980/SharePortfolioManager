@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -38,7 +38,8 @@ namespace SharePortfolioManager.Classes.Buys
         /// The string stores the different buy years
         /// The BuysOfAYearOfTheShare stores the buys of each year
         /// </summary>
-        private readonly SortedDictionary<string, BuysYearOfTheShare> _allBuysOfTheShareDictionary = new SortedDictionary<string, BuysYearOfTheShare>();
+        private readonly SortedDictionary<string, BuysYearOfTheShare> _allBuysOfTheShareDictionary =
+            new SortedDictionary<string, BuysYearOfTheShare>();
 
         #endregion Variables
 
@@ -52,11 +53,23 @@ namespace SharePortfolioManager.Classes.Buys
 
         public string BuyValueTotalAsStrUnit => Helper.FormatDecimal(BuyValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
 
+        public decimal BuyValueReductionTotal { get; internal set; }
+
+        public string BuyValueReductionTotalAsStr => Helper.FormatDecimal(BuyValueReductionTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength);
+
+        public string BuyValueReductionTotalAsStrUnit => Helper.FormatDecimal(BuyValueReductionTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
+
         public decimal BuyValueBrokerageTotal { get; internal set; }
 
         public string BuyValueBrokerageTotalAsStr => Helper.FormatDecimal(BuyValueBrokerageTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength);
 
         public string BuyValueBrokerageTotalAsStrUnit => Helper.FormatDecimal(BuyValueBrokerageTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
+
+        public decimal BuyValueBrokerageReductionTotal { get; internal set; }
+
+        public string BuyValueBrokerageReductionTotalAsStr => Helper.FormatDecimal(BuyValueBrokerageReductionTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength);
+
+        public string BuyValueBrokerageReductionTotalAsStrUnit => Helper.FormatDecimal(BuyValueBrokerageReductionTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
 
         public decimal BuyVolumeTotal { get; internal set; }
 
@@ -124,23 +137,28 @@ namespace SharePortfolioManager.Classes.Buys
 
                 // Calculate the total buy value and total buy volume
                 // Reset total buy value and buy volume
-                BuyValueTotal = 0;
-                BuyValueBrokerageTotal = 0;
                 BuyVolumeTotal = 0;
+                BuyValueTotal = 0;
+                BuyValueReductionTotal = 0;
+                BuyValueBrokerageTotal = 0;
+                BuyValueBrokerageReductionTotal = 0;
 
                 // Calculate the new total buy value and buy volume
                 foreach (var calcObject in AllBuysOfTheShareDictionary.Values)
                 {
-                    BuyValueTotal += calcObject.BuyValueYear;
-                    BuyValueBrokerageTotal += calcObject.BuyValueBrokerageYear;
                     BuyVolumeTotal += calcObject.BuyVolumeYear;
+                    BuyValueTotal += calcObject.BuyValueYear;
+                    BuyValueReductionTotal += calcObject.BuyValueReductionYear;
+                    BuyValueBrokerageTotal += calcObject.BuyValueBrokerageYear;
+                    BuyValueBrokerageReductionTotal += calcObject.BuyValueBrokerageReductionYear;
                 }
 
 #if DEBUG_BUY
+                Console.WriteLine(@"VolumeTotal:{0}", BuyVolumeTotal);
                 Console.WriteLine(@"BuyValueTotal:{0}", BuyValueTotal);
                 Console.WriteLine(@"BuyValueReductionTotal:{0}", BuyValueReductionTotal);
+                Console.WriteLine(@"BuyValueBrokerageTotal:{0}", BuyValueBrokerageTotal);
                 Console.WriteLine(@"BuyValueReductionBrokerageTotal:{0}", BuyValueReductionBrokerageTotal);
-                Console.WriteLine(@"VolumeTotal:{0}", BuyVolumeTotal);
 #endif
             }
             catch
@@ -189,23 +207,26 @@ namespace SharePortfolioManager.Classes.Buys
 
                 // Calculate the total buy value and volume
                 // Reset total buy value and volume
-                BuyValueBrokerageTotal = 0;
-                BuyValueTotal = 0;
                 BuyVolumeTotal = 0;
+                BuyValueTotal = 0;
+                BuyValueBrokerageTotal = 0;
 
                 // Calculate the new total buy value and volume
                 foreach (var calcObject in AllBuysOfTheShareDictionary.Values)
                 {
-                    BuyValueBrokerageTotal += calcObject.BuyValueBrokerageYear;
-                    BuyValueTotal += calcObject.BuyValueYear;
                     BuyVolumeTotal += calcObject.BuyVolumeYear;
+                    BuyValueTotal += calcObject.BuyValueYear;
+                    BuyValueReductionTotal += calcObject.BuyValueReductionYear;
+                    BuyValueBrokerageTotal += calcObject.BuyValueBrokerageYear;
+                    BuyValueBrokerageReductionTotal += calcObject.BuyValueBrokerageReductionYear;
                 }
 
 #if DEBUG_BUY
+                Console.WriteLine(@"VolumeTotal:{0}", BuyVolumeTotal);
                 Console.WriteLine(@"BuyValueTotal:{0}", BuyValueTotal);
                 Console.WriteLine(@"BuyValueReductionTotal:{0}", BuyValueReductionTotal);
+                Console.WriteLine(@"BuyValueBrokerageTotal:{0}", BuyValueBrokerageTotal);
                 Console.WriteLine(@"BuyValueReductionBrokerageTotal:{0}", BuyValueReductionBrokerageTotal);
-                Console.WriteLine(@"VolumeTotal:{0}", BuyVolumeTotal);
 #endif
             }
             catch

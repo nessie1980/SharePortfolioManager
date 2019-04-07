@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -77,7 +77,7 @@ namespace SharePortfolioManager
                 var iPosX = 0;
                 var iPosY = 0;
                 var iWidth = MinimumSize.Width;
-                var iHeigth = MinimumSize.Height;
+                var iHeight = MinimumSize.Height;
 
                 // Read position
                 var nodePosX = Settings.SelectSingleNode("/Settings/Window/PosX");
@@ -105,7 +105,7 @@ namespace SharePortfolioManager
 
                 // Read size
                 var nodeWidth = Settings.SelectSingleNode("/Settings/Window/Width");
-                var nodeHeigth = Settings.SelectSingleNode("/Settings/Window/Height");
+                var nodeHeight = Settings.SelectSingleNode("/Settings/Window/Height");
 
                 // Convert to int values
                 if (nodeWidth != null)
@@ -121,21 +121,21 @@ namespace SharePortfolioManager
                 else
                     loadSettings = false;
 
-                if (nodeHeigth != null)
+                if (nodeHeight != null)
                 {
-                    if (!int.TryParse(nodeHeigth.InnerXml, out iHeigth))
+                    if (!int.TryParse(nodeHeight.InnerXml, out iHeight))
                         loadSettings = false;
                     else
                     {
-                        if (iHeigth < MinimumSize.Height)
-                            iHeigth = MinimumSize.Height;
+                        if (iHeight < MinimumSize.Height)
+                            iHeight = MinimumSize.Height;
                     }
                 }
                 else
                     loadSettings = false;
 
                 // Set size
-                NormalWindowSize = new Size(iWidth, iHeigth);
+                NormalWindowSize = new Size(iWidth, iHeight);
 
                 // Read state
                 var nodeWindowState = Settings.SelectSingleNode("/Settings/Window/State");

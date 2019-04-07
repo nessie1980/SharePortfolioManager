@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -324,6 +324,10 @@ namespace SharePortfolioManager
                 UpdateProfitLossDetails(MarketValueOverviewTabSelected);
                 UpdateDividendDetails(MarketValueOverviewTabSelected);
                 UpdateBrokerageDetails(MarketValueOverviewTabSelected);
+
+                // Check if the "Update" button should be disabled or enabled
+                if (!UpdateAllFlag)
+                    btnRefresh.Enabled = ShareObjectMarketValue.Update && ShareObjectMarketValue.WebSiteConfigurationValid;
             }
             catch (Exception ex)
             {
@@ -387,6 +391,10 @@ namespace SharePortfolioManager
                 UpdateProfitLossDetails(MarketValueOverviewTabSelected);
                 UpdateDividendDetails(MarketValueOverviewTabSelected);
                 UpdateBrokerageDetails(MarketValueOverviewTabSelected);
+
+                // Check if the "Update" button should be disabled or enabled
+                if (!UpdateAllFlag)
+                    btnRefresh.Enabled = ShareObjectFinalValue.Update && ShareObjectFinalValue.WebSiteConfigurationValid;
             }
             catch (Exception ex)
             {
@@ -1743,11 +1751,11 @@ namespace SharePortfolioManager
         {
             try
             {
-                foreach(var shareobject in ShareObjectListFinalValue)
+                foreach(var shareObject in ShareObjectListFinalValue)
                 {
-                    if (shareobject.Wkn != dgvPortfolioFinalValue.Rows[e.RowIndex].Cells[0].Value.ToString()) continue;
+                    if (shareObject.Wkn != dgvPortfolioFinalValue.Rows[e.RowIndex].Cells[0].Value.ToString()) continue;
 
-                    System.Diagnostics.Process.Start(shareobject.WebSite);
+                    System.Diagnostics.Process.Start(shareObject.WebSite);
                     break;
                 }
             }
@@ -1790,11 +1798,11 @@ namespace SharePortfolioManager
         {
             try
             {
-                foreach (var shareobject in ShareObjectListMarketValue)
+                foreach (var shareObject in ShareObjectListMarketValue)
                 {
-                    if (shareobject.Wkn != dgvPortfolioMarketValue.Rows[e.RowIndex].Cells[0].Value.ToString()) continue;
+                    if (shareObject.Wkn != dgvPortfolioMarketValue.Rows[e.RowIndex].Cells[0].Value.ToString()) continue;
 
-                    System.Diagnostics.Process.Start(shareobject.WebSite);
+                    System.Diagnostics.Process.Start(shareObject.WebSite);
                     break;
                 }
             }

@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -20,6 +20,9 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+using Parser;
+using SharePortfolioManager.Classes.Costs;
+using SharePortfolioManager.Classes.Sales;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -27,13 +30,9 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using System.Xml;
-using SharePortfolioManager.Classes.Sales;
-using Parser;
-using SharePortfolioManager.Classes.Costs;
 
 namespace SharePortfolioManager.Classes.ShareObjects
 {
@@ -615,6 +614,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         [Browsable(true)]
         [DisplayName(@"Wkn")]
+        // ReSharper disable once UnusedMember.Global
         public string DgvWkn => WknAsStr;
 
         /// <summary>
@@ -622,6 +622,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         [Browsable(true)]
         [DisplayName(@"Name")]
+        // ReSharper disable once UnusedMember.Global
         public string DgvNameAsStr => NameAsStr;
 
         /// <summary>
@@ -629,6 +630,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         [Browsable(true)]
         [DisplayName(@"Volume")]
+        // ReSharper disable once UnusedMember.Global
         public string DgvVolumeAsStr => VolumeAsStr;
 
         /// <summary>
@@ -636,6 +638,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         [Browsable(true)]
         [DisplayName(@"BrokerageDividendWithTaxes")]
+        // ReSharper disable once UnusedMember.Global
         public string DgvBrokerageDividendWithTaxesAsStrUnit => BrokerageDividendWithTaxesAsStrUnit;
 
         /// <summary>
@@ -643,6 +646,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         [Browsable(true)]
         [DisplayName(@"CurPrevPrice")]
+        // ReSharper disable once UnusedMember.Global
         public string DgvCurPrevPriceAsStrUnit => CurPrevPriceAsStrUnit;
 
         /// <summary>
@@ -651,6 +655,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         [Browsable(true)]
         [DisplayName(@"PrevDayPerformance")]
+        // ReSharper disable once UnusedMember.Global
         public string DgvPrevDayDifferencePerformanceAsStrUnit => PrevDayDifferencePerformanceAsStrUnit;
 
         /// <summary>
@@ -658,6 +663,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         [Browsable(true)]
         [DisplayName(@"")]
+        // ReSharper disable once UnusedMember.Global
         public Image DgvImagePrevDayPerformance => ImagePrevDayPerformance;
 
         /// <summary>
@@ -666,6 +672,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         [Browsable(true)]
         [DisplayName(@"ProfitLossPerformanceFinalValue")]
+        // ReSharper disable once UnusedMember.Global
         public string DgvProfitLossPerformanceValueAsStrUnit => ProfitLossPerformanceValueAsStrUnit;
 
         /// <summary>
@@ -674,6 +681,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         [Browsable(true)]
         [DisplayName(@"PurchaseValueFinalValue")]
+        // ReSharper disable once UnusedMember.Global
         public string DgvPurchaseValueFinalValueAsStrUnit => PurchaseValueFinalValueAsStrUnit;
 
         #endregion Data grid properties
@@ -789,7 +797,10 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 Console.WriteLine(@"bBrokerageOfASale: {0}", bBrokerageOfASale);
                 Console.WriteLine(@"strGuidBuySale: {0}", strGuidBuySale);
                 Console.WriteLine(@"strDateTime: {0}", strDateTime);
-                Console.WriteLine(@"decValue: {0}", decValue);
+                Console.WriteLine(@"decProvision: {0}", decProvisionValue);
+                Console.WriteLine(@"decBrokerFee: {0}", decBrokerFeeValue);
+                Console.WriteLine(@"decTraderPlaceFee: {0}", decTraderPlaceFeeValue);
+                Console.WriteLine(@"decReduction: {0}", decReductionValue);
                 Console.WriteLine(@"strDoc: {0}", strDoc);
 #endif
                 // Remove current brokerage of the share from the brokerage of all shares
@@ -915,28 +926,34 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 Console.WriteLine(@"strDateTime: {0}", strDateTime);
                 Console.WriteLine(@"decVolume: {0}", decVolume);
                 Console.WriteLine(@"decPrice: {0}", decPrice);
-                Console.WriteLine(@"decProvision: {0}", decProvision);
-                Console.WriteLine(@"decBrokerFee: {0}", decBrokerFee);
-                Console.WriteLine(@"decTraderPlaceFee: {0}", decTraderPlaceFee);
-                Console.WriteLine(@"decReduction: {0}", decReduction);
+                if (brokerageObject != null)
+                {
+                    Console.WriteLine(@"decProvision: {0}", brokerageObject.ProvisionValue);
+                    Console.WriteLine(@"decBrokerFee: {0}", brokerageObject.BrokerFeeValue);
+                    Console.WriteLine(@"decTraderPlaceFee: {0}", brokerageObject.TraderPlaceFeeValue);
+                    Console.WriteLine(@"decReduction: {0}", brokerageObject.ReductionValue);
+                }
+                else
+                {
+                    Console.WriteLine(@"decProvision: {0}", 0);
+                    Console.WriteLine(@"decBrokerFee: {0}", 0);
+                    Console.WriteLine(@"decTraderPlaceFee: {0}", 0);
+                    Console.WriteLine(@"decReduction: {0}", 0);
+                }
                 Console.WriteLine(@"strDoc: {0}", strDoc);
 #endif
+                // Add buy with reductions and brokerage
                 if (!AllBuyEntries.AddBuy(strGuid, strOrderNumber, strDateTime, decVolume, decVolumeSold, decPrice,
                     brokerageObject, strDoc))
                     return false;
 
-                // Set buy value of the share
-                PurchaseValueTotal = AllBuyEntries.BuyValueTotal;
-
                 // Set new volume
-                if (Volume == decimal.MinValue / 2)
-                    Volume = 0;
-                Volume += decVolume;
+                Volume = AllBuyEntries.BuyVolumeTotal - AllSaleEntries.SaleVolumeTotal;
 
                 // Recalculate purchase price
                 if (PurchaseValue == decimal.MinValue / 2)
                     PurchaseValue = 0;
-                PurchaseValue += AllBuyEntries.GetBuyObjectByGuidDate(strGuid, strDateTime).BuyValueBrokerage;
+                PurchaseValue += AllBuyEntries.GetBuyObjectByGuidDate(strGuid, strDateTime).BuyValueBrokerageReduction;
 
 #if DEBUG_SHAREOBJECT_FINAL || DEBUG_BUY
                 Console.WriteLine(@"Volume: {0}", Volume);
@@ -972,9 +989,14 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 var buyObject = AllBuyEntries.GetBuyObjectByGuidDate(strGuid, strDateTime);
                 if (buyObject != null)
                 {
-                    Volume -= buyObject.Volume;
-                    PurchaseValue -= buyObject.BuyValueBrokerage;
-                    PurchaseValueTotal = AllBuyEntries.BuyValueTotal;
+                    // Remove buy by Guid and date and time
+                    if (!AllBuyEntries.RemoveBuy(strGuid, strDateTime))
+                        return false;
+
+                    // Set volume
+                    Volume = AllBuyEntries.BuyVolumeTotal - AllSaleEntries.SaleVolumeTotal;
+
+                    PurchaseValue -= buyObject.BuyValueBrokerageReduction;
 
 #if DEBUG_SHAREOBJECT_FINAL || DEBUG_BUY
                     Console.WriteLine(@"Volume: {0}", Volume);
@@ -982,9 +1004,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
                     Console.WriteLine(@"PurchaseValue: {0}", PurchaseValue);
                     Console.WriteLine(@"");
 #endif
-                    // Remove buy by Guid and date and time
-                    if (!AllBuyEntries.RemoveBuy(strGuid, strDateTime))
-                        return false;
                 }
                 else
                     return false;
@@ -1069,17 +1088,15 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 Console.WriteLine(@"decTaxAtSource: {0}", decTaxAtSource);
                 Console.WriteLine(@"decCapitalGainsTax: {0}", decCapitalGainsTax);
                 Console.WriteLine(@"decSolidarityTax: {0}", decSolidarityTax);
-                Console.WriteLine(@"decBrokerage: {0}", decBrokerage);
+                Console.WriteLine(@"decBrokerage: {0}", brokerageObject?.BrokerageValue ?? 0);
                 Console.WriteLine(@"strDoc: {0}", strDoc);
 #endif
                 if (!AllSaleEntries.AddSale(strGuid, strDate, strOrderNumber, decVolume, decSalePrice, usedBuyDetails, decTaxAtSource, decCapitalGainsTax,
                                             decSolidarityTax, brokerageObject, strDoc))
                     return false;
-
-                // Set new volume
-                if (Volume == decimal.MinValue / 2)
-                    Volume = 0;
-                Volume -= decVolume;
+                
+                // Set volume
+                Volume = AllBuyEntries.BuyVolumeTotal - AllSaleEntries.SaleVolumeTotal;
 
                 // Recalculate PurchaseValue and SalePurchaseValueTotal
                 if (SalePurchaseValueTotal == decimal.MinValue / 2)
@@ -1089,11 +1106,10 @@ namespace SharePortfolioManager.Classes.ShareObjects
                     PurchaseValue = 0;
                 else
                 {
-                    // TODO change calculation
                     if (Volume > 0 && PurchaseValue > 0)
                     {
-                        SalePurchaseValueTotal += usedBuyDetails.Sum(x => x.SaleBuyValue) /*decBuyPrice * decVolume*/;
-                        PurchaseValue -= usedBuyDetails.Sum(x => x.SaleBuyValue) /*decBuyPrice * decVolume*/;
+                        SalePurchaseValueTotal += usedBuyDetails.Sum(x => x.SaleBuyValue);
+                        PurchaseValue -= usedBuyDetails.Sum(x => x.SaleBuyValue);
                     }
                     else
                     {
@@ -1104,7 +1120,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
 #if DEBUG_SHAREOBJECT_FINAL
                 Console.WriteLine(@"Volume: {0}", Volume);
-                Console.WriteLine(@"SalePurchaseValueTotal: {0}", SalePurchaseValueTotalAsStr);
+                Console.WriteLine(@"SalePurchaseValueTotal: {0}", SalePurchaseValueTotal);
                 Console.WriteLine(@"PurchaseValue: {0}", PurchaseValue);
 #endif
                 return true;
@@ -1135,17 +1151,19 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 var saleObject = AllSaleEntries.GetSaleObjectByGuidDate(strGuid, strDateTime);
                 if (saleObject != null)
                 {
-                    Volume += saleObject.Volume;
-                    PurchaseValue += saleObject.PurchaseValue;
-                    SalePurchaseValueTotal -= saleObject.PurchaseValue;
-
                     // Remove sale by Guid and DateTime
                     if (!AllSaleEntries.RemoveSale(strGuid, strDateTime))
                         return false;
 
+                    // Set volume
+                    Volume = AllBuyEntries.BuyVolumeTotal - AllSaleEntries.SaleVolumeTotal;
+
+                    PurchaseValue += saleObject.BuyValue;
+                    SalePurchaseValueTotal -= saleObject.BuyValue;
+
 #if DEBUG_SHAREOBJECT_FINAL
                     Console.WriteLine(@"Volume: {0}", Volume);
-                    Console.WriteLine(@"SalePurchaseValueTotal: {0}", SalePurchaseValueTotalAsStr);
+                    Console.WriteLine(@"SalePurchaseValueTotal: {0}", SalePurchaseValueTotal);
                     Console.WriteLine(@"PurchaseValue: {0}", PurchaseValue);
 #endif
                 }
@@ -1355,10 +1373,17 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 && AllSaleEntries.SaleProfitLossTotal > decimal.MinValue / 2
                 )
             {
-                FinalValue = CurPrice * Volume
-//                    - AllBrokerageEntries.BrokerageValueTotal
-                    + AllDividendEntries.DividendValueTotalWithTaxes
-                    + AllSaleEntries.SaleProfitLossTotal;
+                if (Volume > 0)
+                {
+                    FinalValue = CurPrice * Volume
+                                 + AllDividendEntries.DividendValueTotalWithTaxes
+                                 + AllSaleEntries.SaleProfitLossTotal;
+                }
+                else
+                {
+                    FinalValue = AllDividendEntries.DividendValueTotalWithTaxes
+                                 + AllSaleEntries.SaleProfitLossTotal;
+                }
             }
 
 #if DEBUG_SHAREOBJECT_FINAL
@@ -1386,10 +1411,18 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 && AllSaleEntries.SaleProfitLossTotal > decimal.MinValue / 2
                 )
             {
-                ProfitLossValue = CurPrice * Volume
-                    - PurchaseValue
-                    + AllDividendEntries.DividendValueTotalWithTaxes
-                    + AllSaleEntries.SaleProfitLossTotal;
+                if (Volume > 0)
+                {
+                    ProfitLossValue = CurPrice * Volume
+                                      - PurchaseValue
+                                      + AllDividendEntries.DividendValueTotalWithTaxes
+                                      + AllSaleEntries.SaleProfitLossTotal;
+                }
+                else
+                {
+                    ProfitLossValue = AllDividendEntries.DividendValueTotalWithTaxes
+                                      + AllSaleEntries.SaleProfitLossTotal;
+                }
             }
 
 #if DEBUG_SHAREOBJECT_FINAL
@@ -1420,6 +1453,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
             Console.WriteLine(@"");
             Console.WriteLine(@"CalculatePerformance() / FinalValue");
             Console.WriteLine(@"FinalValue: {0}", FinalValue);
+            Console.WriteLine(@"SalePurchaseValueTotal: {0}",  AllSaleEntries.SalePurchaseValueTotal);
+            Console.WriteLine(@"PurchaseValue: {0}",  PurchaseValue);
             Console.WriteLine(@"PerformanceValue: {0}", PerformanceValue);
 #endif
         }
@@ -1456,6 +1491,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
                         nodeElement.Attributes[GeneralWknAttrName].InnerText = shareObject.Wkn;
                         nodeElement.Attributes[GeneralNameAttrName].InnerText = shareObject.NameAsStr;
+                        nodeElement.Attributes[GeneralUpdateAttrName].InnerText = shareObject.UpdateAsStr;
 
                         for (var i = 0; i < nodeElement.ChildNodes.Count; i++)
                         {
@@ -1622,9 +1658,12 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                                     SaleBuyPriceAttrName,
                                                     usedBuys.SaleBuyPriceAsStr);
                                                 newUsedBuyElement.SetAttribute(
+                                                    SaleBrokerageReductionAttrName,
+                                                    usedBuys.BrokerageReductionPartAsStr);
+                                                newUsedBuyElement.SetAttribute(
                                                     SaleBuyGuidAttrName,
                                                     usedBuys.BuyGuid);
-
+                                                
                                                 // Add buy of the sale to the used buys
                                                 newUsedBuysElement.AppendChild(newUsedBuyElement);
                                             }
@@ -1736,6 +1775,11 @@ namespace SharePortfolioManager.Classes.ShareObjects
                         var xmlAttributeShareName = xmlPortfolio.CreateAttribute(@"Name");
                         xmlAttributeShareName.Value = shareObject.NameAsStr;
                         newShareNode.Attributes.Append(xmlAttributeShareName);
+
+                        // Add attributes (Update)
+                        var xmlAttributeUpdateFlag = xmlPortfolio.CreateAttribute(@"Update");
+                        xmlAttributeUpdateFlag.Value = shareObject.UpdateAsStr;
+                        newShareNode.Attributes.Append(xmlAttributeUpdateFlag);
 
                         // Add child nodes (last update Internet)
                         var newLastUpdateInternet = xmlPortfolio.CreateElement(@"LastUpdateInternet");
@@ -1889,14 +1933,17 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         private void CalculatePortfolioPerformance()
         {
-            if (PortfolioPurchasePrice + PortfolioSalePurchaseValue != 0)
+            if (PortfolioPurchasePrice != 0)
             {
-                PortfolioPerformanceValue = ( PortfolioFinalValue + PortfolioSalePurchaseValue) * 100 / ( PortfolioPurchasePrice + PortfolioSalePurchaseValue) - 100;
+                PortfolioPerformanceValue = (PortfolioFinalValue) * 100 / (PortfolioPurchasePrice) - 100;
             }
+            
 #if DEBUG_SHAREOBJECT_FINAL
             Console.WriteLine(@"");
             Console.WriteLine(@"CalculatePerformancePortfolio() / FinalValue");
             Console.WriteLine(@"PortfolioFinalValue: {0}", PortfolioFinalValue);
+            Console.WriteLine(@"PortfolioSalePurchaseValue: {0}", PortfolioSalePurchaseValue);
+            Console.WriteLine(@"PortfolioPurchasePrice: {0}", PortfolioPurchasePrice);
             Console.WriteLine(@"PortfolioPerformanceValue: {0}", PortfolioPerformanceValue);
 #endif
         }
@@ -1912,7 +1959,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
             Console.WriteLine(@"");
             Console.WriteLine(@"CalculatePortfolioProfitLoss() / FinalValue");
             Console.WriteLine(@"PortfolioFinalValue: {0}", PortfolioFinalValue);
-            Console.WriteLine(@"PortfolioPurchaseValue: {0}", PortfolioPurchaseValue);
+            Console.WriteLine(@"PortfolioSalePurchaseValue: {0}", PortfolioSalePurchaseValue);
+            Console.WriteLine(@"PortfolioPurchasePrice: {0}", PortfolioPurchasePrice);
             Console.WriteLine(@"PortfolioProfitLossFinalValue: {0}", PortfolioProfitLossValue);
 #endif
         }

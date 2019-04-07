@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -20,19 +20,22 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+using Parser;
 using SharePortfolioManager.Classes;
+using SharePortfolioManager.Classes.ShareObjects;
 using System;
 using System.Drawing;
 using System.Threading;
+#if DEBUG
 using System.Windows.Forms;
-using SharePortfolioManager.Classes.ShareObjects;
-using Parser;
+#endif
+using SharePortfolioManager.Properties;
 
 namespace SharePortfolioManager
 {
     partial class FrmMain
     {
-        #region WebParsing
+#region WebParsing
 
         /// <summary>
         /// Set up the Parser object for the web parsing by
@@ -59,6 +62,7 @@ namespace SharePortfolioManager
 
                     // Rename the button
                     btnRefreshAll.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAllCancel", LanguageName);
+                    btnRefreshAll.Image = Resources.button_cancel_24;
 
                     // Disable controls
                     EnableDisableControlNames.Clear();
@@ -69,45 +73,122 @@ namespace SharePortfolioManager
                     EnableDisableControlNames.Add(@"btnDelete");
                     EnableDisableControlNames.Add(@"btnClearLogger");
                     EnableDisableControlNames.Add(@"grpBoxShareDetails");
-                    EnableDisableControlNames.Add(@"grpBoxSharePortfolio");
+                    EnableDisableControlNames.Add(@"tabCtrlShareOverviews");
                     Helper.EnableDisableControls(false, this, EnableDisableControlNames);
 
                     // Check which share overview is selected
                     if (MarketValueOverviewTabSelected)
                     {
-                        // Deselect current row
-                        dgvPortfolioMarketValue.ClearSelection();
+                        do
+                        {
+                            // Deselect current row
+                            dgvPortfolioMarketValue.ClearSelection();
 
-                        // Select new row
-                        dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+                            // Select new row
+                            dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
 
-                        // Scroll to the selected row
-                        Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
+                            // Scroll to the selected row
+                            Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex,
+                                LastFirstDisplayedRowIndex, true);
 
-                        // Start the asynchronous operation of the Parser
-                        Parser.WebParsing = true;
-                        Parser.WebSiteUrl = ShareObjectMarketValue.WebSite;
-                        Parser.RegexList = ShareObjectMarketValue.RegexList;
-                        Parser.EncodingType = ShareObjectMarketValue.WebSiteEncodingType;
-                        Parser.StartParsing();
+                            // Check if the current share should not be updated so check the next share
+                            if (!ShareObjectMarketValue.Update || !ShareObjectMarketValue.WebSiteConfigurationValid)
+                                SelectedDataGridViewShareIndex++;
+
+                        } while (!ShareObjectMarketValue.Update ||
+                                 !ShareObjectMarketValue.WebSiteConfigurationValid &&
+                                 SelectedDataGridViewShareIndex < ShareObject.ObjectCounter);
+
+                        // Check if the share should be update
+                        if (ShareObjectMarketValue.Update && ShareObjectMarketValue.WebSiteConfigurationValid)
+                        {
+                            // Start the asynchronous operation of the Parser
+                            Parser.WebParsing = true;
+                            Parser.WebSiteUrl = ShareObjectMarketValue.WebSite;
+                            Parser.RegexList = ShareObjectMarketValue.RegexList;
+                            Parser.EncodingType = ShareObjectMarketValue.WebSiteEncodingType;
+                            Parser.StartParsing();
+                        }
+                        else
+                        {
+                            EnableDisableControlNames.Remove(@"btnRefreshAll");
+                            EnableDisableControlNames.Remove(@"btnRefresh");
+                            Helper.EnableDisableControls(true, this, EnableDisableControlNames);
+
+                            UpdateAllFlag = false;
+
+                            // Reset index
+                            SelectedDataGridViewShareIndex = 0;
+
+                            dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex]
+                                .Selected = true;
+
+                            // Scroll to the selected row
+                            Helper.ScrollDgvToIndex(dgvPortfolioMarketValue,
+                                SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex,
+                                true);
+
+                            btnRefreshAll.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAll", LanguageName);
+                            btnRefresh.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Refresh", LanguageName);
+                            btnRefreshAll.Image = Resources.button_update_all_24;
+                            btnRefresh.Image = Resources.button_update_24;
+                        }
                     }
                     else
                     {
-                        // Deselect current row
-                        dgvPortfolioFinalValue.ClearSelection();
+                        do
+                        {
+                            // Deselect current row
+                            dgvPortfolioFinalValue.ClearSelection();
 
-                        // Select new row
-                        dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+                            // Select new row
+                            dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
 
-                        // Scroll to the selected row
-                        Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
+                            // Scroll to the selected row
+                            Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
 
-                        // Start the asynchronous operation of the Parser
-                        Parser.WebParsing = true;
-                        Parser.WebSiteUrl = ShareObjectFinalValue.WebSite;
-                        Parser.RegexList = ShareObjectFinalValue.RegexList;
-                        Parser.EncodingType = ShareObjectFinalValue.WebSiteEncodingType;
-                        Parser.StartParsing();
+                            // Check if the current share should not be updated so check the next share
+                            if (!ShareObjectFinalValue.Update || !ShareObjectFinalValue.WebSiteConfigurationValid)
+                                SelectedDataGridViewShareIndex++;
+
+                        } while (!ShareObjectFinalValue.Update ||
+                                 !ShareObjectFinalValue.WebSiteConfigurationValid &&
+                                 SelectedDataGridViewShareIndex < ShareObject.ObjectCounter);
+
+                        // Check if the share should be update
+                        if (ShareObjectFinalValue.Update && ShareObjectFinalValue.WebSiteConfigurationValid)
+                        {
+                            // Start the asynchronous operation of the Parser
+                            Parser.WebParsing = true;
+                            Parser.WebSiteUrl = ShareObjectFinalValue.WebSite;
+                            Parser.RegexList = ShareObjectFinalValue.RegexList;
+                            Parser.EncodingType = ShareObjectFinalValue.WebSiteEncodingType;
+                            Parser.StartParsing();
+                        }
+                        else
+                        {
+                            EnableDisableControlNames.Remove(@"btnRefreshAll");
+                            EnableDisableControlNames.Remove(@"btnRefresh");
+                            Helper.EnableDisableControls(true, this, EnableDisableControlNames);
+
+                            UpdateAllFlag = false;
+
+                            // Reset index
+                            SelectedDataGridViewShareIndex = 0;
+
+                            dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex]
+                                .Selected = true;
+
+                            // Scroll to the selected row
+                            Helper.ScrollDgvToIndex(dgvPortfolioFinalValue,
+                                SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex,
+                                true);
+
+                            btnRefreshAll.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAll", LanguageName);
+                            btnRefresh.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Refresh", LanguageName);
+                            btnRefreshAll.Image = Resources.button_update_all_24;
+                            btnRefresh.Image = Resources.button_update_24;
+                        }
                     }
                 }
                 else
@@ -153,6 +234,7 @@ namespace SharePortfolioManager
                         UpdateAllFlag = false;
 
                         btnRefresh.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshCancel", LanguageName);
+                        btnRefresh.Image = Resources.button_cancel_24;
 
                         // Disable controls
                         EnableDisableControlNames.Clear();
@@ -339,78 +421,82 @@ namespace SharePortfolioManager
                                     {
                                         // Increase index to get the next share
                                         SelectedDataGridViewShareIndex++;
-
                                         Thread.Sleep(100);
 
                                         // Check which share overview is selected
                                         if (MarketValueOverviewTabSelected)
                                         {
+                                            do
+                                            {
                                             // Clear current selection
-                                            dgvPortfolioMarketValue.ClearSelection();
+                                                dgvPortfolioMarketValue.ClearSelection();
 
-                                            // Select the new share update
-                                            dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+                                                // Select the new share update
+                                                dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
 
-                                            // Scroll to the selected row
-                                            Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
+                                                // Scroll to the selected row
+                                                Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
 
-                                            // Start the asynchronous parsing operation.
-                                            if (ShareObjectMarketValue != null)
+                                                // Check if the current share should not be updated so check the next share
+                                                if (ShareObjectMarketValue != null && !ShareObjectMarketValue.Update)
+                                                    // Increase index to get the next share
+                                                    SelectedDataGridViewShareIndex++;
+
+                                            } while (ShareObjectMarketValue != null &&
+                                                     !ShareObjectMarketValue.Update &&
+                                                     SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1);
+
+                                            // Check if the share should be update
+                                            if (ShareObjectMarketValue != null && ShareObjectMarketValue.Update && ShareObjectMarketValue.WebSiteConfigurationValid)
                                             {
                                                 Parser.WebParsing = true;
                                                 Parser.WebSiteUrl = ShareObjectMarketValue.WebSite;
                                                 Parser.RegexList = ShareObjectMarketValue.RegexList;
                                                 Parser.EncodingType = ShareObjectMarketValue.WebSiteEncodingType;
+                                                Parser.StartParsing();
                                             }
-                                            Parser.StartParsing();
                                         }
                                         else
                                         {
-                                            // Clear current selection
-                                            dgvPortfolioFinalValue.ClearSelection();
-
-                                            // Select the new share update
-                                            dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
-
-                                            // Scroll to the selected row
-                                            Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
-
-                                            // Start the asynchronous parsing operation.
-                                            if (ShareObjectFinalValue != null)
+                                            do
                                             {
+                                                // Clear current selection
+                                                dgvPortfolioFinalValue.ClearSelection();
+
+                                                // Select the new share update
+                                                dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected =
+                                                    true;
+
+                                                // Scroll to the selected row
+                                                Helper.ScrollDgvToIndex(dgvPortfolioFinalValue,
+                                                    SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
+
+                                                // Check if the current share should not be updated so check the next share
+                                                if (ShareObjectFinalValue != null && !ShareObjectFinalValue.Update)
+                                                    // Increase index to get the next share
+                                                    SelectedDataGridViewShareIndex++;
+
+                                            } while (ShareObjectFinalValue != null && 
+                                                     !ShareObjectFinalValue.Update &&
+                                                     SelectedDataGridViewShareIndex < ShareObject.ObjectCounter);
+
+                                            // Check if the share should be update
+                                            if (ShareObjectFinalValue != null && ShareObjectFinalValue.Update && ShareObjectMarketValue.WebSiteConfigurationValid)
+                                            {
+                                                // Start the asynchronous operation of the Parser
                                                 Parser.WebParsing = true;
                                                 Parser.WebSiteUrl = ShareObjectFinalValue.WebSite;
                                                 Parser.RegexList = ShareObjectFinalValue.RegexList;
                                                 Parser.EncodingType = ShareObjectFinalValue.WebSiteEncodingType;
+                                                Parser.StartParsing();
                                             }
-                                            Parser.StartParsing();
                                         }
-                                    }
-                                    else
-                                    {
-                                        // Reset index
-                                        SelectedDataGridViewShareIndex = 0;
-
-                                        if (MarketValueOverviewTabSelected)
-                                        {
-                                            dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
-
-                                            // Scroll to the selected row
-                                            Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
-                                        }
-                                        else
-                                        {
-                                            dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
-
-                                            // Scroll to the selected row
-                                            Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
-                                        }
-
-                                        timerStatusMessageClear.Enabled = true;
                                     }
                                 }
                                 else
                                 {
+                                    UpdateAllFlag = false;
+
                                     if (MarketValueOverviewTabSelected)
                                     {
                                         // Clear current selection
@@ -600,7 +686,45 @@ namespace SharePortfolioManager
                     // Check if a error occurred or the process has been finished
                     if (e.ParserInfoState.LastErrorCode < 0 || e.ParserInfoState.LastErrorCode == ParserErrorCodes.Finished)
                     {
+                        EnableDisableControlNames.Remove(@"btnRefreshAll");
+                        EnableDisableControlNames.Remove(@"btnRefresh");
                         Helper.EnableDisableControls(true, this, EnableDisableControlNames);
+
+                        UpdateAllFlag = false;
+
+                        if (MarketValueOverviewTabSelected)
+                        {
+                            dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+
+                            // Scroll to the selected row
+                            Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
+
+                            // Reset index
+                            SelectedDataGridViewShareIndex = 0;
+
+                            dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+
+                            // Scroll to the selected row
+                            Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
+                        }
+                        else
+                        {
+                            dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+
+                            // Scroll to the selected row
+                            Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
+
+                            // Reset index
+                            SelectedDataGridViewShareIndex = 0;
+
+                            dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+
+                            // Scroll to the selected row
+                            Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
+                        }
+
+
+                        timerStatusMessageClear.Enabled = true;
 
                         if (e.ParserInfoState.LastErrorCode < 0)
                         {
@@ -611,6 +735,8 @@ namespace SharePortfolioManager
 
                         btnRefreshAll.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAll", LanguageName);
                         btnRefresh.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Refresh", LanguageName);
+                        btnRefreshAll.Image = Resources.button_update_all_24;
+                        btnRefresh.Image = Resources.button_update_24;
                     }
 
                     progressBarWebParser.Value = e.ParserInfoState.Percentage;
@@ -629,6 +755,8 @@ namespace SharePortfolioManager
                         Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
 
                     Thread.Sleep(500);
+                    EnableDisableControlNames.Remove(@"btnRefreshAll");
+                    EnableDisableControlNames.Remove(@"btnRefresh");
                     Helper.EnableDisableControls(true, this, EnableDisableControlNames);
 
                     // Reset labels
@@ -637,10 +765,12 @@ namespace SharePortfolioManager
 
                     btnRefreshAll.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAll", LanguageName);
                     btnRefresh.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Refresh", LanguageName);
+                    btnRefreshAll.Image = Resources.button_update_all_24;
+                    btnRefresh.Image = Resources.button_update_24;
                 }
             }
         }
 
-        #endregion WebParsing
+#endregion WebParsing
     }
 }

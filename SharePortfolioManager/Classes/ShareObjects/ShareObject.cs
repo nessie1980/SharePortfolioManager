@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -87,6 +87,11 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Stores the XML attribute name for the share name
         /// </summary>
         internal const string GeneralNameAttrName = "Name";
+
+        /// <summary>
+        /// Stores the XML attribute name for the flag if the share should be updated
+        /// </summary>
+        internal const string GeneralUpdateAttrName = "Update";
 
         #endregion General XML variables
 
@@ -227,6 +232,11 @@ namespace SharePortfolioManager.Classes.ShareObjects
         internal const string SaleBuyVolumeAttrName = "BuyVolume";
 
         /// <summary>
+        /// Stores the XML attribute name for the brokerage / reduction of one share of a sale
+        /// </summary>
+        internal const string SaleBrokerageReductionAttrName = "BrokerageReduction";
+
+        /// <summary>
         /// Stores the XML attribute name for the buy price of one share of a sale
         /// </summary>
         internal const string SaleBuyPriceAttrName = "BuyPrice";
@@ -249,7 +259,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <summary>
         /// Stores the attribute count for the used buy information
         /// </summary>
-        internal const short SaleAttrCountUsedBuys = 4;
+        internal const short SaleAttrCountUsedBuys = 5;
 
         #endregion Sale XML variables
 
@@ -460,6 +470,30 @@ namespace SharePortfolioManager.Classes.ShareObjects
         public string NameAsStr => Name;
 
         /// <summary>
+        /// Flag if the share should be updated
+        /// </summary>
+        [Browsable(false)]
+        public bool Update { get; set; }
+
+        /// <summary>
+        /// Flag if the share should be updated as string
+        /// </summary>
+        [Browsable(false)]
+        public string UpdateAsStr => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Update.ToString());
+
+        /// <summary>
+        /// Flag if a website configuration of the share website has been found or not
+        /// </summary>
+        [Browsable(false)]
+        public bool WebSiteConfigurationValid { get; set; }
+
+        /// <summary>
+        /// Flag if a website configuration of the share website has been found or not as string
+        /// </summary>
+        [Browsable(false)]
+        public string WebSiteConfigurationValidAsStr => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(WebSiteConfigurationValid.ToString());
+
+        /// <summary>
         /// DateTime of the last share update via Internet
         /// </summary>
         [Browsable(false)]
@@ -486,8 +520,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
             get => _webSite;
             set
             {
-                // Check if "http://" is in front of the website
-                if (value.Substring(0, 7) != "http://" && value.Substring(0, 8) != "https://")
+                // Check if "http://" is in front of the website 
+                if (Update && value.Substring(0, 7) != "http://" && value.Substring(0, 8) != "https://")
                     value = "http://" + value;
                 _webSite = value;
             }
@@ -585,12 +619,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
         #endregion Volume properties
 
         #region Purchase value properties
-
-        /// <summary>
-        /// Total purchase value of the share without dividends, brokerage, profits and loss (market value)
-        /// </summary>
-        [Browsable(false)]
-        public decimal PurchaseValueTotal { get; internal set; }
 
         /// <summary>
         /// List of all buys of this share

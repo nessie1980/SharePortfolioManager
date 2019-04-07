@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,6 @@ using SharePortfolioManager.Classes.ShareObjects;
 using SharePortfolioManager.Properties;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml;
@@ -128,33 +127,14 @@ namespace SharePortfolioManager
         private const string LanguageFileName = @"Settings\Language.XML";
 
         private const string SettingsFileName = @"Settings\Settings.XML";
-
-
-        private const string WebSitesFileName = @"Settings\WebSites.XML";
-
+        
         private XmlReaderSettings _readerSettingsPortfolio;
         private XmlDocument _portfolio;
         private XmlReader _readerPortfolio;
+
         private string _portfolioFileName = @"Portfolios\Portfolio.XML";
 
         #endregion XML files settings
-
-        #region Flags
-
-        #endregion Flags
-
-        #region Share / share list
-
-        #endregion Share / share list
-
-        #region WebSite configuration
-
-        /// <summary>
-        /// Stores the count of the website object tags in the XML
-        /// </summary>
-        private const short WebSiteTagCount = 4;
-
-        #endregion WebSite configuration
 
         #endregion Variables
 
@@ -244,24 +224,21 @@ namespace SharePortfolioManager
 
         public XmlReader ReaderSettings { get; set; }
 
-        public XmlReaderSettings ReaderSettingsWebSites { get; set; }
-
-        public XmlDocument WebSites { get; set; }
-
-        public XmlReader ReaderWebSites { get; set; }
-
+        // ReSharper disable once ConvertToAutoProperty
         public XmlReaderSettings ReaderSettingsPortfolio
         {
             get => _readerSettingsPortfolio;
             set => _readerSettingsPortfolio = value;
         }
 
+        // ReSharper disable once ConvertToAutoProperty
         public XmlDocument Portfolio
         {
             get => _portfolio;
             set => _portfolio = value;
         }
 
+        // ReSharper disable once ConvertToAutoProperty
         public XmlReader ReaderPortfolio
         {
             get => _readerPortfolio;
@@ -278,9 +255,9 @@ namespace SharePortfolioManager
         public enum EStatePortfolioLoad
         {
             FileDoesNotExit = -3,
-            PortfolioListEmtpy = -2,
+            PortfolioListEmpty = -2,
             LoadFailed = -1,
-            LoadSucessful = 0,
+            LoadSuccessful = 0,
 
         }
 
@@ -315,8 +292,6 @@ namespace SharePortfolioManager
         #region Parser
 
         public Parser.Parser Parser { get; } = new Parser.Parser();
-
-        public List<WebSiteRegex> WebSiteRegexList { get; set; } = new List<WebSiteRegex>();
 
         #endregion Parser
 
@@ -451,12 +426,14 @@ namespace SharePortfolioManager
 
                 #region Load website RegEx configuration from XML
 
+                // TODO show message if an error occured
                 WebSiteConfiguration.LoadWebSiteConfigurations(InitFlag);
 
                 #endregion Load website RegEx configuration from XML
 
                 #region Load document RegEx configuration from XML
 
+                // TODO show message if an error occured
                 DocumentParsingConfiguration.LoadDocumentParsingConfigurations(InitFlag);
 
                 #endregion Load document RegEx configuration from XML
@@ -478,7 +455,7 @@ namespace SharePortfolioManager
                     // Check portfolio load state
                     switch (PortfolioLoadState)
                     {
-                        case EStatePortfolioLoad.LoadSucessful:
+                        case EStatePortfolioLoad.LoadSuccessful:
                         {
                             AddSharesToDataGridViews();
                             AddShareFooters();
@@ -492,7 +469,7 @@ namespace SharePortfolioManager
                             EnableDisableControlNames.Add("grpBoxUpdateState");
                             Helper.EnableDisableControls(true, this, EnableDisableControlNames);
                         } break;
-                        case EStatePortfolioLoad.PortfolioListEmtpy:
+                        case EStatePortfolioLoad.PortfolioListEmpty:
                         {
                             // Enable controls
                             EnableDisableControlNames.Clear();
@@ -570,7 +547,7 @@ namespace SharePortfolioManager
                         Language, LanguageName,
                         Color.OrangeRed, Logger, (int)EStateLevels.Warning, (int)EComponentLevels.Application);
 
-                    // Disable menustrip menu point "Save as..."
+                    // Disable menu strip menu point "Save as..."
                     saveAsToolStripMenuItem.Enabled = false;
 
                     EnableDisableControlNames.Clear();
@@ -742,12 +719,12 @@ namespace SharePortfolioManager
 
                 // Save current window size
                 var nodeWidth = Settings.SelectSingleNode("/Settings/Window/Width");
-                var nodeHeigth = Settings.SelectSingleNode("/Settings/Window/Height");
+                var nodeHeight = Settings.SelectSingleNode("/Settings/Window/Height");
 
                 if (nodeWidth != null)
                     nodeWidth.InnerXml = NormalWindowSize.Width.ToString();
-                if (nodeHeigth != null)
-                    nodeHeigth.InnerXml = NormalWindowSize.Height.ToString();
+                if (nodeHeight != null)
+                    nodeHeight.InnerXml = NormalWindowSize.Height.ToString();
 
                 // Save window state
                 var nodeWindowState = Settings.SelectSingleNode("/Settings/Window/State");

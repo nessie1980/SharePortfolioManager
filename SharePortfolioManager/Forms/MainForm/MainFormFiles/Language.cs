@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -20,20 +20,22 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using System;
-using System.Drawing;
-using System.IO;
-using System.Windows.Forms;
 using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.ShareObjects;
+using System;
+using System.Drawing;
+#if DEBUG_LANGUAGE
+using System.IO;
+#endif
+using System.Windows.Forms;
 
 namespace SharePortfolioManager
 {
     public partial class FrmMain
     {
-        #region Load language
+#region Load language
 
         /// <summary>
         /// This function loads the language and sets the language values
@@ -58,22 +60,22 @@ namespace SharePortfolioManager
                     // Check if an language key is not defined in the Language.XML file and then create a
                     // a dialog with the undefined language keys
 #if DEBUG_LANGUAGE
-                        string strProjectPath =
+                        var strProjectPath =
                             Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\"));
                         Language.CheckLanguageKeysOfProject(strProjectPath);
                         Language.CheckLanguageKeysOfXml(strProjectPath);
 
                         if (Language.InvalidLanguageKeysOfProject.Count != 0 || Language.InvalidLanguageKeysOfXml.Count != 0)
                         {
-                            string strInvalidKeys = @"";
+                            var strInvalidKeys = @"";
 
                             if (Language.InvalidLanguageKeysOfProject.Count != 0)
                             {
                                 strInvalidKeys = Language.InvalidLanguageKeysOfProject.Count + " invalid language keys in the project files.\n";
 
-                                foreach (var invalidkeyProject in Language.InvalidLanguageKeysOfProject)
+                                foreach (var invalidKeyProject in Language.InvalidLanguageKeysOfProject)
                                 {
-                                    strInvalidKeys += invalidkeyProject + "\n";
+                                    strInvalidKeys += invalidKeyProject + "\n";
                                 }
 
                                 strInvalidKeys += "\n";
@@ -82,19 +84,19 @@ namespace SharePortfolioManager
                             if (Language.InvalidLanguageKeysOfXml.Count != 0)
                             {
                                 strInvalidKeys += Language.InvalidLanguageKeysOfXml.Count + " unused XML language keys in file \"" + LanguageFileName + "\"\n";
-                                foreach (var invalidKeyXML in Language.InvalidLanguageKeysOfXml)
+                                foreach (var invalidKeyXml in Language.InvalidLanguageKeysOfXml)
                                 {
-                                    strInvalidKeys += invalidKeyXML + "\n";
+                                    strInvalidKeys += invalidKeyXml + "\n";
                                     
                                 }
                             }
                             FrmInvalidLanguageKeys invalidLanguageKeysDlg = new FrmInvalidLanguageKeys();
-                            invalidLanguageKeysDlg.Text += " - (Project path: " + strProjectPath + ")";
+                            invalidLanguageKeysDlg.Text += @" - (Project path: " + strProjectPath + @")";
                             invalidLanguageKeysDlg.SetText(strInvalidKeys);
                             invalidLanguageKeysDlg.ShowDialog();
                         }
 #endif
-                    #region Load logger language
+#region Load logger language
 
                     // Add state names
                     LoggerStateList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Start", LanguageName));
@@ -109,9 +111,9 @@ namespace SharePortfolioManager
                     LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/LanguageHandler", LanguageName));
                     LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Logger", LanguageName));
 
-                    #endregion Load logger language
+#endregion Load logger language
 
-                    #region Add language menu items for the available languages
+#region Add language menu items for the available languages
 
                     // Get settings menu item
                     var tmiSettings =
@@ -145,14 +147,14 @@ namespace SharePortfolioManager
                         tmiLanguage.DropDownItems.Add(tmiLanguageAdd);
                     }
 
-                    #endregion Add language menu items for the available languages
+#endregion Add language menu items for the available languages
 
-                    #region Set share object unit and percentage unit
+#region Set share object unit and percentage unit
 
                     ShareObject.PercentageUnit = Language.GetLanguageTextByXPath(@"/PercentageUnit", LanguageName);
                     ShareObject.PieceUnit = Language.GetLanguageTextByXPath(@"/PieceUnit", LanguageName);
 
-                    #endregion Set share object unit and percentage unit
+#endregion Set share object unit and percentage unit
                 }
                 else
                 {
@@ -189,9 +191,9 @@ namespace SharePortfolioManager
             }
         }
 
-        #endregion Load language
+#endregion Load language
 
-        #region Set language
+#region Set language
 
         /// <summary>
         /// This function loads the language key values to the Main form dialog
@@ -200,7 +202,7 @@ namespace SharePortfolioManager
         {
             try
             {
-                #region Application name
+#region Application name
 
                 Text = Language.GetLanguageTextByXPath(@"/Application/Name", LanguageName)
                     + @" " + Helper.GetApplicationVersion();
@@ -210,9 +212,9 @@ namespace SharePortfolioManager
                     Text += @" - (" + _portfolioFileName + @")";
                 }
 
-                #endregion Application name
+#endregion Application name
 
-                #region Notify icon
+#region Notify icon
 
                 _notifyIcon.Text = Language.GetLanguageTextByXPath(@"/Application/Name", LanguageName)
                                    + @" " + Helper.GetApplicationVersion();
@@ -227,9 +229,9 @@ namespace SharePortfolioManager
                             Language.GetLanguageTextByXPath(@"/NotifyIcon/Exit", LanguageName);
                 }
 
-                #endregion Notify icon
+#endregion Notify icon
 
-                #region Menu
+#region Menu
 
                 fileToolStripMenuItem.Text = Language.GetLanguageTextByXPath(@"/MainForm/Menu/File/Header", LanguageName);
                 newToolStripMenuItem.Text = Language.GetLanguageTextByXPath(@"/MainForm/Menu/File/New", LanguageName);
@@ -247,18 +249,18 @@ namespace SharePortfolioManager
                 helpToolStripMenuItem.Text = Language.GetLanguageTextByXPath(@"/MainForm/Menu/Help/Header", LanguageName);
                 aboutToolStripMenuItem.Text = Language.GetLanguageTextByXPath(@"/MainForm/Menu/Help/About", LanguageName);
 
-                #endregion Menu
+#endregion Menu
 
-                #region GrpBox overviews
+#region GrpBox overviews
 
                 grpBoxSharePortfolio.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Caption", LanguageName);
 
-                #region TabControl overviews
+#region TabControl overviews
 
                 tabCtrlShareOverviews.TabPages[0].Text =
                     Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/Caption", LanguageName);
 
-                #region  DataGirdView for the complete depot value
+#region  DataGirdView for the complete depot value
 
                 if (dgvPortfolioFinalValue.Columns.Count == (int)ColumnIndicesPortfolioFinalValue.EShareSumColumnIndex + 1)
                 {
@@ -280,9 +282,9 @@ namespace SharePortfolioManager
                         Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_PurchaseMarketValue", LanguageName);
                 }
 
-                #endregion  DataGirdView for the complete depot value
+#endregion  DataGirdView for the complete depot value
 
-                #region DataGirdView footer complete depot values
+#region DataGirdView footer complete depot values
 
                 if (dgvPortfolioFooterFinalValue.RowCount > 0)
                 {
@@ -312,26 +314,26 @@ namespace SharePortfolioManager
                         }";
                 }
 
-                #endregion DataGirdView footer complete depot values
+#endregion DataGirdView footer complete depot values
 
                 tabCtrlShareOverviews.TabPages[1].Text =
                     Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/Caption", LanguageName);
 
-                #region  DataGirdView for the market values
+#region  DataGirdView for the market values
 
-                // TODO
+                // Done in the DataGridView.cs
 
-                #endregion DataGridView for the market values
+#endregion DataGridView for the market values
 
-                #region  DataGirdView footer market values
+#region  DataGirdView footer market values
 
-                // TODO
+                // Done in the DataGridView.cs
 
-                #endregion DataGridView footer market values
+#endregion DataGridView footer market values
 
-                #endregion TabControl overviews
+#endregion TabControl overviews
 
-                #region Buttons
+#region Buttons
 
                 btnRefreshAll.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAll",
                     LanguageName);
@@ -344,11 +346,11 @@ namespace SharePortfolioManager
                 btnClearLogger.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/ResetLogger",
                     LanguageName);
 
-                #endregion Buttons
+#endregion Buttons
 
-                #endregion GrpBox overviews
+#endregion GrpBox overviews
 
-                #region GrpBox for the details
+#region GrpBox for the details
 
                 grpBoxShareDetails.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/Caption",
                     LanguageName);
@@ -449,23 +451,23 @@ namespace SharePortfolioManager
                         Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Caption", LanguageName);
                 }
 
-                #endregion GrpBox for the details
+#endregion GrpBox for the details
 
-                #region GrpBox status message
+#region GrpBox status message
 
                 grpBoxStatusMessage.Text = Language.GetLanguageTextByXPath(
                     @"/MainForm/GrpBoxStatusMessage/Caption", LanguageName);
 
-                #endregion GrpBox status message
+#endregion GrpBox status message
 
-                #region GrpBox update state
+#region GrpBox update state
 
                 grpBoxUpdateState.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxUpdateState/Caption",
                     LanguageName);
 
-                #endregion GrpBox update state
+#endregion GrpBox update state
 
-                #region Logger language
+#region Logger language
 
                 // Clear state list
                 LoggerStateList.Clear();
@@ -486,14 +488,14 @@ namespace SharePortfolioManager
                 LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/LanguageHandler", LanguageName));
                 LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Logger", LanguageName));
 
-                #endregion Logger language
+#endregion Logger language
 
-                #region Set share object unit and percentage unit
+#region Set share object unit and percentage unit
 
                 ShareObject.PercentageUnit = Language.GetLanguageTextByXPath(@"/PercentageUnit", LanguageName);
                 ShareObject.PieceUnit = Language.GetLanguageTextByXPath(@"/PieceUnit", LanguageName);
 
-                #endregion Set share object unit and percentage unit
+#endregion Set share object unit and percentage unit
             }
             catch (Exception ex)
             {
@@ -534,6 +536,6 @@ namespace SharePortfolioManager
             }
         }
 
-        #endregion Set language
+#endregion Set language
     }
 }

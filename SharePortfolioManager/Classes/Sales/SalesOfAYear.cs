@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -126,7 +126,7 @@ namespace SharePortfolioManager.Classes.Sales
                 // Create new SaleObject
                 var addObject = new SaleObject(cultureInfo, strGuid, strDate, strOrderNumber, decVolume, decSalePrice, usedBuyDetails, decTaxAtSource, decCapitalGainsTax, decSolidarityTax, brokerageObject, strDoc);
 
-                var addProfitLossObject = new ProfitLossObject(cultureInfo, strGuid, strDate, addObject.ProfitLoss, strDoc);
+                var addProfitLossObject = new ProfitLossObject(cultureInfo, strGuid, strDate, addObject.ProfitLossBrokerage, strDoc);
 
                 // Add object to the list
                 SaleListYear.Add(addObject);
@@ -143,10 +143,10 @@ namespace SharePortfolioManager.Classes.Sales
                 // Calculate sale value
                 if (SalePayoutYear == -1)
                     SalePayoutYear = 0;
-                SalePayoutYear += addObject.Payout;
+                SalePayoutYear += addObject.PayoutBrokerage;
                 if (SalePayoutWithoutBrokerageYear == -1)
                     SalePayoutWithoutBrokerageYear = 0;
-                SalePayoutWithoutBrokerageYear += addObject.PayoutWithoutBrokerage;
+                SalePayoutWithoutBrokerageYear += addObject.Payout;
 
                 // Calculate sale volume
                 if (SaleVolumeYear == -1)
@@ -156,15 +156,15 @@ namespace SharePortfolioManager.Classes.Sales
                 // Calculate sale purchase value
                 if (SalePurchaseValueYear == -1)
                     SalePurchaseValueYear = 0;
-                SalePurchaseValueYear += addObject.PurchaseValue;
+                SalePurchaseValueYear += addObject.BuyValue;
 
                 // Calculate sale profit or loss
                 if (SaleProfitLossYear == -1)
                     SaleProfitLossYear = 0;
-                SaleProfitLossYear += addObject.ProfitLoss;
+                SaleProfitLossYear += addObject.ProfitLossBrokerage;
                 if (SaleProfitLossWithoutBrokerageYear == -1)
                     SaleProfitLossWithoutBrokerageYear = 0;
-                SaleProfitLossWithoutBrokerageYear += addObject.ProfitLossWithoutBrokerage;
+                SaleProfitLossWithoutBrokerageYear += addObject.ProfitLoss;
 
 #if DEBUG_SALE
                 Console.WriteLine(@"SalePayoutYear: {0}", SalePayoutYear);
@@ -213,15 +213,15 @@ namespace SharePortfolioManager.Classes.Sales
                 SaleListYear.Remove(removeObject);
 
                 // Calculate sale value
-                SalePayoutYear -= removeObject.Payout;
-                SalePayoutWithoutBrokerageYear -= removeObject.PayoutWithoutBrokerage;
+                SalePayoutYear -= removeObject.PayoutBrokerage;
+                SalePayoutWithoutBrokerageYear -= removeObject.Payout;
                 // Calculate sale volume
                 SaleVolumeYear -= removeObject.Volume;
                 // Calculate purchase vale
-                SalePurchaseValueYear -= removeObject.PurchaseValue;
+                SalePurchaseValueYear -= removeObject.BuyValue;
                 // Calculate sale profit or loss
-                SaleProfitLossYear -= removeObject.ProfitLoss;
-                SaleProfitLossWithoutBrokerageYear -= removeObject.ProfitLossWithoutBrokerage;
+                SaleProfitLossYear -= removeObject.ProfitLossBrokerage;
+                SaleProfitLossWithoutBrokerageYear -= removeObject.ProfitLoss;
 
                 // Search for the remove object
                 iFoundIndex = -1;

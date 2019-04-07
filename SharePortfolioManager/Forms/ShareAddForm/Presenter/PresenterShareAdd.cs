@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -30,6 +30,7 @@ using System.Linq;
 using System.Windows.Forms;
 using SharePortfolioManager.Classes.ShareObjects;
 
+// ReSharper disable once CheckNamespace
 namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
 {
     public class PresenterShareAdd
@@ -62,13 +63,13 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             _view.OrderNumber = _model.OrderNumber;
             _view.Volume = _model.Volume;
             _view.SharePrice = _model.SharePrice;
-            _view.MarketValue = _model.MarketValue;
             _view.Provision = _model.Provision;
             _view.BrokerFee = _model.BrokerFee;
             _view.TraderPlaceFee = _model.TraderPlaceFee;
             _view.Reduction = _model.Reduction;
             _view.Brokerage = _model.Brokerage;
-            _view.FinalValue = _model.FinalValue;
+            _view.BuyValue = _model.BuyValue;
+            _view.BuyValueBrokerageReduction = _model.BuyValueBrokerageReduction;
             _view.Document = _model.Document;
         }
 
@@ -108,13 +109,13 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             _model.OrderNumber = _view.OrderNumber;
             _model.Volume = _view.Volume;
             _model.SharePrice = _view.SharePrice;
-            _model.MarketValue = _view.MarketValue;
+            _model.BuyValue = _view.BuyValue;
             _model.Provision = _view.Provision;
             _model.BrokerFee = _view.BrokerFee;
             _model.TraderPlaceFee = _view.TraderPlaceFee;
             _model.Reduction = _view.Reduction;
             _model.Brokerage = _view.Brokerage;
-            _model.FinalValue = _view.FinalValue;
+            _model.BuyValueBrokerageReduction = _view.BuyValueBrokerageReduction;
             _model.Document = _view.Document;
 
             CalculateMarketValueAndFinalValue();
@@ -133,12 +134,24 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             {
                 Helper.CalcBuyValues(_model.VolumeDec, _model.SharePriceDec,
                     _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec,
-                    out var decMarketValue, out var decDeposit, out var decBrokerage, out var decBrokerageWithReduction);
+                    out var decBuyValue, out var decBuyValueReduction, out var decBuyValueBrokerage, out var decBuyValueBrokerageReduction,
+                    out var decBrokerage, out var decBrokerageWithReduction);
 
-                _model.MarketValueDec = decMarketValue;
-                _model.FinalValueDec = decDeposit;
                 _model.BrokerageDec = decBrokerage;
                 _model.BrokerageWithReductionDec = decBrokerageWithReduction;
+                _model.BuyValueDec = decBuyValue;
+                _model.BuyValueReductionDec = decBuyValueReduction;
+                _model.BuyValueBrokerageDec = decBuyValueBrokerage;
+                _model.BuyValueBrokerageReductionDec = decBuyValueBrokerageReduction;
+
+#if DEBUG_BUY || DEBUG
+                Console.WriteLine(@"BrokerageDec: {0}", _model.BrokerageDec);
+                Console.WriteLine(@"BrokerageWithReductionDec: {0}", _model.BrokerageWithReductionDec);
+                Console.WriteLine(@"BuyValueDec: {0}", _model.BuyValueDec);
+                Console.WriteLine(@"BuyValueReductionDec: {0}", _model.BuyValueReductionDec);
+                Console.WriteLine(@"BuyValueBrokerageDec: {0}", _model.BuyValueBrokerageDec);
+                Console.WriteLine(@"BuyValueBrokerageReductionDec: {0}", _model.BuyValueBrokerageReductionDec);
+#endif
             }
             catch (Exception ex)
             {
@@ -147,9 +160,12 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
-                _model.MarketValueDec = 0;
-                _model.FinalValueDec = 0;
                 _model.BrokerageDec = 0;
+                _model.BrokerageWithReductionDec = 0;
+                _model.BuyValueDec = 0;
+                _model.BuyValueReductionDec = 0;
+                _model.BuyValueBrokerageDec = 0;
+                _model.BuyValueBrokerageReductionDec = 0;
             }
         }
 
@@ -175,6 +191,10 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                         0,
                         _model.VolumeDec,
                         0,
+                        _model.ProvisionDec,
+                        _model.BrokerFeeDec,
+                        _model.TraderPlaceFeeDec,
+                        _model.ReductionDec,
                         _model.WebSite,
                         _model.ImageList,
                         null,
@@ -234,6 +254,10 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                         _model.SharePriceDec,
                         _model.VolumeDec,
                         0,
+                        _model.ProvisionDec,
+                        _model.BrokerFeeDec,
+                        _model.TraderPlaceFeeDec,
+                        _model.ReductionDec,
                         _model.WebSite,
                         _model.ImageList,
                         null,

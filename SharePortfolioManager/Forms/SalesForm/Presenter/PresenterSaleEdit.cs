@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -29,11 +29,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
-#if DEBUG
 using System.Windows.Forms;
-#endif
 
+// ReSharper disable once CheckNamespace
 namespace SharePortfolioManager.Forms.SalesForm.Presenter
 {
     internal class PresenterSaleEdit
@@ -541,8 +539,30 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                     // Check if the remaining buy volume is greater than the volume which must be sold
                     if (toBeSold >= buy.Volume - buy.VolumeSold)
                     {
+                        // Calculate brokerage / reduction value
+                        var brokerageReductionPart = Math.Round(buy.BrokerageWithReduction * salableVolume / buy.Volume, 5);
+
+                        decimal decAlreadyUsedBrokerageReductionValue = 0;
+                        // Get already used brokerage / reduction value ( rounding errors )
+                        foreach (var saleObject in _model.ShareObjectFinalValue.AllSaleEntries.GetAllSalesOfTheShare())
+                        {
+                            // If an edit is running only add the brokerage / reduction values of the not selected values
+                            if (_model.SelectedGuid == saleObject.Guid) continue;
+
+                            foreach (var saleObjectSaleBuyDetail in saleObject.SaleBuyDetails)
+                            {
+                                if (saleObjectSaleBuyDetail.BuyGuid == buy.Guid)
+                                    decAlreadyUsedBrokerageReductionValue +=
+                                        saleObjectSaleBuyDetail.BrokerageReductionPart;
+                            }
+                        }
+
+                        // Check if the brokerage / reduction value is not equal to the rest calculation
+                        if (!brokerageReductionPart.Equals(buy.BrokerageWithReduction - decAlreadyUsedBrokerageReductionValue))
+                            brokerageReductionPart = buy.BrokerageWithReduction - decAlreadyUsedBrokerageReductionValue;
+
                         _model.UsedBuyDetails?.Add(new SaleBuyDetails(_model.ShareObjectFinalValue.CultureInfo,
-                            buy.DateAsStr, salableVolume, buy.SharePrice, buy.Guid));
+                            buy.DateAsStr, salableVolume, buy.SharePrice, brokerageReductionPart, buy.Guid));
 
                         // Add sale volume to the sold volume of the buy
                         _model.ShareObjectFinalValue.AllBuyEntries.AddSaleVolumeByGuid(buy.Guid,
@@ -553,8 +573,11 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                     }
                     else
                     {
+                        // Calculate brokerage / reduction value
+                        var brokerageReductionPart = Math.Round(buy.BrokerageWithReduction * toBeSold / buy.Volume, 5);
+
                         _model.UsedBuyDetails?.Add(new SaleBuyDetails(_model.ShareObjectFinalValue.CultureInfo,
-                            buy.DateAsStr, toBeSold, buy.SharePrice, buy.Guid));
+                            buy.DateAsStr, toBeSold, buy.SharePrice, brokerageReductionPart, buy.Guid));
 
                         // Add sale volume to the sold volume of the buy
                         _model.ShareObjectFinalValue.AllBuyEntries.AddSaleVolumeByGuid(buy.Guid,
@@ -585,8 +608,6 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                 _model.PayoutDec = decPayout;
 
                 UpdateViewWithModel();
-
-                Console.WriteLine();
             }
             catch (Exception ex)
             {

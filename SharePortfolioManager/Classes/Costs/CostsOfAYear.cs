@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -114,7 +114,7 @@ namespace SharePortfolioManager.Classes.Costs
                 // Calculate brokerage minus reduction value
                 if (BrokerageWithReductionValueYear == -1)
                     BrokerageWithReductionValueYear = 0;
-                BrokerageWithReductionValueYear += addObject.BrokerageWithReductionValue;
+                BrokerageWithReductionValueYear += addObject.BrokerageReductionValue;
 
 #if DEBUG_BROKERAGE
                 Console.WriteLine(@"BrokerageValueYear: {0}", BrokerageValueYear);
@@ -163,7 +163,7 @@ namespace SharePortfolioManager.Classes.Costs
                 BrokerageValueYear -= removeObject.BrokerageValue;
 
                 // Calculate brokerage minus reduction value
-                BrokerageWithReductionValueYear -= removeObject.BrokerageWithReductionValue;
+                BrokerageWithReductionValueYear -= removeObject.BrokerageReductionValue;
 
 #if DEBUG_BROKERAGE
                 Console.WriteLine(@"BrokerageValueYear: {0}", BrokerageValueYear);

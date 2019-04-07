@@ -3,31 +3,31 @@
 	<WebSite Id="www.finanzen.net/fonds" Encoding="UTF-8">
 		<WebSiteLastDate Name="LastDate" FoundIndex="0" ResultEmpty="false" DownloadResult="false" RegexOptions="None">>([0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,4}[ ][0-9]{1,2}[:][0-9]{1,2}[:][0-9]{1,2})</WebSiteLastDate>
 		<WebSiteLastTime Name="LastTime" FoundIndex="0" ResultEmpty="false" DownloadResult="false" RegexOptions="None">>([0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,4}[ ][0-9]{1,2}[:][0-9]{1,2}[:][0-9]{1,2})</WebSiteLastTime>
-		<WebSitePrice Name="Price" FoundIndex="0" ResultEmpty="false" DownloadResult="false" RegexOptions="None">th>([0-9]{1,}[,][0-9]{1,2}[ ])</WebSitePrice>
-		<WebSitePriceBefore Name="PriceBefore" ResultEmpty="false" DownloadResult="false" FoundIndex="0" RegexOptions="None">([0-9]{1,}[,][0-9]{1,2}) EUR</WebSitePriceBefore>
+		<WebSitePrice Name="Price" FoundIndex="0" ResultEmpty="false" DownloadResult="false" RegexOptions="None">th>([0-9.]{1,}[,][0-9]{1,2}[ ])</WebSitePrice>
+		<WebSitePriceBefore Name="PriceBefore" ResultEmpty="false" DownloadResult="false" FoundIndex="0" RegexOptions="None">([0-9.]{1,}[,][0-9]{1,2}) EUR</WebSitePriceBefore>
 	</WebSite>
 	<WebSite Id="www.finanzen.net/aktien" Encoding="UTF-8">
 		<WebSiteLastDate Name="LastDate" FoundIndex="0" ResultEmpty="false" DownloadResult="false" RegexOptions="Multiline">class="textRight">([0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,4})</WebSiteLastDate>
 		<WebSiteLastTime Name="LastTime" FoundIndex="0" ResultEmpty="false" DownloadResult="false" RegexOptions="Multiline">class="textRight">([0-9]{1,2}[:][0-9]{1,2}[:][0-9]{1,2})</WebSiteLastTime>
-		<WebSitePrice Name="Price" FoundIndex="0" ResultEmpty="false" DownloadResult="false" RegexOptions="Multiline">"textRight" colspan="2">([0-9]{1,}[,][0-9]{1,}) EUR</WebSitePrice>
-		<WebSitePriceBefore Name="PriceBefore" FoundIndex="1" ResultEmpty="false" DownloadResult="false" RegexOptions="Multiline">class="textRight">([0-9]{1,}[,][0-9]{1,2})</WebSitePriceBefore>
+		<WebSitePrice Name="Price" FoundIndex="0" ResultEmpty="false" DownloadResult="false" RegexOptions="Multiline">"textRight" colspan="2">([0-9.]{1,}[,][0-9]{1,}) EUR</WebSitePrice>
+		<WebSitePriceBefore Name="PriceBefore" FoundIndex="1" ResultEmpty="false" DownloadResult="false" RegexOptions="Multiline">class="textRight">([0-9.]{1,}[,][0-9]{1,2})</WebSitePriceBefore>
 	</WebSite>
 	<WebSite Id="www.onvista.de/fonds" Encoding="UTF-8">
 		<WebSiteLastDate Name="LastDate" FoundIndex="0" ResultEmpty="false" DownloadResult="false" RegexOptions="None">[ ]([0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,4})</WebSiteLastDate>
 		<WebSiteLastTime Name="LastTime" FoundIndex="0" ResultEmpty="false" DownloadResult="false" RegexOptions="None">, ([0-9]{1,2}[:][0-9]{1,2}[:][0-9]{1,2})</WebSiteLastTime>
-		<WebSitePrice Name="Price" FoundIndex="0" ResultEmpty="false" DownloadResult="false" RegexOptions="Multiline">>([0-9]{1,}[,][0-9]{1,})</WebSitePrice>
-		<WebSitePriceBefore Name="PriceBefore" FoundIndex="0" ResultEmpty="false" DownloadResult="false" RegexOptions="None">quote-previous-last">\s+([0-9]{1,}[,][0-9]{1,})</WebSitePriceBefore>
+		<WebSitePrice Name="Price" FoundIndex="0" ResultEmpty="false" DownloadResult="false" RegexOptions="Multiline">>([0-9.]{1,}[,][0-9]{1,})</WebSitePrice>
+		<WebSitePriceBefore Name="PriceBefore" FoundIndex="0" ResultEmpty="false" DownloadResult="false" RegexOptions="None">quote-previous-last">\s+([0-9.]{1,}[,][0-9]{1,})</WebSitePriceBefore>
 	</WebSite>
 	<WebSite Id="www.onvista.de/aktien" Encoding="UTF-8">
 		<WebSiteLastDate Name="LastDate" FoundIndex="0" ResultEmpty="false" DownloadResult="false" RegexOptions="Multiline">> ([0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,4}),</WebSiteLastDate>
 		<WebSiteLastTime Name="LastTime" FoundIndex="0" ResultEmpty="false" DownloadResult="false" RegexOptions="Multiline">, ([0-9]{1,2}[:][0-9]{1,2}[:][0-9]{1,2}) </WebSiteLastTime>
-		<WebSitePrice Name="Price" FoundIndex="0" ResultEmpty="false" DownloadResult="false" RegexOptions="Multiline">>([0-9]{1,}[,][0-9]{1,})</WebSitePrice>
-		<WebSitePriceBefore Name="PriceBefore" FoundIndex="0" ResultEmpty="false" DownloadResult="false" RegexOptions="none">"dataClose">([0-9]{1,}[,][0-9]{1,})</WebSitePriceBefore>
+		<WebSitePrice Name="Price" FoundIndex="0" ResultEmpty="false" DownloadResult="false" RegexOptions="Multiline">>([0-9.]{1,}[,][0-9]{1,})</WebSitePrice>
+		<WebSitePriceBefore Name="PriceBefore" FoundIndex="0" ResultEmpty="false" DownloadResult="false" RegexOptions="none">"dataClose">([0-9.]{1,}[,][0-9]{1,})</WebSitePriceBefore>
 	</WebSite>
 	<WebSite Id="www.deka.de" Encoding="UTF-8">
         <WebSiteLastDate Name="LastDate" FoundIndex="0" ResultEmpty="false" DownloadResult="false" RegexOptions="None">Aktuelle Fondsdaten vom ([0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,4})</WebSiteLastDate>
 		<WebSiteLastTime Name="LastTime" FoundIndex="0" ResultEmpty="false" DownloadResult="false" RegexOptions="None">Aktuelle Fondsdaten vom ([0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,4})</WebSiteLastTime>
-        <WebSitePrice Name="Price" FoundIndex="1" ResultEmpty="false" DownloadResult="false" RegexOptions="Singleline">([0-9]{1,}[,][0-9]{1,}) EUR</WebSitePrice>
-        <WebSitePriceBefore Name="PriceBefore" FoundIndex="2" ResultEmpty="false" DownloadResult="false" RegexOptions="Singleline">([0-9]{1,}[,][0-9]{1,}) EUR</WebSitePriceBefore>
+        <WebSitePrice Name="Price" FoundIndex="1" ResultEmpty="false" DownloadResult="false" RegexOptions="Singleline">([0-9.]{1,}[,][0-9]{1,}) EUR</WebSitePrice>
+        <WebSitePriceBefore Name="PriceBefore" FoundIndex="2" ResultEmpty="false" DownloadResult="false" RegexOptions="Singleline">([0-9.]{1,}[,][0-9]{1,}) EUR</WebSitePriceBefore>
     </WebSite>
 </WebSites>
