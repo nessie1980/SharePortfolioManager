@@ -430,6 +430,7 @@ namespace SharePortfolioManager
             this.dgvPortfolioFinalValue.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DgvPortfolioFinalValue_CellFormatting);
             this.dgvPortfolioFinalValue.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.DgvPortfolioFinalValue_CellPainting);
             this.dgvPortfolioFinalValue.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.DgvPortfolioFinalValue_DataBindingComplete);
+            this.dgvPortfolioFinalValue.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.OnDgvPortfolioFinalValue_RowsAdded);
             this.dgvPortfolioFinalValue.SelectionChanged += new System.EventHandler(this.DgvPortfolioFinalValue_SelectionChanged);
             this.dgvPortfolioFinalValue.MouseEnter += new System.EventHandler(this.DgvPortfolioFinalValue_MouseEnter);
             this.dgvPortfolioFinalValue.Resize += new System.EventHandler(this.DgvPortfolioFinalValue_Resize);
@@ -496,6 +497,7 @@ namespace SharePortfolioManager
             this.dgvPortfolioMarketValue.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DgvPortfolioMarketValue_CellFormatting);
             this.dgvPortfolioMarketValue.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.DgvPortfolioMarketValue_CellPainting);
             this.dgvPortfolioMarketValue.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.DgvPortfolioMarketValue_DataBindingComplete);
+            this.dgvPortfolioMarketValue.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.OnDgvPortfolioMarketValue_RowsAdded);
             this.dgvPortfolioMarketValue.SelectionChanged += new System.EventHandler(this.DgvPortfolioMarketValue_SelectionChanged);
             this.dgvPortfolioMarketValue.MouseEnter += new System.EventHandler(this.DgvPortfolioMarketValue_MouseEnter);
             this.dgvPortfolioMarketValue.Resize += new System.EventHandler(this.DgvPortfolioMarketValue_Resize);

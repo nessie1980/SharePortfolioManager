@@ -1113,6 +1113,125 @@ namespace SharePortfolioManager.Classes
         #endregion Methods
     }
 
+    #region Text and image in a DataGridView cell
+
+    // Taken from this website
+    //http://csharpuideveloper.blogspot.com/2010/09/how-to-insert-image-with-text-in-one.html
+
+    public class TextAndImageColumn : DataGridViewTextBoxColumn
+    {
+        private Image _imageValue;
+
+        public TextAndImageColumn()
+        {
+            CellTemplate = new TextAndImageCell();
+        }
+
+        public sealed override DataGridViewCell CellTemplate
+        {
+            get => base.CellTemplate;
+            set => base.CellTemplate = value;
+        }
+
+        public override object Clone()
+        {
+            if (!(base.Clone() is TextAndImageColumn clone)) return null;
+
+            clone._imageValue = this._imageValue;
+            clone.ImageSize = this.ImageSize;
+            return clone;
+        }
+
+        public Image Image
+        {
+            get => _imageValue;
+            set
+            {
+                if (Image == value) return;
+                _imageValue = value;
+                ImageSize = value.Size;
+
+                if (InheritedStyle == null) return;
+
+                var inheritedPadding = InheritedStyle.Padding;
+                DefaultCellStyle.Padding = new Padding(ImageSize.Width,
+                    inheritedPadding.Top, inheritedPadding.Right,
+                    inheritedPadding.Bottom);
+            }
+        }
+        private TextAndImageCell TextAndImageCellTemplate => CellTemplate as TextAndImageCell;
+
+        internal Size ImageSize { get; private set; }
+    }
+
+    public class TextAndImageCell : DataGridViewTextBoxCell
+    {
+        private Image _imageValue;
+        private Size _imageSize;
+
+        public override object Clone()
+        {
+            if (!(base.Clone() is TextAndImageCell clone)) return null;
+
+            clone._imageValue = _imageValue;
+            clone._imageSize = _imageSize;
+            return clone;
+
+        }
+
+        public Image Image
+        {
+            get
+            {
+                if (OwningColumn == null || OwningTextAndImageColumn == null)
+                    return _imageValue;
+
+                return _imageValue ?? OwningTextAndImageColumn.Image;
+            }
+            set
+            {
+                if (_imageValue == value) return;
+
+                _imageValue = value;
+                _imageSize = value.Size;
+
+                var inheritedPadding = InheritedStyle.Padding;
+                Style.Padding = new Padding(_imageSize.Width, inheritedPadding.Top, inheritedPadding.Right, inheritedPadding.Bottom);
+            }
+        }
+
+        protected override void Paint(Graphics graphics, Rectangle clipBounds,
+        Rectangle cellBounds, int rowIndex, DataGridViewElementStates cellState,
+        object value, object formattedValue, string errorText,
+        DataGridViewCellStyle cellStyle,
+        DataGridViewAdvancedBorderStyle advancedBorderStyle,
+        DataGridViewPaintParts paintParts)
+        {
+            // Set image to the vertical middle of the cell
+            var newLocation = cellBounds.Location;
+            if (Image != null)
+                newLocation = new Point(cellBounds.X + 1, cellBounds.Location.Y + cellBounds.Height / 2 - Image.Size.Height / 2);
+
+            // Paint the base content
+            base.Paint(graphics, clipBounds, cellBounds, rowIndex, cellState,
+               value, formattedValue, errorText, cellStyle,
+               advancedBorderStyle, paintParts);
+
+            if (Image == null) return;
+
+            // Draw the image clipped to the cell.
+            var container = graphics.BeginContainer();
+            graphics.SetClip(cellBounds);
+            graphics.DrawImageUnscaled(Image, newLocation/*cellBounds.Location*/);
+
+            graphics.EndContainer(container);
+        }
+
+        private TextAndImageColumn OwningTextAndImageColumn => OwningColumn as TextAndImageColumn;
+    }
+
+    #endregion
+
     // This class stores the information of a culture info
     public class CultureInformation
     {

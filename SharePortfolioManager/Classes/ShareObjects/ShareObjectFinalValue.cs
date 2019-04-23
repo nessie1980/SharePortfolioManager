@@ -33,6 +33,7 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using System.Xml;
+using SharePortfolioManager.Properties;
 
 namespace SharePortfolioManager.Classes.ShareObjects
 {

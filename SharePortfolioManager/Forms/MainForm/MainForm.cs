@@ -902,6 +902,5 @@ namespace SharePortfolioManager
         }
 
         #endregion Timer
-
     }
 }
