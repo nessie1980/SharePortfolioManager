@@ -28,52 +28,69 @@ using SharePortfolioManager.Classes.Costs;
 
 namespace SharePortfolioManager.Classes.Buys
 {
+    /// <summary>
+    /// This class handles all buys of a share.
+    /// It calculates all necessary values of the buys of the share:
+    /// - buy volume
+    /// - buy value
+    /// - buy value minus reduction
+    /// - buy value plus brokerage
+    /// - buy value plus brokerage minus reduction
+    /// Dictionary with all buys sorted by the buy years
+    /// </summary>
     [Serializable]
     public class AllBuysOfTheShare
     {
         #region Variables
 
-        /// <summary>
-        /// Stores the buys of a year of the share
-        /// The string stores the different buy years
-        /// The BuysOfAYearOfTheShare stores the buys of each year
-        /// </summary>
-        private readonly SortedDictionary<string, BuysYearOfTheShare> _allBuysOfTheShareDictionary =
-            new SortedDictionary<string, BuysYearOfTheShare>();
-
         #endregion Variables
 
         #region Properties
 
+        /// <summary>
+        /// Culture info of the buys
+        /// </summary>
         public CultureInfo BuyCultureInfo { get; internal set; }
 
-        public decimal BuyValueTotal { get; internal set; }
-
-        public string BuyValueTotalAsStr => Helper.FormatDecimal(BuyValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength);
-
-        public string BuyValueTotalAsStrUnit => Helper.FormatDecimal(BuyValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
-
-        public decimal BuyValueReductionTotal { get; internal set; }
-
-        public string BuyValueReductionTotalAsStr => Helper.FormatDecimal(BuyValueReductionTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength);
-
-        public string BuyValueReductionTotalAsStrUnit => Helper.FormatDecimal(BuyValueReductionTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
-
-        public decimal BuyValueBrokerageTotal { get; internal set; }
-
-        public string BuyValueBrokerageTotalAsStr => Helper.FormatDecimal(BuyValueBrokerageTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength);
-
-        public string BuyValueBrokerageTotalAsStrUnit => Helper.FormatDecimal(BuyValueBrokerageTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
-
-        public decimal BuyValueBrokerageReductionTotal { get; internal set; }
-
-        public string BuyValueBrokerageReductionTotalAsStr => Helper.FormatDecimal(BuyValueBrokerageReductionTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength);
-
-        public string BuyValueBrokerageReductionTotalAsStrUnit => Helper.FormatDecimal(BuyValueBrokerageReductionTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
-
+        /// <summary>
+        /// Total value of all buys
+        /// </summary>
         public decimal BuyVolumeTotal { get; internal set; }
 
-        public SortedDictionary<string, BuysYearOfTheShare> AllBuysOfTheShareDictionary => _allBuysOfTheShareDictionary;
+        /// <summary>
+        /// Total buy value of all buys
+        /// </summary>
+        public decimal BuyValueTotal { get; internal set; }
+
+        /// <summary>
+        /// Total buy value minus reduction of all buys
+        /// </summary>
+        public decimal BuyValueReductionTotal { get; internal set; }
+
+        /// <summary>
+        /// Total buy value plus brokerage of all buys
+        /// </summary>
+        public decimal BuyValueBrokerageTotal { get; internal set; }
+
+        /// <summary>
+        /// Total buy value plus brokerage and minus reduction of all buys
+        /// </summary>
+        public decimal BuyValueBrokerageReductionTotal { get; internal set; }
+
+        /// <summary>
+        /// Total buy value plus brokerage and minus reduction of all buys as string
+        /// </summary>
+        public string BuyValueBrokerageReductionTotalAsStr => Helper.FormatDecimal(BuyValueBrokerageReductionTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength);
+
+        /// <summary>
+        /// Total buy value plus brokerage and minus reduction of all buys as string with unit
+        /// </summary>
+        public string BuyValueBrokerageReductionTotalAsStrUnit => Helper.FormatDecimal(BuyValueBrokerageReductionTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
+
+        /// <summary>
+        /// Sorted dictionary of all buy. The dictionary is sorted by the buy year.
+        /// </summary>
+        public SortedDictionary<string, BuysYearOfTheShare> AllBuysOfTheShareDictionary { get; } = new SortedDictionary<string, BuysYearOfTheShare>();
 
         #endregion Properties
 
@@ -103,10 +120,6 @@ namespace SharePortfolioManager.Classes.Buys
         public bool AddBuy(string strGuid, string strOrderNumber, string strDate, decimal decVolume, decimal decVolumeSold, decimal decSharePrice,
             BrokerageReductionObject brokerageObject, string strDoc = "")
         {
-#if DEBUG_BUY
-            Console.WriteLine(@"");
-            Console.WriteLine(@"Add AllBuysOfTheShare");
-#endif
             try
             {
                 // Get year of the date of the new buy
@@ -152,14 +165,6 @@ namespace SharePortfolioManager.Classes.Buys
                     BuyValueBrokerageTotal += calcObject.BuyValueBrokerageYear;
                     BuyValueBrokerageReductionTotal += calcObject.BuyValueBrokerageReductionYear;
                 }
-
-#if DEBUG_BUY
-                Console.WriteLine(@"VolumeTotal:{0}", BuyVolumeTotal);
-                Console.WriteLine(@"BuyValueTotal:{0}", BuyValueTotal);
-                Console.WriteLine(@"BuyValueReductionTotal:{0}", BuyValueReductionTotal);
-                Console.WriteLine(@"BuyValueBrokerageTotal:{0}", BuyValueBrokerageTotal);
-                Console.WriteLine(@"BuyValueReductionBrokerageTotal:{0}", BuyValueReductionBrokerageTotal);
-#endif
             }
             catch
             {
@@ -178,9 +183,6 @@ namespace SharePortfolioManager.Classes.Buys
         /// <returns></returns>
         public bool RemoveBuy(string strGuid, string strDate)
         {
-#if DEBUG_BUY
-            Console.WriteLine(@"Remove AllBuysOfTheShare");
-#endif
             try
             {
                 // Get year of the date of the buy which should be removed
@@ -220,14 +222,6 @@ namespace SharePortfolioManager.Classes.Buys
                     BuyValueBrokerageTotal += calcObject.BuyValueBrokerageYear;
                     BuyValueBrokerageReductionTotal += calcObject.BuyValueBrokerageReductionYear;
                 }
-
-#if DEBUG_BUY
-                Console.WriteLine(@"VolumeTotal:{0}", BuyVolumeTotal);
-                Console.WriteLine(@"BuyValueTotal:{0}", BuyValueTotal);
-                Console.WriteLine(@"BuyValueReductionTotal:{0}", BuyValueReductionTotal);
-                Console.WriteLine(@"BuyValueBrokerageTotal:{0}", BuyValueBrokerageTotal);
-                Console.WriteLine(@"BuyValueReductionBrokerageTotal:{0}", BuyValueReductionBrokerageTotal);
-#endif
             }
             catch
             {
@@ -247,9 +241,6 @@ namespace SharePortfolioManager.Classes.Buys
         /// <returns></returns>
         public bool SetDocumentBuy(string strGuid, string strDate, string strDocument)
         {
-#if DEBUG_BUY
-            Console.WriteLine(@"Remove SetDocumentBuy");
-#endif
             try
             {
                 // Get year of the date of the buy which should be modified
@@ -349,22 +340,7 @@ namespace SharePortfolioManager.Classes.Buys
                 {
                     if (buyObject.Guid != strGuid ) continue;
 
-#if DEBUG_BUY
-                    Console.WriteLine(@"Add sale volume");
-                    Console.WriteLine(@"Guid: {0}", strGuid);
-                    Console.WriteLine(@"decSaleVolume: {0}", decSaleVolume);
-                    Console.WriteLine(@"VolumeSold: {0}", buyObject.VolumeSold);
-                    Console.WriteLine(@"");
-#endif
                     buyObject.VolumeSold += decSaleVolume;
-
-#if DEBUG_BUY
-                    Console.WriteLine(@"After add sale volume");
-                    Console.WriteLine(@"Guid: {0}", strGuid);
-                    Console.WriteLine(@"decSaleVolume: {0}", decSaleVolume);
-                    Console.WriteLine(@"VolumeSold: {0}", buyObject.VolumeSold);
-                    Console.WriteLine(@"");
-#endif
 
                     return true;
                 }
@@ -387,23 +363,9 @@ namespace SharePortfolioManager.Classes.Buys
                 {
                     if (buyObject.Guid != strGuid) continue;
 
-#if DEBUG_BUY
-                    Console.WriteLine(@"Remove sale volume");
-                    Console.WriteLine(@"Guid: {0}", strGuid);
-                    Console.WriteLine(@"decSaleVolume: {0}", decSaleVolume);
-                    Console.WriteLine(@"VolumeSold: {0}", buyObject.VolumeSold);
-                    Console.WriteLine(@"");
-#endif
                     if (decSaleVolume <= buyObject.VolumeSold)
                         buyObject.VolumeSold -= decSaleVolume;
 
-#if DEBUG_BUY
-                    Console.WriteLine(@"After remove sale volume");
-                    Console.WriteLine(@"Guid: {0}", strGuid);
-                    Console.WriteLine(@"decSaleVolume: {0}", decSaleVolume);
-                    Console.WriteLine(@"VolumeSold: {0}", buyObject.VolumeSold);
-                    Console.WriteLine(@"");
-#endif
                     return true;
                 }
             }
@@ -418,9 +380,9 @@ namespace SharePortfolioManager.Classes.Buys
         /// <returns></returns>
         public bool IsLastBuy(string strGuid)
         {
-            if (_allBuysOfTheShareDictionary.Count <= 0) return false;
+            if (AllBuysOfTheShareDictionary.Count <= 0) return false;
 
-            var lastYearEntries = _allBuysOfTheShareDictionary.Last().Value;
+            var lastYearEntries = AllBuysOfTheShareDictionary.Last().Value;
 
             if (lastYearEntries.BuyListYear.Count <= 0) return false;
 
@@ -434,7 +396,7 @@ namespace SharePortfolioManager.Classes.Buys
         /// <returns></returns>
         public bool OrderNumberAlreadyExists(string strOrderNumber)
         {
-            foreach (var buyList in _allBuysOfTheShareDictionary.Values)
+            foreach (var buyList in AllBuysOfTheShareDictionary.Values)
             {
                 foreach (var buy in buyList.BuyListYear)
                 {
@@ -453,9 +415,9 @@ namespace SharePortfolioManager.Classes.Buys
         /// <returns>Flag if the buy is part of a sale.</returns>
         public bool IsPartOfASale(string strGuid)
         {
-            if (_allBuysOfTheShareDictionary.Count <= 0) return false;
+            if (AllBuysOfTheShareDictionary.Count <= 0) return false;
 
-            foreach (var buysYearOfTheShare in _allBuysOfTheShareDictionary.Values)
+            foreach (var buysYearOfTheShare in AllBuysOfTheShareDictionary.Values)
             {
                 foreach (var buyObject in buysYearOfTheShare.BuyListYear)
                 {

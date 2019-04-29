@@ -29,6 +29,9 @@ using SharePortfolioManager.Classes.Costs;
 
 namespace SharePortfolioManager.Classes.Buys
 {
+    /// <summary>
+    /// This class stores values of one buy.
+    /// </summary>
     [Serializable]
     public class BuyObject
     {
@@ -47,7 +50,7 @@ namespace SharePortfolioManager.Classes.Buys
         /// <summary>
         /// Stores the price of the share
         /// </summary>
-        private decimal _sharePrice;
+        private decimal _price;
 
         #region Brokerage values
 
@@ -92,21 +95,39 @@ namespace SharePortfolioManager.Classes.Buys
 
         #region Properties
 
+        /// <summary>
+        /// Culture info of the buy
+        /// </summary>
         [Browsable(false)]
         public CultureInfo BuyCultureInfo { get; internal set; }
 
+        /// <summary>
+        /// Guid of the buy which is stored in the XML
+        /// </summary>
         [Browsable(false)]
         public string Guid { get; internal set; }
 
+        /// <summary>
+        /// Order number of the buy
+        /// </summary>
         [Browsable(false)]
         public string OrderNumber { get; internal set; }
 
+        /// <summary>
+        /// Date of the buy
+        /// </summary>
         [Browsable(false)]
         public string Date { get; internal set; }
 
+        /// <summary>
+        /// Date of the buy as string
+        /// </summary>
         [Browsable(false)]
         public string DateAsStr => DateTime.Parse(Date).Date.ToShortDateString();
 
+        /// <summary>
+        /// Volume of the buy
+        /// </summary>
         [Browsable(false)]
         public decimal Volume
         {
@@ -119,9 +140,15 @@ namespace SharePortfolioManager.Classes.Buys
             }
         }
 
+        /// <summary>
+        /// Volume of the buy as string
+        /// </summary>
         [Browsable(false)]
         public string VolumeAsStr => Helper.FormatDecimal(Volume, Helper.Volumefivelength, false, Helper.Volumetwofixlength, false, @"", BuyCultureInfo);
 
+        /// <summary>
+        /// Volume which is already sold of this buy
+        /// </summary>
         [Browsable(false)]
         public decimal VolumeSold
         {
@@ -134,26 +161,38 @@ namespace SharePortfolioManager.Classes.Buys
             }
         }
 
+        /// <summary>
+        /// Volume which is already sold if this buy as string
+        /// </summary>
         [Browsable(false)]
         public string VolumeSoldAsStr => Helper.FormatDecimal(VolumeSold, Helper.Volumefivelength, false, Helper.Volumetwofixlength, false, @"", BuyCultureInfo);
 
+        /// <summary>
+        /// Price of one share of this share
+        /// </summary>
         [Browsable(false)]
-        public decimal SharePrice
+        public decimal Price
         {
-            get => _sharePrice;
+            get => _price;
             internal set
             {
-                if (_sharePrice.Equals(value))
+                if (_price.Equals(value))
                     return;
-                _sharePrice = value;
+                _price = value;
             }
         }
 
+        /// <summary>
+        /// Price of one share of this share as string
+        /// </summary>
         [Browsable(false)]
-        public string SharePriceAsStr => Helper.FormatDecimal(SharePrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
+        public string PriceAsStr => Helper.FormatDecimal(Price, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
 
         #region Brokerage values
 
+        /// <summary>
+        /// Guid of the brokerage values of this buy
+        /// </summary>
         [Browsable(false)]
         public string BrokerageGuid
         {
@@ -166,6 +205,9 @@ namespace SharePortfolioManager.Classes.Buys
             }
         }
 
+        /// <summary>
+        /// Provision of this buy
+        /// </summary>
         [Browsable(false)]
         public decimal Provision
         {
@@ -178,9 +220,15 @@ namespace SharePortfolioManager.Classes.Buys
             }
         }
 
+        /// <summary>
+        /// Provision of this buy as string
+        /// </summary>
         [Browsable(false)]
         public string ProvisionAsStr => Helper.FormatDecimal(Provision, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
 
+        /// <summary>
+        /// Broker fee of this buy
+        /// </summary>
         [Browsable(false)]
         public decimal BrokerFee
         {
@@ -193,9 +241,15 @@ namespace SharePortfolioManager.Classes.Buys
             }
         }
 
+        /// <summary>
+        /// Broker fee of this buy as string
+        /// </summary>
         [Browsable(false)]
         public string BrokerFeeAsStr => Helper.FormatDecimal(BrokerFee, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
 
+        /// <summary>
+        /// Trader place fee of this buy
+        /// </summary>
         [Browsable(false)]
         public decimal TraderPlaceFee
         {
@@ -208,9 +262,15 @@ namespace SharePortfolioManager.Classes.Buys
             }
         }
 
+        /// <summary>
+        /// Trader place fee of this buy as string
+        /// </summary>
         [Browsable(false)]
         public string TraderPlaceFeeAsStr => Helper.FormatDecimal(TraderPlaceFee, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
 
+        /// <summary>
+        /// Reduction of this buy
+        /// </summary>
         [Browsable(false)]
         public decimal Reduction
         {
@@ -223,9 +283,16 @@ namespace SharePortfolioManager.Classes.Buys
             }
         }
 
+        /// <summary>
+        /// Reduction of this buy as string
+        /// </summary>
         [Browsable(false)]
         public string ReductionAsStr => Helper.FormatDecimal(Reduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
 
+        /// <summary>
+        /// Complete brokerage of this buy
+        /// Brokerage = provision + broker fee + trader place fee
+        /// </summary>
         [Browsable(false)]
         public decimal Brokerage
         {
@@ -238,9 +305,16 @@ namespace SharePortfolioManager.Classes.Buys
             }
         }
 
+        /// <summary>
+        /// Complete brokerage of this buy as string
+        /// </summary>
         [Browsable(false)]
         public string BrokerageAsStr => Helper.FormatDecimal(Brokerage, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
 
+        /// <summary>
+        /// Complete brokerage with reduction of this buy
+        /// Brokerage with reduction = brokerage - reduction
+        /// </summary>
         [Browsable(false)]
         public decimal BrokerageWithReduction
         {
@@ -255,27 +329,39 @@ namespace SharePortfolioManager.Classes.Buys
 
         #endregion Brokerage values
 
+        /// <summary>
+        /// Value of this buy
+        /// </summary>
         [Browsable(false)]
         public decimal BuyValue { get; internal set; } = -1;
 
+        /// <summary>
+        /// Value - minus reduction of this buy
+        /// </summary>
         [Browsable(false)]
         public decimal BuyValueReduction { get; internal set; } = -1;
 
+        /// <summary>
+        /// Value - minus reduction of this buy as string
+        /// </summary>
         [Browsable(false)]
         public string BuyValueReductionAsStr => Helper.FormatDecimal(BuyValueReduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
 
+        /// <summary>
+        /// Value + brokerage of this buy
+        /// </summary>
         [Browsable(false)]
         public decimal BuyValueBrokerage { get; internal set; } = -1;
 
-        [Browsable(false)]
-        public string BuyValueBrokerageAsStr => Helper.FormatDecimal(BuyValueBrokerage, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
-
+        /// <summary>
+        /// Value + brokerage - reduction of this buy 
+        /// </summary>
         [Browsable(false)]
         public decimal BuyValueBrokerageReduction { get; internal set; } = -1;
 
-        [Browsable(false)]
-        public string BuyValueBrokerageReductionAsStr => Helper.FormatDecimal(BuyValueBrokerageReduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
-
+        /// <summary>
+        /// Document of this buy
+        /// </summary>
         [Browsable(false)]
         public string Document { get; internal set; }
 
@@ -283,36 +369,57 @@ namespace SharePortfolioManager.Classes.Buys
 
         #region Data grid view properties
 
+        /// <summary>
+        /// Guid of the buy for the DataGridView display
+        /// </summary>
         [Browsable(true)]
         [DisplayName(@"Guid")]
         // ReSharper disable once UnusedMember.Global
         public string DgvGuid => Guid;
 
+        /// <summary>
+        /// Date of the buy for the DataGridView display
+        /// </summary>
         [Browsable(true)]
         [DisplayName(@"Date")]
         // ReSharper disable once UnusedMember.Global
         public string DgvDateAsStr => DateAsStr;
 
+        /// <summary>
+        /// Volume of the buy for the DataGridView display
+        /// </summary>
         [Browsable(true)]
         [DisplayName(@"Volume")]
         // ReSharper disable once UnusedMember.Global
         public string DgvVolumeAsStr => VolumeAsStr;
 
+        /// <summary>
+        /// Price of the buy for the DataGridView display
+        /// </summary>
         [Browsable(true)]
         [DisplayName(@"Price")]
         // ReSharper disable once UnusedMember.Global
-        public string DgvSharePriceAsStr => SharePriceAsStr;
+        public string DgvSharePriceAsStr => PriceAsStr;
 
+        /// <summary>
+        /// Brokerage of the buy for the DataGridView display
+        /// </summary>
         [Browsable(true)]
         [DisplayName(@"Brokerage")]
         // ReSharper disable once UnusedMember.Global
         public string DgvBrokerageAsStr => BrokerageAsStr;
 
+        /// <summary>
+        /// Buy value - reduction of the buy for the DataGridView display
+        /// </summary>
         [Browsable(true)]
         [DisplayName(@"BuyValueReduction")]
         // ReSharper disable once UnusedMember.Global
         public string DgvBuyValueReductionAsStr => BuyValueReductionAsStr;
 
+        /// <summary>
+        /// Document of the buy for the DataGridView display
+        /// </summary>
         [Browsable(true)]
         [DisplayName(@"Document")]
         // ReSharper disable once UnusedMember.Global
@@ -343,7 +450,7 @@ namespace SharePortfolioManager.Classes.Buys
             Date = strDate;
             Volume = decVolume;
             VolumeSold = decVolumeSold;
-            SharePrice = decSharePrice;
+            Price = decSharePrice;
             if (brokerageObject != null)
             {
                 BrokerageGuid = brokerageObject.Guid;
@@ -361,21 +468,6 @@ namespace SharePortfolioManager.Classes.Buys
 
             // Calculate the market values and brokerage
             CalculateValues();
-
-#if DEBUG_BUY
-            Console.WriteLine(@"");
-            Console.WriteLine(@"New buy created");
-            Console.WriteLine(@"Guid: {0}", Guid);
-            Console.WriteLine(@"Date: {0}", Date);
-            Console.WriteLine(@"Volume: {0}", Volume);
-            Console.WriteLine(@"SharePrice: {0}", SharePrice);
-            Console.WriteLine(@"MarketValue: {0}", BuyValue);
-            Console.WriteLine(@"Reduction: {0}", Reduction);
-            Console.WriteLine(@"Brokerage: {0}", Brokerage);
-            Console.WriteLine(@"BrokerageReduction: {0}", Brokerage);
-            Console.WriteLine(@"Document: {0}", Document);
-            Console.WriteLine(@"");
-#endif
         }
 
         /// <summary>
@@ -390,7 +482,7 @@ namespace SharePortfolioManager.Classes.Buys
         /// </summary>
         private void CalculateValues()
         {
-            Helper.CalcBuyValues( Volume, SharePrice,
+            Helper.CalcBuyValues( Volume, Price,
                 Provision, BrokerFee, TraderPlaceFee, Reduction,
                 out var decBuyValue, out var decBuyValueReduction, out var decBuyValueBrokerage, out var decBuyValueWithBrokerageWithReduction, out var decBrokerage, out var decBrokerageReduction);
 
@@ -400,13 +492,6 @@ namespace SharePortfolioManager.Classes.Buys
             BuyValueReduction = decBuyValueReduction;
             BuyValueBrokerage = decBuyValueBrokerage;
             BuyValueBrokerageReduction = decBuyValueWithBrokerageWithReduction;
-
-#if DEBUG_BUY
-            Console.WriteLine(@"BuyValue: {0}", BuyValue);
-            Console.WriteLine(@"BuyValueBrokerage: {0}", BuyValueBrokerage);
-            Console.WriteLine(@"Brokerage: {0}", Brokerage);
-            Console.WriteLine(@"BrokerageWithReduction: {0}", BrokerageWithReduction);
-#endif
         }
 
         #endregion Methods
@@ -421,6 +506,13 @@ namespace SharePortfolioManager.Classes.Buys
     {
         #region Methods
 
+        /// <inheritdoc />
+        /// <summary>
+        /// This function compares the to given BuyObjects by the date
+        /// </summary>
+        /// <param name="object1"></param>
+        /// <param name="object2"></param>
+        /// <returns></returns>
         public int Compare(BuyObject object1, BuyObject object2)
         {
             if (object1 == null) return 0;
@@ -431,5 +523,4 @@ namespace SharePortfolioManager.Classes.Buys
 
         #endregion Methods
     }
-
 }
