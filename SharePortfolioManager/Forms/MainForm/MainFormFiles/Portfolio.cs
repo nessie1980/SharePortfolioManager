@@ -224,7 +224,7 @@ namespace SharePortfolioManager
 #pragma warning restore 168
             {
 #if DEBUG
-                var message = $"ChangePortfolio()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -856,7 +856,7 @@ namespace SharePortfolioManager
 #pragma warning restore 168
             {
 #if DEBUG
-                var message = $"LoadPortfolio()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -887,7 +887,7 @@ namespace SharePortfolioManager
 #pragma warning restore 168
             {
 #if DEBUG
-                var message = $"LoadWebSiteConfigurations()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif

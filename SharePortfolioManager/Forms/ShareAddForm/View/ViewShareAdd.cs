@@ -40,9 +40,12 @@ using DocumentParsingConfiguration = SharePortfolioManager.Classes.DocumentParsi
 // ReSharper disable once CheckNamespace
 namespace SharePortfolioManager.Forms.ShareAddForm.View
 {
-    // Error codes of the ShareAdd
+    /// <summary>
+    /// Error codes of the ShareAdd
+    /// </summary>
     public enum ShareAddErrorCode
     {
+#pragma warning disable 1591
         AddSuccessful,
         AddFailed,
         WknEmpty,
@@ -74,11 +77,15 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         DocumentDirectoryDoesNotExists,
         DocumentFileDoesNotExists,
         WebSiteRegexNotFound
+#pragma warning restore 1591
     };
 
-    // Error codes for the document parsing
+    /// <summary>
+    /// Error codes for the document parsing
+    /// </summary>
     public enum ParsingErrorCode
     {
+#pragma warning disable 1591
         ParsingFailed = -6,
         ParsingDocumentNotImplemented = -5,
         ParsingDocumentTypeIdentifierFailed = -4,
@@ -87,6 +94,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         ParsingParsingDocumentError = -1,
         ParsingStarted = 0,
         ParsingIdentifierValuesFound = 1
+#pragma warning restore 1591
     }
 
     /// <inheritdoc />
@@ -95,6 +103,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
     /// </summary>
     public interface IViewShareAdd : INotifyPropertyChanged
     {
+#pragma warning disable 1591
         event EventHandler ShareAddEventHandler;
         event EventHandler FormatInputValuesEventHandler;
 
@@ -131,9 +140,10 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
         DialogResult ShowDialog();
         void AddFinish();
+#pragma warning restore 1591
     }
 
-    public partial class ViewShareAdd : Form, IViewShareAdd
+    internal partial class ViewShareAdd : Form, IViewShareAdd
     {
         #region Parsing Fields
 
@@ -911,12 +921,13 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 dateTimePickerDate.Value = DateTime.Now;
                 dateTimePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
             }
+#if DEBUG
             catch (Exception ex)
             {
-#if DEBUG_ADDSHARE || DEBUG
-                var message = $"FrmShareAdd_Load()\n\n{ex.Message}";
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                Helper.ShowMessage(@"Error", ex);
+#else
+            catch
+            {
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageaAddShare,
@@ -969,12 +980,13 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                     txtBoxDocument.Text = strCurrentFile;
                 }
             }
+#if DEBUG_ADDSHARE || DEBUG
             catch (Exception ex)
             {
-#if DEBUG_ADDSHARE || DEBUG
-                var message = $"btnShareDocumentBrowse_Click()\n\n{ex.Message}";
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                Helper.ShowMessage(@"Error", ex);
+#else
+            catch
+            {
 #endif
                 // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageaAddShare,
@@ -1001,12 +1013,13 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
                 ShareAddEventHandler?.Invoke(this, new EventArgs());
             }
+#if DEBUG
             catch (Exception ex)
             {
-#if DEBUG_ADDSHARE || DEBUG
-                var message = $"btnSave_Click()\n\n{ex.Message}";
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                Helper.ShowMessage(@"Error", ex);
+#else
+            catch
+            {
 #endif
                 StopFomClosingFlag = true;
                 // Add status message
@@ -1200,13 +1213,15 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
                 _parsingStartAllow = false;
             }
+#if DEBUG
             catch (Exception ex)
             {
-#if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-
+#else
+            catch
+            {
 #endif
                 toolStripStatusLabelMessageAddShareDocumentParsing.ForeColor = Color.Red;
                 toolStripStatusLabelMessageAddShareDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingErrors/ParsingFailed", LanguageName);
@@ -1258,13 +1273,14 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
                 ParsingText = string.Empty;
 
-                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingStarted);
+                _parsingBackgroundWorker.ReportProgress((int) ParsingErrorCode.ParsingStarted);
 
                 DocumentType = DocumentParsingConfiguration.DocumentTypes.BuyDocument;
                 DocumentTypeParser = null;
                 DictionaryParsingResult = null;
 
-                Helper.RunProcess(Helper.PdfConverterApplication, $"-simple \"{txtBoxDocument.Text}\" {Helper.ParsingDocumentFileName}");
+                Helper.RunProcess(Helper.PdfConverterApplication,
+                    $"-simple \"{txtBoxDocument.Text}\" {Helper.ParsingDocumentFileName}");
 
                 // This text is added only once to the file.
                 if (File.Exists(Helper.ParsingDocumentFileName))
@@ -1279,25 +1295,23 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                     Thread.Sleep(100);
                 }
             }
+#if DEBUG
             catch (OperationCanceledException ex)
             {
-#if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
-                MessageBox.Show(message, @"Error 1", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
+                Helper.ShowMessage(@"Cancel", ex);
+                _parsingBackgroundWorker.ReportProgress((int) ParsingErrorCode.ParsingDocumentFailed);
             }
             catch (Exception ex)
             {
-//#if DEBUG               
-
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}\n\n{Helper.ParsingDocumentFileName}\n\n{ex.StackTrace}\n\n{ex.HelpLink}";
-                MessageBox.Show(message, @"Error 2", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-//#endif
+                Helper.ShowMessage(@"Error", ex);
+                _parsingBackgroundWorker.ReportProgress((int) ParsingErrorCode.ParsingDocumentFailed);
+            }
+#else
+            catch
+            { 
                 _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
             }
+#endif
         }
 
         /// <summary>
@@ -1339,12 +1353,13 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                     _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingParsingDocumentError);
                 }
             }
+#if DEBUG
             catch (Exception ex)
             {
-#if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                Helper.ShowMessage(@"Error", ex);
+#else
+            catch
+            {
 #endif
                 _parsingThreadFinished = true;
                 _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingFailed);
@@ -1612,12 +1627,15 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                             }
                         }
                     }
+#if DEBUG
                     catch (Exception ex)
                     {
-#if DEBUG
-                        var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                        var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                         MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                             MessageBoxIcon.Error);
+#else
+                    catch
+                    { 
 #endif
                         DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
                         _parsingThreadFinished = true;
@@ -1625,12 +1643,13 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                     }
                 }
             }
-            catch (Exception exception)
-            {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{exception.Message}";
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+            catch (Exception ex)
+            {
+                Helper.ShowMessage(@"Error", ex);
+#else
+            catch
+            {
 #endif
                 DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
                 _parsingThreadFinished = true;

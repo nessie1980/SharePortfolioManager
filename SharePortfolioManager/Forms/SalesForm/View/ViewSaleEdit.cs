@@ -1253,7 +1253,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             catch (Exception ex)
             {
 #if DEBUG_SALE || DEBUG
-                var message = $"ShareSalesEdit_Load()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -1879,7 +1879,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 
@@ -1978,7 +1978,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             catch (Exception ex)
             {
 #if DEBUG_SALE || DEBUG
-                var message = $"btnAdd_Click()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -2052,7 +2052,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             catch (Exception ex)
             {
 #if DEBUG_SALE || DEBUG
-                var message = $"btnDelete_Click()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -2084,7 +2084,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             catch (Exception ex)
             {
 #if DEBUG_SALE || DEBUG
-                var message = $"btnReset_Click()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -2396,7 +2396,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"ShowSalesRunning()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -2505,7 +2505,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             catch (Exception ex)
             {
 #if DEBUG_SALE || DEBUG
-                var message = $"dataGridViewSalesOfAYear_DataBindingComplete()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -2545,7 +2545,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             catch (Exception ex)
             {
 #if DEBUG_SALE || DEBUG
-                var message = $"DeselectRowsOfDataGridViews()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -2606,7 +2606,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"TabCtrlBuys_SelectedIndexChanged()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -2724,7 +2724,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             catch (Exception ex)
             {
 #if DEBUG_SALE || DEBUG
-                var message = $"dataGridViewSalesOfYears_SelectionChanged()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -2931,7 +2931,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             catch (Exception ex)
             {
 #if DEBUG_SALE || DEBUG
-                var message = $"dataGridViewSalesOfAYear_SelectionChanged()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -3044,7 +3044,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             catch (Exception ex)
             {
 #if DEBUG_SALE || DEBUG
-                var message = $"dataGridViewSalesOfAYear_CellContentDecimalClick()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -3102,7 +3102,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             catch (OperationCanceledException ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error 1", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -3111,7 +3111,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error 2", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -3161,7 +3161,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -3429,7 +3429,7 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                     catch (Exception ex)
                     {
 #if DEBUG
-                        var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                        var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                         MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                             MessageBoxIcon.Error);
 #endif
@@ -3439,10 +3439,10 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                     }
                 }
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{exception.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif

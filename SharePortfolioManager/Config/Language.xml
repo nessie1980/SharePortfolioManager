@@ -109,9 +109,9 @@
 							<ColHeader_Price text="Price" />
 							<ColHeader_PrevDay text="Pre. day" />
 							<ColHeader_Volume text="Volume"/>
-							<ColHeader_Performance text="Perf." />
-							<ColHeader_BrokerageDividend text="  Brok. / Dividends" />
-							<ColHeader_PurchaseMarketValue text="  Purchase / Market" />
+							<ColHeader_Performance text="Performance" />
+							<ColHeader_BrokerageDividend text="Brokorage\nDividends" />
+							<ColHeader_PurchaseMarketValue text="Purchase\n Market" />
 						</DgvPortfolio>
 						<DgvPortfolio_Error>
 							<ConfigurationFailed text="Configuration of the datagridview 'portfolio' failed!" />
@@ -149,7 +149,7 @@
 							<ColHeader_PrevDay text="Pre. day" />
 							<ColHeader_Volume text="Volume"/>
 							<ColHeader_Performance text="Perf." />
-							<ColHeader_PurchaseMarketValue text="  Purchase / Market" />
+							<ColHeader_PurchaseMarketValue text="  Purchase\nMarket" />
 						</DgvPortfolio>
 						
 						<!-- DataGridView portfolio footer -->
@@ -1272,8 +1272,8 @@
 							<ColHeader_PrevDay text="Vortag" />
 							<ColHeader_Volume text="Anteile"/>
 							<ColHeader_Performance text="Entw." />
-							<ColHeader_BrokerageDividend text="Kosten / Dividenden" />
-							<ColHeader_PurchaseMarketValue text=" Einzahlung / Marktwert" />
+							<ColHeader_BrokerageDividend text="Kosten\nDividenden" />
+							<ColHeader_PurchaseMarketValue text="Einzahlung\nMarktwert" />
 						</DgvPortfolio>
 						<DgvPortfolio_Error>
 							<ConfigurationFailed text="Konfiguration des DataGridView 'Portfolio' fehlgeschlagen!" />

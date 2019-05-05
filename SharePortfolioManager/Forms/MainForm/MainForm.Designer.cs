@@ -131,6 +131,7 @@ namespace SharePortfolioManager
             this.lblShareNameWebParser = new System.Windows.Forms.Label();
             this.timerStatusMessageClear = new System.Windows.Forms.Timer(this.components);
             this.lblShareDetailsWithOutDividendBrokerageSharePriceCurrentValue = new System.Windows.Forms.Label();
+            this.timerStartNextShareUpdate = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.grpBoxSharePortfolio.SuspendLayout();
             this.tblLayPnlShareOverviews.SuspendLayout();
@@ -1574,6 +1575,11 @@ namespace SharePortfolioManager
             this.lblShareDetailsWithOutDividendBrokerageSharePriceCurrentValue.TabIndex = 43;
             this.lblShareDetailsWithOutDividendBrokerageSharePriceCurrentValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // timerStartNextShareUpdate
+            // 
+            this.timerStartNextShareUpdate.Interval = 1000;
+            this.timerStartNextShareUpdate.Tick += new System.EventHandler(this.TimerStartNextShareUpdate_Tick);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
@@ -1728,6 +1734,7 @@ namespace SharePortfolioManager
         private TableLayoutPanel tblLayPnlShareDetailsTabControls;
         private TableLayoutPanel tblLayPnlStatusMessages;
         private TableLayoutPanel tblLayPnlUpdateState;
+        private Timer timerStartNextShareUpdate;
     }
 }
 

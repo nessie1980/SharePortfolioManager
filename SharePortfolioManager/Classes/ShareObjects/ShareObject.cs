@@ -488,12 +488,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
         public bool WebSiteConfigurationValid { get; set; }
 
         /// <summary>
-        /// Flag if a website configuration of the share website has been found or not as string
-        /// </summary>
-        [Browsable(false)]
-        public string WebSiteConfigurationValidAsStr => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(WebSiteConfigurationValid.ToString());
-
-        /// <summary>
         /// DateTime of the last share update via Internet
         /// </summary>
         [Browsable(false)]
@@ -691,7 +685,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             get
             {
                 var value = Helper.FormatDecimal(CurPrice, Helper.Currencyfivelength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-                value += "\n" + Helper.FormatDecimal(PrevDayPrice, Helper.Currencyfivelength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+                value += Environment.NewLine + Helper.FormatDecimal(PrevDayPrice, Helper.Currencyfivelength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
                 return value;
             }
         }
@@ -727,7 +721,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             get
             {
                 var value = Helper.FormatDecimal(PrevDayDifference, Helper.Currencyfivelength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-                value += "\n" + Helper.FormatDecimal(PrevDayPerformance, Helper.Percentagefivelength, true, Helper.Percentagenonefixlength, true, PercentageUnit, CultureInfo);
+                value += Environment.NewLine + Helper.FormatDecimal(PrevDayPerformance, Helper.Percentagefivelength, true, Helper.Percentagenonefixlength, true, PercentageUnit, CultureInfo);
                 return value;
             }
         }
@@ -846,11 +840,13 @@ namespace SharePortfolioManager.Classes.ShareObjects
             LastUpdateInternet = lastUpdateInternet;
             LastUpdateDate = lastUpdateShareDate;
             LastUpdateTime = lastUpdateShareTime;
+            // ReSharper disable once VirtualMemberCallInConstructor
             CurPrice = price;
             WebSite = webSite;
             ImageListPrevDayPerformance = imageListForDayBeforePerformance;
             ImagePrevDayPerformance = ImageListPrevDayPerformance[0];
             RegexList = regexList;
+            // ReSharper disable once VirtualMemberCallInConstructor
             CultureInfo = cultureInfo;
             ShareType = shareType;
 
@@ -1000,21 +996,24 @@ namespace SharePortfolioManager.Classes.ShareObjects
             Disposed = true;
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// This function allows to clone this object
+        /// </summary>
+        /// <returns>New clone of the object</returns>
         public object Clone()
         {
             using (var stream = new MemoryStream())
 
             {
-                if (GetType().IsSerializable)
-                {
-                    var formatter = new BinaryFormatter();
-                    formatter.Serialize(stream, this);
-                    stream.Position = 0;
+                // ReSharper disable once AssignNullToNotNullAttribute
+                if (!GetType().IsSerializable) return null;
+                var formatter = new BinaryFormatter();
+                formatter.Serialize(stream, this);
+                stream.Position = 0;
 
-                    return formatter.Deserialize(stream);
-                }
+                return formatter.Deserialize(stream);
 
-                return null;
             }
         }
 

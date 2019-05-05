@@ -75,18 +75,18 @@ namespace SharePortfolioManager
 
                                 foreach (var invalidKeyProject in Language.InvalidLanguageKeysOfProject)
                                 {
-                                    strInvalidKeys += invalidKeyProject + "\n";
+                                    strInvalidKeys += invalidKeyProject + Environment.NewLine;
                                 }
 
-                                strInvalidKeys += "\n";
+                                strInvalidKeys += Environment.NewLine;
                             }
 
                             if (Language.InvalidLanguageKeysOfXml.Count != 0)
                             {
-                                strInvalidKeys += Language.InvalidLanguageKeysOfXml.Count + " unused XML language keys in file \"" + LanguageFileName + "\"\n";
+                                strInvalidKeys += Language.InvalidLanguageKeysOfXml.Count + " unused XML language keys in file \"" + LanguageFileName + Environment.NewLine;
                                 foreach (var invalidKeyXml in Language.InvalidLanguageKeysOfXml)
                                 {
-                                    strInvalidKeys += invalidKeyXml + "\n";
+                                    strInvalidKeys += invalidKeyXml + Environment.NewLine;
                                     
                                 }
                             }
@@ -159,7 +159,7 @@ namespace SharePortfolioManager
                 else
                 {
 #if DEBUG
-                    var message = $"{Helper.GetMyMethodName()}\n\n{Language.LastException.Message}";
+                    var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + Language.LastException.Message;
                     MessageBox.Show(message,
                         @"Error", MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
@@ -176,7 +176,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message,
                     @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -500,7 +500,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 #endif
                 if (Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadAllLanguageKeys", LanguageName) !=

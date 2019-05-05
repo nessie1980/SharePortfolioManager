@@ -184,6 +184,25 @@ namespace SharePortfolioManager.Classes
 
         #endregion Get name of current method
 
+        #region Show error / waring message
+
+        public static void ShowMessage(string strCaption, Exception ex)
+        {
+            var message = GetMyMethodName()
+                          + Environment.NewLine + Environment.NewLine
+                          + ex.Message
+                          + Environment.NewLine + Environment.NewLine
+                          + Helper.ParsingDocumentFileName
+                          + Environment.NewLine + Environment.NewLine
+                          + ex.StackTrace
+                          + Environment.NewLine + Environment.NewLine
+                          + ex.HelpLink;
+            MessageBox.Show(message, strCaption, MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+        }
+
+        #endregion Show error / warning message
+
         #region Add status message to the text box and to the logger
 
         /// <summary>
@@ -233,11 +252,11 @@ namespace SharePortfolioManager.Classes
                     tempControl.WordWrap = false;
 
                     // Add time stamp
-                    stateMessage = string.Format(Timefullformat, DateTime.Now) + @" " + stateMessage + "\n";
+                    stateMessage = string.Format(Timefullformat, DateTime.Now) + @" " + stateMessage + Environment.NewLine;
 
                     // Check if the logger add failed
                     if (stateMessageError != "")
-                        stateMessage += string.Format(Timefullformat, DateTime.Now) + @" " + stateMessageError + "\n";
+                        stateMessage += string.Format(Timefullformat, DateTime.Now) + @" " + stateMessageError + Environment.NewLine;
 
                     // Check if the maximum of lines is reached and delete last line
                     if (tempControl.Lines.Any() && tempControl.Lines.Length > logger.LoggerSize)
@@ -269,7 +288,7 @@ namespace SharePortfolioManager.Classes
 
                     // Check if the logger add failed
                     if (stateMessageError != "")
-                        stateMessage += @" " + stateMessageError + "\n";
+                        stateMessage += @" " + stateMessageError + Environment.NewLine;
 
                     // Set state message
                     castControl.Text = stateMessage;
@@ -290,7 +309,7 @@ namespace SharePortfolioManager.Classes
 
                     // Check if the logger add failed
                     if (stateMessageError != "")
-                        stateMessage += @" " + stateMessageError + "\n";
+                        stateMessage += @" " + stateMessageError + Environment.NewLine;
                     
                     // Set state message
                     castControl.Text = stateMessage;
@@ -304,7 +323,7 @@ namespace SharePortfolioManager.Classes
             }
             catch (Exception ex)
             {
-                var message = $"AddStatusMessage()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
@@ -426,7 +445,7 @@ namespace SharePortfolioManager.Classes
             }
             catch (Exception ex)
             {
-                var message = $"EnableDisableControls()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -498,7 +517,7 @@ namespace SharePortfolioManager.Classes
         //    }
         //    catch (Exception ex)
         //    {
-        //        var message = $"EnableDisableItems()\n\n{ex.Message}";
+        //        var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
         //        MessageBox.Show(message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         //    }
 

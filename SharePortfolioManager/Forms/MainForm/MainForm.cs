@@ -158,6 +158,8 @@ namespace SharePortfolioManager
 
         public int StatusMessageClearTimerValue { get; set; } = 5000;
 
+        public int StartNextShareUpdateTimerValue { get; set; } = 5000;
+
         #endregion Form
 
         #region Logger
@@ -743,7 +745,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"MainForm_FormClosing()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -890,6 +892,31 @@ namespace SharePortfolioManager
         /// <param name="e">EventArgs</param>
         private void TimerStatusMessageDelete_Tick(object sender, EventArgs e)
         {
+            Helper.EnableDisableControls(true, this, EnableDisableControlNames);
+
+            // Reset index
+            SelectedDataGridViewShareIndex = 0;
+
+            if (MarketValueOverviewTabSelected)
+            {
+                dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+
+                // Scroll to the selected row
+                Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
+            }
+            else
+            {
+                dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+
+                // Scroll to the selected row
+                Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
+            }
+
+            btnRefreshAll.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAll", LanguageName);
+            btnRefresh.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Refresh", LanguageName);
+            btnRefreshAll.Image = Resources.button_update_all_24;
+            btnRefresh.Image = Resources.button_update_24;
+
             // Reset labels
             lblShareNameWebParser.Text = @"";
             lblWebParserState.Text = @"";
@@ -902,5 +929,119 @@ namespace SharePortfolioManager
         }
 
         #endregion Timer
+
+        private void TimerStartNextShareUpdate_Tick(object sender, EventArgs e)
+        {
+            timerStartNextShareUpdate.Enabled = false;
+            
+            // Check if another share object should be updated
+            if (SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1)
+            {
+                // Increase index to get the next share
+                SelectedDataGridViewShareIndex++;
+
+                // Check which share overview is selected
+                if (MarketValueOverviewTabSelected)
+                {
+                    do
+                    {
+                        // Select the new share update
+                        dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+
+                        // Scroll to the selected row
+                        Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex,
+                            LastFirstDisplayedRowIndex);
+
+                        // Check if the current share should not be updated so check the next share
+                        if (ShareObjectMarketValue != null && !ShareObjectMarketValue.Update && SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1)
+                            // Increase index to get the next share
+                            SelectedDataGridViewShareIndex++;
+
+                    } while (ShareObjectMarketValue != null &&
+                             !ShareObjectMarketValue.Update &&
+                             SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1);
+
+                    // Check if the share should be update
+                    if (ShareObjectMarketValue != null && ShareObjectMarketValue.Update &&
+                        ShareObjectMarketValue.WebSiteConfigurationValid)
+                    {
+                        Parser.WebParsing = true;
+                        Parser.WebSiteUrl = ShareObjectMarketValue.WebSite;
+                        Parser.RegexList = ShareObjectMarketValue.RegexList;
+                        Parser.EncodingType = ShareObjectMarketValue.WebSiteEncodingType;
+                        Parser.StartParsing();
+                    }
+                }
+                else
+                {
+                    do
+                    {
+                        // Check if the current share should not be updated so check the next share
+                        if (!ShareObjectListFinalValue[SelectedDataGridViewShareIndex].Update && SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1)
+                            // Increase index to get the next share
+                            SelectedDataGridViewShareIndex++;
+
+                    } while (!ShareObjectListFinalValue[SelectedDataGridViewShareIndex].Update &&
+                             SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1);
+
+                    // Select the new share update
+                    if (ShareObjectListFinalValue[SelectedDataGridViewShareIndex].Update &&
+                        ShareObjectListFinalValue[SelectedDataGridViewShareIndex].WebSiteConfigurationValid
+                        )
+                    { 
+                        dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+
+                        // Scroll to the selected rowShareObjectListFinalValue[SelectedDataGridViewShareIndex].Update &&
+                        Helper.ScrollDgvToIndex(dgvPortfolioFinalValue,
+                            SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
+
+                        // Start the asynchronous operation of the Parser
+                        Parser.WebParsing = true;
+                        Parser.WebSiteUrl = ShareObjectFinalValue.WebSite;
+                        Parser.RegexList = ShareObjectFinalValue.RegexList;
+                        Parser.EncodingType = ShareObjectFinalValue.WebSiteEncodingType;
+                        Parser.StartParsing();
+                    }
+                    else
+                        UpdateAllFlag = false;
+                }
+            }
+
+            // Check if a error occurred or the process has been finished
+            if (SelectedDataGridViewShareIndex >= ShareObject.ObjectCounter - 1 && UpdateAllFlag == false)
+            {
+                Helper.EnableDisableControls(true, this, EnableDisableControlNames);
+
+                // Reset index
+                SelectedDataGridViewShareIndex = 0;
+
+                if (MarketValueOverviewTabSelected)
+                {
+                    dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+
+                    // Scroll to the selected row
+                    Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
+                }
+                else
+                {
+                    dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+
+                    // Scroll to the selected row
+                    Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
+                }
+
+                btnRefreshAll.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAll", LanguageName);
+                btnRefresh.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Refresh", LanguageName);
+                btnRefreshAll.Image = Resources.button_update_all_24;
+                btnRefresh.Image = Resources.button_update_24;
+
+                // Reset labels
+                lblShareNameWebParser.Text = @"";
+                lblWebParserState.Text = @"";
+
+                // Reset progress bar
+                progressBarWebParser.Value = 0;
+            }
+        }
     }
 }

@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Microsoft.VisualBasic;
 using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager
@@ -132,6 +133,7 @@ namespace SharePortfolioManager
                 var styleMarketValue = dgvPortfolioMarketValue.ColumnHeadersDefaultCellStyle;
                 styleMarketValue.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 styleMarketValue.BackColor = SystemColors.ControlLight;
+                styleMarketValue.BackColor = SystemColors.GrayText;
 
                 dgvPortfolioMarketValue.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
                 dgvPortfolioMarketValue.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
@@ -152,11 +154,11 @@ namespace SharePortfolioManager
 
                 // Advanced configuration DataGridView share portfolio
                 dgvPortfolioFinalValue.EnableHeadersVisualStyles = false;
-                dgvPortfolioFinalValue.ColumnHeadersHeight = 30;
+                dgvPortfolioFinalValue.ColumnHeadersHeight = 50;
 
                 var styleFinaleValue = dgvPortfolioFinalValue.ColumnHeadersDefaultCellStyle;
                 styleFinaleValue.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                styleFinaleValue.BackColor = SystemColors.ControlLight;
+                styleFinaleValue.BackColor = SystemColors.GrayText;
 
                 dgvPortfolioFinalValue.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
                 dgvPortfolioFinalValue.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
@@ -176,7 +178,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -258,7 +260,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -329,7 +331,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -396,7 +398,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -537,7 +539,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -650,7 +652,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -817,7 +819,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -834,6 +836,10 @@ namespace SharePortfolioManager
             }
         }
 
+        /// <summary>
+        /// This function adds the image if a share will be updated
+        /// and also the image if the share performance is positive, neutral or negative.
+        /// </summary>
         private void OnDgvPortfolioFinalValue_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
             if (dgvPortfolioFinalValue.Rows[e.RowIndex].Cells.Count < 7) return;
@@ -857,6 +863,10 @@ namespace SharePortfolioManager
             }
         }
 
+        /// <summary>
+        /// This function adds the image if a share will be updated
+        /// and also the image if the share performance is positive, neutral or negative.
+        /// </summary>
         private void OnDgvPortfolioMarketValue_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
             if (dgvPortfolioMarketValue.Rows[e.RowIndex].Cells.Count < 6) return;
@@ -929,7 +939,7 @@ namespace SharePortfolioManager
                 dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareSumColumnIndex].Name =
                     Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_PurchaseMarketValue", LanguageName);
                 dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EShareSumColumnIndex].HeaderText =
-                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_PurchaseMarketValue", LanguageName);
+                    Strings.Replace(Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_PurchaseMarketValue", LanguageName), "\\n", Environment.NewLine);
 
                 #endregion Captions
 
@@ -1047,7 +1057,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1100,7 +1110,7 @@ namespace SharePortfolioManager
                 dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareBrokerageDividendColumnIndex].Name =
                     Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_BrokerageDividend", LanguageName);
                 dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareBrokerageDividendColumnIndex].HeaderText =
-                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_BrokerageDividend", LanguageName);
+                    Strings.Replace(Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_BrokerageDividend", LanguageName), "\\n", Environment.NewLine);
 
                 dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ESharePriceColumnIndex].Name =
                     Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Price", LanguageName);
@@ -1118,7 +1128,7 @@ namespace SharePortfolioManager
                 dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareSumColumnIndex].Name =
                     Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_PurchaseMarketValue", LanguageName);
                 dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EShareSumColumnIndex].HeaderText =
-                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_PurchaseMarketValue", LanguageName);
+                    Strings.Replace(Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_PurchaseMarketValue", LanguageName), "\\n", Environment.NewLine);
 
                 #endregion Captions
 
@@ -1245,7 +1255,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1297,7 +1307,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1345,7 +1355,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1395,7 +1405,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1445,7 +1455,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1487,7 +1497,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1529,7 +1539,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1609,7 +1619,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1690,7 +1700,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1791,7 +1801,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1836,6 +1846,11 @@ namespace SharePortfolioManager
 
         #region Data grid view cell double click
 
+        /// <summary>
+        /// This function opens the website of the clicked share
+        /// </summary>
+        /// <param name="sender">DataGridView</param>
+        /// <param name="e">DataGridViewCallEventArgs</param>
         private void DgvPortfolioFinalValue_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -1853,7 +1868,7 @@ namespace SharePortfolioManager
                 if (noBrowser.ErrorCode == -2147467259)
                 {
 #if DEBUG
-                    var message = $"{Helper.GetMyMethodName()}\n\n{noBrowser.Message}";
+                    var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + noBrowser.Message;
                     MessageBox.Show(message, @"Error",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
@@ -1869,7 +1884,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -1883,6 +1898,11 @@ namespace SharePortfolioManager
             }
         }
 
+        /// <summary>
+        /// This function opens the website of the clicked share
+        /// </summary>
+        /// <param name="sender">DataGridView</param>
+        /// <param name="e">DataGridViewCallEventArgs</param>
         private void DgvPortfolioMarketValue_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -1900,7 +1920,7 @@ namespace SharePortfolioManager
                 if (noBrowser.ErrorCode == -2147467259)
                 {
 #if DEBUG
-                    var message = $"{Helper.GetMyMethodName()}\n\n{noBrowser.Message}";
+                    var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + noBrowser.Message;
                     MessageBox.Show(message, @"Error",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
@@ -1916,7 +1936,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);

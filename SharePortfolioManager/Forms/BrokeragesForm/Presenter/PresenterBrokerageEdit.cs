@@ -193,7 +193,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.Presenter
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"OnDocumentBrowse()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif

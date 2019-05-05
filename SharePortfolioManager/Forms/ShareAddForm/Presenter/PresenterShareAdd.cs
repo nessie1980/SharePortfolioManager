@@ -156,7 +156,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             catch (Exception ex)
             {
 #if DEBUG_ADDSHARE || DEBUG
-                var message = $"CalculateMarketValueAndFinalValue()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif

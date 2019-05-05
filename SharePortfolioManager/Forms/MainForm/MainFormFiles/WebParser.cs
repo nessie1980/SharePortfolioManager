@@ -203,7 +203,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -290,7 +290,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -403,8 +403,8 @@ namespace SharePortfolioManager
                                     }
 
                                     // Update row with the new ShareObject values
-                                    DgvPortfolioBindingSourceFinalValue.ResetBindings(false);
-                                    DgvPortfolioBindingSourceMarketValue.ResetBindings(false);
+                                    dgvPortfolioFinalValue.Refresh();
+                                    dgvPortfolioMarketValue.Refresh();
 
                                     // Refresh the footer
                                     RefreshFooters();
@@ -416,87 +416,34 @@ namespace SharePortfolioManager
 
                                 if (UpdateAllFlag)
                                 {
+                                    // Check which share overview is selected
+                                    if (MarketValueOverviewTabSelected)
+                                    {
+                                        // Select the new share update
+                                        dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+
+                                        // Scroll to the selected row
+                                        Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
+                                    }
+                                    else
+                                    {
+                                        // Select the new share update
+                                        dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+
+                                        // Scroll to the selected row
+                                        Helper.ScrollDgvToIndex(dgvPortfolioFinalValue,
+                                            SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
+                                    }
+
                                     // Check if another share object should be updated
                                     if (SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1)
-                                    {
-                                        // Increase index to get the next share
-                                        SelectedDataGridViewShareIndex++;
-                                        Thread.Sleep(100);
+                                        timerStartNextShareUpdate.Enabled = true;
 
-                                        // Check which share overview is selected
-                                        if (MarketValueOverviewTabSelected)
-                                        {
-                                            do
-                                            {
-                                            // Clear current selection
-                                                dgvPortfolioMarketValue.ClearSelection();
-
-                                                // Select the new share update
-                                                dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
-
-                                                // Scroll to the selected row
-                                                Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
-
-                                                // Check if the current share should not be updated so check the next share
-                                                if (ShareObjectMarketValue != null && !ShareObjectMarketValue.Update)
-                                                    // Increase index to get the next share
-                                                    SelectedDataGridViewShareIndex++;
-
-                                            } while (ShareObjectMarketValue != null &&
-                                                     !ShareObjectMarketValue.Update &&
-                                                     SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1);
-
-                                            // Check if the share should be update
-                                            if (ShareObjectMarketValue != null && ShareObjectMarketValue.Update && ShareObjectMarketValue.WebSiteConfigurationValid)
-                                            {
-                                                Parser.WebParsing = true;
-                                                Parser.WebSiteUrl = ShareObjectMarketValue.WebSite;
-                                                Parser.RegexList = ShareObjectMarketValue.RegexList;
-                                                Parser.EncodingType = ShareObjectMarketValue.WebSiteEncodingType;
-                                                Parser.StartParsing();
-                                            }
-                                        }
-                                        else
-                                        {
-                                            do
-                                            {
-                                                // Clear current selection
-                                                dgvPortfolioFinalValue.ClearSelection();
-
-                                                // Select the new share update
-                                                dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected =
-                                                    true;
-
-                                                // Scroll to the selected row
-                                                Helper.ScrollDgvToIndex(dgvPortfolioFinalValue,
-                                                    SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
-
-                                                // Check if the current share should not be updated so check the next share
-                                                if (ShareObjectFinalValue != null && !ShareObjectFinalValue.Update)
-                                                    // Increase index to get the next share
-                                                    SelectedDataGridViewShareIndex++;
-
-                                            } while (ShareObjectFinalValue != null && 
-                                                     !ShareObjectFinalValue.Update &&
-                                                     SelectedDataGridViewShareIndex < ShareObject.ObjectCounter);
-
-                                            // Check if the share should be update
-                                            if (ShareObjectFinalValue != null && ShareObjectFinalValue.Update && ShareObjectMarketValue.WebSiteConfigurationValid)
-                                            {
-                                                // Start the asynchronous operation of the Parser
-                                                Parser.WebParsing = true;
-                                                Parser.WebSiteUrl = ShareObjectFinalValue.WebSite;
-                                                Parser.RegexList = ShareObjectFinalValue.RegexList;
-                                                Parser.EncodingType = ShareObjectFinalValue.WebSiteEncodingType;
-                                                Parser.StartParsing();
-                                            }
-                                        }
-                                    }
+                                    if (SelectedDataGridViewShareIndex == ShareObject.ObjectCounter - 1 /*&& ShareObjectFinalValue.Update*/ )
+                                        timerStatusMessageClear.Enabled = true;
                                 }
                                 else
                                 {
-                                    UpdateAllFlag = false;
-
                                     if (MarketValueOverviewTabSelected)
                                     {
                                         // Clear current selection
@@ -680,14 +627,9 @@ namespace SharePortfolioManager
                             }
                     }
 
-                    if (Parser.ParserErrorCode > 0)
-                        Thread.Sleep(100);
-
                     // Check if a error occurred or the process has been finished
-                    if (e.ParserInfoState.LastErrorCode < 0 || e.ParserInfoState.LastErrorCode == ParserErrorCodes.Finished)
+                    if (e.ParserInfoState.LastErrorCode < 0)
                     {
-                        EnableDisableControlNames.Remove(@"btnRefreshAll");
-                        EnableDisableControlNames.Remove(@"btnRefresh");
                         Helper.EnableDisableControls(true, this, EnableDisableControlNames);
 
                         UpdateAllFlag = false;
@@ -723,7 +665,6 @@ namespace SharePortfolioManager
                             Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
                         }
 
-
                         timerStatusMessageClear.Enabled = true;
 
                         if (e.ParserInfoState.LastErrorCode < 0)
@@ -744,7 +685,7 @@ namespace SharePortfolioManager
                 catch (Exception ex)
                 {
 #if DEBUG
-                    var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                    var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                     MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
 #endif
@@ -755,8 +696,6 @@ namespace SharePortfolioManager
                         Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
 
                     Thread.Sleep(500);
-                    EnableDisableControlNames.Remove(@"btnRefreshAll");
-                    EnableDisableControlNames.Remove(@"btnRefresh");
                     Helper.EnableDisableControls(true, this, EnableDisableControlNames);
 
                     // Reset labels

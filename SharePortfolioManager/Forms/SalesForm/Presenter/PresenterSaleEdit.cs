@@ -474,7 +474,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"OnDocumentBrowse()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -562,7 +562,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                             brokerageReductionPart = buy.BrokerageWithReduction - decAlreadyUsedBrokerageReductionValue;
 
                         _model.UsedBuyDetails?.Add(new SaleBuyDetails(_model.ShareObjectFinalValue.CultureInfo,
-                            buy.DateAsStr, salableVolume, buy.SharePrice, brokerageReductionPart, buy.Guid));
+                            buy.DateAsStr, salableVolume, buy.Price, brokerageReductionPart, buy.Guid));
 
                         // Add sale volume to the sold volume of the buy
                         _model.ShareObjectFinalValue.AllBuyEntries.AddSaleVolumeByGuid(buy.Guid,
@@ -577,7 +577,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                         var brokerageReductionPart = Math.Round(buy.BrokerageWithReduction * toBeSold / buy.Volume, 5);
 
                         _model.UsedBuyDetails?.Add(new SaleBuyDetails(_model.ShareObjectFinalValue.CultureInfo,
-                            buy.DateAsStr, toBeSold, buy.SharePrice, brokerageReductionPart, buy.Guid));
+                            buy.DateAsStr, toBeSold, buy.Price, brokerageReductionPart, buy.Guid));
 
                         // Add sale volume to the sold volume of the buy
                         _model.ShareObjectFinalValue.AllBuyEntries.AddSaleVolumeByGuid(buy.Guid,
@@ -612,7 +612,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"CalculateProfitLossAndPayout()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif

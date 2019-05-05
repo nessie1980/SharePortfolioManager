@@ -1042,7 +1042,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             catch (Exception ex)
             {
 #if DEBUG_DIVIDEND || DEBUG
-                var message = $"ShareDividendEdit_Load()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 #endif
                 // Add status message
@@ -1584,7 +1584,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 
@@ -1640,7 +1640,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             catch (Exception ex)
             {
 #if DEBUG_DIVIDEND || DEBUG
-                var message = $"btnAdd_Click()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -1705,7 +1705,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             catch (Exception ex)
             {
 #if DEBUG_DIVIDEND || DEBUG
-                var message = $"btnDividendDelete_Click()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -1732,7 +1732,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             catch (Exception ex)
             {
 #if DEBUG_DIVIDEND || DEBUG
-                var message = $"btnReset_Click()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -2027,7 +2027,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             catch (Exception ex)
             {
 #if DEBUG_DIVIDEND || DEBUG
-                var message = $"ShowDividends()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -2130,7 +2130,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             catch (Exception ex)
             {
 #if DEBUG_DIVIDEND || DEBUG
-                var message = $"dataGridViewDividendsOfAYear_DataBindingComplete()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -2168,7 +2168,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             catch (Exception ex)
             {
 #if DEBUG_DIVIDEND || DEBUG
-                var message = $"DeselectRowsOfDataGridViews()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -2314,7 +2314,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             catch (Exception ex)
             {
 #if DEBUG_DIVIDEND || DEBUG
-                var message = $"dataGridViewDividendsOfYears_SelectionChanged()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -2483,7 +2483,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             catch (Exception ex)
             {
 #if DEBUG_DIVIDEND || DEBUG
-                var message = $"dataGridViewDividendsOfAYear_SelectionChanged()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -2597,7 +2597,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             catch (Exception ex)
             {
 #if DEBUG_DIVIDEND || DEBUG
-                var message = $"dataGridViewDividendsOfAYear_CellContentDecimalClick()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -2730,7 +2730,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             catch (OperationCanceledException ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error 1", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -2739,7 +2739,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error 2", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -2789,7 +2789,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -3056,7 +3056,7 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     catch (Exception ex)
                     {
 #if DEBUG
-                        var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                        var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                         MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                             MessageBoxIcon.Error);
 #endif
@@ -3066,10 +3066,10 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                     }
                 }
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{exception.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif

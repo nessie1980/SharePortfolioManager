@@ -33,7 +33,6 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using System.Xml;
-using SharePortfolioManager.Properties;
 
 namespace SharePortfolioManager.Classes.ShareObjects
 {
@@ -359,7 +358,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             get
             {
                 var value = Helper.FormatDecimal(BrokerageValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-                value += "\n" + Helper.FormatDecimal(DividendValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+                value += Environment.NewLine + Helper.FormatDecimal(DividendValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
                 return value;
             }
         }
@@ -439,7 +438,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             get
             {
                 var value = Helper.FormatDecimal(ProfitLossValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-                value += "\n" + Helper.FormatDecimal(PerformanceValue, Helper.Percentagetwolength, true, Helper.Percentagenonefixlength, true, PercentageUnit, CultureInfo);
+                value += Environment.NewLine + Helper.FormatDecimal(PerformanceValue, Helper.Percentagetwolength, true, Helper.Percentagenonefixlength, true, PercentageUnit, CultureInfo);
                 return value;
             }
         }
@@ -453,7 +452,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             get
             {
                 var value = Helper.FormatDecimal(PurchaseValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-                value += "\n" + Helper.FormatDecimal(FinalValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+                value += Environment.NewLine + Helper.FormatDecimal(FinalValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
                 return value;
             }
         }
@@ -540,7 +539,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             get
             {
                 var value = Helper.FormatDecimal(PortfolioBrokerage, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-                value += "\n" + Helper.FormatDecimal(PortfolioDividend, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+                value += Environment.NewLine + Helper.FormatDecimal(PortfolioDividend, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
                 return value;
             }
         }
@@ -574,7 +573,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             get
             {
                 var value = Helper.FormatDecimal(PortfolioProfitLossValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-                value += "\n" + Helper.FormatDecimal(PortfolioPerformanceValue, Helper.Percentagetwolength, true, Helper.Percentagenonefixlength, true, PercentageUnit, CultureInfo);
+                value += Environment.NewLine + Helper.FormatDecimal(PortfolioPerformanceValue, Helper.Percentagetwolength, true, Helper.Percentagenonefixlength, true, PercentageUnit, CultureInfo);
                 return value;
             }
         }
@@ -1595,7 +1594,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                         newBuyElement.SetAttribute(BuyVolumeSoldAttrName,
                                             buyElementYear.VolumeSoldAsStr);
                                         newBuyElement.SetAttribute(BuyPriceAttrName,
-                                            buyElementYear.SharePriceAsStr);
+                                            buyElementYear.PriceAsStr);
                                         newBuyElement.SetAttribute(BuyBrokerageGuidAttrName,
                                             buyElementYear.BrokerageGuid);
                                         newBuyElement.SetAttribute(BuyDocumentAttrName,
@@ -1877,7 +1876,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                             newBuyElement.SetAttribute(BuyDateAttrName, buyElementYear.DateAsStr);
                             newBuyElement.SetAttribute(BuyVolumeAttrName, buyElementYear.VolumeAsStr);
                             newBuyElement.SetAttribute(BuyVolumeSoldAttrName, @"0");
-                            newBuyElement.SetAttribute(BuyPriceAttrName, buyElementYear.SharePriceAsStr);
+                            newBuyElement.SetAttribute(BuyPriceAttrName, buyElementYear.PriceAsStr);
                             newBuyElement.SetAttribute(BuyBrokerageGuidAttrName, buyElementYear.BrokerageGuid);
                             newBuyElement.SetAttribute(BuyDocumentAttrName, buyElementYear.Document);
                             newBuys.AppendChild(newBuyElement);
@@ -2021,10 +2020,16 @@ namespace SharePortfolioManager.Classes.ShareObjects
             base.Dispose(bDisposing);
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// This function allows to clone this object
+        /// </summary>
+        /// <returns>New clone of the object</returns>
         public new object Clone()
         {
             using (var stream = new MemoryStream())
             {
+                // ReSharper disable once AssignNullToNotNullAttribute
                 if (!GetType().IsSerializable) return null;
 
                 var formatter = new BinaryFormatter();

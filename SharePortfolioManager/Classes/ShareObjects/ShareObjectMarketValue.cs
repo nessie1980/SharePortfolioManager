@@ -345,7 +345,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             get
             {
                 var value = Helper.FormatDecimal(ProfitLossValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-                value += "\n" + Helper.FormatDecimal(PerformanceValue, Helper.Percentagetwolength, true, Helper.Percentagenonefixlength, true, PercentageUnit, CultureInfo);
+                value += Environment.NewLine + Helper.FormatDecimal(PerformanceValue, Helper.Percentagetwolength, true, Helper.Percentagenonefixlength, true, PercentageUnit, CultureInfo);
                 return value;
             }
         }
@@ -359,7 +359,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             get
             {
                 var value = Helper.FormatDecimal(PurchaseValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-                value += "\n" + Helper.FormatDecimal(MarketValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+                value += Environment.NewLine + Helper.FormatDecimal(MarketValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
                 return value;
             }
         }
@@ -446,7 +446,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             get
             {
                 var value = Helper.FormatDecimal(PortfolioProfitLossValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-                value += "\n" + Helper.FormatDecimal(PortfolioPerformanceValue, Helper.Percentagetwolength, true, Helper.Percentagenonefixlength, true, PercentageUnit, CultureInfo);
+                value += Environment.NewLine + Helper.FormatDecimal(PortfolioPerformanceValue, Helper.Percentagetwolength, true, Helper.Percentagenonefixlength, true, PercentageUnit, CultureInfo);
                 return value;
             }
         }
@@ -1028,6 +1028,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="strPortfolioFileName">Name of the portfolio XML</param>
         /// <param name="exception">Exception which may occur. If no exception occurs the value is null</param>
         /// <returns>Flag if the save was successful</returns>
+        // ReSharper disable once UnusedMember.Global
         public static bool SaveShareObject(ShareObjectFinalValue shareObject, ref XmlDocument xmlPortfolio, ref XmlReader xmlReaderPortfolio, ref XmlReaderSettings xmlReaderSettingsPortfolio, string strPortfolioFileName, out Exception exception)
         {
             try
@@ -1132,7 +1133,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                         newBuyElement.SetAttribute(BuyVolumeSoldAttrName,
                                             buyElementYear.VolumeSoldAsStr);
                                         newBuyElement.SetAttribute(BuyPriceAttrName,
-                                            buyElementYear.SharePriceAsStr);
+                                            buyElementYear.PriceAsStr);
                                         newBuyElement.SetAttribute(BuyBrokerageGuidAttrName,
                                             buyElementYear.ReductionAsStr);
                                         newBuyElement.SetAttribute(BuyDocumentAttrName,
@@ -1336,7 +1337,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                             newBuyElement.SetAttribute(BuyDateAttrName, buyElementYear.DateAsStr);
                             newBuyElement.SetAttribute(BuyVolumeAttrName, buyElementYear.VolumeAsStr);
                             newBuyElement.SetAttribute(BuyVolumeSoldAttrName, @"0");
-                            newBuyElement.SetAttribute(BuyPriceAttrName, buyElementYear.SharePriceAsStr);
+                            newBuyElement.SetAttribute(BuyPriceAttrName, buyElementYear.PriceAsStr);
                             newBuyElement.SetAttribute(BuyBrokerageGuidAttrName, buyElementYear.BrokerageGuid);
                             newBuyElement.SetAttribute(BuyDocumentAttrName, buyElementYear.Document);
                             newBuys.AppendChild(newBuyElement);

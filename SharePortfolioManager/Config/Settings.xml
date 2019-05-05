@@ -9,6 +9,7 @@
 		<State>Normal</State>
 	</Window>
 	<Language>English</Language>
+	<StartNextShareUpdate>2000</StartNextShareUpdate>
 	<StatusMessageClear>3000</StatusMessageClear>
 	<Logger>
 		<GUIEntries>20</GUIEntries>

@@ -711,7 +711,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
             catch (Exception ex)
             {
 #if DEBUG_BROKERAGE || DEBUG
-                var message = $"ShareBrokerageEdit_Load()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -1073,7 +1073,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
             catch (Exception ex)
             {
 #if DEBUG_BROKERAGE || DEBUG
-                var message = $"btnAdd_Click()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -1119,7 +1119,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
             catch (Exception ex)
             {
 #if DEBUG_BROKERAGE || DEBUG
-                var message = $"btnDelete_Click()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -1146,7 +1146,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
             catch (Exception ex)
             {
 #if DEBUG_BROKERAGE || DEBUG
-                var message = $"btnReset_Click()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -1438,7 +1438,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
             catch (Exception ex)
             {
 #if DEBUG_BROKERAGE || DEBUG
-                var message = $"ShowBrokerage()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -1525,7 +1525,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
             catch (Exception ex)
             {
 #if DEBUG_BROKERAGE || DEBUG
-                var message = $"dataGridViewBrokerageOfAYear_DataBindingComplete()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -1562,7 +1562,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
             catch (Exception ex)
             {
 #if DEBUG_BROKERAGE || DEBUG
-                var message = $"DeselectRowsOfDataGridViews()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -1703,7 +1703,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
             catch (Exception ex)
             {
 #if DEBUG_BROKERAGE || DEBUG
-                var message = $"dataGridViewBrokerageOfYears_SelectionChanged()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -1886,7 +1886,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
             catch (Exception ex)
             {
 #if DEBUG_BROKERAGE || DEBUG
-                var message = $"dataGridViewBrokerageOfAYear_SelectionChanged()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -2010,7 +2010,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
             catch (Exception ex)
             {
 #if DEBUG_BROKERAGE || DEBUG
-                var message = $"dataGridViewBrokerageOfAYear_CellContentDecimalClick()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif

@@ -185,6 +185,25 @@ namespace SharePortfolioManager
 
                 #endregion Language
 
+                #region Start next share update timer
+
+                // Read the time value for starting the next share update
+                var nodeStartNextShareUpdate = Settings.SelectSingleNode("/Settings/StartNextShareUpdate");
+                if (nodeStartNextShareUpdate != null)
+                {
+                    if (int.TryParse(nodeStartNextShareUpdate.InnerText, out var iOutResult))
+                        StartNextShareUpdateTimerValue = iOutResult;
+                    else
+                        loadSettings = false;
+                }
+                else
+                    loadSettings = false;
+
+                // Set timerStartNextShareUpdate value
+                timerStartNextShareUpdate.Interval = StartNextShareUpdateTimerValue;
+
+                #endregion Start next share update timer
+
                 #region State clear timer
 
                 // Read the time value for clearing the status message
@@ -348,7 +367,7 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
 #if DEBUG
-                var message = $"{Helper.GetMyMethodName()}\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif

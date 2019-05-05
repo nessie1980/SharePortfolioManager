@@ -290,7 +290,7 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
             catch (Exception ex)
             {
 #if DEBUG_BUY || DEBUG
-                var message = $"OnDocumentBrowse()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
@@ -331,7 +331,7 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
             catch (Exception ex)
             {
 #if DEBUG_BUY || DEBUG
-                var message = $"CalculateMarketValueAndFinalValue()\n\n{ex.Message}";
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
