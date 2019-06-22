@@ -25,7 +25,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
-using SharePortfolioManager.Properties;
 
 namespace SharePortfolioManager.Classes.Costs
 {

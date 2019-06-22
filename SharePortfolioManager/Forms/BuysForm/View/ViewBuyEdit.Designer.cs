@@ -1,4 +1,4 @@
-﻿namespace SharePortfolioManager.Forms.BuysForm.View
+﻿namespace SharePortfolioManager.BuysForm.View
 {
     partial class ViewBuyEdit
     {
@@ -153,7 +153,7 @@
             this.btnReset.Margin = new System.Windows.Forms.Padding(1);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(178, 31);
-            this.btnReset.TabIndex = 10;
+            this.btnReset.TabIndex = 13;
             this.btnReset.Text = "_Reset";
             this.btnReset.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnReset.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -171,7 +171,7 @@
             this.btnDelete.Margin = new System.Windows.Forms.Padding(1);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(178, 31);
-            this.btnDelete.TabIndex = 9;
+            this.btnDelete.TabIndex = 12;
             this.btnDelete.Text = "_Delete";
             this.btnDelete.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnDelete.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -188,7 +188,7 @@
             this.btnAddSave.Margin = new System.Windows.Forms.Padding(1);
             this.btnAddSave.Name = "btnAddSave";
             this.btnAddSave.Size = new System.Drawing.Size(178, 31);
-            this.btnAddSave.TabIndex = 8;
+            this.btnAddSave.TabIndex = 11;
             this.btnAddSave.Text = "_Add/Save";
             this.btnAddSave.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnAddSave.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -205,7 +205,7 @@
             this.btnCancel.Margin = new System.Windows.Forms.Padding(1);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(178, 31);
-            this.btnCancel.TabIndex = 11;
+            this.btnCancel.TabIndex = 14;
             this.btnCancel.Text = "_Cancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnCancel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -221,6 +221,9 @@
             this.tblLayPnlBuyInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 77F));
             this.tblLayPnlBuyInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tblLayPnlBuyInput.Controls.Add(this.lblTime, 0, 1);
+            this.tblLayPnlBuyInput.Controls.Add(this.lblBrokerageUnit, 3, 10);
+            this.tblLayPnlBuyInput.Controls.Add(this.lblBrokerage, 0, 10);
+            this.tblLayPnlBuyInput.Controls.Add(this.txtBoxBrokerage, 1, 10);
             this.tblLayPnlBuyInput.Controls.Add(this.lblDate, 0, 0);
             this.tblLayPnlBuyInput.Controls.Add(this.dateTimePickerDate, 1, 0);
             this.tblLayPnlBuyInput.Controls.Add(this.dateTimePickerTime, 1, 1);
@@ -230,8 +233,6 @@
             this.tblLayPnlBuyInput.Controls.Add(this.txtBoxDocument, 1, 13);
             this.tblLayPnlBuyInput.Controls.Add(this.btnDocumentBrowse, 3, 13);
             this.tblLayPnlBuyInput.Controls.Add(this.lblBuyValueBrokerageReduction, 0, 12);
-            this.tblLayPnlBuyInput.Controls.Add(this.lblBrokerage, 0, 11);
-            this.tblLayPnlBuyInput.Controls.Add(this.lblReduction, 0, 10);
             this.tblLayPnlBuyInput.Controls.Add(this.lblTraderPlaceFee, 0, 9);
             this.tblLayPnlBuyInput.Controls.Add(this.lblBrokerFee, 0, 8);
             this.tblLayPnlBuyInput.Controls.Add(this.lblProvision, 0, 7);
@@ -241,8 +242,6 @@
             this.tblLayPnlBuyInput.Controls.Add(this.lblVolume, 0, 3);
             this.tblLayPnlBuyInput.Controls.Add(this.lblOrderNumber, 0, 2);
             this.tblLayPnlBuyInput.Controls.Add(this.txtBoxBuyValueBrokerageReduction, 1, 12);
-            this.tblLayPnlBuyInput.Controls.Add(this.txtBoxBrokerage, 1, 11);
-            this.tblLayPnlBuyInput.Controls.Add(this.txtBoxReduction, 1, 10);
             this.tblLayPnlBuyInput.Controls.Add(this.txtBoxTraderPlaceFee, 1, 9);
             this.tblLayPnlBuyInput.Controls.Add(this.txtBoxBrokerFee, 1, 8);
             this.tblLayPnlBuyInput.Controls.Add(this.txtBoxProvision, 1, 7);
@@ -252,8 +251,6 @@
             this.tblLayPnlBuyInput.Controls.Add(this.txtBoxVolume, 1, 3);
             this.tblLayPnlBuyInput.Controls.Add(this.txtBoxOrderNumber, 1, 2);
             this.tblLayPnlBuyInput.Controls.Add(this.lblDepositUnit, 3, 12);
-            this.tblLayPnlBuyInput.Controls.Add(this.lblBrokerageUnit, 3, 11);
-            this.tblLayPnlBuyInput.Controls.Add(this.lblReductionUnit, 3, 10);
             this.tblLayPnlBuyInput.Controls.Add(this.lblTraderPlaceFeeUnit, 3, 9);
             this.tblLayPnlBuyInput.Controls.Add(this.lblBrokerFeeUnit, 3, 8);
             this.tblLayPnlBuyInput.Controls.Add(this.lblProvisionUnit, 3, 7);
@@ -261,13 +258,16 @@
             this.tblLayPnlBuyInput.Controls.Add(this.lblPriceUnit, 3, 5);
             this.tblLayPnlBuyInput.Controls.Add(this.lblVolumeSoldUnit, 3, 4);
             this.tblLayPnlBuyInput.Controls.Add(this.lblVolumeUnit, 3, 3);
-            this.tblLayPnlBuyInput.Controls.Add(this.picBoxReductionParseState, 4, 10);
             this.tblLayPnlBuyInput.Controls.Add(this.picBoxTraderPlaceFeeParseState, 4, 9);
             this.tblLayPnlBuyInput.Controls.Add(this.picBoxBrokerFeeParseState, 4, 8);
             this.tblLayPnlBuyInput.Controls.Add(this.picBoxProvisionParseState, 4, 7);
             this.tblLayPnlBuyInput.Controls.Add(this.picBoxPriceParseState, 4, 5);
             this.tblLayPnlBuyInput.Controls.Add(this.picBoxVolumeParseState, 4, 3);
             this.tblLayPnlBuyInput.Controls.Add(this.picBoxOrderNumberParseState, 4, 2);
+            this.tblLayPnlBuyInput.Controls.Add(this.lblReduction, 0, 11);
+            this.tblLayPnlBuyInput.Controls.Add(this.txtBoxReduction, 1, 11);
+            this.tblLayPnlBuyInput.Controls.Add(this.lblReductionUnit, 3, 11);
+            this.tblLayPnlBuyInput.Controls.Add(this.picBoxReductionParseState, 4, 11);
             this.tblLayPnlBuyInput.Dock = System.Windows.Forms.DockStyle.Top;
             this.tblLayPnlBuyInput.Location = new System.Drawing.Point(3, 18);
             this.tblLayPnlBuyInput.Margin = new System.Windows.Forms.Padding(1);
@@ -397,7 +397,7 @@
             this.txtBoxDocument.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxDocument.Name = "txtBoxDocument";
             this.txtBoxDocument.Size = new System.Drawing.Size(466, 22);
-            this.txtBoxDocument.TabIndex = 6;
+            this.txtBoxDocument.TabIndex = 9;
             this.txtBoxDocument.TextChanged += new System.EventHandler(this.OnTxtBoxDocument_TextChanged);
             this.txtBoxDocument.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragDrop);
             this.txtBoxDocument.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragEnter);
@@ -415,14 +415,14 @@
             this.btnDocumentBrowse.Margin = new System.Windows.Forms.Padding(1);
             this.btnDocumentBrowse.Name = "btnDocumentBrowse";
             this.btnDocumentBrowse.Size = new System.Drawing.Size(99, 22);
-            this.btnDocumentBrowse.TabIndex = 7;
+            this.btnDocumentBrowse.TabIndex = 10;
             this.btnDocumentBrowse.Text = "...";
             this.btnDocumentBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnDocumentBrowse.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnDocumentBrowse.UseVisualStyleBackColor = true;
             this.btnDocumentBrowse.Click += new System.EventHandler(this.OnBtnBuyDocumentBrowse_Click);
             // 
-            // lblDeposit
+            // lblBuyValueBrokerageReduction
             // 
             this.lblBuyValueBrokerageReduction.BackColor = System.Drawing.Color.LightGray;
             this.lblBuyValueBrokerageReduction.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -430,7 +430,7 @@
             this.lblBuyValueBrokerageReduction.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBuyValueBrokerageReduction.Location = new System.Drawing.Point(1, 289);
             this.lblBuyValueBrokerageReduction.Margin = new System.Windows.Forms.Padding(1);
-            this.lblBuyValueBrokerageReduction.Name = "lblDeposit";
+            this.lblBuyValueBrokerageReduction.Name = "lblBuyValueBrokerageReduction";
             this.lblBuyValueBrokerageReduction.Size = new System.Drawing.Size(248, 22);
             this.lblBuyValueBrokerageReduction.TabIndex = 15;
             this.lblBuyValueBrokerageReduction.Text = "_addFinalValue";
@@ -442,7 +442,7 @@
             this.lblBrokerage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblBrokerage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBrokerage.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBrokerage.Location = new System.Drawing.Point(1, 265);
+            this.lblBrokerage.Location = new System.Drawing.Point(1, 241);
             this.lblBrokerage.Margin = new System.Windows.Forms.Padding(1);
             this.lblBrokerage.Name = "lblBrokerage";
             this.lblBrokerage.Size = new System.Drawing.Size(248, 22);
@@ -456,7 +456,7 @@
             this.lblReduction.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblReduction.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblReduction.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblReduction.Location = new System.Drawing.Point(1, 241);
+            this.lblReduction.Location = new System.Drawing.Point(1, 265);
             this.lblReduction.Margin = new System.Windows.Forms.Padding(1);
             this.lblReduction.Name = "lblReduction";
             this.lblReduction.Size = new System.Drawing.Size(248, 22);
@@ -506,7 +506,7 @@
             this.lblProvision.Text = "_addProvision";
             this.lblProvision.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // lblMarketValue
+            // lblBuyValue
             // 
             this.lblBuyValue.BackColor = System.Drawing.Color.LightGray;
             this.lblBuyValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -514,7 +514,7 @@
             this.lblBuyValue.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBuyValue.Location = new System.Drawing.Point(1, 145);
             this.lblBuyValue.Margin = new System.Windows.Forms.Padding(1);
-            this.lblBuyValue.Name = "lblMarketValue";
+            this.lblBuyValue.Name = "lblBuyValue";
             this.lblBuyValue.Size = new System.Drawing.Size(248, 22);
             this.lblBuyValue.TabIndex = 27;
             this.lblBuyValue.Text = "_addMarketValue";
@@ -576,7 +576,7 @@
             this.lblOrderNumber.Text = "_lblOrderNumber";
             this.lblOrderNumber.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // txtBoxDeposit
+            // txtBoxBuyValueBrokerageReduction
             // 
             this.txtBoxBuyValueBrokerageReduction.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tblLayPnlBuyInput.SetColumnSpan(this.txtBoxBuyValueBrokerageReduction, 2);
@@ -585,10 +585,10 @@
             this.txtBoxBuyValueBrokerageReduction.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtBoxBuyValueBrokerageReduction.Location = new System.Drawing.Point(251, 289);
             this.txtBoxBuyValueBrokerageReduction.Margin = new System.Windows.Forms.Padding(1);
-            this.txtBoxBuyValueBrokerageReduction.Name = "txtBoxDeposit";
+            this.txtBoxBuyValueBrokerageReduction.Name = "txtBoxBuyValueBrokerageReduction";
             this.txtBoxBuyValueBrokerageReduction.ReadOnly = true;
             this.txtBoxBuyValueBrokerageReduction.Size = new System.Drawing.Size(466, 22);
-            this.txtBoxBuyValueBrokerageReduction.TabIndex = 13;
+            this.txtBoxBuyValueBrokerageReduction.TabIndex = 18;
             this.txtBoxBuyValueBrokerageReduction.TabStop = false;
             this.txtBoxBuyValueBrokerageReduction.Text = "-";
             // 
@@ -599,12 +599,13 @@
             this.txtBoxBrokerage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtBoxBrokerage.Enabled = false;
             this.txtBoxBrokerage.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxBrokerage.Location = new System.Drawing.Point(251, 265);
+            this.txtBoxBrokerage.Location = new System.Drawing.Point(251, 241);
             this.txtBoxBrokerage.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxBrokerage.Name = "txtBoxBrokerage";
             this.txtBoxBrokerage.ReadOnly = true;
             this.txtBoxBrokerage.Size = new System.Drawing.Size(466, 22);
-            this.txtBoxBrokerage.TabIndex = 4;
+            this.txtBoxBrokerage.TabIndex = 17;
+            this.txtBoxBrokerage.TabStop = false;
             this.txtBoxBrokerage.Text = "-";
             this.txtBoxBrokerage.TextChanged += new System.EventHandler(this.OnTxtBoxBrokerage_TextChanged);
             this.txtBoxBrokerage.Enter += new System.EventHandler(this.OnTxtBoxBrokerage_Enter);
@@ -616,11 +617,11 @@
             this.tblLayPnlBuyInput.SetColumnSpan(this.txtBoxReduction, 2);
             this.txtBoxReduction.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtBoxReduction.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxReduction.Location = new System.Drawing.Point(251, 241);
+            this.txtBoxReduction.Location = new System.Drawing.Point(251, 265);
             this.txtBoxReduction.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxReduction.Name = "txtBoxReduction";
             this.txtBoxReduction.Size = new System.Drawing.Size(466, 22);
-            this.txtBoxReduction.TabIndex = 5;
+            this.txtBoxReduction.TabIndex = 8;
             this.txtBoxReduction.TextChanged += new System.EventHandler(this.OnTxtBoxReduction_TextChanged);
             this.txtBoxReduction.Enter += new System.EventHandler(this.OnTxtBoxReduction_Enter);
             this.txtBoxReduction.Leave += new System.EventHandler(this.OnTxtBoxReduction_Leave);
@@ -635,7 +636,7 @@
             this.txtBoxTraderPlaceFee.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxTraderPlaceFee.Name = "txtBoxTraderPlaceFee";
             this.txtBoxTraderPlaceFee.Size = new System.Drawing.Size(466, 22);
-            this.txtBoxTraderPlaceFee.TabIndex = 37;
+            this.txtBoxTraderPlaceFee.TabIndex = 7;
             this.txtBoxTraderPlaceFee.TextChanged += new System.EventHandler(this.OnTxtBoxTraderPlaceFee_TextChanged);
             this.txtBoxTraderPlaceFee.Enter += new System.EventHandler(this.OnTxtBoxTraderPlaceFee_Enter);
             this.txtBoxTraderPlaceFee.Leave += new System.EventHandler(this.OnTxtBoxTraderPlaceFee_Leave);
@@ -650,7 +651,7 @@
             this.txtBoxBrokerFee.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxBrokerFee.Name = "txtBoxBrokerFee";
             this.txtBoxBrokerFee.Size = new System.Drawing.Size(466, 22);
-            this.txtBoxBrokerFee.TabIndex = 36;
+            this.txtBoxBrokerFee.TabIndex = 6;
             this.txtBoxBrokerFee.TextChanged += new System.EventHandler(this.OnTxtBoxBrokerFee_TextChanged);
             this.txtBoxBrokerFee.Enter += new System.EventHandler(this.OnTxtBoxBrokerFee_Enter);
             this.txtBoxBrokerFee.Leave += new System.EventHandler(this.OnTxtBoxBrokerFee_Leave);
@@ -665,12 +666,12 @@
             this.txtBoxProvision.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxProvision.Name = "txtBoxProvision";
             this.txtBoxProvision.Size = new System.Drawing.Size(466, 22);
-            this.txtBoxProvision.TabIndex = 35;
+            this.txtBoxProvision.TabIndex = 5;
             this.txtBoxProvision.TextChanged += new System.EventHandler(this.OnTxtBoxProvision_TextChanged);
             this.txtBoxProvision.Enter += new System.EventHandler(this.OnTxtBoxProvision_Enter);
             this.txtBoxProvision.Leave += new System.EventHandler(this.OnTxtBoxProvision_Leave);
             // 
-            // txtBoxMarketValue
+            // txtBoxBuyValue
             // 
             this.txtBoxBuyValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tblLayPnlBuyInput.SetColumnSpan(this.txtBoxBuyValue, 2);
@@ -679,10 +680,10 @@
             this.txtBoxBuyValue.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtBoxBuyValue.Location = new System.Drawing.Point(251, 145);
             this.txtBoxBuyValue.Margin = new System.Windows.Forms.Padding(1);
-            this.txtBoxBuyValue.Name = "txtBoxMarketValue";
+            this.txtBoxBuyValue.Name = "txtBoxBuyValue";
             this.txtBoxBuyValue.ReadOnly = true;
             this.txtBoxBuyValue.Size = new System.Drawing.Size(466, 22);
-            this.txtBoxBuyValue.TabIndex = 12;
+            this.txtBoxBuyValue.TabIndex = 16;
             this.txtBoxBuyValue.TabStop = false;
             this.txtBoxBuyValue.Text = "-";
             // 
@@ -696,7 +697,7 @@
             this.txtBoxSharePrice.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxSharePrice.Name = "txtBoxSharePrice";
             this.txtBoxSharePrice.Size = new System.Drawing.Size(466, 22);
-            this.txtBoxSharePrice.TabIndex = 3;
+            this.txtBoxSharePrice.TabIndex = 4;
             this.txtBoxSharePrice.TextChanged += new System.EventHandler(this.OnTxtBoxPrice_TextChanged);
             this.txtBoxSharePrice.Enter += new System.EventHandler(this.OnTxtBoxPrice_Enter);
             this.txtBoxSharePrice.Leave += new System.EventHandler(this.OnTxtBoxPrice_Leave);
@@ -712,7 +713,7 @@
             this.txtBoxVolumeSold.Name = "txtBoxVolumeSold";
             this.txtBoxVolumeSold.ReadOnly = true;
             this.txtBoxVolumeSold.Size = new System.Drawing.Size(466, 22);
-            this.txtBoxVolumeSold.TabIndex = 30;
+            this.txtBoxVolumeSold.TabIndex = 15;
             this.txtBoxVolumeSold.TabStop = false;
             this.txtBoxVolumeSold.Text = "-";
             this.txtBoxVolumeSold.TextChanged += new System.EventHandler(this.OnTxtBoxAddVolumeSold_TextChanged);
@@ -728,7 +729,7 @@
             this.txtBoxVolume.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxVolume.Name = "txtBoxVolume";
             this.txtBoxVolume.Size = new System.Drawing.Size(466, 22);
-            this.txtBoxVolume.TabIndex = 2;
+            this.txtBoxVolume.TabIndex = 3;
             this.txtBoxVolume.TextChanged += new System.EventHandler(this.OnTxtBoxAddVolume_TextChanged);
             this.txtBoxVolume.Enter += new System.EventHandler(this.OnTxtBoxVolume_Enter);
             this.txtBoxVolume.Leave += new System.EventHandler(this.OnTxtBoxVolume_Leave);
@@ -744,7 +745,7 @@
             this.txtBoxOrderNumber.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxOrderNumber.Name = "txtBoxOrderNumber";
             this.txtBoxOrderNumber.Size = new System.Drawing.Size(466, 22);
-            this.txtBoxOrderNumber.TabIndex = 51;
+            this.txtBoxOrderNumber.TabIndex = 2;
             this.txtBoxOrderNumber.TextChanged += new System.EventHandler(this.OnTxtBoxOrderNumber_TextChanged);
             this.txtBoxOrderNumber.Enter += new System.EventHandler(this.OnTxtBoxOrderNumber_Enter);
             // 
@@ -764,7 +765,7 @@
             // 
             this.lblBrokerageUnit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBrokerageUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBrokerageUnit.Location = new System.Drawing.Point(719, 265);
+            this.lblBrokerageUnit.Location = new System.Drawing.Point(719, 241);
             this.lblBrokerageUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblBrokerageUnit.Name = "lblBrokerageUnit";
             this.lblBrokerageUnit.Size = new System.Drawing.Size(75, 22);
@@ -776,7 +777,7 @@
             // 
             this.lblReductionUnit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblReductionUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblReductionUnit.Location = new System.Drawing.Point(719, 241);
+            this.lblReductionUnit.Location = new System.Drawing.Point(719, 265);
             this.lblReductionUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblReductionUnit.Name = "lblReductionUnit";
             this.lblReductionUnit.Size = new System.Drawing.Size(75, 22);
@@ -820,13 +821,13 @@
             this.lblProvisionUnit.Text = "_lblProvisionUnit";
             this.lblProvisionUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // lblMarketValueUnit
+            // lblBuyValueUnit
             // 
             this.lblBuyValueUnit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBuyValueUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBuyValueUnit.Location = new System.Drawing.Point(719, 145);
             this.lblBuyValueUnit.Margin = new System.Windows.Forms.Padding(1);
-            this.lblBuyValueUnit.Name = "lblMarketValueUnit";
+            this.lblBuyValueUnit.Name = "lblBuyValueUnit";
             this.lblBuyValueUnit.Size = new System.Drawing.Size(75, 22);
             this.lblBuyValueUnit.TabIndex = 28;
             this.lblBuyValueUnit.Text = "_lblMarketValueUnit";
@@ -871,7 +872,7 @@
             // picBoxReductionParseState
             // 
             this.picBoxReductionParseState.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.picBoxReductionParseState.Location = new System.Drawing.Point(798, 243);
+            this.picBoxReductionParseState.Location = new System.Drawing.Point(798, 267);
             this.picBoxReductionParseState.Name = "picBoxReductionParseState";
             this.picBoxReductionParseState.Size = new System.Drawing.Size(18, 18);
             this.picBoxReductionParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -1016,12 +1017,12 @@
             this.tabCtrlBuys.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.OnTabCtrlBuys_KeyPress);
             this.tabCtrlBuys.MouseLeave += new System.EventHandler(this.OnTabCtrlBuys_MouseLeave);
             // 
-            // lblPurchaseValue
+            // lblBuyValueBrokerageReductionLabel
             // 
             this.lblBuyValueBrokerageReductionLabel.BackColor = System.Drawing.Color.LightGray;
             this.lblBuyValueBrokerageReductionLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblBuyValueBrokerageReductionLabel.Location = new System.Drawing.Point(10, 177);
-            this.lblBuyValueBrokerageReductionLabel.Name = "lblPurchaseValue";
+            this.lblBuyValueBrokerageReductionLabel.Name = "lblBuyValueBrokerageReductionLabel";
             this.lblBuyValueBrokerageReductionLabel.Size = new System.Drawing.Size(365, 23);
             this.lblBuyValueBrokerageReductionLabel.TabIndex = 15;
             this.lblBuyValueBrokerageReductionLabel.Text = "_addFinalValue";

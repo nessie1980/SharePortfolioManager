@@ -983,9 +983,9 @@ namespace SharePortfolioManager.Classes
             if (decVolume > 0 && decSharePrice > 0)
             {
                 decBuyValue = Math.Round(decVolume * decSharePrice, 2, MidpointRounding.AwayFromZero);
-                decBuyValueReduction = decBuyValue - decReduction;
                 decBuyValueBrokerage = decBuyValue + decBrokerage;
-                decBuyValueBrokerageReduction = decBuyValue + decBrokerageReduction;
+                decBuyValueReduction = decBuyValue - decReduction;
+                decBuyValueBrokerageReduction = decBuyValue + decBrokerage - decReduction;
             }
             else
             {
@@ -1006,7 +1006,11 @@ namespace SharePortfolioManager.Classes
             // Calculate brokerage
             decBrokerage = decProvision + decBrokerFee + decTraderPlaceFee;
             // Calculate brokerage minus reduction
-            decBrokerageReduction = decBrokerage - decReduction;
+            // Check if the brokerage minus reduction is equal or higher then 0
+            if (decBrokerage - decReduction >= 0)
+                decBrokerageReduction = decBrokerage - decReduction;
+            else
+                decBrokerageReduction = 0;
         }
 
         #endregion Calculate brokerage value

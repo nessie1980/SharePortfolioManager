@@ -22,11 +22,11 @@
 
 using LanguageHandler;
 using Logging;
+using SharePortfolioManager.BrokeragesForm.View;
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.ShareObjects;
-using SharePortfolioManager.Forms.BrokeragesForm.View;
 
-namespace SharePortfolioManager.Forms.BrokeragesForm.Model
+namespace SharePortfolioManager.BrokeragesForm.Model
 {
     /// <summary>
     /// Interface of the BrokerageEdit model
@@ -170,11 +170,11 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.Model
             get => _provisionDec;
             set
             {
-                if (_provisionDec == value)
+                if (Equals(_provisionDec, value))
                     return;
                 _provisionDec = value;
 
-                Provision = _provisionDec.ToString("G");
+                UpdateView = true;
             }
         }
 
@@ -207,11 +207,11 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.Model
             get => _brokerFeeDec;
             set
             {
-                if (_brokerFeeDec == value)
+                if (Equals(_brokerFeeDec, value))
                     return;
                 _brokerFeeDec = value;
 
-                BrokerFee = _brokerFeeDec.ToString("G");
+                UpdateView = true;
             }
         }
 
@@ -244,11 +244,11 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.Model
             get => _traderPlaceFeeDec;
             set
             {
-                if (_traderPlaceFeeDec == value)
+                if (Equals(_traderPlaceFeeDec, value))
                     return;
                 _traderPlaceFeeDec = value;
 
-                TraderPlaceFee = _traderPlaceFeeDec.ToString("G");
+                UpdateView = true;
             }
         }
 
@@ -281,36 +281,24 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.Model
             get => _reductionDec;
             set
             {
-                if (_reductionDec == value)
+                if (Equals(_reductionDec, value))
                     return;
                 _reductionDec = value;
 
-                Brokerage = _reductionDec.ToString("G");
+                UpdateView = true;
             }
         }
 
         public string Brokerage
         {
-            get
-            {
-                if (UpdateViewFormatted)
-                {
-                    // Only return the value if the brokerage is greater than '0'
-                    return _brokerageDec > 0 ? Helper.FormatDecimal(_brokerageDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : @"";
-                }
-
-                return _brokerage;
-            }
+            get => _brokerageDec >= 0 ? Helper.FormatDecimal(_brokerageDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : _brokerage;
             set
             {
-                if (_brokerage == value)
+                if (Equals(_brokerage, value))
                     return;
                 _brokerage = value;
-
-                // Try to parse
-                if (!decimal.TryParse(_brokerage, out _brokerageDec))
-                    _brokerageDec = 0;
             }
+
         }
 
         public decimal BrokerageDec
@@ -318,11 +306,11 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.Model
             get => _brokerageDec;
             set
             {
-                if (_brokerageDec == value)
+                if (Equals(_brokerageDec, value))
                     return;
                 _brokerageDec = value;
 
-                Brokerage = _brokerageDec.ToString("G");
+                UpdateView = true;
             }
         }
 

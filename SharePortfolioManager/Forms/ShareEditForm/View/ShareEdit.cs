@@ -23,9 +23,6 @@
 using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Classes;
-using SharePortfolioManager.Forms.BuysForm.Model;
-using SharePortfolioManager.Forms.BuysForm.Presenter;
-using SharePortfolioManager.Forms.BuysForm.View;
 using SharePortfolioManager.Forms.DividendForm.Model;
 using SharePortfolioManager.Forms.DividendForm.Presenter;
 using SharePortfolioManager.Forms.DividendForm.View;
@@ -38,10 +35,13 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using SharePortfolioManager.BrokeragesForm.Model;
+using SharePortfolioManager.BrokeragesForm.Presenter;
+using SharePortfolioManager.BrokeragesForm.View;
+using SharePortfolioManager.BuysForm.Model;
+using SharePortfolioManager.BuysForm.Presenter;
+using SharePortfolioManager.BuysForm.View;
 using SharePortfolioManager.Classes.ShareObjects;
-using SharePortfolioManager.Forms.BrokeragesForm.Model;
-using SharePortfolioManager.Forms.BrokeragesForm.Presenter;
-using SharePortfolioManager.Forms.BrokeragesForm.View;
 using SharePortfolioManager.Forms.SalesForm.Model;
 using SharePortfolioManager.Forms.SalesForm.Presenter;
 
@@ -162,7 +162,7 @@ namespace SharePortfolioManager
                     lblProfitLossUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                     lblDividendValue.Text = ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesAsStr;
                     lblDividendUnit.Text = ShareObjectFinalValue.CurrencyUnit;
-                    lblBrokerageValue.Text = ShareObjectFinalValue.AllBrokerageEntries.BrokerageValueTotalAsStr;
+                    lblBrokerageValue.Text = ShareObjectFinalValue.AllBrokerageEntries.BrokerageWithReductionValueTotalAsStr;
                     lblBrokerageUnit.Text = ShareObjectFinalValue.CurrencyUnit;
 
                     #endregion GroupBox EarningsExpenditure
@@ -237,7 +237,7 @@ namespace SharePortfolioManager
 
                 // Load button images
                 btnSave.Image = Resources.button_save_24;
-                btnCancel.Image = Resources.button_cancel_24;
+                btnCancel.Image = Resources.button_back_24;
 
                 #endregion Language configuration
             }

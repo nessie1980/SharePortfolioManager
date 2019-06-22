@@ -302,7 +302,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
 
                     // Get brokerage object
                     brokerage =
-                        _model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByGuid(strGuidBrokerage, strDateTime);
+                        _model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByGuidDate(strGuidBrokerage, strDateTime);
 
                 }
 
@@ -356,7 +356,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                 }
 
                 // Get brokerage object
-                var brokerage = _model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByGuid(guidBrokerage, strDateTime);
+                var brokerage = _model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByGuidDate(guidBrokerage, strDateTime);
 
                 if (bFlagBrokerageEdit)
                 {
@@ -426,7 +426,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
                 _model.ShareObjectMarketValue.RemoveSale(_model.SelectedGuid, _model.SelectedDate))
             {
                 // Check if a brokerage object exists
-                if (_model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByGuid(_model.SelectedGuid,
+                if (_model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByGuidDate(_model.SelectedGuid,
                         _model.SelectedDate) != null)
                 {
                     _model.ErrorCode =

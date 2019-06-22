@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace SharePortfolioManager.Forms.BrokeragesForm.View
+namespace SharePortfolioManager.BrokeragesForm.View
 {
     partial class ViewBrokerageEdit
     {
@@ -164,7 +164,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
             this.btnAddSave.Margin = new System.Windows.Forms.Padding(1);
             this.btnAddSave.Name = "btnAddSave";
             this.btnAddSave.Size = new System.Drawing.Size(178, 31);
-            this.btnAddSave.TabIndex = 10;
+            this.btnAddSave.TabIndex = 12;
             this.btnAddSave.Text = "_Add/Save";
             this.btnAddSave.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnAddSave.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -182,7 +182,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
             this.btnDelete.Margin = new System.Windows.Forms.Padding(1);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(178, 31);
-            this.btnDelete.TabIndex = 11;
+            this.btnDelete.TabIndex = 13;
             this.btnDelete.Text = "_Delete";
             this.btnDelete.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnDelete.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -199,7 +199,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
             this.btnCancel.Margin = new System.Windows.Forms.Padding(1);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(178, 31);
-            this.btnCancel.TabIndex = 13;
+            this.btnCancel.TabIndex = 15;
             this.btnCancel.Text = "_Cancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnCancel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -216,7 +216,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
             this.btnReset.Margin = new System.Windows.Forms.Padding(1);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(178, 31);
-            this.btnReset.TabIndex = 12;
+            this.btnReset.TabIndex = 14;
             this.btnReset.Text = "_Reset";
             this.btnReset.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnReset.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -281,7 +281,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
             this.txtBoxReduction.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxReduction.Name = "txtBoxReduction";
             this.txtBoxReduction.Size = new System.Drawing.Size(484, 22);
-            this.txtBoxReduction.TabIndex = 33;
+            this.txtBoxReduction.TabIndex = 8;
             this.txtBoxReduction.TextChanged += new System.EventHandler(this.OnTxtBoxReduction_TextChanged);
             this.txtBoxReduction.Enter += new System.EventHandler(this.OnTxtBoxReduction_Enter);
             this.txtBoxReduction.Leave += new System.EventHandler(this.OnTxtBoxReduction_Leave);
@@ -485,6 +485,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
             this.chkBoxBuyPart.Name = "chkBoxBuyPart";
             this.chkBoxBuyPart.Size = new System.Drawing.Size(237, 18);
             this.chkBoxBuyPart.TabIndex = 3;
+            this.chkBoxBuyPart.TabStop = false;
             this.chkBoxBuyPart.Text = "_BuyPart";
             this.chkBoxBuyPart.UseVisualStyleBackColor = true;
             // 
@@ -497,6 +498,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
             this.chkBoxSalePart.Name = "chkBoxSalePart";
             this.chkBoxSalePart.Size = new System.Drawing.Size(237, 18);
             this.chkBoxSalePart.TabIndex = 4;
+            this.chkBoxSalePart.TabStop = false;
             this.chkBoxSalePart.Text = "_SalePart";
             this.chkBoxSalePart.UseVisualStyleBackColor = true;
             // 
@@ -525,7 +527,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
             this.txtBoxDocument.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxDocument.Name = "txtBoxDocument";
             this.txtBoxDocument.Size = new System.Drawing.Size(484, 22);
-            this.txtBoxDocument.TabIndex = 9;
+            this.txtBoxDocument.TabIndex = 10;
             this.txtBoxDocument.TextChanged += new System.EventHandler(this.OnTxtBoxDocument_TextChanged);
             this.txtBoxDocument.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragDrop);
             this.txtBoxDocument.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragEnter);
@@ -542,7 +544,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
             this.btnDocumentBrowse.Margin = new System.Windows.Forms.Padding(1);
             this.btnDocumentBrowse.Name = "btnDocumentBrowse";
             this.btnDocumentBrowse.Size = new System.Drawing.Size(75, 22);
-            this.btnDocumentBrowse.TabIndex = 7;
+            this.btnDocumentBrowse.TabIndex = 11;
             this.btnDocumentBrowse.Text = "...";
             this.btnDocumentBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnDocumentBrowse.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -573,7 +575,8 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
             this.txtBoxBrokerage.Name = "txtBoxBrokerage";
             this.txtBoxBrokerage.ReadOnly = true;
             this.txtBoxBrokerage.Size = new System.Drawing.Size(484, 22);
-            this.txtBoxBrokerage.TabIndex = 8;
+            this.txtBoxBrokerage.TabIndex = 9;
+            this.txtBoxBrokerage.TabStop = false;
             this.txtBoxBrokerage.Text = "-";
             // 
             // lblBrokerage

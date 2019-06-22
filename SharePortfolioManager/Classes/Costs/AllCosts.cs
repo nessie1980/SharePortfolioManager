@@ -233,7 +233,7 @@ namespace SharePortfolioManager.Classes.Costs
         /// <param name="strGuid">Guid of the brokerage</param>
         /// <param name="strDateTime">Date and time of the buy</param>
         /// <returns>BrokerageObject or null if the search failed</returns>
-        public BrokerageReductionObject GetBrokerageObjectByGuid(string strGuid, string strDateTime)
+        public BrokerageReductionObject GetBrokerageObjectByGuidDate(string strGuid, string strDateTime)
         {
             GetYearOfDate(strDateTime, out var year);
 

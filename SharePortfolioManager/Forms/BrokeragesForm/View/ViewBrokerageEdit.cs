@@ -33,7 +33,7 @@ using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.ShareObjects;
 using SharePortfolioManager.Properties;
 
-namespace SharePortfolioManager.Forms.BrokeragesForm.View
+namespace SharePortfolioManager.BrokeragesForm.View
 {
     // Error codes of the BrokerageEdit
     public enum BrokerageErrorCode
@@ -92,7 +92,8 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
         string Provision { get; set; }
         string BrokerFee { get; set; }
         string TraderPlaceFee { get; set; }
-        string Brokerage { get; set; }
+        string Reduction { get; set; }
+        string Brokerage{ get; set; }
         string Document { get; set; }
 
         DialogResult ShowDialog();
@@ -216,34 +217,34 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
 
         public string Provision
         {
-            get => txtBoxBrokerage.Text;
+            get => txtBoxProvision.Text;
             set
             {
-                if (txtBoxBrokerage.Text == value)
+                if (txtBoxProvision.Text == value)
                     return;
-                txtBoxBrokerage.Text = value;
+                txtBoxProvision.Text = value;
             }
         }
 
         public string BrokerFee
         {
-            get => txtBoxBrokerage.Text;
+            get => txtBoxBrokerFee.Text;
             set
             {
-                if (txtBoxBrokerage.Text == value)
+                if (txtBoxBrokerFee.Text == value)
                     return;
-                txtBoxBrokerage.Text = value;
+                txtBoxBrokerFee.Text = value;
             }
         }
 
         public string TraderPlaceFee
         {
-            get => txtBoxBrokerage.Text;
+            get => txtBoxTraderPlaceFee.Text;
             set
             {
-                if (txtBoxBrokerage.Text == value)
+                if (txtBoxTraderPlaceFee.Text == value)
                     return;
-                txtBoxBrokerage.Text = value;
+                txtBoxTraderPlaceFee.Text = value;
             }
         }
 
@@ -746,6 +747,10 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
             datePickerDate.Enabled = true;
             datePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
             datePickerTime.Enabled = true;
+
+            // Reset check boxes
+            chkBoxBuyPart.CheckState = CheckState.Unchecked;
+            chkBoxSalePart.CheckState = CheckState.Unchecked;
 
             // Reset text boxes
             txtBoxProvision.Text = @"";
@@ -1252,7 +1257,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
                     Text = Language.GetLanguageTextByXPath(
                                @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/TabPgOverview/Overview", 
                                LanguageName)
-                           + @" (" + ShareObjectFinalValue.AllBrokerageEntries.BrokerageValueTotalWithUnitAsStr +
+                           + @" (" + ShareObjectFinalValue.AllBrokerageEntries.BrokerageWithReductionValueTotalWithUnitAsStr +
                            @")"
                 };
 
@@ -1351,7 +1356,7 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
                         // Set TabPage caption
                         Text = keyName + @" (" +
                                ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageReductionOfTheShareDictionary[keyName]
-                                   .BrokerageValueYearWithUnitAsStr
+                                   .BrokerageWithReductionValueYearWithUnitAsStr
                                + @")"
                     };
 
@@ -1778,7 +1783,11 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
                         datePickerTime.Value = Convert.ToDateTime(selectedBrokerageObject.Date);
                         chkBoxBuyPart.CheckState = PartOfABuy ? CheckState.Checked : CheckState.Unchecked;
                         chkBoxSalePart.CheckState = PartOfASale ? CheckState.Checked : CheckState.Unchecked;
-                        txtBoxBrokerage.Text = selectedBrokerageObject.BrokerageValueAsStr;
+                        txtBoxProvision.Text = selectedBrokerageObject.ProvisionValueAsStr;
+                        txtBoxBrokerFee.Text = selectedBrokerageObject.BrokerFeeValueAsStr;
+                        txtBoxTraderPlaceFee.Text = selectedBrokerageObject.TraderPlaceFeeValueAsStr;
+                        txtBoxReduction.Text = selectedBrokerageObject.ReductionValueAsStr;
+                        txtBoxBrokerage.Text = selectedBrokerageObject.BrokerageReductionValueAsStr;
                         txtBoxDocument.Text = selectedBrokerageObject.BrokerageDocument;
                     }
                     else
@@ -1787,8 +1796,12 @@ namespace SharePortfolioManager.Forms.BrokeragesForm.View
                         datePickerTime.Value = Convert.ToDateTime(SelectedDate);
                         chkBoxBuyPart.CheckState = CheckState.Unchecked;
                         chkBoxSalePart.CheckState = CheckState.Unchecked;
-                        txtBoxBrokerage.Text = curItem[0].Cells[1].Value.ToString();
-                        txtBoxDocument.Text = curItem[0].Cells[2].Value.ToString();
+                        txtBoxProvision.Text = string.Empty;
+                        txtBoxBrokerFee.Text = string.Empty;
+                        txtBoxTraderPlaceFee.Text = string.Empty;
+                        txtBoxReduction.Text = string.Empty;
+                        txtBoxBrokerage.Text = curItem[0].Cells[2].Value.ToString();
+                        txtBoxDocument.Text = string.Empty;
                     }
 
                     // Set brokerage values

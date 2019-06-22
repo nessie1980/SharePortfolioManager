@@ -811,10 +811,18 @@ namespace SharePortfolioManager.Classes.ShareObjects
                     return false;
 
                 // Set brokerage of the share
-                BrokerageValueTotal = AllBrokerageEntries.BrokerageValueTotal;
+                BrokerageValueTotal = AllBrokerageEntries.BrokerageWithReductionValueTotal /*.BrokerageValueTotal*/;
 
                 // Add new brokerage of the share to the brokerage of all shares
                 PortfolioBrokerage += BrokerageValueTotal;
+
+                // Recalculate purchase price
+                if (bBrokerageOfABuy == false && bBrokerageOfASale == false)
+                {
+                    if (PurchaseValue == decimal.MinValue / 2)
+                        PurchaseValue = 0;
+                    PurchaseValue += AllBrokerageEntries.GetBrokerageObjectByGuidDate(strGuid, strDateTime).BrokerageReductionValue;
+                }
 
                 // Recalculate the total sum of the share
                 CalculateFinalValue();
@@ -858,6 +866,15 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 Console.WriteLine(@"RemoveBrokerage() / FinalValue");
                 Console.WriteLine(@"strDateTime: {0}", strDateTime);
 #endif
+                // Get flag if brokerage is part of a buy
+                bool bPartOfABuy = AllBrokerageEntries.GetBrokerageObjectByGuidDate(strGuid, strDateTime).PartOfABuy;
+
+                // Get flag if brokerage is part of a buy
+                bool bPartOfASale = AllBrokerageEntries.GetBrokerageObjectByGuidDate(strGuid, strDateTime).PartOfASale;
+
+                // Get brokerage with reduction value
+                decimal decBrokerageReductionValue = AllBrokerageEntries.GetBrokerageObjectByGuidDate(strGuid, strDateTime).BrokerageReductionValue;
+
                 // Remove current brokerage the share to the brokerage of all shares
                 PortfolioBrokerage -= AllBrokerageEntries.BrokerageValueTotal;
 
@@ -870,6 +887,15 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
                 // Add new brokerage of the share to the brokerage of all shares
                 PortfolioBrokerage += AllBrokerageEntries.BrokerageValueTotal;
+
+
+                // Recalculate purchase price
+                if (bPartOfABuy == false && bPartOfASale == false)
+                {
+                    if (PurchaseValue == decimal.MinValue / 2)
+                        PurchaseValue = 0;
+                    PurchaseValue -= decBrokerageReductionValue;
+                }
 
                 // Recalculate the total sum of the share
                 CalculateFinalValue();
@@ -1368,7 +1394,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
             if (CurPrice > decimal.MinValue / 2
                 && Volume > decimal.MinValue / 2
-                && AllBrokerageEntries.BrokerageValueTotal > decimal.MinValue / 2
                 && AllDividendEntries.DividendValueTotalWithTaxes > decimal.MinValue / 2
                 && AllSaleEntries.SaleProfitLossTotal > decimal.MinValue / 2
                 )
@@ -1391,7 +1416,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
             Console.WriteLine(@"CalculateFinalValue() / FinalValue");
             Console.WriteLine(@"CurrentPrice: {0}", CurPrice);
             Console.WriteLine(@"Volume: {0}", Volume);
-            Console.WriteLine(@"BrokerageValueTotal: {0}", AllBrokerageEntries.BrokerageValueTotal);
             Console.WriteLine(@"DividendValueTotal: {0}", AllDividendEntries.DividendValueTotalWithTaxes);
             Console.WriteLine(@"SaleProfitLossTotal: {0}", AllSaleEntries.SaleProfitLossTotal);
             Console.WriteLine(@"FinalValue: {0}", FinalValue);

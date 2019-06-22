@@ -481,7 +481,7 @@ namespace SharePortfolioManager
                                                     ShareObject.BuyAttrCount)
                                                 {
                                                     // Get brokerage object
-                                                    var brokerage = ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].AllBrokerageEntries.GetBrokerageObjectByGuid(
+                                                    var brokerage = ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].AllBrokerageEntries.GetBrokerageObjectByGuidDate(
                                                         nodeList.Attributes[ShareObject.BuyBrokerageGuidAttrName].Value,
                                                         nodeList.Attributes[ShareObject.BuyDateAttrName].Value
                                                     );
@@ -605,7 +605,7 @@ namespace SharePortfolioManager
                                                             ShareObjectListFinalValue[
                                                                     ShareObjectListFinalValue.Count - 1]
                                                                 .AllBrokerageEntries
-                                                                .GetBrokerageObjectByGuid(
+                                                                .GetBrokerageObjectByGuidDate(
                                                                     nodeList.Attributes[
                                                                         ShareObject.SaleBrokerageGuidAttrName].Value,
                                                                     nodeList.Attributes[ShareObject.SaleDateAttrName]

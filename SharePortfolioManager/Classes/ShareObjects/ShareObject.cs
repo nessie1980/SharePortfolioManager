@@ -473,7 +473,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Flag if the share should be updated
         /// </summary>
         [Browsable(false)]
-        public bool Update { get; set; }
+        public bool Update { get; set; } = true;
 
         /// <summary>
         /// Flag if the share should be updated as string

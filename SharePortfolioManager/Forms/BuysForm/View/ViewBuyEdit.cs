@@ -20,24 +20,24 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using LanguageHandler;
-using Logging;
-using SharePortfolioManager.Classes;
-using SharePortfolioManager.Properties;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using SharePortfolioManager.Classes.ShareObjects;
-using System.Collections.Generic;
+using LanguageHandler;
+using Logging;
 using Parser;
-using System.Text;
+using SharePortfolioManager.Classes;
+using SharePortfolioManager.Classes.ShareObjects;
+using SharePortfolioManager.Properties;
 
-namespace SharePortfolioManager.Forms.BuysForm.View
+namespace SharePortfolioManager.BuysForm.View
 {
     // Error codes of the BuyEdit
     public enum BuyErrorCode
@@ -392,9 +392,7 @@ namespace SharePortfolioManager.Forms.BuysForm.View
             }
         }
 
-        public string Brokerage { get; set; }
-
-        public string BrokerageWithReduction
+        public string Brokerage
         {
             get => txtBoxBrokerage.Text;
             set
@@ -404,6 +402,8 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                 txtBoxBrokerage.Text = value;
             }
         }
+
+        public string BrokerageWithReduction { get; set; }
 
         public string BuyValue
         {
@@ -2397,11 +2397,11 @@ namespace SharePortfolioManager.Forms.BuysForm.View
                     {
                         dateTimePickerDate.Value = Convert.ToDateTime(SelectedDate);
                         dateTimePickerTime.Value = Convert.ToDateTime(SelectedDate);
-                        txtBoxVolume.Text = curItem[0].Cells[1].Value.ToString();
-                        txtBoxSharePrice.Text = curItem[0].Cells[2].Value.ToString();
+                        txtBoxVolume.Text = curItem[0].Cells[2].Value.ToString();
+                        txtBoxSharePrice.Text = curItem[0].Cells[3].Value.ToString();
                         txtBoxReduction.Text = string.Empty;
-                        txtBoxBuyValueBrokerageReduction.Text = curItem[0].Cells[3].Value.ToString();
-                        txtBoxDocument.Text = curItem[0].Cells[4].Value.ToString();
+                        txtBoxBuyValueBrokerageReduction.Text = curItem[0].Cells[4].Value.ToString();
+                        txtBoxDocument.Text = string.Empty;
                     }
 
                     if (ShareObjectFinalValue.AllBuyEntries.IsLastBuy(SelectedGuid) &&

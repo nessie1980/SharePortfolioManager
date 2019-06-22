@@ -23,13 +23,12 @@
 using System;
 using System.IO;
 using System.Windows.Forms;
+using SharePortfolioManager.BuysForm.Model;
+using SharePortfolioManager.BuysForm.View;
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.Costs;
-using SharePortfolioManager.Forms.BuysForm.Model;
-using SharePortfolioManager.Forms.BuysForm.View;
 
-// ReSharper disable once CheckNamespace
-namespace SharePortfolioManager.Forms.BuysForm.Presenter
+namespace SharePortfolioManager.BuysForm.Presenter
 {
     internal class PresenterBuyEdit  
     {
@@ -146,7 +145,7 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
 
                     // Get brokerage object
                     brokerage =
-                        _model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByGuid(strGuidBrokerage, strDateTime);
+                        _model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByGuidDate(strGuidBrokerage, strDateTime);
                 }
                 
                 // Add buy
@@ -200,7 +199,7 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
                 }
 
                 // Get brokerage object
-                var brokerage = _model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByGuid(guidBrokerage, strDateTime);
+                var brokerage = _model.ShareObjectFinalValue.AllBrokerageEntries.GetBrokerageObjectByGuidDate(guidBrokerage, strDateTime);
 
                 if (bFlagBrokerageEdit)
                 {
@@ -359,13 +358,13 @@ namespace SharePortfolioManager.Forms.BuysForm.Presenter
 
                 _model.ErrorCode = bFlagEdit ? BuyErrorCode.EditSuccessful : BuyErrorCode.AddSuccessful;
 
-                // Check if a order number for the buy is given
+                // Check if a order number for the buy is given and the order number does not exits already if a new buy should be added
                 if (_model.OrderNumber == @"")
                 {
                     _model.ErrorCode = BuyErrorCode.OrderNumberEmpty;
                     bErrorFlag = true;
                 }
-                else if (_model.ShareObjectFinalValue.AllBuyEntries.OrderNumberAlreadyExists(_model.OrderNumber))
+                else if (_model.ShareObjectFinalValue.AllBuyEntries.OrderNumberAlreadyExists(_model.OrderNumber) && bFlagEdit == false)
                 {
                     _model.ErrorCode = BuyErrorCode.OrderNumberExists;
                     bErrorFlag = true;

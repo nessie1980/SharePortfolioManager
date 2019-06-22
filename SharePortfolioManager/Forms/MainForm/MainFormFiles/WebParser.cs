@@ -511,6 +511,8 @@ namespace SharePortfolioManager
                             }
                         case ParserErrorCodes.Started:
                             {
+                                // Just wait some time before the update begins
+                                Thread.Sleep(250);
                                 lblShareNameWebParser.Text = ShareObjectFinalValue.Name;
                                 progressBarWebParser.Value = e.ParserInfoState.Percentage;
                                 // Add status message

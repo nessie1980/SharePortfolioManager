@@ -22,11 +22,11 @@
 
 using LanguageHandler;
 using Logging;
+using SharePortfolioManager.BuysForm.View;
 using SharePortfolioManager.Classes;
-using SharePortfolioManager.Forms.BuysForm.View;
 using SharePortfolioManager.Classes.ShareObjects;
 
-namespace SharePortfolioManager.Forms.BuysForm.Model
+namespace SharePortfolioManager.BuysForm.Model
 {
     /// <summary>
     /// Interface of the BuyEdit model
