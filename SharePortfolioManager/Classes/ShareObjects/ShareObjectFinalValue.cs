@@ -1559,11 +1559,39 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
                                 #endregion General
 
+                                #region Daily values
+
+                                case (int)FrmMain.PortfolioParts.DailyValues:
+                                    // Remove old daily values
+                                    while (nodeElement.ChildNodes[i].FirstChild != null)
+                                        nodeElement.ChildNodes[i].RemoveChild(nodeElement.ChildNodes[i].FirstChild);
+                                    nodeElement.ChildNodes[i].Attributes[DailyValuesWebSiteAttrName].InnerText = shareObject.DailyValuesWebSite;
+
+                                    foreach (var dailyValue in shareObject.DailyValues)
+                                    {
+                                        var newDailyValuesElement =
+                                            xmlPortfolio.CreateElement(DailyValuesTagNamePre);
+                                        newDailyValuesElement.SetAttribute(DailyValuesDateTagName,
+                                            dailyValue.Date.ToShortDateString());
+                                        newDailyValuesElement.SetAttribute(DailyValuesClosingPriceTagName,
+                                            dailyValue.ClosingPrice.ToString());
+                                        newDailyValuesElement.SetAttribute(DailyValuesOpeningPriceTagName,
+                                            dailyValue.OpeningPrice.ToString());
+                                        newDailyValuesElement.SetAttribute(DailyValuesTopTagName,
+                                            dailyValue.Top.ToString());
+                                        newDailyValuesElement.SetAttribute(DailyValuesBottomTagName,
+                                            dailyValue.Bottom.ToString());
+                                        newDailyValuesElement.SetAttribute(DailyValuesVolumeTagName,
+                                           dailyValue.Volume.ToString());
+                                        nodeElement.ChildNodes[i].AppendChild(newDailyValuesElement);
+                                    }
+                                    break;
+
+                                #endregion Daily values
+
                                 #region Brokerage
 
                                 case (int)FrmMain.PortfolioParts.Brokerages:
-                                    // Remove old brokerage
-                                    nodeElement.ChildNodes[i].RemoveAll();
                                     // Remove old brokerage
                                     nodeElement.ChildNodes[i].RemoveAll();
                                     foreach (var brokerageElementYear in shareObject.AllBrokerageEntries
@@ -1869,7 +1897,12 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
                         #endregion General
 
-                        #region Buys / Sales / Brokerage / Dividends
+                        #region DailyValues / Brokerage / Buys / Sales / Dividends
+
+                        // Add child nodes (daily values)
+                        var newDailyValues = xmlPortfolio.CreateElement(@"DailyValues");
+                        newDailyValues.SetAttribute(DailyValuesWebSiteAttrName, "");
+                        newShareNode.AppendChild(newDailyValues);
 
                         // Add child nodes (brokerage)
                         var newBrokerage = xmlPortfolio.CreateElement(@"Brokerage");
@@ -1917,7 +1950,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                             shareObject.DividendPayoutIntervalAsStr);
                         newShareNode.AppendChild(newDividend);
 
-                        #endregion Buys / Sales / Brokerage / Dividends
+                        #endregion DailyValues / Brokerage / Buys / Sales / Dividends
 
                         // Add share name to XML
                         rootPortfolio.AppendChild(newShareNode);

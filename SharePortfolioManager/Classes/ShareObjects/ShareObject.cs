@@ -57,7 +57,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <summary>
         /// Stores the count of the share object tags in the XML
         /// </summary>
-        internal const short ShareObjectTagCount = 12;
+        internal const short ShareObjectTagCount = 13;
 
         /// <summary>
         /// Stores a list of images for the previous day performance visualization
@@ -421,6 +421,55 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
         #endregion Dividends XML variables
 
+        #region DailyValues XML variables
+
+        /// <summary>
+        /// Stores the tag name prefix of a daliy values entry
+        /// </summary>
+        internal const string DailyValuesTagNamePre = "Entry";
+
+        /// <summary>
+        /// Stores the XML attribute name for the website for the daily values update
+        /// </summary>
+        internal const string DailyValuesWebSiteAttrName = "WebSite";
+
+        /// <summary>
+        /// Stores the XML attribute name for the date of the daily value
+        /// </summary>
+        public const string DailyValuesDateTagName = "D";
+
+        /// <summary>
+        /// Stores the XML attribute name for the closing price of the daily value
+        /// </summary>
+        public const string DailyValuesClosingPriceTagName = "C";
+
+        /// <summary>
+        /// Stores the XML attribute name for the top price of the daily value
+        /// </summary>
+        public const string DailyValuesOpeningPriceTagName = "O";
+
+        /// <summary>
+        /// Stores the XML attribute name for the opening price of the daily value
+        /// </summary>
+        public const string DailyValuesTopTagName = "T";
+
+        /// <summary>
+        /// Stores the XML attribute name for the bottom price of the daily value
+        /// </summary>
+        public const string DailyValuesBottomTagName = "B";
+
+        /// <summary>
+        /// Stores the XML attribute name for the voluem price of the daily value
+        /// </summary>
+        public const string DailyValuesVolumeTagName = "V";
+
+        /// <summary>
+        /// Stores the attribute count for the daily values
+        /// </summary>
+        public const short DailyValuesAttrCount = 6; // Date / ClosingPrice / OpeningPrice / Top / Bottom / Volume
+
+        #endregion DailyValues XML variables
+
         #endregion Variables
 
         #region Properties
@@ -571,6 +620,22 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         [Browsable(false)]
         public int ShareType { get; set; }
+
+        #region Daily values
+
+        /// <summary>
+        /// Daily values website of the share for the update
+        /// </summary>
+        [Browsable(false)]
+        public string DailyValuesWebSite { get; set; }
+
+        /// <summary>
+        /// Daily values of the share ( Date / ClosingPrice / OpeningPrice / Top / Bottom / Volume )
+        /// </summary>
+        [Browsable(false)]
+        public List<DailyValues> DailyValues { get; } = new List<DailyValues>();
+
+        #endregion Daily values
 
         #endregion General properties
 

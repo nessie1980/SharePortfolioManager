@@ -1307,7 +1307,12 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
                         #endregion General
 
-                        #region Buys / Sales / Brokerage / Dividends
+                        #region DailyValues / Brokerage / Buys / Sales / Dividends
+
+                        // Add child nodes (daily values)
+                        var newDailyValues = xmlPortfolio.CreateElement(@"DailyValues");
+                        newDailyValues.SetAttribute(DailyValuesWebSiteAttrName, "");
+                        newShareNode.AppendChild(newDailyValues);
 
                         // Add child nodes (brokerage)
                         var newBrokerage = xmlPortfolio.CreateElement(@"Brokerage");
@@ -1353,7 +1358,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                             shareObject.DividendPayoutIntervalAsStr);
                         newShareNode.AppendChild(newDividend);
 
-                        #endregion Buys / Sales / Brokerage / Dividends
+                        #endregion DailyValues / Brokerage / Buys / Sales / Dividends
 
                         // Add share name to XML
                         rootPortfolio.AppendChild(newShareNode);

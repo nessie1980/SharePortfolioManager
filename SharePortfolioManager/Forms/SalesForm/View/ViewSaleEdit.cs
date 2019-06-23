@@ -1154,9 +1154,6 @@ namespace SharePortfolioManager.Forms.SalesForm.View
                 lblAddSaleDate.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Labels/Date",
                     LanguageName);
-                lblAddSaleTime.Text =
-                    Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Labels/Time",
-                        LanguageName);
                 lblSalesOrderNumber.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Labels/OrderNumber",
                         LanguageName);

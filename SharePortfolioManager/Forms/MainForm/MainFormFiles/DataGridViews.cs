@@ -29,6 +29,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using SharePortfolioManager.Classes.ShareObjects;
+using SharePortfolioManager.Forms.ShareDetailsForm;
 
 namespace SharePortfolioManager
 {
@@ -319,11 +320,6 @@ namespace SharePortfolioManager
 
                 if (ShareObjectMarketValue == null || ShareObjectFinalValue == null) return;
 
-                UpdateShareDetails(MarketValueOverviewTabSelected);
-                UpdateProfitLossDetails(MarketValueOverviewTabSelected);
-                UpdateDividendDetails(MarketValueOverviewTabSelected);
-                UpdateBrokerageDetails(MarketValueOverviewTabSelected);
-
                 // Check if the "Update" button should be disabled or enabled
                 if (!UpdateAllFlag)
                     btnRefresh.Enabled = ShareObjectMarketValue.Update && ShareObjectMarketValue.WebSiteConfigurationValid;
@@ -385,11 +381,6 @@ namespace SharePortfolioManager
                 }
 
                 if (ShareObjectFinalValue == null || ShareObjectListMarketValue == null) return;
-
-                UpdateShareDetails(MarketValueOverviewTabSelected);
-                UpdateProfitLossDetails(MarketValueOverviewTabSelected);
-                UpdateDividendDetails(MarketValueOverviewTabSelected);
-                UpdateBrokerageDetails(MarketValueOverviewTabSelected);
 
                 // Check if the "Update" button should be disabled or enabled
                 if (!UpdateAllFlag)
@@ -1844,113 +1835,111 @@ namespace SharePortfolioManager
 
         #endregion Data grid view enter
 
-        #region Data grid view cell double click
+        #region Data grid view cell click
 
-        /// <summary>
-        /// This function opens the website of the clicked share
-        /// </summary>
-        /// <param name="sender">DataGridView</param>
-        /// <param name="e">DataGridViewCallEventArgs</param>
-        private void DgvPortfolioFinalValue_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void DgvPortfolioFinalValue_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
-                foreach(var shareObject in ShareObjectListFinalValue)
-                {
-                    if (shareObject.Wkn != dgvPortfolioFinalValue.Rows[e.RowIndex].Cells[0].Value.ToString()) continue;
+                if (e.RowIndex < 0 || e.RowIndex >= ShareObjectListFinalValue.Count) return;
 
-                    System.Diagnostics.Process.Start(shareObject.WebSite);
-                    break;
-                }
-            }
-            catch(System.ComponentModel.Win32Exception noBrowser)
-            {
-                if (noBrowser.ErrorCode == -2147467259)
+                var form = new ShareDetailsForm(MarketValueOverviewTabSelected,
+                    ShareObjectFinalValue, ShareObjectMarketValue,
+                    rchTxtBoxStateMessage, Logger,
+                    Language, LanguageName);
+                var dialogResult = form.ShowDialog();
+
+                if (dialogResult != DialogResult.OK) return;
+
+                // Save the share values only of the final value object to the XML (The market value object contains the same values)
+                if (ShareObjectFinalValue.SaveShareObject(ShareObjectFinalValue, ref _portfolio, ref _readerPortfolio,
+                    ref _readerSettingsPortfolio, _portfolioFileName, out var exception))
                 {
-#if DEBUG
-                    var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + noBrowser.Message;
-                    MessageBox.Show(message, @"Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-#endif
                     // Add status message
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        Language.GetLanguageTextByXPath(
-                            @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio_Error/NoBrowserInstalled", LanguageName),
+                        Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/EditSaveSuccessful", LanguageName),
                         Language, LanguageName,
-                        Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                        Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Application);
                 }
+                else
+                {
+                    // Add status message
+                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                        Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
+                        Language, LanguageName,
+                        Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Application);
+                }
+
+                if (exception != null)
+                    throw exception;
             }
             catch (Exception ex)
             {
 #if DEBUG
                 var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error",
-                    MessageBoxButtons.OK,
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(
-                        @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio_Error/CellDoubleClickFailed", LanguageName),
+                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
             }
         }
 
-        /// <summary>
-        /// This function opens the website of the clicked share
-        /// </summary>
-        /// <param name="sender">DataGridView</param>
-        /// <param name="e">DataGridViewCallEventArgs</param>
-        private void DgvPortfolioMarketValue_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void DgvPortfolioMarketValue_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
-                foreach (var shareObject in ShareObjectListMarketValue)
-                {
-                    if (shareObject.Wkn != dgvPortfolioMarketValue.Rows[e.RowIndex].Cells[0].Value.ToString()) continue;
+                if (e.RowIndex < 0 || e.RowIndex >= ShareObjectListMarketValue.Count) return;
 
-                    System.Diagnostics.Process.Start(shareObject.WebSite);
-                    break;
-                }
-            }
-            catch (System.ComponentModel.Win32Exception noBrowser)
-            {
-                if (noBrowser.ErrorCode == -2147467259)
+                var form = new ShareDetailsForm(MarketValueOverviewTabSelected,
+                    ShareObjectFinalValue, ShareObjectMarketValue,
+                    rchTxtBoxStateMessage, Logger,
+                    Language, LanguageName);
+
+                var dialogResult = form.ShowDialog();
+                if (dialogResult != DialogResult.OK) return;
+
+                // Save the share values only of the final value object to the XML (The market value object contains the same values)
+                if (ShareObjectFinalValue.SaveShareObject(ShareObjectFinalValue, ref _portfolio, ref _readerPortfolio,
+                    ref _readerSettingsPortfolio, _portfolioFileName, out var exception))
                 {
-#if DEBUG
-                    var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + noBrowser.Message;
-                    MessageBox.Show(message, @"Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-#endif
                     // Add status message
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        Language.GetLanguageTextByXPath(
-                            @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio_Error/NoBrowserInstalled", LanguageName),
+                        Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/EditSaveSuccessful", LanguageName),
                         Language, LanguageName,
-                        Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                        Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Application);
                 }
+                else
+                {
+                    // Add status message
+                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                        Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
+                        Language, LanguageName,
+                        Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Application);
+                }
+
+                if (exception != null)
+                    throw exception;
             }
             catch (Exception ex)
             {
 #if DEBUG
                 var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error",
-                    MessageBoxButtons.OK,
+                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(
-                        @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio_Error/CellDoubleClickFailed", LanguageName),
+                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Application);
             }
         }
 
-        #endregion Data grid view cell double click
+#endregion Data grid view cell click
 
         #endregion Methods
     }

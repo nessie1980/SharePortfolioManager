@@ -24,6 +24,7 @@ using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.ShareObjects;
+using SharePortfolioManager.Forms.ShareDetailsForm;
 using SharePortfolioManager.Properties;
 using System;
 using System.Collections.Generic;
@@ -54,26 +55,31 @@ namespace SharePortfolioManager
         /// </summary>
         private ContextMenuStrip _notifyContextMenuStrip;
 
+        // TODO remove
         /// <summary>
         /// Stores the name of the final value tab control
         /// </summary>
         private readonly string _tabPageDetailsFinalValue = "tabPgDetailsFinalValue";
 
+        // TODO remove
         /// <summary>
         /// Stores the name of the market value tab control
         /// </summary>
         private readonly string _tabPageDetailsMarketValue = "tabPgDetailsMarketValue";
 
+        // TODO remove
         /// <summary>
         /// Stores the name of the dividends tab control
         /// </summary>
         private readonly string _tabPageDetailsDividendValue = "tabPgDividends";
 
+        // TODO remove
         /// <summary>
         /// Stores the name of the brokerage tab control
         /// </summary>
         private readonly string _tabPageDetailsBrokerageValue = "tabPgBrokerage";
 
+        // TODO remove
         /// <summary>
         /// Stores the name of the profit / loss value tab control
         /// </summary>
@@ -321,6 +327,7 @@ namespace SharePortfolioManager
 
         public List<string> EnableDisableControlNames { get; } = new List<string>();
 
+        // TODO Remove
         private TabPage _tempFinalValues;
         private TabPage _tempMarketValues;
         private TabPage _tempProfitLoss;
@@ -560,22 +567,6 @@ namespace SharePortfolioManager
                 }
 
                 #endregion Read shares from XML / Load portfolio
-
-                #region Set tab controls names
-
-                _tabPageDetailsFinalValue = tabCtrlDetails.TabPages[0].Name;
-                _tabPageDetailsMarketValue = tabCtrlDetails.TabPages[1].Name;
-                _tabPageDetailsProfitLossValue = tabCtrlDetails.TabPages[2].Name;
-                _tabPageDetailsDividendValue = tabCtrlDetails.TabPages[3].Name;
-                _tabPageDetailsBrokerageValue = tabCtrlDetails.TabPages[4].Name;
-
-                _tempFinalValues = tabCtrlDetails.TabPages[_tabPageDetailsFinalValue];
-                _tempMarketValues = tabCtrlDetails.TabPages[_tabPageDetailsMarketValue];
-                _tempDividends = tabCtrlDetails.TabPages[_tabPageDetailsDividendValue];
-                _tempBrokerage = tabCtrlDetails.TabPages[_tabPageDetailsBrokerageValue];
-                _tempProfitLoss = tabCtrlDetails.TabPages[_tabPageDetailsProfitLossValue];
-
-                #endregion Set tab controls names
 
                 #region Select first item
 

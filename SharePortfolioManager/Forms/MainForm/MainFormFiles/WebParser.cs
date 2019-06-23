@@ -498,6 +498,8 @@ namespace SharePortfolioManager
                                     Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/ContentLoaded", LanguageName) + " ( " + e.ParserInfoState.Percentage.ToString() + " % )",
                                     Language, LanguageName,
                                    Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Parser);
+
+                                System.Console.WriteLine(@"Content: {0}", e.ParserInfoState.WebSiteContentAsString);
                                 break;
                             }
                         case ParserErrorCodes.ContentLoadStarted:

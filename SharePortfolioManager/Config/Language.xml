@@ -118,8 +118,6 @@
 							<DisplayFailed text="Show of the shares failed!"/>
 							<CellFormattingFailed text="Formatting the cells failed!"/>
 							<CellPaintingBorderFailed text="Formatting the border failed!"/>
-							<CellDoubleClickFailed text="Cell double click failed!" />
-							<NoBrowserInstalled text="No installed browser found!" />
 						</DgvPortfolio_Error>
 						
 						<!-- DataGridView portfolio footer -->
@@ -174,6 +172,86 @@
 				</Buttons>				
 			</GrpBoxPortfolio>
 			
+			<!-- Groupbox update state -->		
+			<GrpBoxUpdateState>
+				<Caption text="Update status" />
+			</GrpBoxUpdateState>
+
+			<!-- Groupbox state messages -->		
+			<GrpBoxStatusMessage>
+				<Caption text="State messages" />
+			</GrpBoxStatusMessage>
+			
+			<!-- Update messages -->
+			<UpdateMessages>
+				<Start_1 text="Update of the share '"/>
+				<Start_2 text="' started." />
+				<ContentLoadStarted text="Website content will be loaded." />
+				<ContentLoaded text="Website content loaded." />
+				<SearchStarted text="Search process has been started." />
+				<SearchRunning text="Search process running." />
+				<SearchFinish text="Search process finished." />
+				<Finish_1 text="Update of the share '" />
+				<Finish_2 text="' successfully finished." />
+			</UpdateMessages>
+
+			<!-- Update errors -->
+			<UpdateErrors>
+				<StartFailed text="Start of the Parser failed." />
+				<BusyFailed text="Parser is already busy." />
+				<InvalidWebSiteGiven text="The website address is invalid." />
+				<NoRegexListGiven text="No regular expression list given." />
+				<ContentLoadedFailed text="Load of the website content failed." />
+				<ParsingFailed_1 text="Parsing of the key '" />
+				<ParsingFailed_2 text="' failed." />
+				<CancelThread_1 text="Update of the share '" />
+				<CancelThread_2 text="' has been cancelled." />
+				<UpdateFailed text="Update failed!" />
+				<Failure text="Update has been failed. Error: " />
+			</UpdateErrors>
+			
+			<!-- Status messages -->
+			<StatusMessages>
+				<SelectAShare text="Please select a share." />
+				<AddSaveSuccessful text="Share add was successful." />
+				<EditSaveSuccessful text="Change was successful." />
+				<DeleteSuccessful text="Share delete was successful." />
+				<ChangeLanguageSuccessful text="Language has been changed." />
+				<ChangingPortfolioSuccessful text="Portfolio has been changed." />
+			</StatusMessages>
+			
+			<!-- Error messages -->
+			<Errors>
+				<FileDoesNotExists_1 text="File '" />
+				<FileDoesNotExists_2 text="' does not exists any more! Create a new portfolio." />
+				<CouldNotLoadFile_1 text="Could not load file '" />
+				<CouldNotLoadFile_2 text="'!" />
+				<XMLSyntaxFailure_1 text="A XML syntax error exists in the file '" />
+				<XMLSyntaxFailure_2 text="'!" />
+				<ChangingPortfolioFailed text="Changing the portfolio failed!" />
+				<CouldNotLoadAllLanguageKeys text="Could not load all language keys!" />
+				<WebSiteRegexNotFound1_1 text="No parse configuration for the share with the WKN " />
+				<WebSiteRegexNotFound1_2 text=" available!" />
+				<WebSiteRegexNotFound2_1 text="No parse configuration for the shares with the WKN " />
+				<WebSiteRegexNotFound2_2 text=" available!" />
+				<PortfolioNotSet text="No portfolio set. Create a new portfolio or open an existing one." />
+				<PortfolioConfigurationListEmpty text="Portfolio is empty!" />
+				<PortfolioConfigurationListLoadFailed text="Configuration incomplete!"/>
+				<AddShowFailed text="An error occurred while show!" />
+				<AddSaveFailed text="Add of the share failed!" />
+				<AddSaveErrorFailed text="An error occurred after the add share save!" />
+				<EditSaveFailed text="Change of the share failed!" />
+				<EditSaveErrorFailed text="An error occurred after the edit share save!" />
+				<DeleteFailed text="Delete of the share failed!" />
+				<DeleteErrorFailed text="An error occurred after the share delete!" />
+				<SaveSettingsFailed text="Settings save failed!" />
+				<SelectionChangeFailed text="The selection change failed!" />
+				<ChangeLanguageFailed text="Changing the language failed!" />
+			</Errors>
+		</MainForm>	
+		
+		<!-- ShareDetailsForm -->
+		<ShareDetailsForm>
 			<!-- GroupBox details -->
 			<GrpBoxDetails>
 				<Caption text="Share details" /> <!-- only a place holder -->
@@ -182,7 +260,47 @@
 				<ShareUpdateNotDone text="-" />
 
 				<!-- TabControl with the details -->
-				<TabCtrlDetails>		
+				<TabCtrlDetails>
+					<!-- TabPage with chart -->
+					<TabPgChart>
+						<Caption text="Share- Chart" />
+						<ClosingPrice text="Closing price" />
+						<OpeningPrice text="Opening price" />
+						<Top text="Top" />
+						<Bottom text="Bottom" />
+						<Volume text="Volume" />
+						<Selection text="Selection:" />
+						<StartDate text="Start date:" />
+						<Interval text="Interval:" />
+						<Amount text="Amount:" />
+						<!-- Update message box -->
+						<UpdateMsgBox>
+							<Caption text="Info"/>
+							<Message text="The daily values are not update to date! Should the daily values be updated now?"/>
+							<FirstUpdate text="The first update can take a long time!"/>
+							<Yes text="Yes"/>
+							<No text="No"/>
+						</UpdateMsgBox>
+					</TabPgChart>
+					
+					<!-- Status messages -->
+					<TabPgChartStateMessages>
+						<UpdateStarted text="Market values download started. Please wait..." />
+						<DownloadRunning text="Market values download running. Please wait..." />
+						<DownloadDone text="Market values download finished." />
+						<ParsingStarted text="Market values parsing started. Please wait... " />
+						<ParsingProcess text="Market values parsing running. Please wait... " />
+						<ParsingFinished text="Market values update finished." />
+					</TabPgChartStateMessages>
+
+					<!-- Error messages -->
+					<TabPgChartErrors>
+						<UpdateFailed text="Market values update failed!" />
+						<ParsingFailed text="Market values parsing failed!" />
+						<OpenWebSiteFailed text="Open website failed!" />
+						<NoBrowserInstalled text="No installed browser found!" />
+					</TabPgChartErrors>
+
 					<!-- TabPage with dividend and brokerage -->
 					<TabPgWithDividendBrokerage>
 						<Caption text="With dividend / brokerage" />
@@ -286,84 +404,19 @@
 					</TabPgProfitLoss_Error>
 				</TabCtrlDetails>
 			</GrpBoxDetails>
-
-			<!-- Groupbox update state -->		
-			<GrpBoxUpdateState>
-				<Caption text="Update status" />
-			</GrpBoxUpdateState>
-
-			<!-- Groupbox state messages -->		
-			<GrpBoxStatusMessage>
-				<Caption text="State messages" />
-			</GrpBoxStatusMessage>
 			
-			<!-- Update messages -->
-			<UpdateMessages>
-				<Start_1 text="Update of the share '"/>
-				<Start_2 text="' started." />
-				<ContentLoadStarted text="Website content will be loaded." />
-				<ContentLoaded text="Website content loaded." />
-				<SearchStarted text="Search process has been started." />
-				<SearchRunning text="Search process running." />
-				<SearchFinish text="Search process finished." />
-				<Finish_1 text="Update of the share '" />
-				<Finish_2 text="' successfully finished." />
-			</UpdateMessages>
+			<!-- Buttons -->
+			<Buttons>
+				<OpenWebSite text="Open website"/>
+				<Ok text="Close" />
+				<Update text="Update" />
+			</Buttons>
 
-			<!-- Update errors -->
-			<UpdateErrors>
-				<StartFailed text="Start of the Parser failed." />
-				<BusyFailed text="Parser is already busy." />
-				<InvalidWebSiteGiven text="The website address is invalid." />
-				<NoRegexListGiven text="No regular expression list given." />
-				<ContentLoadedFailed text="Load of the website content failed." />
-				<ParsingFailed_1 text="Parsing of the key '" />
-				<ParsingFailed_2 text="' failed." />
-				<CancelThread_1 text="Update of the share '" />
-				<CancelThread_2 text="' has been cancelled." />
-				<UpdateFailed text="Update failed!" />
-				<Failure text="Update has been failed. Error: " />
-			</UpdateErrors>
-			
-			<!-- Status messages -->
-			<StatusMessages>
-				<SelectAShare text="Please select a share." />
-				<AddSaveSuccessful text="Share add was successful." />
-				<EditSaveSuccessful text="Change was successful." />
-				<DeleteSuccessful text="Share delete was successful." />
-				<ChangeLanguageSuccessful text="Language has been changed." />
-				<ChangingPortfolioSuccessful text="Portfolio has been changed." />
-			</StatusMessages>
-			
-			<!-- Error messages -->
+			<!-- Errors -->
 			<Errors>
-				<FileDoesNotExists_1 text="File '" />
-				<FileDoesNotExists_2 text="' does not exists any more! Create a new portfolio." />
-				<CouldNotLoadFile_1 text="Could not load file '" />
-				<CouldNotLoadFile_2 text="'!" />
-				<XMLSyntaxFailure_1 text="A XML syntax error exists in the file '" />
-				<XMLSyntaxFailure_2 text="'!" />
-				<ChangingPortfolioFailed text="Changing the portfolio failed!" />
-				<CouldNotLoadAllLanguageKeys text="Could not load all language keys!" />
-				<WebSiteRegexNotFound1_1 text="No parse configuration for the share with the WKN " />
-				<WebSiteRegexNotFound1_2 text=" available!" />
-				<WebSiteRegexNotFound2_1 text="No parse configuration for the shares with the WKN " />
-				<WebSiteRegexNotFound2_2 text=" available!" />
-				<PortfolioNotSet text="No portfolio set. Create a new portfolio or open an existing one." />
-				<PortfolioConfigurationListEmpty text="Portfolio is empty!" />
-				<PortfolioConfigurationListLoadFailed text="Configuration incomplete!"/>
-				<AddShowFailed text="An error occurred while show!" />
-				<AddSaveFailed text="Add of the share failed!" />
-				<AddSaveErrorFailed text="An error occurred after the add share save!" />
-				<EditSaveFailed text="Change of the share failed!" />
-				<EditSaveErrorFailed text="An error occurred after the edit share save!" />
-				<DeleteFailed text="Delete of the share failed!" />
-				<DeleteErrorFailed text="An error occurred after the share delete!" />
-				<SaveSettingsFailed text="Settings save failed!" />
 				<SelectionChangeFailed text="The selection change failed!" />
-				<ChangeLanguageFailed text="Changing the language failed!" />
 			</Errors>
-		</MainForm>	
+		</ShareDetailsForm>
 
 		<!-- Add window -->
 		<AddFormShare>
@@ -663,7 +716,6 @@
 				<!-- Labels -->
 				<Labels>
 					<Date text="Date:" />
-					<Time text="Time:" />
 <!--					<ForeignCurrencyActivation text="Activate foreign currency input:" /> -->
 <!--					<ForeignCurrencyFactor text="Calculation factor:" /> -->
 					<OrderNumber text="Order number:" />
@@ -1277,8 +1329,6 @@
 							<DisplayFailed text="Anzeigen der Aktien ist fehlgeschlagen!"/>
 							<CellFormattingFailed text="Formatieren der Zellen ist fehlgeschlagen!"/>
 							<CellPaintingBorderFailed text="Formatieren der Umrandung ist fehlgeschlagen!"/>
-							<CellDoubleClickFailed text="Zellen Double- Click fehlgeschlagen!" />
-							<NoBrowserInstalled text="Kein installierter Browser gefunden!" />
 						</DgvPortfolio_Error>
 						
 						<!-- DataGridView portfolio footer -->
@@ -1333,6 +1383,86 @@
 				</Buttons>				
 			</GrpBoxPortfolio>
 			
+			<!-- Groupbox update state -->		
+			<GrpBoxUpdateState>
+				<Caption text="Aktualisierungs- Status" />
+			</GrpBoxUpdateState>
+	
+			<!-- Groupbox state messages -->		
+			<GrpBoxStatusMessage>
+				<Caption text="Status- Meldungen" />
+			</GrpBoxStatusMessage>
+	
+			<!-- Update messages -->
+			<UpdateMessages>
+				<Start_1 text="Aktualisierung der Aktie '" />
+				<Start_2 text="' gestartet." />
+				<ContentLoadStarted text="Webseiten- Inhalt wird geladen." />
+				<ContentLoaded text="Webseiten- Inhalt geladen." />
+				<SearchStarted text="Such- Vorgang wurde gestartet." />
+				<SearchRunning text="Such- Vorgang läuft." />
+				<SearchFinish text="Such- Vorgang beendet." />
+				<Finish_1 text="Aktualisierung der Aktie '" />
+				<Finish_2 text="' wurde erfolgreich beendet." />
+			</UpdateMessages>
+
+			<!-- Update errors -->
+			<UpdateErrors>
+				<StartFailed text="Starten des Parser ist fehlgeschlagen." />
+				<BusyFailed text="Parser ist bereits in Verwendung." />
+				<InvalidWebSiteGiven text="Die Websiten- Adresse ist ungültig." />
+				<NoRegexListGiven text="Es wurde kein regulärer Ausdruck übergeben." />
+				<ContentLoadedFailed text="Laden des Webseiten- Inhalts ist fehlgeschlagen." />
+				<ParsingFailed_1 text="Parsen des Schlüssels '" />F
+				<ParsingFailed_2 text="' ist fehlgeschlagen." />
+				<CancelThread_1 text="Aktualisierung der Aktie '" />
+				<CancelThread_2 text="' wurde abgebrochen." />
+				<UpdateFailed text="Aktualisieren ist fehlgeschlagen!" />
+				<Failure text="Aktualisierung ist fehlgeschalgen. Fehler: " />
+			</UpdateErrors>
+			
+			<!-- Status messages -->
+			<StatusMessages>
+				<SelectAShare text="Bitte eine Aktie auswählen." />
+				<AddSaveSuccessful text="Aktie wurde erfoglreich hinzugefügt." />
+				<EditSaveSuccessful text="Änderung war erfolgreich." />
+				<DeleteSuccessful text="Aktie wurde erfolgreich entfernt." />
+				<ChangeLanguageSuccessful text="Sprache wurde geändert." />
+				<ChangingPortfolioSuccessful text="Wechsel des Portfolios erfolgreich." />
+			</StatusMessages>
+			
+			<!-- Error messages -->
+			<Errors>
+				<FileDoesNotExists_1 text="Datei '" />
+				<FileDoesNotExists_2 text="' existiert nicht mehr! Legen Sie ein neues Portfolio an." />
+				<CouldNotLoadFile_1 text="Datei '" />
+				<CouldNotLoadFile_2 text="' konnte nicht geladen werden!" />
+				<XMLSyntaxFailure_1 text="Es ist ein XML- Syntax- Fehler in der Datei '" />
+				<XMLSyntaxFailure_2 text="' vorhanden!" />
+				<ChangingPortfolioFailed text="Wechseln des Portfolios ist fehlgeschlagen!" />
+				<CouldNotLoadAllLanguageKeys text="Es konnten nicht alle Sprach- Elemente geladen werden!" />
+				<WebSiteRegexNotFound1_1 text="Keine Parser- Konfiguration für die Aktie mit der WKN " />
+				<WebSiteRegexNotFound1_2 text=" verfügbar!" />
+				<WebSiteRegexNotFound2_1 text="Kein Parser-Konfiguration für die Aktien mit den WKN " />
+				<WebSiteRegexNotFound2_2 text=" verfügbar!" />
+				<PortfolioNotSet text="Kein Portfolio ausgewählt. Erstellen Sie ein Neues oder laden Sie ein Bestehendes." />
+				<PortfolioConfigurationListEmpty text="Portfolio ist leer!" />
+				<PortfolioConfigurationListLoadFailed text="Konfiguration unvollständig!"/>
+				<AddShowFailed text="Es trat ein Fehler bei der Anzeige auf!" />
+				<AddSaveFailed text="Hinzufügen der Aktie ist fehlgeschlagen!" />
+				<AddSaveErrorFailed text="Es trat ein Fehler nach dem Speichern der Aktie auf!" />
+				<EditSaveFailed text="Ändern der Aktie ist fehlgeschlagen!" />
+				<EditSaveErrorFailed text="Es trat ein Fehler nach dem Editieren der Aktie auf!" />
+				<DeleteFailed text="Entfernen der Aktie ist fehlgeschlagen!" />
+				<DeleteErrorFailed text="Es trat ein Fehler nach dem Entfernen der Aktie auf!" />
+				<SaveSettingsFailed text="Speichern der Einstellungen fehlgeschalgen!" />
+				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
+				<ChangeLanguageFailed text="Ändern der Sprache fehlgeschlagen!" />
+			</Errors>
+		</MainForm>	
+
+		<!-- ShareDetailsForm -->
+		<ShareDetailsForm>
 			<!-- GroupBox details -->
 			<GrpBoxDetails>
 				<Caption text="Aktien- Details" /> <!-- only a place holder -->
@@ -1341,7 +1471,48 @@
 				<ShareUpdateNotDone text="-" />
 
 				<!-- TabControl with the details -->
-				<TabCtrlDetails>		
+				<TabCtrlDetails>
+
+					<!-- TabPage with chart -->
+					<TabPgChart>
+						<Caption text="Aktien- Chart" />
+						<ClosingPrice text="Schluss- Kurs" />
+						<OpeningPrice text="Eröffungs- Kurs" />
+						<Top text="Höchstwert" />
+						<Bottom text="Tiefstwert" />
+						<Volume text="Volume" />
+						<Selection text="Selektion:" />
+						<StartDate text="Start- Datum:" />
+						<Interval text="Interval:" />
+						<Amount text="Anzahl:" />
+						<!-- Update message box -->
+						<UpdateMsgBox>
+							<Caption text="Info"/>
+							<Message text="Die Tages- Werte sind nicht aktuell! Sollen die Tages- Wert jetzt aktualisiert werden?"/>
+							<FirstUpdate text="Das erste Aktualisieren kann viel Zeit in Anspruch nehmen!"/>
+							<Yes text="Ja"/>
+							<No text="Nein"/>
+						</UpdateMsgBox>
+					</TabPgChart>
+					
+					<!-- Status messages -->
+					<TabPgChartStateMessages>
+						<UpdateStarted text="Kurswerte- Download gestartet. Bitte warten..." />
+						<DownloadRunning text="Kurswerte- Download läuft. Bitte warten..." />
+						<DownloadDone text="Kurswerte- Download abgeschlossen." />
+						<ParsingStarted text="Kurswerte parsen gestartet. Bitte warten... " />
+						<ParsingProcess text="Kurswerte parsen läuft. Bitte warten... " />
+						<ParsingFinished text="Kurswerte- Aktualisierung abgeschlossen." />
+					</TabPgChartStateMessages>
+					
+					<!-- Error messages -->
+					<TabPgChartErrors>
+						<UpdateFailed text="Kurswerte- Aktualisierung fehlgeschalgen!" />
+						<ParsingFailed text="Kurswerte parsen fehlgeschalgen!" />
+						<OpenWebSiteFailed text="Öffnen der WebSite ist fehlgeschlagen!" />
+						<NoBrowserInstalled text="Kein installierter Browser gefunden!" />
+					</TabPgChartErrors>
+
 					<!-- TabPage with dividend and brokerage -->
 					<TabPgWithDividendBrokerage>
 						<Caption text="Mit Dividenden / Kosten" />
@@ -1445,85 +1616,21 @@
 					</TabPgProfitLoss_Error>
 				</TabCtrlDetails>
 			</GrpBoxDetails>
-
-			<!-- Groupbox update state -->		
-			<GrpBoxUpdateState>
-				<Caption text="Aktualisierungs- Status" />
-			</GrpBoxUpdateState>
-	
-			<!-- Groupbox state messages -->		
-			<GrpBoxStatusMessage>
-				<Caption text="Status- Meldungen" />
-			</GrpBoxStatusMessage>
-	
-			<!-- Update messages -->
-			<UpdateMessages>
-				<Start_1 text="Aktualisierung der Aktie '" />
-				<Start_2 text="' gestartet." />
-				<ContentLoadStarted text="Webseiten- Inhalt wird geladen." />
-				<ContentLoaded text="Webseiten- Inhalt geladen." />
-				<SearchStarted text="Such- Vorgang wurde gestartet." />
-				<SearchRunning text="Such- Vorgang läuft." />
-				<SearchFinish text="Such- Vorgang beendet." />
-				<Finish_1 text="Aktualisierung der Aktie '" />
-				<Finish_2 text="' wurde erfolgreich beendet." />
-			</UpdateMessages>
-
-			<!-- Update errors -->
-			<UpdateErrors>
-				<StartFailed text="Starten des Parser ist fehlgeschlagen." />
-				<BusyFailed text="Parser ist bereits in Verwendung." />
-				<InvalidWebSiteGiven text="Die Websiten- Adresse ist ungültig." />
-				<NoRegexListGiven text="Es wurde kein regulärer Ausdruck übergeben." />
-				<ContentLoadedFailed text="Laden des Webseiten- Inhalts ist fehlgeschlagen." />
-				<ParsingFailed_1 text="Parsen des Schlüssels '" />F
-				<ParsingFailed_2 text="' ist fehlgeschlagen." />
-				<CancelThread_1 text="Aktualisierung der Aktie '" />
-				<CancelThread_2 text="' wurde abgebrochen." />
-				<UpdateFailed text="Aktualisieren ist fehlgeschlagen!" />
-				<Failure text="Aktualisierung ist fehlgeschalgen. Fehler: " />
-			</UpdateErrors>
 			
-			<!-- Status messages -->
-			<StatusMessages>
-				<SelectAShare text="Bitte eine Aktie auswählen." />
-				<AddSaveSuccessful text="Aktie wurde erfoglreich hinzugefügt." />
-				<EditSaveSuccessful text="Änderung war erfolgreich." />
-				<DeleteSuccessful text="Aktie wurde erfolgreich entfernt." />
-				<ChangeLanguageSuccessful text="Sprache wurde geändert." />
-				<ChangingPortfolioSuccessful text="Wechsel des Portfolios erfolgreich." />
-			</StatusMessages>
+			<!-- Buttons -->
+			<Buttons>
+				<OpenWebSite text="Website öffnen"/>
+				<Ok text="Schließen" />
+				<Update text="Aktualisieren" />
+			</Buttons>
 			
-			<!-- Error messages -->
+			<!-- Errors -->
 			<Errors>
-				<FileDoesNotExists_1 text="Datei '" />
-				<FileDoesNotExists_2 text="' existiert nicht mehr! Legen Sie ein neues Portfolio an." />
-				<CouldNotLoadFile_1 text="Datei '" />
-				<CouldNotLoadFile_2 text="' konnte nicht geladen werden!" />
-				<XMLSyntaxFailure_1 text="Es ist ein XML- Syntax- Fehler in der Datei '" />
-				<XMLSyntaxFailure_2 text="' vorhanden!" />
-				<ChangingPortfolioFailed text="Wechseln des Portfolios ist fehlgeschlagen!" />
-				<CouldNotLoadAllLanguageKeys text="Es konnten nicht alle Sprach- Elemente geladen werden!" />
-				<WebSiteRegexNotFound1_1 text="Keine Parser- Konfiguration für die Aktie mit der WKN " />
-				<WebSiteRegexNotFound1_2 text=" verfügbar!" />
-				<WebSiteRegexNotFound2_1 text="Kein Parser-Konfiguration für die Aktien mit den WKN " />
-				<WebSiteRegexNotFound2_2 text=" verfügbar!" />
-				<PortfolioNotSet text="Kein Portfolio ausgewählt. Erstellen Sie ein Neues oder laden Sie ein Bestehendes." />
-				<PortfolioConfigurationListEmpty text="Portfolio ist leer!" />
-				<PortfolioConfigurationListLoadFailed text="Konfiguration unvollständig!"/>
-				<AddShowFailed text="Es trat ein Fehler bei der Anzeige auf!" />
-				<AddSaveFailed text="Hinzufügen der Aktie ist fehlgeschlagen!" />
-				<AddSaveErrorFailed text="Es trat ein Fehler nach dem Speichern der Aktie auf!" />
-				<EditSaveFailed text="Ändern der Aktie ist fehlgeschlagen!" />
-				<EditSaveErrorFailed text="Es trat ein Fehler nach dem Editieren der Aktie auf!" />
-				<DeleteFailed text="Entfernen der Aktie ist fehlgeschlagen!" />
-				<DeleteErrorFailed text="Es trat ein Fehler nach dem Entfernen der Aktie auf!" />
-				<SaveSettingsFailed text="Speichern der Einstellungen fehlgeschalgen!" />
 				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
-				<ChangeLanguageFailed text="Ändern der Sprache fehlgeschlagen!" />
 			</Errors>
-		</MainForm>	
 
+		</ShareDetailsForm>
+		
 		<!-- Add window -->
 		<AddFormShare>
 			<Caption text="Aktie hinzufügen" />
@@ -1822,7 +1929,6 @@
 				<!-- Labels -->
 				<Labels>
 					<Date text="Datum:" />
-					<Time text="Zeit:" />
 					<OrderNumber text="Ordernummer:" />
 					<Volume text="Verkaufte Anteile:" />
 					<BuyValue text="Verkaufter Kaufwert:" />

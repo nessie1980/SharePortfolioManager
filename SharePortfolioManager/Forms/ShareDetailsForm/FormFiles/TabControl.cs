@@ -30,68 +30,12 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using static SharePortfolioManager.FrmMain;
 
-namespace SharePortfolioManager
+namespace SharePortfolioManager.Forms.ShareDetailsForm
 {
-    partial class FrmMain
+    partial class ShareDetailsForm
     {
-        #region Tab control overview
-
-        /// <summary>
-        /// This function calls the details update function
-        /// </summary>
-        /// <param name="sender">TabControl</param>
-        /// <param name="e">EventArgs</param>
-        private void TabCtrlShareOverviews_Enter(object sender, EventArgs e)
-        {
-            UpdateDetails((TabControl)sender);
-        }
-
-        /// <summary>
-        /// This function calls the details update function
-        /// </summary>
-        /// <param name="sender">TabControl</param>
-        /// <param name="e">EventArgs</param>
-        private void TabCtrlShareOverviews_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            UpdateDetails((TabControl)sender);
-        }
-
-        /// <summary>
-        /// This function updates the flag if the final value or the market value should be shown
-        /// </summary>
-        /// <param name="tabControl">TabControl</param>
-        private void UpdateDetails(TabControl tabControl)
-        {
-            switch (tabControl.SelectedIndex)
-            {
-                case 0:
-                    MarketValueOverviewTabSelected = false;
-                    break;
-                case 1:
-                    MarketValueOverviewTabSelected = true;
-                    break;
-            }
-
-            ResetShareDetails();
-
-            UpdateShareDetails(MarketValueOverviewTabSelected);
-            UpdateProfitLossDetails(MarketValueOverviewTabSelected);
-            UpdateBrokerageDetails(MarketValueOverviewTabSelected);
-            UpdateDividendDetails(MarketValueOverviewTabSelected);
-
-            tabCtrlDetails.SelectedIndex = 0;
-
-            if (MarketValueOverviewTabSelected)
-                dgvPortfolioMarketValue.Focus();
-            else
-                dgvPortfolioFinalValue.Focus();
-
-            OnResizeDataGridView();
-        }
-
-        #endregion Tab control overview
-
         #region Tab control details
 
         /// <summary>
@@ -102,23 +46,19 @@ namespace SharePortfolioManager
         /// <param name="e">EventArgs</param>
         private void TabCtrlDetails_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Update the profit or loss page
+            // Update the profit or loss page / update the dividend page / update the brokerage page
             switch (((TabControl)sender).SelectedIndex)
             {
-                case 1:
+                case (int)EDetailsPageNumber.ProfitLoss:
                     UpdateProfitLossDetails(MarketValueOverviewTabSelected);
                     break;
-                case 2:
+                case (int)EDetailsPageNumber.Dividend:
                     UpdateDividendDetails(MarketValueOverviewTabSelected);
                     break;
-                case 3:
+                case (int)EDetailsPageNumber.Brokerage:
                     UpdateBrokerageDetails(MarketValueOverviewTabSelected);
                     break;
             }
-
-            // Update the dividend page
-
-            // Update the brokerage page
         }
 
         #region Reset group box details
@@ -126,31 +66,31 @@ namespace SharePortfolioManager
         private void ResetShareDetails()
         {
             // Group box caption
-            grpBoxShareDetails.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/Caption",
+            grpBoxShareDetails.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/Caption",
                 LanguageName);
 
             // Tab captions
             if (tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsFinalValue))
                 tabCtrlDetails.TabPages[_tabPageDetailsFinalValue].Text =
-                Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Caption",
+                Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Caption",
                     LanguageName);
 
             if (tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsMarketValue))
                 tabCtrlDetails.TabPages[_tabPageDetailsMarketValue].Text =
-                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Caption",
+                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Caption",
                         LanguageName);
 
             if (tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsProfitLossValue))
                 tabCtrlDetails.TabPages[_tabPageDetailsProfitLossValue].Text =
-                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Caption", LanguageName);
+                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Caption", LanguageName);
 
             if (tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsDividendValue))
                 tabCtrlDetails.TabPages[_tabPageDetailsDividendValue].Text =
-                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/Caption", LanguageName);
+                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/Caption", LanguageName);
 
             if (tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsBrokerageValue))
                 tabCtrlDetails.TabPages[_tabPageDetailsBrokerageValue].Text =
-                Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/Caption", LanguageName);
+                Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/Caption", LanguageName);
 
             // Label values of the market value
             lblDetailsMarketValueDateValue.Text = @"";
@@ -205,7 +145,7 @@ namespace SharePortfolioManager
 
                     // Add page
                     if (!tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsMarketValue))
-                        tabCtrlDetails.TabPages.Insert(0, _tempMarketValues);
+                        tabCtrlDetails.TabPages.Insert( (int)EDetailsPageNumber.FinalMarketValue, _tempMarketValues);
 
                     // Check if a share is selected
                     if (ShareObjectMarketValue == null)
@@ -219,30 +159,30 @@ namespace SharePortfolioManager
                     if (ShareObjectMarketValue.LastUpdateInternet == DateTime.MinValue)
                     {
                         grpBoxShareDetails.Text = ShareObjectMarketValue.Name + @" ( " +
-                                                  Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/ShareType",
+                                                  Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/ShareType",
                                                       LanguageName) +
                                                   @" " +
                                                   Helper.GetComboBoxItems(@" / ComboBoxItemsShareType/*", LanguageName,
                                                       Language)[ShareObjectMarketValue.ShareType] +
                                                   @" / " +
                                                   Language.GetLanguageTextByXPath(
-                                                      @"/MainForm/GrpBoxDetails/ShareUpdate",
+                                                      @"/ShareDetailsForm/GrpBoxDetails/ShareUpdate",
                                                       LanguageName) + @" " +
                                                   Language.GetLanguageTextByXPath(
-                                                      @"/MainForm/GrpBoxDetails/ShareUpdateNotDone", LanguageName) +
+                                                      @"/ShareDetailsForm/GrpBoxDetails/ShareUpdateNotDone", LanguageName) +
                                                   @" )";
                     }
                     else
                     {
                         grpBoxShareDetails.Text = ShareObjectMarketValue.Name + @" ( " +
-                                                  Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/ShareType",
+                                                  Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/ShareType",
                                                       LanguageName) +
                                                   @" " +
                                                   Helper.GetComboBoxItems(@" / ComboBoxItemsShareType/*", LanguageName,
                                                       Language)[ShareObjectMarketValue.ShareType] +
                                                   @" / " +
                                                   Language.GetLanguageTextByXPath(
-                                                      @"/MainForm/GrpBoxDetails/ShareUpdate",
+                                                      @"/ShareDetailsForm/GrpBoxDetails/ShareUpdate",
                                                       LanguageName) + @" " +
                                                   string.Format(Helper.Datefulltimeshortformat, ShareObjectMarketValue.LastUpdateInternet)
                                                        + @" )";
@@ -253,7 +193,7 @@ namespace SharePortfolioManager
                     {
                         // Set the share update date
                         lblDetailsMarketValueDateValue.Text =
-                            Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/ShareUpdateNotDone", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/ShareUpdateNotDone", LanguageName);
                     }
                     else
                     {
@@ -347,13 +287,13 @@ namespace SharePortfolioManager
 
                     // Add page
                     if (!tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsFinalValue))
-                        tabCtrlDetails.TabPages.Insert(0, _tempFinalValues);
+                        tabCtrlDetails.TabPages.Insert((int) EDetailsPageNumber.FinalMarketValue, _tempFinalValues);
                     if (!tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsDividendValue))
-                        tabCtrlDetails.TabPages.Insert(1, _tempDividends);
+                        tabCtrlDetails.TabPages.Insert((int)EDetailsPageNumber.ProfitLoss, _tempDividends);
                     if (!tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsProfitLossValue))
-                        tabCtrlDetails.TabPages.Insert(2, _tempProfitLoss);
+                        tabCtrlDetails.TabPages.Insert((int)EDetailsPageNumber.Dividend, _tempProfitLoss);
                     if (!tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsBrokerageValue))
-                        tabCtrlDetails.TabPages.Insert(3, _tempBrokerage);
+                        tabCtrlDetails.TabPages.Insert((int)EDetailsPageNumber.Brokerage, _tempBrokerage);
 
                     // Check if a share is selected
                     if (ShareObjectFinalValue == null)
@@ -367,30 +307,30 @@ namespace SharePortfolioManager
                     if (ShareObjectFinalValue.LastUpdateInternet == DateTime.MinValue)
                     {
                         grpBoxShareDetails.Text = ShareObjectFinalValue.Name + @" ( " +
-                                                  Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/ShareType",
+                                                  Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/ShareType",
                                                       LanguageName) +
                                                   @" " +
                                                   Helper.GetComboBoxItems(@" / ComboBoxItemsShareType/*", LanguageName,
                                                       Language)[ShareObjectFinalValue.ShareType] +
                                                   @" / " +
                                                   Language.GetLanguageTextByXPath(
-                                                      @"/MainForm/GrpBoxDetails/ShareUpdate",
+                                                      @"/ShareDetailsForm/GrpBoxDetails/ShareUpdate",
                                                       LanguageName) + @" " +
                                                   Language.GetLanguageTextByXPath(
-                                                      @"/MainForm/GrpBoxDetails/ShareUpdateNotDone", LanguageName) +
+                                                      @"/ShareDetailsForm/GrpBoxDetails/ShareUpdateNotDone", LanguageName) +
                                                   @" )";
                     }
                     else
                     {
                         grpBoxShareDetails.Text = ShareObjectFinalValue.Name + @" ( " +
-                                                  Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/ShareType",
+                                                  Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/ShareType",
                                                       LanguageName) +
                                                   @" " +
                                                   Helper.GetComboBoxItems(@" / ComboBoxItemsShareType/*", LanguageName,
                                                       Language)[ShareObjectFinalValue.ShareType] +
                                                   @" / " +
                                                   Language.GetLanguageTextByXPath(
-                                                      @"/MainForm/GrpBoxDetails/ShareUpdate",
+                                                      @"/ShareDetailsForm/GrpBoxDetails/ShareUpdate",
                                                       LanguageName) + @" " +
                                                   string.Format(Helper.Datefulltimeshortformat, ShareObjectFinalValue.LastUpdateInternet)
                                                        + @" )";
@@ -401,7 +341,7 @@ namespace SharePortfolioManager
                     {
                         // Set the share update date
                         lblDetailsFinalValueDateValue.Text =
-                            Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/ShareUpdateNotDone", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/ShareUpdateNotDone", LanguageName);
                     }
                     else
                     {
@@ -423,7 +363,7 @@ namespace SharePortfolioManager
                     // Disable the dividend labels 
                     lblDetailsMarketValueDividend.Enabled = false;
                     lblDetailsMarketValueDividendValue.Enabled = false;
-                    
+
                     // Set brokerage value
                     lblDetailsFinalValueBrokerageValue.Text =
                         ShareObjectFinalValue.AllBrokerageEntries.BrokerageValueTotalWithUnitAsStr;
@@ -495,8 +435,8 @@ namespace SharePortfolioManager
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgWithWithOutDividendBrokerageErrors/ShowFailed", LanguageName),
+                Helper.AddStatusMessage(RichTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithWithOutDividendBrokerageErrors/ShowFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
             }
@@ -526,7 +466,7 @@ namespace SharePortfolioManager
                 {
                     // Add page
                     if (!tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsProfitLossValue))
-                        tabCtrlDetails.TabPages.Insert(1, _tempProfitLoss);
+                        tabCtrlDetails.TabPages.Insert((int)EDetailsPageNumber.ProfitLoss, _tempProfitLoss);
 
                     // Check if a share is selected
                     if (ShareObjectFinalValue == null)
@@ -540,7 +480,7 @@ namespace SharePortfolioManager
                     tabCtrlDetails.TabPages[_tabPageDetailsProfitLossValue].Text =
                         $@"{
                                 Language.GetLanguageTextByXPath(
-                                    @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Caption", LanguageName)
+                                    @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Caption", LanguageName)
                             } ({
                                 Helper.FormatDecimal(ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotal,
                                     Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"",
@@ -549,7 +489,7 @@ namespace SharePortfolioManager
 
                     Thread.CurrentThread.CurrentCulture = CultureInfo.CurrentUICulture;
 
-                    if (tabCtrlDetails.SelectedIndex != 1) return;
+                    if (tabCtrlDetails.SelectedIndex != (int)EDetailsPageNumber.ProfitLoss) return;
 
                     Thread.CurrentThread.CurrentCulture = ShareObjectFinalValue.CultureInfo;
 
@@ -574,10 +514,10 @@ namespace SharePortfolioManager
                     var newTabPageOverviewYears = new TabPage
                     {
                         Name = Language.GetLanguageTextByXPath(
-                            @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Overview",
+                            @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Overview",
                             LanguageName),
                         Text = Language.GetLanguageTextByXPath(
-                                   @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Overview",
+                                   @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Overview",
                                    LanguageName) +
                                $@" ({ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotal:C2})"
                     };
@@ -722,8 +662,8 @@ namespace SharePortfolioManager
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss_Error/ShowFailed", LanguageName),
+                Helper.AddStatusMessage(RichTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss_Error/ShowFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
             }
@@ -757,8 +697,8 @@ namespace SharePortfolioManager
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/SelectionChangeFailed", LanguageName),
+                Helper.AddStatusMessage(RichTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
             }
@@ -774,7 +714,7 @@ namespace SharePortfolioManager
         {
             try
             {
-                if (((DataGridView) sender).SelectedRows.Count != 1) return;
+                if (((DataGridView)sender).SelectedRows.Count != 1) return;
 
                 // Get the currently selected item in the ListBox
                 var curItem = ((DataGridView)sender).SelectedRows;
@@ -803,8 +743,8 @@ namespace SharePortfolioManager
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/SelectionChangeFailed", LanguageName),
+                Helper.AddStatusMessage(RichTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
             }
@@ -826,7 +766,7 @@ namespace SharePortfolioManager
                 if (e.ColumnIndex != iColumnCount - 1) return;
 
                 // Check if a row is selected
-                if (((DataGridView) sender).SelectedRows.Count != 1) return;
+                if (((DataGridView)sender).SelectedRows.Count != 1) return;
 
                 // Get the current selected row
                 var curItem = ((DataGridView)sender).SelectedRows;
@@ -866,6 +806,7 @@ namespace SharePortfolioManager
                             strCancel);
                         if (messageBox.ShowDialog() == DialogResult.OK)
                         {
+                            // TODO
                             //// Remove sale object and add it with no document
                             //if (ShareObjectFinalValue.RemoveSale(temp.Guid, temp.Date) &&
                             //    ShareObjectFinalValue.AddSale(temp.Guid, strDateTime, temp.OrderNumber, temp.Volume, temp.SalePrice, temp.SaleBuyDetails, temp.TaxAtSource, temp.CapitalGainsTax, temp.SolidarityTax, temp.Brokerage, temp.Reduction))
@@ -884,7 +825,7 @@ namespace SharePortfolioManager
                             //    {
                             //        // Add status message
                             //        Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            //            Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/EditSaveSuccessful", LanguageName),
+                            //            Language.GetLanguageTextByXPath(@"/ShareDetailsForm/StatusMessages/EditSaveSuccessful", LanguageName),
                             //            Language, LanguageName,
                             //            Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
 
@@ -895,7 +836,7 @@ namespace SharePortfolioManager
                             //    {
                             //        // Add status message
                             //        Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            //            Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
+                            //            Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Errors/EditSaveFailed", LanguageName),
                             //            Language, LanguageName,
                             //            Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
                             //    }
@@ -921,7 +862,7 @@ namespace SharePortfolioManager
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                Helper.AddStatusMessage(RichTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/DocumentShowFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
@@ -949,13 +890,13 @@ namespace SharePortfolioManager
                         case 0:
                             {
                                 if (tabCtrlProfitLoss.TabPages.Count == 1)
-                                    ((DataGridView) sender).Columns[i].HeaderText = Language.GetLanguageTextByXPath(
-                                        @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/DgvProfitLossOverview/ColHeader_Year",
+                                    ((DataGridView)sender).Columns[i].HeaderText = Language.GetLanguageTextByXPath(
+                                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/DgvProfitLossOverview/ColHeader_Year",
                                         LanguageName
                                     );
                                 else
                                     ((DataGridView)sender).Columns[i].HeaderText = Language.GetLanguageTextByXPath(
-                                        @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/DgvProfitLossOverview/ColHeader_Date",
+                                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/DgvProfitLossOverview/ColHeader_Date",
                                         LanguageName
                                     );
 
@@ -963,13 +904,13 @@ namespace SharePortfolioManager
                             }
                         case 1:
                             ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/DgvProfitLossOverview/ColHeader_ProfitLoss",
+                                Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/DgvProfitLossOverview/ColHeader_ProfitLoss",
                                     LanguageName) +
                                 $@" ({new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol})";
                             break;
                         case 2:
                             ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/DgvProfitLossOverview/ColHeader_Document",
+                                Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/DgvProfitLossOverview/ColHeader_Document",
                                     LanguageName)
                             ;
                             break;
@@ -989,8 +930,8 @@ namespace SharePortfolioManager
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend_Error/RenameHeaderFailed", LanguageName),
+                Helper.AddStatusMessage(RichTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend_Error/RenameHeaderFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
             }
@@ -1016,8 +957,8 @@ namespace SharePortfolioManager
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/SelectionChangeFailed", LanguageName),
+                Helper.AddStatusMessage(RichTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
             }
@@ -1047,7 +988,7 @@ namespace SharePortfolioManager
                 {
                     // Add page
                     if (!tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsDividendValue))
-                        tabCtrlDetails.TabPages.Insert(2, _tempDividends);
+                        tabCtrlDetails.TabPages.Insert((int)EDetailsPageNumber.ProfitLoss, _tempDividends);
 
                     // Check if a share is selected
                     if (ShareObjectFinalValue == null)
@@ -1061,12 +1002,12 @@ namespace SharePortfolioManager
                     tabCtrlDetails.TabPages[_tabPageDetailsDividendValue].Text =
                         $@"{
                                 Language.GetLanguageTextByXPath(
-                                    @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/Caption", LanguageName)
+                                    @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/Caption", LanguageName)
                             } ({ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesWithUnitAsStr})";
 
                     Thread.CurrentThread.CurrentCulture = CultureInfo.CurrentUICulture;
 
-                    if (tabCtrlDetails.SelectedIndex != 2) return;
+                    if (tabCtrlDetails.SelectedIndex != (int)EDetailsPageNumber.Dividend) return;
 
                     // Reset tab control
                     foreach (TabPage tabPage in tabCtrlDividends.TabPages)
@@ -1090,12 +1031,12 @@ namespace SharePortfolioManager
                     {
                         // Set TabPage name
                         Name = Language.GetLanguageTextByXPath(
-                            @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/Overview",
+                            @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/Overview",
                             LanguageName),
 
                         // Set TabPage caption
                         Text = Language.GetLanguageTextByXPath(
-                                   @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/Overview",
+                                   @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/Overview",
                                    LanguageName) +
                                $@" ({ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesWithUnitAsStr})"
                     };
@@ -1241,8 +1182,8 @@ namespace SharePortfolioManager
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend_Error/ShowFailed", LanguageName),
+                Helper.AddStatusMessage(RichTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend_Error/ShowFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
             }
@@ -1276,8 +1217,8 @@ namespace SharePortfolioManager
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/SelectionChangeFailed", LanguageName),
+                Helper.AddStatusMessage(RichTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
             }
@@ -1293,7 +1234,7 @@ namespace SharePortfolioManager
         {
             try
             {
-                if (((DataGridView) sender).SelectedRows.Count != 1) return;
+                if (((DataGridView)sender).SelectedRows.Count != 1) return;
 
                 // Get the currently selected item in the ListBox
                 var curItem = ((DataGridView)sender).SelectedRows;
@@ -1322,8 +1263,8 @@ namespace SharePortfolioManager
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/SelectionChangeFailed", LanguageName),
+                Helper.AddStatusMessage(RichTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
             }
@@ -1351,18 +1292,18 @@ namespace SharePortfolioManager
                             {
                                 if (tabCtrlDividends.TabPages.Count == 1)
                                     ((DataGridView)sender).Columns[i].HeaderText = Language.GetLanguageTextByXPath(
-                                        @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Year",
+                                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Year",
                                         LanguageName);
                                 else
                                     ((DataGridView)sender).Columns[i].HeaderText = Language.GetLanguageTextByXPath(
-                                        @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Date",
+                                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Date",
                                         LanguageName);
-                                break;                    
+                                break;
                             }
                         case 1:
                             {
                                 ((DataGridView)sender).Columns[i].HeaderText =
-                                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Payout",
+                                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Payout",
                                         LanguageName) +
                                     $@" ({new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol})";
                                 break;
@@ -1370,7 +1311,7 @@ namespace SharePortfolioManager
                         case 2:
                             {
                                 ((DataGridView)sender).Columns[i].HeaderText =
-                                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Dividend",
+                                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Dividend",
                                         LanguageName) +
                                     $@" ({new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol})";
                                 break;
@@ -1378,7 +1319,7 @@ namespace SharePortfolioManager
                         case 3:
                             {
                                 ((DataGridView)sender).Columns[i].HeaderText =
-                                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Yield",
+                                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Yield",
                                         LanguageName) +
                                     $@" ({ShareObject.PercentageUnit})";
                                 break;
@@ -1386,7 +1327,7 @@ namespace SharePortfolioManager
                         case 4:
                             {
                                 ((DataGridView)sender).Columns[i].HeaderText =
-                                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Price",
+                                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Price",
                                         LanguageName) +
                                     $@" ({new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol})";
                                 break;
@@ -1394,7 +1335,7 @@ namespace SharePortfolioManager
                         case 5:
                             {
                                 ((DataGridView)sender).Columns[i].HeaderText =
-                                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Volume",
+                                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Volume",
                                         LanguageName) +
                                         ShareObject.PieceUnit;
                                 break;
@@ -1402,7 +1343,7 @@ namespace SharePortfolioManager
                         case 6:
                             {
                                 ((DataGridView)sender).Columns[i].HeaderText =
-                                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Document",
+                                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Document",
                                         LanguageName)
                                 ;
                                 break;
@@ -1421,8 +1362,8 @@ namespace SharePortfolioManager
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend_Error/RenameHeaderFailed", LanguageName),
+                Helper.AddStatusMessage(RichTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend_Error/RenameHeaderFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
             }
@@ -1448,8 +1389,8 @@ namespace SharePortfolioManager
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/SelectionChangeFailed", LanguageName),
+                Helper.AddStatusMessage(RichTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
             }
@@ -1480,7 +1421,7 @@ namespace SharePortfolioManager
                 {
                     // Add page
                     if (!tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsBrokerageValue))
-                        tabCtrlDetails.TabPages.Insert(3, _tempBrokerage);
+                        tabCtrlDetails.TabPages.Insert((int)EDetailsPageNumber.Brokerage, _tempBrokerage);
 
                     // Check if a share is selected
                     if (ShareObjectFinalValue == null)
@@ -1494,12 +1435,12 @@ namespace SharePortfolioManager
                     tabCtrlDetails.TabPages[_tabPageDetailsBrokerageValue].Text =
                         $@"{
                                 Language.GetLanguageTextByXPath(
-                                    @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/Caption", LanguageName)
+                                    @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/Caption", LanguageName)
                             } ({ShareObjectFinalValue.AllBrokerageEntries.BrokerageValueTotalWithUnitAsStr})";
 
                     Thread.CurrentThread.CurrentCulture = CultureInfo.CurrentUICulture;
 
-                    if (tabCtrlDetails.SelectedIndex != 3) return;
+                    if (tabCtrlDetails.SelectedIndex != (int)EDetailsPageNumber.Brokerage) return;
 
                     // Reset tab control
                     foreach (TabPage tabPage in tabCtrlBrokerage.TabPages)
@@ -1522,10 +1463,10 @@ namespace SharePortfolioManager
                     var newTabPageOverviewYears = new TabPage
                     {
                         Name = Language.GetLanguageTextByXPath(
-                            @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/Overview",
+                            @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/Overview",
                             LanguageName),
                         Text = Language.GetLanguageTextByXPath(
-                                   @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/Overview", LanguageName) +
+                                   @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/Overview", LanguageName) +
                                $@" ({ShareObjectFinalValue.AllBrokerageEntries.BrokerageValueTotalWithUnitAsStr})"
                     };
                     // Set TabPage name
@@ -1662,8 +1603,8 @@ namespace SharePortfolioManager
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage_Error/ShowFailed", LanguageName),
+                Helper.AddStatusMessage(RichTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage_Error/ShowFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
             }
@@ -1697,8 +1638,8 @@ namespace SharePortfolioManager
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/SelectionChangeFailed", LanguageName),
+                Helper.AddStatusMessage(RichTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
             }
@@ -1714,7 +1655,7 @@ namespace SharePortfolioManager
         {
             try
             {
-                if (((DataGridView) sender).SelectedRows.Count != 1) return;
+                if (((DataGridView)sender).SelectedRows.Count != 1) return;
 
                 // Get the currently selected item in the ListBox
                 var curItem = ((DataGridView)sender).SelectedRows;
@@ -1743,8 +1684,8 @@ namespace SharePortfolioManager
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/SelectionChangeFailed", LanguageName),
+                Helper.AddStatusMessage(RichTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
             }
@@ -1771,20 +1712,20 @@ namespace SharePortfolioManager
                         case 0:
                             {
                                 if (tabCtrlBrokerage.TabPages.Count == 1)
-                                    ((DataGridView) sender).Columns[i].HeaderText = Language.GetLanguageTextByXPath(
-                                        @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/DgvBrokerageOverview/ColHeader_Year",
+                                    ((DataGridView)sender).Columns[i].HeaderText = Language.GetLanguageTextByXPath(
+                                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/DgvBrokerageOverview/ColHeader_Year",
                                         LanguageName
                                     );
                                 else
                                     ((DataGridView)sender).Columns[i].HeaderText = Language.GetLanguageTextByXPath(
-                                        @"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/DgvBrokerageOverview/ColHeader_Date",
+                                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/DgvBrokerageOverview/ColHeader_Date",
                                         LanguageName);
                                 break;
                             }
                         case 1:
                             {
                                 ((DataGridView)sender).Columns[i].HeaderText =
-                                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/DgvBrokerageOverview/ColHeader_Brokerage",
+                                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/DgvBrokerageOverview/ColHeader_Brokerage",
                                         LanguageName) +
                                     $@" ({new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol})";
                                 break;
@@ -1792,7 +1733,7 @@ namespace SharePortfolioManager
                         case 2:
                             {
                                 ((DataGridView)sender).Columns[i].HeaderText =
-                                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/DgvBrokerageOverview/ColHeader_Document",
+                                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/DgvBrokerageOverview/ColHeader_Document",
                                         LanguageName) +
                                     $@" ({new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol})";
                                 break;
@@ -1811,8 +1752,8 @@ namespace SharePortfolioManager
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage_Error/RenameHeaderFailed", LanguageName),
+                Helper.AddStatusMessage(RichTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage_Error/RenameHeaderFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
             }
@@ -1841,8 +1782,8 @@ namespace SharePortfolioManager
                     MessageBoxIcon.Error);
 #endif
                 // Add status message
-                Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/SelectionChangeFailed", LanguageName),
+                Helper.AddStatusMessage(RichTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
             }

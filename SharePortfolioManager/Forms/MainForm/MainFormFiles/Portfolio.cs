@@ -50,6 +50,7 @@ namespace SharePortfolioManager
             WebSite,
             Culture,
             ShareType,
+            DailyValues,
             Brokerages,
             Buys,
             Sales,
@@ -103,9 +104,6 @@ namespace SharePortfolioManager
                 dgvPortfolioFooterFinalValue.ColumnHeadersVisible = false;
 
                 #endregion Reset FinalValue values
-
-                // Reset group box share details
-                ResetShareDetails();
 
                 // Load new portfolio
                 LoadPortfolio();
@@ -428,6 +426,59 @@ namespace SharePortfolioManager
 
                                         #endregion General
 
+                                        #region DailyValues
+
+                                        case (int)PortfolioParts.DailyValues:
+                                            // Read daily values sebsite
+                                            if (nodeElement.ChildNodes[i].Attributes != null)
+                                            {
+                                                ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                                        .DailyValuesWebSite =
+                                                        nodeElement.ChildNodes[i].Attributes[
+                                                            ShareObject.DailyValuesWebSiteAttrName].InnerText;
+                                            }
+                                            else
+                                                bLoadPortfolio = false;
+                                            foreach (XmlElement nodeList in nodeElement.ChildNodes[i].ChildNodes)
+                                            {
+                                                // Check if the node has the right count of attributes
+                                                if (nodeList != null &&
+                                                    nodeList.Attributes.Count ==
+                                                    ShareObject.DailyValuesAttrCount)
+                                                {
+
+                                                    // Try do cast date of the daily values
+                                                    if (DateTime.TryParse(nodeList.Attributes[ShareObject.DailyValuesDateTagName].Value, out DateTime dateTime)) // Date
+                                                    {
+                                                        DailyValues dailyValues = new DailyValues
+                                                        {
+                                                            Date = dateTime,
+                                                            OpeningPrice = Convert.ToDecimal(
+                                                            nodeList.Attributes[ShareObject.DailyValuesOpeningPriceTagName].Value),                     // Opening price
+                                                            ClosingPrice = Convert.ToDecimal(
+                                                            nodeList.Attributes[ShareObject.DailyValuesClosingPriceTagName].Value),                     // Closing price
+                                                            Top = Convert.ToDecimal(
+                                                            nodeList.Attributes[ShareObject.DailyValuesTopTagName].Value),                              // Top
+                                                            Bottom = Convert.ToDecimal(
+                                                            nodeList.Attributes[ShareObject.DailyValuesBottomTagName].Value),                           // Bottom
+                                                            Volume = Convert.ToDecimal(
+                                                            nodeList.Attributes[ShareObject.DailyValuesVolumeTagName].Value)                            // Volume
+                                                        };
+
+                                                        // Add daily values item
+                                                        ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].DailyValues.Add(dailyValues);
+                                                        ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].DailyValues.Add(dailyValues);
+                                                    }
+                                                    else
+                                                        bLoadPortfolio = false;
+                                                }
+                                                else
+                                                    bLoadPortfolio = false;
+                                            }
+                                            break;
+
+                                        #endregion DailyValues
+
                                         #region Brokerage
 
                                         case (int)PortfolioParts.Brokerages:
@@ -697,7 +748,7 @@ namespace SharePortfolioManager
                                                         .DividendPayoutInterval =
                                                     Convert.ToInt16(
                                                         nodeElement.ChildNodes[i].Attributes[
-                                                            ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].DividendPayoutInterval].InnerText);
+                                                            ShareObject.DividendPayoutIntervalAttrName].InnerText);
                                             }
                                             else
                                                 bLoadPortfolio = false;

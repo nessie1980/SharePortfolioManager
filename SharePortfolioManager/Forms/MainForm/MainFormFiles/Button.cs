@@ -403,33 +403,6 @@ namespace SharePortfolioManager
                     // Check if other shares exists
                     if (ShareObjectListFinalValue.Count == 0 || ShareObjectListMarketValue.Count == 0)
                     {
-                        grpBoxShareDetails.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxDetails/Caption", LanguageName);
-                        lblDetailsFinalValueDateValue.Text = @"";
-                        lblDetailsFinalValueVolumeValue.Text = @"";
-                        lblDetailsFinalValueDividendValue.Text = @"";
-                        lblDetailsFinalValueBrokerageValue.Text = @"";
-                        lblDetailsFinalValueCurPriceValue.Text = @"";
-                        lblDetailsFinalValueDiffPerformancePrevValue.Text = @"";
-                        lblDetailsFinalValueDiffSumPrevValue.Text = @"";
-                        lblDetailsFinalValuePrevPriceValue.Text = @"";
-                        lblDetailsFinalValuePurchaseValue.Text = @"";
-                        lblDetailsFinalValueTotalProfitValue.Text = @"";
-                        lblDetailsFinalValueTotalPerformanceValue.Text = @"";
-                        lblDetailsFinalValueTotalSumValue.Text = @"";
-
-                        lblDetailsMarketValueDateValue.Text = @"";
-                        lblDetailsMarketValueVolumeValue.Text = @"";
-                        lblDetailsMarketValueDividendValue.Text = @"";
-                        lblDetailsMarketValueBrokerageValue.Text = @"";
-                        lblDetailsMarketValueCurPriceValue.Text = @"";
-                        lblDetailsMarketValueDiffPerformancePrevValue.Text = @"";
-                        lblDetailsMarketValueDiffSumPrevValue.Text = @"";
-                        lblDetailsMarketValuePrevPriceValue.Text = @"";
-                        lblDetailsMarketValuePurchaseValue.Text = @"";
-                        lblDetailsMarketValueTotalProfitValue.Text = @"";
-                        lblDetailsMarketValueTotalPerformanceValue.Text = @"";
-                        lblDetailsMarketValueTotalSumValue.Text = @"";
-
                         // Reset share object portfolio values
                         ShareObjectFinalValue.PortfolioValuesReset();
                         ShareObjectMarketValue.PortfolioValuesReset();
