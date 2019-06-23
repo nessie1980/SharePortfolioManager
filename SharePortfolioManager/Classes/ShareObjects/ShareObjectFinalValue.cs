@@ -1878,8 +1878,9 @@ namespace SharePortfolioManager.Classes.ShareObjects
                         {
                             var newBrokerageElement = xmlPortfolio.CreateElement(BrokerageTagNamePre);
                             newBrokerageElement.SetAttribute(BrokerageGuidAttrName, brokerageElementYear.Guid);
-                            newBrokerageElement.SetAttribute(BrokerageBuyPartAttrName,
-                                brokerageElementYear.PartOfABuyAsStr);
+                            newBrokerageElement.SetAttribute(BrokerageBuyPartAttrName, brokerageElementYear.PartOfABuyAsStr);
+                            newBrokerageElement.SetAttribute(BrokerageSalePartAttrName, brokerageElementYear.PartOfASaleAsStr);
+                            newBrokerageElement.SetAttribute(BrokerageGuidBuySaleAttrName, brokerageElementYear.GuidBuySale);
                             newBrokerageElement.SetAttribute(BrokerageDateAttrName, brokerageElementYear.DateAsStr);
                             newBrokerageElement.SetAttribute(BrokerageProvisionAttrName, brokerageElementYear.ProvisionValueAsStr);
                             newBrokerageElement.SetAttribute(BrokerageBrokerFeeAttrName, brokerageElementYear.BrokerFeeValueAsStr);

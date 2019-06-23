@@ -315,6 +315,32 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                             false, guid , strDateTime, _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec, _model.Document);
                     }
 
+                    // Set website configuration and encoding to the share object.
+                    // The encoding is necessary for the Parser for encoding the download result.
+                    if (!_model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1]
+                        .SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList))
+                    {
+                        // Set update flag to false
+                        _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1]
+                            .WebSiteConfigurationValid = false;
+                    }
+                    else
+                        // Set update flag to false
+                        _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1]
+                            .WebSiteConfigurationValid = true;
+
+                    if (!_model.ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1]
+                        .SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList))
+                    {
+                        // Set update flag to false
+                        _model.ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1]
+                            .WebSiteConfigurationValid = false;
+                    }
+                    else
+                        // Set update flag to false
+                        _model.ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1]
+                            .WebSiteConfigurationValid = true;
+
                     // Sort portfolio list in order of the share names
                     _model.ShareObjectListFinalValue.Sort(new ShareObjectListComparer());
                 }

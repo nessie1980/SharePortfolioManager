@@ -1193,8 +1193,8 @@ namespace SharePortfolioManager
                     // Reset flag
                     AddFlagFinalValue = false;
 
-                    //if (dgvPortfolioFinalValue.Rows.Count > 1)
-                    //    dgvPortfolioFinalValue.ClearSelection();
+                    if (dgvPortfolioFinalValue.Rows.Count > 1)
+                        dgvPortfolioFinalValue.ClearSelection();
 
                     SelectedDataGridViewShareIndex = ShareObjectListFinalValue.IndexOf(ShareObjectFinalValue);
                     dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;

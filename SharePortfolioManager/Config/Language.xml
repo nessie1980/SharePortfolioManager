@@ -306,7 +306,7 @@
 				<SearchStarted text="Search process has been started." />
 				<SearchRunning text="Search process running." />
 				<SearchFinish text="Search process finished." />
-				<Finish_1 text="Update of the share'" />
+				<Finish_1 text="Update of the share '" />
 				<Finish_2 text="' successfully finished." />
 			</UpdateMessages>
 
@@ -383,7 +383,6 @@
 					<OrderNumber text="Order number:" />
 					<WebSite text="Web page address:" />
 					<Date text="Date:" />
-					<Time text="Time:" />
 					<Volume text="Volume:" />
 					<SharePrice text="Market price:" />
 					<MarketValue text="Market value:" />
@@ -539,7 +538,6 @@
 				<!-- Labels -->
 				<Labels>
 					<Date text="Date:" />
-					<Time text="Time:" />
 					<OrderNumber text="Order number:" />
 					<Volume text="Volume:" />
 					<VolumeSold text="Already sold volume:" />
@@ -816,7 +814,6 @@
 				<!-- Labels -->
 				<Labels>
 					<Date text="Date of the payout:" />
-					<Time text="Time of the payout:" />
 					<EnableForeignCurrency text="Activate foreign currency input:" />
 					<ExchangeRatio text="Exchange rate:" />
 					<DividendRate text="Dividend rate:" />
@@ -1461,14 +1458,14 @@
 	
 			<!-- Update messages -->
 			<UpdateMessages>
-				<Start_1 text="Aktualisierung der Aktie'" />
+				<Start_1 text="Aktualisierung der Aktie '" />
 				<Start_2 text="' gestartet." />
 				<ContentLoadStarted text="Webseiten- Inhalt wird geladen." />
 				<ContentLoaded text="Webseiten- Inhalt geladen." />
 				<SearchStarted text="Such- Vorgang wurde gestartet." />
 				<SearchRunning text="Such- Vorgang läuft." />
 				<SearchFinish text="Such- Vorgang beendet." />
-				<Finish_1 text="Aktualisierung der Aktie'" />
+				<Finish_1 text="Aktualisierung der Aktie '" />
 				<Finish_2 text="' wurde erfolgreich beendet." />
 			</UpdateMessages>
 
@@ -1481,7 +1478,7 @@
 				<ContentLoadedFailed text="Laden des Webseiten- Inhalts ist fehlgeschlagen." />
 				<ParsingFailed_1 text="Parsen des Schlüssels '" />F
 				<ParsingFailed_2 text="' ist fehlgeschlagen." />
-				<CancelThread_1 text="Aktualisierung der Aktie'" />
+				<CancelThread_1 text="Aktualisierung der Aktie '" />
 				<CancelThread_2 text="' wurde abgebrochen." />
 				<UpdateFailed text="Aktualisieren ist fehlgeschlagen!" />
 				<Failure text="Aktualisierung ist fehlgeschalgen. Fehler: " />
@@ -1545,7 +1542,6 @@
 					<OrderNumber text="Ordernummer:" />
 					<WebSite text="Webseiten- Adresse:" />
 					<Date text="Datum:" />
-					<Time text="Zeit:" />
 					<Volume text="Anteile:" />
 					<SharePrice text="Kurs:" />
 					<MarketValue text="Kurswert:" />
@@ -1701,7 +1697,6 @@
 				<!-- Labels -->
 				<Labels>
 					<Date text="Datum:" />
-					<Time text="Zeit:" />
 					<OrderNumber text="Ordernummer:" />
 					<Volume text="Gekaufte Anteile:" />
 					<VolumeSold text="Bereits verkaufte Anteile:" />
@@ -1976,7 +1971,6 @@
 				<!-- Labels -->
 				<Labels>
 					<Date text="Datum der Auszahlung:" />
-					<Time text="Zeit der Auszahlung:" />
 					<EnableForeignCurrency text="Fremdwährungseingabe aktivieren:" />
 					<ExchangeRatio text="Devisenkurs:" />
 					<DividendRate text="Dividendensatz:" />

@@ -935,8 +935,6 @@ namespace SharePortfolioManager.BuysForm.View
                         LanguageName);
                 lblDate.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Labels/Date",
                     LanguageName);
-                lblTime.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Labels/Time",
-                    LanguageName);
                 lblOrderNumber.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Labels/OrderNumber",
                     LanguageName);
                 lblVolume.Text =
