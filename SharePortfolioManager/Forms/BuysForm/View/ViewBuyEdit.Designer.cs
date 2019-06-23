@@ -40,9 +40,6 @@
             this.txtBoxBrokerage = new System.Windows.Forms.TextBox();
             this.lblDate = new System.Windows.Forms.Label();
             this.dateTimePickerDate = new System.Windows.Forms.DateTimePicker();
-            this.dateTimePickerTime = new System.Windows.Forms.DateTimePicker();
-            this.picBoxDateParseState = new System.Windows.Forms.PictureBox();
-            this.picBoxTimeParseState = new System.Windows.Forms.PictureBox();
             this.lblDocument = new System.Windows.Forms.Label();
             this.txtBoxDocument = new System.Windows.Forms.TextBox();
             this.btnDocumentBrowse = new System.Windows.Forms.Button();
@@ -72,15 +69,18 @@
             this.lblPriceUnit = new System.Windows.Forms.Label();
             this.lblVolumeSoldUnit = new System.Windows.Forms.Label();
             this.lblVolumeUnit = new System.Windows.Forms.Label();
-            this.picBoxTraderPlaceFeeParseState = new System.Windows.Forms.PictureBox();
-            this.picBoxBrokerFeeParseState = new System.Windows.Forms.PictureBox();
-            this.picBoxProvisionParseState = new System.Windows.Forms.PictureBox();
-            this.picBoxPriceParseState = new System.Windows.Forms.PictureBox();
-            this.picBoxVolumeParseState = new System.Windows.Forms.PictureBox();
-            this.picBoxOrderNumberParseState = new System.Windows.Forms.PictureBox();
             this.lblReduction = new System.Windows.Forms.Label();
             this.txtBoxReduction = new System.Windows.Forms.TextBox();
             this.lblReductionUnit = new System.Windows.Forms.Label();
+            this.picBoxDateParseState = new System.Windows.Forms.PictureBox();
+            this.picBoxTimeParseState = new System.Windows.Forms.PictureBox();
+            this.dateTimePickerTime = new System.Windows.Forms.DateTimePicker();
+            this.picBoxOrderNumberParseState = new System.Windows.Forms.PictureBox();
+            this.picBoxVolumeParseState = new System.Windows.Forms.PictureBox();
+            this.picBoxPriceParseState = new System.Windows.Forms.PictureBox();
+            this.picBoxProvisionParseState = new System.Windows.Forms.PictureBox();
+            this.picBoxBrokerFeeParseState = new System.Windows.Forms.PictureBox();
+            this.picBoxTraderPlaceFeeParseState = new System.Windows.Forms.PictureBox();
             this.picBoxReductionParseState = new System.Windows.Forms.PictureBox();
             this.statusStripMessages = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelMessageBuyEdit = new System.Windows.Forms.ToolStripStatusLabel();
@@ -95,12 +95,12 @@
             this.tblLayPnlBuyInput.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxDateParseState)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxTimeParseState)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picBoxTraderPlaceFeeParseState)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picBoxBrokerFeeParseState)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picBoxProvisionParseState)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picBoxPriceParseState)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picBoxVolumeParseState)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxOrderNumberParseState)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxVolumeParseState)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxPriceParseState)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxProvisionParseState)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxBrokerFeeParseState)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxTraderPlaceFeeParseState)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxReductionParseState)).BeginInit();
             this.statusStripMessages.SuspendLayout();
             this.grpBoxBuys.SuspendLayout();
@@ -219,7 +219,7 @@
             this.tblLayPnlBuyInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tblLayPnlBuyInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tblLayPnlBuyInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tblLayPnlBuyInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlBuyInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tblLayPnlBuyInput.Controls.Add(this.lblBrokerageUnit, 4, 9);
             this.tblLayPnlBuyInput.Controls.Add(this.lblBrokerage, 0, 9);
             this.tblLayPnlBuyInput.Controls.Add(this.txtBoxBrokerage, 1, 9);
@@ -362,38 +362,6 @@
             this.dateTimePickerDate.ValueChanged += new System.EventHandler(this.OnDatePickerDate_ValueChanged);
             this.dateTimePickerDate.Enter += new System.EventHandler(this.OnDatePickerDate_Enter);
             this.dateTimePickerDate.Leave += new System.EventHandler(this.OnDatePickerDate_Leave);
-            // 
-            // dateTimePickerTime
-            // 
-            this.dateTimePickerTime.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dateTimePickerTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dateTimePickerTime.Location = new System.Drawing.Point(505, 1);
-            this.dateTimePickerTime.Margin = new System.Windows.Forms.Padding(1);
-            this.dateTimePickerTime.Name = "dateTimePickerTime";
-            this.dateTimePickerTime.ShowUpDown = true;
-            this.dateTimePickerTime.Size = new System.Drawing.Size(228, 22);
-            this.dateTimePickerTime.TabIndex = 1;
-            this.dateTimePickerTime.ValueChanged += new System.EventHandler(this.OnDatePickerTime_ValueChanged);
-            this.dateTimePickerTime.Enter += new System.EventHandler(this.OnDatePickerTime_Enter);
-            this.dateTimePickerTime.Leave += new System.EventHandler(this.OnDatePickerTime_Leave);
-            // 
-            // picBoxDateParseState
-            // 
-            this.picBoxDateParseState.Location = new System.Drawing.Point(483, 3);
-            this.picBoxDateParseState.Name = "picBoxDateParseState";
-            this.picBoxDateParseState.Size = new System.Drawing.Size(18, 18);
-            this.picBoxDateParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picBoxDateParseState.TabIndex = 42;
-            this.picBoxDateParseState.TabStop = false;
-            // 
-            // picBoxTimeParseState
-            // 
-            this.picBoxTimeParseState.Location = new System.Drawing.Point(797, 3);
-            this.picBoxTimeParseState.Name = "picBoxTimeParseState";
-            this.picBoxTimeParseState.Size = new System.Drawing.Size(18, 18);
-            this.picBoxTimeParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picBoxTimeParseState.TabIndex = 43;
-            this.picBoxTimeParseState.TabStop = false;
             // 
             // lblDocument
             // 
@@ -798,60 +766,6 @@
             this.lblVolumeUnit.Text = "_lblVolumeUnit";
             this.lblVolumeUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // picBoxTraderPlaceFeeParseState
-            // 
-            this.picBoxTraderPlaceFeeParseState.Location = new System.Drawing.Point(797, 195);
-            this.picBoxTraderPlaceFeeParseState.Name = "picBoxTraderPlaceFeeParseState";
-            this.picBoxTraderPlaceFeeParseState.Size = new System.Drawing.Size(18, 18);
-            this.picBoxTraderPlaceFeeParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picBoxTraderPlaceFeeParseState.TabIndex = 48;
-            this.picBoxTraderPlaceFeeParseState.TabStop = false;
-            // 
-            // picBoxBrokerFeeParseState
-            // 
-            this.picBoxBrokerFeeParseState.Location = new System.Drawing.Point(797, 171);
-            this.picBoxBrokerFeeParseState.Name = "picBoxBrokerFeeParseState";
-            this.picBoxBrokerFeeParseState.Size = new System.Drawing.Size(18, 18);
-            this.picBoxBrokerFeeParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picBoxBrokerFeeParseState.TabIndex = 47;
-            this.picBoxBrokerFeeParseState.TabStop = false;
-            // 
-            // picBoxProvisionParseState
-            // 
-            this.picBoxProvisionParseState.Location = new System.Drawing.Point(797, 147);
-            this.picBoxProvisionParseState.Name = "picBoxProvisionParseState";
-            this.picBoxProvisionParseState.Size = new System.Drawing.Size(18, 18);
-            this.picBoxProvisionParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picBoxProvisionParseState.TabIndex = 46;
-            this.picBoxProvisionParseState.TabStop = false;
-            // 
-            // picBoxPriceParseState
-            // 
-            this.picBoxPriceParseState.Location = new System.Drawing.Point(797, 99);
-            this.picBoxPriceParseState.Name = "picBoxPriceParseState";
-            this.picBoxPriceParseState.Size = new System.Drawing.Size(18, 18);
-            this.picBoxPriceParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picBoxPriceParseState.TabIndex = 45;
-            this.picBoxPriceParseState.TabStop = false;
-            // 
-            // picBoxVolumeParseState
-            // 
-            this.picBoxVolumeParseState.Location = new System.Drawing.Point(797, 51);
-            this.picBoxVolumeParseState.Name = "picBoxVolumeParseState";
-            this.picBoxVolumeParseState.Size = new System.Drawing.Size(18, 18);
-            this.picBoxVolumeParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picBoxVolumeParseState.TabIndex = 44;
-            this.picBoxVolumeParseState.TabStop = false;
-            // 
-            // picBoxOrderNumberParseState
-            // 
-            this.picBoxOrderNumberParseState.Location = new System.Drawing.Point(797, 27);
-            this.picBoxOrderNumberParseState.Name = "picBoxOrderNumberParseState";
-            this.picBoxOrderNumberParseState.Size = new System.Drawing.Size(18, 18);
-            this.picBoxOrderNumberParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picBoxOrderNumberParseState.TabIndex = 52;
-            this.picBoxOrderNumberParseState.TabStop = false;
-            // 
             // lblReduction
             // 
             this.lblReduction.BackColor = System.Drawing.Color.LightGray;
@@ -891,6 +805,92 @@
             this.lblReductionUnit.TabIndex = 23;
             this.lblReductionUnit.Text = "_lblReductionUnit";
             this.lblReductionUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // picBoxDateParseState
+            // 
+            this.picBoxDateParseState.Location = new System.Drawing.Point(483, 3);
+            this.picBoxDateParseState.Name = "picBoxDateParseState";
+            this.picBoxDateParseState.Size = new System.Drawing.Size(18, 18);
+            this.picBoxDateParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picBoxDateParseState.TabIndex = 42;
+            this.picBoxDateParseState.TabStop = false;
+            // 
+            // picBoxTimeParseState
+            // 
+            this.picBoxTimeParseState.Location = new System.Drawing.Point(797, 3);
+            this.picBoxTimeParseState.Name = "picBoxTimeParseState";
+            this.picBoxTimeParseState.Size = new System.Drawing.Size(18, 18);
+            this.picBoxTimeParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picBoxTimeParseState.TabIndex = 43;
+            this.picBoxTimeParseState.TabStop = false;
+            // 
+            // dateTimePickerTime
+            // 
+            this.dateTimePickerTime.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dateTimePickerTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.dateTimePickerTime.Location = new System.Drawing.Point(505, 1);
+            this.dateTimePickerTime.Margin = new System.Windows.Forms.Padding(1);
+            this.dateTimePickerTime.Name = "dateTimePickerTime";
+            this.dateTimePickerTime.ShowUpDown = true;
+            this.dateTimePickerTime.Size = new System.Drawing.Size(228, 22);
+            this.dateTimePickerTime.TabIndex = 1;
+            this.dateTimePickerTime.ValueChanged += new System.EventHandler(this.OnDatePickerTime_ValueChanged);
+            this.dateTimePickerTime.Enter += new System.EventHandler(this.OnDatePickerTime_Enter);
+            this.dateTimePickerTime.Leave += new System.EventHandler(this.OnDatePickerTime_Leave);
+            // 
+            // picBoxOrderNumberParseState
+            // 
+            this.picBoxOrderNumberParseState.Location = new System.Drawing.Point(797, 27);
+            this.picBoxOrderNumberParseState.Name = "picBoxOrderNumberParseState";
+            this.picBoxOrderNumberParseState.Size = new System.Drawing.Size(18, 18);
+            this.picBoxOrderNumberParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picBoxOrderNumberParseState.TabIndex = 52;
+            this.picBoxOrderNumberParseState.TabStop = false;
+            // 
+            // picBoxVolumeParseState
+            // 
+            this.picBoxVolumeParseState.Location = new System.Drawing.Point(797, 51);
+            this.picBoxVolumeParseState.Name = "picBoxVolumeParseState";
+            this.picBoxVolumeParseState.Size = new System.Drawing.Size(18, 18);
+            this.picBoxVolumeParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picBoxVolumeParseState.TabIndex = 44;
+            this.picBoxVolumeParseState.TabStop = false;
+            // 
+            // picBoxPriceParseState
+            // 
+            this.picBoxPriceParseState.Location = new System.Drawing.Point(797, 99);
+            this.picBoxPriceParseState.Name = "picBoxPriceParseState";
+            this.picBoxPriceParseState.Size = new System.Drawing.Size(18, 18);
+            this.picBoxPriceParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picBoxPriceParseState.TabIndex = 45;
+            this.picBoxPriceParseState.TabStop = false;
+            // 
+            // picBoxProvisionParseState
+            // 
+            this.picBoxProvisionParseState.Location = new System.Drawing.Point(797, 147);
+            this.picBoxProvisionParseState.Name = "picBoxProvisionParseState";
+            this.picBoxProvisionParseState.Size = new System.Drawing.Size(18, 18);
+            this.picBoxProvisionParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picBoxProvisionParseState.TabIndex = 46;
+            this.picBoxProvisionParseState.TabStop = false;
+            // 
+            // picBoxBrokerFeeParseState
+            // 
+            this.picBoxBrokerFeeParseState.Location = new System.Drawing.Point(797, 171);
+            this.picBoxBrokerFeeParseState.Name = "picBoxBrokerFeeParseState";
+            this.picBoxBrokerFeeParseState.Size = new System.Drawing.Size(18, 18);
+            this.picBoxBrokerFeeParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picBoxBrokerFeeParseState.TabIndex = 47;
+            this.picBoxBrokerFeeParseState.TabStop = false;
+            // 
+            // picBoxTraderPlaceFeeParseState
+            // 
+            this.picBoxTraderPlaceFeeParseState.Location = new System.Drawing.Point(797, 195);
+            this.picBoxTraderPlaceFeeParseState.Name = "picBoxTraderPlaceFeeParseState";
+            this.picBoxTraderPlaceFeeParseState.Size = new System.Drawing.Size(18, 18);
+            this.picBoxTraderPlaceFeeParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picBoxTraderPlaceFeeParseState.TabIndex = 48;
+            this.picBoxTraderPlaceFeeParseState.TabStop = false;
             // 
             // picBoxReductionParseState
             // 
@@ -1020,12 +1020,12 @@
             this.tblLayPnlBuyInput.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxDateParseState)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxTimeParseState)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picBoxTraderPlaceFeeParseState)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picBoxBrokerFeeParseState)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picBoxProvisionParseState)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picBoxPriceParseState)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picBoxVolumeParseState)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxOrderNumberParseState)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxVolumeParseState)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxPriceParseState)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxProvisionParseState)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxBrokerFeeParseState)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxTraderPlaceFeeParseState)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxReductionParseState)).EndInit();
             this.statusStripMessages.ResumeLayout(false);
             this.statusStripMessages.PerformLayout();

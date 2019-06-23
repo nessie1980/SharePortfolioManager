@@ -663,7 +663,6 @@
 				<!-- Labels -->
 				<Labels>
 					<Date text="Date:" />
-					<Time text="Time:" />
 <!--					<ForeignCurrencyActivation text="Activate foreign currency input:" /> -->
 <!--					<ForeignCurrencyFactor text="Calculation factor:" /> -->
 					<OrderNumber text="Order number:" />
@@ -1822,7 +1821,6 @@
 				<!-- Labels -->
 				<Labels>
 					<Date text="Datum:" />
-					<Time text="Zeit:" />
 					<OrderNumber text="Ordernummer:" />
 					<Volume text="Verkaufte Anteile:" />
 					<BuyValue text="Verkaufter Kaufwert:" />
