@@ -54,6 +54,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Model
         int DividendPayoutInterval { get; set; }
         CultureInfo CultureInfo { get; set; }
         string WebSite { get; set; }
+        string DailyValuesWebSite { get; set; }
         string Date { get; set; }
         string Time { get; set; }
         string OrderNumber { get; set; }
@@ -98,6 +99,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Model
         private int _dividendPayoutInterval;
         private CultureInfo _cultureInfo;
         private string _webSite;
+        private string _dailyValuesWebSite;
         private string _date;
         private string _time;
         private string _orderNumber;
@@ -212,6 +214,17 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Model
                 if (Equals(_webSite, value))
                     return;
                 _webSite = value;
+            }
+        }
+
+        public string DailyValuesWebSite
+        {
+            get => _dailyValuesWebSite;
+            set
+            {
+                if (Equals(_dailyValuesWebSite, value))
+                    return;
+                _dailyValuesWebSite = value;
             }
         }
 

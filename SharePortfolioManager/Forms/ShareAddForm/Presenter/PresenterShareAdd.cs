@@ -27,6 +27,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using SharePortfolioManager.Classes.ShareObjects;
 
@@ -58,6 +59,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             _view.Wkn = _model.Wkn;
             _view.ShareName = _model.Name;
             _view.WebSite = _model.WebSite;
+            _view.DailyValuesWebSite = _model.DailyValuesWebSite;
             _view.Date = _model.Date;
             _view.Time = _model.Time;
             _view.OrderNumber = _model.OrderNumber;
@@ -104,6 +106,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             _model.DividendPayoutInterval = _view.DividendPayoutInterval;
             _model.CultureInfo = _view.CultureInfo;
             _model.WebSite = _view.WebSite;
+            _model.DailyValuesWebSite = _view.DailyValuesWebSite;
             _model.Date = _view.Date;
             _model.Time = _view.Time;
             _model.OrderNumber = _view.OrderNumber;
@@ -196,6 +199,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                         _model.TraderPlaceFeeDec,
                         _model.ReductionDec,
                         _model.WebSite,
+                        _model.DailyValuesWebSite,
                         _model.ImageList,
                         null,
                         _model.CultureInfo,
@@ -224,6 +228,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                         _model.TraderPlaceFeeDec,
                         _model.ReductionDec,
                         _model.WebSite,
+                        _model.DailyValuesWebSite,
                         _model.ImageList,
                         null,
                         _model.CultureInfo,
@@ -259,6 +264,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                         _model.TraderPlaceFeeDec,
                         _model.ReductionDec,
                         _model.WebSite,
+                        _model.DailyValuesWebSite,
                         _model.ImageList,
                         null,
                         _model.CultureInfo,
@@ -284,6 +290,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                         _model.TraderPlaceFeeDec,
                         _model.ReductionDec,
                         _model.WebSite,
+                        _model.DailyValuesWebSite,
                         _model.ImageList,
                         null,
                         _model.CultureInfo,
@@ -367,7 +374,14 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
         private bool CheckInputValues()
         {
             var bErrorFlag = false;
-            var decodedUrl = _model.WebSite;
+            var decodedUrlWebSite = _model.WebSite;
+
+            _model.DailyValuesWebSite = Regex.Replace(_model.DailyValuesWebSite,
+                "[=]([0-9][0-9].[0-9][0-9].[0-9][0-9][0-9][0-9])[&]", "={0}&");
+
+            _model.DailyValuesWebSite = Regex.Replace(_model.DailyValuesWebSite,
+                "[=]([M,Y][1,3,5,6])[&]", "={1}&");
+            var decodeUrlDailyValuesWebSite = _model.DailyValuesWebSite;
 
             _model.ErrorCode = ShareAddErrorCode.AddSuccessful;
 
@@ -569,7 +583,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                 bErrorFlag = true;
             }
             // Check website format
-            else if (bErrorFlag == false && !Helper.UrlChecker(ref decodedUrl, 10000))
+            else if (bErrorFlag == false && !Helper.UrlChecker(ref decodedUrlWebSite, 10000))
             {
                 _model.ErrorCode = ShareAddErrorCode.WebSiteWrongFormat;
                 bErrorFlag = true;
@@ -578,7 +592,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             else if (bErrorFlag == false)
             {
 
-                // Check if a market value share with the given WKN number already exists
+                // Check if a market value share with the given website already exists
                 foreach (var shareObjectMarketValue in _model.ShareObjectListMarketValue)
                 {
                     if (shareObjectMarketValue.WebSite != _model.WebSite ||
@@ -591,13 +605,55 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
 
                 if (bErrorFlag == false)
                 {
-                    // Check if a final value share with the given WKN number already exists
+                    // Check if a final value share with the given website already exists
                     foreach (var shareObjectFinalValue in _model.ShareObjectListFinalValue)
                     {
                         if (shareObjectFinalValue.WebSite != _model.WebSite ||
                             shareObjectFinalValue == _model.ShareObjectFinalValue) continue;
 
                         _model.ErrorCode = ShareAddErrorCode.WebSiteExists;
+                        bErrorFlag = true;
+                        break;
+                    }
+                }
+            }
+
+            // Check daily values website input
+            if (_model.DailyValuesWebSite == @"" && bErrorFlag == false)
+            {
+                _model.ErrorCode = ShareAddErrorCode.DailyValuesWebSiteEmpty;
+                bErrorFlag = true;
+            }
+            // Check daily values website format
+            else if (bErrorFlag == false && !Helper.UrlChecker(ref decodeUrlDailyValuesWebSite, 10000))
+            {
+                _model.ErrorCode = ShareAddErrorCode.DailyValuesWebSiteWrongFormat;
+                bErrorFlag = true;
+            }
+            // Check if the daily values website is already used
+            else if (bErrorFlag == false)
+            {
+
+                // Check if a market value share with the given daily values website already exists
+                foreach (var shareObjectMarketValue in _model.ShareObjectListMarketValue)
+                {
+                    if (shareObjectMarketValue.DailyValuesWebSite != _model.DailyValuesWebSite ||
+                        shareObjectMarketValue == _model.ShareObjectMarketValue) continue;
+
+                    _model.ErrorCode = ShareAddErrorCode.DailyValuesWebSiteExists;
+                    bErrorFlag = true;
+                    break;
+                }
+
+                if (bErrorFlag == false)
+                {
+                    // Check if a final value share with the given daily values website already exists
+                    foreach (var shareObjectFinalValue in _model.ShareObjectListFinalValue)
+                    {
+                        if (shareObjectFinalValue.DailyValuesWebSite != _model.DailyValuesWebSite ||
+                            shareObjectFinalValue == _model.ShareObjectFinalValue) continue;
+
+                        _model.ErrorCode = ShareAddErrorCode.DailyValuesWebSiteExists;
                         bErrorFlag = true;
                         break;
                     }
@@ -616,7 +672,8 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                 _model.ErrorCode = ShareAddErrorCode.DocumentFileDoesNotExists;
             }
 
-            _model.WebSite = decodedUrl;
+            _model.WebSite = decodedUrlWebSite;
+            _model.DailyValuesWebSite = decodeUrlDailyValuesWebSite;
 
             return bErrorFlag;
         }

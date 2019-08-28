@@ -417,6 +417,54 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
         #region Buttons
 
         /// <summary>
+        /// This function opens the website of the share
+        /// </summary>
+        /// <param name="sender">Open button</param>
+        /// <param name="e">Eventargs</param>
+        private void OnBtnOpenWebSite_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(MarketValueOverviewTabSelected
+                    ? ShareObjectMarketValue.WebSite
+                    : ShareObjectFinalValue.WebSite);
+            }
+            catch (Win32Exception noBrowser)
+            {
+                if (noBrowser.ErrorCode == -2147467259)
+                {
+#if DEBUG
+                    var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + noBrowser.Message;
+                    MessageBox.Show(message, @"Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+#endif
+                    // Add status message
+                    Helper.AddStatusMessage(toolStripStatusLabelUpdate,
+                        Language.GetLanguageTextByXPath(
+                            @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChartErrors/NoBrowserInstalled", LanguageName),
+                        Language, LanguageName,
+                        Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                }
+            }
+            catch (Exception ex)
+            {
+#if DEBUG
+                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
+                MessageBox.Show(message, @"Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+#endif
+                // Add status message
+                Helper.AddStatusMessage(toolStripStatusLabelUpdate,
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChartErrors/OpenWebSiteFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+            }
+        }
+
+        /// <summary>
         /// This function starts the daily values update
         /// </summary>
         /// <param name="sender">Update button</param>
@@ -465,7 +513,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                     var date = DateTime.Now;
                     // Go five years back
                     date = date.AddYears(-5);
-                    strDailyValuesWebSite = string.Format(ShareObjectFinalValue.DailyValuesWebSite, date.ToString("dd.MM.yyyy"), "5Y");
+                    strDailyValuesWebSite = string.Format(ShareObjectFinalValue.DailyValuesWebSite, date.ToString("dd.MM.yyyy"), "Y5");
                 }
                 else
                 {
@@ -473,17 +521,21 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                     var lastDate = ShareObjectFinalValue.DailyValues.Last().Date;
 
                     // Check if the days are less or equal than 27 days
-                    var diffDays = DateTime.Now - lastDate;
+                    var diffMonth = Helper.GetTotalMonthsFrom(DateTime.Now, lastDate);
 
-                    if (diffDays.Days <= 27 )
-                        strDailyValuesWebSite = string.Format(ShareObjectFinalValue.DailyValuesWebSite, DateTime.Now.AddMonths(-1).ToString("dd.MM.yyyy"), "1M");
+                    if (diffMonth < 1 )
+                        strDailyValuesWebSite = string.Format(ShareObjectFinalValue.DailyValuesWebSite, DateTime.Now.AddMonths(-1).ToString("dd.MM.yyyy"), "M1");
+                    else if (diffMonth < 3)
+                        strDailyValuesWebSite = string.Format(ShareObjectFinalValue.DailyValuesWebSite, DateTime.Now.AddMonths(-3).ToString("dd.MM.yyyy"), "M3");
+                    else if (diffMonth < 6)
+                        strDailyValuesWebSite = string.Format(ShareObjectFinalValue.DailyValuesWebSite, DateTime.Now.AddMonths(-6).ToString("dd.MM.yyyy"), "M6");
+                    else if (diffMonth < 12)
+                        strDailyValuesWebSite = string.Format(ShareObjectFinalValue.DailyValuesWebSite, DateTime.Now.AddMonths(-12).ToString("dd.MM.yyyy"), "Y1");
+                    else if (diffMonth < 36)
+                        strDailyValuesWebSite = string.Format(ShareObjectFinalValue.DailyValuesWebSite, DateTime.Now.AddMonths(-36).ToString("dd.MM.yyyy"), "Y3");
                     else
                     {
-                        var years = DateTime.Now.Year - lastDate.Year + 1;
-                        if (years > 5)
-                            years = 5;
-                        
-                        strDailyValuesWebSite = string.Format(ShareObjectFinalValue.DailyValuesWebSite, DateTime.Now.AddYears(-years).ToString("dd.MM.yyyy"), $"{years}Y");
+                        strDailyValuesWebSite = string.Format(ShareObjectFinalValue.DailyValuesWebSite, DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy"), "Y5");
                     }
                 }
 
@@ -605,29 +657,29 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                                 if (row.TagName != "TR") continue;
 
                                 // Check if the row has five elements
-                                if (row.All.Count == 6)
+                                if (row.All.Count == 8)
                                 {
                                     foreach (HtmlElement cell in row.All)
                                     {
                                         switch (iCellCounter)
                                         {
                                             case 0:
-                                                dailyValues.Date = DateTime.Parse(cell.InnerHtml);
-                                                break;
-                                            case 1:
-                                                dailyValues.OpeningPrice = decimal.Parse(cell.InnerHtml);
-                                                break;
-                                            case 2:
-                                                dailyValues.Top = decimal.Parse(cell.InnerHtml);
+                                                dailyValues.Date = DateTime.Parse(cell.InnerText);
                                                 break;
                                             case 3:
-                                                dailyValues.Bottom = decimal.Parse(cell.InnerHtml);
+                                                dailyValues.OpeningPrice = decimal.Parse(cell.InnerText);
                                                 break;
                                             case 4:
-                                                dailyValues.ClosingPrice = decimal.Parse(cell.InnerHtml);
+                                                dailyValues.Top = decimal.Parse(cell.InnerText);
                                                 break;
                                             case 5:
-                                                dailyValues.Volume = decimal.Parse(cell.InnerHtml);
+                                                dailyValues.Bottom = decimal.Parse(cell.InnerText);
+                                                break;
+                                            case 6:
+                                                dailyValues.ClosingPrice = decimal.Parse(cell.InnerText);
+                                                break;
+                                            case 7:
+                                                dailyValues.Volume = decimal.Parse(cell.InnerText);
                                                 break;
                                         }
 
@@ -1157,48 +1209,5 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
         }
 
         #endregion Selection change
-
-        private void btnOpenWebSite_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                System.Diagnostics.Process.Start(MarketValueOverviewTabSelected
-                    ? ShareObjectMarketValue.WebSite
-                    : ShareObjectFinalValue.WebSite);
-            }
-            catch (Win32Exception noBrowser)
-            {
-                if (noBrowser.ErrorCode == -2147467259)
-                {
-#if DEBUG
-                    var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + noBrowser.Message;
-                    MessageBox.Show(message, @"Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-#endif
-                    // Add status message
-                    Helper.AddStatusMessage(toolStripStatusLabelUpdate,
-                        Language.GetLanguageTextByXPath(
-                            @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChartErrors/NoBrowserInstalled", LanguageName),
-                        Language, LanguageName,
-                        Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
-                }
-            }
-            catch (Exception ex)
-            {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
-                Helper.AddStatusMessage(toolStripStatusLabelUpdate,
-                    Language.GetLanguageTextByXPath(
-                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChartErrors/OpenWebSiteFailed", LanguageName),
-                    Language, LanguageName,
-                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
-            }
-        }
     }
 }

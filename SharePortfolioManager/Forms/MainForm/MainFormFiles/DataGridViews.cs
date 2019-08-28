@@ -1835,9 +1835,9 @@ namespace SharePortfolioManager
 
         #endregion Data grid view enter
 
-        #region Data grid view cell click
+        #region Data grid view cell double click
 
-        private void DgvPortfolioFinalValue_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void OnDgvPortfolioFinalValue_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
@@ -1859,7 +1859,7 @@ namespace SharePortfolioManager
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
                         Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/EditSaveSuccessful", LanguageName),
                         Language, LanguageName,
-                        Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Application);
+                        Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
                 }
                 else
                 {
@@ -1867,7 +1867,7 @@ namespace SharePortfolioManager
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
                         Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
                         Language, LanguageName,
-                        Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Application);
+                        Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
                 }
 
                 if (exception != null)
@@ -1888,7 +1888,7 @@ namespace SharePortfolioManager
             }
         }
 
-        private void DgvPortfolioMarketValue_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void OnDgvPortfolioMarketValue_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
@@ -1910,7 +1910,7 @@ namespace SharePortfolioManager
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
                         Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/EditSaveSuccessful", LanguageName),
                         Language, LanguageName,
-                        Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Application);
+                        Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
                 }
                 else
                 {
@@ -1918,7 +1918,7 @@ namespace SharePortfolioManager
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
                         Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
                         Language, LanguageName,
-                        Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Application);
+                        Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
                 }
 
                 if (exception != null)
@@ -1935,11 +1935,11 @@ namespace SharePortfolioManager
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
                     Language, LanguageName,
-                    Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Application);
+                    Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
             }
         }
 
-#endregion Data grid view cell click
+        #endregion Data grid view cell double click
 
         #endregion Methods
     }

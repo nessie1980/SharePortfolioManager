@@ -53,14 +53,18 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.tblLayPnlEditShareInput = new System.Windows.Forms.TableLayoutPanel();
+            this.lblDate = new System.Windows.Forms.Label();
+            this.lblDateValue = new System.Windows.Forms.Label();
+            this.lblShareType = new System.Windows.Forms.Label();
+            this.lblDividendPayoutInterval = new System.Windows.Forms.Label();
+            this.lblCultureInfo = new System.Windows.Forms.Label();
             this.cbxShareType = new System.Windows.Forms.ComboBox();
             this.cbxDividendPayoutInterval = new System.Windows.Forms.ComboBox();
-            this.lblDividendPayoutInterval = new System.Windows.Forms.Label();
-            this.lblDate = new System.Windows.Forms.Label();
             this.cboBoxCultureInfo = new System.Windows.Forms.ComboBox();
-            this.lblDateValue = new System.Windows.Forms.Label();
-            this.lblCultureInfo = new System.Windows.Forms.Label();
-            this.lblShareType = new System.Windows.Forms.Label();
+            this.chkBoxUpdate = new System.Windows.Forms.CheckBox();
+            this.lblShareUpdate = new System.Windows.Forms.Label();
+            this.lblDailyValuesWebSite = new System.Windows.Forms.Label();
+            this.txtBoxDailyValuesWebSite = new System.Windows.Forms.TextBox();
             this.grpBoxEarningsExpenditure = new System.Windows.Forms.GroupBox();
             this.tblLayPnlEditShareEarningsExpenditure = new System.Windows.Forms.TableLayoutPanel();
             this.lblBrokerageValue = new System.Windows.Forms.Label();
@@ -76,8 +80,6 @@
             this.lblProfitLoss = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.editShareStatusLabelMessage = new System.Windows.Forms.ToolStripStatusLabel();
-            this.lblShareUpdate = new System.Windows.Forms.Label();
-            this.chkBoxUpdate = new System.Windows.Forms.CheckBox();
             this.grpBoxGeneral.SuspendLayout();
             this.tblLayPnlEditShareButtons.SuspendLayout();
             this.tblLayPnlEditShareInput.SuspendLayout();
@@ -167,7 +169,7 @@
             this.txtBoxWebSite.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxWebSite.Name = "txtBoxWebSite";
             this.txtBoxWebSite.Size = new System.Drawing.Size(490, 22);
-            this.txtBoxWebSite.TabIndex = 2;
+            this.txtBoxWebSite.TabIndex = 3;
             // 
             // lblVolume
             // 
@@ -300,7 +302,7 @@
             this.btnShareBuysEdit.Margin = new System.Windows.Forms.Padding(0);
             this.btnShareBuysEdit.Name = "btnShareBuysEdit";
             this.btnShareBuysEdit.Size = new System.Drawing.Size(40, 24);
-            this.btnShareBuysEdit.TabIndex = 5;
+            this.btnShareBuysEdit.TabIndex = 10;
             this.btnShareBuysEdit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnShareBuysEdit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnShareBuysEdit.UseVisualStyleBackColor = true;
@@ -355,7 +357,7 @@
             this.btnShareSalesEdit.Margin = new System.Windows.Forms.Padding(0);
             this.btnShareSalesEdit.Name = "btnShareSalesEdit";
             this.btnShareSalesEdit.Size = new System.Drawing.Size(40, 24);
-            this.btnShareSalesEdit.TabIndex = 6;
+            this.btnShareSalesEdit.TabIndex = 11;
             this.btnShareSalesEdit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnShareSalesEdit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnShareSalesEdit.UseVisualStyleBackColor = true;
@@ -370,7 +372,7 @@
             this.grpBoxGeneral.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grpBoxGeneral.Location = new System.Drawing.Point(5, 5);
             this.grpBoxGeneral.Name = "grpBoxGeneral";
-            this.grpBoxGeneral.Size = new System.Drawing.Size(825, 297);
+            this.grpBoxGeneral.Size = new System.Drawing.Size(825, 321);
             this.grpBoxGeneral.TabIndex = 36;
             this.grpBoxGeneral.TabStop = false;
             this.grpBoxGeneral.Text = "grpBoxGeneral";
@@ -384,7 +386,7 @@
             this.tblLayPnlEditShareButtons.Controls.Add(this.btnCancel, 2, 0);
             this.tblLayPnlEditShareButtons.Controls.Add(this.btnSave, 1, 0);
             this.tblLayPnlEditShareButtons.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tblLayPnlEditShareButtons.Location = new System.Drawing.Point(3, 258);
+            this.tblLayPnlEditShareButtons.Location = new System.Drawing.Point(3, 282);
             this.tblLayPnlEditShareButtons.Margin = new System.Windows.Forms.Padding(1);
             this.tblLayPnlEditShareButtons.Name = "tblLayPnlEditShareButtons";
             this.tblLayPnlEditShareButtons.RowCount = 1;
@@ -403,7 +405,7 @@
             this.btnCancel.Margin = new System.Windows.Forms.Padding(1);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(178, 33);
-            this.btnCancel.TabIndex = 40;
+            this.btnCancel.TabIndex = 9;
             this.btnCancel.Text = "_Cancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnCancel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -421,7 +423,7 @@
             this.btnSave.Margin = new System.Windows.Forms.Padding(1);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(178, 33);
-            this.btnSave.TabIndex = 39;
+            this.btnSave.TabIndex = 8;
             this.btnSave.Text = "_Save";
             this.btnSave.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSave.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -441,13 +443,13 @@
             this.tblLayPnlEditShareInput.Controls.Add(this.lblDateValue, 1, 1);
             this.tblLayPnlEditShareInput.Controls.Add(this.lblName, 0, 2);
             this.tblLayPnlEditShareInput.Controls.Add(this.txtBoxName, 1, 2);
-            this.tblLayPnlEditShareInput.Controls.Add(this.lblShareType, 0, 9);
-            this.tblLayPnlEditShareInput.Controls.Add(this.lblDividendPayoutInterval, 0, 8);
-            this.tblLayPnlEditShareInput.Controls.Add(this.lblCultureInfo, 0, 7);
+            this.tblLayPnlEditShareInput.Controls.Add(this.lblShareType, 0, 10);
+            this.tblLayPnlEditShareInput.Controls.Add(this.lblDividendPayoutInterval, 0, 9);
+            this.tblLayPnlEditShareInput.Controls.Add(this.lblCultureInfo, 0, 8);
             this.tblLayPnlEditShareInput.Controls.Add(this.lblWebSite, 0, 6);
-            this.tblLayPnlEditShareInput.Controls.Add(this.cbxShareType, 1, 9);
-            this.tblLayPnlEditShareInput.Controls.Add(this.cbxDividendPayoutInterval, 1, 8);
-            this.tblLayPnlEditShareInput.Controls.Add(this.cboBoxCultureInfo, 1, 7);
+            this.tblLayPnlEditShareInput.Controls.Add(this.cbxShareType, 1, 10);
+            this.tblLayPnlEditShareInput.Controls.Add(this.cbxDividendPayoutInterval, 1, 9);
+            this.tblLayPnlEditShareInput.Controls.Add(this.cboBoxCultureInfo, 1, 8);
             this.tblLayPnlEditShareInput.Controls.Add(this.txtBoxWebSite, 1, 6);
             this.tblLayPnlEditShareInput.Controls.Add(this.lblDepositUnit, 3, 3);
             this.tblLayPnlEditShareInput.Controls.Add(this.lblVolumeUnit, 3, 4);
@@ -457,10 +459,12 @@
             this.tblLayPnlEditShareInput.Controls.Add(this.lblShareUpdate, 0, 5);
             this.tblLayPnlEditShareInput.Controls.Add(this.lblPurchase, 0, 3);
             this.tblLayPnlEditShareInput.Controls.Add(this.lblVolume, 0, 4);
+            this.tblLayPnlEditShareInput.Controls.Add(this.lblDailyValuesWebSite, 0, 7);
+            this.tblLayPnlEditShareInput.Controls.Add(this.txtBoxDailyValuesWebSite, 1, 7);
             this.tblLayPnlEditShareInput.Dock = System.Windows.Forms.DockStyle.Top;
             this.tblLayPnlEditShareInput.Location = new System.Drawing.Point(3, 18);
             this.tblLayPnlEditShareInput.Name = "tblLayPnlEditShareInput";
-            this.tblLayPnlEditShareInput.RowCount = 10;
+            this.tblLayPnlEditShareInput.RowCount = 11;
             this.tblLayPnlEditShareInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tblLayPnlEditShareInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tblLayPnlEditShareInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
@@ -471,48 +475,9 @@
             this.tblLayPnlEditShareInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tblLayPnlEditShareInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tblLayPnlEditShareInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tblLayPnlEditShareInput.Size = new System.Drawing.Size(819, 240);
+            this.tblLayPnlEditShareInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlEditShareInput.Size = new System.Drawing.Size(819, 264);
             this.tblLayPnlEditShareInput.TabIndex = 41;
-            // 
-            // cbxShareType
-            // 
-            this.tblLayPnlEditShareInput.SetColumnSpan(this.cbxShareType, 2);
-            this.cbxShareType.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbxShareType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxShareType.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbxShareType.FormattingEnabled = true;
-            this.cbxShareType.Location = new System.Drawing.Point(251, 217);
-            this.cbxShareType.Margin = new System.Windows.Forms.Padding(1);
-            this.cbxShareType.Name = "cbxShareType";
-            this.cbxShareType.Size = new System.Drawing.Size(490, 22);
-            this.cbxShareType.TabIndex = 42;
-            // 
-            // cbxDividendPayoutInterval
-            // 
-            this.tblLayPnlEditShareInput.SetColumnSpan(this.cbxDividendPayoutInterval, 2);
-            this.cbxDividendPayoutInterval.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbxDividendPayoutInterval.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxDividendPayoutInterval.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbxDividendPayoutInterval.FormattingEnabled = true;
-            this.cbxDividendPayoutInterval.Location = new System.Drawing.Point(251, 193);
-            this.cbxDividendPayoutInterval.Margin = new System.Windows.Forms.Padding(1);
-            this.cbxDividendPayoutInterval.Name = "cbxDividendPayoutInterval";
-            this.cbxDividendPayoutInterval.Size = new System.Drawing.Size(490, 22);
-            this.cbxDividendPayoutInterval.TabIndex = 4;
-            // 
-            // lblDividendPayoutInterval
-            // 
-            this.lblDividendPayoutInterval.BackColor = System.Drawing.Color.LightGray;
-            this.lblDividendPayoutInterval.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDividendPayoutInterval.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblDividendPayoutInterval.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDividendPayoutInterval.Location = new System.Drawing.Point(1, 193);
-            this.lblDividendPayoutInterval.Margin = new System.Windows.Forms.Padding(1);
-            this.lblDividendPayoutInterval.Name = "lblDividendPayoutInterval";
-            this.lblDividendPayoutInterval.Size = new System.Drawing.Size(248, 22);
-            this.lblDividendPayoutInterval.TabIndex = 40;
-            this.lblDividendPayoutInterval.Text = "_lblDividendPayoutInterval";
-            this.lblDividendPayoutInterval.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblDate
             // 
@@ -527,20 +492,6 @@
             this.lblDate.TabIndex = 36;
             this.lblDate.Text = "_lblDate";
             this.lblDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // cboBoxCultureInfo
-            // 
-            this.cboBoxCultureInfo.BackColor = System.Drawing.Color.White;
-            this.tblLayPnlEditShareInput.SetColumnSpan(this.cboBoxCultureInfo, 2);
-            this.cboBoxCultureInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cboBoxCultureInfo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboBoxCultureInfo.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cboBoxCultureInfo.FormattingEnabled = true;
-            this.cboBoxCultureInfo.Location = new System.Drawing.Point(251, 169);
-            this.cboBoxCultureInfo.Margin = new System.Windows.Forms.Padding(1);
-            this.cboBoxCultureInfo.Name = "cboBoxCultureInfo";
-            this.cboBoxCultureInfo.Size = new System.Drawing.Size(490, 22);
-            this.cboBoxCultureInfo.TabIndex = 3;
             // 
             // lblDateValue
             // 
@@ -557,27 +508,13 @@
             this.lblDateValue.Text = "_lblDateValue";
             this.lblDateValue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // lblCultureInfo
-            // 
-            this.lblCultureInfo.BackColor = System.Drawing.Color.LightGray;
-            this.lblCultureInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblCultureInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblCultureInfo.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCultureInfo.Location = new System.Drawing.Point(1, 169);
-            this.lblCultureInfo.Margin = new System.Windows.Forms.Padding(1);
-            this.lblCultureInfo.Name = "lblCultureInfo";
-            this.lblCultureInfo.Size = new System.Drawing.Size(248, 22);
-            this.lblCultureInfo.TabIndex = 39;
-            this.lblCultureInfo.Text = "_lblCultureInfo";
-            this.lblCultureInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // lblShareType
             // 
             this.lblShareType.BackColor = System.Drawing.Color.LightGray;
             this.lblShareType.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblShareType.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblShareType.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblShareType.Location = new System.Drawing.Point(1, 217);
+            this.lblShareType.Location = new System.Drawing.Point(1, 241);
             this.lblShareType.Margin = new System.Windows.Forms.Padding(1);
             this.lblShareType.Name = "lblShareType";
             this.lblShareType.Size = new System.Drawing.Size(248, 22);
@@ -585,13 +522,130 @@
             this.lblShareType.Text = "_lblShareType";
             this.lblShareType.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // lblDividendPayoutInterval
+            // 
+            this.lblDividendPayoutInterval.BackColor = System.Drawing.Color.LightGray;
+            this.lblDividendPayoutInterval.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDividendPayoutInterval.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDividendPayoutInterval.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDividendPayoutInterval.Location = new System.Drawing.Point(1, 217);
+            this.lblDividendPayoutInterval.Margin = new System.Windows.Forms.Padding(1);
+            this.lblDividendPayoutInterval.Name = "lblDividendPayoutInterval";
+            this.lblDividendPayoutInterval.Size = new System.Drawing.Size(248, 22);
+            this.lblDividendPayoutInterval.TabIndex = 40;
+            this.lblDividendPayoutInterval.Text = "_lblDividendPayoutInterval";
+            this.lblDividendPayoutInterval.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblCultureInfo
+            // 
+            this.lblCultureInfo.BackColor = System.Drawing.Color.LightGray;
+            this.lblCultureInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblCultureInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCultureInfo.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCultureInfo.Location = new System.Drawing.Point(1, 193);
+            this.lblCultureInfo.Margin = new System.Windows.Forms.Padding(1);
+            this.lblCultureInfo.Name = "lblCultureInfo";
+            this.lblCultureInfo.Size = new System.Drawing.Size(248, 22);
+            this.lblCultureInfo.TabIndex = 39;
+            this.lblCultureInfo.Text = "_lblCultureInfo";
+            this.lblCultureInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbxShareType
+            // 
+            this.tblLayPnlEditShareInput.SetColumnSpan(this.cbxShareType, 2);
+            this.cbxShareType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbxShareType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxShareType.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbxShareType.FormattingEnabled = true;
+            this.cbxShareType.Location = new System.Drawing.Point(251, 241);
+            this.cbxShareType.Margin = new System.Windows.Forms.Padding(1);
+            this.cbxShareType.Name = "cbxShareType";
+            this.cbxShareType.Size = new System.Drawing.Size(490, 22);
+            this.cbxShareType.TabIndex = 7;
+            // 
+            // cbxDividendPayoutInterval
+            // 
+            this.tblLayPnlEditShareInput.SetColumnSpan(this.cbxDividendPayoutInterval, 2);
+            this.cbxDividendPayoutInterval.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbxDividendPayoutInterval.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxDividendPayoutInterval.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbxDividendPayoutInterval.FormattingEnabled = true;
+            this.cbxDividendPayoutInterval.Location = new System.Drawing.Point(251, 217);
+            this.cbxDividendPayoutInterval.Margin = new System.Windows.Forms.Padding(1);
+            this.cbxDividendPayoutInterval.Name = "cbxDividendPayoutInterval";
+            this.cbxDividendPayoutInterval.Size = new System.Drawing.Size(490, 22);
+            this.cbxDividendPayoutInterval.TabIndex = 6;
+            // 
+            // cboBoxCultureInfo
+            // 
+            this.cboBoxCultureInfo.BackColor = System.Drawing.Color.White;
+            this.tblLayPnlEditShareInput.SetColumnSpan(this.cboBoxCultureInfo, 2);
+            this.cboBoxCultureInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cboBoxCultureInfo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboBoxCultureInfo.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cboBoxCultureInfo.FormattingEnabled = true;
+            this.cboBoxCultureInfo.Location = new System.Drawing.Point(251, 193);
+            this.cboBoxCultureInfo.Margin = new System.Windows.Forms.Padding(1);
+            this.cboBoxCultureInfo.Name = "cboBoxCultureInfo";
+            this.cboBoxCultureInfo.Size = new System.Drawing.Size(490, 22);
+            this.cboBoxCultureInfo.TabIndex = 5;
+            // 
+            // chkBoxUpdate
+            // 
+            this.chkBoxUpdate.AutoSize = true;
+            this.chkBoxUpdate.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chkBoxUpdate.Location = new System.Drawing.Point(253, 123);
+            this.chkBoxUpdate.Name = "chkBoxUpdate";
+            this.chkBoxUpdate.Size = new System.Drawing.Size(240, 18);
+            this.chkBoxUpdate.TabIndex = 2;
+            this.chkBoxUpdate.UseVisualStyleBackColor = true;
+            // 
+            // lblShareUpdate
+            // 
+            this.lblShareUpdate.BackColor = System.Drawing.Color.LightGray;
+            this.lblShareUpdate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblShareUpdate.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblShareUpdate.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblShareUpdate.Location = new System.Drawing.Point(1, 121);
+            this.lblShareUpdate.Margin = new System.Windows.Forms.Padding(1);
+            this.lblShareUpdate.Name = "lblShareUpdate";
+            this.lblShareUpdate.Size = new System.Drawing.Size(248, 22);
+            this.lblShareUpdate.TabIndex = 43;
+            this.lblShareUpdate.Text = "_lblShareUpdate";
+            this.lblShareUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblDailyValuesWebSite
+            // 
+            this.lblDailyValuesWebSite.BackColor = System.Drawing.Color.LightGray;
+            this.lblDailyValuesWebSite.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDailyValuesWebSite.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDailyValuesWebSite.Location = new System.Drawing.Point(1, 169);
+            this.lblDailyValuesWebSite.Margin = new System.Windows.Forms.Padding(1);
+            this.lblDailyValuesWebSite.Name = "lblDailyValuesWebSite";
+            this.lblDailyValuesWebSite.Size = new System.Drawing.Size(248, 22);
+            this.lblDailyValuesWebSite.TabIndex = 45;
+            this.lblDailyValuesWebSite.Text = "_lblDailyValuesWebSite";
+            this.lblDailyValuesWebSite.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtBoxDailyValuesWebSite
+            // 
+            this.txtBoxDailyValuesWebSite.BackColor = System.Drawing.Color.White;
+            this.tblLayPnlEditShareInput.SetColumnSpan(this.txtBoxDailyValuesWebSite, 2);
+            this.txtBoxDailyValuesWebSite.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtBoxDailyValuesWebSite.Location = new System.Drawing.Point(251, 169);
+            this.txtBoxDailyValuesWebSite.Margin = new System.Windows.Forms.Padding(1);
+            this.txtBoxDailyValuesWebSite.Name = "txtBoxDailyValuesWebSite";
+            this.txtBoxDailyValuesWebSite.Size = new System.Drawing.Size(490, 22);
+            this.txtBoxDailyValuesWebSite.TabIndex = 4;
+            this.txtBoxDailyValuesWebSite.Leave += new System.EventHandler(this.OnTxtBoxDailyValuesWebSite_Leave);
+            // 
             // grpBoxEarningsExpenditure
             // 
             this.grpBoxEarningsExpenditure.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grpBoxEarningsExpenditure.Controls.Add(this.tblLayPnlEditShareEarningsExpenditure);
             this.grpBoxEarningsExpenditure.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpBoxEarningsExpenditure.Location = new System.Drawing.Point(5, 318);
+            this.grpBoxEarningsExpenditure.Location = new System.Drawing.Point(5, 342);
             this.grpBoxEarningsExpenditure.Name = "grpBoxEarningsExpenditure";
             this.grpBoxEarningsExpenditure.Size = new System.Drawing.Size(825, 143);
             this.grpBoxEarningsExpenditure.TabIndex = 37;
@@ -686,7 +740,7 @@
             this.btnShareBrokerageEdit.Margin = new System.Windows.Forms.Padding(0);
             this.btnShareBrokerageEdit.Name = "btnShareBrokerageEdit";
             this.btnShareBrokerageEdit.Size = new System.Drawing.Size(40, 24);
-            this.btnShareBrokerageEdit.TabIndex = 8;
+            this.btnShareBrokerageEdit.TabIndex = 13;
             this.btnShareBrokerageEdit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnShareBrokerageEdit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnShareBrokerageEdit.UseVisualStyleBackColor = true;
@@ -701,7 +755,7 @@
             this.btnShareDividendsEdit.Margin = new System.Windows.Forms.Padding(0);
             this.btnShareDividendsEdit.Name = "btnShareDividendsEdit";
             this.btnShareDividendsEdit.Size = new System.Drawing.Size(40, 24);
-            this.btnShareDividendsEdit.TabIndex = 7;
+            this.btnShareDividendsEdit.TabIndex = 12;
             this.btnShareDividendsEdit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnShareDividendsEdit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnShareDividendsEdit.UseVisualStyleBackColor = true;
@@ -791,7 +845,7 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.editShareStatusLabelMessage});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 463);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 487);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(834, 22);
             this.statusStrip1.TabIndex = 41;
@@ -803,45 +857,21 @@
             this.editShareStatusLabelMessage.Name = "editShareStatusLabelMessage";
             this.editShareStatusLabelMessage.Size = new System.Drawing.Size(0, 17);
             // 
-            // lblShareUpdate
-            // 
-            this.lblShareUpdate.BackColor = System.Drawing.Color.LightGray;
-            this.lblShareUpdate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblShareUpdate.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblShareUpdate.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblShareUpdate.Location = new System.Drawing.Point(1, 121);
-            this.lblShareUpdate.Margin = new System.Windows.Forms.Padding(1);
-            this.lblShareUpdate.Name = "lblShareUpdate";
-            this.lblShareUpdate.Size = new System.Drawing.Size(248, 22);
-            this.lblShareUpdate.TabIndex = 43;
-            this.lblShareUpdate.Text = "_lblShareUpdate";
-            this.lblShareUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // chkBoxUpdate
-            // 
-            this.chkBoxUpdate.AutoSize = true;
-            this.chkBoxUpdate.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chkBoxUpdate.Location = new System.Drawing.Point(253, 123);
-            this.chkBoxUpdate.Name = "chkBoxUpdate";
-            this.chkBoxUpdate.Size = new System.Drawing.Size(240, 18);
-            this.chkBoxUpdate.TabIndex = 44;
-            this.chkBoxUpdate.UseVisualStyleBackColor = true;
-            // 
             // FrmShareEdit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.ClientSize = new System.Drawing.Size(834, 485);
+            this.ClientSize = new System.Drawing.Size(834, 509);
             this.ControlBox = false;
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.grpBoxEarningsExpenditure);
             this.Controls.Add(this.grpBoxGeneral);
             this.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(900, 524);
+            this.MaximumSize = new System.Drawing.Size(900, 548);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(800, 524);
+            this.MinimumSize = new System.Drawing.Size(800, 548);
             this.Name = "FrmShareEdit";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -913,5 +943,7 @@
         private System.Windows.Forms.TableLayoutPanel tblLayPnlEditShareButtons;
         private System.Windows.Forms.Label lblShareUpdate;
         private System.Windows.Forms.CheckBox chkBoxUpdate;
+        private System.Windows.Forms.Label lblDailyValuesWebSite;
+        private System.Windows.Forms.TextBox txtBoxDailyValuesWebSite;
     }
 }

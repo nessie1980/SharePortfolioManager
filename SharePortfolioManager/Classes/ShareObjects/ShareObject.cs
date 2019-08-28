@@ -882,7 +882,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         public ShareObject(
             string wkn, string addDateTime, string name,
             DateTime lastUpdateInternet, DateTime lastUpdateShareDate, DateTime lastUpdateShareTime,
-            decimal price, string webSite, List<Image> imageListForDayBeforePerformance,
+            decimal price, string webSite, string dailyValuesWebSite, List<Image> imageListForDayBeforePerformance,
             RegExList regexList, CultureInfo cultureInfo,
             int shareType)
         {
@@ -908,6 +908,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             // ReSharper disable once VirtualMemberCallInConstructor
             CurPrice = price;
             WebSite = webSite;
+            DailyValuesWebSite = dailyValuesWebSite;
             ImageListPrevDayPerformance = imageListForDayBeforePerformance;
             ImagePrevDayPerformance = ImageListPrevDayPerformance[0];
             RegexList = regexList;

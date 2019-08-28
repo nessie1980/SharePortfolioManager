@@ -429,7 +429,7 @@ namespace SharePortfolioManager
                                         #region DailyValues
 
                                         case (int)PortfolioParts.DailyValues:
-                                            // Read daily values sebsite
+                                            // Read daily values website
                                             if (nodeElement.ChildNodes[i].Attributes != null)
                                             {
                                                 ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]

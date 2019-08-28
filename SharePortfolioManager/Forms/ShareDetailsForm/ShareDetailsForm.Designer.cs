@@ -281,7 +281,7 @@
             this.btnOpenWebSite.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnOpenWebSite.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnOpenWebSite.UseVisualStyleBackColor = true;
-            this.btnOpenWebSite.Click += new System.EventHandler(this.btnOpenWebSite_Click);
+            this.btnOpenWebSite.Click += new System.EventHandler(this.OnBtnOpenWebSite_Click);
             // 
             // tableLayoutPanel1
             // 

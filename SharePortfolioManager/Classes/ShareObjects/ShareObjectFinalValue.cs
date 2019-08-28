@@ -720,6 +720,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="traderPlaceFee">Trader place fee of the buy</param>
         /// <param name="reduction">Reduction of the share</param>
         /// <param name="webSite">Website address of the share</param>
+        /// <param name="dailyValuesWebSite">>Website address for the daily values of the share</param>
         /// <param name="imageListForDayBeforePerformance">Images for the performance indication</param>
         /// <param name="regexList">RegEx list for the share</param>
         /// <param name="cultureInfo">Culture of the share</param>
@@ -730,10 +731,10 @@ namespace SharePortfolioManager.Classes.ShareObjects
             string guid, string wkn, string orderNumber, string addDateTime, string name,
             DateTime lastUpdateInternet, DateTime lastUpdateShareDate, DateTime lastUpdateShareTime,
             decimal price, decimal volume, decimal volumeSold, decimal provision, decimal brokerFee, decimal traderPlaceFee, decimal reduction,
-            string webSite, List<Image> imageListForDayBeforePerformance, RegExList regexList, CultureInfo cultureInfo,
+            string webSite, string dailyValuesWebSite, List<Image> imageListForDayBeforePerformance, RegExList regexList, CultureInfo cultureInfo,
             int dividendPayoutInterval, int shareType, string document)
             : base(wkn, addDateTime, name, lastUpdateInternet, lastUpdateShareDate, lastUpdateShareTime,
-                    price, webSite, imageListForDayBeforePerformance,
+                    price, webSite, dailyValuesWebSite, imageListForDayBeforePerformance,
                     regexList, cultureInfo, shareType)
         {
             BrokerageReductionObject tempBrokerageObject = null;

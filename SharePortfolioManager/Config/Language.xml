@@ -434,7 +434,8 @@
 					<PayoutInterval text="Dividend payout interval:" />
 					<CultureInfo text="Country info:" />
 					<OrderNumber text="Order number:" />
-					<WebSite text="Web page address:" />
+					<WebSite text="Website:" />
+					<DailyValuesWebSite text="Daily values website:" />
 					<Date text="Date:" />
 					<Volume text="Volume:" />
 					<SharePrice text="Market price:" />
@@ -495,9 +496,12 @@
 				<BrokerageWrongFormat text="Format for the value 'Brokerage' is invalid." />
 				<BrokerageWrongValue text="The value for 'Brokerage' must be higher than '0'." />
 				<WebSiteEmpty text="Please enter a web page address." />
-				<WebSiteWrongFormat text="The web page address you entered is invalid or unreachable. Try again" />
+				<WebSiteWrongFormat text="The web page address you entered is invalid or unreachable. Try again." />
 				<WebSiteExists text="The entered web page address already exists." />
 				<WebSiteRegexNotFound text="No parser configuration available for the specified web page address!" />
+				<DailyValuesWebSiteEmpty text="Please enter a web page address for the daily values." />
+				<DailyValuesWebSiteWrongFormat text="The web page address for the daily values you entered is invalid or unreachable. Try again" />
+				<DailyValuesWebSiteExists text="The entered web page address for the daily values already exists." />
 				<AddFailed text="Buy add has been failed!" />
 				<AddSaveFailed text="An error occurred. Adding share failed!" />
 				<ChoseDocumentFailed text="An error occurred. Failed to select file!" />
@@ -531,7 +535,8 @@
 					<Date text="Date:" />
 					<Purchase text="Purchase:" />
 					<Volume text="Volume:" />
-					<WebSite text="Website address:" />
+					<WebSite text="Website:" />
+					<DailyValuesWebSite text="Daily values website:" />
 					<CultureInfo text="Country info:" />
 					<PayoutInterval text="Dividend payout interval:" />
 					<ShareType text="Type:" />
@@ -564,7 +569,7 @@
 			<!-- Buttons -->
 			<Buttons>
 				<Save text="Save" />
-				<Cancel text="Return" />
+				<Cancel text="Close" />
 			</Buttons>
 		
 			<!-- Errors -->
@@ -575,6 +580,9 @@
 				<WebSiteEmpty text="Please insert a website address." />
 				<WebSiteWrongFormat text="The website address has an invalid format or is not reachable. Try it again." />
 				<WebSiteExists text="The website already exists." />
+				<DailyValuesWebSiteEmpty text="Please enter a web page address for the daily values." />
+				<DailyValuesWebSiteWrongFormat text="The web page address for the daily values you entered is invalid or unreachable. Try again" />
+				<DailyValuesWebSiteExists text="The entered web page address for the daily values already exists." />
 				<EditSaveFailed text="An error occurred. Edit of the share failed!" />
 			</Errors>
 		</EditFormShare>
@@ -616,7 +624,7 @@
 					<Save text="Save" />
 					<Delete text="Delete" />
 					<Reset text="Reset" />
-					<Cancel text="Return" />
+					<Cancel text="Close" />
 				</Buttons>
 			</GrpBoxAddEdit>
 			
@@ -747,7 +755,7 @@
 					<Save text="Save" />
 					<Delete text="Delete" />
 					<Reset text="Reset" />
-					<Cancel text="Return" />
+					<Cancel text="Close" />
 				</Buttons>
 			</GrpBoxAddEdit>
 			
@@ -892,7 +900,7 @@
 					<Save text="Save" />
 					<Delete text="Delete" />
 					<Reset text="Reset" />
-					<Cancel text="Return" />
+					<Cancel text="Close" />
 				</Buttons>
 			</GrpBoxAddEdit>
 			
@@ -1012,7 +1020,7 @@
 					<Save text="Save" />
 					<Delete text="Delete" />
 					<Reset text="Reset" />
-					<Cancel text="Return" />
+					<Cancel text="Close" />
 				</Buttons>				
 			</GrpBoxAddEdit>
 			
@@ -1647,7 +1655,8 @@
 					<PayoutInterval text="Dividendenauszahlungs- Interval:" />
 					<CultureInfo text="Länder- Info:" />
 					<OrderNumber text="Ordernummer:" />
-					<WebSite text="Webseiten- Adresse:" />
+					<WebSite text="Webseite:" />
+					<DailyValuesWebSite text="Tages-Werte Webseite:" />
 					<Date text="Datum:" />
 					<Volume text="Anteile:" />
 					<SharePrice text="Kurs:" />
@@ -1711,6 +1720,9 @@
 				<WebSiteWrongFormat text="Die eingegebene Webseiten- Adresse ist ungültig oder nicht erreichbar. Versuchen Sie es noch einmal." />
 				<WebSiteExists text="Die eingegebene Webseite existiert bereits." />
 				<WebSiteRegexNotFound text="Keine Parser-Konfiguration für die angegebene Web- Addresse verfügbar!" />
+				<DailyValuesWebSiteEmpty text="Bitte geben Sie eine Webseiten- Adresse für die Tags- Werte ein." />
+				<DailyValuesWebSiteWrongFormat text="Die eingegebene Webseiten- Adresse für die Tages- Werte ist ungültig oder nicht erreichbar. Versuchen Sie es noch einmal." />
+				<DailyValuesWebSiteExists text="Die eingegebene Webseite für die Tages- Werte existiert bereits." />
 				<AddFailed text="Hinzufügen des Kaufs ist fehlgeschlagen!" />
 				<AddSaveFailed text="Es trat ein Fehler auf. Hinzufügen der Aktien ist fehlgeschlagen!" />
 				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
@@ -1744,7 +1756,8 @@
 					<Date text="Datum:" />
 					<Purchase text="Einzahlung:" />
 					<Volume text="Anteile:" />
-					<WebSite text="Webseiten- Adresse:" />
+					<WebSite text="Webseite:" />
+					<DailyValuesWebSite text="Tages-Werte Webseite:" />
 					<CultureInfo text="Länder- Info:" />
 					<PayoutInterval text="Dividendenauszahlungs- Interval:" />
 					<ShareType text="Typ:" />
@@ -1777,7 +1790,7 @@
 			<!-- Buttons -->
 			<Buttons>
 				<Save text="Speichern" />
-				<Cancel text="Zurück" />
+				<Cancel text="Schließen" />
 			</Buttons>
 		
 			<!-- Errors -->
@@ -1788,6 +1801,9 @@
 				<WebSiteEmpty text="Bitte geben Sie eine Webseiten- Adresse ein." />
 				<WebSiteWrongFormat text="Die eingegebene Webseiten- Adresse ist ungültig oder nicht erreichbar. Versuchen Sie es noch einmal." />
 				<WebSiteExists text="Die Webseite existiert bereits." />
+				<DailyValuesWebSiteEmpty text="Bitte geben Sie eine Webseiten- Adresse für die Tags- Werte ein." />
+				<DailyValuesWebSiteWrongFormat text="Die eingegebene Webseiten- Adresse für die Tages- Werte ist ungültig oder nicht erreichbar. Versuchen Sie es noch einmal." />
+				<DailyValuesWebSiteExists text="Die eingegebene Webseite für die Tages- Werte existiert bereits." />
 				<EditSaveFailed text="Es trat ein Fehler auf. Editieren der Aktien ist fehlgeschlagen!" />
 			</Errors>
 		</EditFormShare>
@@ -1829,7 +1845,7 @@
 					<Save text="Speichern" />
 					<Delete text="Entfernen" />
 					<Reset text="Reset" />
-					<Cancel text="Zurück" />
+					<Cancel text="Schließen" />
 				</Buttons>
 			</GrpBoxAddEdit>
 			
@@ -1958,7 +1974,7 @@
 					<Save text="Speichern" />
 					<Delete text="Entfernen" />
 					<Reset text="Reset" />
-					<Cancel text="Zurück" />
+					<Cancel text="Schließen" />
 				</Buttons>
 			</GrpBoxAddEdit>
 			
@@ -2103,7 +2119,7 @@
 					<Save text="Speichern" />
 					<Delete text="Entfernen" />
 					<Reset text="Reset" />
-					<Cancel text="Zurück" />
+					<Cancel text="Schließen" />
 				</Buttons>
 			</GrpBoxAddEdit>
 			
@@ -2223,7 +2239,7 @@
 					<Save text="Speichern" />
 					<Delete text="Entfernen" />
 					<Reset text="Reset" />
-					<Cancel text="Zurück" />
+					<Cancel text="Schließen" />
 				</Buttons>				
 			</GrpBoxAddEdit>
 			

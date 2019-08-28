@@ -74,6 +74,9 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         WebSiteEmpty,
         WebSiteWrongFormat,
         WebSiteExists,
+        DailyValuesWebSiteEmpty,
+        DailyValuesWebSiteWrongFormat,
+        DailyValuesWebSiteExists,
         DocumentDirectoryDoesNotExists,
         DocumentFileDoesNotExists,
         WebSiteRegexNotFound
@@ -133,6 +136,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         string Brokerage { get; set; }
         string BuyValueBrokerageReduction { get; set; }
         string WebSite { get; set; }
+        string DailyValuesWebSite { get; set; }
         CultureInfo CultureInfo { get; }
         int DividendPayoutInterval { get; set; }
         int ShareType { get; set; }
@@ -315,6 +319,17 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 if (txtBoxWebSite.Text == value)
                     return;
                 txtBoxWebSite.Text = value;
+            }
+        }
+
+        public string DailyValuesWebSite
+        {
+            get => txtBoxDailyValuesWebSite.Text;
+            set
+            {
+                if (txtBoxDailyValuesWebSite.Text == value)
+                    return;
+                txtBoxDailyValuesWebSite.Text = value;
             }
         }
 
@@ -730,6 +745,33 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                     txtBoxWebSite.Focus();
                     break;
                 }
+                case ShareAddErrorCode.DailyValuesWebSiteEmpty:
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DailyValuesWebSiteEmpty", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxWebSite.Focus();
+                    break;
+                }
+                case ShareAddErrorCode.DailyValuesWebSiteWrongFormat:
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DailyValuesWebSiteWrongFormat", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxWebSite.Focus();
+                    break;
+                }
+                case ShareAddErrorCode.DailyValuesWebSiteExists:
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DailyValuesWebSiteExists", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxWebSite.Focus();
+                    break;
+                }
                 case ShareAddErrorCode.DocumentDirectoryDoesNotExists:
                 {
                     strMessage =
@@ -860,6 +902,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                     Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/CultureInfo", LanguageName);
 
                 lblWebSite.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/WebSite", LanguageName);
+                lblDailyValuesWebSite.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/DailyValuesWebSite", LanguageName);
                 lblOrderNumber.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/OrderNumber", LanguageName);
                 lblDate.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Date", LanguageName);
                 lblVolume.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Volume", LanguageName);
@@ -1074,6 +1117,11 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         private void OnTxtBoxWebSite_TextChanged(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WebSite"));
+        }
+
+        private void OnTxtBoxDailyValuesWebSite_TextChanged(object sender, EventArgs e)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DailyValuesWebSite"));
         }
 
         private void OntTxtBoxOrderNumber_TextChanged(object sender, EventArgs e)

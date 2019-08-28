@@ -354,7 +354,7 @@ namespace SharePortfolioManager
             this.dgvPortfolioFinalValue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvPortfolioFinalValue.Size = new System.Drawing.Size(1204, 416);
             this.dgvPortfolioFinalValue.TabIndex = 9;
-            this.dgvPortfolioFinalValue.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvPortfolioFinalValue_CellClick);
+            this.dgvPortfolioFinalValue.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.OnDgvPortfolioFinalValue_CellDoubleClick);
             this.dgvPortfolioFinalValue.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DgvPortfolioFinalValue_CellFormatting);
             this.dgvPortfolioFinalValue.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.DgvPortfolioFinalValue_CellPainting);
             this.dgvPortfolioFinalValue.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.DgvPortfolioFinalValue_DataBindingComplete);
@@ -421,7 +421,7 @@ namespace SharePortfolioManager
             this.dgvPortfolioMarketValue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvPortfolioMarketValue.Size = new System.Drawing.Size(1204, 256);
             this.dgvPortfolioMarketValue.TabIndex = 11;
-            this.dgvPortfolioMarketValue.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvPortfolioMarketValue_CellClick);
+            this.dgvPortfolioMarketValue.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.OnDgvPortfolioMarketValue_CellDoubleClick);
             this.dgvPortfolioMarketValue.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DgvPortfolioMarketValue_CellFormatting);
             this.dgvPortfolioMarketValue.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.DgvPortfolioMarketValue_CellPainting);
             this.dgvPortfolioMarketValue.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.DgvPortfolioMarketValue_DataBindingComplete);

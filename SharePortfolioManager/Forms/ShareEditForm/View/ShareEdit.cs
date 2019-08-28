@@ -33,6 +33,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using SharePortfolioManager.BrokeragesForm.Model;
@@ -120,6 +121,7 @@ namespace SharePortfolioManager
                     lblVolumeValue.Text = ShareObjectFinalValue.VolumeAsStr;
                     lblVolumeUnit.Text = ShareObject.PieceUnit;
                     txtBoxWebSite.Text = ShareObjectFinalValue.WebSite;
+                    txtBoxDailyValuesWebSite.Text = ShareObjectFinalValue.DailyValuesWebSite;
 
                     #region Get culture info
 
@@ -185,6 +187,7 @@ namespace SharePortfolioManager
                 lblPurchase.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Purchase", LanguageName);
                 lblVolume.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Volume", LanguageName);
                 lblWebSite.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/WebSite", LanguageName);
+                lblDailyValuesWebSite.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/DailyValuesWebSite", LanguageName);
                 lblCultureInfo.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/CultureInfo", LanguageName);
 
                 lblDividendPayoutInterval.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/PayoutInterval", LanguageName);
@@ -279,6 +282,21 @@ namespace SharePortfolioManager
             DialogResult = Save ? DialogResult.OK : DialogResult.Cancel;
         }
 
+        /// <summary>
+        /// This function replace the start date and the interval with {0} and {1}.
+        /// This allows to replace it with other parameters
+        /// </summary>
+        /// <param name="sender">Textbox</param>
+        /// <param name="e">EventArgs</param>
+        private void OnTxtBoxDailyValuesWebSite_Leave(object sender, EventArgs e)
+        {
+            txtBoxDailyValuesWebSite.Text = Regex.Replace(txtBoxDailyValuesWebSite.Text,
+                "[=]([0-9][0-9].[0-9][0-9].[0-9][0-9][0-9][0-9])[&]", "={0}&");
+
+            txtBoxDailyValuesWebSite.Text = Regex.Replace(txtBoxDailyValuesWebSite.Text,
+                "[=]([M,Y][1,3,5,6])[&]", "={1}&");
+        }
+
         #endregion Form
 
         #region Button
@@ -296,8 +314,12 @@ namespace SharePortfolioManager
                 var errorFlag = false;
 
                 statusStrip1.ForeColor = Color.Red;
+                statusStrip1.Text = "";
 
-                var decodedUrl = txtBoxWebSite.Text;
+                var decodedUrlWebSite = txtBoxWebSite.Text;
+                var decodeUrlDailyValuesWebSite = txtBoxDailyValuesWebSite.Text;
+                decodeUrlDailyValuesWebSite =
+                    string.Format(decodeUrlDailyValuesWebSite, DateTime.Now.AddMonths(-1).ToShortDateString(), "M1");
 
                 if (txtBoxName.Text == @"")
                 {
@@ -349,6 +371,7 @@ namespace SharePortfolioManager
                     }
                 }
 
+                // Update website
                 if (txtBoxWebSite.Text == @"" && chkBoxUpdate.CheckState == CheckState.Checked && errorFlag == false)
                 {
                     txtBoxWebSite.Focus();
@@ -359,7 +382,7 @@ namespace SharePortfolioManager
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                     errorFlag = true;
                 }
-                else if (chkBoxUpdate.CheckState == CheckState.Checked && !Helper.UrlChecker(ref decodedUrl, 10000))
+                else if (chkBoxUpdate.CheckState == CheckState.Checked && !Helper.UrlChecker(ref decodedUrlWebSite, 10000))
                 {
                     txtBoxWebSite.Focus();
                     // Add status message
@@ -391,7 +414,7 @@ namespace SharePortfolioManager
 
                     if (errorFlag == false)
                     {
-                        // Check if a final value share with the given WKN number already exists
+                        // Check if a final value share with the given website already exists
                         foreach (var shareObjectFinalValue in ParentWindow.ShareObjectListFinalValue)
                         {
                             if (txtBoxWebSite.Text == @"" ||
@@ -411,9 +434,73 @@ namespace SharePortfolioManager
                     }
                 }
 
+                // Daily values update website
+                if (txtBoxDailyValuesWebSite.Text == @"" && errorFlag == false)
+                {
+                    txtBoxDailyValuesWebSite.Focus();
+                    // Add status message
+                    Helper.AddStatusMessage(editShareStatusLabelMessage,
+                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DailyValuesWebSiteEmpty", LanguageName),
+                        Language, LanguageName,
+                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                    errorFlag = true;
+                }
+                else if (!Helper.UrlChecker(ref decodeUrlDailyValuesWebSite, 10000))
+                {
+                    txtBoxDailyValuesWebSite.Focus();
+                    // Add status message
+                    Helper.AddStatusMessage(editShareStatusLabelMessage,
+                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DailyValuesWebSiteWrongFormat", LanguageName),
+                        Language, LanguageName,
+                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                    errorFlag = true;
+                }
+                else if (errorFlag == false)
+                {
+                    // Check if a market value share with the given daily values website already exists
+                    foreach (var shareObjectMarketValue in ParentWindow.ShareObjectListMarketValue)
+                    {
+                        if (txtBoxWebSite.Text == @"" ||
+                            shareObjectMarketValue.DailyValuesWebSite != txtBoxDailyValuesWebSite.Text ||
+                            shareObjectMarketValue == ShareObjectMarketValue) continue;
+
+                        errorFlag = true;
+                        StopFomClosingFlag = true;
+                        txtBoxDailyValuesWebSite.Focus();
+                        // Add status message
+                        Helper.AddStatusMessage(editShareStatusLabelMessage,
+                            Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DailyValuesWebSiteExists", LanguageName),
+                            Language, LanguageName,
+                            Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                        break;
+                    }
+
+                    if (errorFlag == false)
+                    {
+                        // Check if a final value share with the given daily values website already exists
+                        foreach (var shareObjectFinalValue in ParentWindow.ShareObjectListFinalValue)
+                        {
+                            if (txtBoxWebSite.Text == @"" ||
+                                shareObjectFinalValue.DailyValuesWebSite != txtBoxDailyValuesWebSite.Text ||
+                                shareObjectFinalValue == ShareObjectFinalValue) continue;
+
+                            errorFlag = true;
+                            StopFomClosingFlag = true;
+                            txtBoxDailyValuesWebSite.Focus();
+                            // Add status message
+                            Helper.AddStatusMessage(editShareStatusLabelMessage,
+                                Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DailyValuesWebSiteExists", LanguageName),
+                                Language, LanguageName,
+                                Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                            break;
+                        }
+                    }
+                }
+
                 if (errorFlag) return;
 
-                txtBoxWebSite.Text = decodedUrl;
+                txtBoxWebSite.Text = decodedUrlWebSite;
+                txtBoxDailyValuesWebSite.Text = decodeUrlDailyValuesWebSite;
 
                 StopFomClosingFlag = false; 
                 Save = true;
@@ -424,6 +511,7 @@ namespace SharePortfolioManager
                 ShareObjectMarketValue.Name = txtBoxName.Text;
                 ShareObjectMarketValue.Update = chkBoxUpdate.Checked;
                 ShareObjectMarketValue.WebSite = txtBoxWebSite.Text;
+                ShareObjectMarketValue.DailyValuesWebSite = txtBoxDailyValuesWebSite.Text;
                 ShareObjectMarketValue.CultureInfo = cultureInfo;
                 ShareObjectMarketValue.ShareType = cbxShareType.SelectedIndex;
 
@@ -431,6 +519,7 @@ namespace SharePortfolioManager
                 ShareObjectFinalValue.Name = txtBoxName.Text;
                 ShareObjectFinalValue.Update = chkBoxUpdate.Checked;
                 ShareObjectFinalValue.WebSite = txtBoxWebSite.Text;
+                ShareObjectFinalValue.DailyValuesWebSite = txtBoxDailyValuesWebSite.Text;
                 ShareObjectFinalValue.CultureInfo = cultureInfo;
                 ShareObjectFinalValue.DividendPayoutInterval = cbxDividendPayoutInterval.SelectedIndex;
                 ShareObjectFinalValue.ShareType = cbxShareType.SelectedIndex;
