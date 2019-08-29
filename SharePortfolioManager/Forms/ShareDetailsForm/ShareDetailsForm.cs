@@ -663,7 +663,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                                 // Check if the child is a table row
                                 if (row.TagName != "TR") continue;
 
-                                // Check if the row has five elements
+                                // Check if the row has eight elements
                                 if (row.All.Count == 8)
                                 {
                                     foreach (HtmlElement cell in row.All)
@@ -686,6 +686,44 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                                                 dailyValues.ClosingPrice = decimal.Parse(cell.InnerText);
                                                 break;
                                             case 7:
+                                                dailyValues.Volume = decimal.Parse(cell.InnerText);
+                                                break;
+                                        }
+
+                                        iCellCounter++;
+                                    }
+
+                                    // Only add if the date not exists already
+                                    if (!ShareObjectFinalValue.DailyValues.Exists(x => x.Date.ToString() == dailyValues.Date.ToString()))
+                                    {
+                                        // Add new daily values to the list
+                                        ShareObjectFinalValue.DailyValues.Add(dailyValues);
+                                        ShareObjectFinalValue.DailyValues.Sort();
+                                    }
+                                }
+                                // Check if the row has six elements
+                                else if (row.All.Count == 6)
+                                {
+                                    foreach (HtmlElement cell in row.All)
+                                    {
+                                        switch (iCellCounter)
+                                        {
+                                            case 0:
+                                                dailyValues.Date = DateTime.Parse(cell.InnerText);
+                                                break;
+                                            case 1:
+                                                dailyValues.OpeningPrice = decimal.Parse(cell.InnerText);
+                                                break;
+                                            case 2:
+                                                dailyValues.Top = decimal.Parse(cell.InnerText);
+                                                break;
+                                            case 3:
+                                                dailyValues.Bottom = decimal.Parse(cell.InnerText);
+                                                break;
+                                            case 4:
+                                                dailyValues.ClosingPrice = decimal.Parse(cell.InnerText);
+                                                break;
+                                            case 5:
                                                 dailyValues.Volume = decimal.Parse(cell.InnerText);
                                                 break;
                                         }
