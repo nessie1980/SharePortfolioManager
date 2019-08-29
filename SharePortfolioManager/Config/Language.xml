@@ -1508,15 +1508,15 @@
 						<UpdateStarted text="Kurswerte- Download gestartet. Bitte warten..." />
 						<DownloadRunning text="Kurswerte- Download läuft. Bitte warten..." />
 						<DownloadDone text="Kurswerte- Download abgeschlossen." />
-						<ParsingStarted text="Kurswerte parsen gestartet. Bitte warten... " />
-						<ParsingProcess text="Kurswerte parsen läuft. Bitte warten... " />
+						<ParsingStarted text="Kurswerte auslesen gestartet. Bitte warten... " />
+						<ParsingProcess text="Kurswerte auslesen läuft. Bitte warten... " />
 						<ParsingFinished text="Kurswerte- Aktualisierung abgeschlossen." />
 					</TabPgChartStateMessages>
 					
 					<!-- Error messages -->
 					<TabPgChartErrors>
 						<UpdateFailed text="Kurswerte- Aktualisierung fehlgeschalgen!" />
-						<ParsingFailed text="Kurswerte parsen fehlgeschalgen!" />
+						<ParsingFailed text="Kurswerte auslesen fehlgeschalgen!" />
 						<OpenWebSiteFailed text="Öffnen der WebSite ist fehlgeschlagen!" />
 						<NoBrowserInstalled text="Kein installierter Browser gefunden!" />
 					</TabPgChartErrors>
@@ -1687,8 +1687,8 @@
 				<AddSuccess text="Kauf wurde hinzugefügt." />
 			</StateMessages>
 			<ParsingStateMessages>
-				<ParsingStarted text="Dokument- Analyze läuft..." />
-				<ParsingDocumentSuccessful text="Dokument- Analyze war erfolgreich." />
+				<ParsingStarted text="Dokumenten- Analyse läuft..." />
+				<ParsingDocumentSuccessful text="Dokumenten- Analyse war erfolgreich." />
 			</ParsingStateMessages>
 	
 			<!-- Errors -->
@@ -1730,13 +1730,13 @@
 				<DocumentFileDoesNotExists text="Die angegebene Datei existiert nicht!" />				
 			</Errors>
 			<ParsingErrors>
-				<ParsingBankIdentifierFailed text="Banken-Typ nicht gefunden!" />
-				<ParsingDocumentTypeIdentifierFailed text="Dokument-Typ nicht gefunden!" />
-				<ParsingDocumentNotImplemented text="Dokument-Typ ist nicht implementiert!" />
-				<ParsingFailed text="Analyze ist fehlgeschlagen!" />
-				<ParsingDocumentFailed text="Dokument- Analyze ist fehlgeschlagen!" />
-				<ParsingParsingDocumentError text="Fehler in der Dokumenten- Analizer- Konfigurations- Datei!"/>
-				<ParsingIdentifierValuesFound text="Dokument-Typ wurde gefunden. Analyze der Kaufwerte wurde gestartet..." />			
+				<ParsingBankIdentifierFailed text="Banken- Typ nicht gefunden!" />
+				<ParsingDocumentTypeIdentifierFailed text="Dokumenten- Typ nicht gefunden!" />
+				<ParsingDocumentNotImplemented text="Dokumenten- Typ ist nicht implementiert!" />
+				<ParsingFailed text="Analyse ist fehlgeschlagen!" />
+				<ParsingDocumentFailed text="Dokumenten- Analyse ist fehlgeschlagen!" />
+				<ParsingParsingDocumentError text="Fehler in der Dokumenten- Analyser- Konfigurations- Datei!"/>
+				<ParsingIdentifierValuesFound text="Dokumenten- Typ wurde gefunden. Analyse der Kaufwerte wurde gestartet..." />			
 			</ParsingErrors>
 		</AddFormShare>
 		
@@ -1881,8 +1881,8 @@
 				<DeleteSuccess text="Kauf- Eintrag wurde gelöscht!" />			
 			</StateMessages>
 			<ParsingStateMessages>
-				<ParsingStarted text="Dokument- Analyze läuft..." />
-				<ParsingDocumentSuccessful text="Dokument- Analyze war erfolgreich." />
+				<ParsingStarted text="Dokumenten- Analyse läuft..." />
+				<ParsingDocumentSuccessful text="Dokumenten- Analyse war erfolgreich." />
 			</ParsingStateMessages>
 			
 			<!-- Buy add / edit errors -->
@@ -1922,14 +1922,14 @@
 				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
 			</Errors>
 			<ParsingErrors>
-				<ParsingBankIdentifierFailed text="Banken-Typ nicht gefunden!" />
-				<ParsingDocumentTypeIdentifierFailed text="Dokument-Typ nicht gefunden!" />
-				<ParsingDocumentNotImplemented text="Dokument-Typ ist nicht implementiert!" />
+				<ParsingBankIdentifierFailed text="Banken- Typ nicht gefunden!" />
+				<ParsingDocumentTypeIdentifierFailed text="Dokumenten- Typ nicht gefunden!" />
+				<ParsingDocumentNotImplemented text="Dokumenten- Typ ist nicht implementiert!" />
 				<ParsingWrongWkn text="Die falsche WKN wurde gefunden!" />
-				<ParsingFailed text="Analyze ist fehlgeschlagen!" />
-				<ParsingDocumentFailed text="Dokument- Analyze ist fehlgeschlagen!" />
-				<ParsingParsingDocumentError text="Fehler in der Dokumenten- Analizer- Konfigurations- Datei!"/>
-				<ParsingIdentifierValuesFound text="Dokument-Typ wurde gefunden. Analyze der Kaufwerte wurde gestartet..." />			
+				<ParsingFailed text="Analyse ist fehlgeschlagen!" />
+				<ParsingDocumentFailed text="Dokumenten- Analyse ist fehlgeschlagen!" />
+				<ParsingParsingDocumentError text="Fehler in der Dokumenten- Analyser- Konfigurations- Datei!"/>
+				<ParsingIdentifierValuesFound text="Dokumenten- Typ wurde gefunden. Analyse der Kaufwerte wurde gestartet..." />			
 			</ParsingErrors>
 		</AddEditFormBuy>
 			
@@ -2011,8 +2011,8 @@
 				<DeleteSuccess text="Verkaufs- Eintrag wurde gelöscht!" />			
 			</StateMessages>
 			<ParsingStateMessages>
-				<ParsingStarted text="Dokument- Analyze läuft..." />
-				<ParsingDocumentSuccessful text="Dokument- Analyze war erfolgreich." />
+				<ParsingStarted text="Dokumenten- Analyse läuft..." />
+				<ParsingDocumentSuccessful text="Dokumenten- Analyse war erfolgreich." />
 			</ParsingStateMessages>
 			
 			<!-- Sale add / edit errors -->
@@ -2059,14 +2059,14 @@
 				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
 			</Errors>
 			<ParsingErrors>
-				<ParsingBankIdentifierFailed text="Banken-Typ nicht gefunden!" />
-				<ParsingDocumentTypeIdentifierFailed text="Dokument-Typ nicht gefunden!" />
-				<ParsingDocumentNotImplemented text="Dokument-Typ ist nicht implementiert!" />
+				<ParsingBankIdentifierFailed text="Banken- Typ nicht gefunden!" />
+				<ParsingDocumentTypeIdentifierFailed text="Dokumenten- Typ nicht gefunden!" />
+				<ParsingDocumentNotImplemented text="Dokumenten- Typ ist nicht implementiert!" />
 				<ParsingWrongWkn text="Die falsche WKN wurde gefunden!" />
-				<ParsingFailed text="Analyze ist fehlgeschlagen!" />
-				<ParsingDocumentFailed text="Dokument- Analyze ist fehlgeschlagen!" />
-				<ParsingParsingDocumentError text="Fehler in der Dokumenten- Analizer- Konfigurations- Datei!"/>
-				<ParsingIdentifierValuesFound text="Dokument-Typ wurde gefunden. Analyze der Verkaufswerte wurde gestartet..." />			
+				<ParsingFailed text="Analyse ist fehlgeschlagen!" />
+				<ParsingDocumentFailed text="Dokumenten- Analyse ist fehlgeschlagen!" />
+				<ParsingParsingDocumentError text="Fehler in der Dokumenten- Analyser- Konfigurations- Datei!"/>
+				<ParsingIdentifierValuesFound text="Dokumenten- Typ wurde gefunden. Analyse der Verkaufswerte wurde gestartet..." />			
 			</ParsingErrors>
 			
 			<UsedBuyDetailsForm>	
@@ -2154,8 +2154,8 @@
 				<DeleteSuccess text="Dividenden- Eintrag wurde gelöscht!" />			
 			</StateMessages>
 			<ParsingStateMessages>
-				<ParsingStarted text="Dokument- Analyze läuft..." />
-				<ParsingDocumentSuccessful text="Dokument- Analyze war erfolgreich." />
+				<ParsingStarted text="Dokumenten- Analyse läuft..." />
+				<ParsingDocumentSuccessful text="Dokumenten- Analyse war erfolgreich." />
 			</ParsingStateMessages>
 			
 			<!-- Dividend add / edit errors -->
@@ -2195,14 +2195,14 @@
 				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
 			</Errors>
 			<ParsingErrors>
-				<ParsingBankIdentifierFailed text="Banken-Typ nicht gefunden!" />
-				<ParsingDocumentTypeIdentifierFailed text="Dokument-Typ nicht gefunden!" />
-				<ParsingDocumentNotImplemented text="Dokument-Typ ist nicht implementiert!" />
+				<ParsingBankIdentifierFailed text="Banken- Typ nicht gefunden!" />
+				<ParsingDocumentTypeIdentifierFailed text="Dokumenten- Typ nicht gefunden!" />
+				<ParsingDocumentNotImplemented text="Dokumenten- Typ ist nicht implementiert!" />
 				<ParsingWrongWkn text="Die falsche WKN wurde gefunden!" />
-				<ParsingFailed text="Analyze ist fehlgeschlagen!" />
-				<ParsingDocumentFailed text="Dokument- Analyze ist fehlgeschlagen!" />
-				<ParsingParsingDocumentError text="Fehler in der Dokumenten- Analizer- Konfigurations- Datei!"/>
-				<ParsingIdentifierValuesFound text="Dokument-Typ wurde gefunden. Analyze der Dividendenwerte wurde gestartet..." />			
+				<ParsingFailed text="Analyse ist fehlgeschlagen!" />
+				<ParsingDocumentFailed text="Dokumenten- Analyse ist fehlgeschlagen!" />
+				<ParsingParsingDocumentError text="Fehler in der Dokumenten- Analyser- Konfigurations- Datei!"/>
+				<ParsingIdentifierValuesFound text="Dokumenten- Typ wurde gefunden. Analyse der Dividendenwerte wurde gestartet..." />			
 			</ParsingErrors>
 		</AddEditFormDividend>
 		

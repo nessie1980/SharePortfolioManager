@@ -373,11 +373,18 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
             var dateNow = DateTime.Now;
             var date = new DateTime(dateNow.Year, dateNow.Month, dateNow.Day, 0, 0, 0);
 
+            var bFlag = false;
+
+            // Check if the current day is a weekend day
             while (date.DayOfWeek == DayOfWeek.Sunday ||
                    date.DayOfWeek == DayOfWeek.Saturday)
             {
                 date = date.AddDays(-1);
+                bFlag = true;
             }
+
+            if (!bFlag)
+                date = date.AddDays(-1);
 
             // Check if no update is necessary
             if (dateTimePickerStartDate.Value >= date && 
