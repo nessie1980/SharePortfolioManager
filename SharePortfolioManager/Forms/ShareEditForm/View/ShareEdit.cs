@@ -290,11 +290,7 @@ namespace SharePortfolioManager
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxDailyValuesWebSite_Leave(object sender, EventArgs e)
         {
-            txtBoxDailyValuesWebSite.Text = Regex.Replace(txtBoxDailyValuesWebSite.Text,
-                "[=]([0-9][0-9].[0-9][0-9].[0-9][0-9][0-9][0-9])[&]", "={0}&");
-
-            txtBoxDailyValuesWebSite.Text = Regex.Replace(txtBoxDailyValuesWebSite.Text,
-                "[=]([M,Y][1,3,5,6])[&]", "={1}&");
+            txtBoxDailyValuesWebSite.Text = Helper.RegexReplaceStartDateAndInterval(txtBoxDailyValuesWebSite.Text);
         }
 
         #endregion Form
@@ -500,7 +496,7 @@ namespace SharePortfolioManager
                 if (errorFlag) return;
 
                 txtBoxWebSite.Text = decodedUrlWebSite;
-                txtBoxDailyValuesWebSite.Text = decodeUrlDailyValuesWebSite;
+                txtBoxDailyValuesWebSite.Text = Helper.RegexReplaceStartDateAndInterval(decodeUrlDailyValuesWebSite);
 
                 StopFomClosingFlag = false; 
                 Save = true;

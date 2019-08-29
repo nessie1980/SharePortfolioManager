@@ -375,13 +375,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
         {
             var bErrorFlag = false;
             var decodedUrlWebSite = _model.WebSite;
-
-            _model.DailyValuesWebSite = Regex.Replace(_model.DailyValuesWebSite,
-                "[=]([0-9][0-9].[0-9][0-9].[0-9][0-9][0-9][0-9])[&]", "={0}&");
-
-            _model.DailyValuesWebSite = Regex.Replace(_model.DailyValuesWebSite,
-                "[=]([M,Y][1,3,5,6])[&]", "={1}&");
-            var decodeUrlDailyValuesWebSite = _model.DailyValuesWebSite;
+            var decodeUrlDailyValuesWebSite = Helper.RegexReplaceStartDateAndInterval(_model.DailyValuesWebSite);
 
             _model.ErrorCode = ShareAddErrorCode.AddSuccessful;
 
@@ -673,7 +667,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
             }
 
             _model.WebSite = decodedUrlWebSite;
-            _model.DailyValuesWebSite = decodeUrlDailyValuesWebSite;
+            _model.DailyValuesWebSite = Helper.RegexReplaceStartDateAndInterval(decodeUrlDailyValuesWebSite);
 
             return bErrorFlag;
         }

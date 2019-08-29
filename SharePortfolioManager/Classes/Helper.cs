@@ -1043,6 +1043,20 @@ namespace SharePortfolioManager.Classes
             return response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Found;
         }
 
+        public static string RegexReplaceStartDateAndInterval(string strWebSite)
+        {
+            strWebSite = Regex.Replace(strWebSite,
+                "[=]([0-9][0-9].[0-9][0-9].[0-9][0-9][0-9][0-9])[&]", "={0}&");
+
+            strWebSite = Regex.Replace(strWebSite,
+                "[=]([M,Y][1,3,5,6])[&]", "={1}&");
+
+            strWebSite = Regex.Replace(strWebSite,
+                "[=]([1,3,5,6][M,Y])[&]", "={1}&");
+
+            return strWebSite;
+        }
+
 #endregion URL checker
 
         #region Get combo box items
