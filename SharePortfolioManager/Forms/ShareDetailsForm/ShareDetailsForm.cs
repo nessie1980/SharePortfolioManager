@@ -24,6 +24,15 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
         ParsingFinished = 2
     }
 
+    // Interval for charting values
+    public enum ChartingInterval
+    {
+        Week = 0,
+        Month = 1,
+        Quarter = 2,
+        Year = 4
+    }
+
     public partial class ShareDetailsForm : Form
     {
         #region Variables
@@ -119,6 +128,10 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
 
         #region Charting
 
+        internal int ChartingIntervalValue = (int) ChartingInterval.Month;
+
+        internal int ChartingAmount = 1;
+
         internal Point? PrevPosition { get; set; }
         
         #endregion Charting
@@ -128,7 +141,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
         public ShareDetailsForm( bool marketValueOverviewTabSelected,
             ShareObjectFinalValue shareObjectFinalValue, ShareObjectMarketValue shareObjectMarketValue,
             RichTextBox rchTxtBoxStateMessage, Logger logger,
-            Language language, string languageName  )
+            Language language, string languageName, int iChartingInterval, int iChartingAmount  )
         {
             InitializeComponent();
 
@@ -363,7 +376,8 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
             tabCtrlDetails.SelectedIndex = 0;
 
             // Select first interval
-            cbxIntervalSelection.SelectedIndex = 0;
+            cbxIntervalSelection.SelectedIndex = ChartingIntervalValue;
+            numDrpDwnAmount.Value = ChartingAmount;
 
             #endregion Settings
         }
@@ -899,7 +913,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
             #region Selection
 
             // Week
-            if (cbxIntervalSelection.SelectedIndex == 0)
+            if (cbxIntervalSelection.SelectedIndex == (int)ChartingInterval.Week)
             {
                 dailyValuesList = GetDailyValuesOfWeeks(dateTimePickerStartDate.Value, (int)numDrpDwnAmount.Value);
                 GetMinMax(dailyValuesList, out decMinValue, out decMaxValue);
@@ -907,7 +921,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
             }
 
             // Month
-            if (cbxIntervalSelection.SelectedIndex == 1)
+            if (cbxIntervalSelection.SelectedIndex == (int)ChartingInterval.Month)
             {
                 dailyValuesList = GetDailyValuesOfWeeks(dateTimePickerStartDate.Value, (int)numDrpDwnAmount.Value * 4);
                 GetMinMax(dailyValuesList, out decMinValue, out decMaxValue);
@@ -915,7 +929,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
             }
 
             // Quarter
-            if (cbxIntervalSelection.SelectedIndex == 2)
+            if (cbxIntervalSelection.SelectedIndex == (int)ChartingInterval.Quarter)
             {
                 dailyValuesList = GetDailyValuesOfWeeks(dateTimePickerStartDate.Value, (int)numDrpDwnAmount.Value * 4 * 3);
                 GetMinMax(dailyValuesList, out decMinValue, out decMaxValue);
@@ -923,7 +937,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
             }
 
             // Year
-            if (cbxIntervalSelection.SelectedIndex == 3)
+            if (cbxIntervalSelection.SelectedIndex == (int)ChartingInterval.Year)
             {
                 dailyValuesList = GetDailyValuesOfWeeks(dateTimePickerStartDate.Value, (int)numDrpDwnAmount.Value * 52);
                 GetMinMax(dailyValuesList, out decMinValue, out decMaxValue);
@@ -971,6 +985,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
 
                 chartDailyValues.Series.Add("Series");
                 chartDailyValues.Series["Series"].ChartType = SeriesChartType.Line;
+                chartDailyValues.Series["Series"].BorderWidth = 2;
                 chartDailyValues.Series["Series"].XValueMember = DailyValues.DateName;
                 chartDailyValues.Series["Series"].XValueType = ChartValueType.DateTime;
                 chartDailyValues.Series["Series"].YValueMembers = DailyValues.ClosingPriceName;

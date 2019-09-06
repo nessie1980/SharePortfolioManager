@@ -27,6 +27,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
+using SharePortfolioManager.Forms.ShareDetailsForm;
 
 namespace SharePortfolioManager
 {
@@ -222,6 +223,48 @@ namespace SharePortfolioManager
                 timerStatusMessageClear.Interval = StatusMessageClearTimerValue;
 
                 #endregion State clear timer
+
+                #region Charting values
+
+                // Read the charting values
+                var nodeChartingInterval = Settings.SelectSingleNode("/Settings/Charting/Interval");
+                if (nodeChartingInterval != null)
+                {
+                    switch (nodeChartingInterval.InnerText)
+                    {
+                        case "Week":
+                            ChartingIntervalValue = (int) ChartingInterval.Week;
+                            break;
+                        case "Month":
+                            ChartingIntervalValue = (int) ChartingInterval.Month;
+                            break;
+                        case "Quarter":
+                            ChartingIntervalValue = (int) ChartingInterval.Quarter;
+                            break;
+                        case "Year":
+                            ChartingIntervalValue = (int) ChartingInterval.Year;
+                            break;
+                        default:
+                            loadSettings = false;
+                            break;
+                    }
+                }
+                else
+                    loadSettings = false;
+
+                // Read the charting values
+                var nodeChartingAmount = Settings.SelectSingleNode("/Settings/Charting/Amount");
+                if (nodeChartingAmount != null)
+                {
+                    if (int.TryParse(nodeChartingAmount.InnerText, out var iOutResult))
+                        ChartingAmount = iOutResult;
+                    else
+                        loadSettings = false;
+                }
+                else
+                    loadSettings = false;
+
+                #endregion Charting values
 
                 #region Logger stored log files
 

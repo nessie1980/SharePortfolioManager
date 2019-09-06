@@ -303,6 +303,15 @@ namespace SharePortfolioManager
 
         #endregion Parser
 
+        #region Charting
+
+        public int ChartingIntervalValue = (int)Forms.ShareDetailsForm.ChartingInterval.Week;
+
+        public int ChartingAmount = 1;
+
+
+        #endregion Charting
+
         #region Share objects
 
         public ShareObjectMarketValue ShareObjectMarketValue { get; internal set; }

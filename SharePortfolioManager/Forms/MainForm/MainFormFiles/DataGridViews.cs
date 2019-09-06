@@ -1846,7 +1846,7 @@ namespace SharePortfolioManager
                 var form = new ShareDetailsForm(MarketValueOverviewTabSelected,
                     ShareObjectFinalValue, ShareObjectMarketValue,
                     rchTxtBoxStateMessage, Logger,
-                    Language, LanguageName);
+                    Language, LanguageName, ChartingIntervalValue, ChartingAmount);
                 var dialogResult = form.ShowDialog();
 
                 if (dialogResult != DialogResult.OK) return;
@@ -1897,7 +1897,7 @@ namespace SharePortfolioManager
                 var form = new ShareDetailsForm(MarketValueOverviewTabSelected,
                     ShareObjectFinalValue, ShareObjectMarketValue,
                     rchTxtBoxStateMessage, Logger,
-                    Language, LanguageName);
+                    Language, LanguageName, ChartingIntervalValue, ChartingAmount);
 
                 var dialogResult = form.ShowDialog();
                 if (dialogResult != DialogResult.OK) return;

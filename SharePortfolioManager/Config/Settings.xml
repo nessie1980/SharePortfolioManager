@@ -11,6 +11,10 @@
 	<Language>English</Language>
 	<StartNextShareUpdate>2000</StartNextShareUpdate>
 	<StatusMessageClear>3000</StatusMessageClear>
+	<Charting>
+		<Interval>Month</Interval>
+		<Amount>2</Amount>
+	</Charting>
 	<Logger>
 		<GUIEntries>20</GUIEntries>
 		<LogToFileEnable>true</LogToFileEnable>
