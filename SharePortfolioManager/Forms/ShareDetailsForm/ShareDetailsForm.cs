@@ -30,7 +30,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
         Week = 0,
         Month = 1,
         Quarter = 2,
-        Year = 4
+        Year = 3
     }
 
     public partial class ShareDetailsForm : Form
@@ -905,42 +905,22 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
             }
 
             chartDailyValues.DataSource = null;
-            decimal decMinValue = 0;
-            decimal decMaxValue = 0;
-
-            var dailyValuesList = new List<DailyValues>();
 
             #region Selection
 
-            // Week
-            if (cbxIntervalSelection.SelectedIndex == (int)ChartingInterval.Week)
-            {
-                dailyValuesList = GetDailyValuesOfWeeks(dateTimePickerStartDate.Value, (int)numDrpDwnAmount.Value);
-                GetMinMax(dailyValuesList, out decMinValue, out decMaxValue);
-                chartDailyValues.DataSource = dailyValuesList;
-            }
+            decimal decMinValue = 0;
+            decimal decMaxValue = 0;
+            var dailyValuesList = new List<DailyValues>();
 
-            // Month
-            if (cbxIntervalSelection.SelectedIndex == (int)ChartingInterval.Month)
+            // Check if an Interval is selected and the amount is greater than 0
+            if (cbxIntervalSelection.SelectedIndex > 0 && numDrpDwnAmount.Value > 0)
             {
-                dailyValuesList = GetDailyValuesOfWeeks(dateTimePickerStartDate.Value, (int)numDrpDwnAmount.Value * 4);
-                GetMinMax(dailyValuesList, out decMinValue, out decMaxValue);
-                chartDailyValues.DataSource = dailyValuesList;
-            }
+                dailyValuesList = GetDailyValuesOfInterval(dateTimePickerStartDate.Value,
+                    cbxIntervalSelection.SelectedIndex, (int) numDrpDwnAmount.Value);
 
-            // Quarter
-            if (cbxIntervalSelection.SelectedIndex == (int)ChartingInterval.Quarter)
-            {
-                dailyValuesList = GetDailyValuesOfWeeks(dateTimePickerStartDate.Value, (int)numDrpDwnAmount.Value * 4 * 3);
-                GetMinMax(dailyValuesList, out decMinValue, out decMaxValue);
-                chartDailyValues.DataSource = dailyValuesList;
-            }
+                if ( dailyValuesList.Count > 0)
+                    GetMinMax(dailyValuesList, out decMinValue, out decMaxValue);
 
-            // Year
-            if (cbxIntervalSelection.SelectedIndex == (int)ChartingInterval.Year)
-            {
-                dailyValuesList = GetDailyValuesOfWeeks(dateTimePickerStartDate.Value, (int)numDrpDwnAmount.Value * 52);
-                GetMinMax(dailyValuesList, out decMinValue, out decMaxValue);
                 chartDailyValues.DataSource = dailyValuesList;
             }
 
@@ -1065,10 +1045,11 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
             }
         }
 
-        private List<DailyValues> GetDailyValuesOfWeeks(DateTime givenDateTime, int iAmount)
+        private List<DailyValues> GetDailyValuesOfInterval(DateTime givenDateTime, int iInterval, int iAmount)
         {
-            var iDays = 7;
+            var iDays = 0;
             var calcDateTime = givenDateTime;
+            var startDate = givenDateTime;
             var dateTimes = new List<DateTime>();
 
             // Fill with random int values
@@ -1079,15 +1060,39 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                 ? ShareObjectMarketValue.DailyValues
                 : ShareObjectFinalValue.DailyValues);
 
+            // Week
+            if (cbxIntervalSelection.SelectedIndex == (int)ChartingInterval.Week)
+            {
+                startDate = givenDateTime.AddDays(-7 * iAmount);
+            }
+
+            // Month
+            if (cbxIntervalSelection.SelectedIndex == (int)ChartingInterval.Month)
+            {
+                startDate = givenDateTime.AddMonths(-iAmount);
+            }
+
+            // Quarter
+            if (cbxIntervalSelection.SelectedIndex == (int)ChartingInterval.Quarter)
+            {
+                startDate = givenDateTime.AddMonths(-3*iAmount);
+            }
+
+            // Year
+            if (cbxIntervalSelection.SelectedIndex == (int)ChartingInterval.Year)
+            {
+                startDate = givenDateTime.AddYears(-iAmount);
+            }
+
             do
             {
                 //if (calcDateTime.DayOfWeek != DayOfWeek.Saturday && calcDateTime.DayOfWeek != DayOfWeek.Sunday )
                 //{
-                    dateTimes.Add(calcDateTime);
+                dateTimes.Add(calcDateTime);
                 //}
 
                 calcDateTime = calcDateTime.AddDays(-1);
-            } while (dateTimes.Count <= iDays * iAmount);
+            } while (dateTimes.Count <= ( givenDateTime - startDate).Days);
 
             foreach (var dateTime in dateTimes)
             {
@@ -1095,8 +1100,6 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                 {
                     if (dailyValue.Date == dateTime.Date)
                         dailyValuesResult.Add(dailyValue);
-
-                    if (dailyValuesResult.Count >= iDays * iAmount) break;
                 }
             }
 
