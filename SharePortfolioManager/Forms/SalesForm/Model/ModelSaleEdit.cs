@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -25,10 +25,10 @@ using Logging;
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.Sales;
 using SharePortfolioManager.Classes.ShareObjects;
-using SharePortfolioManager.Forms.SalesForm.View;
+using SharePortfolioManager.SalesForm.View;
 using System.Collections.Generic;
 
-namespace SharePortfolioManager.Forms.SalesForm.Model
+namespace SharePortfolioManager.SalesForm.Model
 {
     /// <summary>
     /// Interface of the SaleEdit model
@@ -207,7 +207,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
                     _volumeDec = 0;
 
                 if (UpdateViewFormatted)
-                    return _volumeDec > 0 ? Helper.FormatDecimal(_volumeDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _volume;
+                    return _volumeDec > 0 ? Helper.FormatDecimal(_volumeDec, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength) : _volume;
 
                 return _volume;
             }
@@ -242,7 +242,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
 
                 if (UpdateViewFormatted)
                 {
-                    return _salePriceDec > 0 ? Helper.FormatDecimal(_salePriceDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _salePrice;
+                    return _salePriceDec > 0 ? Helper.FormatDecimal(_salePriceDec, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength) : _salePrice;
                 }
 
                 return _salePrice;
@@ -273,7 +273,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
 
         public string SaleBuyValue
         {
-            get => Helper.FormatDecimal(_saleBuyValueDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength);
+            get => Helper.FormatDecimal(_saleBuyValueDec, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength);
             set
             {
                 if (Equals(_saleBuyValue, value))
@@ -300,7 +300,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
 
         public string ProfitLoss
         {
-            get => Helper.FormatDecimal(_profitLossDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength);
+            get => Helper.FormatDecimal(_profitLossDec, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength);
             set
             {
                 if (Equals(_profitLoss, value))
@@ -335,7 +335,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
                     _taxAtSourceDec = 0;
 
                 if (UpdateViewFormatted)
-                    return _taxAtSourceDec > 0 ? Helper.FormatDecimal(_taxAtSourceDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : _taxAtSource;
+                    return _taxAtSourceDec > 0 ? Helper.FormatDecimal(_taxAtSourceDec, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength) : _taxAtSource;
 
                 return _taxAtSource;
             }
@@ -371,7 +371,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
                     _capitalGainsTaxDec = 0;
 
                 if (UpdateViewFormatted)
-                    return _capitalGainsTaxDec > 0 ? Helper.FormatDecimal(_capitalGainsTaxDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : _capitalGainsTax;
+                    return _capitalGainsTaxDec > 0 ? Helper.FormatDecimal(_capitalGainsTaxDec, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength) : _capitalGainsTax;
 
                 return _capitalGainsTax;
             }
@@ -407,7 +407,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
                     _solidarityTaxDec = 0;
 
                 if (UpdateViewFormatted)
-                    return _solidarityTaxDec > 0 ? Helper.FormatDecimal(_solidarityTaxDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : _solidarityTax;
+                    return _solidarityTaxDec > 0 ? Helper.FormatDecimal(_solidarityTaxDec, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength) : _solidarityTax;
 
                 return _solidarityTax;
             }
@@ -443,7 +443,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
                     _provisionDec = 0;
 
                 if (UpdateViewFormatted)
-                    return _provisionDec > 0 ? Helper.FormatDecimal(_provisionDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : _provision;
+                    return _provisionDec > 0 ? Helper.FormatDecimal(_provisionDec, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength) : _provision;
 
                 return _provision;
             }
@@ -479,7 +479,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
                     _brokerFeeDec = 0;
 
                 if (UpdateViewFormatted)
-                    return _brokerFeeDec > 0 ? Helper.FormatDecimal(_brokerFeeDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : _brokerFee;
+                    return _brokerFeeDec > 0 ? Helper.FormatDecimal(_brokerFeeDec, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength) : _brokerFee;
 
                 return _brokerFee;
             }
@@ -515,7 +515,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
                     _traderPlaceFeeDec = 0;
 
                 if (UpdateViewFormatted)
-                    return _traderPlaceFeeDec > 0 ? Helper.FormatDecimal(_traderPlaceFeeDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : _traderPlaceFee;
+                    return _traderPlaceFeeDec > 0 ? Helper.FormatDecimal(_traderPlaceFeeDec, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength) : _traderPlaceFee;
 
                 return _traderPlaceFee;
             }
@@ -551,7 +551,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
                     _reductionDec = 0;
 
                 if (UpdateViewFormatted)
-                    return _reductionDec > 0 ? Helper.FormatDecimal(_reductionDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : _reduction;
+                    return _reductionDec > 0 ? Helper.FormatDecimal(_reductionDec, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength) : _reduction;
 
                 return _reduction;
             }
@@ -581,7 +581,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
 
         public string Brokerage
         {
-            get => Helper.FormatDecimal(_brokerageDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength);
+            get => Helper.FormatDecimal(_brokerageDec, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength);
             set
             {
                 if (Equals(_brokerage, value))
@@ -608,7 +608,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Model
 
         public string Payout
         {
-            get => Helper.FormatDecimal(_payoutDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength);
+            get => Helper.FormatDecimal(_payoutDec, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength);
             set
             {
                 if (Equals(_payout, value))

@@ -1,4 +1,4 @@
-﻿namespace SharePortfolioManager.Forms.AboutForm
+﻿namespace SharePortfolioManager.AboutForm
 {
     partial class FrmAbout
     {

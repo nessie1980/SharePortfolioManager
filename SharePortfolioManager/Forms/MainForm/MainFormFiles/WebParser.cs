@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -35,16 +35,19 @@ namespace SharePortfolioManager
 {
     partial class FrmMain
     {
-#region WebParsing
-
         /// <summary>
         /// Set up the Parser object for the web parsing by
         /// attaching event handlers.
         /// </summary>
         private void InitializeParser()
         {
-            if (InitFlag && Parser != null)
-                Parser.OnParserUpdate += WebParser_UpdateGUI;
+            // Set market values delegate
+            if (InitFlag && ParserMarketValues != null)
+                ParserMarketValues.OnParserUpdate += ParserMarketValues_UpdateGUI;
+
+            // Set daily values delegate
+            if (InitFlag && ParserDailyValues != null)
+                ParserDailyValues.OnParserUpdate += ParserDailyValues_UpdateGUI;
         }
 
         /// <summary>
@@ -55,7 +58,7 @@ namespace SharePortfolioManager
             try
             {
                 // Check if the Parser is in idle mode
-                if (Parser != null && Parser.ParserInfoState.State == ParserState.Idle)
+                if (ParserMarketValues != null && ParserMarketValues.ParserInfoState.State == ParserState.Idle)
                 {
                     // Set flag for updating all shares
                     UpdateAllFlag = true;
@@ -102,12 +105,20 @@ namespace SharePortfolioManager
                         // Check if the share should be update
                         if (ShareObjectMarketValue.Update && ShareObjectMarketValue.WebSiteConfigurationValid)
                         {
-                            // Start the asynchronous operation of the Parser
-                            Parser.WebParsing = true;
-                            Parser.WebSiteUrl = ShareObjectMarketValue.WebSite;
-                            Parser.RegexList = ShareObjectMarketValue.RegexList;
-                            Parser.EncodingType = ShareObjectMarketValue.WebSiteEncodingType;
-                            Parser.StartParsing();
+                            // Start the asynchronous operation of the Parser for the market values
+                            ParserMarketValues.ParsingValues = new ParsingValues(
+                                new Uri(ShareObjectMarketValue.WebSite),
+                                ShareObjectMarketValue.WebSiteEncodingType,
+                                ShareObjectMarketValue.RegexList
+                                );
+                            ParserMarketValues.StartParsing();
+
+                            // Start the asynchronous operation of the Parser for the daily market values
+                            ParserDailyValues.ParsingValues = new ParsingValues(
+                                new Uri(Helper.BuildDailyValuesUrl(ShareObjectMarketValue.DailyValues, ShareObjectMarketValue.DailyValuesWebSite, ShareObjectMarketValue.ShareType)),
+                                ShareObjectMarketValue.WebSiteEncodingType
+                            );
+                            ParserDailyValues.StartParsing();
                         }
                         else
                         {
@@ -158,12 +169,20 @@ namespace SharePortfolioManager
                         // Check if the share should be update
                         if (ShareObjectFinalValue.Update && ShareObjectFinalValue.WebSiteConfigurationValid)
                         {
-                            // Start the asynchronous operation of the Parser
-                            Parser.WebParsing = true;
-                            Parser.WebSiteUrl = ShareObjectFinalValue.WebSite;
-                            Parser.RegexList = ShareObjectFinalValue.RegexList;
-                            Parser.EncodingType = ShareObjectFinalValue.WebSiteEncodingType;
-                            Parser.StartParsing();
+                            // Start the asynchronous operation of the Parser for the market values
+                            ParserMarketValues.ParsingValues = new ParsingValues(
+                                new Uri(ShareObjectFinalValue.WebSite),
+                                ShareObjectFinalValue.WebSiteEncodingType,
+                                ShareObjectFinalValue.RegexList
+                                );
+                            ParserMarketValues.StartParsing();
+
+                            // Start the asynchronous operation of the Parser for the daily market values
+                            ParserDailyValues.ParsingValues = new ParsingValues(
+                                new Uri(Helper.BuildDailyValuesUrl(ShareObjectFinalValue.DailyValues, ShareObjectFinalValue.DailyValuesWebSite, ShareObjectFinalValue.ShareType)),
+                                ShareObjectFinalValue.WebSiteEncodingType
+                            );
+                            ParserDailyValues.StartParsing();
                         }
                         else
                         {
@@ -223,7 +242,7 @@ namespace SharePortfolioManager
             try
             {
                 // Check if the Parser is in idle mode
-                if (Parser != null && Parser.ParserInfoState.State == ParserState.Idle)
+                if (ParserMarketValues != null && ParserMarketValues.ParserInfoState.State == ParserState.Idle)
                 {
                     // Check if a share is selected
                     if (MarketValueOverviewTabSelected == false && dgvPortfolioFinalValue.SelectedCells.Count != 0 && dgvPortfolioFinalValue.SelectedCells[0].Value.ToString() != "" ||
@@ -252,21 +271,45 @@ namespace SharePortfolioManager
                         // Check which share overview is selected
                         if (MarketValueOverviewTabSelected)
                         {
-                            // Start the asynchronous operation.
-                            Parser.WebParsing = true;
-                            Parser.WebSiteUrl = ShareObjectListMarketValue[dgvPortfolioMarketValue.SelectedCells[0].RowIndex].WebSite;
-                            Parser.RegexList = ShareObjectListMarketValue[dgvPortfolioMarketValue.SelectedCells[0].RowIndex].RegexList;
-                            Parser.EncodingType = ShareObjectListMarketValue[dgvPortfolioMarketValue.SelectedCells[0].RowIndex].WebSiteEncodingType;
-                            Parser.StartParsing();
+                            // Start the asynchronous operation of the Parser for the market values
+                            ParserMarketValues.ParsingValues = new ParsingValues(
+                                new Uri(ShareObjectListMarketValue[dgvPortfolioMarketValue.SelectedCells[0].RowIndex].WebSite),
+                                ShareObjectListMarketValue[dgvPortfolioMarketValue.SelectedCells[0].RowIndex].WebSiteEncodingType,
+                                ShareObjectListMarketValue[dgvPortfolioMarketValue.SelectedCells[0].RowIndex].RegexList
+                                );
+                            ParserMarketValues.StartParsing();
+
+                            // Start the asynchronous operation of the Parser for the daily market values
+                            ParserDailyValues.ParsingValues = new ParsingValues(
+                                new Uri(Helper.BuildDailyValuesUrl(
+                                    ShareObjectListMarketValue[dgvPortfolioMarketValue.SelectedCells[0].RowIndex].DailyValues, 
+                                    ShareObjectListMarketValue[dgvPortfolioMarketValue.SelectedCells[0].RowIndex].DailyValuesWebSite,
+                                    ShareObjectListMarketValue[dgvPortfolioMarketValue.SelectedCells[0].RowIndex].ShareType
+                                    )),
+                                ShareObjectListMarketValue[dgvPortfolioMarketValue.SelectedCells[0].RowIndex].WebSiteEncodingType
+                                );
+                            ParserDailyValues.StartParsing();
                         }
                         else
                         {
-                            // Start the asynchronous operation.
-                            Parser.WebParsing = true;
-                            Parser.WebSiteUrl = ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedCells[0].RowIndex].WebSite;
-                            Parser.RegexList = ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedCells[0].RowIndex].RegexList;
-                            Parser.EncodingType = ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedCells[0].RowIndex].WebSiteEncodingType;
-                            Parser.StartParsing();
+                            // Start the asynchronous operation of the Parser for the market values
+                            ParserMarketValues.ParsingValues = new ParsingValues(
+                                new Uri(ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedCells[0].RowIndex].WebSite),
+                                ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedCells[0].RowIndex].WebSiteEncodingType,
+                                ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedCells[0].RowIndex].RegexList
+                                );
+                            ParserMarketValues.StartParsing();
+
+                            // Start the asynchronous operation of the Parser for the daily market values
+                            ParserDailyValues.ParsingValues = new ParsingValues(
+                                new Uri(Helper.BuildDailyValuesUrl(
+                                    ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedCells[0].RowIndex].DailyValues,
+                                    ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedCells[0].RowIndex].DailyValuesWebSite,
+                            ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedCells[0].RowIndex].ShareType
+                                    )),
+                                ShareObjectListFinalValue[dgvPortfolioFinalValue.SelectedCells[0].RowIndex].WebSiteEncodingType
+                            );
+                            ParserDailyValues.StartParsing();
                         }
                     }
                     else
@@ -307,20 +350,23 @@ namespace SharePortfolioManager
         /// </summary>
         private void CancelWebParser()
         {
-            if (Parser != null)
-                Parser.CancelThread = true;
+            if (ParserMarketValues != null)
+                ParserMarketValues.CancelThread = true;
+
+            if (ParserDailyValues != null)
+                ParserDailyValues.CancelThread = true;
         }
 
         /// <summary>
-        /// This event handler updates the progress.
+        /// This event handler updates the progress of the market values.
         /// </summary>
         /// <param name="sender">BackGroundWorker</param>
         /// <param name="e">ProgressChangedEventArgs</param>
-        private void WebParser_UpdateGUI(object sender, OnParserUpdateEventArgs e)
+        private void ParserMarketValues_UpdateGUI(object sender, OnParserUpdateEventArgs e)
         {
             if (InvokeRequired)
             {
-                Invoke(new Action(() => WebParser_UpdateGUI(sender, e)));
+                Invoke(new Action(() => ParserMarketValues_UpdateGUI(sender, e)));
             }
             else
             {
@@ -334,42 +380,37 @@ namespace SharePortfolioManager
                             {
                                 // Add status message
                                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/Finish_1", LanguageName) +
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/MarketValues/Finish_1", LanguageName) +
                                     shareName +
-                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/Finish_2", LanguageName),
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/MarketValues/Finish_2", LanguageName),
                                     Language, LanguageName,
                                     Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Parser);
 
                                 // Check if a share is selected
                                 if (ShareObjectFinalValue != null && ShareObjectMarketValue != null)
                                 {
-                                    DateTime dtTryParse;
                                     ShareObjectFinalValue.LastUpdateInternet = DateTime.Now;
                                     ShareObjectMarketValue.LastUpdateInternet = DateTime.Now;
 
-                                    if (e.ParserInfoState.SearchResult.ContainsKey("LastDate"))
-                                        if (DateTime.TryParse(e.ParserInfoState.SearchResult["LastDate"][0], out dtTryParse))
-                                        {
-                                            ShareObjectMarketValue.LastUpdateDate = dtTryParse;
-                                            ShareObjectFinalValue.LastUpdateDate = dtTryParse;
-                                        }
-                                        else
-                                        {
-                                            ShareObjectMarketValue.LastUpdateDate = DateTime.Parse(e.ParserInfoState.SearchResult["LastDate"][0]);
-                                            ShareObjectFinalValue.LastUpdateDate = DateTime.Parse(e.ParserInfoState.SearchResult["LastDate"][0]);
-                                        }
+                                    if (e.ParserInfoState.SearchResult.ContainsKey("LastDate") &&
+                                        e.ParserInfoState.SearchResult.ContainsKey("LastTime"))
+                                    {
+                                        var dateTime =
+                                            $@"{e.ParserInfoState.SearchResult["LastDate"][0]} {e.ParserInfoState.SearchResult["LastTime"][0]}";
 
-                                    if (e.ParserInfoState.SearchResult.ContainsKey("LastTime"))
-                                        if (DateTime.TryParse(e.ParserInfoState.SearchResult["LastTime"][0], out dtTryParse))
+                                        if (DateTime.TryParse(dateTime, out var dtTryParse))
                                         {
-                                            ShareObjectMarketValue.LastUpdateTime = new DateTime(1970, 1, 1, DateTime.Parse(e.ParserInfoState.SearchResult["LastTime"][0]).Hour, DateTime.Parse(e.ParserInfoState.SearchResult["LastTime"][0]).Minute, DateTime.Parse(e.ParserInfoState.SearchResult["LastTime"][0]).Second);
-                                            ShareObjectFinalValue.LastUpdateTime = new DateTime(1970, 1, 1, DateTime.Parse(e.ParserInfoState.SearchResult["LastTime"][0]).Hour, DateTime.Parse(e.ParserInfoState.SearchResult["LastTime"][0]).Minute, DateTime.Parse(e.ParserInfoState.SearchResult["LastTime"][0]).Second);
+                                            ShareObjectMarketValue.LastUpdateShare = dtTryParse;
+                                            ShareObjectFinalValue.LastUpdateShare = dtTryParse;
                                         }
                                         else
                                         {
-                                            ShareObjectMarketValue.LastUpdateTime = new DateTime(0, 1, 1, DateTime.Parse(e.ParserInfoState.SearchResult["LastTime"][0]).Hour, DateTime.Parse(e.ParserInfoState.SearchResult["LastTime"][0]).Minute, DateTime.Parse(e.ParserInfoState.SearchResult["LastTime"][0]).Second);
-                                            ShareObjectFinalValue.LastUpdateTime = new DateTime(0, 1, 1, DateTime.Parse(e.ParserInfoState.SearchResult["LastTime"][0]).Hour, DateTime.Parse(e.ParserInfoState.SearchResult["LastTime"][0]).Minute, DateTime.Parse(e.ParserInfoState.SearchResult["LastTime"][0]).Second);
+                                            ShareObjectMarketValue.LastUpdateShare =
+                                                DateTime.Parse(dateTime);
+                                            ShareObjectFinalValue.LastUpdateShare =
+                                                DateTime.Parse(dateTime);
                                         }
+                                    }
 
                                     if (e.ParserInfoState.SearchResult.ContainsKey("Price"))
                                     {
@@ -384,11 +425,19 @@ namespace SharePortfolioManager
                                     }
 
                                     // Save the share values to the XML
-                                    if (!ShareObjectFinalValue.SaveShareObject(ShareObjectFinalValue, ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio, _portfolioFileName, out var exception))
-                                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                            exception.Message,
-                                            Language, LanguageName,
-                                            Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
+                                    if (ParserDailyValues.ParserErrorCode == ParserErrorCodes.Finished ||
+                                        ParserDailyValues.ParserErrorCode <= ParserErrorCodes.NoError
+                                        )
+                                    {
+                                        if (!ShareObjectFinalValue.SaveShareObject(ShareObjectFinalValue,
+                                            ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio,
+                                            _portfolioFileName, out var exception))
+                                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                                exception.Message,
+                                                Language, LanguageName,
+                                                Color.Black, Logger, (int) EStateLevels.Info,
+                                                (int) EComponentLevels.Application);
+                                    }
 
                                     // Save last displayed DataGridView row
                                     if (MarketValueOverviewTabSelected)
@@ -436,11 +485,17 @@ namespace SharePortfolioManager
                                     }
 
                                     // Check if another share object should be updated
-                                    if (SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1)
-                                        timerStartNextShareUpdate.Enabled = true;
+                                    if (ParserDailyValues.ParserErrorCode == ParserErrorCodes.Finished ||
+                                        ParserDailyValues.ParserErrorCode <= ParserErrorCodes.NoError
+                                        )
+                                    {
 
-                                    if (SelectedDataGridViewShareIndex == ShareObject.ObjectCounter - 1 /*&& ShareObjectFinalValue.Update*/ )
-                                        timerStatusMessageClear.Enabled = true;
+                                        if (SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1)
+                                            timerStartNextShareUpdate.Enabled = true;
+
+                                        if (SelectedDataGridViewShareIndex == ShareObject.ObjectCounter - 1)
+                                            timerStatusMessageClear.Enabled = true;
+                                    }
                                 }
                                 else
                                 {
@@ -460,15 +515,20 @@ namespace SharePortfolioManager
                                         // Select the new share update
                                         dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
                                     }
-                                    timerStatusMessageClear.Enabled = true;
+
+                                    // Check if all parsing is done
+                                    if (ParserDailyValues.ParserErrorCode == ParserErrorCodes.Finished ||
+                                        ParserDailyValues.ParserErrorCode <= ParserErrorCodes.NoError
+                                        )
+                                        timerStatusMessageClear.Enabled = true;
                                 }
                                 break;
                             }
                         case ParserErrorCodes.SearchFinished:
                             {
                                 // Add status message
-                                Helper.AddStatusMessage(lblWebParserState,
-                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/SearchFinish", LanguageName) + " ( " + e.ParserInfoState.Percentage.ToString() + " % )",
+                                Helper.AddStatusMessage(lblWebParserMarketValuesState,
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/MarketValues/SearchFinish", LanguageName) + " ( " + e.ParserInfoState.Percentage.ToString() + " % )",
                                     Language, LanguageName,
                                     Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Parser);
                                 break;
@@ -476,8 +536,8 @@ namespace SharePortfolioManager
                         case ParserErrorCodes.SearchRunning:
                             {
                                 // Add status message
-                                Helper.AddStatusMessage(lblWebParserState,
-                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/SearchRunning", LanguageName) + " ( " + e.ParserInfoState.Percentage.ToString() + " % )",
+                                Helper.AddStatusMessage(lblWebParserMarketValuesState,
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/MarketValues/SearchRunning", LanguageName) + " ( " + e.ParserInfoState.Percentage.ToString() + " % )",
                                     Language, LanguageName,
                                     Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Parser);
                                 break;
@@ -485,8 +545,8 @@ namespace SharePortfolioManager
                         case ParserErrorCodes.SearchStarted:
                             {
                                 // Add status message
-                                Helper.AddStatusMessage(lblWebParserState,
-                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/SearchStarted", LanguageName) + " ( " + e.ParserInfoState.Percentage.ToString() + " % )",
+                                Helper.AddStatusMessage(lblWebParserMarketValuesState,
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/MarketValues/SearchStarted", LanguageName) + " ( " + e.ParserInfoState.Percentage.ToString() + " % )",
                                     Language, LanguageName,
                                     Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Parser);
                                 break;
@@ -494,19 +554,19 @@ namespace SharePortfolioManager
                         case ParserErrorCodes.ContentLoadFinished:
                             {
                                 // Add status message
-                                Helper.AddStatusMessage(lblWebParserState,
-                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/ContentLoaded", LanguageName) + " ( " + e.ParserInfoState.Percentage.ToString() + " % )",
+                                Helper.AddStatusMessage(lblWebParserMarketValuesState,
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/MarketValues/ContentLoaded", LanguageName) + " ( " + e.ParserInfoState.Percentage.ToString() + " % )",
                                     Language, LanguageName,
                                    Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Parser);
 
-                                System.Console.WriteLine(@"Content: {0}", e.ParserInfoState.WebSiteContentAsString);
+                                Console.WriteLine(@"Content: {0}", e.ParserInfoState.WebSiteContentAsString);
                                 break;
                             }
                         case ParserErrorCodes.ContentLoadStarted:
                             {
                                 // Add status message
-                                Helper.AddStatusMessage(lblWebParserState,
-                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/ContentLoadStarted", LanguageName) + " ( " + e.ParserInfoState.Percentage.ToString() + " % )",
+                                Helper.AddStatusMessage(lblWebParserMarketValuesState,
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/MarketValues/ContentLoadStarted", LanguageName) + " ( " + e.ParserInfoState.Percentage.ToString() + " % )",
                                     Language, LanguageName,
                                     Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Parser);
                                 break;
@@ -515,22 +575,20 @@ namespace SharePortfolioManager
                             {
                                 // Just wait some time before the update begins
                                 Thread.Sleep(250);
-                                lblShareNameWebParser.Text = ShareObjectFinalValue.Name;
-                                progressBarWebParser.Value = e.ParserInfoState.Percentage;
+                                progressBarWebParserMarketValues.Value = e.ParserInfoState.Percentage;
                                 // Add status message
                                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/Start_1", LanguageName) +
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/MarketValues/Start_1", LanguageName) +
                                     shareName +
-                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/Start_2", LanguageName),
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/MarketValues/Start_2", LanguageName),
                                     Language, LanguageName,
                                     Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Parser);
                                 break;
                             }
                         case ParserErrorCodes.Starting:
                             {
-                                lblShareNameWebParser.Text = @"";
-                                lblWebParserState.Text = @"";
-                                progressBarWebParser.Value = 0;
+                                lblWebParserMarketValuesState.Text = @"";
+                                progressBarWebParserMarketValues.Value = 0;
                                 break;
                             }
                         case ParserErrorCodes.NoError:
@@ -546,7 +604,7 @@ namespace SharePortfolioManager
                             {
                                 // Add status message
                                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/StartFailed", LanguageName),
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/StartFailed", LanguageName),
                                     Language, LanguageName,
                                     Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Parser);
                                 break;
@@ -555,7 +613,7 @@ namespace SharePortfolioManager
                             {
                                 // Add status message
                                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/BusyFailed", LanguageName),
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/BusyFailed", LanguageName),
                                     Language, LanguageName,
                                     Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Parser);
                                 break;
@@ -564,7 +622,7 @@ namespace SharePortfolioManager
                             {
                                 // Add status message
                                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/InvalidWebSiteGiven", LanguageName),
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/InvalidWebSiteGiven", LanguageName),
                                     Language, LanguageName,
                                     Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Parser);
                                 break;
@@ -573,7 +631,7 @@ namespace SharePortfolioManager
                             {
                                 // Add status message
                                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/NoRegexListGiven", LanguageName),
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/NoRegexListGiven", LanguageName),
                                     Language, LanguageName,
                                     Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Parser);
                                 break;
@@ -582,7 +640,7 @@ namespace SharePortfolioManager
                             {
                                 // Add status message
                                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/ContentLoadedFailed", LanguageName),
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/ContentLoadedFailed", LanguageName),
                                     Language, LanguageName,
                                     Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Parser);
                                 break;
@@ -591,9 +649,9 @@ namespace SharePortfolioManager
                             {
                                 // Add status message
                                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/ParsingFailed_1", LanguageName) +
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/ParsingFailed_1", LanguageName) +
                                     e.ParserInfoState.LastRegexListKey +
-                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/ParsingFailed_2", LanguageName),
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/ParsingFailed_2", LanguageName),
                                     Language, LanguageName,
                                     Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Parser);
                                 break;
@@ -602,9 +660,9 @@ namespace SharePortfolioManager
                             {
                                 // Add status message
                                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/CancelThread_1", LanguageName) +
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/CancelThread_1", LanguageName) +
                                     shareName +
-                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/CancelThread_2", LanguageName),
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/CancelThread_2", LanguageName),
                                     Language, LanguageName,
                                     Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Parser);
                                 break;
@@ -613,7 +671,7 @@ namespace SharePortfolioManager
                             {
                                 // Add status message
                                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/Failure", LanguageName) +
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/Failure", LanguageName) +
                                     e.ParserInfoState.Exception.Message,
                                     Language, LanguageName,
                                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Parser);
@@ -623,19 +681,19 @@ namespace SharePortfolioManager
                             {
                                 // Add status message
                                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/Failure", LanguageName) +
-                                    e.ParserInfoState.Exception.Message,
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/Failure", LanguageName) +
+                                    e.ParserInfoState.Exception.Message +
+                                    e.ParserInfoState.Exception.Source + 
+                                    e.ParserInfoState.Exception.Data,
                                     Language, LanguageName,
                                     Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Parser);
                                 break;
                             }
                     }
 
-                    // Check if a error occurred or the process has been finished
-                    if (e.ParserInfoState.LastErrorCode < 0)
+                    // Check if an error occurred or the process has been finished
+                    if (e.ParserInfoState.LastErrorCode < ParserErrorCodes.NoError)
                     {
-                        Helper.EnableDisableControls(true, this, EnableDisableControlNames);
-
                         UpdateAllFlag = false;
 
                         if (MarketValueOverviewTabSelected)
@@ -669,22 +727,13 @@ namespace SharePortfolioManager
                             Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
                         }
 
-                        timerStatusMessageClear.Enabled = true;
-
-                        if (e.ParserInfoState.LastErrorCode < 0)
-                        {
-                            // Reset labels
-                            lblShareNameWebParser.Text = @"";
-                            lblWebParserState.Text = @"";
-                        }
-
-                        btnRefreshAll.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAll", LanguageName);
-                        btnRefresh.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Refresh", LanguageName);
-                        btnRefreshAll.Image = Resources.button_update_all_24;
-                        btnRefresh.Image = Resources.button_update_24;
+                        if(ParserDailyValues.ParserErrorCode == ParserErrorCodes.Finished ||
+                           ParserDailyValues.ParserErrorCode <= ParserErrorCodes.NoError
+                           )
+                            timerStatusMessageClear.Enabled = true;
                     }
 
-                    progressBarWebParser.Value = e.ParserInfoState.Percentage;
+                    progressBarWebParserMarketValues.Value = e.ParserInfoState.Percentage;
                 }
                 catch (Exception ex)
                 {
@@ -695,7 +744,7 @@ namespace SharePortfolioManager
 #endif
                     // Add status message
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/UpdateFailed", LanguageName),
+                        Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/UpdateFailed", LanguageName),
                         Language, LanguageName,
                         Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
 
@@ -703,8 +752,7 @@ namespace SharePortfolioManager
                     Helper.EnableDisableControls(true, this, EnableDisableControlNames);
 
                     // Reset labels
-                    lblShareNameWebParser.Text = @"";
-                    lblWebParserState.Text = @"";
+                    lblWebParserMarketValuesState.Text = @"";
 
                     btnRefreshAll.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAll", LanguageName);
                     btnRefresh.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Refresh", LanguageName);
@@ -714,6 +762,352 @@ namespace SharePortfolioManager
             }
         }
 
-#endregion WebParsing
+        /// <summary>
+        /// This event handler updates the progress of the daily values.
+        /// </summary>
+        /// <param name="sender">BackGroundWorker</param>
+        /// <param name="e">ProgressChangedEventArgs</param>
+        private void ParserDailyValues_UpdateGUI(object sender, OnParserUpdateEventArgs e)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => ParserDailyValues_UpdateGUI(sender, e)));
+            }
+            else
+            {
+                try
+                {
+                    var shareName = MarketValueOverviewTabSelected ? ShareObjectMarketValue.Name : ShareObjectFinalValue.Name;
+
+                    switch (e.ParserInfoState.LastErrorCode)
+                    {
+                        case ParserErrorCodes.Finished:
+                            {
+                                // Add status message
+                                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/DailyValues/Finish_1", LanguageName) +
+                                    shareName +
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/DailyValues/Finish_2", LanguageName),
+                                    Language, LanguageName,
+                                    Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Parser);
+
+                                // Check if a share is selected
+                                if (ShareObjectFinalValue != null && ShareObjectMarketValue != null)
+                                {
+                                    // Only add if the date not exists already
+                                    ShareObjectFinalValue.AddNewDailyValues(ParserDailyValues.ParserInfoState
+                                        .DailyValuesList);
+
+                                    // Save the share values to the XML
+                                    if (ParserMarketValues.ParserErrorCode == ParserErrorCodes.Finished ||
+                                        ParserMarketValues.ParserErrorCode <= ParserErrorCodes.NoError
+                                        )
+                                    {
+                                        // Save the share values to the XML
+                                        if (!ShareObjectFinalValue.SaveShareObject(ShareObjectFinalValue,
+                                            ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio,
+                                            _portfolioFileName, out var exception))
+                                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                                exception.Message,
+                                                Language, LanguageName,
+                                                Color.Black, Logger, (int) EStateLevels.Info,
+                                                (int) EComponentLevels.Application);
+                                    }
+                                }
+
+                                if (UpdateAllFlag)
+                                {
+                                    // Check which share overview is selected
+                                    if (MarketValueOverviewTabSelected)
+                                    {
+                                        // Select the new share update
+                                        dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+
+                                        // Scroll to the selected row
+                                        Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
+                                    }
+                                    else
+                                    {
+                                        // Select the new share update
+                                        dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+
+                                        // Scroll to the selected row
+                                        Helper.ScrollDgvToIndex(dgvPortfolioFinalValue,
+                                            SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
+                                    }
+
+                                    // Check if another share object should be updated
+                                    if (ParserMarketValues.ParserErrorCode == ParserErrorCodes.Finished ||
+                                        ParserMarketValues.ParserErrorCode <= ParserErrorCodes.NoError
+                                    )
+                                    {
+                                        if (SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1)
+                                            timerStartNextShareUpdate.Enabled = true;
+
+                                        if (SelectedDataGridViewShareIndex == ShareObject.ObjectCounter - 1)
+                                            timerStatusMessageClear.Enabled = true;
+                                    }
+                                }
+                                else
+                                {
+                                    if (MarketValueOverviewTabSelected)
+                                    {
+                                        // Clear current selection
+                                        dgvPortfolioMarketValue.ClearSelection();
+
+                                        // Select the new share update
+                                        dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+                                    }
+                                    else
+                                    {
+                                        // Clear current selection
+                                        dgvPortfolioFinalValue.ClearSelection();
+
+                                        // Select the new share update
+                                        dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+                                    }
+
+                                    if (ParserMarketValues.ParserErrorCode == ParserErrorCodes.Finished ||
+                                        ParserMarketValues.ParserErrorCode <= ParserErrorCodes.NoError
+                                        )
+                                        timerStatusMessageClear.Enabled = true;
+                                }
+                                break;
+                            }
+                        case ParserErrorCodes.SearchFinished:
+                            {
+                                // Add status message
+                                Helper.AddStatusMessage(lblWebParserDailyValuesState,
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/DailyValues/SearchFinish", LanguageName) + " ( " + e.ParserInfoState.Percentage.ToString() + " % )",
+                                    Language, LanguageName,
+                                    Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Parser);
+                                break;
+                            }
+                        case ParserErrorCodes.SearchRunning:
+                            {
+                                // Add status message
+                                Helper.AddStatusMessage(lblWebParserDailyValuesState,
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/DailyValues/SearchRunning", LanguageName) + " ( " + e.ParserInfoState.Percentage.ToString() + " % )",
+                                    Language, LanguageName,
+                                    Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Parser);
+                                break;
+                            }
+                        case ParserErrorCodes.SearchStarted:
+                            {
+                                // Add status message
+                                Helper.AddStatusMessage(lblWebParserDailyValuesState,
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/DailyValues/SearchStarted", LanguageName) + " ( " + e.ParserInfoState.Percentage.ToString() + " % )",
+                                    Language, LanguageName,
+                                    Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Parser);
+                                break;
+                            }
+                        case ParserErrorCodes.ContentLoadFinished:
+                            {
+                                // Add status message
+                                Helper.AddStatusMessage(lblWebParserDailyValuesState,
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/DailyValues/ContentLoaded", LanguageName) + " ( " + e.ParserInfoState.Percentage.ToString() + " % )",
+                                    Language, LanguageName,
+                                   Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Parser);
+
+                                Console.WriteLine(@"Content: {0}", e.ParserInfoState.WebSiteContentAsString);
+                                break;
+                            }
+                        case ParserErrorCodes.ContentLoadStarted:
+                            {
+                                // Add status message
+                                Helper.AddStatusMessage(lblWebParserDailyValuesState,
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/DailyValues/ContentLoadStarted", LanguageName) + " ( " + e.ParserInfoState.Percentage.ToString() + " % )",
+                                    Language, LanguageName,
+                                    Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Parser);
+                                break;
+                            }
+                        case ParserErrorCodes.Started:
+                            {
+                                // Just wait some time before the update begins
+                                Thread.Sleep(250);
+                                progressBarWebParserDailyValues.Value = e.ParserInfoState.Percentage;
+                                // Add status message
+                                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/DailyValues/Start_1", LanguageName) +
+                                    shareName +
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/DailyValues/Start_2", LanguageName),
+                                    Language, LanguageName,
+                                    Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Parser);
+                                break;
+                            }
+                        case ParserErrorCodes.Starting:
+                            {
+                                lblWebParserDailyValuesState.Text = @"";
+                                progressBarWebParserDailyValues.Value = 0;
+                                break;
+                            }
+                        case ParserErrorCodes.NoError:
+                            {
+                                // Add status message
+                                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                    "",
+                                    Language, LanguageName,
+                                    Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Parser);
+                                break;
+                            }
+                        case ParserErrorCodes.StartFailed:
+                            {
+                                // Add status message
+                                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/StartFailed", LanguageName),
+                                    Language, LanguageName,
+                                    Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Parser);
+                                break;
+                            }
+                        case ParserErrorCodes.BusyFailed:
+                            {
+                                // Add status message
+                                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/BusyFailed", LanguageName),
+                                    Language, LanguageName,
+                                    Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Parser);
+                                break;
+                            }
+                        case ParserErrorCodes.InvalidWebSiteGiven:
+                            {
+                                // Add status message
+                                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/InvalidWebSiteGiven", LanguageName),
+                                    Language, LanguageName,
+                                    Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Parser);
+                                break;
+                            }
+                        case ParserErrorCodes.NoRegexListGiven:
+                            {
+                                // Add status message
+                                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/NoRegexListGiven", LanguageName),
+                                    Language, LanguageName,
+                                    Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Parser);
+                                break;
+                            }
+                        case ParserErrorCodes.NoWebContentLoaded:
+                            {
+                                // Add status message
+                                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/ContentLoadedFailed", LanguageName),
+                                    Language, LanguageName,
+                                    Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Parser);
+                                break;
+                            }
+                        case ParserErrorCodes.ParsingFailed:
+                            {
+                                // Add status message
+                                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/ParsingFailed_1", LanguageName) +
+                                    e.ParserInfoState.LastRegexListKey +
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/ParsingFailed_2", LanguageName),
+                                    Language, LanguageName,
+                                    Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Parser);
+                                break;
+                            }
+                        case ParserErrorCodes.CancelThread:
+                            {
+                                // Add status message
+                                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/CancelThread_1", LanguageName) +
+                                    shareName +
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/CancelThread_2", LanguageName),
+                                    Language, LanguageName,
+                                    Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Parser);
+                                break;
+                            }
+                        case ParserErrorCodes.WebExceptionOccured:
+                            {
+                                // Add status message
+                                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/Failure", LanguageName) +
+                                    e.ParserInfoState.Exception.Message,
+                                    Language, LanguageName,
+                                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Parser);
+                                break;
+                            }
+                        case ParserErrorCodes.ExceptionOccured:
+                            {
+                                // Add status message
+                                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/Failure", LanguageName) +
+                                    e.ParserInfoState.Exception.Message,
+                                    Language, LanguageName,
+                                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Parser);
+                                break;
+                            }
+                    }
+
+                    // Check if an error occurred or the process has been finished
+                    if (e.ParserInfoState.LastErrorCode < ParserErrorCodes.NoError)
+                    {
+                        UpdateAllFlag = false;
+
+                        if (MarketValueOverviewTabSelected)
+                        {
+                            dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+
+                            // Scroll to the selected row
+                            Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
+
+                            // Reset index
+                            SelectedDataGridViewShareIndex = 0;
+
+                            dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+
+                            // Scroll to the selected row
+                            Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
+                        }
+                        else
+                        {
+                            dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+
+                            // Scroll to the selected row
+                            Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
+
+                            // Reset index
+                            SelectedDataGridViewShareIndex = 0;
+
+                            dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+
+                            // Scroll to the selected row
+                            Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
+                        }
+
+                        if (ParserMarketValues.ParserErrorCode == ParserErrorCodes.Finished ||
+                            ParserMarketValues.ParserErrorCode <= ParserErrorCodes.NoError
+                            )
+                            timerStatusMessageClear.Enabled = true;
+                    }
+
+                    progressBarWebParserDailyValues.Value = e.ParserInfoState.Percentage;
+                }
+                catch (Exception ex)
+                {
+#if DEBUG
+                    var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
+                    MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+#endif
+                    // Add status message
+                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                        Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/UpdateFailed", LanguageName),
+                        Language, LanguageName,
+                        Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+
+                    Thread.Sleep(500);
+                    Helper.EnableDisableControls(true, this, EnableDisableControlNames);
+
+                    // Reset labels
+                    lblWebParserDailyValuesState.Text = @"";
+
+                    btnRefreshAll.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAll", LanguageName);
+                    btnRefresh.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Refresh", LanguageName);
+                    btnRefreshAll.Image = Resources.button_update_all_24;
+                    btnRefresh.Image = Resources.button_update_24;
+                }
+            }
+        }
     }
 }

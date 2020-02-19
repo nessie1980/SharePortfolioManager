@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -20,14 +20,15 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using SharePortfolioManager.Classes;
-using SharePortfolioManager.Forms.DividendForm.Model;
-using SharePortfolioManager.Forms.DividendForm.View;
 using System;
 using System.IO;
 using System.Windows.Forms;
+using SharePortfolioManager.Classes;
+using SharePortfolioManager.Classes.Dividend;
+using SharePortfolioManager.DividendForm.Model;
+using SharePortfolioManager.DividendForm.View;
 
-namespace SharePortfolioManager.Forms.DividendForm.Presenter
+namespace SharePortfolioManager.DividendForm.Presenter
 {
     internal class PresenterDividendEdit
     {
@@ -256,7 +257,7 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
         {
             try
             {
-                var strCurrentFile = string.Empty;
+                string strCurrentFile;
 
                 const string strFilter = "pdf (*.pdf)|*.pdf|txt (*.txt)|.txt|doc (*.doc)|.doc|docx (*.docx)|.docx";
                 if (_model.DividendObject != null)
@@ -285,9 +286,12 @@ namespace SharePortfolioManager.Forms.DividendForm.Presenter
 
                 _view.DocumentBrowseFinish();
             }
+#if !DEBUG
+            catch
+            {
+#else
             catch (Exception ex)
             {
-#if DEBUG_DIVIDEND
                 var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);

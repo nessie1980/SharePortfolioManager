@@ -21,26 +21,29 @@
 //SOFTWARE.
 
 using System;
-using System.Windows.Forms;
 
-namespace SharePortfolioManager
+namespace SharePortfolioManager.Classes
 {
-    static class Program
+    public class DailyValues : IComparable<DailyValues>
     {
-        /// <summary>
-        /// Main entry point of the application
-        /// </summary>
-        [STAThread]
-        private static void Main()
+        public DateTime Date { get; set; }
+        public const string DateName = "Date";
+        public decimal ClosingPrice { get; set; }
+        public const string ClosingPriceName = "Closingprice";
+        public decimal OpeningPrice { get; set; }
+        public const string OpeningPriceName  = "Openingprice";
+        public decimal Top { get; set; }
+        public const string TopName = "Top";
+        public decimal Bottom { get; set; }
+        public const string BottomName = "Bottom";
+        public decimal Volume { get; set; }
+        public const string VolumeName = "Volume";
+
+        // Default comparer for DailiyValues type.
+        public int CompareTo(DailyValues dailyValue)
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
-            // Create a controller and pass an instance of your application from the MainForm
-            var controller = new Classes.ApplicationController(new FrmMain());
-
-            //Run application
-            controller.Run(Environment.GetCommandLineArgs());
+            // A null value means that this object is greater.
+            return dailyValue == null ? 1 : Date.CompareTo(dailyValue.Date);
         }
     }
 }

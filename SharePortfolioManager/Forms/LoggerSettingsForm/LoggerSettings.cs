@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +27,9 @@ using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using SharePortfolioManager.OwnMessageBoxForm;
 
-namespace SharePortfolioManager
+namespace SharePortfolioManager.LoggerSettingsForm
 {
     public partial class FrmLoggerSettings : Form
     {

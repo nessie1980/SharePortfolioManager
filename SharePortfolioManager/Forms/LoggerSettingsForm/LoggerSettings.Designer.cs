@@ -1,7 +1,7 @@
 ﻿
 using SharePortfolioManager.Properties;
 
-namespace SharePortfolioManager
+namespace SharePortfolioManager.LoggerSettingsForm
 {
     partial class FrmLoggerSettings
     {

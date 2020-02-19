@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -30,11 +30,11 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using static SharePortfolioManager.FrmMain;
+using SharePortfolioManager.OwnMessageBoxForm;
 
-namespace SharePortfolioManager.Forms.ShareDetailsForm
+namespace SharePortfolioManager.ShareDetailsForm
 {
-    partial class ShareDetailsForm
+    public partial class ShareDetailsForm
     {
         #region Tab control details
 
@@ -184,12 +184,11 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                                                   Language.GetLanguageTextByXPath(
                                                       @"/ShareDetailsForm/GrpBoxDetails/ShareUpdate",
                                                       LanguageName) + @" " +
-                                                  string.Format(Helper.Datefulltimeshortformat, ShareObjectMarketValue.LastUpdateInternet)
+                                                  string.Format(Helper.DateFullTimeShortFormat, ShareObjectMarketValue.LastUpdateInternet)
                                                        + @" )";
                     }
 
-                    if (ShareObjectMarketValue.LastUpdateDate == DateTime.MinValue &&
-                        ShareObjectMarketValue.LastUpdateTime == DateTime.MinValue)
+                    if (ShareObjectMarketValue.LastUpdateShare == DateTime.MinValue)
                     {
                         // Set the share update date
                         lblDetailsMarketValueDateValue.Text =
@@ -199,11 +198,11 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                     {
                         // Set the share update date
                         lblDetailsMarketValueDateValue.Text =
-                            string.Format(Helper.Datefullformat, ShareObjectMarketValue.LastUpdateDate) + @" " +
-                            string.Format(Helper.Timeshortformat, ShareObjectMarketValue.LastUpdateTime);
+                            string.Format(Helper.DateFullFormat, ShareObjectMarketValue.LastUpdateShare) + @" " +
+                            string.Format(Helper.TimeShortFormat, ShareObjectMarketValue.LastUpdateShare);
                         lblDetailsMarketValueDateValue.Text =
-                            string.Format(Helper.Datefullformat, ShareObjectMarketValue.LastUpdateDate) + @" " +
-                            string.Format(Helper.Timeshortformat, ShareObjectMarketValue.LastUpdateTime);
+                            string.Format(Helper.DateFullFormat, ShareObjectMarketValue.LastUpdateShare) + @" " +
+                            string.Format(Helper.TimeShortFormat, ShareObjectMarketValue.LastUpdateShare);
                     }
                     // Set share volume
                     lblDetailsMarketValueVolumeValue.Text = ShareObjectMarketValue.VolumeAsStrUnit;
@@ -261,19 +260,6 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                     lblDetailsMarketValueDiffPerformancePrevValue.ForeColor = ShareObjectMarketValue.PrevDayPerformance >= 0 ? Color.Green : Color.Red;
 
                     lblDetailsMarketValueDiffSumPrevValue.ForeColor = ShareObjectMarketValue.PrevDayProfitLoss >= 0 ? Color.Green : Color.Red;
-
-                    var iLastUpdateDay =
-                        DateTime.Parse(ShareObjectMarketValue.LastUpdateDate.ToString("G"), ShareObjectMarketValue.CultureInfo).Day;
-                    var iLastUpdateMonth =
-                        DateTime.Parse(ShareObjectMarketValue.LastUpdateDate.ToString("G"), ShareObjectMarketValue.CultureInfo).Month;
-                    var iLastUpdateYear =
-                        DateTime.Parse(ShareObjectMarketValue.LastUpdateDate.ToString("G"), ShareObjectMarketValue.CultureInfo).Year;
-                    var iLastUpdateHour =
-                        DateTime.Parse(ShareObjectMarketValue.LastUpdateTime.ToString("G"), ShareObjectMarketValue.CultureInfo).Hour;
-                    var iLastUpdateMinute =
-                        DateTime.Parse(ShareObjectMarketValue.LastUpdateTime.ToString("G"), ShareObjectMarketValue.CultureInfo).Minute;
-                    var iLastUpdateSecond =
-                        DateTime.Parse(ShareObjectMarketValue.LastUpdateTime.ToString("G"), ShareObjectMarketValue.CultureInfo).Second;
                 }
                 else
                 {
@@ -332,12 +318,11 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                                                   Language.GetLanguageTextByXPath(
                                                       @"/ShareDetailsForm/GrpBoxDetails/ShareUpdate",
                                                       LanguageName) + @" " +
-                                                  string.Format(Helper.Datefulltimeshortformat, ShareObjectFinalValue.LastUpdateInternet)
+                                                  string.Format(Helper.DateFullTimeShortFormat, ShareObjectFinalValue.LastUpdateInternet)
                                                        + @" )";
                     }
 
-                    if (ShareObjectFinalValue.LastUpdateDate == DateTime.MinValue &&
-                        ShareObjectFinalValue.LastUpdateTime == DateTime.MinValue)
+                    if (ShareObjectFinalValue.LastUpdateShare == DateTime.MinValue)
                     {
                         // Set the share update date
                         lblDetailsFinalValueDateValue.Text =
@@ -347,11 +332,11 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                     {
                         // Set the share update date
                         lblDetailsFinalValueDateValue.Text =
-                            string.Format(Helper.Datefullformat, ShareObjectFinalValue.LastUpdateDate) + @" " +
-                            string.Format(Helper.Timeshortformat, ShareObjectFinalValue.LastUpdateTime);
+                            string.Format(Helper.DateFullFormat, ShareObjectFinalValue.LastUpdateShare) + @" " +
+                            string.Format(Helper.TimeShortFormat, ShareObjectFinalValue.LastUpdateShare);
                         lblDetailsMarketValueDateValue.Text =
-                            string.Format(Helper.Datefullformat, ShareObjectFinalValue.LastUpdateDate) + @" " +
-                            string.Format(Helper.Timeshortformat, ShareObjectFinalValue.LastUpdateTime);
+                            string.Format(Helper.DateFullFormat, ShareObjectFinalValue.LastUpdateShare) + @" " +
+                            string.Format(Helper.TimeShortFormat, ShareObjectFinalValue.LastUpdateShare);
                     }
 
                     // Set share volume
@@ -412,19 +397,6 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                     lblDetailsFinalValueDiffPerformancePrevValue.ForeColor = ShareObjectFinalValue.PrevDayPerformance >= 0 ? Color.Green : Color.Red;
 
                     lblDetailsFinalValueDiffSumPrevValue.ForeColor = ShareObjectFinalValue.PrevDayProfitLoss >= 0 ? Color.Green : Color.Red;
-
-                    var iLastUpdateDay =
-                        DateTime.Parse(ShareObjectFinalValue.LastUpdateDate.ToString("G"), ShareObjectFinalValue.CultureInfo).Day;
-                    var iLastUpdateMonth =
-                        DateTime.Parse(ShareObjectFinalValue.LastUpdateDate.ToString("G"), ShareObjectFinalValue.CultureInfo).Month;
-                    var iLastUpdateYear =
-                        DateTime.Parse(ShareObjectFinalValue.LastUpdateDate.ToString("G"), ShareObjectFinalValue.CultureInfo).Year;
-                    var iLastUpdateHour =
-                        DateTime.Parse(ShareObjectFinalValue.LastUpdateTime.ToString("G"), ShareObjectFinalValue.CultureInfo).Hour;
-                    var iLastUpdateMinute =
-                        DateTime.Parse(ShareObjectFinalValue.LastUpdateTime.ToString("G"), ShareObjectFinalValue.CultureInfo).Minute;
-                    var iLastUpdateSecond =
-                        DateTime.Parse(ShareObjectFinalValue.LastUpdateTime.ToString("G"), ShareObjectFinalValue.CultureInfo).Second;
                 }
             }
             catch (Exception ex)
@@ -438,7 +410,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                 Helper.AddStatusMessage(RichTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithWithOutDividendBrokerageErrors/ShowFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -483,7 +455,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                                     @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Caption", LanguageName)
                             } ({
                                 Helper.FormatDecimal(ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotal,
-                                    Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"",
+                                    Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"",
                                     ShareObjectFinalValue.CultureInfo)
                             })";
 
@@ -590,7 +562,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                             {
                                 Name = keyName,
                                 Text = keyName +
-                                       $@" ({Helper.FormatDecimal(ShareObjectFinalValue.AllSaleEntries.AllSalesOfTheShareDictionary[keyName].SaleProfitLossYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", ShareObjectFinalValue.CultureInfo)})"
+                                       $@" ({Helper.FormatDecimal(ShareObjectFinalValue.AllSaleEntries.AllSalesOfTheShareDictionary[keyName].SaleProfitLossYear, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", ShareObjectFinalValue.CultureInfo)})"
                             };
                             // Set TabPage name
 
@@ -665,7 +637,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                 Helper.AddStatusMessage(RichTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss_Error/ShowFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -700,7 +672,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                 Helper.AddStatusMessage(RichTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -746,7 +718,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                 Helper.AddStatusMessage(RichTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -865,7 +837,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                 Helper.AddStatusMessage(RichTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/DocumentShowFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -888,17 +860,13 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                     switch (i)
                     {
                         case 0:
-                            {
-                                if (tabCtrlProfitLoss.TabPages.Count == 1)
-                                    ((DataGridView)sender).Columns[i].HeaderText = Language.GetLanguageTextByXPath(
-                                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/DgvProfitLossOverview/ColHeader_Year",
-                                        LanguageName
-                                    );
-                                else
-                                    ((DataGridView)sender).Columns[i].HeaderText = Language.GetLanguageTextByXPath(
-                                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/DgvProfitLossOverview/ColHeader_Date",
-                                        LanguageName
-                                    );
+                        {
+                            ((DataGridView) sender).Columns[i].HeaderText =
+                                Language.GetLanguageTextByXPath(
+                                    tabCtrlProfitLoss.TabPages.Count == 1
+                                        ? @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/DgvProfitLossOverview/ColHeader_Year"
+                                        : @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/DgvProfitLossOverview/ColHeader_Date",
+                                    LanguageName);
 
                                 break;
                             }
@@ -933,7 +901,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                 Helper.AddStatusMessage(RichTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend_Error/RenameHeaderFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -960,7 +928,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                 Helper.AddStatusMessage(RichTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -1185,7 +1153,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                 Helper.AddStatusMessage(RichTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend_Error/ShowFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -1220,7 +1188,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                 Helper.AddStatusMessage(RichTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -1266,7 +1234,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                 Helper.AddStatusMessage(RichTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -1289,15 +1257,12 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                     switch (i)
                     {
                         case 0:
-                            {
-                                if (tabCtrlDividends.TabPages.Count == 1)
-                                    ((DataGridView)sender).Columns[i].HeaderText = Language.GetLanguageTextByXPath(
-                                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Year",
-                                        LanguageName);
-                                else
-                                    ((DataGridView)sender).Columns[i].HeaderText = Language.GetLanguageTextByXPath(
-                                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Date",
-                                        LanguageName);
+                        {
+                            ((DataGridView) sender).Columns[i].HeaderText = Language.GetLanguageTextByXPath(
+                                tabCtrlDividends.TabPages.Count == 1
+                                    ? @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Year"
+                                    : @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Date",
+                                LanguageName);
                                 break;
                             }
                         case 1:
@@ -1365,7 +1330,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                 Helper.AddStatusMessage(RichTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend_Error/RenameHeaderFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -1392,7 +1357,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                 Helper.AddStatusMessage(RichTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -1606,7 +1571,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                 Helper.AddStatusMessage(RichTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage_Error/ShowFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -1641,7 +1606,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                 Helper.AddStatusMessage(RichTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -1687,7 +1652,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                 Helper.AddStatusMessage(RichTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -1710,16 +1675,12 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                     switch (i)
                     {
                         case 0:
-                            {
-                                if (tabCtrlBrokerage.TabPages.Count == 1)
-                                    ((DataGridView)sender).Columns[i].HeaderText = Language.GetLanguageTextByXPath(
-                                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/DgvBrokerageOverview/ColHeader_Year",
-                                        LanguageName
-                                    );
-                                else
-                                    ((DataGridView)sender).Columns[i].HeaderText = Language.GetLanguageTextByXPath(
-                                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/DgvBrokerageOverview/ColHeader_Date",
-                                        LanguageName);
+                        {
+                            ((DataGridView) sender).Columns[i].HeaderText = Language.GetLanguageTextByXPath(
+                                tabCtrlBrokerage.TabPages.Count == 1
+                                    ? @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/DgvBrokerageOverview/ColHeader_Year"
+                                    : @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/DgvBrokerageOverview/ColHeader_Date",
+                                LanguageName);
                                 break;
                             }
                         case 1:
@@ -1755,7 +1716,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                 Helper.AddStatusMessage(RichTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage_Error/RenameHeaderFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 
@@ -1785,7 +1746,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                 Helper.AddStatusMessage(RichTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
             }
         }
 

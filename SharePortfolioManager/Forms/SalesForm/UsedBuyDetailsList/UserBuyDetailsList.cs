@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace SharePortfolioManager.Forms.UsedBuyDetailsList
+namespace SharePortfolioManager.SalesForm.UsedBuyDetailsList
 {
     public partial class UsedBuyDetailsList : Form
     {

@@ -1,4 +1,4 @@
-﻿namespace SharePortfolioManager
+﻿namespace SharePortfolioManager.OwnMessageBoxForm
 {
     partial class OwnMessageBox
     {

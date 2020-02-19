@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -22,10 +22,12 @@
 
 using LanguageHandler;
 using Logging;
+using Parser;
+using SharePortfolioManager.Chart;
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.ShareObjects;
-using SharePortfolioManager.Forms.ShareDetailsForm;
 using SharePortfolioManager.Properties;
+using SharePortfolioManager.ShareDetailsForm;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -54,36 +56,6 @@ namespace SharePortfolioManager
         /// Stores the context menu for the notify icon
         /// </summary>
         private ContextMenuStrip _notifyContextMenuStrip;
-
-        // TODO remove
-        /// <summary>
-        /// Stores the name of the final value tab control
-        /// </summary>
-        private readonly string _tabPageDetailsFinalValue = "tabPgDetailsFinalValue";
-
-        // TODO remove
-        /// <summary>
-        /// Stores the name of the market value tab control
-        /// </summary>
-        private readonly string _tabPageDetailsMarketValue = "tabPgDetailsMarketValue";
-
-        // TODO remove
-        /// <summary>
-        /// Stores the name of the dividends tab control
-        /// </summary>
-        private readonly string _tabPageDetailsDividendValue = "tabPgDividends";
-
-        // TODO remove
-        /// <summary>
-        /// Stores the name of the brokerage tab control
-        /// </summary>
-        private readonly string _tabPageDetailsBrokerageValue = "tabPgBrokerage";
-
-        // TODO remove
-        /// <summary>
-        /// Stores the name of the profit / loss value tab control
-        /// </summary>
-        private readonly string _tabPageDetailsProfitLossValue = "tabPgProfitLoss";
 
         #endregion From
 
@@ -299,13 +271,18 @@ namespace SharePortfolioManager
 
         #region Parser
 
-        public Parser.Parser Parser { get; } = new Parser.Parser();
+        // Parser for the market values
+        public Parser.Parser ParserMarketValues { get; } = new Parser.Parser();
+
+        public Parser.Parser ParserDailyValues { get; } = new Parser.Parser();
 
         #endregion Parser
 
         #region Charting
 
-        public int ChartingIntervalValue = (int)Forms.ShareDetailsForm.ChartingInterval.Week;
+        public FrmChart FrmChart;
+
+        public ChartingInterval ChartingIntervalValue = ChartingInterval.Week;
 
         public int ChartingAmount = 1;
 
@@ -335,13 +312,6 @@ namespace SharePortfolioManager
         #endregion Selected indices's
 
         public List<string> EnableDisableControlNames { get; } = new List<string>();
-
-        // TODO Remove
-        private TabPage _tempFinalValues;
-        private TabPage _tempMarketValues;
-        private TabPage _tempProfitLoss;
-        private TabPage _tempDividends;
-        private TabPage _tempBrokerage;
 
         #endregion Properties
 
@@ -555,7 +525,7 @@ namespace SharePortfolioManager
                     Text = Language.GetLanguageTextByXPath(@"/Application/Name", LanguageName)
                            + @" " + Helper.GetApplicationVersion();
                     if ( _portfolioFileName !=  @"")
-                    Text += @" - (" + _portfolioFileName + @")";
+                        Text += @" - (" + _portfolioFileName + @")";
                 }
                 else
                 {
@@ -918,18 +888,22 @@ namespace SharePortfolioManager
             btnRefresh.Image = Resources.button_update_24;
 
             // Reset labels
-            lblShareNameWebParser.Text = @"";
-            lblWebParserState.Text = @"";
+            lblWebParserMarketValuesState.Text = @"";
+            lblWebParserDailyValuesState.Text = @"";
 
             // Reset progress bar
-            progressBarWebParser.Value = 0;
+            progressBarWebParserMarketValues.Value = 0;
+            progressBarWebParserDailyValues.Value = 0;
 
             // Disable time
             timerStatusMessageClear.Enabled = false;
         }
 
-        #endregion Timer
-
+        /// <summary>
+        /// This function starts the next share update if all shares should be updated
+        /// </summary>
+        /// <param name="sender">Timer</param>
+        /// <param name="e">EventArgs</param>
         private void TimerStartNextShareUpdate_Tick(object sender, EventArgs e)
         {
             timerStartNextShareUpdate.Enabled = false;
@@ -965,11 +939,24 @@ namespace SharePortfolioManager
                     if (ShareObjectMarketValue != null && ShareObjectMarketValue.Update &&
                         ShareObjectMarketValue.WebSiteConfigurationValid)
                     {
-                        Parser.WebParsing = true;
-                        Parser.WebSiteUrl = ShareObjectMarketValue.WebSite;
-                        Parser.RegexList = ShareObjectMarketValue.RegexList;
-                        Parser.EncodingType = ShareObjectMarketValue.WebSiteEncodingType;
-                        Parser.StartParsing();
+                        // Start the asynchronous operation of the Parser for the market values
+                        ParserMarketValues.ParsingValues = new ParsingValues(
+                            new Uri(ShareObjectMarketValue.WebSite),
+                            ShareObjectMarketValue.WebSiteEncodingType,
+                            ShareObjectMarketValue.RegexList
+                        );
+                        ParserMarketValues.StartParsing();
+
+                        // Start the asynchronous operation of the Parser for the daily market values
+                        ParserDailyValues.ParsingValues = new ParsingValues(
+                            new Uri(Helper.BuildDailyValuesUrl(
+                                ShareObjectMarketValue.DailyValues,
+                                ShareObjectMarketValue.DailyValuesWebSite,
+                                ShareObjectMarketValue.ShareType
+                            )),
+                            ShareObjectMarketValue.WebSiteEncodingType
+                        );
+                        ParserDailyValues.StartParsing();
                     }
                 }
                 else
@@ -994,13 +981,25 @@ namespace SharePortfolioManager
                         // Scroll to the selected rowShareObjectListFinalValue[SelectedDataGridViewShareIndex].Update &&
                         Helper.ScrollDgvToIndex(dgvPortfolioFinalValue,
                             SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
+                        
+                        // Start the asynchronous operation of the Parser for the market values
+                        ParserMarketValues.ParsingValues = new ParsingValues(
+                            new Uri(ShareObjectFinalValue.WebSite),
+                            ShareObjectFinalValue.WebSiteEncodingType,
+                            ShareObjectFinalValue.RegexList
+                        );
+                        ParserMarketValues.StartParsing();
 
-                        // Start the asynchronous operation of the Parser
-                        Parser.WebParsing = true;
-                        Parser.WebSiteUrl = ShareObjectFinalValue.WebSite;
-                        Parser.RegexList = ShareObjectFinalValue.RegexList;
-                        Parser.EncodingType = ShareObjectFinalValue.WebSiteEncodingType;
-                        Parser.StartParsing();
+                        // Start the asynchronous operation of the Parser for the daily market values
+                        ParserDailyValues.ParsingValues = new ParsingValues(
+                            new Uri(Helper.BuildDailyValuesUrl(
+                                ShareObjectFinalValue.DailyValues,
+                                ShareObjectFinalValue.DailyValuesWebSite,
+                                ShareObjectFinalValue.ShareType
+                            )),
+                            ShareObjectFinalValue.WebSiteEncodingType
+                        );
+                        ParserDailyValues.StartParsing();
                     }
                     else
                         UpdateAllFlag = false;
@@ -1036,12 +1035,15 @@ namespace SharePortfolioManager
                 btnRefresh.Image = Resources.button_update_24;
 
                 // Reset labels
-                lblShareNameWebParser.Text = @"";
-                lblWebParserState.Text = @"";
+                lblWebParserMarketValuesState.Text = @"";
+                lblWebParserDailyValuesState.Text = @"";
 
                 // Reset progress bar
-                progressBarWebParser.Value = 0;
+                progressBarWebParserMarketValues.Value = 0;
+                progressBarWebParserDailyValues.Value = 0;
             }
         }
+
+        #endregion Timer
     }
 }

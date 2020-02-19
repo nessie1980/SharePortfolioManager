@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -21,18 +21,16 @@
 //SOFTWARE.
 
 using SharePortfolioManager.Classes;
-using SharePortfolioManager.Forms.ShareAddForm.Model;
-using SharePortfolioManager.Forms.ShareAddForm.View;
+using SharePortfolioManager.ShareAddForm.Model;
+using SharePortfolioManager.ShareAddForm.View;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using SharePortfolioManager.Classes.ShareObjects;
 
-// ReSharper disable once CheckNamespace
-namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
+namespace SharePortfolioManager.ShareAddForm.Presenter
 {
     public class PresenterShareAdd
     {
@@ -58,6 +56,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
 
             _view.Wkn = _model.Wkn;
             _view.ShareName = _model.Name;
+            _view.StockMarketLaunchDate = _model.StockMarketLaunchDate;
             _view.WebSite = _model.WebSite;
             _view.DailyValuesWebSite = _model.DailyValuesWebSite;
             _view.Date = _model.Date;
@@ -102,6 +101,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
 
             _model.Wkn = _view.Wkn;
             _model.Name = _view.ShareName;
+            _model.StockMarketLaunchDate = _view.StockMarketLaunchDate;
             _model.ShareType = _view.ShareType;
             _model.DividendPayoutInterval = _view.DividendPayoutInterval;
             _model.CultureInfo = _view.CultureInfo;
@@ -187,8 +187,8 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                         _model.Wkn,
                         _model.OrderNumber,
                         strDateTime,
+                        _model.StockMarketLaunchDate,
                         _model.Name,
-                        DateTime.MinValue,
                         DateTime.MinValue,
                         DateTime.MinValue,
                         0,
@@ -216,8 +216,8 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                         _model.Wkn,
                         _model.OrderNumber,
                         strDateTime,
+                        _model.StockMarketLaunchDate,
                         _model.Name,
-                        DateTime.MinValue,
                         DateTime.MinValue,
                         DateTime.MinValue,
                         0,
@@ -252,8 +252,8 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                         _model.Wkn,
                         _model.OrderNumber,
                         strDateTime,
+                        _model.StockMarketLaunchDate,
                         _model.Name,
-                        DateTime.MinValue,
                         DateTime.MinValue,
                         DateTime.MinValue,
                         _model.SharePriceDec,
@@ -278,8 +278,8 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                         _model.Wkn,
                         _model.OrderNumber,
                         strDateTime,
+                        _model.StockMarketLaunchDate,
                         _model.Name,
-                        DateTime.MinValue,
                         DateTime.MinValue,
                         DateTime.MinValue,
                         _model.SharePriceDec,
@@ -310,6 +310,9 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                     _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1].SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList);
                     _model.ShareObjectFinalValue = _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1];
 
+                    // Sort portfolio list in order of the share names
+                    _model.ShareObjectListFinalValue.Sort(new ShareObjectListComparer());
+
                     // Brokerage entry if any brokerage value is not 0
                     if (_model.ProvisionDec != 0 || _model.BrokerFeeDec != 0 || _model.TraderPlaceFeeDec != 0 || _model.ReductionDec != 0)
                     {
@@ -324,29 +327,13 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
 
                     // Set website configuration and encoding to the share object.
                     // The encoding is necessary for the Parser for encoding the download result.
-                    if (!_model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1]
-                        .SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList))
-                    {
-                        // Set update flag to false
-                        _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1]
-                            .WebSiteConfigurationValid = false;
-                    }
-                    else
-                        // Set update flag to false
-                        _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1]
-                            .WebSiteConfigurationValid = true;
+                    _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1]
+                        .WebSiteConfigurationValid = _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1]
+                        .SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList);
 
-                    if (!_model.ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1]
-                        .SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList))
-                    {
-                        // Set update flag to false
-                        _model.ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1]
-                            .WebSiteConfigurationValid = false;
-                    }
-                    else
-                        // Set update flag to false
-                        _model.ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1]
-                            .WebSiteConfigurationValid = true;
+                    _model.ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1]
+                        .WebSiteConfigurationValid = _model.ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1]
+                        .SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList);
 
                     // Sort portfolio list in order of the share names
                     _model.ShareObjectListFinalValue.Sort(new ShareObjectListComparer());
@@ -444,6 +431,19 @@ namespace SharePortfolioManager.Forms.ShareAddForm.Presenter
                     break;
                 }
             }
+
+            // Check if the stock market launch date has been modified
+            var dummy = new DateTimePicker
+            {
+                MinDate = DateTime.MinValue
+            };
+
+            if (_model.StockMarketLaunchDate == dummy.MinDate.ToShortDateString() && bErrorFlag == false)
+            {
+                _model.ErrorCode = ShareAddErrorCode.StockMarketLaunchDateNotModified;
+                bErrorFlag = true;
+            }
+
 
             // Check if a correct volume for the add is given
             if (_model.Volume == @"" && bErrorFlag == false)

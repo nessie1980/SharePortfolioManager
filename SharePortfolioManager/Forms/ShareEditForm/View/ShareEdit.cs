@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -22,29 +22,28 @@
 
 using LanguageHandler;
 using Logging;
-using SharePortfolioManager.Classes;
-using SharePortfolioManager.Forms.DividendForm.Model;
-using SharePortfolioManager.Forms.DividendForm.Presenter;
-using SharePortfolioManager.Forms.DividendForm.View;
-using SharePortfolioManager.Forms.SalesForm.View;
-using SharePortfolioManager.Properties;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Globalization;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Windows.Forms;
 using SharePortfolioManager.BrokeragesForm.Model;
 using SharePortfolioManager.BrokeragesForm.Presenter;
 using SharePortfolioManager.BrokeragesForm.View;
 using SharePortfolioManager.BuysForm.Model;
 using SharePortfolioManager.BuysForm.Presenter;
 using SharePortfolioManager.BuysForm.View;
+using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.ShareObjects;
-using SharePortfolioManager.Forms.SalesForm.Model;
-using SharePortfolioManager.Forms.SalesForm.Presenter;
+using SharePortfolioManager.DividendForm.Model;
+using SharePortfolioManager.DividendForm.Presenter;
+using SharePortfolioManager.DividendForm.View;
+using SharePortfolioManager.Properties;
+using SharePortfolioManager.SalesForm.Model;
+using SharePortfolioManager.SalesForm.Presenter;
+using SharePortfolioManager.SalesForm.View;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
+using System.Linq;
+using System.Threading;
+using System.Windows.Forms;
 
 // ReSharper disable once CheckNamespace
 namespace SharePortfolioManager
@@ -113,6 +112,7 @@ namespace SharePortfolioManager
                     #region GroupBox General 
 
                     lblWknValue.Text = ShareObjectFinalValue.Wkn;
+                    dateTimeStockMarketLaunchDate.Value = DateTime.Parse(ShareObjectFinalValue.StockMarketLaunchDate);
                     lblDateValue.Text = ShareObjectFinalValue.AllBuyEntries.AllBuysOfTheShareDictionary.Values.First().BuyListYear.First().Date;
                     txtBoxName.Text = ShareObjectFinalValue.Name;
                     chkBoxUpdate.CheckState = ShareObjectFinalValue.Update ? CheckState.Checked : CheckState.Unchecked;
@@ -130,6 +130,7 @@ namespace SharePortfolioManager
                     {
                         try
                         {
+                            // ReSharper disable once UnusedVariable
                             var specName = CultureInfo.CreateSpecificCulture(ci.Name).Name;
                         }
                         catch
@@ -181,6 +182,7 @@ namespace SharePortfolioManager
                 Text = Language.GetLanguageTextByXPath(@"/EditFormShare/Caption", LanguageName);
                 grpBoxGeneral.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Caption", LanguageName);
                 lblWkn.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/WKN", LanguageName);
+                lblStockMarketLaunchDate.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/StockMarketLaunchDate", LanguageName);
                 lblDate.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Date", LanguageName);
                 lblName.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Name", LanguageName);
                 lblShareUpdate.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Update", LanguageName);
@@ -215,10 +217,10 @@ namespace SharePortfolioManager
                 btnShareSalesEdit.Text =
                     Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Buttons/Sales",
                     LanguageName);
-                if (ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotal < 0)
-                lblProfitLoss.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Loss", LanguageName);
-                        else
-                    lblProfitLoss.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Profit", LanguageName);
+                lblProfitLoss.Text = Language.GetLanguageTextByXPath(
+                    ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotal < 0
+                        ? @"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Loss"
+                        : @"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Profit", LanguageName);
                 lblDividend.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Dividend",
                     LanguageName);
                 btnShareDividendsEdit.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Buttons/Dividend",
@@ -312,8 +314,10 @@ namespace SharePortfolioManager
                 statusStrip1.ForeColor = Color.Red;
                 statusStrip1.Text = "";
 
+                // Needed for the URL check
                 var decodedUrlWebSite = txtBoxWebSite.Text;
                 var decodeUrlDailyValuesWebSite = txtBoxDailyValuesWebSite.Text;
+                // Set start date and interval for the test
                 decodeUrlDailyValuesWebSite =
                     string.Format(decodeUrlDailyValuesWebSite, DateTime.Now.AddMonths(-1).ToShortDateString(), "M1");
 
@@ -365,6 +369,24 @@ namespace SharePortfolioManager
                             break;
                         }
                     }
+                }
+
+                // Stock market launch date
+                // Check if the stock market launch date has been modified
+                var dummy = new DateTimePicker
+                {
+                    MinDate = DateTime.MinValue
+                };
+
+                if (txtBoxDailyValuesWebSite.Text == dummy.MinDate.ToShortDateString() && errorFlag == false)
+                {
+                    txtBoxDailyValuesWebSite.Focus();
+                    // Add status message
+                    Helper.AddStatusMessage(editShareStatusLabelMessage,
+                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/StockMarketLaunchDateNotModified", LanguageName),
+                        Language, LanguageName,
+                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                    errorFlag = true;
                 }
 
                 // Update website
@@ -429,7 +451,7 @@ namespace SharePortfolioManager
                         }
                     }
                 }
-
+                
                 // Daily values update website
                 if (txtBoxDailyValuesWebSite.Text == @"" && errorFlag == false)
                 {
@@ -505,6 +527,7 @@ namespace SharePortfolioManager
 
                 // Market value share
                 ShareObjectMarketValue.Name = txtBoxName.Text;
+                ShareObjectMarketValue.StockMarketLaunchDate = dateTimeStockMarketLaunchDate.Value.ToShortDateString();
                 ShareObjectMarketValue.Update = chkBoxUpdate.Checked;
                 ShareObjectMarketValue.WebSite = txtBoxWebSite.Text;
                 ShareObjectMarketValue.DailyValuesWebSite = txtBoxDailyValuesWebSite.Text;
@@ -513,6 +536,7 @@ namespace SharePortfolioManager
 
                 // Final value share
                 ShareObjectFinalValue.Name = txtBoxName.Text;
+                ShareObjectFinalValue.StockMarketLaunchDate = dateTimeStockMarketLaunchDate.Value.ToShortDateString();
                 ShareObjectFinalValue.Update = chkBoxUpdate.Checked;
                 ShareObjectFinalValue.WebSite = txtBoxWebSite.Text;
                 ShareObjectFinalValue.DailyValuesWebSite = txtBoxDailyValuesWebSite.Text;
@@ -557,6 +581,7 @@ namespace SharePortfolioManager
         {
             IModelBuyEdit model = new ModelBuyEdit();
             IViewBuyEdit view = new ViewBuyEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, LanguageName);
+            // ReSharper disable once UnusedVariable
             var presenterBuyEdit = new PresenterBuyEdit (view, model);
 
             var dlgResult = view.ShowDialog();
@@ -574,6 +599,7 @@ namespace SharePortfolioManager
         {
             IModelSaleEdit model = new ModelSaleEdit();
             IViewSaleEdit view = new ViewSaleEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, LanguageName);
+            // ReSharper disable once UnusedVariable
             var presenterSaleEdit = new PresenterSaleEdit(view, model);
 
             var dlgResult = view.ShowDialog();
@@ -591,6 +617,7 @@ namespace SharePortfolioManager
         {
             IModelDividendEdit model = new ModelDividendEdit();
             IViewDividendEdit view = new ViewDividendEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, LanguageName);
+            // ReSharper disable once UnusedVariable
             var presenterDividendEdit = new PresenterDividendEdit(view, model);
 
             var dlgResult = view.ShowDialog();
@@ -608,6 +635,7 @@ namespace SharePortfolioManager
         {
             IModelBrokerageEdit model = new ModelBrokerageEdit();
             IViewBrokerageEdit view = new ViewBrokerageEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, LanguageName);
+            // ReSharper disable once UnusedVariable
             var presenterBrokerageEdit = new PresenterBrokerageEdit(view, model);
 
             var dlgResult = view.ShowDialog();

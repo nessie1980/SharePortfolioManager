@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -37,8 +37,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using SharePortfolioManager.OwnMessageBoxForm;
 
-namespace SharePortfolioManager.Forms.DividendForm.View
+namespace SharePortfolioManager.DividendForm.View
 {
     // Error codes of the DividendEdit
     public enum DividendErrorCode
@@ -2756,9 +2757,12 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                 if (DocumentParsingConfiguration.InitFlag)
                 {
                     if (DocumentTypeParser == null)
-                        DocumentTypeParser = new Parser.Parser(false, ParsingText,
-                            DocumentParsingConfiguration.BankRegexList[_bankCounter].BankRegexList,
-                            DocumentParsingConfiguration.BankRegexList[_bankCounter].BankEncodingType);
+                        DocumentTypeParser = new Parser.Parser();
+                    DocumentTypeParser.ParsingValues = new ParsingValues(ParsingText,
+                        DocumentParsingConfiguration.BankRegexList[_bankCounter].BankEncodingType,
+                        DocumentParsingConfiguration.BankRegexList[_bankCounter].BankRegexList
+                    );
+
                     // Check if the Parser is in idle mode
                     if (DocumentTypeParser != null && DocumentTypeParser.ParserInfoState.State == ParserState.Idle)
                     {
@@ -2950,40 +2954,53 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                                         {
                                             case DocumentParsingConfiguration.DocumentTypes.BuyDocument:
                                                 {
-                                                    DocumentTypeParser.RegexList = DocumentParsingConfiguration
-                                                        .BankRegexList[_bankCounter]
-                                                        .DictionaryDocumentRegex[
-                                                            DocumentParsingConfiguration.DocumentTypeBuy].DocumentRegexList;
+                                                    var parsingValues = DocumentTypeParser.ParsingValues;
+                                                    DocumentTypeParser.ParsingValues = new ParsingValues(
+                                                        parsingValues.WebSiteUrl,
+                                                        parsingValues.EncodingType,
+                                                        DocumentParsingConfiguration
+                                                            .BankRegexList[_bankCounter]
+                                                            .DictionaryDocumentRegex[DocumentParsingConfiguration.DocumentTypeBuy].DocumentRegexList
+                                                    );
                                                     DocumentTypeParser.StartParsing();
                                                     break;
                                                 }
                                             case DocumentParsingConfiguration.DocumentTypes.SaleDocument:
                                                 {
-                                                    DocumentTypeParser.RegexList = DocumentParsingConfiguration
-                                                        .BankRegexList[_bankCounter]
-                                                        .DictionaryDocumentRegex[
-                                                            DocumentParsingConfiguration.DocumentTypeSale]
-                                                        .DocumentRegexList;
+                                                    var parsingValues = DocumentTypeParser.ParsingValues;
+                                                    DocumentTypeParser.ParsingValues = new ParsingValues(
+                                                        parsingValues.WebSiteUrl,
+                                                        parsingValues.EncodingType,
+                                                        DocumentParsingConfiguration
+                                                            .BankRegexList[_bankCounter]
+                                                            .DictionaryDocumentRegex[DocumentParsingConfiguration.DocumentTypeSale].DocumentRegexList
+                                                    );
                                                     DocumentTypeParser.StartParsing();
                                                     break;
                                                 }
                                             case DocumentParsingConfiguration.DocumentTypes.DividendDocument:
                                                 {
-                                                    DocumentTypeParser.RegexList = DocumentParsingConfiguration
-                                                        .BankRegexList[_bankCounter]
-                                                        .DictionaryDocumentRegex[
-                                                            DocumentParsingConfiguration.DocumentTypeDividend]
-                                                        .DocumentRegexList;
+                                                    var parsingValues = DocumentTypeParser.ParsingValues;
+                                                    DocumentTypeParser.ParsingValues = new ParsingValues(
+                                                        parsingValues.WebSiteUrl,
+                                                        parsingValues.EncodingType,
+                                                        DocumentParsingConfiguration
+                                                            .BankRegexList[_bankCounter]
+                                                            .DictionaryDocumentRegex[DocumentParsingConfiguration.DocumentTypeDividend].DocumentRegexList
+                                                    );
                                                     DocumentTypeParser.StartParsing();
                                                     break;
                                                 }
                                             case DocumentParsingConfiguration.DocumentTypes.BrokerageDocument:
                                                 {
-                                                    DocumentTypeParser.RegexList = DocumentParsingConfiguration
-                                                        .BankRegexList[_bankCounter]
-                                                        .DictionaryDocumentRegex[
-                                                            DocumentParsingConfiguration.DocumentTypeBrokerage]
-                                                        .DocumentRegexList;
+                                                    var parsingValues = DocumentTypeParser.ParsingValues;
+                                                    DocumentTypeParser.ParsingValues = new ParsingValues(
+                                                        parsingValues.WebSiteUrl,
+                                                        parsingValues.EncodingType,
+                                                        DocumentParsingConfiguration
+                                                            .BankRegexList[_bankCounter]
+                                                            .DictionaryDocumentRegex[DocumentParsingConfiguration.DocumentTypeBrokerage].DocumentRegexList
+                                                    );
                                                     DocumentTypeParser.StartParsing();
                                                     break;
                                                 }
@@ -3002,8 +3019,13 @@ namespace SharePortfolioManager.Forms.DividendForm.View
                                 if (_bankCounter < DocumentParsingConfiguration.BankRegexList.Count &&
                                     _bankIdentifierFound == false)
                                 {
-                                    DocumentTypeParser.RegexList = DocumentParsingConfiguration
-                                        .BankRegexList[_bankCounter].BankRegexList;
+                                    var parsingValues = DocumentTypeParser.ParsingValues;
+                                    DocumentTypeParser.ParsingValues = new ParsingValues(
+                                        parsingValues.WebSiteUrl,
+                                        parsingValues.EncodingType,
+                                        DocumentParsingConfiguration
+                                            .BankRegexList[_bankCounter].BankRegexList
+                                    );
                                     DocumentTypeParser.StartParsing();
                                 }
                                 else

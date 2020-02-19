@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("SharePortfolioManager")]
-[assembly: AssemblyCopyright("Copyright ©  nessie1980 2019")]
+[assembly: AssemblyCopyright("Copyright © nessie1980 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

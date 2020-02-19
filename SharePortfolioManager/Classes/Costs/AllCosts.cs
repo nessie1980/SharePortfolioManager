@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -36,15 +36,15 @@ namespace SharePortfolioManager.Classes.Costs
 
         public decimal BrokerageValueTotal { get; internal set; }
 
-        public string BrokerageValueTotalAsStr => Helper.FormatDecimal(BrokerageValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CultureInfo);
+        public string BrokerageValueTotalAsStr => Helper.FormatDecimal(BrokerageValueTotal, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
 
-        public string BrokerageValueTotalWithUnitAsStr => Helper.FormatDecimal(BrokerageValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CultureInfo);
+        public string BrokerageValueTotalWithUnitAsStr => Helper.FormatDecimal(BrokerageValueTotal, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", CultureInfo);
 
         public decimal BrokerageWithReductionValueTotal { get; internal set; }
 
-        public string BrokerageWithReductionValueTotalAsStr => Helper.FormatDecimal(BrokerageWithReductionValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CultureInfo);
+        public string BrokerageWithReductionValueTotalAsStr => Helper.FormatDecimal(BrokerageWithReductionValueTotal, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
 
-        public string BrokerageWithReductionValueTotalWithUnitAsStr => Helper.FormatDecimal(BrokerageWithReductionValueTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CultureInfo);
+        public string BrokerageWithReductionValueTotalWithUnitAsStr => Helper.FormatDecimal(BrokerageWithReductionValueTotal, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", CultureInfo);
 
         public SortedDictionary<string, BrokerageReductionYearOfTheShare> AllBrokerageReductionOfTheShareDictionary { get; } = new SortedDictionary<string, BrokerageReductionYearOfTheShare>();
 

@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -82,7 +82,7 @@ namespace SharePortfolioManager.Classes.Buys
         /// Buy value plus brokerage and minus reduction of all buys of a year as string with unit
         /// </summary>
         [Browsable(false)]
-        public string BuyValueBrokerageReductionYearAsStrUnit => Helper.FormatDecimal(BuyValueBrokerageReductionYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
+        public string BuyValueBrokerageReductionYearAsStrUnit => Helper.FormatDecimal(BuyValueBrokerageReductionYear, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", BuyCultureInfo);
 
         /// <summary>
         /// List of all buys of a year

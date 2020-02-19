@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using SharePortfolioManager.Classes;
 using System.Windows.Forms;
 
-namespace SharePortfolioManager
+namespace SharePortfolioManager.Classes.Dividend
 {
     [Serializable]
     public class DividendYearOfTheShare
@@ -44,7 +43,7 @@ namespace SharePortfolioManager
         public decimal DividendValueYear { get; internal set; } = -1;
 
         [Browsable(false)]
-        public string DividendValueYearWithUnitAsStr => Helper.FormatDecimal(DividendValueYear, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", DividendCultureInfo);
+        public string DividendValueYearWithUnitAsStr => Helper.FormatDecimal(DividendValueYear, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", DividendCultureInfo);
 
         [Browsable(false)]
         public List<DividendObject> DividendListYear { get; } = new List<DividendObject>();

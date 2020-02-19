@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SharePortfolioManager</RootNamespace>
     <AssemblyName>SharePortfolioManager</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -177,10 +177,10 @@
     <Compile Include="Classes\Buys\BuyObject.cs" />
     <Compile Include="Classes\Buys\AllBuys.cs" />
     <Compile Include="Classes\Buys\BuysOfAYear.cs" />
+    <Compile Include="Classes\ChartingDailyValues.cs" />
     <Compile Include="Classes\Costs\CostObject.cs" />
     <Compile Include="Classes\Costs\AllCosts.cs" />
     <Compile Include="Classes\Costs\CostsOfAYear.cs" />
-    <Compile Include="Classes\CsvHandler.cs" />
     <Compile Include="Classes\DailyValues.cs" />
     <Compile Include="Classes\Dividend\DividendObject.cs" />
     <Compile Include="Classes\Dividend\AllDividends.cs" />
@@ -216,6 +216,12 @@
       <DependentUpon>ViewBuyEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\BuysForm\Model\ModelBuyEdit.cs" />
+    <Compile Include="Forms\Chart\Chart.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Chart\Chart.Designer.cs">
+      <DependentUpon>Chart.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\DividendForm\Model\ModelDividendEdit.cs" />
     <Compile Include="Forms\DividendForm\Presenter\PresenterDividendEdit.cs" />
     <Compile Include="Forms\DividendForm\View\ViewDividendEdit.cs">
@@ -322,6 +328,9 @@
     <EmbeddedResource Include="Forms\BuysForm\View\ViewBuyEdit.resx">
       <DependentUpon>ViewBuyEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Chart\Chart.resx">
+      <DependentUpon>Chart.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\DividendForm\View\ViewDividendEdit.resx">
       <DependentUpon>ViewDividendEdit.cs</DependentUpon>

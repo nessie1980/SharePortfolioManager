@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -20,16 +20,17 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using LanguageHandler;
-using Logging;
-using SharePortfolioManager.Classes;
-using SharePortfolioManager.Forms.DividendForm.View;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Forms;
+using LanguageHandler;
+using Logging;
+using SharePortfolioManager.Classes;
+using SharePortfolioManager.Classes.Dividend;
 using SharePortfolioManager.Classes.ShareObjects;
+using SharePortfolioManager.DividendForm.View;
 
-namespace SharePortfolioManager.Forms.DividendForm.Model
+namespace SharePortfolioManager.DividendForm.Model
 {
     /// <summary>
     /// Interface of the DividendEdit model
@@ -187,7 +188,7 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
                     _exchangeRatioDec = 0;
 
                 if (UpdateViewFormatted)
-                    return _exchangeRatioDec > 0 ? Helper.FormatDecimal(_exchangeRatioDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _exchangeRatio;
+                    return _exchangeRatioDec > 0 ? Helper.FormatDecimal(_exchangeRatioDec, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength) : _exchangeRatio;
 
                 return _exchangeRatio;
             }
@@ -234,7 +235,7 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
                     _rateDec = 0;
 
                 if (UpdateViewFormatted)
-                    return _rateDec > 0 ? Helper.FormatDecimal(_rateDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _rate;
+                    return _rateDec > 0 ? Helper.FormatDecimal(_rateDec, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength) : _rate;
 
                 return _rate;
             }
@@ -270,7 +271,7 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
                     _volumeDec = 0;
 
                 if (UpdateViewFormatted)
-                    return _volumeDec >= 0 ? Helper.FormatDecimal(_volumeDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _volume;
+                    return _volumeDec >= 0 ? Helper.FormatDecimal(_volumeDec, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength) : _volume;
 
                 return _volume;
             }
@@ -304,7 +305,7 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
                     _payoutDec = 0;
 
                 if (UpdateViewFormatted)
-                    return _payoutDec >= 0 ? Helper.FormatDecimal(_payoutDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _payout;
+                    return _payoutDec >= 0 ? Helper.FormatDecimal(_payoutDec, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength) : _payout;
 
                 return _payout;
             }
@@ -344,9 +345,9 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
                 if (UpdateViewFormatted)
                 {
                     if(EnableFc == CheckState.Checked)
-                        return _payoutFcDec >= 0 ? Helper.FormatDecimal(_payoutFcDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _payoutFc;
+                        return _payoutFcDec >= 0 ? Helper.FormatDecimal(_payoutFcDec, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength) : _payoutFc;
                     else
-                        return _payoutFcDec > 0 ? Helper.FormatDecimal(_payoutFcDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _payoutFc;
+                        return _payoutFcDec > 0 ? Helper.FormatDecimal(_payoutFcDec, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength) : _payoutFc;
                 }
 
                 return _payoutFc;
@@ -383,7 +384,7 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
                     _taxAtSourceDec = 0;
 
                 if (UpdateViewFormatted)
-                    return _taxAtSourceDec > 0 ? Helper.FormatDecimal(_taxAtSourceDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _taxAtSource;
+                    return _taxAtSourceDec > 0 ? Helper.FormatDecimal(_taxAtSourceDec, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength) : _taxAtSource;
 
                 return _taxAtSource;
             }
@@ -417,7 +418,7 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
                     _capitalGainsTaxDec = 0;
 
                 if (UpdateViewFormatted)
-                    return _capitalGainsTaxDec > 0 ? Helper.FormatDecimal(_capitalGainsTaxDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _capitalGainsTax;
+                    return _capitalGainsTaxDec > 0 ? Helper.FormatDecimal(_capitalGainsTaxDec, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength) : _capitalGainsTax;
 
                 return _capitalGainsTax;
             }
@@ -451,7 +452,7 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
                     _solidarityTaxDec = 0;
 
                 if (UpdateViewFormatted)
-                    return _solidarityTaxDec > 0 ? Helper.FormatDecimal(_solidarityTaxDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _solidarityTax;
+                    return _solidarityTaxDec > 0 ? Helper.FormatDecimal(_solidarityTaxDec, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength) : _solidarityTax;
 
                 return _solidarityTax;
             }
@@ -485,7 +486,7 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
                     _taxDec = 0;
 
                 if (UpdateViewFormatted)
-                    return _taxDec >= 0 ? Helper.FormatDecimal(_taxDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _tax;
+                    return _taxDec >= 0 ? Helper.FormatDecimal(_taxDec, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength) : _tax;
 
                 return _tax;
             }
@@ -519,7 +520,7 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
                     _payoutAfterTaxDec = 0;
 
                 if (UpdateViewFormatted)
-                    return _payoutAfterTaxDec >= 0 ? Helper.FormatDecimal(_payoutAfterTaxDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _payoutAfterTax;
+                    return _payoutAfterTaxDec >= 0 ? Helper.FormatDecimal(_payoutAfterTaxDec, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength) : _payoutAfterTax;
 
                 return _payoutAfterTax;
             }
@@ -555,7 +556,7 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
                     _yieldDec = 0;
 
                 if (UpdateViewFormatted)
-                    return _yieldDec >= 0 ? Helper.FormatDecimal(_yieldDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _yield;
+                    return _yieldDec >= 0 ? Helper.FormatDecimal(_yieldDec, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength) : _yield;
 
                 return _yield;
             }
@@ -591,7 +592,7 @@ namespace SharePortfolioManager.Forms.DividendForm.Model
                     _priceDec = 0;
 
                 if (UpdateViewFormatted)
-                    return _priceDec > 0 ? Helper.FormatDecimal(_priceDec, Helper.Currencyfivelength, false, Helper.Currencytwofixlength) : _price;
+                    return _priceDec > 0 ? Helper.FormatDecimal(_priceDec, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength) : _price;
 
                 return _price;
             }

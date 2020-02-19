@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -31,6 +31,7 @@ using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.ShareObjects;
+using SharePortfolioManager.OwnMessageBoxForm;
 using SharePortfolioManager.Properties;
 
 namespace SharePortfolioManager.BrokeragesForm.View
@@ -1494,10 +1495,10 @@ namespace SharePortfolioManager.BrokeragesForm.View
                             }
                             else
                             {
-                            ((DataGridView)sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(
-                                    @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Date",
-                                    LanguageName);
+                                ((DataGridView)sender).Columns[i].HeaderText =
+                                    Language.GetLanguageTextByXPath(
+                                        @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Date",
+                                        LanguageName);
                             }
                             break;
                         case 2:
@@ -1805,9 +1806,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                     }
 
                     // Set brokerage values
-                    if (selectedBrokerageObject != null && 
-                        (selectedBrokerageObject.PartOfABuy || selectedBrokerageObject.PartOfASale)
-                        )
+                    if (selectedBrokerageObject.PartOfABuy || selectedBrokerageObject.PartOfASale)
                     {
                         // Set flag if brokerage is part of a buy
                         PartOfABuy = selectedBrokerageObject.PartOfABuy;
@@ -1831,28 +1830,25 @@ namespace SharePortfolioManager.BrokeragesForm.View
                     }
                     else
                     {
-                        if (selectedBrokerageObject != null)
-                        {
-                            // Set flag if brokerage is part of a buy
-                            PartOfABuy = selectedBrokerageObject.PartOfABuy;
+                        // Set flag if brokerage is part of a buy
+                        PartOfABuy = selectedBrokerageObject.PartOfABuy;
 
-                            // Set flag if brokerage is part of a sale
-                            PartOfASale = selectedBrokerageObject.PartOfASale;
+                        // Set flag if brokerage is part of a sale
+                        PartOfASale = selectedBrokerageObject.PartOfASale;
 
-                            // Enable TextBox(es)
-                            datePickerDate.Enabled = true;
-                            datePickerTime.Enabled = true;
-                            txtBoxProvision.Enabled = true;
-                            txtBoxBrokerFee.Enabled = true;
-                            txtBoxTraderPlaceFee.Enabled = true;
-                            txtBoxReduction.Enabled = true;
-                            txtBoxDocument.Enabled = true;
+                        // Enable TextBox(es)
+                        datePickerDate.Enabled = true;
+                        datePickerTime.Enabled = true;
+                        txtBoxProvision.Enabled = true;
+                        txtBoxBrokerFee.Enabled = true;
+                        txtBoxTraderPlaceFee.Enabled = true;
+                        txtBoxReduction.Enabled = true;
+                        txtBoxDocument.Enabled = true;
 
-                            // Enable Button(s)
-                            btnDocumentBrowse.Enabled = true;
-                            btnAddSave.Enabled = true;
-                            btnDelete.Enabled = true;
-                        }
+                        // Enable Button(s)
+                        btnDocumentBrowse.Enabled = true;
+                        btnAddSave.Enabled = true;
+                        btnDelete.Enabled = true;
                     }
 
                     // Rename button

@@ -1,4 +1,4 @@
-﻿namespace SharePortfolioManager.Forms.DividendForm.View
+﻿namespace SharePortfolioManager.DividendForm.View
 {
     partial class ViewDividendEdit
     {

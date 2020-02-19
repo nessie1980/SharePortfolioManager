@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -42,13 +42,13 @@ namespace SharePortfolioManager.Classes.Costs
         public decimal BrokerageValueYear { get; internal set; } = -1;
 
         [Browsable(false)]
-        public string BrokerageValueYearWithUnitAsStr => Helper.FormatDecimal(BrokerageValueYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BrokerageReductionCultureInfo);
+        public string BrokerageValueYearWithUnitAsStr => Helper.FormatDecimal(BrokerageValueYear, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", BrokerageReductionCultureInfo);
 
         [Browsable(false)]
         public decimal BrokerageWithReductionValueYear { get; internal set; } = -1;
 
         [Browsable(false)]
-        public string BrokerageWithReductionValueYearWithUnitAsStr => Helper.FormatDecimal(BrokerageWithReductionValueYear, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BrokerageReductionCultureInfo);
+        public string BrokerageWithReductionValueYearWithUnitAsStr => Helper.FormatDecimal(BrokerageWithReductionValueYear, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", BrokerageReductionCultureInfo);
 
         [Browsable(false)]
         public List<BrokerageReductionObject> BrokerageReductionListYear { get; } = new List<BrokerageReductionObject>();

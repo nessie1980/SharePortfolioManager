@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -33,6 +33,7 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using System.Xml;
+using SharePortfolioManager.Classes.Dividend;
 
 namespace SharePortfolioManager.Classes.ShareObjects
 {
@@ -245,13 +246,13 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Purchase price of the current share volume as string
         /// </summary>
         [Browsable(false)]
-        public string PurchaseValueAsStr => Helper.FormatDecimal(PurchaseValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
+        public string PurchaseValueAsStr => Helper.FormatDecimal(PurchaseValue, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, false, @"", CultureInfo);
 
         /// <summary>
         /// Purchase price of the current share volume as string with unit
         /// </summary>
         [Browsable(false)]
-        public string PurchaseValueAsStrUnit => Helper.FormatDecimal(PurchaseValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+        public string PurchaseValueAsStrUnit => Helper.FormatDecimal(PurchaseValue, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
 
         #endregion Purchase value properties
 
@@ -309,7 +310,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Brokerage value of the final value of the share volume as string
         /// </summary>
         [Browsable(false)]
-        public string BrokerageValueTotalAsStr => Helper.FormatDecimal(BrokerageValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, false, @"", CultureInfo);
+        public string BrokerageValueTotalAsStr => Helper.FormatDecimal(BrokerageValueTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, false, @"", CultureInfo);
 
         /// <summary>
         /// List of all brokerages of this share
@@ -357,8 +358,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
             get
             {
-                var value = Helper.FormatDecimal(BrokerageValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-                value += Environment.NewLine + Helper.FormatDecimal(DividendValueTotal, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+                var value = Helper.FormatDecimal(BrokerageValueTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
+                value += Environment.NewLine + Helper.FormatDecimal(DividendValueTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
                 return value;
             }
         }
@@ -403,7 +404,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Current final value of the share volume as string with unit
         /// </summary>
         [Browsable(false)]
-        public string FinalValueAsStrUnit => Helper.FormatDecimal(FinalValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+        public string FinalValueAsStrUnit => Helper.FormatDecimal(FinalValue, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
 
         /// <summary>
         /// Performance value of the final value of the share volume
@@ -427,7 +428,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Profit or loss value of the final value of the share volume as string with unit
         /// </summary>
         [Browsable(false)]
-        public string ProfitLossValueAsStrUnit => Helper.FormatDecimal(ProfitLossValue, Helper.Currencythreelength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+        public string ProfitLossValueAsStrUnit => Helper.FormatDecimal(ProfitLossValue, Helper.CurrencyThreeLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
 
         /// <summary>
         /// Profit or loss and performance value of the final value of the share volume as sting with unit
@@ -437,7 +438,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
             get
             {
-                var value = Helper.FormatDecimal(ProfitLossValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+                var value = Helper.FormatDecimal(ProfitLossValue, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
                 value += Environment.NewLine + Helper.FormatDecimal(PerformanceValue, Helper.Percentagetwolength, true, Helper.Percentagenonefixlength, true, PercentageUnit, CultureInfo);
                 return value;
             }
@@ -451,8 +452,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
             get
             {
-                var value = Helper.FormatDecimal(PurchaseValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-                value += Environment.NewLine + Helper.FormatDecimal(FinalValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+                var value = Helper.FormatDecimal(PurchaseValue, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
+                value += Environment.NewLine + Helper.FormatDecimal(FinalValue, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
                 return value;
             }
         }
@@ -486,7 +487,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Purchase value of the hole portfolio (all share in the portfolio without dividends, brokerage, profits and loss (market value) ) as string with unit
         /// </summary>
         [Browsable(false)]
-        public string PortfolioPurchaseValueAsStrUnit => Helper.FormatDecimal(PortfolioPurchasePrice, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+        public string PortfolioPurchaseValueAsStrUnit => Helper.FormatDecimal(PortfolioPurchasePrice, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
 
         /// <summary>
         /// The portfolio sale purchase value stores the
@@ -538,8 +539,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
             get
             {
-                var value = Helper.FormatDecimal(PortfolioBrokerage, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-                value += Environment.NewLine + Helper.FormatDecimal(PortfolioDividend, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+                var value = Helper.FormatDecimal(PortfolioBrokerage, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
+                value += Environment.NewLine + Helper.FormatDecimal(PortfolioDividend, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
                 return value;
             }
         }
@@ -572,7 +573,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
             get
             {
-                var value = Helper.FormatDecimal(PortfolioProfitLossValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+                var value = Helper.FormatDecimal(PortfolioProfitLossValue, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
                 value += Environment.NewLine + Helper.FormatDecimal(PortfolioPerformanceValue, Helper.Percentagetwolength, true, Helper.Percentagenonefixlength, true, PercentageUnit, CultureInfo);
                 return value;
             }
@@ -603,7 +604,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Final value of the hole portfolio (all share in the portfolio with dividends, brokerage, profits and loss (final value) ) as string with unit
         /// </summary>
         [Browsable(false)]
-        public string PortfolioFinalValueAsStrUnit => Helper.FormatDecimal(PortfolioFinalValue, Helper.Currencytwolength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+        public string PortfolioFinalValueAsStrUnit => Helper.FormatDecimal(PortfolioFinalValue, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
 
         #endregion Portfolio properties
 
@@ -705,13 +706,13 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Constructor with parameters
         /// </summary>
         /// <param name="guid">Guid of the buy</param>
-        /// <param name="orderNumber">Order number of the buy</param>
         /// <param name="wkn">WKN number of the share</param>
+        /// <param name="orderNumber">Order number of the buy</param>
         /// <param name="addDateTime">Date and time of the add</param>
+        /// <param name="stockMarketLaunchDate">Date of the stock market launch</param>
         /// <param name="name">Name of the share</param>
         /// <param name="lastUpdateInternet">Date and time of the last update from the Internet</param>
-        /// <param name="lastUpdateShareDate">Date of the last update on the Internet site of the share</param>
-        /// <param name="lastUpdateShareTime">Time of the last update on the Internet site of the share</param>
+        /// <param name="lastUpdateShare">Date and time of the last update on the Internet site of the share</param>
         /// <param name="price">Current price of the share</param>
         /// <param name="volume">Volume of the share</param>
         /// <param name="volumeSold">Volume of the share which is already sold</param>
@@ -728,12 +729,12 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="shareType">Type of the share</param>
         /// <param name="document">Document of the first buy</param>
         public ShareObjectFinalValue(
-            string guid, string wkn, string orderNumber, string addDateTime, string name,
-            DateTime lastUpdateInternet, DateTime lastUpdateShareDate, DateTime lastUpdateShareTime,
+            string guid, string wkn, string orderNumber, string addDateTime, string stockMarketLaunchDate, string name,
+            DateTime lastUpdateInternet, DateTime lastUpdateShare,
             decimal price, decimal volume, decimal volumeSold, decimal provision, decimal brokerFee, decimal traderPlaceFee, decimal reduction,
             string webSite, string dailyValuesWebSite, List<Image> imageListForDayBeforePerformance, RegExList regexList, CultureInfo cultureInfo,
             int dividendPayoutInterval, int shareType, string document)
-            : base(wkn, addDateTime, name, lastUpdateInternet, lastUpdateShareDate, lastUpdateShareTime,
+            : base(wkn, addDateTime, stockMarketLaunchDate, name, lastUpdateInternet, lastUpdateShare,
                     price, webSite, dailyValuesWebSite, imageListForDayBeforePerformance,
                     regexList, cultureInfo, shareType)
         {
@@ -1503,7 +1504,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             try
             {
                 // Update existing share
-                var nodeListShares = xmlPortfolio.SelectNodes($"/Portfolio/Share [@WKN = \"{shareObject.Wkn}\"]");
+                var nodeListShares = xmlPortfolio.SelectNodes($"/{GeneralPortfolioAttrName}/{GeneralShareAttrName} [@{GeneralWknAttrName} = \"{shareObject.Wkn}\"]");
                 if (nodeListShares != null)
                 {
                     foreach (XmlNode nodeElement in nodeListShares)
@@ -1524,22 +1525,20 @@ namespace SharePortfolioManager.Classes.ShareObjects
                             {
                                 #region General
 
-                                case (int)FrmMain.PortfolioParts.LastInternetUpdate:
+                                case (int)FrmMain.PortfolioParts.StockMarketLaunchDate:
+                                    nodeElement.ChildNodes[i].InnerText =
+                                        $@"{shareObject.StockMarketLaunchDate}";
+                                    break;
+                                case (int)FrmMain.PortfolioParts.LastUpdateInternet:
                                     nodeElement.ChildNodes[i].InnerText =
                                         $@"{shareObject.LastUpdateInternet.ToShortDateString()} {
                                             shareObject.LastUpdateInternet.ToShortTimeString()
                                         }";
                                     break;
-                                case (int)FrmMain.PortfolioParts.LastUpdateShareDate:
+                                case (int)FrmMain.PortfolioParts.LastUpdateShare:
                                     nodeElement.ChildNodes[i].InnerText =
-                                        $@"{shareObject.LastUpdateDate.ToShortDateString()} {
-                                            shareObject.LastUpdateDate.ToShortTimeString()
-                                        }";
-                                    break;
-                                case (int)FrmMain.PortfolioParts.LastUpdateTime:
-                                    nodeElement.ChildNodes[i].InnerText =
-                                        $@"{shareObject.LastUpdateTime.ToShortDateString()} {
-                                            shareObject.LastUpdateTime.ToShortTimeString()
+                                        $@"{shareObject.LastUpdateShare.ToShortDateString()} {
+                                            shareObject.LastUpdateShare.ToShortTimeString()
                                         }";
                                     break;
                                 case (int)FrmMain.PortfolioParts.SharePrice:
@@ -1575,15 +1574,15 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                         newDailyValuesElement.SetAttribute(DailyValuesDateTagName,
                                             dailyValue.Date.ToShortDateString());
                                         newDailyValuesElement.SetAttribute(DailyValuesClosingPriceTagName,
-                                            dailyValue.ClosingPrice.ToString());
+                                            dailyValue.ClosingPrice.ToString(CultureInfo.CurrentCulture));
                                         newDailyValuesElement.SetAttribute(DailyValuesOpeningPriceTagName,
-                                            dailyValue.OpeningPrice.ToString());
+                                            dailyValue.OpeningPrice.ToString(CultureInfo.CurrentCulture));
                                         newDailyValuesElement.SetAttribute(DailyValuesTopTagName,
-                                            dailyValue.Top.ToString());
+                                            dailyValue.Top.ToString(CultureInfo.CurrentCulture));
                                         newDailyValuesElement.SetAttribute(DailyValuesBottomTagName,
-                                            dailyValue.Bottom.ToString());
+                                            dailyValue.Bottom.ToString(CultureInfo.CurrentCulture));
                                         newDailyValuesElement.SetAttribute(DailyValuesVolumeTagName,
-                                           dailyValue.Volume.ToString());
+                                           dailyValue.Volume.ToString(CultureInfo.CurrentCulture));
                                         nodeElement.ChildNodes[i].AppendChild(newDailyValuesElement);
                                     }
                                     break;
@@ -1814,28 +1813,36 @@ namespace SharePortfolioManager.Classes.ShareObjects
                         #region General
 
                         // Get root element
-                        var rootPortfolio = xmlPortfolio.SelectSingleNode(@"Portfolio");
+                        var rootPortfolio = xmlPortfolio.SelectSingleNode(GeneralPortfolioAttrName);
 
                         // Add new share
-                        var newShareNode = xmlPortfolio.CreateNode(XmlNodeType.Element, "Share", null);
+                        var newShareNode = xmlPortfolio.CreateNode(XmlNodeType.Element, GeneralShareAttrName, null);
 
                         // Add attributes (WKN)
-                        var xmlAttributeWkn = xmlPortfolio.CreateAttribute(@"WKN");
+                        var xmlAttributeWkn = xmlPortfolio.CreateAttribute(GeneralWknAttrName);
                         xmlAttributeWkn.Value = shareObject.WknAsStr;
                         newShareNode.Attributes.Append(xmlAttributeWkn);
 
                         // Add attributes (ShareName)
-                        var xmlAttributeShareName = xmlPortfolio.CreateAttribute(@"Name");
+                        var xmlAttributeShareName = xmlPortfolio.CreateAttribute(GeneralNameAttrName);
                         xmlAttributeShareName.Value = shareObject.NameAsStr;
                         newShareNode.Attributes.Append(xmlAttributeShareName);
 
                         // Add attributes (Update)
-                        var xmlAttributeUpdateFlag = xmlPortfolio.CreateAttribute(@"Update");
+                        var xmlAttributeUpdateFlag = xmlPortfolio.CreateAttribute(GeneralUpdateAttrName);
                         xmlAttributeUpdateFlag.Value = shareObject.UpdateAsStr;
                         newShareNode.Attributes.Append(xmlAttributeUpdateFlag);
 
                         // Add child nodes (last update Internet)
-                        var newLastUpdateInternet = xmlPortfolio.CreateElement(@"LastUpdateInternet");
+                        var newStockMarketLaunchDate = xmlPortfolio.CreateElement(GeneralStockMarketLaunchDateAttrName);
+                        // Add child inner text
+                        var stockMarketLaunchDateValue = xmlPortfolio.CreateTextNode(
+                            shareObject.StockMarketLaunchDate);
+                        newShareNode.AppendChild(newStockMarketLaunchDate);
+                        newShareNode.LastChild.AppendChild(stockMarketLaunchDateValue);
+
+                        // Add child nodes (last update Internet)
+                        var newLastUpdateInternet = xmlPortfolio.CreateElement(GeneralLastUpdateInternetAttrName);
                         // Add child inner text
                         var lastUpdateInternetValue = xmlPortfolio.CreateTextNode(
                             shareObject.LastUpdateInternet.ToShortDateString() + " " +
@@ -1843,54 +1850,45 @@ namespace SharePortfolioManager.Classes.ShareObjects
                         newShareNode.AppendChild(newLastUpdateInternet);
                         newShareNode.LastChild.AppendChild(lastUpdateInternetValue);
 
-                        // Add child nodes (last update date)
-                        var newLastUpdateDate = xmlPortfolio.CreateElement(@"LastUpdateShareDate");
+                        // Add child nodes (last update share )
+                        var newLastUpdateDate = xmlPortfolio.CreateElement(GeneralLastUpdateShareDateAttrName);
                         // Add child inner text
                         var lastUpdateValueDate = xmlPortfolio.CreateTextNode(
-                            shareObject.LastUpdateDate.ToShortDateString() + " " +
-                            shareObject.LastUpdateDate.ToShortTimeString());
+                            shareObject.LastUpdateShare.ToShortDateString() + " " +
+                            shareObject.LastUpdateShare.ToShortTimeString());
                         newShareNode.AppendChild(newLastUpdateDate);
                         newShareNode.LastChild.AppendChild(lastUpdateValueDate);
 
-                        // Add child nodes (last update time)
-                        var newLastUpdateTime = xmlPortfolio.CreateElement(@"LastUpdateTime");
-                        // Add child inner text
-                        var lastUpdateValueTime = xmlPortfolio.CreateTextNode(
-                            shareObject.LastUpdateTime.ToShortDateString() + " " +
-                            shareObject.LastUpdateTime.ToShortTimeString());
-                        newShareNode.AppendChild(newLastUpdateTime);
-                        newShareNode.LastChild.AppendChild(lastUpdateValueTime);
-
                         // Add child nodes (share price)
-                        var newSharePrice = xmlPortfolio.CreateElement(@"SharePrice");
+                        var newSharePrice = xmlPortfolio.CreateElement(GeneralSharePriceAttrName);
                         // Add child inner text
                         var sharePrice = xmlPortfolio.CreateTextNode(shareObject.CurPriceAsStr);
                         newShareNode.AppendChild(newSharePrice);
                         newShareNode.LastChild.AppendChild(sharePrice);
 
                         // Add child nodes (share price before)
-                        var newSharePriceBefore = xmlPortfolio.CreateElement(@"SharePriceBefore");
+                        var newSharePriceBefore = xmlPortfolio.CreateElement(GeneralSharePriceBeforeAttrName);
                         // Add child inner text
                         var sharePriceBefore = xmlPortfolio.CreateTextNode(shareObject.PrevDayPriceAsStr);
                         newShareNode.AppendChild(newSharePriceBefore);
                         newShareNode.LastChild.AppendChild(sharePriceBefore);
 
                         // Add child nodes (website)
-                        var newWebsite = xmlPortfolio.CreateElement(@"WebSite");
+                        var newWebsite = xmlPortfolio.CreateElement(GeneralWebSiteAttrName);
                         // Add child inner text
                         var webSite = xmlPortfolio.CreateTextNode(shareObject.WebSite);
                         newShareNode.AppendChild(newWebsite);
                         newShareNode.LastChild.AppendChild(webSite);
 
                         // Add child nodes (culture)
-                        var newCulture = xmlPortfolio.CreateElement(@"Culture");
+                        var newCulture = xmlPortfolio.CreateElement(GeneralCultureAttrName);
                         // Add child inner text
                         var culture = xmlPortfolio.CreateTextNode(shareObject.CultureInfo.Name);
                         newShareNode.AppendChild(newCulture);
                         newShareNode.LastChild.AppendChild(culture);
 
                         // Add child nodes (share type)
-                        var newShareType = xmlPortfolio.CreateElement(@"ShareType");
+                        var newShareType = xmlPortfolio.CreateElement(GeneralShareTypeAttrName);
                         // Add child inner text
                         var shareType = xmlPortfolio.CreateTextNode(shareObject.ShareType.ToString());
                         newShareNode.AppendChild(newShareType);
@@ -1901,12 +1899,12 @@ namespace SharePortfolioManager.Classes.ShareObjects
                         #region DailyValues / Brokerage / Buys / Sales / Dividends
 
                         // Add child nodes (daily values)
-                        var newDailyValues = xmlPortfolio.CreateElement(@"DailyValues");
-                        newDailyValues.SetAttribute(DailyValuesWebSiteAttrName, "");
+                        var newDailyValues = xmlPortfolio.CreateElement(GeneralDailyValuesAttrName);
+                        newDailyValues.SetAttribute(DailyValuesWebSiteAttrName, shareObject.DailyValuesWebSite);
                         newShareNode.AppendChild(newDailyValues);
 
                         // Add child nodes (brokerage)
-                        var newBrokerage = xmlPortfolio.CreateElement(@"Brokerage");
+                        var newBrokerage = xmlPortfolio.CreateElement(GeneralBrokeragesAttrName);
                         newShareNode.AppendChild(newBrokerage);
                         foreach (var brokerageElementYear in shareObject.AllBrokerageEntries.GetAllBrokerageOfTheShare())
                         {
@@ -1925,7 +1923,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                         }
 
                         // Add child nodes (buys)
-                        var newBuys = xmlPortfolio.CreateElement(@"Buys");
+                        var newBuys = xmlPortfolio.CreateElement(GeneralBuysAttrName);
                         newShareNode.AppendChild(newBuys);
                         foreach (var buyElementYear in shareObject.AllBuyEntries.GetAllBuysOfTheShare())
                         {
@@ -1942,11 +1940,11 @@ namespace SharePortfolioManager.Classes.ShareObjects
                         }
 
                         // Add child nodes (sales)
-                        var newSales = xmlPortfolio.CreateElement(@"Sales");
+                        var newSales = xmlPortfolio.CreateElement(GeneralSalesAttrName);
                         newShareNode.AppendChild(newSales);
 
                         // Add child nodes (dividend)
-                        var newDividend = xmlPortfolio.CreateElement(@"Dividends");
+                        var newDividend = xmlPortfolio.CreateElement(GeneralDividendsAttrName);
                         newDividend.SetAttribute(DividendPayoutIntervalAttrName,
                             shareObject.DividendPayoutIntervalAsStr);
                         newShareNode.AppendChild(newDividend);

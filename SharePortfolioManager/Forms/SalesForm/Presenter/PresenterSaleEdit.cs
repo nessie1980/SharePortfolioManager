@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -23,16 +23,15 @@
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.Costs;
 using SharePortfolioManager.Classes.Sales;
-using SharePortfolioManager.Forms.SalesForm.Model;
-using SharePortfolioManager.Forms.SalesForm.View;
+using SharePortfolioManager.SalesForm.Model;
+using SharePortfolioManager.SalesForm.View;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
-// ReSharper disable once CheckNamespace
-namespace SharePortfolioManager.Forms.SalesForm.Presenter
+namespace SharePortfolioManager.SalesForm.Presenter
 {
     internal class PresenterSaleEdit
     {
@@ -272,7 +271,7 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
 
                 _model.UsedBuyDetails.Clear();
             }
-         }
+        }
 
         private void OnAddSale(object sender, EventArgs e)
         {
@@ -471,9 +470,12 @@ namespace SharePortfolioManager.Forms.SalesForm.Presenter
 
                 _view.DocumentBrowseFinish();
             }
+#if! DEBUG
+            catch
+            {
+#else
             catch (Exception ex)
             {
-#if DEBUG
                 var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
                 MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);

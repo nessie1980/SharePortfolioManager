@@ -184,30 +184,59 @@
 			
 			<!-- Update messages -->
 			<UpdateMessages>
-				<Start_1 text="Update of the share '"/>
-				<Start_2 text="' started." />
-				<ContentLoadStarted text="Website content will be loaded." />
-				<ContentLoaded text="Website content loaded." />
-				<SearchStarted text="Search process has been started." />
-				<SearchRunning text="Search process running." />
-				<SearchFinish text="Search process finished." />
-				<Finish_1 text="Update of the share '" />
-				<Finish_2 text="' successfully finished." />
+				<MarketValues>
+					<Start_1 text="Update of the share market values of '"/>
+					<Start_2 text="' started." />
+					<ContentLoadStarted text="Website content will be loaded." />
+					<ContentLoaded text="Website content loaded." />
+					<SearchStarted text="Search process has been started." />
+					<SearchRunning text="Search process running." />
+					<SearchFinish text="Search process finished." />
+					<Finish_1 text="Update of the share market values of '" />
+					<Finish_2 text="' successfully finished." />
+				</MarketValues>
+				<DailyValues>
+					<Start_1 text="Update of the share daily values of'"/>
+					<Start_2 text="' started." />
+					<ContentLoadStarted text="Website content will be loaded." />
+					<ContentLoaded text="Website content loaded." />
+					<SearchStarted text="Search process has been started." />
+					<SearchRunning text="Search process running." />
+					<SearchFinish text="Search process finished." />
+					<Finish_1 text="Update of the share daily values of '" />
+					<Finish_2 text="' successfully finished." />
+				</DailyValues>
 			</UpdateMessages>
 
 			<!-- Update errors -->
 			<UpdateErrors>
-				<StartFailed text="Start of the Parser failed." />
-				<BusyFailed text="Parser is already busy." />
-				<InvalidWebSiteGiven text="The website address is invalid." />
-				<NoRegexListGiven text="No regular expression list given." />
-				<ContentLoadedFailed text="Load of the website content failed." />
-				<ParsingFailed_1 text="Parsing of the key '" />
-				<ParsingFailed_2 text="' failed." />
-				<CancelThread_1 text="Update of the share '" />
-				<CancelThread_2 text="' has been cancelled." />
-				<UpdateFailed text="Update failed!" />
-				<Failure text="Update has been failed. Error: " />
+				<StartFailed text="Start of the parsing failed." />
+				<MarketValues>
+					<StartFailed text="Start of the Parser for the 'MarketValues' failed." />
+					<BusyFailed text="Parser for the 'MarketValues' is already busy." />
+					<InvalidWebSiteGiven text="The website address for the 'MarketValues' is invalid." />
+					<NoRegexListGiven text="No regular expression list for the 'MarketValues' given." />
+					<ContentLoadedFailed text="Load of the website content for the 'MarketValues' failed." />
+					<ParsingFailed_1 text="Parsing of the key '" />
+					<ParsingFailed_2 text="' for the 'MarketValues' failed." />
+					<CancelThread_1 text="Update of the 'MarketValues' of the share '" />
+					<CancelThread_2 text="' has been cancelled." />
+					<UpdateFailed text="Update of the 'MarketValues' failed!" />
+					<Failure text="Update of the 'MarketValues' has been failed. Error: " />
+				</MarketValues>
+				<DailyValues>
+					<StartFailed text="Start of the Parser for the 'DailyValues' failed." />
+					<BusyFailed text="Parser for the 'DailyValues' is already busy." />
+					<InvalidWebSiteGiven text="The website address for the 'DailyValues' is invalid." />
+					<NoRegexListGiven text="No regular expression list for the 'DailyValues' given." />
+					<ContentLoadedFailed text="Load of the website content for the 'DailyValues' failed." />
+					<ParsingFailed_1 text="Parsing of the key '" />
+					<ParsingFailed_2 text="' for the 'DailyValues' failed." />
+					<CancelThread_1 text="Update of the 'DailyValues' of the share '" />
+					<CancelThread_2 text="' has been cancelled." />
+					<UpdateFailed text="Update of the 'DailyValues' failed!" />
+					<Failure text="Update of the 'DailyValues' has been failed. Error: " />
+				</DailyValues>
 			</UpdateErrors>
 			
 			<!-- Status messages -->
@@ -273,30 +302,10 @@
 						<StartDate text="Start date:" />
 						<Interval text="Interval:" />
 						<Amount text="Amount:" />
-						<!-- Update message box -->
-						<UpdateMsgBox>
-							<Caption text="Info"/>
-							<Message text="The daily values are not update to date! Should the daily values be updated now?"/>
-							<FirstUpdate text="The first update can take a long time!"/>
-							<Yes text="Yes"/>
-							<No text="No"/>
-						</UpdateMsgBox>
 					</TabPgChart>
 					
-					<!-- Status messages -->
-					<TabPgChartStateMessages>
-						<UpdateStarted text="Market values download started. Please wait..." />
-						<DownloadRunning text="Market values download running. Please wait..." />
-						<DownloadDone text="Market values download finished." />
-						<ParsingStarted text="Market values parsing started. Please wait... " />
-						<ParsingProcess text="Market values parsing running. Please wait... " />
-						<ParsingFinished text="Market values update finished." />
-					</TabPgChartStateMessages>
-
 					<!-- Error messages -->
 					<TabPgChartErrors>
-						<UpdateFailed text="Market values update failed!" />
-						<ParsingFailed text="Market values parsing failed!" />
 						<OpenWebSiteFailed text="Open website failed!" />
 						<NoBrowserInstalled text="No installed browser found!" />
 					</TabPgChartErrors>
@@ -409,8 +418,12 @@
 			<Buttons>
 				<OpenWebSite text="Open website"/>
 				<Ok text="Close" />
-				<Update text="Update" />
 			</Buttons>
+
+			<!-- Message -->
+			<Messages>
+				<UpdatePossible text="Share should be updated! Data may not be up to date.." />
+			</Messages>
 
 			<!-- Errors -->
 			<Errors>
@@ -430,6 +443,7 @@
 				<Labels>
 					<WKN text="WKN:" />
 					<Name text="Name:" />
+					<StockMarketLaunchDate text="Stock exchange quotation:" />
 					<ShareType text="Type:" />
 					<PayoutInterval text="Dividend payout interval:" />
 					<CultureInfo text="Country info:" />
@@ -476,6 +490,7 @@
 				<WKNExists text="The WKN number already exists." />
 				<NameEmpty text="Please enter a share name." />
 				<NameExists text="The share name already exists." />
+				<StockMarketLaunchDateNotModified text="Stock exchange quotation date not changed." />
 				<OrderNumberEmpty text="Please enter a order number." />
 				<OrderNumberExists text="The order number already exists." />
 				<VolumeEmpty text="Please enter a value for the purchased shares." />
@@ -531,6 +546,7 @@
 				<Labels>
 					<WKN text="WKN:" />
 					<Name text="Name:" />
+					<StockMarketLaunchDate text="Stock exchange quotation:" />
 					<Update text="Do update via internet:" />
 					<Date text="Date:" />
 					<Purchase text="Purchase:" />
@@ -577,6 +593,7 @@
 				<ShowFailed text="An error occurred while the share should be shown!" />
 				<NameEmpty text="Please insert a name." />
 				<NameExists text="The name already exists." />
+				<StockMarketLaunchDateNotModified text="Stock exchange quotation date not changed." />
 				<WebSiteEmpty text="Please insert a website address." />
 				<WebSiteWrongFormat text="The website address has an invalid format or is not reachable. Try it again." />
 				<WebSiteExists text="The website already exists." />
@@ -1082,6 +1099,30 @@
 			</Errors>
 		</AddEditFormBrokerage>
 		
+		<!-- Chart -->
+		<Chart>
+			<!-- Legend -->
+			<Legend>
+				<Caption text="Legend" />
+				<ClosingPrice text="Closing price" />
+				<ClosingPriceYTitle text="Price" />
+				<OpeningPrice text="Opening price" />
+				<OpeningPriceYTitle text="Price" />
+				<Top text="Top" />
+				<TopYTitle text="Price" />
+				<Bottom text="Bottom" />
+				<BottomYTitle text="Price" />
+				<Volume text="Volume" />
+				<VolumeYTitle text="Amount" />
+			</Legend>
+			<ToolTip>
+				<Date text="Date:" />
+				<Value text="Value:" />
+				<Minimum text="Min:" />
+				<Maximum text="Max:" />
+			</ToolTip>
+		</Chart>						
+		
 		<!-- Logger settings -->
 		<LoggerSettingsForm>
 			<Caption text="Logger" />
@@ -1403,30 +1444,59 @@
 	
 			<!-- Update messages -->
 			<UpdateMessages>
-				<Start_1 text="Aktualisierung der Aktie '" />
-				<Start_2 text="' gestartet." />
-				<ContentLoadStarted text="Webseiten- Inhalt wird geladen." />
-				<ContentLoaded text="Webseiten- Inhalt geladen." />
-				<SearchStarted text="Such- Vorgang wurde gestartet." />
-				<SearchRunning text="Such- Vorgang läuft." />
-				<SearchFinish text="Such- Vorgang beendet." />
-				<Finish_1 text="Aktualisierung der Aktie '" />
-				<Finish_2 text="' wurde erfolgreich beendet." />
+				<MarketValues>
+					<Start_1 text="Aktualisierung der Aktien- Kurswerte von '" />
+					<Start_2 text="' gestartet." />
+					<ContentLoadStarted text="Webseiten- Inhalt wird geladen." />
+					<ContentLoaded text="Webseiten- Inhalt geladen." />
+					<SearchStarted text="Such- Vorgang wurde gestartet." />
+					<SearchRunning text="Such- Vorgang läuft." />
+					<SearchFinish text="Such- Vorgang beendet." />
+					<Finish_1 text="Aktualisierung der Aktien- Kurswerte von '" />
+					<Finish_2 text="' wurde erfolgreich beendet." />
+				</MarketValues>
+				<DailyValues>
+					<Start_1 text="Aktualisierung der Aktien- Tageswerte von '" />
+					<Start_2 text="' gestartet." />
+					<ContentLoadStarted text="Webseiten- Inhalt wird geladen." />
+					<ContentLoaded text="Webseiten- Inhalt geladen." />
+					<SearchStarted text="Such- Vorgang wurde gestartet." />
+					<SearchRunning text="Such- Vorgang läuft." />
+					<SearchFinish text="Such- Vorgang beendet." />
+					<Finish_1 text="Aktualisierung der Aktien- Tageswerte von '" />
+					<Finish_2 text="' wurde erfolgreich beendet." />
+				</DailyValues>
 			</UpdateMessages>
 
 			<!-- Update errors -->
 			<UpdateErrors>
-				<StartFailed text="Starten des Parser ist fehlgeschlagen." />
-				<BusyFailed text="Parser ist bereits in Verwendung." />
-				<InvalidWebSiteGiven text="Die Websiten- Adresse ist ungültig." />
-				<NoRegexListGiven text="Es wurde kein regulärer Ausdruck übergeben." />
-				<ContentLoadedFailed text="Laden des Webseiten- Inhalts ist fehlgeschlagen." />
-				<ParsingFailed_1 text="Parsen des Schlüssels '" />F
-				<ParsingFailed_2 text="' ist fehlgeschlagen." />
-				<CancelThread_1 text="Aktualisierung der Aktie '" />
-				<CancelThread_2 text="' wurde abgebrochen." />
-				<UpdateFailed text="Aktualisieren ist fehlgeschlagen!" />
-				<Failure text="Aktualisierung ist fehlgeschalgen. Fehler: " />
+				<StartFailed text="Starten des Parsen ist fehlgeschlagen." />
+				<MarketValues>
+					<StartFailed text="Starten des Parser 'Kurswerte' ist fehlgeschlagen." />
+					<BusyFailed text="Parser für die 'Kurswerte' ist bereits in Verwendung." />
+					<InvalidWebSiteGiven text="Die Websiten- Adresse für die 'Kurswerte' ist ungültig." />
+					<NoRegexListGiven text="Es wurde kein regulärer Ausdruck für die 'Kurswerte' übergeben." />
+					<ContentLoadedFailed text="Laden des Webseiten- Inhalts für die 'Kurswerte' ist fehlgeschlagen." />
+					<ParsingFailed_1 text="Parsen des Schlüssels '" />
+					<ParsingFailed_2 text="' für 'Kurswerte' ist fehlgeschlagen." />
+					<CancelThread_1 text="Aktualisierung der 'Kurswerte' der Aktie '" />
+					<CancelThread_2 text="' wurde abgebrochen." />
+					<UpdateFailed text="Aktualisieren der 'Kurswerte' ist fehlgeschlagen!" />
+					<Failure text="Aktualisierung der 'Kurswerte' ist fehlgeschalgen. Fehler: " />
+				</MarketValues>
+				<DailyValues>
+					<StartFailed text="Starten des Parser 'Tageswerte' ist fehlgeschlagen." />
+					<BusyFailed text="Parser für die 'Tageswerte' ist bereits in Verwendung." />
+					<InvalidWebSiteGiven text="Die Websiten- Adresse für die 'Tageswerte' ist ungültig." />
+					<NoRegexListGiven text="Es wurde kein regulärer Ausdruck für die 'Tageswerte' übergeben." />
+					<ContentLoadedFailed text="Laden des Webseiten- Inhalts für die 'Tageswerte' ist fehlgeschlagen." />
+					<ParsingFailed_1 text="Parsen des Schlüssels '" />
+					<ParsingFailed_2 text="' für 'Tageswerte' ist fehlgeschlagen." />
+					<CancelThread_1 text="Aktualisierung der 'Tageswerte' der Aktie '" />
+					<CancelThread_2 text="' wurde abgebrochen." />
+					<UpdateFailed text="Aktualisieren der 'Tageswerte' ist fehlgeschlagen!" />
+					<Failure text="Aktualisierung der 'Tageswerte' ist fehlgeschalgen. Fehler: " />
+				</DailyValues>
 			</UpdateErrors>
 			
 			<!-- Status messages -->
@@ -1493,30 +1563,10 @@
 						<StartDate text="Start- Datum:" />
 						<Interval text="Interval:" />
 						<Amount text="Anzahl:" />
-						<!-- Update message box -->
-						<UpdateMsgBox>
-							<Caption text="Info"/>
-							<Message text="Die Tages- Werte sind nicht aktuell! Sollen die Tages- Wert jetzt aktualisiert werden?"/>
-							<FirstUpdate text="Das erste Aktualisieren kann viel Zeit in Anspruch nehmen!"/>
-							<Yes text="Ja"/>
-							<No text="Nein"/>
-						</UpdateMsgBox>
 					</TabPgChart>
-					
-					<!-- Status messages -->
-					<TabPgChartStateMessages>
-						<UpdateStarted text="Kurswerte- Download gestartet. Bitte warten..." />
-						<DownloadRunning text="Kurswerte- Download läuft. Bitte warten..." />
-						<DownloadDone text="Kurswerte- Download abgeschlossen." />
-						<ParsingStarted text="Kurswerte auslesen gestartet. Bitte warten... " />
-						<ParsingProcess text="Kurswerte auslesen läuft. Bitte warten... " />
-						<ParsingFinished text="Kurswerte- Aktualisierung abgeschlossen." />
-					</TabPgChartStateMessages>
-					
+										
 					<!-- Error messages -->
 					<TabPgChartErrors>
-						<UpdateFailed text="Kurswerte- Aktualisierung fehlgeschalgen!" />
-						<ParsingFailed text="Kurswerte auslesen fehlgeschalgen!" />
 						<OpenWebSiteFailed text="Öffnen der WebSite ist fehlgeschlagen!" />
 						<NoBrowserInstalled text="Kein installierter Browser gefunden!" />
 					</TabPgChartErrors>
@@ -1629,9 +1679,13 @@
 			<Buttons>
 				<OpenWebSite text="Website öffnen"/>
 				<Ok text="Schließen" />
-				<Update text="Aktualisieren" />
 			</Buttons>
 			
+			<!-- Message -->
+			<Messages>
+				<UpdatePossible text="Aktie sollte aktualisiert werden! Daten sind evtl. nicht auf dem aktuellen Stand." />
+			</Messages>
+
 			<!-- Errors -->
 			<Errors>
 				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
@@ -1651,6 +1705,7 @@
 				<Labels>
 					<WKN text="WKN:" />
 					<Name text="Name:" />
+					<StockMarketLaunchDate text="Börsennotierung:" />
 					<ShareType text="Typ:" />
 					<PayoutInterval text="Dividendenauszahlungs- Interval:" />
 					<CultureInfo text="Länder- Info:" />
@@ -1697,6 +1752,7 @@
 				<WKNExists text="Die eingegebene WKN- Nummber existiert bereits." />
 				<NameEmpty text="Bitte geben Sie einen Aktien- Namen ein." />
 				<NameExists text="Der eingegebene Aktien- Name existiert bereits." />
+				<StockMarketLaunchDateNotModified text="Börsennotierungs- Datum nicht angepasst." />
 				<OrderNumberEmpty text="Bitte geben Sie eine Ordernummer ein." />
 				<OrderNumberExists text="Die eingegebene Ordernummer existiert bereits." />
 				<VolumeEmpty text="Bitte geben Sie einen Wert für die gekauften Anteile ein." />
@@ -1752,6 +1808,7 @@
 				<Labels>
 					<WKN text="WKN:" />
 					<Name text="Name:" />
+					<StockMarketLaunchDate text="Börsennotierung:" />
 					<Update text="Update via Internet durchführen:" />
 					<Date text="Datum:" />
 					<Purchase text="Einzahlung:" />
@@ -1798,6 +1855,7 @@
 				<ShowFailed text="Es trat ein Fehler beim Anzeigen der Aktie auf!" />
 				<NameEmpty text="Bitte geben Sie einen Namen ein." />
 				<NameExists text="Der Name existiert bereits." />
+				<StockMarketLaunchDateNotModified text="Börsennotierungs- Datum nicht angepasst." />
 				<WebSiteEmpty text="Bitte geben Sie eine Webseiten- Adresse ein." />
 				<WebSiteWrongFormat text="Die eingegebene Webseiten- Adresse ist ungültig oder nicht erreichbar. Versuchen Sie es noch einmal." />
 				<WebSiteExists text="Die Webseite existiert bereits." />
@@ -2299,6 +2357,30 @@
 				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
 			</Errors>
 		</AddEditFormBrokerage>
+
+		<!-- Chart -->
+		<Chart>
+			<!-- Legend -->
+			<Legend>
+				<Caption text="Legende" />
+				<ClosingPrice text="Schluss- Kurs" />
+				<ClosingPriceYTitle text="Preis" />
+				<OpeningPrice text="Eröffungs- Kurs" />
+				<OpeningPriceYTitle text="Preis" />
+				<Top text="Höchstwert" />
+				<TopYTitle text="Preis" />
+				<Bottom text="Tiefstwert" />
+				<BottomYTitle text="Preis" />
+				<Volume text="Volume" />
+				<VolumeYTitle text="Anzahl" />
+			</Legend>
+			<ToolTip>
+				<Date text="Datum:" />
+				<Value text="Wert:" />
+				<Minimum text="Min:" />
+				<Maximum text="Max:" />
+			</ToolTip>
+		</Chart>
 
 		<!-- Logger settings -->
 		<LoggerSettingsForm>

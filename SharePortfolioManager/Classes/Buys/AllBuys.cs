@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -80,12 +80,12 @@ namespace SharePortfolioManager.Classes.Buys
         /// <summary>
         /// Total buy value plus brokerage and minus reduction of all buys as string
         /// </summary>
-        public string BuyValueBrokerageReductionTotalAsStr => Helper.FormatDecimal(BuyValueBrokerageReductionTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength);
+        public string BuyValueBrokerageReductionTotalAsStr => Helper.FormatDecimal(BuyValueBrokerageReductionTotal, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength);
 
         /// <summary>
         /// Total buy value plus brokerage and minus reduction of all buys as string with unit
         /// </summary>
-        public string BuyValueBrokerageReductionTotalAsStrUnit => Helper.FormatDecimal(BuyValueBrokerageReductionTotal, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", BuyCultureInfo);
+        public string BuyValueBrokerageReductionTotalAsStrUnit => Helper.FormatDecimal(BuyValueBrokerageReductionTotal, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", BuyCultureInfo);
 
         /// <summary>
         /// Sorted dictionary of all buy. The dictionary is sorted by the buy year.

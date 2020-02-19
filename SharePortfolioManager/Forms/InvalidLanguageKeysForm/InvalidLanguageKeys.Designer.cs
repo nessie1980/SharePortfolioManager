@@ -1,4 +1,4 @@
-﻿namespace SharePortfolioManager
+﻿namespace SharePortfolioManager.InvalidLanguageKeysForm
 {
     partial class FrmInvalidLanguageKeys
     {

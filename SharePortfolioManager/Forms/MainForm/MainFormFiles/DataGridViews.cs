@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -20,16 +20,17 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+using Microsoft.VisualBasic;
 using SharePortfolioManager.Classes;
+using SharePortfolioManager.Classes.ShareObjects;
+using SharePortfolioManager.Chart;
+using SharePortfolioManager.ShareDetailsForm;
 using SharePortfolioManager.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using Microsoft.VisualBasic;
-using SharePortfolioManager.Classes.ShareObjects;
-using SharePortfolioManager.Forms.ShareDetailsForm;
 
 namespace SharePortfolioManager
 {
@@ -96,9 +97,40 @@ namespace SharePortfolioManager
 
         #endregion Column width for the dgvPortfolio and dgvPortfolioFooter
 
+        #region Data grid view row click or double click detection
+
+        /// <summary>
+        /// Stores that a data grid view row is clicked the first time
+        /// </summary>
+        private bool _isFirstCellClick = true;
+
+        /// <summary>
+        /// Stores the index of the first clicked data grid view row
+        /// </summary>
+        private int _isFirstRowIndex = -1;
+
+        /// <summary>
+        /// Stores that a data grid view row is clicked the second time
+        /// </summary>
+        private bool _isSecondCellClick;
+
+        /// <summary>
+        /// Stores the index of the second clicked data grid view row
+        /// </summary>
+        private int _isDoubleRowIndex = -1;
+
+        /// <summary>
+        /// Stores the time between the first and second data grid view row click
+        /// </summary>
+        private int _checkDoubleClickMilliSeconds;
+
+        #endregion Data grid view row click or double click detection
+
         #endregion Variables
 
         #region Properties
+
+        public ShareDetailsForm.ShareDetailsForm FrmShareDetailsForm;
 
         public BindingSource DgvPortfolioBindingSourceMarketValue { get; } = new BindingSource();
 
@@ -1821,6 +1853,9 @@ namespace SharePortfolioManager
         private void DgvPortfolioFinalValue_MouseEnter(object sender, EventArgs e)
         {
             ((DataGridView)sender).Focus();
+
+            // Close open window
+            FrmChart?.Close();
         }
 
         /// <summary>
@@ -1831,115 +1866,166 @@ namespace SharePortfolioManager
         private void DgvPortfolioMarketValue_MouseEnter(object sender, EventArgs e)
         {
             ((DataGridView)sender).Focus();
+
+            // Close open window
+            FrmChart?.Close();
         }
 
         #endregion Data grid view enter
 
-        #region Data grid view cell double click
+        #region Data grid view cell mouse down
 
-        private void OnDgvPortfolioFinalValue_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        /// <summary>
+        /// This function detects if a mouse down event on the market value data grid view is made
+        /// </summary>
+        /// <param name="sender">Final value data grid view</param>
+        /// <param name="e">DataGridViewCellMouseEventArgs</param>
+        private void OnDgvPortfolioMarketValue_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
-            try
+            // Check if a valid row has been clicked
+            if (e.RowIndex < 0 || e.RowIndex >= ShareObjectListMarketValue.Count) return;
+
+            // Close open chart window
+            FrmChart?.Close();
+
+            // Check double click
+            CheckDoubleClick(e);
+        }
+
+        /// <summary>
+        /// This function detects if a mouse down event on the final value data grid view is made
+        /// </summary>
+        /// <param name="sender">Final value data grid view</param>
+        /// <param name="e">DataGridViewCellMouseEventArgs</param>
+        private void OnDgvPortfolioFinalValue_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            // Check if a valid row has been clicked
+            if (e.RowIndex < 0 || e.RowIndex >= ShareObjectListFinalValue.Count) return;
+
+            // Close open chart window
+            FrmChart?.Close();
+
+            // Check double click
+            CheckDoubleClick(e);
+        }
+
+        /// <summary>
+        /// This function does the detection if a single click or a double click on a data grid view row is made
+        /// </summary>
+        /// <param name="e">DataGridViewCellMouseEventArgs</param>
+        private void CheckDoubleClick(DataGridViewCellMouseEventArgs e)
+        {
+            // This is the first mouse click.
+            if (_isFirstCellClick)
             {
-                if (e.RowIndex < 0 || e.RowIndex >= ShareObjectListFinalValue.Count) return;
+                _isFirstRowIndex = e.RowIndex;
+                _isFirstCellClick = false;
 
-                var form = new ShareDetailsForm(MarketValueOverviewTabSelected,
-                    ShareObjectFinalValue, ShareObjectMarketValue,
-                    rchTxtBoxStateMessage, Logger,
-                    Language, LanguageName, ChartingIntervalValue, ChartingAmount);
-                var dialogResult = form.ShowDialog();
+                // Start the double click timer.
+                timerMouseCellDownDoubleClick.Start();
+            }
+            else
+            {
+                // Check if the second clicked row is the not same as the first clicked row
+                // and if the time between the first and second click is not greater than the double click detection time
+                // so no double click has been made
+                if (_isFirstRowIndex != e.RowIndex || _checkDoubleClickMilliSeconds >= SystemInformation.DoubleClickTime) return;
 
-                if (dialogResult != DialogResult.OK) return;
+                _isDoubleRowIndex = e.RowIndex;
+                _isSecondCellClick = true;
+            }
+        }
 
-                // Save the share values only of the final value object to the XML (The market value object contains the same values)
-                if (ShareObjectFinalValue.SaveShareObject(ShareObjectFinalValue, ref _portfolio, ref _readerPortfolio,
-                    ref _readerSettingsPortfolio, _portfolioFileName, out var exception))
+        #endregion Data grid view cell mouse down
+
+        #region Timer
+
+        /// <summary>
+        /// This function detects if a double click has been made or a single click
+        /// </summary>
+        /// <param name="sender">Timer</param>
+        /// <param name="e">EventArgs</param>
+        private void TimerMouseCellDownDoubleClick_Tick(object sender, EventArgs e)
+        {
+            // Increase the time which detects if it is a single or double click
+            _checkDoubleClickMilliSeconds += timerMouseCellDownDoubleClick.Interval;
+
+            // Check if the timer has reached which detects a double click time limit.
+            if (_checkDoubleClickMilliSeconds < SystemInformation.DoubleClickTime) return;
+
+            timerMouseCellDownDoubleClick.Stop();
+
+            // Check if it is the second click so a double click has been made
+            // so open the ShareDetailsForm
+            if (_isSecondCellClick)
+            {
+                try
                 {
-                    // Add status message
-                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/EditSaveSuccessful", LanguageName),
-                        Language, LanguageName,
-                        Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
+                    if (_isDoubleRowIndex < 0 || _isDoubleRowIndex >= ShareObjectListFinalValue.Count) return;
+
+                    // Stop the double click timer
+                    timerMouseCellDownDoubleClick.Enabled = false;
+
+                    // Create ShareDetails form
+                    FrmShareDetailsForm = new ShareDetailsForm.ShareDetailsForm(MarketValueOverviewTabSelected,
+                        ShareObjectFinalValue, ShareObjectMarketValue,
+                        rchTxtBoxStateMessage, Logger,
+                        Language, LanguageName);
+
+                    FrmShareDetailsForm.ShowDialog();
+                    FrmShareDetailsForm = null;
                 }
-                else
+                catch (Exception ex)
                 {
+#if DEBUG
+                    var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
+                    MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+#endif
                     // Add status message
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
                         Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
                         Language, LanguageName,
                         Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
                 }
-
-                if (exception != null)
-                    throw exception;
             }
-            catch (Exception ex)
+            else
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
-                Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
-                    Language, LanguageName,
-                    Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
-            }
-        }
-
-        private void OnDgvPortfolioMarketValue_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            try
-            {
-                if (e.RowIndex < 0 || e.RowIndex >= ShareObjectListMarketValue.Count) return;
-
-                var form = new ShareDetailsForm(MarketValueOverviewTabSelected,
-                    ShareObjectFinalValue, ShareObjectMarketValue,
-                    rchTxtBoxStateMessage, Logger,
-                    Language, LanguageName, ChartingIntervalValue, ChartingAmount);
-
-                var dialogResult = form.ShowDialog();
-                if (dialogResult != DialogResult.OK) return;
-
-                // Save the share values only of the final value object to the XML (The market value object contains the same values)
-                if (ShareObjectFinalValue.SaveShareObject(ShareObjectFinalValue, ref _portfolio, ref _readerPortfolio,
-                    ref _readerSettingsPortfolio, _portfolioFileName, out var exception))
+                // Check if a chart window already exist so close and delete it
+                if (FrmChart != null)
                 {
-                    // Add status message
-                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/EditSaveSuccessful", LanguageName),
-                        Language, LanguageName,
-                        Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
-                }
-                else
-                {
-                    // Add status message
-                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
-                        Language, LanguageName,
-                        Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
+                    FrmChart?.Close();
+                    FrmChart = null;
                 }
 
-                if (exception != null)
-                    throw exception;
+                // Check if a chart window already exists else create a new one
+                if (FrmChart == null)
+                    FrmChart = new FrmChart(MarketValueOverviewTabSelected,
+                        ShareObjectListFinalValue[_isFirstRowIndex], ShareObjectListMarketValue[_isFirstRowIndex],
+                        rchTxtBoxStateMessage, Logger, Language, LanguageName,
+                        ChartingInterval.Year, 1);
+
+                // Set window title
+                FrmChart.Text = ShareObjectListFinalValue[_isFirstRowIndex].Name;
+
+                // Set location for the chart window
+                var locationPoint = Point.Empty;
+                locationPoint.X = MousePosition.X + 10;
+                locationPoint.Y = MousePosition.Y + 10;
+                FrmChart.Location = locationPoint;
+
+                FrmChart.Show();
             }
-            catch (Exception ex)
-            {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
-                Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
-                    Language, LanguageName,
-                    Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
-            }
+
+            // Allow the MouseDown event handler to process clicks again.
+            _isFirstCellClick = true;
+            _isDoubleRowIndex = -1;
+            _isSecondCellClick = false;
+            _isDoubleRowIndex = -1;
+            _checkDoubleClickMilliSeconds = 0;
         }
 
-        #endregion Data grid view cell double click
+        #endregion Timer
 
         #endregion Methods
     }

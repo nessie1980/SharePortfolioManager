@@ -1,4 +1,4 @@
-﻿namespace SharePortfolioManager.Forms.ShareDetailsForm
+﻿namespace SharePortfolioManager.ShareDetailsForm
 {
     partial class ShareDetailsForm
     {
@@ -34,20 +34,13 @@
             this.tabCtrlDetails = new System.Windows.Forms.TabControl();
             this.tabPgDetailsChart = new System.Windows.Forms.TabPage();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripProgressBarUpdate = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabelUpdate = new System.Windows.Forms.ToolStripStatusLabel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.btnOk = new System.Windows.Forms.Button();
-            this.btnUpdateDailyValues = new System.Windows.Forms.Button();
             this.btnOpenWebSite = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.chartDailyValues = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.lblDailyValuesSelection = new System.Windows.Forms.Label();
-            this.rdbClosingPrice = new System.Windows.Forms.RadioButton();
-            this.rdbOpeningPrice = new System.Windows.Forms.RadioButton();
-            this.rdbTop = new System.Windows.Forms.RadioButton();
-            this.rdbBottom = new System.Windows.Forms.RadioButton();
-            this.rdbVolume = new System.Windows.Forms.RadioButton();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.lblStartDate = new System.Windows.Forms.Label();
             this.dateTimePickerStartDate = new System.Windows.Forms.DateTimePicker();
@@ -57,6 +50,11 @@
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.lblAmount = new System.Windows.Forms.Label();
             this.numDrpDwnAmount = new System.Windows.Forms.NumericUpDown();
+            this.chkClosingPrice = new System.Windows.Forms.CheckBox();
+            this.chkOpeningPrice = new System.Windows.Forms.CheckBox();
+            this.chkTop = new System.Windows.Forms.CheckBox();
+            this.chkBottom = new System.Windows.Forms.CheckBox();
+            this.chkVolume = new System.Windows.Forms.CheckBox();
             this.tabPgDetailsFinalValue = new System.Windows.Forms.TabPage();
             this.tblLayPnlFinaleValueShareDetails = new System.Windows.Forms.TableLayoutPanel();
             this.lblDetailsFinalValueBrokerage = new System.Windows.Forms.Label();
@@ -138,6 +136,9 @@
             // 
             // grpBoxShareDetails
             // 
+            this.grpBoxShareDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.grpBoxShareDetails.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.grpBoxShareDetails.Controls.Add(this.tblLayPnlShareDetailsTabControls);
             this.grpBoxShareDetails.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -156,14 +157,14 @@
             this.tblLayPnlShareDetailsTabControls.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblLayPnlShareDetailsTabControls.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tblLayPnlShareDetailsTabControls.Controls.Add(this.tabCtrlDetails, 0, 0);
-            this.tblLayPnlShareDetailsTabControls.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tblLayPnlShareDetailsTabControls.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tblLayPnlShareDetailsTabControls.Location = new System.Drawing.Point(3, 19);
             this.tblLayPnlShareDetailsTabControls.Margin = new System.Windows.Forms.Padding(3, 3, 3, 5);
             this.tblLayPnlShareDetailsTabControls.Name = "tblLayPnlShareDetailsTabControls";
             this.tblLayPnlShareDetailsTabControls.RowCount = 1;
             this.tblLayPnlShareDetailsTabControls.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblLayPnlShareDetailsTabControls.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 405F));
-            this.tblLayPnlShareDetailsTabControls.Size = new System.Drawing.Size(912, 405);
+            this.tblLayPnlShareDetailsTabControls.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 407F));
+            this.tblLayPnlShareDetailsTabControls.Size = new System.Drawing.Size(912, 407);
             this.tblLayPnlShareDetailsTabControls.TabIndex = 0;
             // 
             // tabCtrlDetails
@@ -175,11 +176,13 @@
             this.tabCtrlDetails.Controls.Add(this.tabPgProfitLoss);
             this.tabCtrlDetails.Controls.Add(this.tabPgDividends);
             this.tabCtrlDetails.Controls.Add(this.tabPgBrokerage);
+            this.tabCtrlDetails.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabCtrlDetails.Location = new System.Drawing.Point(3, 0);
             this.tabCtrlDetails.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
+            this.tabCtrlDetails.MinimumSize = new System.Drawing.Size(906, 402);
             this.tabCtrlDetails.Name = "tabCtrlDetails";
             this.tabCtrlDetails.SelectedIndex = 0;
-            this.tabCtrlDetails.Size = new System.Drawing.Size(906, 402);
+            this.tabCtrlDetails.Size = new System.Drawing.Size(906, 404);
             this.tabCtrlDetails.TabIndex = 10;
             this.tabCtrlDetails.SelectedIndexChanged += new System.EventHandler(this.TabCtrlDetails_SelectedIndexChanged);
             // 
@@ -190,7 +193,7 @@
             this.tabPgDetailsChart.Controls.Add(this.tableLayoutPanel1);
             this.tabPgDetailsChart.Location = new System.Drawing.Point(4, 26);
             this.tabPgDetailsChart.Name = "tabPgDetailsChart";
-            this.tabPgDetailsChart.Size = new System.Drawing.Size(898, 372);
+            this.tabPgDetailsChart.Size = new System.Drawing.Size(898, 374);
             this.tabPgDetailsChart.TabIndex = 5;
             this.tabPgDetailsChart.Text = "tabPgDetailsChart_";
             this.tabPgDetailsChart.UseVisualStyleBackColor = true;
@@ -198,36 +201,29 @@
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripProgressBarUpdate,
             this.toolStripStatusLabelUpdate});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 350);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 352);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(898, 22);
             this.statusStrip1.TabIndex = 3;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // toolStripProgressBarUpdate
-            // 
-            this.toolStripProgressBarUpdate.MarqueeAnimationSpeed = 20;
-            this.toolStripProgressBarUpdate.Name = "toolStripProgressBarUpdate";
-            this.toolStripProgressBarUpdate.Size = new System.Drawing.Size(100, 16);
-            this.toolStripProgressBarUpdate.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
-            this.toolStripProgressBarUpdate.Visible = false;
-            // 
             // toolStripStatusLabelUpdate
             // 
             this.toolStripStatusLabelUpdate.Name = "toolStripStatusLabelUpdate";
             this.toolStripStatusLabelUpdate.Size = new System.Drawing.Size(0, 17);
+            this.toolStripStatusLabelUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tableLayoutPanel2
             // 
-            this.tableLayoutPanel2.ColumnCount = 4;
+            this.tableLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel2.ColumnCount = 3;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
-            this.tableLayoutPanel2.Controls.Add(this.btnOk, 3, 0);
-            this.tableLayoutPanel2.Controls.Add(this.btnUpdateDailyValues, 2, 0);
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.Controls.Add(this.btnOk, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.btnOpenWebSite, 1, 0);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 312);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -252,27 +248,12 @@
             this.btnOk.UseVisualStyleBackColor = true;
             this.btnOk.Click += new System.EventHandler(this.OnBtnOk_Click);
             // 
-            // btnUpdateDailyValues
-            // 
-            this.btnUpdateDailyValues.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnUpdateDailyValues.Image = global::SharePortfolioManager.Properties.Resources.button_update_24;
-            this.btnUpdateDailyValues.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnUpdateDailyValues.Location = new System.Drawing.Point(533, 1);
-            this.btnUpdateDailyValues.Margin = new System.Windows.Forms.Padding(1);
-            this.btnUpdateDailyValues.Name = "btnUpdateDailyValues";
-            this.btnUpdateDailyValues.Size = new System.Drawing.Size(178, 33);
-            this.btnUpdateDailyValues.TabIndex = 1;
-            this.btnUpdateDailyValues.Text = "Update_";
-            this.btnUpdateDailyValues.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnUpdateDailyValues.UseVisualStyleBackColor = true;
-            this.btnUpdateDailyValues.Click += new System.EventHandler(this.BtnUpdateDailyValues_Click);
-            // 
             // btnOpenWebSite
             // 
             this.btnOpenWebSite.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnOpenWebSite.Image = global::SharePortfolioManager.Properties.Resources.search_info_24;
             this.btnOpenWebSite.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnOpenWebSite.Location = new System.Drawing.Point(353, 1);
+            this.btnOpenWebSite.Location = new System.Drawing.Point(533, 1);
             this.btnOpenWebSite.Margin = new System.Windows.Forms.Padding(1);
             this.btnOpenWebSite.Name = "btnOpenWebSite";
             this.btnOpenWebSite.Size = new System.Drawing.Size(178, 33);
@@ -285,19 +266,22 @@
             // 
             // tableLayoutPanel1
             // 
+            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 210F));
             this.tableLayoutPanel1.Controls.Add(this.chartDailyValues, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.lblDailyValuesSelection, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.rdbClosingPrice, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.rdbOpeningPrice, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.rdbTop, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.rdbBottom, 1, 4);
-            this.tableLayoutPanel1.Controls.Add(this.rdbVolume, 1, 5);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 1, 6);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel4, 1, 7);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel5, 1, 8);
+            this.tableLayoutPanel1.Controls.Add(this.chkClosingPrice, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.chkOpeningPrice, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.chkTop, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.chkBottom, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.chkVolume, 1, 5);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 10;
@@ -327,7 +311,6 @@
             this.chartDailyValues.Size = new System.Drawing.Size(676, 300);
             this.chartDailyValues.TabIndex = 0;
             this.chartDailyValues.Text = "Daily values";
-            this.chartDailyValues.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnChartMouseMove);
             // 
             // lblDailyValuesSelection
             // 
@@ -339,68 +322,6 @@
             this.lblDailyValuesSelection.TabIndex = 1;
             this.lblDailyValuesSelection.Text = "lblDailyValuesSelction_";
             this.lblDailyValuesSelection.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // rdbClosingPrice
-            // 
-            this.rdbClosingPrice.AutoSize = true;
-            this.rdbClosingPrice.Checked = true;
-            this.rdbClosingPrice.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rdbClosingPrice.Location = new System.Drawing.Point(685, 27);
-            this.rdbClosingPrice.Name = "rdbClosingPrice";
-            this.rdbClosingPrice.Size = new System.Drawing.Size(204, 18);
-            this.rdbClosingPrice.TabIndex = 4;
-            this.rdbClosingPrice.TabStop = true;
-            this.rdbClosingPrice.Text = "ClosingPrice_";
-            this.rdbClosingPrice.UseVisualStyleBackColor = true;
-            this.rdbClosingPrice.CheckedChanged += new System.EventHandler(this.OnRdbClosingPrice_CheckedChanged);
-            // 
-            // rdbOpeningPrice
-            // 
-            this.rdbOpeningPrice.AutoSize = true;
-            this.rdbOpeningPrice.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rdbOpeningPrice.Location = new System.Drawing.Point(685, 51);
-            this.rdbOpeningPrice.Name = "rdbOpeningPrice";
-            this.rdbOpeningPrice.Size = new System.Drawing.Size(204, 18);
-            this.rdbOpeningPrice.TabIndex = 5;
-            this.rdbOpeningPrice.Text = "OpeningPrice_";
-            this.rdbOpeningPrice.UseVisualStyleBackColor = true;
-            this.rdbOpeningPrice.CheckedChanged += new System.EventHandler(this.OnRdbOpeningPrice_CheckedChanged);
-            // 
-            // rdbTop
-            // 
-            this.rdbTop.AutoSize = true;
-            this.rdbTop.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rdbTop.Location = new System.Drawing.Point(685, 75);
-            this.rdbTop.Name = "rdbTop";
-            this.rdbTop.Size = new System.Drawing.Size(204, 18);
-            this.rdbTop.TabIndex = 6;
-            this.rdbTop.Text = "Top_";
-            this.rdbTop.UseVisualStyleBackColor = true;
-            this.rdbTop.CheckedChanged += new System.EventHandler(this.OnRdbTop_CheckedChanged);
-            // 
-            // rdbBottom
-            // 
-            this.rdbBottom.AutoSize = true;
-            this.rdbBottom.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rdbBottom.Location = new System.Drawing.Point(685, 99);
-            this.rdbBottom.Name = "rdbBottom";
-            this.rdbBottom.Size = new System.Drawing.Size(204, 18);
-            this.rdbBottom.TabIndex = 7;
-            this.rdbBottom.Text = "Bottom_";
-            this.rdbBottom.UseVisualStyleBackColor = true;
-            this.rdbBottom.CheckedChanged += new System.EventHandler(this.OnRdbBottom_CheckedChanged);
-            // 
-            // rdbVolume
-            // 
-            this.rdbVolume.AutoSize = true;
-            this.rdbVolume.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rdbVolume.Location = new System.Drawing.Point(685, 123);
-            this.rdbVolume.Name = "rdbVolume";
-            this.rdbVolume.Size = new System.Drawing.Size(204, 18);
-            this.rdbVolume.TabIndex = 8;
-            this.rdbVolume.Text = "Volume_";
-            this.rdbVolume.UseVisualStyleBackColor = true;
-            this.rdbVolume.CheckedChanged += new System.EventHandler(this.OnRdbVolume_CheckedChanged);
             // 
             // tableLayoutPanel3
             // 
@@ -532,6 +453,68 @@
             0});
             this.numDrpDwnAmount.ValueChanged += new System.EventHandler(this.OnNumDrpDwnAmount_ValueChanged);
             // 
+            // chkClosingPrice
+            // 
+            this.chkClosingPrice.AutoSize = true;
+            this.chkClosingPrice.Checked = true;
+            this.chkClosingPrice.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkClosingPrice.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chkClosingPrice.Location = new System.Drawing.Point(685, 27);
+            this.chkClosingPrice.Name = "chkClosingPrice";
+            this.chkClosingPrice.Size = new System.Drawing.Size(204, 18);
+            this.chkClosingPrice.TabIndex = 17;
+            this.chkClosingPrice.Text = "ClosingPrice_";
+            this.chkClosingPrice.UseVisualStyleBackColor = true;
+            this.chkClosingPrice.CheckedChanged += new System.EventHandler(this.OnChkClosingPrice_CheckedChanged);
+            // 
+            // chkOpeningPrice
+            // 
+            this.chkOpeningPrice.AutoSize = true;
+            this.chkOpeningPrice.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chkOpeningPrice.Location = new System.Drawing.Point(685, 51);
+            this.chkOpeningPrice.Name = "chkOpeningPrice";
+            this.chkOpeningPrice.Size = new System.Drawing.Size(204, 18);
+            this.chkOpeningPrice.TabIndex = 18;
+            this.chkOpeningPrice.Text = "OpeningPrice_";
+            this.chkOpeningPrice.UseVisualStyleBackColor = true;
+            this.chkOpeningPrice.CheckedChanged += new System.EventHandler(this.OnChkOpeningPrice_CheckedChanged);
+            // 
+            // chkTop
+            // 
+            this.chkTop.AutoSize = true;
+            this.chkTop.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chkTop.Location = new System.Drawing.Point(685, 75);
+            this.chkTop.Name = "chkTop";
+            this.chkTop.Size = new System.Drawing.Size(204, 18);
+            this.chkTop.TabIndex = 19;
+            this.chkTop.Text = "Top_";
+            this.chkTop.UseVisualStyleBackColor = true;
+            this.chkTop.CheckedChanged += new System.EventHandler(this.OnChkTop_CheckedChanged);
+            // 
+            // chkBottom
+            // 
+            this.chkBottom.AutoSize = true;
+            this.chkBottom.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chkBottom.Location = new System.Drawing.Point(685, 99);
+            this.chkBottom.Name = "chkBottom";
+            this.chkBottom.Size = new System.Drawing.Size(204, 18);
+            this.chkBottom.TabIndex = 20;
+            this.chkBottom.Text = "Bottom_";
+            this.chkBottom.UseVisualStyleBackColor = true;
+            this.chkBottom.CheckedChanged += new System.EventHandler(this.OnChkBottom_CheckedChanged);
+            // 
+            // chkVolume
+            // 
+            this.chkVolume.AutoSize = true;
+            this.chkVolume.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chkVolume.Location = new System.Drawing.Point(685, 123);
+            this.chkVolume.Name = "chkVolume";
+            this.chkVolume.Size = new System.Drawing.Size(204, 18);
+            this.chkVolume.TabIndex = 21;
+            this.chkVolume.Text = "Volume_";
+            this.chkVolume.UseVisualStyleBackColor = true;
+            this.chkVolume.CheckedChanged += new System.EventHandler(this.OnChkVolume_CheckedChanged);
+            // 
             // tabPgDetailsFinalValue
             // 
             this.tabPgDetailsFinalValue.BackColor = System.Drawing.SystemColors.InactiveCaption;
@@ -539,7 +522,7 @@
             this.tabPgDetailsFinalValue.Location = new System.Drawing.Point(4, 26);
             this.tabPgDetailsFinalValue.Margin = new System.Windows.Forms.Padding(0);
             this.tabPgDetailsFinalValue.Name = "tabPgDetailsFinalValue";
-            this.tabPgDetailsFinalValue.Size = new System.Drawing.Size(898, 372);
+            this.tabPgDetailsFinalValue.Size = new System.Drawing.Size(898, 374);
             this.tabPgDetailsFinalValue.TabIndex = 0;
             this.tabPgDetailsFinalValue.Text = "DetailsFinalValue_";
             // 
@@ -593,7 +576,7 @@
             this.tblLayPnlFinaleValueShareDetails.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tblLayPnlFinaleValueShareDetails.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tblLayPnlFinaleValueShareDetails.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tblLayPnlFinaleValueShareDetails.Size = new System.Drawing.Size(898, 372);
+            this.tblLayPnlFinaleValueShareDetails.Size = new System.Drawing.Size(898, 374);
             this.tblLayPnlFinaleValueShareDetails.TabIndex = 0;
             // 
             // lblDetailsFinalValueBrokerage
@@ -867,7 +850,7 @@
             this.lblDetailsFinalValueTotalSum.Location = new System.Drawing.Point(1, 265);
             this.lblDetailsFinalValueTotalSum.Margin = new System.Windows.Forms.Padding(1);
             this.lblDetailsFinalValueTotalSum.Name = "lblDetailsFinalValueTotalSum";
-            this.lblDetailsFinalValueTotalSum.Size = new System.Drawing.Size(447, 106);
+            this.lblDetailsFinalValueTotalSum.Size = new System.Drawing.Size(447, 108);
             this.lblDetailsFinalValueTotalSum.TabIndex = 7;
             this.lblDetailsFinalValueTotalSum.Text = "TotalSum_";
             this.lblDetailsFinalValueTotalSum.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -920,7 +903,7 @@
             this.lblDetailsFinalValueTotalSumValue.Location = new System.Drawing.Point(450, 265);
             this.lblDetailsFinalValueTotalSumValue.Margin = new System.Windows.Forms.Padding(1);
             this.lblDetailsFinalValueTotalSumValue.Name = "lblDetailsFinalValueTotalSumValue";
-            this.lblDetailsFinalValueTotalSumValue.Size = new System.Drawing.Size(447, 106);
+            this.lblDetailsFinalValueTotalSumValue.Size = new System.Drawing.Size(447, 108);
             this.lblDetailsFinalValueTotalSumValue.TabIndex = 16;
             this.lblDetailsFinalValueTotalSumValue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -930,7 +913,7 @@
             this.tabPgDetailsMarketValue.Controls.Add(this.tblLayPnlMarketValueShareDetails);
             this.tabPgDetailsMarketValue.Location = new System.Drawing.Point(4, 26);
             this.tabPgDetailsMarketValue.Name = "tabPgDetailsMarketValue";
-            this.tabPgDetailsMarketValue.Size = new System.Drawing.Size(898, 372);
+            this.tabPgDetailsMarketValue.Size = new System.Drawing.Size(898, 374);
             this.tabPgDetailsMarketValue.TabIndex = 3;
             this.tabPgDetailsMarketValue.Text = "DetailsMarketValue_";
             // 
@@ -984,7 +967,7 @@
             this.tblLayPnlMarketValueShareDetails.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tblLayPnlMarketValueShareDetails.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tblLayPnlMarketValueShareDetails.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tblLayPnlMarketValueShareDetails.Size = new System.Drawing.Size(898, 372);
+            this.tblLayPnlMarketValueShareDetails.Size = new System.Drawing.Size(898, 374);
             this.tblLayPnlMarketValueShareDetails.TabIndex = 0;
             // 
             // lblDetailsMarketValueDateValue
@@ -1258,7 +1241,7 @@
             this.lblDetailsMarketValueTotalSum.Location = new System.Drawing.Point(1, 265);
             this.lblDetailsMarketValueTotalSum.Margin = new System.Windows.Forms.Padding(1);
             this.lblDetailsMarketValueTotalSum.Name = "lblDetailsMarketValueTotalSum";
-            this.lblDetailsMarketValueTotalSum.Size = new System.Drawing.Size(447, 106);
+            this.lblDetailsMarketValueTotalSum.Size = new System.Drawing.Size(447, 108);
             this.lblDetailsMarketValueTotalSum.TabIndex = 40;
             this.lblDetailsMarketValueTotalSum.Text = "TotalSum_";
             this.lblDetailsMarketValueTotalSum.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1311,7 +1294,7 @@
             this.lblDetailsMarketValueTotalSumValue.Location = new System.Drawing.Point(450, 265);
             this.lblDetailsMarketValueTotalSumValue.Margin = new System.Windows.Forms.Padding(1);
             this.lblDetailsMarketValueTotalSumValue.Name = "lblDetailsMarketValueTotalSumValue";
-            this.lblDetailsMarketValueTotalSumValue.Size = new System.Drawing.Size(447, 106);
+            this.lblDetailsMarketValueTotalSumValue.Size = new System.Drawing.Size(447, 108);
             this.lblDetailsMarketValueTotalSumValue.TabIndex = 44;
             this.lblDetailsMarketValueTotalSumValue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -1324,7 +1307,7 @@
             this.tabPgProfitLoss.Location = new System.Drawing.Point(4, 26);
             this.tabPgProfitLoss.Margin = new System.Windows.Forms.Padding(0);
             this.tabPgProfitLoss.Name = "tabPgProfitLoss";
-            this.tabPgProfitLoss.Size = new System.Drawing.Size(898, 372);
+            this.tabPgProfitLoss.Size = new System.Drawing.Size(898, 374);
             this.tabPgProfitLoss.TabIndex = 4;
             this.tabPgProfitLoss.Text = "ProfitLoss_";
             // 
@@ -1335,8 +1318,9 @@
             this.tabCtrlProfitLoss.Location = new System.Drawing.Point(0, 0);
             this.tabCtrlProfitLoss.Name = "tabCtrlProfitLoss";
             this.tabCtrlProfitLoss.SelectedIndex = 0;
-            this.tabCtrlProfitLoss.Size = new System.Drawing.Size(898, 372);
+            this.tabCtrlProfitLoss.Size = new System.Drawing.Size(898, 374);
             this.tabCtrlProfitLoss.TabIndex = 0;
+            this.tabCtrlProfitLoss.SelectedIndexChanged += new System.EventHandler(this.TabCtrlProfitLoss_SelectedIndexChanged);
             // 
             // tabPgDividends
             // 
@@ -1347,7 +1331,7 @@
             this.tabPgDividends.Location = new System.Drawing.Point(4, 26);
             this.tabPgDividends.Margin = new System.Windows.Forms.Padding(0);
             this.tabPgDividends.Name = "tabPgDividends";
-            this.tabPgDividends.Size = new System.Drawing.Size(898, 372);
+            this.tabPgDividends.Size = new System.Drawing.Size(898, 374);
             this.tabPgDividends.TabIndex = 1;
             this.tabPgDividends.Text = "Dividends_";
             // 
@@ -1358,8 +1342,9 @@
             this.tabCtrlDividends.Location = new System.Drawing.Point(0, 0);
             this.tabCtrlDividends.Name = "tabCtrlDividends";
             this.tabCtrlDividends.SelectedIndex = 0;
-            this.tabCtrlDividends.Size = new System.Drawing.Size(898, 372);
+            this.tabCtrlDividends.Size = new System.Drawing.Size(898, 374);
             this.tabCtrlDividends.TabIndex = 0;
+            this.tabCtrlDividends.SelectedIndexChanged += new System.EventHandler(this.TabCtrlDividends_SelectedIndexChanged);
             // 
             // tabPgBrokerage
             // 
@@ -1370,7 +1355,7 @@
             this.tabPgBrokerage.Location = new System.Drawing.Point(4, 26);
             this.tabPgBrokerage.Margin = new System.Windows.Forms.Padding(0);
             this.tabPgBrokerage.Name = "tabPgBrokerage";
-            this.tabPgBrokerage.Size = new System.Drawing.Size(898, 372);
+            this.tabPgBrokerage.Size = new System.Drawing.Size(898, 374);
             this.tabPgBrokerage.TabIndex = 2;
             this.tabPgBrokerage.Text = "Brokerage_";
             // 
@@ -1381,8 +1366,9 @@
             this.tabCtrlBrokerage.Location = new System.Drawing.Point(0, 0);
             this.tabCtrlBrokerage.Name = "tabCtrlBrokerage";
             this.tabCtrlBrokerage.SelectedIndex = 0;
-            this.tabCtrlBrokerage.Size = new System.Drawing.Size(898, 372);
+            this.tabCtrlBrokerage.Size = new System.Drawing.Size(898, 374);
             this.tabCtrlBrokerage.TabIndex = 0;
+            this.tabCtrlBrokerage.SelectedIndexChanged += new System.EventHandler(this.TabCtrlBrokerage_SelectedIndexChanged);
             // 
             // ShareDetailsForm
             // 
@@ -1391,6 +1377,7 @@
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.ClientSize = new System.Drawing.Size(925, 437);
             this.Controls.Add(this.grpBoxShareDetails);
+            this.MinimumSize = new System.Drawing.Size(941, 476);
             this.Name = "ShareDetailsForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ShareDetailsForm";
@@ -1487,21 +1474,14 @@
         private System.Windows.Forms.TabControl tabCtrlDividends;
         private System.Windows.Forms.TabPage tabPgBrokerage;
         private System.Windows.Forms.TabControl tabCtrlBrokerage;
-        private System.Windows.Forms.Button btnUpdateDailyValues;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartDailyValues;
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBarUpdate;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelUpdate;
         private System.Windows.Forms.Label lblDailyValuesSelection;
         private System.Windows.Forms.Label lblStartDate;
-        private System.Windows.Forms.RadioButton rdbClosingPrice;
-        private System.Windows.Forms.RadioButton rdbOpeningPrice;
-        private System.Windows.Forms.RadioButton rdbTop;
-        private System.Windows.Forms.RadioButton rdbBottom;
-        private System.Windows.Forms.RadioButton rdbVolume;
         private System.Windows.Forms.DateTimePicker dateTimePickerStartDate;
         private System.Windows.Forms.Label lblIntervalSelection;
         private System.Windows.Forms.ComboBox cbxIntervalSelection;
@@ -1511,5 +1491,10 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private System.Windows.Forms.Label lblAmount;
         private System.Windows.Forms.Button btnOpenWebSite;
+        private System.Windows.Forms.CheckBox chkClosingPrice;
+        private System.Windows.Forms.CheckBox chkOpeningPrice;
+        private System.Windows.Forms.CheckBox chkTop;
+        private System.Windows.Forms.CheckBox chkBottom;
+        private System.Windows.Forms.CheckBox chkVolume;
     }
 }

@@ -7,23 +7,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
-namespace SharePortfolioManager.Forms.ShareDetailsForm
+namespace SharePortfolioManager.ShareDetailsForm
 {
-    // Error codes for the document parsing
-    public enum ParsingErrorCodes
-    {
-        ParsingFailed = -2,
-        UpdateFailed = -1,
-        ParsingStarted = 0,
-        ParsingProcess = 1,
-        ParsingFinished = 2
-    }
-
     // Interval for charting values
     public enum ChartingInterval
     {
@@ -85,19 +73,6 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
         private TabPage _tempDividends;
         private TabPage _tempBrokerage;
 
-        // Tool tip shows the X value of the mouse hovers
-        private readonly ToolTip _tooltip = new ToolTip();
-        private string _strUnit;
-
-        #region Parsing Fields
-
-        /// <summary>
-        /// BackGroundWorker for the document parsing
-        /// </summary>
-        private readonly BackgroundWorker _parsingBackgroundWorker = new BackgroundWorker();
-
-        #endregion Parsing Fields
-
         #endregion Variables
 
         #region Properties
@@ -120,19 +95,13 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
 
         #endregion Share objects
 
-        #region Update
-
-        public WebBrowser WebBrowser = new WebBrowser();
-
-        #endregion Update
-
         #region Charting
 
         internal int ChartingIntervalValue = (int) ChartingInterval.Month;
 
         internal int ChartingAmount = 1;
 
-        internal Point? PrevPosition { get; set; }
+        internal ChartingDailyValues.ChartValues ChartValues;
         
         #endregion Charting
 
@@ -141,7 +110,7 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
         public ShareDetailsForm( bool marketValueOverviewTabSelected,
             ShareObjectFinalValue shareObjectFinalValue, ShareObjectMarketValue shareObjectMarketValue,
             RichTextBox rchTxtBoxStateMessage, Logger logger,
-            Language language, string languageName, int iChartingInterval, int iChartingAmount  )
+            Language language, string languageName)
         {
             InitializeComponent();
 
@@ -186,15 +155,15 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
             lblAmount.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/Amount",
                 LanguageName);
 
-            rdbClosingPrice.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/ClosingPrice",
+            chkClosingPrice.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/ClosingPrice",
                 LanguageName);
-            rdbOpeningPrice.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/OpeningPrice",
+            chkOpeningPrice.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/OpeningPrice",
                 LanguageName);
-            rdbTop.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/Top",
+            chkTop.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/Top",
                 LanguageName);
-            rdbBottom.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/Bottom",
+            chkBottom.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/Bottom",
                 LanguageName);
-            rdbVolume.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/Volume",
+            chkVolume.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/Volume",
                 LanguageName);
 
             if (tabCtrlDetails.TabPages[_tabPageDetailsFinalValue] != null)
@@ -312,24 +281,6 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
 
             #endregion Set tab controls names
 
-            #region Backgroundworker
-
-            _parsingBackgroundWorker.WorkerReportsProgress = true;
-            _parsingBackgroundWorker.WorkerSupportsCancellation = true;
-
-            _parsingBackgroundWorker.DoWork += DailyValuesParsing;
-            _parsingBackgroundWorker.ProgressChanged += OnDocumentParsingProgressChanged;
-            _parsingBackgroundWorker.RunWorkerCompleted += OnDocumentParsingRunWorkerCompleted;
-
-            #endregion Backgroundworker
-
-            #region Web browser
-
-            WebBrowser.DocumentCompleted += WebBrowser_DocumentCompleted;
-            WebBrowser.ProgressChanged += WebBrowser_ProgressChanged;
-
-            #endregion Web browser
-
             UpdateShareDetails(MarketValueOverviewTabSelected);
             UpdateProfitLossDetails(MarketValueOverviewTabSelected);
             UpdateBrokerageDetails(MarketValueOverviewTabSelected);
@@ -356,18 +307,17 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
             }
             else
             {
-                rdbClosingPrice.Enabled = false;
-                rdbOpeningPrice.Enabled = false;
-                rdbTop.Enabled = false;
-                rdbBottom.Enabled = false;
-                rdbVolume.Enabled = false;
+                chkClosingPrice.Enabled = false;
+                chkOpeningPrice.Enabled = false;
+                chkTop.Enabled = false;
+                chkBottom.Enabled = false;
+                chkVolume.Enabled = false;
                 dateTimePickerStartDate.Enabled = false;
                 cbxIntervalSelection.Enabled = false;
                 numDrpDwnAmount.Enabled = false;
             }
 
             btnOpenWebSite.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Buttons/OpenWebSite", LanguageName);
-            btnUpdateDailyValues.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Buttons/Update", LanguageName);
             btnOk.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Buttons/Ok", LanguageName);
 
             #region Settings
@@ -401,32 +351,12 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
                 date = date.AddDays(-1);
 
             // Check if no update is necessary
+            // TODO Add check if the share is still active or update is activated
             if (dateTimePickerStartDate.Value >= date && 
                 ( ShareObjectFinalValue.DailyValues.Count > 0 || ShareObjectMarketValue.DailyValues.Count > 0) ) return;
 
-            var strCaption = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/UpdateMsgBox/Caption",
-                LanguageName);
-            var strMessage = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/UpdateMsgBox/Message",
-                LanguageName);
-            if (ShareObjectFinalValue.DailyValues.Count == 0 || ShareObjectMarketValue.DailyValues.Count == 0)
-            {
-                strMessage += " ";
-                strMessage += Language.GetLanguageTextByXPath(
-                    @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/UpdateMsgBox/FirstUpdate",
-                    LanguageName);
-            }
-
-            var strOk = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/UpdateMsgBox/Yes",
-                LanguageName);
-            var strCancel = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/UpdateMsgBox/No",
-                LanguageName);
-
-            var updateOwnMessageBox = new OwnMessageBox(strCaption, strMessage, strOk, strCancel);
-            var dlgResult = updateOwnMessageBox.ShowDialog();
-            if (dlgResult == DialogResult.OK)
-            {
-                btnUpdateDailyValues.PerformClick();
-            }
+            toolStripStatusLabelUpdate.ForeColor = Color.Red;
+            toolStripStatusLabelUpdate.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Messages/UpdatePossible", LanguageName);
         }
 
         public sealed override string Text
@@ -486,743 +416,160 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
         }
 
         /// <summary>
-        /// This function starts the daily values update
-        /// </summary>
-        /// <param name="sender">Update button</param>
-        /// <param name="e">Eventargs</param>
-        private void BtnUpdateDailyValues_Click(object sender, EventArgs e)
-        {
-            // Disable controls
-            rdbClosingPrice.Enabled = false;
-            rdbOpeningPrice.Enabled = false;
-            rdbTop.Enabled = false;
-            rdbBottom.Enabled = false;
-            rdbVolume.Enabled = false;
-            dateTimePickerStartDate.Enabled = false;
-            cbxIntervalSelection.Enabled = false;
-            numDrpDwnAmount.Enabled = false;
-            btnUpdateDailyValues.Enabled = false;
-            btnOk.Enabled = false;
-
-            // Check if the BackGroundWorker already is running
-            if (_parsingBackgroundWorker.IsBusy)
-            {
-                _parsingBackgroundWorker.CancelAsync();
-
-                rdbClosingPrice.Enabled = true;
-                rdbOpeningPrice.Enabled = true;
-                rdbTop.Enabled = true;
-                rdbBottom.Enabled = true;
-                rdbVolume.Enabled = true;
-                dateTimePickerStartDate.Enabled = true;
-                cbxIntervalSelection.Enabled = true;
-                numDrpDwnAmount.Enabled = true;
-                btnUpdateDailyValues.Enabled = true;
-                btnOk.Enabled = true;
-            }
-            else
-            {
-                toolStripStatusLabelUpdate.ForeColor = Color.Black;
-                toolStripStatusLabelUpdate.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChartStateMessages/UpdateStarted", LanguageName);
-                toolStripProgressBarUpdate.Visible = true;
-
-                var strDailyValuesWebSite = "";
-
-                // Check if any daily values already exists
-                if (ShareObjectFinalValue.DailyValues.Count == 0)
-                {
-                    var date = DateTime.Now;
-                    // Go five years back
-                    date = date.AddYears(-5);
-                    strDailyValuesWebSite = string.Format(ShareObjectFinalValue.DailyValuesWebSite, date.ToString("dd.MM.yyyy"), "Y5");
-                }
-                else
-                {
-                    // Get date of last daily values entry
-                    var lastDate = ShareObjectFinalValue.DailyValues.Last().Date;
-
-                    // Check if the days are less or equal than 27 days
-                    var diffMonth = Helper.GetTotalMonthsFrom(DateTime.Now, lastDate);
-
-                    if (diffMonth < 1 )
-                        strDailyValuesWebSite = string.Format(ShareObjectFinalValue.DailyValuesWebSite, DateTime.Now.AddMonths(-1).ToString("dd.MM.yyyy"), "M1");
-                    else if (diffMonth < 3)
-                        strDailyValuesWebSite = string.Format(ShareObjectFinalValue.DailyValuesWebSite, DateTime.Now.AddMonths(-3).ToString("dd.MM.yyyy"), "M3");
-                    else if (diffMonth < 6)
-                        strDailyValuesWebSite = string.Format(ShareObjectFinalValue.DailyValuesWebSite, DateTime.Now.AddMonths(-6).ToString("dd.MM.yyyy"), "M6");
-                    else if (diffMonth < 12)
-                        strDailyValuesWebSite = string.Format(ShareObjectFinalValue.DailyValuesWebSite, DateTime.Now.AddMonths(-12).ToString("dd.MM.yyyy"), "Y1");
-                    else if (diffMonth < 36)
-                        strDailyValuesWebSite = string.Format(ShareObjectFinalValue.DailyValuesWebSite, DateTime.Now.AddMonths(-36).ToString("dd.MM.yyyy"), "Y3");
-                    else
-                    {
-                        strDailyValuesWebSite = string.Format(ShareObjectFinalValue.DailyValuesWebSite, DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy"), "Y5");
-                    }
-                }
-
-#if DEBUG
-                Console.WriteLine(@"WebSite: {0}", strDailyValuesWebSite);
-#endif
-                // Navigate / load the daily values website
-                WebBrowser.Navigate(strDailyValuesWebSite);
-            }
-        }
-
-        /// <summary>
         /// This function close the details window
         /// </summary>
         /// <param name="sender">Button</param>
         /// <param name="e">Eventargs</param>
         private void OnBtnOk_Click(object sender, EventArgs e)
         {
-            // Disconnect delegates
-            _parsingBackgroundWorker.DoWork -= DailyValuesParsing;
-            _parsingBackgroundWorker.ProgressChanged -= OnDocumentParsingProgressChanged;
-            _parsingBackgroundWorker.RunWorkerCompleted -= OnDocumentParsingRunWorkerCompleted;
-
-            WebBrowser.DocumentCompleted -= WebBrowser_DocumentCompleted;
-            WebBrowser.ProgressChanged -= WebBrowser_ProgressChanged;
-
             Close();
         }
 
         #endregion Buttons
 
-        #region Parsing
-
-        /// <summary>
-        /// This function reports the daily values website load process
-        /// </summary>
-        /// <param name="sender">WebBrowser</param>
-        /// <param name="e">WebBrowser process change eventargs</param>
-        private void WebBrowser_ProgressChanged(object sender, WebBrowserProgressChangedEventArgs e)
-        {
-            toolStripStatusLabelUpdate.ForeColor = Color.Black;
-            toolStripStatusLabelUpdate.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChartStateMessages/DownloadRunning", LanguageName);
-        }
-
-        /// <summary>
-        /// This function reports the daily values website has been loaded and starts the parsing process
-        /// </summary>
-        /// <param name="sender">WebBrowser</param>
-        /// <param name="e">WebBrowser document completed eventargs</param>
-        private void WebBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
-        {
-            try
-            {
-                // Check if the BackGroundWorker is already running
-                if (!_parsingBackgroundWorker.IsBusy)
-                { 
-                    // Start BackGroundWorker with the parsing process
-                    _parsingBackgroundWorker.RunWorkerAsync(WebBrowser.Document);
-                }
-            }
-            catch (Exception ex)
-            {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error 1", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCodes.UpdateFailed);
-            }
-        }
-
-        /// <summary>
-        /// This function parse the daily values from the loaded website
-        /// </summary>
-        /// <param name="sender">BackGroundWorker</param>
-        /// <param name="e">Eventargs with the loaded website content</param>
-        private void DailyValuesParsing(object sender, DoWorkEventArgs e)
-        {
-            try
-            {
-                toolStripStatusLabelUpdate.ForeColor = Color.Black;
-                toolStripStatusLabelUpdate.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChartStateMessages/DownloadDone", LanguageName);
-
-                Thread.Sleep(2000);
-
-                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCodes.ParsingStarted);
-
-                var htmlDocument = (HtmlDocument)e.Argument;
-                // Get tables with the daily values which are tagged with "tbody"
-                var tables = htmlDocument.GetElementsByTagName("tbody");
-
-                // Check if the "tbody" tag has been found
-                if (tables.Count > 0)
-                {
-                    _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCodes.ParsingProcess);
-
-                    // Loop through the found tables
-                    foreach (HtmlElement table in tables)
-                    {
-                        // Check if the current table has childs
-                        if (table.All.Count > 0)
-                        {
-                            // Count the rows
-                            for (var index = 0; index < table.All.Count; index++)
-                            {
-                                var row = table.All[index];
-                                if (row.TagName == "TR")
-                                {
-                                }
-                            }
-
-                            // Loop through the childs
-                            foreach (HtmlElement row in table.All)
-                            {
-                                var iCellCounter = 0;
-                                var dailyValues = new DailyValues();
-
-                                // Check if the child is a table row
-                                if (row.TagName != "TR") continue;
-
-                                // Check if the row has eight elements
-                                if (row.All.Count == 8)
-                                {
-                                    foreach (HtmlElement cell in row.All)
-                                    {
-                                        switch (iCellCounter)
-                                        {
-                                            case 0:
-                                                dailyValues.Date = DateTime.Parse(cell.InnerText);
-                                                break;
-                                            case 3:
-                                                dailyValues.OpeningPrice = decimal.Parse(cell.InnerText);
-                                                break;
-                                            case 4:
-                                                dailyValues.Top = decimal.Parse(cell.InnerText);
-                                                break;
-                                            case 5:
-                                                dailyValues.Bottom = decimal.Parse(cell.InnerText);
-                                                break;
-                                            case 6:
-                                                dailyValues.ClosingPrice = decimal.Parse(cell.InnerText);
-                                                break;
-                                            case 7:
-                                                dailyValues.Volume = decimal.Parse(cell.InnerText);
-                                                break;
-                                        }
-
-                                        iCellCounter++;
-                                    }
-
-                                    // Only add if the date not exists already
-                                    if (!ShareObjectFinalValue.DailyValues.Exists(x => x.Date.ToString() == dailyValues.Date.ToString()))
-                                    {
-                                        // Add new daily values to the list
-                                        ShareObjectFinalValue.DailyValues.Add(dailyValues);
-                                        ShareObjectFinalValue.DailyValues.Sort();
-                                    }
-                                }
-                                // Check if the row has six elements
-                                else if (row.All.Count == 6)
-                                {
-                                    foreach (HtmlElement cell in row.All)
-                                    {
-                                        switch (iCellCounter)
-                                        {
-                                            case 0:
-                                                dailyValues.Date = DateTime.Parse(cell.InnerText);
-                                                break;
-                                            case 1:
-                                                dailyValues.OpeningPrice = decimal.Parse(cell.InnerText);
-                                                break;
-                                            case 2:
-                                                dailyValues.Top = decimal.Parse(cell.InnerText);
-                                                break;
-                                            case 3:
-                                                dailyValues.Bottom = decimal.Parse(cell.InnerText);
-                                                break;
-                                            case 4:
-                                                dailyValues.ClosingPrice = decimal.Parse(cell.InnerText);
-                                                break;
-                                            case 5:
-                                                dailyValues.Volume = decimal.Parse(cell.InnerText);
-                                                break;
-                                        }
-
-                                        iCellCounter++;
-                                    }
-
-                                    // Only add if the date not exists already
-                                    if (!ShareObjectFinalValue.DailyValues.Exists(x => x.Date.ToString() == dailyValues.Date.ToString()))
-                                    {
-                                        // Add new daily values to the list
-                                        ShareObjectFinalValue.DailyValues.Add(dailyValues);
-                                        ShareObjectFinalValue.DailyValues.Sort();
-                                    }
-                                }
-                                else
-                                {
-                                    _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCodes.ParsingFailed);
-                                    return;
-                                }
-
-                                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCodes.ParsingProcess);
-                            }
-                        }
-                        else
-                        {
-                            _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCodes.ParsingFailed);
-                            return;
-                        }
-                    }
-
-                    _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCodes.ParsingFinished);
-                }
-                else
-                {
-                    _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCodes.ParsingFailed);
-                }
-            }
-            catch (OperationCanceledException ex)
-            {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error 1", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCodes.ParsingFailed);
-            }
-            catch (Exception ex)
-            {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error 2", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCodes.ParsingFailed);
-            }
-        }
-
-        private void OnDocumentParsingProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            switch (e.ProgressPercentage)
-            {
-                case (int)ParsingErrorCodes.ParsingStarted:
-                    {
-
-                        toolStripStatusLabelUpdate.ForeColor = Color.Black;
-                        toolStripStatusLabelUpdate.Text =
-                            Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChartStateMessages/ParsingStarted",
-                                LanguageName);
-
-                        toolStripProgressBarUpdate.Visible = true;
-
-                        break;
-                    }
-                case (int)ParsingErrorCodes.ParsingProcess:
-                    {
-                        toolStripStatusLabelUpdate.ForeColor = Color.Black;
-                        toolStripStatusLabelUpdate.Text =
-                            Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChartStateMessages/ParsingProcess",
-                                LanguageName);
-                        break;
-                    }
-                case (int)ParsingErrorCodes.UpdateFailed:
-                    {
-                        toolStripStatusLabelUpdate.ForeColor = Color.Red;
-                        toolStripStatusLabelUpdate.Text =
-                            Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChartErrors/UpdateFailed",
-                                LanguageName);
-
-                        chartDailyValues.DataBind();
-
-                        toolStripProgressBarUpdate.Visible = false;
-
-                        btnUpdateDailyValues.Enabled = true;
-                        btnOk.Enabled = true;
-
-                        break;
-                    }
-                case (int)ParsingErrorCodes.ParsingFailed:
-                    {
-                        toolStripStatusLabelUpdate.ForeColor = Color.Red;
-                        toolStripStatusLabelUpdate.Text =
-                            Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChartErrors/ParsingFailed",
-                                LanguageName);
-
-                        chartDailyValues.DataBind();
-
-                        toolStripProgressBarUpdate.Visible = false;
-
-                        btnUpdateDailyValues.Enabled = true;
-                        btnOk.Enabled = true;
-
-                        break;
-                    }
-                case (int)ParsingErrorCodes.ParsingFinished:
-                    {
-                        toolStripStatusLabelUpdate.ForeColor = Color.Black;
-                        toolStripStatusLabelUpdate.Text =
-                            Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChartStateMessages/ParsingFinished",
-                                LanguageName);
-
-                        chartDailyValues.DataBind();
-
-                        toolStripProgressBarUpdate.Visible = false;
-
-                        btnUpdateDailyValues.Enabled = true;
-                        btnOk.Enabled = true;
-
-                        break;
-                    }
-            }
-        }
-
-        private void OnDocumentParsingRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            SetStartEndDateAtDateTimePicker();
-
-            rdbClosingPrice.Enabled = true;
-            rdbOpeningPrice.Enabled = true;
-            rdbTop.Enabled = true;
-            rdbBottom.Enabled = true;
-            rdbVolume.Enabled = true;
-            dateTimePickerStartDate.Enabled = true;
-            cbxIntervalSelection.Enabled = true;
-            numDrpDwnAmount.Enabled = true;
-            btnUpdateDailyValues.Enabled = true;
-            btnOk.Enabled = true;
-        }
-
-        #endregion Parsing
-
         #region Charting
 
         private void Charting()
         {
-            if (MarketValueOverviewTabSelected)
+            #region Graph values creation
+
+            // Create charting values settings
+            var graphValuesList = new List<ChartingDailyValues.GraphValues>();
+
+            // Check if the ClosingPrice is selected
+            if (chkClosingPrice.CheckState == CheckState.Checked)
             {
-                if (ShareObjectMarketValue.DailyValues.Count == 0)
-                    return;
-            }
-            else
-            {
-                if (ShareObjectFinalValue.DailyValues.Count == 0)
-                    return;
-            }
-
-            chartDailyValues.DataSource = null;
-
-            #region Selection
-
-            decimal decMinValue = 0;
-            decimal decMaxValue = 0;
-            var dailyValuesList = new List<DailyValues>();
-
-            // Check if an Interval is selected and the amount is greater than 0
-            if (cbxIntervalSelection.SelectedIndex > 0 && numDrpDwnAmount.Value > 0)
-            {
-                dailyValuesList = GetDailyValuesOfInterval(dateTimePickerStartDate.Value,
-                    cbxIntervalSelection.SelectedIndex, (int) numDrpDwnAmount.Value);
-
-                if ( dailyValuesList.Count > 0)
-                    GetMinMax(dailyValuesList, out decMinValue, out decMaxValue);
-
-                chartDailyValues.DataSource = dailyValuesList;
+                var graphValueClosingPrice = new ChartingDailyValues.GraphValues(
+                    true,
+                    SeriesChartType.Line,
+                    2,
+                    Color.Black,
+                    DailyValues.DateName,
+                    DailyValues.ClosingPriceName
+                );
+                graphValuesList.Add(graphValueClosingPrice);
             }
 
-            #endregion Selection
-
-#if DEBUG
-            if (dailyValuesList.Count != 0)
+            // Check if the OpeningPrice is selected
+            if (chkOpeningPrice.CheckState == CheckState.Checked)
             {
-                var startDateTime = dailyValuesList.First().Date;
-                var endDateTime = dailyValuesList.Last().Date;
-                var diffDatetime = startDateTime - endDateTime;
-
-                Console.WriteLine(@"Start: {0}", startDateTime.ToShortDateString());
-                Console.WriteLine(@"End:   {0}", endDateTime.ToShortDateString());
-                Console.WriteLine(@"Diff:  {0}", diffDatetime.Days);
-            }
-#endif
-            // Clear chart
-            chartDailyValues.ChartAreas.Clear();
-            chartDailyValues.Series.Clear();
-
-            if (dailyValuesList.Count <= 0) return;
-
-            chartDailyValues.ChartAreas.Add("ChosenVales");
-            chartDailyValues.ChartAreas[0].AxisY.LabelStyle.Font = new Font("Microsoft Sans Serif", 9.00F);
-            chartDailyValues.ChartAreas[0].AxisY.TitleFont = new Font("Microsoft Sans Serif", 10.00F, FontStyle.Bold);
-
-            chartDailyValues.ChartAreas[0].AxisY.Minimum = (int)decMinValue;
-            chartDailyValues.ChartAreas[0].AxisY.Maximum = (int)decMaxValue;
-            chartDailyValues.ChartAreas[0].AxisY.ScaleBreakStyle.StartFromZero = StartFromZero.No;
-
-
-            chartDailyValues.ChartAreas[0].AxisX.LabelStyle.Format = "dd.MM.yy";
-            chartDailyValues.ChartAreas[0].AxisX.IntervalType = DateTimeIntervalType.Days;
-            chartDailyValues.ChartAreas[0].AxisX.IntervalOffset = 0;
-
-            if (rdbClosingPrice.Checked)
-            {
-                _strUnit = ShareObjectFinalValue.CurrencyUnit;
-
-                chartDailyValues.ChartAreas[0].AxisY.Title = "Price ( " + ShareObjectFinalValue.CurrencyUnit + " )";
-
-                chartDailyValues.Series.Add("Series");
-                chartDailyValues.Series["Series"].ChartType = SeriesChartType.Line;
-                chartDailyValues.Series["Series"].BorderWidth = 2;
-                chartDailyValues.Series["Series"].XValueMember = DailyValues.DateName;
-                chartDailyValues.Series["Series"].XValueType = ChartValueType.DateTime;
-                chartDailyValues.Series["Series"].YValueMembers = DailyValues.ClosingPriceName;
-                chartDailyValues.Series["Series"].YValueType = ChartValueType.Double;
+                var graphValueOpeningPrice = new ChartingDailyValues.GraphValues(
+                    true,
+                    SeriesChartType.Line,
+                    2,
+                    Color.DarkGreen,
+                    DailyValues.DateName,
+                    DailyValues.OpeningPriceName
+                );
+                graphValuesList.Add(graphValueOpeningPrice);
             }
 
-            if (rdbOpeningPrice.Checked)
+            // Check if the Top is selected
+            if (chkTop.CheckState == CheckState.Checked)
             {
-                _strUnit = ShareObjectFinalValue.CurrencyUnit;
-
-                chartDailyValues.ChartAreas[0].AxisY.Title = "Price ( " + ShareObjectFinalValue.CurrencyUnit + " )";
-
-                chartDailyValues.Series.Add("Series");
-                chartDailyValues.Series["Series"].ChartType = SeriesChartType.Line;
-                chartDailyValues.Series["Series"].XValueMember = DailyValues.DateName;
-                chartDailyValues.Series["Series"].XValueType = ChartValueType.DateTime;
-                chartDailyValues.Series["Series"].YValueMembers = DailyValues.OpeningPriceName;
-                chartDailyValues.Series["Series"].YValueType = ChartValueType.Double;
+                var graphValueTop = new ChartingDailyValues.GraphValues(
+                    true,
+                    SeriesChartType.Line,
+                    2,
+                    Color.DarkBlue,
+                    DailyValues.DateName,
+                    DailyValues.TopName
+                );
+                graphValuesList.Add(graphValueTop);
             }
 
-            if (rdbTop.Checked)
+            // Check if the Top is selected
+            if (chkBottom.CheckState == CheckState.Checked)
             {
-                _strUnit = ShareObjectFinalValue.CurrencyUnit;
-
-                chartDailyValues.ChartAreas[0].AxisY.Title = "Price ( " + ShareObjectFinalValue.CurrencyUnit + " )";
-
-                chartDailyValues.Series.Add("Series");
-                chartDailyValues.Series["Series"].ChartType = SeriesChartType.Line;
-                chartDailyValues.Series["Series"].XValueMember = DailyValues.DateName;
-                chartDailyValues.Series["Series"].XValueType = ChartValueType.DateTime;
-                chartDailyValues.Series["Series"].YValueMembers = DailyValues.TopName;
-                chartDailyValues.Series["Series"].YValueType = ChartValueType.Double;
+                var graphValueBottom = new ChartingDailyValues.GraphValues(
+                    true,
+                    SeriesChartType.Line,
+                    2,
+                    Color.DarkRed,
+                    DailyValues.DateName,
+                    DailyValues.BottomName
+                );
+                graphValuesList.Add(graphValueBottom);
             }
 
-            if (rdbBottom.Checked)
+            // Check if the Volume is selected
+            if (chkVolume.CheckState == CheckState.Checked)
             {
-                _strUnit = ShareObjectFinalValue.CurrencyUnit;
-
-                chartDailyValues.ChartAreas[0].AxisY.Title = "Price ( " + ShareObjectFinalValue.CurrencyUnit + " )";
-
-                chartDailyValues.Series.Add("Series");
-                chartDailyValues.Series["Series"].ChartType = SeriesChartType.Line;
-                chartDailyValues.Series["Series"].XValueMember = DailyValues.DateName;
-                chartDailyValues.Series["Series"].XValueType = ChartValueType.DateTime;
-                chartDailyValues.Series["Series"].YValueMembers = DailyValues.BottomName;
-                chartDailyValues.Series["Series"].YValueType = ChartValueType.Double;
+                var graphValueVolume = new ChartingDailyValues.GraphValues(
+                    true,
+                    SeriesChartType.Line,
+                    2,
+                    Color.Goldenrod,
+                    DailyValues.DateName,
+                    DailyValues.VolumeName
+                );
+                graphValuesList.Add(graphValueVolume);
             }
 
-            if (rdbVolume.Checked)
+            #endregion Graph values creation
+
+            // Check which interval is chosen
+            ChartingInterval chartingInterval;
+            switch (cbxIntervalSelection.SelectedIndex)
             {
-                _strUnit = ShareObject.PieceUnit;
-
-                chartDailyValues.ChartAreas[0].AxisY.Title = "Volume ( " + ShareObject.PieceUnit + " )";
-
-                chartDailyValues.Series.Add("Series");
-                chartDailyValues.Series["Series"].ChartType = SeriesChartType.Line;
-                chartDailyValues.Series["Series"].XValueMember = DailyValues.DateName;
-                chartDailyValues.Series["Series"].XValueType = ChartValueType.DateTime;
-                chartDailyValues.Series["Series"].YValueMembers = DailyValues.VolumeName;
-                chartDailyValues.Series["Series"].YValueType = ChartValueType.Double;
+                case (int)ChartingInterval.Week:
+                {
+                    chartingInterval = ChartingInterval.Week;
+                } break;
+                case (int)ChartingInterval.Month:
+                {
+                    chartingInterval = ChartingInterval.Month;
+                } break;
+                case (int)ChartingInterval.Quarter:
+                {
+                        chartingInterval = ChartingInterval.Quarter;
+                } break;
+                case (int)ChartingInterval.Year:
+                {
+                    chartingInterval = ChartingInterval.Year;
+                } break;
+                default:
+                {
+                    chartingInterval = ChartingInterval.Week;
+                } break;
             }
+
+            ChartValues =
+                new ChartingDailyValues.ChartValues(
+                    chartingInterval,
+                    (int)numDrpDwnAmount.Value,
+                    @"dd.MM.yy",
+                    DateTimeIntervalType.Days,
+                    graphValuesList);
+
+            // Draw chart with the given values
+            ChartingDailyValues.Charting(
+                MarketValueOverviewTabSelected,
+                ShareObjectFinalValue, ShareObjectMarketValue,
+                Logger, LanguageName, Language,
+                dateTimePickerStartDate.Value,
+                chartDailyValues,
+                ChartValues
+            );
         }
 
         private void SetStartEndDateAtDateTimePicker()
         {
             if (MarketValueOverviewTabSelected)
             {
+                if (ShareObjectMarketValue.DailyValues == null || ShareObjectMarketValue.DailyValues.Count <= 0) return;
+
                 dateTimePickerStartDate.MinDate = ShareObjectMarketValue.DailyValues.First().Date;
                 dateTimePickerStartDate.MaxDate = ShareObjectMarketValue.DailyValues.Last().Date;
                 dateTimePickerStartDate.Value = dateTimePickerStartDate.MaxDate;
             }
             else
             {
+                if (ShareObjectFinalValue.DailyValues == null || ShareObjectFinalValue.DailyValues.Count <= 0) return;
+
                 dateTimePickerStartDate.MinDate = ShareObjectFinalValue.DailyValues.First().Date;
                 dateTimePickerStartDate.MaxDate = ShareObjectFinalValue.DailyValues.Last().Date;
                 dateTimePickerStartDate.Value = dateTimePickerStartDate.MaxDate;
-            }
-        }
-
-        private List<DailyValues> GetDailyValuesOfInterval(DateTime givenDateTime, int iInterval, int iAmount)
-        {
-            var iDays = 0;
-            var calcDateTime = givenDateTime;
-            var startDate = givenDateTime;
-            var dateTimes = new List<DateTime>();
-
-            // Fill with random int values
-            var dailyValues = new List<DailyValues>();
-            var dailyValuesResult = new List<DailyValues>();
-
-            dailyValues.AddRange(MarketValueOverviewTabSelected
-                ? ShareObjectMarketValue.DailyValues
-                : ShareObjectFinalValue.DailyValues);
-
-            // Week
-            if (cbxIntervalSelection.SelectedIndex == (int)ChartingInterval.Week)
-            {
-                startDate = givenDateTime.AddDays(-7 * iAmount);
-            }
-
-            // Month
-            if (cbxIntervalSelection.SelectedIndex == (int)ChartingInterval.Month)
-            {
-                startDate = givenDateTime.AddMonths(-iAmount);
-            }
-
-            // Quarter
-            if (cbxIntervalSelection.SelectedIndex == (int)ChartingInterval.Quarter)
-            {
-                startDate = givenDateTime.AddMonths(-3*iAmount);
-            }
-
-            // Year
-            if (cbxIntervalSelection.SelectedIndex == (int)ChartingInterval.Year)
-            {
-                startDate = givenDateTime.AddYears(-iAmount);
-            }
-
-            do
-            {
-                //if (calcDateTime.DayOfWeek != DayOfWeek.Saturday && calcDateTime.DayOfWeek != DayOfWeek.Sunday )
-                //{
-                dateTimes.Add(calcDateTime);
-                //}
-
-                calcDateTime = calcDateTime.AddDays(-1);
-            } while (dateTimes.Count <= ( givenDateTime - startDate).Days);
-
-            foreach (var dateTime in dateTimes)
-            {
-                foreach (var dailyValue in dailyValues)
-                {
-                    if (dailyValue.Date == dateTime.Date)
-                        dailyValuesResult.Add(dailyValue);
-                }
-            }
-
-            return dailyValuesResult;
-        }
-
-        private void GetMinMax(List<DailyValues> dailyValuesList, out decimal decMinValue, out decimal decMaxValue)
-        {
-            decMinValue = 0;
-            decMaxValue = 0;
-
-            #region Check which value should be shown
-
-            if (rdbClosingPrice.Checked)
-            {
-                decMinValue = dailyValuesList.Min(x => x.ClosingPrice);
-                decMaxValue = dailyValuesList.Max(x => x.ClosingPrice);
-            }
-
-            if (rdbOpeningPrice.Checked)
-            {
-                decMinValue = dailyValuesList.Min(x => x.OpeningPrice);
-                decMaxValue = dailyValuesList.Max(x => x.OpeningPrice);
-            }
-
-            if (rdbTop.Checked)
-            {
-                decMinValue = dailyValuesList.Min(x => x.Top);
-                decMaxValue = dailyValuesList.Max(x => x.Top);
-            }
-
-            if (rdbBottom.Checked)
-            {
-                decMinValue = dailyValuesList.Min(x => x.Bottom);
-                decMaxValue = dailyValuesList.Max(x => x.Bottom);
-            }
-
-            if (rdbVolume.Checked)
-            {
-                decMinValue = dailyValuesList.Min(x => x.Volume);
-                decMaxValue = dailyValuesList.Max(x => x.Volume);
-            }
-
-            #endregion Check which value should be shown
-
-            // Round min value down and round max value up
-            decMinValue = decimal.Floor(decMinValue);
-            decMaxValue = decimal.Ceiling(decMaxValue);
-
-            // Calculate difference between max and min value
-            var minMaxDifference = (int)(decMaxValue - decMinValue);
-            var iPlace = 0;
-
-            // Get length of the difference value
-            if (minMaxDifference == 0)
-                iPlace = 1;
-            else
-            {
-                while (minMaxDifference > 0)
-                {
-                    minMaxDifference /= 10;
-                    iPlace++;
-                }
-            }
-
-#if DEBUG
-            Console.WriteLine(@"Place: {0}", iPlace);
-            Console.WriteLine(@"Min: {0}", decMinValue);
-            Console.WriteLine(@"Max: {0}", decMaxValue);
-#endif
-
-            if (iPlace < 3)
-            {
-                decMinValue -= 1;
-                decMaxValue += 1;
-            }
-            else
-            {
-                var j = (int) Math.Pow(10, iPlace - 2);
-
-                decMinValue -= j;
-                decMaxValue += j;
-            }
-
-            // Check if the min value is lower than 0 so set it to 0
-            if (decMinValue < 0) decMinValue = 0;
-
-#if DEBUG
-            Console.WriteLine(@"Min: {0}", decMinValue);
-            Console.WriteLine(@"Max: {0}", decMaxValue);
-#endif
-        }
-
-        public void OnChartMouseMove(object sender, MouseEventArgs e)
-        {
-            var pos = e.Location;
-            const int tolerance = 5;
-
-            if (PrevPosition.HasValue && pos == PrevPosition.Value) return;
-
-            _tooltip.RemoveAll();
-
-            PrevPosition = pos;
-
-            var results = chartDailyValues.HitTest(pos.X, pos.Y, false,
-                ChartElementType.DataPoint);
-
-            foreach (var result in results)
-            {
-                if (result.ChartElementType != ChartElementType.DataPoint) continue;
-
-                if (!(result.Object is DataPoint prop)) continue;
-
-                var pointXPixel = result.ChartArea.AxisX.ValueToPixelPosition(prop.XValue);
-                var pointYPixel = result.ChartArea.AxisY.ValueToPixelPosition(prop.YValues[0]);
-
-                // check if the cursor is really close to the point (2 pixels around the point)
-                if (Math.Abs(pos.X - pointXPixel) < tolerance &&
-                    Math.Abs(pos.Y - pointYPixel) < tolerance)
-                {
-                    _tooltip.Show(prop.YValues[0] + " " + _strUnit, this.chartDailyValues,
-                        pos.X, pos.Y - 15);
-                }
             }
         }
 
@@ -1230,28 +577,27 @@ namespace SharePortfolioManager.Forms.ShareDetailsForm
 
         #region Selection change
 
-        private void OnRdbClosingPrice_CheckedChanged(object sender, EventArgs e)
+        private void OnChkClosingPrice_CheckedChanged(object sender, EventArgs e)
         {
             Charting();
         }
 
-        private void OnRdbOpeningPrice_CheckedChanged(object sender, EventArgs e)
-        {
-            Charting();
-
-        }
-
-        private void OnRdbTop_CheckedChanged(object sender, EventArgs e)
+        private void OnChkOpeningPrice_CheckedChanged(object sender, EventArgs e)
         {
             Charting();
         }
 
-        private void OnRdbBottom_CheckedChanged(object sender, EventArgs e)
+        private void OnChkTop_CheckedChanged(object sender, EventArgs e)
         {
             Charting();
         }
 
-        private void OnRdbVolume_CheckedChanged(object sender, EventArgs e)
+        private void OnChkBottom_CheckedChanged(object sender, EventArgs e)
+        {
+            Charting();
+        }
+
+        private void OnChkVolume_CheckedChanged(object sender, EventArgs e)
         {
             Charting();
         }

@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -26,11 +26,13 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using SharePortfolioManager.Classes.Buys;
 using Parser;
+using SharePortfolioManager.Classes.ParserRegex;
 using SharePortfolioManager.Classes.Sales;
 
 namespace SharePortfolioManager.Classes.ShareObjects
@@ -76,6 +78,14 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
         #endregion General variables
 
+        #region Portfolio parts values
+
+        internal const string GeneralPortfolioAttrName = @"Portfolio";
+
+        internal const string GeneralShareAttrName = @"Share";
+
+        #endregion Portfolio parts values
+
         #region General XML variables
 
         /// <summary>
@@ -92,6 +102,71 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Stores the XML attribute name for the flag if the share should be updated
         /// </summary>
         internal const string GeneralUpdateAttrName = "Update";
+
+        /// <summary>
+        /// Stores the XML attribute name for the share stock market launch date
+        /// </summary>
+        internal const string GeneralStockMarketLaunchDateAttrName = "StockMarketLaunchDate";
+
+        /// <summary>
+        /// Stores the XML attribute name for the last update from the internet
+        /// </summary>
+        internal const string GeneralLastUpdateInternetAttrName = "LastUpdateInternet";
+
+        /// <summary>
+        /// Stores the XML attribute name for the last update of the share
+        /// </summary>
+        internal const string GeneralLastUpdateShareDateAttrName = "LastUpdateShareDate";
+
+        /// <summary>
+        /// Stores the XML attribute name for the current share price
+        /// </summary>
+        internal const string GeneralSharePriceAttrName = "SharePrice";
+
+        /// <summary>
+        /// Stores the XML attribute name for the day before share price
+        /// </summary>
+        internal const string GeneralSharePriceBeforeAttrName = "SharePriceBefore";
+
+        /// <summary>
+        /// Stores the XML attribute name for the website of the share update
+        /// </summary>
+        internal const string GeneralWebSiteAttrName = "WebSite";
+
+        /// <summary>
+        /// Stores the XML attribute name for the culture of the share
+        /// </summary>
+        internal const string GeneralCultureAttrName = "Culture";
+
+        /// <summary>
+        /// Stores the XML attribute name for the share type
+        /// </summary>
+        internal const string GeneralShareTypeAttrName = "ShareType";
+
+        /// <summary>
+        /// Stores the XML attribute name for the daily value entries
+        /// </summary>
+        internal const string GeneralDailyValuesAttrName = "DailyValues";
+
+        /// <summary>
+        /// Stores the XML attribute name for the buy entries
+        /// </summary>
+        internal const string GeneralBuysAttrName = "Buys";
+
+        /// <summary>
+        /// Stores the XML attribute name for the sale entries
+        /// </summary>
+        internal const string GeneralSalesAttrName = "Sales";
+
+        /// <summary>
+        /// Stores the XML attribute name for the brokerage entries
+        /// </summary>
+        internal const string GeneralBrokeragesAttrName = "Brokerages";
+
+        /// <summary>
+        /// Stores the XML attribute name for the dividend entries
+        /// </summary>
+        internal const string GeneralDividendsAttrName = "Dividends";
 
         #endregion General XML variables
 
@@ -424,7 +499,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         #region DailyValues XML variables
 
         /// <summary>
-        /// Stores the tag name prefix of a daliy values entry
+        /// Stores the tag name prefix of a daily values entry
         /// </summary>
         internal const string DailyValuesTagNamePre = "Entry";
 
@@ -459,7 +534,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         public const string DailyValuesBottomTagName = "B";
 
         /// <summary>
-        /// Stores the XML attribute name for the voluem price of the daily value
+        /// Stores the XML attribute name for the volume price of the daily value
         /// </summary>
         public const string DailyValuesVolumeTagName = "V";
 
@@ -507,6 +582,12 @@ namespace SharePortfolioManager.Classes.ShareObjects
         public string AddDateTime { get; set; }
 
         /// <summary>
+        /// DateTime of the stock market launch
+        /// </summary>
+        [Browsable(false)]
+        public string StockMarketLaunchDate { get; set; }
+
+        /// <summary>
         /// Name of the share
         /// </summary>
         [Browsable(false)]
@@ -546,13 +627,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Date of the last update share of the parsed Internet side
         /// </summary>
         [Browsable(false)]
-        public DateTime LastUpdateDate { get; set; }
-
-        /// <summary>
-        /// Time of the last update share of the parsed Internet side
-        /// </summary>
-        [Browsable(false)]
-        public DateTime LastUpdateTime { get; set; }
+        public DateTime LastUpdateShare { get; set; }
 
         /// <summary>
         /// Website for the share update value parsing
@@ -633,7 +708,34 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Daily values of the share ( Date / ClosingPrice / OpeningPrice / Top / Bottom / Volume )
         /// </summary>
         [Browsable(false)]
-        public List<DailyValues> DailyValues { get; } = new List<DailyValues>();
+        public List<Parser.DailyValues> DailyValues { get; } = new List<Parser.DailyValues>();
+
+        /// <summary>
+        /// Add the new daily values to the existing daily values list
+        /// </summary>
+        /// <param name="newDailyValues"></param>
+        /// <returns></returns>
+        public bool AddNewDailyValues(List<Parser.DailyValues> newDailyValues)
+        {
+            try
+            {
+                // Only add if the date not exists already
+                var addList = newDailyValues.Except(DailyValues);
+
+                foreach (var item in addList)
+                {
+                    // Add new daily values to the list
+                    DailyValues.Add(item);
+                }
+                DailyValues.Sort();
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
         #endregion Daily values
 
@@ -715,13 +817,13 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Current price of the share as string
         /// </summary>
         [Browsable(false)]
-        public string CurPriceAsStr => Helper.FormatDecimal(CurPrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CultureInfo);
+        public string CurPriceAsStr => Helper.FormatDecimal(CurPrice, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
 
         /// <summary>
         /// Current price of the share as string with unit
         /// </summary>
         [Browsable(false)]
-        public string CurPriceAsStrUnit => Helper.FormatDecimal(CurPrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CultureInfo);
+        public string CurPriceAsStrUnit => Helper.FormatDecimal(CurPrice, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", CultureInfo);
 
         /// <summary>
         /// Previous day price of the share. Will be updated via the Internet
@@ -733,13 +835,13 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Previous day price of the share as string
         /// </summary>
         [Browsable(false)]
-        public string PrevDayPriceAsStr => Helper.FormatDecimal(PrevDayPrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", CultureInfo);
+        public string PrevDayPriceAsStr => Helper.FormatDecimal(PrevDayPrice, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
 
         /// <summary>
         /// Previous day price of the share as string with unit
         /// </summary>
         [Browsable(false)]
-        public string PrevDayPriceAsStrUnit => Helper.FormatDecimal(PrevDayPrice, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, true, @"", CultureInfo);
+        public string PrevDayPriceAsStrUnit => Helper.FormatDecimal(PrevDayPrice, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", CultureInfo);
 
         /// <summary>
         /// Current and previous day price of the share as string with unit and a line break
@@ -749,8 +851,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
             get
             {
-                var value = Helper.FormatDecimal(CurPrice, Helper.Currencyfivelength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
-                value += Environment.NewLine + Helper.FormatDecimal(PrevDayPrice, Helper.Currencyfivelength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+                var value = Helper.FormatDecimal(CurPrice, Helper.CurrencyFiveLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
+                value += Environment.NewLine + Helper.FormatDecimal(PrevDayPrice, Helper.CurrencyFiveLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
                 return value;
             }
         }
@@ -785,7 +887,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
             get
             {
-                var value = Helper.FormatDecimal(PrevDayDifference, Helper.Currencyfivelength, true, Helper.Currencynonefixlength, true, @"", CultureInfo);
+                var value = Helper.FormatDecimal(PrevDayDifference, Helper.CurrencyFiveLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
                 value += Environment.NewLine + Helper.FormatDecimal(PrevDayPerformance, Helper.Percentagefivelength, true, Helper.Percentagenonefixlength, true, PercentageUnit, CultureInfo);
                 return value;
             }
@@ -869,19 +971,20 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         /// <param name="wkn">WKN number of the share</param>
         /// <param name="addDateTime">Date and time of the add</param>
+        /// <param name="stockMarketLaunchDate">Date of the stock market launch</param>
         /// <param name="name">Name of the share</param>
         /// <param name="lastUpdateInternet">Date and time of the last update from the Internet</param>
-        /// <param name="lastUpdateShareDate">Date of the last update on the Internet site of the share</param>
-        /// <param name="lastUpdateShareTime">Time of the last update on the Internet site of the share</param>
+        /// <param name="lastUpdateShare">Date and time of the last update on the Internet site of the share</param>
         /// <param name="price">Current price of the share</param>
         /// <param name="webSite">Website address of the share</param>
+        /// <param name="dailyValuesWebSite">WebSite for the daily values update</param>
         /// <param name="imageListForDayBeforePerformance">Images for the performance indication</param>
         /// <param name="regexList">RegEx list for the share</param>
         /// <param name="cultureInfo">Culture of the share</param>
         /// <param name="shareType">Type of the share</param>
         public ShareObject(
-            string wkn, string addDateTime, string name,
-            DateTime lastUpdateInternet, DateTime lastUpdateShareDate, DateTime lastUpdateShareTime,
+            string wkn, string addDateTime, string stockMarketLaunchDate, string name,
+            DateTime lastUpdateInternet, DateTime lastUpdateShare,
             decimal price, string webSite, string dailyValuesWebSite, List<Image> imageListForDayBeforePerformance,
             RegExList regexList, CultureInfo cultureInfo,
             int shareType)
@@ -901,10 +1004,10 @@ namespace SharePortfolioManager.Classes.ShareObjects
 #endif
             Wkn = wkn;
             AddDateTime = addDateTime;
+            StockMarketLaunchDate = stockMarketLaunchDate;
             Name = name;
             LastUpdateInternet = lastUpdateInternet;
-            LastUpdateDate = lastUpdateShareDate;
-            LastUpdateTime = lastUpdateShareTime;
+            LastUpdateShare = lastUpdateShare;
             // ReSharper disable once VirtualMemberCallInConstructor
             CurPrice = price;
             WebSite = webSite;

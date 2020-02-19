@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -148,7 +148,7 @@ namespace SharePortfolioManager.BrokeragesForm.Model
                 if (UpdateViewFormatted)
                 {
                     // Only return the value if the provision is greater than '0'
-                    return _provisionDec > 0 ? Helper.FormatDecimal(_provisionDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : @"";
+                    return _provisionDec > 0 ? Helper.FormatDecimal(_provisionDec, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength) : @"";
                 }
 
                 return _provision;
@@ -185,7 +185,7 @@ namespace SharePortfolioManager.BrokeragesForm.Model
                 if (UpdateViewFormatted)
                 {
                     // Only return the value if the broker free is greater than '0'
-                    return _brokerFeeDec > 0 ? Helper.FormatDecimal(_brokerFeeDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : @"";
+                    return _brokerFeeDec > 0 ? Helper.FormatDecimal(_brokerFeeDec, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength) : @"";
                 }
 
                 return _brokerFee;
@@ -222,7 +222,7 @@ namespace SharePortfolioManager.BrokeragesForm.Model
                 if (UpdateViewFormatted)
                 {
                     // Only return the value if the trader place fee is greater than '0'
-                    return _traderPlaceFeeDec > 0 ? Helper.FormatDecimal(_traderPlaceFeeDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : @"";
+                    return _traderPlaceFeeDec > 0 ? Helper.FormatDecimal(_traderPlaceFeeDec, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength) : @"";
                 }
 
                 return _traderPlaceFee;
@@ -259,7 +259,7 @@ namespace SharePortfolioManager.BrokeragesForm.Model
                 if (UpdateViewFormatted)
                 {
                     // Only return the value if the brokerage is greater than '0'
-                    return _reductionDec > 0 ? Helper.FormatDecimal(_reductionDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : @"";
+                    return _reductionDec > 0 ? Helper.FormatDecimal(_reductionDec, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength) : @"";
                 }
 
                 return _reduction;
@@ -291,7 +291,7 @@ namespace SharePortfolioManager.BrokeragesForm.Model
 
         public string Brokerage
         {
-            get => _brokerageDec >= 0 ? Helper.FormatDecimal(_brokerageDec, Helper.Currencytwolength, true, Helper.Currencytwofixlength) : _brokerage;
+            get => _brokerageDec >= 0 ? Helper.FormatDecimal(_brokerageDec, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength) : _brokerage;
             set
             {
                 if (Equals(_brokerage, value))

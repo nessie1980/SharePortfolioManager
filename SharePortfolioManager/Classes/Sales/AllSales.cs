@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -46,9 +46,9 @@ namespace SharePortfolioManager.Classes.Sales
 
         public decimal SalePayoutTotal { get; internal set; }
 
-        public string SalePayoutTotalAsStr => Helper.FormatDecimal(SalePayoutTotal, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
+        public string SalePayoutTotalAsStr => Helper.FormatDecimal(SalePayoutTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", SaleCultureInfo);
 
-        public string SalePayoutTotalWithUnitAsStr => Helper.FormatDecimal(SalePayoutTotal, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
+        public string SalePayoutTotalWithUnitAsStr => Helper.FormatDecimal(SalePayoutTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
 
         public decimal SalePayoutWithoutBrokerageTotal { get; internal set; }
 
@@ -58,9 +58,9 @@ namespace SharePortfolioManager.Classes.Sales
 
         public decimal SaleProfitLossTotal { get; internal set; }
 
-        public string SaleProfitLossTotalAsStr => Helper.FormatDecimal(SaleProfitLossTotal, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
+        public string SaleProfitLossTotalAsStr => Helper.FormatDecimal(SaleProfitLossTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", SaleCultureInfo);
 
-        public string SaleProfitLossTotalWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossTotal, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
+        public string SaleProfitLossTotalWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
 
         public decimal SaleProfitLossTotalWithoutBrokerage { get; internal set; }
 
@@ -319,7 +319,7 @@ namespace SharePortfolioManager.Classes.Sales
 
             foreach (var key in AllSalesOfTheShareDictionary.Keys)
             {
-                allProfitLossOfTheShare.Add(key, Helper.FormatDecimal(AllSalesOfTheShareDictionary[key].SaleProfitLossYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, false, @"", SaleCultureInfo));
+                allProfitLossOfTheShare.Add(key, Helper.FormatDecimal(AllSalesOfTheShareDictionary[key].SaleProfitLossYear, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength, false, @"", SaleCultureInfo));
             }
             return allProfitLossOfTheShare;
         }

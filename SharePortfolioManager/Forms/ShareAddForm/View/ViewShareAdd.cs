@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -35,23 +35,22 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using DocumentParsingConfiguration = SharePortfolioManager.Classes.DocumentParsingConfiguration;
+using SharePortfolioManager.Classes.ParserRegex;
 
-// ReSharper disable once CheckNamespace
-namespace SharePortfolioManager.Forms.ShareAddForm.View
+namespace SharePortfolioManager.ShareAddForm.View
 {
     /// <summary>
     /// Error codes of the ShareAdd
     /// </summary>
     public enum ShareAddErrorCode
     {
-#pragma warning disable 1591
         AddSuccessful,
         AddFailed,
         WknEmpty,
         WknExists,
         NameEmpty,
         NameExists,
+        StockMarketLaunchDateNotModified,
         OrderNumberEmpty,
         OrderNumberExists,
         VolumeEmpty,
@@ -80,7 +79,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         DocumentDirectoryDoesNotExists,
         DocumentFileDoesNotExists,
         WebSiteRegexNotFound
-#pragma warning restore 1591
     };
 
     /// <summary>
@@ -106,7 +104,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
     /// </summary>
     public interface IViewShareAdd : INotifyPropertyChanged
     {
-#pragma warning disable 1591
         event EventHandler ShareAddEventHandler;
         event EventHandler FormatInputValuesEventHandler;
 
@@ -123,6 +120,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
         string Wkn { get; set; }
         string ShareName { get; set; }
+        string StockMarketLaunchDate { get; set; }
         string Date { get; set; }
         string Time { get; set; }
         string OrderNumber { get; set; }
@@ -144,7 +142,6 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
 
         DialogResult ShowDialog();
         void AddFinish();
-#pragma warning restore 1591
     }
 
     internal partial class ViewShareAdd : Form, IViewShareAdd
@@ -277,6 +274,17 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 if (txtBoxName.Text == value)
                     return;
                 txtBoxName.Text = value;
+            }
+        }
+
+        public string StockMarketLaunchDate
+        {
+            get => dateTimePickerStockMarketLaunch.Text;
+            set
+            {
+                if (dateTimePickerStockMarketLaunch.Text == value)
+                    return;
+                dateTimePickerStockMarketLaunch.Text = value;
             }
         }
 
@@ -545,6 +553,16 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                     txtBoxName.Focus();
                     break;
                 }
+                case ShareAddErrorCode.StockMarketLaunchDateNotModified:
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/StockMarketLaunchDateNotModified", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxName.Focus();
+                    break;
+                }
+                    
                 case ShareAddErrorCode.OrderNumberEmpty:
                 {
                     strMessage =
@@ -889,6 +907,7 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 grpBoxGeneral.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Caption", LanguageName);
                 lblWkn.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/WKN", LanguageName);
                 lblName.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Name", LanguageName);
+                lblStockMarketLaunchDate.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/StockMarketLaunchDate", LanguageName);
 
                 lblShareType.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/ShareType", LanguageName);
                 // Add share type values
@@ -960,6 +979,8 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 cbxDividendPayoutInterval.SelectedIndex = 0;
                 cbxShareType.SelectedIndex = 0;
 
+                dateTimePickerStockMarketLaunch.MinDate = DateTime.MinValue;
+                dateTimePickerStockMarketLaunch.Value = dateTimePickerStockMarketLaunch.MinDate;
                 dateTimePickerDate.Value = DateTime.Now;
                 dateTimePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
             }
@@ -1114,6 +1135,11 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Name"));
         }
 
+        private void OnDateTimePickerStockMarketLaunch_ValueChanged(object sender, EventArgs e)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("StockMarketLaunchDate"));
+        }
+
         private void OnTxtBoxWebSite_TextChanged(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WebSite"));
@@ -1122,6 +1148,11 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
         private void OnTxtBoxDailyValuesWebSite_TextChanged(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DailyValuesWebSite"));
+        }
+
+        private void OnTxtBoxDailyValuesWebSite_Leave(object sender, EventArgs e)
+        {
+            txtBoxDailyValuesWebSite.Text = Helper.RegexReplaceStartDateAndInterval(txtBoxDailyValuesWebSite.Text);
         }
 
         private void OntTxtBoxOrderNumber_TextChanged(object sender, EventArgs e)
@@ -1372,9 +1403,12 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                 if (DocumentParsingConfiguration.InitFlag)
                 {
                     if (DocumentTypeParser == null)
-                        DocumentTypeParser = new Parser.Parser(false, ParsingText,
-                            DocumentParsingConfiguration.BankRegexList[_bankCounter].BankRegexList,
-                            DocumentParsingConfiguration.BankRegexList[_bankCounter].BankEncodingType);
+                        DocumentTypeParser = new Parser.Parser();
+                    DocumentTypeParser.ParsingValues = new ParsingValues(ParsingText,
+                        DocumentParsingConfiguration.BankRegexList[_bankCounter].BankEncodingType,
+                        DocumentParsingConfiguration.BankRegexList[_bankCounter].BankRegexList
+                    );
+                    
                     // Check if the Parser is in idle mode
                     if (DocumentTypeParser != null && DocumentTypeParser.ParserInfoState.State == ParserState.Idle)
                     {
@@ -1573,41 +1607,62 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                                         {
                                             case DocumentParsingConfiguration.DocumentTypes.BuyDocument:
                                                 {
-                                                    DocumentTypeParser.RegexList = DocumentParsingConfiguration
-                                                        .BankRegexList[_bankCounter]
-                                                        .DictionaryDocumentRegex[
-                                                            DocumentParsingConfiguration.DocumentTypeBuy].DocumentRegexList;
+                                                    var parsingValues = DocumentTypeParser.ParsingValues;
+                                                    DocumentTypeParser.ParsingValues = new ParsingValues(
+                                                        parsingValues.WebSiteUrl,
+                                                        parsingValues.EncodingType,
+                                                        DocumentParsingConfiguration
+                                                            .BankRegexList[_bankCounter]
+                                                            .DictionaryDocumentRegex[
+                                                                DocumentParsingConfiguration.DocumentTypeBuy].
+                                                            DocumentRegexList
+                                                    );
                                                     DocumentTypeParser.StartParsing();
                                                     break;
                                                 }
                                             case DocumentParsingConfiguration.DocumentTypes.SaleDocument:
                                             {
-                                                DocumentTypeParser.RegexList = DocumentParsingConfiguration
-                                                    .BankRegexList[_bankCounter]
-                                                    .DictionaryDocumentRegex[
-                                                        DocumentParsingConfiguration.DocumentTypeSale]
-                                                    .DocumentRegexList;
+                                                var parsingValues = DocumentTypeParser.ParsingValues;
+                                                DocumentTypeParser.ParsingValues = new ParsingValues(
+                                                    parsingValues.WebSiteUrl,
+                                                    parsingValues.EncodingType,
+                                                    DocumentParsingConfiguration
+                                                        .BankRegexList[_bankCounter]
+                                                        .DictionaryDocumentRegex[
+                                                            DocumentParsingConfiguration.DocumentTypeSale].
+                                                        DocumentRegexList
+                                                );
                                                 DocumentTypeParser.StartParsing();
                                                 break;
                                             }
                                             case DocumentParsingConfiguration.DocumentTypes.DividendDocument:
                                             {
-                                                DocumentTypeParser.RegexList = DocumentParsingConfiguration
-                                                    .BankRegexList[_bankCounter]
-                                                    .DictionaryDocumentRegex[
-                                                        DocumentParsingConfiguration.DocumentTypeDividend]
-                                                    .DocumentRegexList;
+                                                var parsingValues = DocumentTypeParser.ParsingValues;
+                                                DocumentTypeParser.ParsingValues = new ParsingValues(
+                                                    parsingValues.WebSiteUrl,
+                                                    parsingValues.EncodingType,
+                                                    DocumentParsingConfiguration
+                                                        .BankRegexList[_bankCounter]
+                                                        .DictionaryDocumentRegex[
+                                                            DocumentParsingConfiguration.DocumentTypeDividend].
+                                                        DocumentRegexList
+                                                );
                                                 DocumentTypeParser.StartParsing();
                                                 break;
                                             }
                                             case DocumentParsingConfiguration.DocumentTypes.BrokerageDocument:
                                             {
-                                                DocumentTypeParser.RegexList = DocumentParsingConfiguration
-                                                    .BankRegexList[_bankCounter]
-                                                    .DictionaryDocumentRegex[
-                                                        DocumentParsingConfiguration.DocumentTypeBrokerage]
-                                                    .DocumentRegexList;
-                                                DocumentTypeParser.StartParsing();
+                                                var parsingValues = DocumentTypeParser.ParsingValues;
+                                                DocumentTypeParser.ParsingValues = new ParsingValues(
+                                                    parsingValues.WebSiteUrl,
+                                                    parsingValues.EncodingType,
+                                                    DocumentParsingConfiguration
+                                                        .BankRegexList[_bankCounter]
+                                                        .DictionaryDocumentRegex[
+                                                            DocumentParsingConfiguration.DocumentTypeBrokerage].
+                                                        DocumentRegexList
+                                                );
+                                                    DocumentTypeParser.StartParsing();
                                                 break;
                                             }
                                             default:
@@ -1625,8 +1680,13 @@ namespace SharePortfolioManager.Forms.ShareAddForm.View
                                 if (_bankCounter < DocumentParsingConfiguration.BankRegexList.Count &&
                                     _bankIdentifierFound == false)
                                 {
-                                    DocumentTypeParser.RegexList = DocumentParsingConfiguration
-                                        .BankRegexList[_bankCounter].BankRegexList;
+                                    var parsingValues = DocumentTypeParser.ParsingValues;
+                                    DocumentTypeParser.ParsingValues = new ParsingValues(
+                                        parsingValues.WebSiteUrl,
+                                        parsingValues.EncodingType,
+                                        DocumentParsingConfiguration
+                                            .BankRegexList[_bankCounter].BankRegexList
+                                    );
                                     DocumentTypeParser.StartParsing();
                                 }
                                 else

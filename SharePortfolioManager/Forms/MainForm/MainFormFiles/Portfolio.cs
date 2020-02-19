@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -42,9 +42,9 @@ namespace SharePortfolioManager
     {
         public enum PortfolioParts
         {
-            LastInternetUpdate,
-            LastUpdateShareDate,
-            LastUpdateTime,
+            StockMarketLaunchDate,
+            LastUpdateInternet,
+            LastUpdateShare,
             SharePrice,
             SharePriceBefore,
             WebSite,
@@ -305,7 +305,7 @@ namespace SharePortfolioManager
                 Portfolio.Load(ReaderPortfolio);
 
                 // Read the portfolio and check if shares exist
-                var nodeListShares = Portfolio.SelectNodes("/Portfolio/Share");
+                var nodeListShares = Portfolio.SelectNodes($"/{ShareObject.GeneralPortfolioAttrName}/{ShareObject.GeneralShareAttrName}");
                 if (nodeListShares != null && nodeListShares.Count > 0)
                 {
                     // Set portfolio content flag
@@ -375,22 +375,22 @@ namespace SharePortfolioManager
                                     {
                                         #region General
 
-                                        case (int)PortfolioParts.LastInternetUpdate:
+                                        case (int)PortfolioParts.StockMarketLaunchDate:
+                                            ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].StockMarketLaunchDate =
+                                                nodeElement.ChildNodes[i].InnerText;
+                                            ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].StockMarketLaunchDate = 
+                                                nodeElement.ChildNodes[i].InnerText;
+                                            break;
+                                        case (int)PortfolioParts.LastUpdateInternet:
                                             ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].LastUpdateInternet =
                                                 Convert.ToDateTime(nodeElement.ChildNodes[i].InnerText);
                                             ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].LastUpdateInternet =
                                                 Convert.ToDateTime(nodeElement.ChildNodes[i].InnerText);
                                             break;
-                                        case (int)PortfolioParts.LastUpdateShareDate:
-                                            ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].LastUpdateDate =
+                                        case (int)PortfolioParts.LastUpdateShare:
+                                            ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].LastUpdateShare =
                                                 Convert.ToDateTime(nodeElement.ChildNodes[i].InnerText);
-                                            ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].LastUpdateDate =
-                                                Convert.ToDateTime(nodeElement.ChildNodes[i].InnerText);
-                                            break;
-                                        case (int)PortfolioParts.LastUpdateTime:
-                                            ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].LastUpdateTime =
-                                                Convert.ToDateTime(nodeElement.ChildNodes[i].InnerText);
-                                            ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].LastUpdateTime =
+                                            ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].LastUpdateShare =
                                                 Convert.ToDateTime(nodeElement.ChildNodes[i].InnerText);
                                             break;
                                         case (int)PortfolioParts.SharePrice:
@@ -448,9 +448,9 @@ namespace SharePortfolioManager
                                                 {
 
                                                     // Try do cast date of the daily values
-                                                    if (DateTime.TryParse(nodeList.Attributes[ShareObject.DailyValuesDateTagName].Value, out DateTime dateTime)) // Date
+                                                    if (DateTime.TryParse(nodeList.Attributes[ShareObject.DailyValuesDateTagName].Value, out var dateTime)) // Date
                                                     {
-                                                        DailyValues dailyValues = new DailyValues
+                                                        var dailyValues = new Parser.DailyValues
                                                         {
                                                             Date = dateTime,
                                                             OpeningPrice = Convert.ToDecimal(
@@ -479,7 +479,7 @@ namespace SharePortfolioManager
 
                                         #endregion DailyValues
 
-                                        #region Brokerage
+                                        #region Brokerages
 
                                         case (int)PortfolioParts.Brokerages:
                                             foreach (XmlElement nodeList in nodeElement.ChildNodes[i].ChildNodes)
@@ -519,7 +519,7 @@ namespace SharePortfolioManager
                                             }
                                             break;
 
-                                        #endregion Brokerage
+                                        #endregion Brokerages
 
                                         #region Buys
 
@@ -902,9 +902,7 @@ namespace SharePortfolioManager
                 // Check if any share set for updating so enable the refresh all button
                 btnRefreshAll.Enabled = ShareObjectListFinalValue.Count(p => p.Update && p.WebSiteConfigurationValid) >= 1;
             }
-#pragma warning disable 168
             catch (XmlException ex)
-#pragma warning restore 168
             {
 #if DEBUG
                 var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
@@ -933,9 +931,7 @@ namespace SharePortfolioManager
                 // Close portfolio reader
                 ReaderPortfolio?.Close();
             }
-#pragma warning disable 168
             catch (Exception ex)
-#pragma warning restore 168
             {
 #if DEBUG
                 var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
@@ -972,7 +968,7 @@ namespace SharePortfolioManager
             try
             {
                 // Read the portfolio
-                var nodeElement = Portfolio.SelectSingleNode($"/Portfolio/Share[@WKN=\"{wkn}\"]");
+                var nodeElement = Portfolio.SelectSingleNode($"/{ShareObject.GeneralPortfolioAttrName}/{ShareObject.GeneralShareAttrName} [@{ShareObject.GeneralWknAttrName}=\"{wkn}\"]");
                 if (nodeElement == null) return 0;
 
                 foreach (XmlElement nodeList in nodeElement.ChildNodes[(int) PortfolioParts.Brokerages].ChildNodes)
@@ -1022,7 +1018,7 @@ namespace SharePortfolioManager
             try
             {
                 // Read the portfolio
-                var nodeElement = Portfolio.SelectSingleNode($"/Portfolio/Share[@WKN=\"{wkn}\"]");
+                var nodeElement = Portfolio.SelectSingleNode($"/{ShareObject.GeneralPortfolioAttrName}/{ShareObject.GeneralShareAttrName}[@{ShareObject.GeneralWknAttrName}=\"{wkn}\"]");
                 if (nodeElement == null) return 0;
 
                 foreach (XmlElement nodeList in nodeElement.ChildNodes[(int)PortfolioParts.Brokerages].ChildNodes)
@@ -1050,7 +1046,8 @@ namespace SharePortfolioManager
                         var decReduction =
                             Convert.ToDecimal(nodeList.Attributes[ShareObject.BrokerageReductionAttrName].Value);
 
-                        Helper.CalcBrokerageValues(decProvision, decBrokerFee, decTraderPlaceFee, decReduction, out var decBrokerage, out var decBrokerageWithReduction);
+                        Helper.CalcBrokerageValues(decProvision, decBrokerFee, decTraderPlaceFee, decReduction,
+                            out var decBrokerage, out var decBrokerageWithReduction);
 
                         return decBrokerage;
                     }

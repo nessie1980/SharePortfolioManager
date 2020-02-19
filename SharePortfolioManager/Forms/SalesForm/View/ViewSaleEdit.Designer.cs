@@ -1,7 +1,7 @@
 ﻿
 using SharePortfolioManager.Properties;
 
-namespace SharePortfolioManager.Forms.SalesForm.View
+namespace SharePortfolioManager.SalesForm.View
 {
     partial class ViewSaleEdit
     {

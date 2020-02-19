@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -186,7 +186,7 @@ namespace SharePortfolioManager.Classes.Buys
         /// Price of one share of this share as string
         /// </summary>
         [Browsable(false)]
-        public string PriceAsStr => Helper.FormatDecimal(Price, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
+        public string PriceAsStr => Helper.FormatDecimal(Price, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, false, @"", BuyCultureInfo);
 
         #region Brokerage values
 
@@ -224,7 +224,7 @@ namespace SharePortfolioManager.Classes.Buys
         /// Provision of this buy as string
         /// </summary>
         [Browsable(false)]
-        public string ProvisionAsStr => Helper.FormatDecimal(Provision, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
+        public string ProvisionAsStr => Helper.FormatDecimal(Provision, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, false, @"", BuyCultureInfo);
 
         /// <summary>
         /// Broker fee of this buy
@@ -245,7 +245,7 @@ namespace SharePortfolioManager.Classes.Buys
         /// Broker fee of this buy as string
         /// </summary>
         [Browsable(false)]
-        public string BrokerFeeAsStr => Helper.FormatDecimal(BrokerFee, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
+        public string BrokerFeeAsStr => Helper.FormatDecimal(BrokerFee, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, false, @"", BuyCultureInfo);
 
         /// <summary>
         /// Trader place fee of this buy
@@ -266,7 +266,7 @@ namespace SharePortfolioManager.Classes.Buys
         /// Trader place fee of this buy as string
         /// </summary>
         [Browsable(false)]
-        public string TraderPlaceFeeAsStr => Helper.FormatDecimal(TraderPlaceFee, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
+        public string TraderPlaceFeeAsStr => Helper.FormatDecimal(TraderPlaceFee, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, false, @"", BuyCultureInfo);
 
         /// <summary>
         /// Reduction of this buy
@@ -287,7 +287,7 @@ namespace SharePortfolioManager.Classes.Buys
         /// Reduction of this buy as string
         /// </summary>
         [Browsable(false)]
-        public string ReductionAsStr => Helper.FormatDecimal(Reduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
+        public string ReductionAsStr => Helper.FormatDecimal(Reduction, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, false, @"", BuyCultureInfo);
 
         /// <summary>
         /// Complete brokerage of this buy
@@ -309,7 +309,7 @@ namespace SharePortfolioManager.Classes.Buys
         /// Complete brokerage of this buy as string
         /// </summary>
         [Browsable(false)]
-        public string BrokerageAsStr => Helper.FormatDecimal(Brokerage, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
+        public string BrokerageAsStr => Helper.FormatDecimal(Brokerage, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, false, @"", BuyCultureInfo);
 
         /// <summary>
         /// Complete brokerage with reduction of this buy
@@ -345,7 +345,7 @@ namespace SharePortfolioManager.Classes.Buys
         /// Value - minus reduction of this buy as string
         /// </summary>
         [Browsable(false)]
-        public string BuyValueReductionAsStr => Helper.FormatDecimal(BuyValueReduction, Helper.Currencyfivelength, false, Helper.Currencytwofixlength, false, @"", BuyCultureInfo);
+        public string BuyValueReductionAsStr => Helper.FormatDecimal(BuyValueReduction, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, false, @"", BuyCultureInfo);
 
         /// <summary>
         /// Value + brokerage of this buy

@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -21,13 +21,12 @@
 //SOFTWARE.
 
 using System;
-using SharePortfolioManager.Classes;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace SharePortfolioManager
+namespace SharePortfolioManager.Classes.Dividend
 {
     [Serializable]
     public class AllDividendsOfTheShare
@@ -38,9 +37,9 @@ namespace SharePortfolioManager
 
         public decimal DividendValueTotalWithTaxes { get; internal set; }
 
-        public string DividendValueTotalWithTaxesAsStr => Helper.FormatDecimal(DividendValueTotalWithTaxes, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", DividendCultureInfo);
+        public string DividendValueTotalWithTaxesAsStr => Helper.FormatDecimal(DividendValueTotalWithTaxes, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", DividendCultureInfo);
 
-        public string DividendValueTotalWithTaxesWithUnitAsStr => Helper.FormatDecimal(DividendValueTotalWithTaxes, Helper.Currencytwolength, true, Helper.Currencytwofixlength, true, @"", DividendCultureInfo);
+        public string DividendValueTotalWithTaxesWithUnitAsStr => Helper.FormatDecimal(DividendValueTotalWithTaxes, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", DividendCultureInfo);
 
         public SortedDictionary<string, DividendYearOfTheShare> AllDividendsOfTheShareDictionary { get; } = new SortedDictionary<string, DividendYearOfTheShare>();
 

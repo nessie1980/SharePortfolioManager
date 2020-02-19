@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -64,37 +64,37 @@ namespace SharePortfolioManager.Classes.Costs
         public decimal ProvisionValue { get; set; }
 
         [Browsable(false)]
-        public string ProvisionValueAsStr => Helper.FormatDecimal(ProvisionValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", CultureInfo);
+        public string ProvisionValueAsStr => Helper.FormatDecimal(ProvisionValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
 
         [Browsable(false)]
         public decimal BrokerFeeValue { get; set; }
 
         [Browsable(false)]
-        public string BrokerFeeValueAsStr => Helper.FormatDecimal(BrokerFeeValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", CultureInfo);
+        public string BrokerFeeValueAsStr => Helper.FormatDecimal(BrokerFeeValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
 
         [Browsable(false)]
         public decimal TraderPlaceFeeValue { get; set; }
 
         [Browsable(false)]
-        public string TraderPlaceFeeValueAsStr => Helper.FormatDecimal(TraderPlaceFeeValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", CultureInfo);
+        public string TraderPlaceFeeValueAsStr => Helper.FormatDecimal(TraderPlaceFeeValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
 
         [Browsable(false)]
         public decimal ReductionValue { get; set; }
 
         [Browsable(false)]
-        public string ReductionValueAsStr => Helper.FormatDecimal(ReductionValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", CultureInfo);
+        public string ReductionValueAsStr => Helper.FormatDecimal(ReductionValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
 
         [Browsable(false)]
         public decimal BrokerageValue { get; set; }
 
         [Browsable(false)]
-        public string BrokerageValueAsStr => Helper.FormatDecimal(BrokerageValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", CultureInfo);
+        public string BrokerageValueAsStr => Helper.FormatDecimal(BrokerageValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
 
         [Browsable(false)]
         public decimal BrokerageReductionValue { get; set; }
 
         [Browsable(false)]
-        public string BrokerageReductionValueAsStr => Helper.FormatDecimal(BrokerageReductionValue, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", CultureInfo);
+        public string BrokerageReductionValueAsStr => Helper.FormatDecimal(BrokerageReductionValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
 
         [Browsable(false)]
         public string BrokerageDocument { get; set; }

@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,6 @@ using System.Diagnostics;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using SharePortfolioManager.Classes.ShareObjects;
 using SharePortfolioManager.Properties;
 using MenuItem = System.Windows.Forms.MenuItem;
 
@@ -48,19 +47,19 @@ namespace SharePortfolioManager.Classes
         /// <summary>
         /// Stores the max precision for a value
         /// </summary>
-        public const int Maxprecision = 6;
+        public const int MaxPrecision = 6;
 
         #region Date
 
         /// <summary>
         /// Stores the date time format
         /// </summary>
-        public const string Datetimefullformat = "{0:dd/MM/yyyy HH:mm:ss}";
-        public const string Datetimefullformat2 = "{0:dd/MM/yyyy 1:HH:mm:ss}";
-        public const string Datefulltimeshortformat = "{0:dd/MM/yyyy HH:mm}";
-        public const string Timefullformat = "{0:HH:mm:ss}";
-        public const string Timeshortformat = "{0:HH:mm}";
-        public const string Datefullformat = "{0:dd/MM/yyyy}";
+        public const string DateTimeFullFormat = "{0:dd/MM/yyyy HH:mm:ss}";
+        public const string DateTimeFullFormat2 = "{0:dd/MM/yyyy 1:HH:mm:ss}";
+        public const string DateFullTimeShortFormat = "{0:dd/MM/yyyy HH:mm}";
+        public const string TimeFullFormat = "{0:HH:mm:ss}";
+        public const string TimeShortFormat = "{0:HH:mm}";
+        public const string DateFullFormat = "{0:dd/MM/yyyy}";
 
         #endregion Date
 
@@ -69,19 +68,19 @@ namespace SharePortfolioManager.Classes
         /// <summary>
         /// Stores currency format (price, deposit, brokerage, buys...)
         /// </summary>
-        public const int Currencysixlength = 6;
-        public const int Currencyfivelength = 5;
-        public const int Currencyfourlength = 4;
-        public const int Currencythreelength = 3;
-        public const int Currencytwolength = 2;
-        public const int Currencyonelength = 1;
+        public const int CurrencySixLength = 6;
+        public const int CurrencyFiveLength = 5;
+        public const int CurrencyFourLength = 4;
+        public const int CurrencyThreeLength = 3;
+        public const int CurrencyTwoLength = 2;
+        public const int CurrencyOneLength = 1;
 
-        public const int Currencyfivefixlength = 5;
-        public const int Currencyfourfixlength = 4;
-        public const int Currencythreefixlength = 3;
-        public const int Currencytwofixlength = 2;
-        public const int Currencyonefixlength = 1;
-        public const int Currencynonefixlength = 0;
+        public const int CurrencyFiveFixLength = 5;
+        public const int CurrencyFourFixLength = 4;
+        public const int CurrencyThreeFixLength = 3;
+        public const int CurrencyTwoFixLength = 2;
+        public const int CurrencyOneFixLength = 1;
+        public const int CurrencyNoneFixLength = 0;
 
         #endregion Currency
 
@@ -252,11 +251,11 @@ namespace SharePortfolioManager.Classes
                     tempControl.WordWrap = false;
 
                     // Add time stamp
-                    stateMessage = string.Format(Timefullformat, DateTime.Now) + @" " + stateMessage + Environment.NewLine;
+                    stateMessage = string.Format(TimeFullFormat, DateTime.Now) + @" " + stateMessage + Environment.NewLine;
 
                     // Check if the logger add failed
                     if (stateMessageError != "")
-                        stateMessage += string.Format(Timefullformat, DateTime.Now) + @" " + stateMessageError + Environment.NewLine;
+                        stateMessage += string.Format(TimeFullFormat, DateTime.Now) + @" " + stateMessageError + Environment.NewLine;
 
                     // Check if the maximum of lines is reached and delete last line
                     if (tempControl.Lines.Any() && tempControl.Lines.Length > logger.LoggerSize)
@@ -483,48 +482,6 @@ namespace SharePortfolioManager.Classes
 
         #endregion Get image for the given file
 
-        // TODO
-        //#region Enable or disable item
-
-        ///// <summary>
-        ///// This function allows to enable or disable controls
-        ///// The controls are
-        ///// GroupBox
-        ///// Button
-        ///// MenuStrip
-        ///// DataGridView
-        ///// TabControl
-        ///// </summary>
-        ///// <param name="flag">true = enable / false = disable</param>
-        ///// <param name="givenItem">Object of the item</param>
-        ///// <param name="listControlNames">List with the control names which should be enabled or disabled</param>
-        //public static void EnableDisableItems(bool flag, Control givenItem, List<string> listControlNames)
-        //{
-        //    try
-        //    {
-        //        // TabControl
-        //        if (givenItem.GetType() == typeof(MenuItem))
-        //        {
-        //            var castControl = (MenuItem)givenItem;
-        //            Console.WriteLine(castControl.Name);
-
-        //            if (listControlNames.Contains(castControl.Name))
-        //                castControl.Enabled = flag;
-
-        //            if (castControl.MenuItems.Count > 0)
-        //                EnableDisableItems(flag, castControl, listControlNames);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-        //        MessageBox.Show(message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //    }
-
-        //}
-
-        //#endregion Enable or disable item
-
         #region Scroll DataGridView to given index
 
         /// <summary>
@@ -598,8 +555,8 @@ namespace SharePortfolioManager.Classes
             var strFormatString = "";
 
             // Check if the given precision is greater than the maximum
-            if (iPrecision > Maxprecision)
-                iPrecision = Maxprecision;
+            if (iPrecision > MaxPrecision)
+                iPrecision = MaxPrecision;
 
             // Check if the given fixed precision is greater than the maximum
             if (iFixedPrecision > iPrecision)
@@ -616,9 +573,9 @@ namespace SharePortfolioManager.Classes
                     for (var i = 1; i <= iPrecision; i++)
                     {
                         if (i == 1)
-                            strFormatString = strFormatString + "0.0";
+                            strFormatString += "0.0";
                         else
-                            strFormatString = strFormatString + "0";
+                            strFormatString += "0";
                     }
                 }
                 else
@@ -644,7 +601,7 @@ namespace SharePortfolioManager.Classes
             }
             else
             {
-                strFormatString = strFormatString + "0";
+                strFormatString += "0";
             }
 
             // Format with the given culture info
@@ -685,8 +642,8 @@ namespace SharePortfolioManager.Classes
             var strFormatString = "";
 
             // Check if the given precision is greater than the maximum
-            if (iPrecision > Maxprecision)
-                iPrecision = Maxprecision;
+            if (iPrecision > MaxPrecision)
+                iPrecision = MaxPrecision;
 
             // Check if the given fixed precision is greater than the maximum
             if (iFixedPrecision > iPrecision)
@@ -925,7 +882,7 @@ namespace SharePortfolioManager.Classes
         /// This function returns a list of all currency
         /// in three letter ISO name and the ISO currency unit
         /// </summary>
-        /// <returns>IEnumberable with a KeyValuePair list</returns>
+        /// <returns>IEnumerable with a KeyValuePair list</returns>
         public static void CreateNameCultureInfoCurrencySymbolList()
         {
             ListNameCultureInfoCurrencySymbol = CultureInfo
@@ -1036,7 +993,7 @@ namespace SharePortfolioManager.Classes
             }
             catch(Exception ex)
             {
-                Console.WriteLine("Exception: {0}", ex.Message);
+                Console.WriteLine(@"Exception: {0}", ex.Message);
                 return false; //could not connect to the inter net (maybe) 
             }
 
@@ -1050,6 +1007,12 @@ namespace SharePortfolioManager.Classes
 
             strWebSite = Regex.Replace(strWebSite,
                 "[=]([M,Y][1,3,5,6])[&]", "={1}&");
+
+            strWebSite = Regex.Replace(strWebSite,
+                "[=]([M,Y][1,3,5,6])", "={1}");
+
+            strWebSite = Regex.Replace(strWebSite,
+                "[=]([1,3,5,6][M,Y])[&]", "={1}&");
 
             strWebSite = Regex.Replace(strWebSite,
                 "[=]([1,3,5,6][M,Y])[&]", "={1}&");
@@ -1150,6 +1113,97 @@ namespace SharePortfolioManager.Classes
 
         #region Time function
 
+        public static string BuildDailyValuesUrl(List<Parser.DailyValues>dailyValues, string webSiteUrl, int shareType)
+        {
+            var strDailyValuesWebSite = "";
+
+            // Check if any daily values already exists
+            if (dailyValues.Count == 0)
+            {
+                var date = DateTime.Now;
+
+                // Go five years back
+                date = date.AddYears(-5);
+
+                switch (shareType)
+                {
+                    // Share type "Share"
+                    case 0:
+                        strDailyValuesWebSite = string.Format(webSiteUrl, date.ToString("dd.MM.yyyy"), "Y5");
+                        break;
+                    // Share type "Fond"
+                    case 1:
+                        strDailyValuesWebSite = string.Format(webSiteUrl, date.ToString("dd.MM.yyyy"), "5Y");
+                        break;
+                }
+            }
+            else
+            {
+                // Get date of last daily values entry
+                var lastDate = dailyValues.Last().Date;
+
+                // Check if the days are less or equal than 27 days
+                var diffMonth = Helper.GetTotalMonthsFrom(DateTime.Now, lastDate);
+
+                switch (shareType)
+                {
+                    // Share type "Share"
+                    case 0:
+                    {
+                        if (diffMonth < 1)
+                            strDailyValuesWebSite = string.Format(webSiteUrl,
+                                DateTime.Now.AddMonths(-1).ToString("dd.MM.yyyy"), "M1");
+                        else if (diffMonth < 3)
+                            strDailyValuesWebSite = string.Format(webSiteUrl,
+                                DateTime.Now.AddMonths(-3).ToString("dd.MM.yyyy"), "M3");
+                        else if (diffMonth < 6)
+                            strDailyValuesWebSite = string.Format(webSiteUrl,
+                                DateTime.Now.AddMonths(-6).ToString("dd.MM.yyyy"), "M6");
+                        else if (diffMonth < 12)
+                            strDailyValuesWebSite = string.Format(webSiteUrl,
+                                DateTime.Now.AddMonths(-12).ToString("dd.MM.yyyy"), "Y1");
+                        else if (diffMonth < 36)
+                            strDailyValuesWebSite = string.Format(webSiteUrl,
+                                DateTime.Now.AddMonths(-36).ToString("dd.MM.yyyy"), "Y3");
+                        else
+                        {
+                            strDailyValuesWebSite = string.Format(webSiteUrl,
+                                DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy"), "Y5");
+                        }
+                    } break;
+                    // Share type "Fond"
+                    case 1:
+                    {
+                        if (diffMonth < 1)
+                            strDailyValuesWebSite = string.Format(webSiteUrl,
+                                DateTime.Now.AddMonths(-1).ToString("dd.MM.yyyy"), "1M");
+                        else if (diffMonth < 3)
+                            strDailyValuesWebSite = string.Format(webSiteUrl,
+                                DateTime.Now.AddMonths(-3).ToString("dd.MM.yyyy"), "3M");
+                        else if (diffMonth < 6)
+                            strDailyValuesWebSite = string.Format(webSiteUrl,
+                                DateTime.Now.AddMonths(-6).ToString("dd.MM.yyyy"), "6M");
+                        else if (diffMonth < 12)
+                            strDailyValuesWebSite = string.Format(webSiteUrl,
+                                DateTime.Now.AddMonths(-12).ToString("dd.MM.yyyy"), "1Y");
+                        else if (diffMonth < 36)
+                            strDailyValuesWebSite = string.Format(webSiteUrl,
+                                DateTime.Now.AddMonths(-36).ToString("dd.MM.yyyy"), "3Y");
+                        else
+                        {
+                            strDailyValuesWebSite = string.Format(webSiteUrl,
+                                DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy"), "5Y");
+                        }
+                    } break;
+                }
+            }
+
+#if DEBUG
+            Console.WriteLine(@"WebSite: {0}", strDailyValuesWebSite);
+#endif
+            return strDailyValuesWebSite;
+        }
+
         public static int GetTotalMonthsFrom(DateTime dt1, DateTime dt2)
         {
             DateTime earlyDate = (dt1 > dt2) ? dt2.Date : dt1.Date;
@@ -1192,10 +1246,11 @@ namespace SharePortfolioManager.Classes
 
         public override object Clone()
         {
+            // ReSharper disable once AssignNullToNotNullAttribute
             if (!(base.Clone() is TextAndImageColumn clone)) return null;
 
-            clone._imageValue = this._imageValue;
-            clone.ImageSize = this.ImageSize;
+            clone._imageValue = _imageValue;
+            clone.ImageSize = ImageSize;
             return clone;
         }
 
@@ -1216,7 +1271,6 @@ namespace SharePortfolioManager.Classes
                     inheritedPadding.Bottom);
             }
         }
-        private TextAndImageCell TextAndImageCellTemplate => CellTemplate as TextAndImageCell;
 
         internal Size ImageSize { get; private set; }
     }
@@ -1228,6 +1282,7 @@ namespace SharePortfolioManager.Classes
 
         public override object Clone()
         {
+            // ReSharper disable once AssignNullToNotNullAttribute
             if (!(base.Clone() is TextAndImageCell clone)) return null;
 
             clone._imageValue = _imageValue;

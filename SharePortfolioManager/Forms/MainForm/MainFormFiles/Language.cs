@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -96,7 +96,7 @@ namespace SharePortfolioManager
                             invalidLanguageKeysDlg.ShowDialog();
                         }
 #endif
-#region Load logger language
+                    #region Load logger language
 
                     // Add state names
                     LoggerStateList.Add(Language.GetLanguageTextByXPath(@"/Logger/States/Start", LanguageName));
@@ -111,9 +111,9 @@ namespace SharePortfolioManager
                     LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/LanguageHandler", LanguageName));
                     LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Logger", LanguageName));
 
-#endregion Load logger language
+                    #endregion Load logger language
 
-#region Add language menu items for the available languages
+                    #region Add language menu items for the available languages
 
                     // Get settings menu item
                     var tmiSettings =
@@ -147,14 +147,14 @@ namespace SharePortfolioManager
                         tmiLanguage.DropDownItems.Add(tmiLanguageAdd);
                     }
 
-#endregion Add language menu items for the available languages
+                    #endregion Add language menu items for the available languages
 
-#region Set share object unit and percentage unit
+                    #region Set share object unit and percentage unit
 
                     ShareObject.PercentageUnit = Language.GetLanguageTextByXPath(@"/PercentageUnit", LanguageName);
                     ShareObject.PieceUnit = Language.GetLanguageTextByXPath(@"/PieceUnit", LanguageName);
 
-#endregion Set share object unit and percentage unit
+                    #endregion Set share object unit and percentage unit
                 }
                 else
                 {
@@ -191,9 +191,9 @@ namespace SharePortfolioManager
             }
         }
 
-#endregion Load language
+        #endregion Load language
 
-#region Set language
+        #region Set language
 
         /// <summary>
         /// This function loads the language key values to the Main form dialog
@@ -202,7 +202,7 @@ namespace SharePortfolioManager
         {
             try
             {
-#region Application name
+                #region Application name
 
                 Text = Language.GetLanguageTextByXPath(@"/Application/Name", LanguageName)
                     + @" " + Helper.GetApplicationVersion();
@@ -212,9 +212,9 @@ namespace SharePortfolioManager
                     Text += @" - (" + _portfolioFileName + @")";
                 }
 
-#endregion Application name
+                #endregion Application name
 
-#region Notify icon
+                #region Notify icon
 
                 _notifyIcon.Text = Language.GetLanguageTextByXPath(@"/Application/Name", LanguageName)
                                    + @" " + Helper.GetApplicationVersion();
@@ -229,9 +229,9 @@ namespace SharePortfolioManager
                             Language.GetLanguageTextByXPath(@"/NotifyIcon/Exit", LanguageName);
                 }
 
-#endregion Notify icon
+                #endregion Notify icon
 
-#region Menu
+                #region Menu
 
                 fileToolStripMenuItem.Text = Language.GetLanguageTextByXPath(@"/MainForm/Menu/File/Header", LanguageName);
                 newToolStripMenuItem.Text = Language.GetLanguageTextByXPath(@"/MainForm/Menu/File/New", LanguageName);
@@ -249,18 +249,18 @@ namespace SharePortfolioManager
                 helpToolStripMenuItem.Text = Language.GetLanguageTextByXPath(@"/MainForm/Menu/Help/Header", LanguageName);
                 aboutToolStripMenuItem.Text = Language.GetLanguageTextByXPath(@"/MainForm/Menu/Help/About", LanguageName);
 
-#endregion Menu
+                #endregion Menu
 
-#region GrpBox overviews
+                #region GrpBox overviews
 
                 grpBoxSharePortfolio.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Caption", LanguageName);
 
-#region TabControl overviews
+                #region TabControl overviews
 
                 tabCtrlShareOverviews.TabPages[0].Text =
                     Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/Caption", LanguageName);
 
-#region  DataGirdView for the complete depot value
+                #region  DataGirdView for the complete depot value
 
                 if (dgvPortfolioFinalValue.Columns.Count == (int)ColumnIndicesPortfolioFinalValue.EShareSumColumnIndex + 1)
                 {
@@ -282,9 +282,9 @@ namespace SharePortfolioManager
                         Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_PurchaseMarketValue", LanguageName);
                 }
 
-#endregion  DataGirdView for the complete depot value
+                #endregion  DataGirdView for the complete depot value
 
-#region DataGirdView footer complete depot values
+                #region DataGirdView footer complete depot values
 
                 if (dgvPortfolioFooterFinalValue.RowCount > 0)
                 {
@@ -314,26 +314,14 @@ namespace SharePortfolioManager
                         }";
                 }
 
-#endregion DataGirdView footer complete depot values
+                #endregion DataGirdView footer complete depot values
 
                 tabCtrlShareOverviews.TabPages[1].Text =
                     Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/Caption", LanguageName);
+                
+                #endregion TabControl overviews
 
-#region  DataGirdView for the market values
-
-                // Done in the DataGridView.cs
-
-#endregion DataGridView for the market values
-
-#region  DataGirdView footer market values
-
-                // Done in the DataGridView.cs
-
-#endregion DataGridView footer market values
-
-#endregion TabControl overviews
-
-#region Buttons
+                #region Buttons
 
                 btnRefreshAll.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAll",
                     LanguageName);
@@ -346,25 +334,25 @@ namespace SharePortfolioManager
                 btnClearLogger.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/ResetLogger",
                     LanguageName);
 
-#endregion Buttons
+                #endregion Buttons
 
-#endregion GrpBox overviews
+                #endregion GrpBox overviews
 
-#region GrpBox status message
+                #region GrpBox status message
 
                 grpBoxStatusMessage.Text = Language.GetLanguageTextByXPath(
                     @"/MainForm/GrpBoxStatusMessage/Caption", LanguageName);
 
-#endregion GrpBox status message
+                #endregion GrpBox status message
 
-#region GrpBox update state
+                #region GrpBox update state
 
                 grpBoxUpdateState.Text = Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxUpdateState/Caption",
                     LanguageName);
 
-#endregion GrpBox update state
+                #endregion GrpBox update state
 
-#region Logger language
+                #region Logger language
 
                 // Clear state list
                 LoggerStateList.Clear();
@@ -385,14 +373,14 @@ namespace SharePortfolioManager
                 LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/LanguageHandler", LanguageName));
                 LoggerComponentNamesList.Add(Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Logger", LanguageName));
 
-#endregion Logger language
+                #endregion Logger language
 
-#region Set share object unit and percentage unit
+                #region Set share object unit and percentage unit
 
                 ShareObject.PercentageUnit = Language.GetLanguageTextByXPath(@"/PercentageUnit", LanguageName);
                 ShareObject.PieceUnit = Language.GetLanguageTextByXPath(@"/PieceUnit", LanguageName);
 
-#endregion Set share object unit and percentage unit
+                #endregion Set share object unit and percentage unit
             }
             catch (Exception ex)
             {
@@ -404,7 +392,7 @@ namespace SharePortfolioManager
                     Language.InvalidLanguageKeyValue)
                 {
                     // Set status message
-                    lblWebParserState.Text = Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadAllLanguageKeys", LanguageName);
+                    lblWebParserMarketValuesState.Text = Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadAllLanguageKeys", LanguageName);
                     //Helper.AddStatusMessage(richTextBox1, statusMessage, Color.Red);
 
                     // Write log
@@ -413,7 +401,7 @@ namespace SharePortfolioManager
                 else
                 {
                     // Set status message
-                    lblWebParserState.Text = lblWebParserState.Text = @"Could not set all language keys to the controls!";
+                    lblWebParserMarketValuesState.Text = lblWebParserMarketValuesState.Text = @"Could not set all language keys to the controls!";
                     //Helper.AddStatusMessage(richTextBox1, statusMessage, Color.Red);
 
                     // Write log
@@ -433,6 +421,6 @@ namespace SharePortfolioManager
             }
         }
 
-#endregion Set language
+        #endregion Set language
     }
 }

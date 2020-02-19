@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -43,10 +43,10 @@ namespace SharePortfolioManager.Classes.Sales
         public decimal SalePayoutYear { get; internal set; } = -1;
 
         [Browsable(false)]
-        public string SalePayoutYearAsStr => Helper.FormatDecimal(SalePayoutYear, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
+        public string SalePayoutYearAsStr => Helper.FormatDecimal(SalePayoutYear, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", SaleCultureInfo);
 
         [Browsable(false)]
-        public string SalePayoutYearWithUnitAsStr => Helper.FormatDecimal(SalePayoutYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
+        public string SalePayoutYearWithUnitAsStr => Helper.FormatDecimal(SalePayoutYear, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
 
         [Browsable(false)]
         public decimal SalePayoutWithoutBrokerageYear { get; internal set; } = -1;
@@ -55,7 +55,7 @@ namespace SharePortfolioManager.Classes.Sales
         public decimal SaleVolumeYear { get; internal set; } = -1;
 
         [Browsable(false)]
-        public string SaleVolumeYearAsStr => Helper.FormatDecimal(SaleVolumeYear, Helper.Currencytwolength, true, Helper.Currencytwofixlength, false, @"", SaleCultureInfo);
+        public string SaleVolumeYearAsStr => Helper.FormatDecimal(SaleVolumeYear, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", SaleCultureInfo);
 
         [Browsable(false)]
         public decimal SalePurchaseValueYear { get; internal set; } = -1;
@@ -64,7 +64,7 @@ namespace SharePortfolioManager.Classes.Sales
         public decimal SaleProfitLossYear { get; internal set; } = -1;
 
         [Browsable(false)]
-        public string SaleProfitLossYearWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossYear, Helper.Currencytwolength, false, Helper.Currencytwofixlength, true, @"", SaleCultureInfo);
+        public string SaleProfitLossYearWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossYear, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
 
         [Browsable(false)]
         public decimal SaleProfitLossWithoutBrokerageYear { get; internal set; } = -1;

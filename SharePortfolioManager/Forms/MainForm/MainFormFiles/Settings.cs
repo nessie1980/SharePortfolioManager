@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2019 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
-using SharePortfolioManager.Forms.ShareDetailsForm;
+using SharePortfolioManager.ShareDetailsForm;
 
 namespace SharePortfolioManager
 {
@@ -233,16 +233,16 @@ namespace SharePortfolioManager
                     switch (nodeChartingInterval.InnerText)
                     {
                         case "Week":
-                            ChartingIntervalValue = (int) ChartingInterval.Week;
+                            ChartingIntervalValue = ChartingInterval.Week;
                             break;
                         case "Month":
-                            ChartingIntervalValue = (int) ChartingInterval.Month;
+                            ChartingIntervalValue = ChartingInterval.Month;
                             break;
                         case "Quarter":
-                            ChartingIntervalValue = (int) ChartingInterval.Quarter;
+                            ChartingIntervalValue = ChartingInterval.Quarter;
                             break;
                         case "Year":
-                            ChartingIntervalValue = (int) ChartingInterval.Year;
+                            ChartingIntervalValue = ChartingInterval.Year;
                             break;
                         default:
                             loadSettings = false;

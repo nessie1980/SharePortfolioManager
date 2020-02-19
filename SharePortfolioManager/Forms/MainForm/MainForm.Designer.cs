@@ -63,14 +63,16 @@ namespace SharePortfolioManager
             this.grpBoxStatusMessage = new System.Windows.Forms.GroupBox();
             this.tblLayPnlStatusMessages = new System.Windows.Forms.TableLayoutPanel();
             this.rchTxtBoxStateMessage = new System.Windows.Forms.RichTextBox();
-            this.lblWebParserState = new System.Windows.Forms.Label();
-            this.progressBarWebParser = new System.Windows.Forms.ProgressBar();
+            this.lblWebParserDailyValuesState = new System.Windows.Forms.Label();
+            this.progressBarWebParserMarketValues = new System.Windows.Forms.ProgressBar();
+            this.lblWebParserMarketValuesState = new System.Windows.Forms.Label();
             this.grpBoxUpdateState = new System.Windows.Forms.GroupBox();
             this.tblLayPnlUpdateState = new System.Windows.Forms.TableLayoutPanel();
-            this.lblShareNameWebParser = new System.Windows.Forms.Label();
+            this.progressBarWebParserDailyValues = new System.Windows.Forms.ProgressBar();
             this.timerStatusMessageClear = new System.Windows.Forms.Timer(this.components);
             this.lblShareDetailsWithOutDividendBrokerageSharePriceCurrentValue = new System.Windows.Forms.Label();
             this.timerStartNextShareUpdate = new System.Windows.Forms.Timer(this.components);
+            this.timerMouseCellDownDoubleClick = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.grpBoxSharePortfolio.SuspendLayout();
             this.tblLayPnlShareOverviews.SuspendLayout();
@@ -206,7 +208,7 @@ namespace SharePortfolioManager
             this.grpBoxSharePortfolio.Location = new System.Drawing.Point(5, 25);
             this.grpBoxSharePortfolio.Name = "grpBoxSharePortfolio";
             this.grpBoxSharePortfolio.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.grpBoxSharePortfolio.Size = new System.Drawing.Size(1225, 578);
+            this.grpBoxSharePortfolio.Size = new System.Drawing.Size(1225, 558);
             this.grpBoxSharePortfolio.TabIndex = 3;
             this.grpBoxSharePortfolio.TabStop = false;
             this.grpBoxSharePortfolio.Text = "Share portfolio_";
@@ -236,7 +238,7 @@ namespace SharePortfolioManager
             this.tblLayPnlShareOverviews.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblLayPnlShareOverviews.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tblLayPnlShareOverviews.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tblLayPnlShareOverviews.Size = new System.Drawing.Size(1219, 555);
+            this.tblLayPnlShareOverviews.Size = new System.Drawing.Size(1219, 535);
             this.tblLayPnlShareOverviews.TabIndex = 13;
             // 
             // btnRefreshAll
@@ -246,7 +248,7 @@ namespace SharePortfolioManager
             this.btnRefreshAll.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRefreshAll.Image = global::SharePortfolioManager.Properties.Resources.button_update_all_24;
             this.btnRefreshAll.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnRefreshAll.Location = new System.Drawing.Point(1, 521);
+            this.btnRefreshAll.Location = new System.Drawing.Point(1, 501);
             this.btnRefreshAll.Margin = new System.Windows.Forms.Padding(1);
             this.btnRefreshAll.Name = "btnRefreshAll";
             this.btnRefreshAll.Size = new System.Drawing.Size(178, 33);
@@ -263,7 +265,7 @@ namespace SharePortfolioManager
             this.btnEdit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEdit.Image = global::SharePortfolioManager.Properties.Resources.button_pencil_24;
             this.btnEdit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnEdit.Location = new System.Drawing.Point(541, 521);
+            this.btnEdit.Location = new System.Drawing.Point(541, 501);
             this.btnEdit.Margin = new System.Windows.Forms.Padding(1);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(178, 33);
@@ -280,7 +282,7 @@ namespace SharePortfolioManager
             this.btnAdd.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAdd.Image = global::SharePortfolioManager.Properties.Resources.button_add_24;
             this.btnAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAdd.Location = new System.Drawing.Point(361, 521);
+            this.btnAdd.Location = new System.Drawing.Point(361, 501);
             this.btnAdd.Margin = new System.Windows.Forms.Padding(1);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(178, 33);
@@ -297,7 +299,7 @@ namespace SharePortfolioManager
             this.btnRefresh.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRefresh.Image = global::SharePortfolioManager.Properties.Resources.button_update_24;
             this.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnRefresh.Location = new System.Drawing.Point(181, 521);
+            this.btnRefresh.Location = new System.Drawing.Point(181, 501);
             this.btnRefresh.Margin = new System.Windows.Forms.Padding(1);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(178, 33);
@@ -320,7 +322,7 @@ namespace SharePortfolioManager
             this.tabCtrlShareOverviews.Name = "tabCtrlShareOverviews";
             this.tabCtrlShareOverviews.Padding = new System.Drawing.Point(0, 0);
             this.tabCtrlShareOverviews.SelectedIndex = 0;
-            this.tabCtrlShareOverviews.Size = new System.Drawing.Size(1213, 520);
+            this.tabCtrlShareOverviews.Size = new System.Drawing.Size(1213, 500);
             this.tabCtrlShareOverviews.TabIndex = 12;
             // 
             // tabPgFinalValue
@@ -330,7 +332,7 @@ namespace SharePortfolioManager
             this.tabPgFinalValue.Location = new System.Drawing.Point(4, 26);
             this.tabPgFinalValue.Name = "tabPgFinalValue";
             this.tabPgFinalValue.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPgFinalValue.Size = new System.Drawing.Size(1205, 490);
+            this.tabPgFinalValue.Size = new System.Drawing.Size(1205, 470);
             this.tabPgFinalValue.TabIndex = 0;
             this.tabPgFinalValue.Text = "_tabPageCompleteDepotValues";
             this.tabPgFinalValue.UseVisualStyleBackColor = true;
@@ -341,9 +343,6 @@ namespace SharePortfolioManager
             this.dgvPortfolioFinalValue.AllowUserToDeleteRows = false;
             this.dgvPortfolioFinalValue.AllowUserToResizeColumns = false;
             this.dgvPortfolioFinalValue.AllowUserToResizeRows = false;
-            this.dgvPortfolioFinalValue.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvPortfolioFinalValue.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvPortfolioFinalValue.Location = new System.Drawing.Point(0, 0);
             this.dgvPortfolioFinalValue.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -352,10 +351,10 @@ namespace SharePortfolioManager
             this.dgvPortfolioFinalValue.ReadOnly = true;
             this.dgvPortfolioFinalValue.RowHeadersVisible = false;
             this.dgvPortfolioFinalValue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPortfolioFinalValue.Size = new System.Drawing.Size(1204, 416);
+            this.dgvPortfolioFinalValue.Size = new System.Drawing.Size(1204, 396);
             this.dgvPortfolioFinalValue.TabIndex = 9;
-            this.dgvPortfolioFinalValue.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.OnDgvPortfolioFinalValue_CellDoubleClick);
             this.dgvPortfolioFinalValue.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DgvPortfolioFinalValue_CellFormatting);
+            this.dgvPortfolioFinalValue.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.OnDgvPortfolioFinalValue_CellMouseDown);
             this.dgvPortfolioFinalValue.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.DgvPortfolioFinalValue_CellPainting);
             this.dgvPortfolioFinalValue.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.DgvPortfolioFinalValue_DataBindingComplete);
             this.dgvPortfolioFinalValue.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.OnDgvPortfolioFinalValue_RowsAdded);
@@ -375,7 +374,7 @@ namespace SharePortfolioManager
             this.dgvPortfolioFooterFinalValue.ColumnHeadersVisible = false;
             this.dgvPortfolioFooterFinalValue.Enabled = false;
             this.dgvPortfolioFooterFinalValue.EnableHeadersVisualStyles = false;
-            this.dgvPortfolioFooterFinalValue.Location = new System.Drawing.Point(0, 416);
+            this.dgvPortfolioFooterFinalValue.Location = new System.Drawing.Point(0, 396);
             this.dgvPortfolioFooterFinalValue.MultiSelect = false;
             this.dgvPortfolioFooterFinalValue.Name = "dgvPortfolioFooterFinalValue";
             this.dgvPortfolioFooterFinalValue.ReadOnly = true;
@@ -397,7 +396,7 @@ namespace SharePortfolioManager
             this.tabPgMarketValue.Location = new System.Drawing.Point(4, 26);
             this.tabPgMarketValue.Name = "tabPgMarketValue";
             this.tabPgMarketValue.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPgMarketValue.Size = new System.Drawing.Size(1205, 490);
+            this.tabPgMarketValue.Size = new System.Drawing.Size(1205, 470);
             this.tabPgMarketValue.TabIndex = 1;
             this.tabPgMarketValue.Text = "_tabPageMarketValues";
             this.tabPgMarketValue.UseVisualStyleBackColor = true;
@@ -419,10 +418,10 @@ namespace SharePortfolioManager
             this.dgvPortfolioMarketValue.ReadOnly = true;
             this.dgvPortfolioMarketValue.RowHeadersVisible = false;
             this.dgvPortfolioMarketValue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPortfolioMarketValue.Size = new System.Drawing.Size(1204, 256);
+            this.dgvPortfolioMarketValue.Size = new System.Drawing.Size(1204, 396);
             this.dgvPortfolioMarketValue.TabIndex = 11;
-            this.dgvPortfolioMarketValue.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.OnDgvPortfolioMarketValue_CellDoubleClick);
             this.dgvPortfolioMarketValue.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DgvPortfolioMarketValue_CellFormatting);
+            this.dgvPortfolioMarketValue.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.OnDgvPortfolioMarketValue_CellMouseDown);
             this.dgvPortfolioMarketValue.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.DgvPortfolioMarketValue_CellPainting);
             this.dgvPortfolioMarketValue.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.DgvPortfolioMarketValue_DataBindingComplete);
             this.dgvPortfolioMarketValue.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.OnDgvPortfolioMarketValue_RowsAdded);
@@ -442,7 +441,7 @@ namespace SharePortfolioManager
             this.dgvPortfolioFooterMarketValue.ColumnHeadersVisible = false;
             this.dgvPortfolioFooterMarketValue.Enabled = false;
             this.dgvPortfolioFooterMarketValue.EnableHeadersVisualStyles = false;
-            this.dgvPortfolioFooterMarketValue.Location = new System.Drawing.Point(0, 256);
+            this.dgvPortfolioFooterMarketValue.Location = new System.Drawing.Point(0, 396);
             this.dgvPortfolioFooterMarketValue.MultiSelect = false;
             this.dgvPortfolioFooterMarketValue.Name = "dgvPortfolioFooterMarketValue";
             this.dgvPortfolioFooterMarketValue.ReadOnly = true;
@@ -463,7 +462,7 @@ namespace SharePortfolioManager
             this.btnDelete.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDelete.Image = global::SharePortfolioManager.Properties.Resources.button_recycle_bin_24;
             this.btnDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDelete.Location = new System.Drawing.Point(721, 521);
+            this.btnDelete.Location = new System.Drawing.Point(721, 501);
             this.btnDelete.Margin = new System.Windows.Forms.Padding(1);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(178, 33);
@@ -481,7 +480,7 @@ namespace SharePortfolioManager
             this.btnClearLogger.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnClearLogger.Image = ((System.Drawing.Image)(resources.GetObject("btnClearLogger.Image")));
             this.btnClearLogger.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnClearLogger.Location = new System.Drawing.Point(901, 521);
+            this.btnClearLogger.Location = new System.Drawing.Point(901, 501);
             this.btnClearLogger.Margin = new System.Windows.Forms.Padding(1);
             this.btnClearLogger.Name = "btnClearLogger";
             this.btnClearLogger.Size = new System.Drawing.Size(178, 33);
@@ -499,11 +498,11 @@ namespace SharePortfolioManager
             this.grpBoxStatusMessage.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.grpBoxStatusMessage.Controls.Add(this.tblLayPnlStatusMessages);
             this.grpBoxStatusMessage.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpBoxStatusMessage.Location = new System.Drawing.Point(5, 610);
+            this.grpBoxStatusMessage.Location = new System.Drawing.Point(5, 590);
             this.grpBoxStatusMessage.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.grpBoxStatusMessage.Name = "grpBoxStatusMessage";
             this.grpBoxStatusMessage.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.grpBoxStatusMessage.Size = new System.Drawing.Size(770, 95);
+            this.grpBoxStatusMessage.Size = new System.Drawing.Size(770, 115);
             this.grpBoxStatusMessage.TabIndex = 5;
             this.grpBoxStatusMessage.TabStop = false;
             this.grpBoxStatusMessage.Text = "Status message_";
@@ -519,8 +518,8 @@ namespace SharePortfolioManager
             this.tblLayPnlStatusMessages.Name = "tblLayPnlStatusMessages";
             this.tblLayPnlStatusMessages.RowCount = 1;
             this.tblLayPnlStatusMessages.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblLayPnlStatusMessages.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 72F));
-            this.tblLayPnlStatusMessages.Size = new System.Drawing.Size(764, 72);
+            this.tblLayPnlStatusMessages.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 92F));
+            this.tblLayPnlStatusMessages.Size = new System.Drawing.Size(764, 92);
             this.tblLayPnlStatusMessages.TabIndex = 0;
             // 
             // rchTxtBoxStateMessage
@@ -531,41 +530,52 @@ namespace SharePortfolioManager
             this.rchTxtBoxStateMessage.Name = "rchTxtBoxStateMessage";
             this.rchTxtBoxStateMessage.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
             this.rchTxtBoxStateMessage.ShowSelectionMargin = true;
-            this.rchTxtBoxStateMessage.Size = new System.Drawing.Size(758, 66);
+            this.rchTxtBoxStateMessage.Size = new System.Drawing.Size(758, 86);
             this.rchTxtBoxStateMessage.TabIndex = 0;
             this.rchTxtBoxStateMessage.Text = "";
             // 
-            // lblWebParserState
+            // lblWebParserDailyValuesState
             // 
-            this.lblWebParserState.BackColor = System.Drawing.Color.Transparent;
-            this.lblWebParserState.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblWebParserState.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWebParserState.Location = new System.Drawing.Point(3, 23);
-            this.lblWebParserState.Margin = new System.Windows.Forms.Padding(3);
-            this.lblWebParserState.Name = "lblWebParserState";
-            this.lblWebParserState.Size = new System.Drawing.Size(437, 14);
-            this.lblWebParserState.TabIndex = 1;
-            this.lblWebParserState.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblWebParserDailyValuesState.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblWebParserDailyValuesState.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblWebParserDailyValuesState.Location = new System.Drawing.Point(2, 48);
+            this.lblWebParserDailyValuesState.Margin = new System.Windows.Forms.Padding(1);
+            this.lblWebParserDailyValuesState.Name = "lblWebParserDailyValuesState";
+            this.lblWebParserDailyValuesState.Size = new System.Drawing.Size(439, 21);
+            this.lblWebParserDailyValuesState.TabIndex = 1;
+            this.lblWebParserDailyValuesState.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // progressBarWebParser
+            // progressBarWebParserMarketValues
             // 
-            this.progressBarWebParser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.progressBarWebParser.Location = new System.Drawing.Point(3, 44);
-            this.progressBarWebParser.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.progressBarWebParser.Name = "progressBarWebParser";
-            this.progressBarWebParser.Size = new System.Drawing.Size(437, 24);
-            this.progressBarWebParser.TabIndex = 0;
+            this.progressBarWebParserMarketValues.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.progressBarWebParserMarketValues.Location = new System.Drawing.Point(4, 28);
+            this.progressBarWebParserMarketValues.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.progressBarWebParserMarketValues.Name = "progressBarWebParserMarketValues";
+            this.progressBarWebParserMarketValues.Size = new System.Drawing.Size(435, 15);
+            this.progressBarWebParserMarketValues.TabIndex = 0;
+            // 
+            // lblWebParserMarketValuesState
+            // 
+            this.lblWebParserMarketValuesState.BackColor = System.Drawing.Color.Transparent;
+            this.lblWebParserMarketValuesState.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblWebParserMarketValuesState.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblWebParserMarketValuesState.Location = new System.Drawing.Point(4, 4);
+            this.lblWebParserMarketValuesState.Margin = new System.Windows.Forms.Padding(3);
+            this.lblWebParserMarketValuesState.Name = "lblWebParserMarketValuesState";
+            this.lblWebParserMarketValuesState.Size = new System.Drawing.Size(435, 17);
+            this.lblWebParserMarketValuesState.TabIndex = 1;
+            this.lblWebParserMarketValuesState.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // grpBoxUpdateState
             // 
             this.grpBoxUpdateState.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.grpBoxUpdateState.Controls.Add(this.tblLayPnlUpdateState);
             this.grpBoxUpdateState.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpBoxUpdateState.Location = new System.Drawing.Point(781, 610);
+            this.grpBoxUpdateState.Location = new System.Drawing.Point(781, 590);
             this.grpBoxUpdateState.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.grpBoxUpdateState.Name = "grpBoxUpdateState";
             this.grpBoxUpdateState.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.grpBoxUpdateState.Size = new System.Drawing.Size(449, 95);
+            this.grpBoxUpdateState.Size = new System.Drawing.Size(449, 115);
             this.grpBoxUpdateState.TabIndex = 6;
             this.grpBoxUpdateState.TabStop = false;
             this.grpBoxUpdateState.Text = "Update state_";
@@ -574,29 +584,32 @@ namespace SharePortfolioManager
             // 
             this.tblLayPnlUpdateState.ColumnCount = 1;
             this.tblLayPnlUpdateState.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblLayPnlUpdateState.Controls.Add(this.progressBarWebParser, 0, 2);
-            this.tblLayPnlUpdateState.Controls.Add(this.lblShareNameWebParser, 0, 0);
-            this.tblLayPnlUpdateState.Controls.Add(this.lblWebParserState, 0, 1);
-            this.tblLayPnlUpdateState.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tblLayPnlUpdateState.Controls.Add(this.progressBarWebParserDailyValues, 0, 3);
+            this.tblLayPnlUpdateState.Controls.Add(this.lblWebParserDailyValuesState, 0, 2);
+            this.tblLayPnlUpdateState.Controls.Add(this.progressBarWebParserMarketValues, 0, 1);
+            this.tblLayPnlUpdateState.Controls.Add(this.lblWebParserMarketValuesState, 0, 0);
+            this.tblLayPnlUpdateState.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
             this.tblLayPnlUpdateState.Location = new System.Drawing.Point(3, 19);
+            this.tblLayPnlUpdateState.MaximumSize = new System.Drawing.Size(443, 92);
+            this.tblLayPnlUpdateState.MinimumSize = new System.Drawing.Size(443, 92);
             this.tblLayPnlUpdateState.Name = "tblLayPnlUpdateState";
-            this.tblLayPnlUpdateState.RowCount = 3;
-            this.tblLayPnlUpdateState.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tblLayPnlUpdateState.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tblLayPnlUpdateState.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tblLayPnlUpdateState.Size = new System.Drawing.Size(443, 72);
+            this.tblLayPnlUpdateState.Padding = new System.Windows.Forms.Padding(1);
+            this.tblLayPnlUpdateState.RowCount = 4;
+            this.tblLayPnlUpdateState.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
+            this.tblLayPnlUpdateState.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
+            this.tblLayPnlUpdateState.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
+            this.tblLayPnlUpdateState.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
+            this.tblLayPnlUpdateState.Size = new System.Drawing.Size(443, 92);
             this.tblLayPnlUpdateState.TabIndex = 2;
             // 
-            // lblShareNameWebParser
+            // progressBarWebParserDailyValues
             // 
-            this.lblShareNameWebParser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblShareNameWebParser.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblShareNameWebParser.Location = new System.Drawing.Point(1, 1);
-            this.lblShareNameWebParser.Margin = new System.Windows.Forms.Padding(1);
-            this.lblShareNameWebParser.Name = "lblShareNameWebParser";
-            this.lblShareNameWebParser.Size = new System.Drawing.Size(441, 18);
-            this.lblShareNameWebParser.TabIndex = 1;
-            this.lblShareNameWebParser.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.progressBarWebParserDailyValues.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.progressBarWebParserDailyValues.Location = new System.Drawing.Point(4, 74);
+            this.progressBarWebParserDailyValues.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.progressBarWebParserDailyValues.Name = "progressBarWebParserDailyValues";
+            this.progressBarWebParserDailyValues.Size = new System.Drawing.Size(435, 15);
+            this.progressBarWebParserDailyValues.TabIndex = 2;
             // 
             // timerStatusMessageClear
             // 
@@ -619,6 +632,11 @@ namespace SharePortfolioManager
             // 
             this.timerStartNextShareUpdate.Interval = 1000;
             this.timerStartNextShareUpdate.Tick += new System.EventHandler(this.TimerStartNextShareUpdate_Tick);
+            // 
+            // timerMouseCellDownDoubleClick
+            // 
+            this.timerMouseCellDownDoubleClick.Interval = 500;
+            this.timerMouseCellDownDoubleClick.Tick += new System.EventHandler(this.TimerMouseCellDownDoubleClick_Tick);
             // 
             // FrmMain
             // 
@@ -680,13 +698,13 @@ namespace SharePortfolioManager
         private ToolStripMenuItem settingsToolStripMenuItem;
         private ToolStripMenuItem languageToolStripMenuItem;
         private GroupBox grpBoxStatusMessage;
-        private ProgressBar progressBarWebParser;
+        private ProgressBar progressBarWebParserMarketValues;
         private GroupBox grpBoxUpdateState;
-        private Label lblShareNameWebParser;
+        private Label lblWebParserDailyValuesState;
         private Timer timerStatusMessageClear;
         private DataGridView dgvPortfolioFooterFinalValue;
         private RichTextBox rchTxtBoxStateMessage;
-        private Label lblWebParserState;
+        private Label lblWebParserMarketValuesState;
         private ToolStripMenuItem loggerToolStripMenuItem;
         private Button btnClearLogger;
         private ToolStripMenuItem newToolStripMenuItem;
@@ -703,6 +721,8 @@ namespace SharePortfolioManager
         private TableLayoutPanel tblLayPnlStatusMessages;
         private TableLayoutPanel tblLayPnlUpdateState;
         private Timer timerStartNextShareUpdate;
+        private ProgressBar progressBarWebParserDailyValues;
+        private Timer timerMouseCellDownDoubleClick;
     }
 }
 
