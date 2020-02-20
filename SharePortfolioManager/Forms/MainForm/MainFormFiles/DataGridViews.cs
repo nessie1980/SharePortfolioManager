@@ -1853,9 +1853,6 @@ namespace SharePortfolioManager
         private void DgvPortfolioFinalValue_MouseEnter(object sender, EventArgs e)
         {
             ((DataGridView)sender).Focus();
-
-            // Close open window
-            FrmChart?.Close();
         }
 
         /// <summary>
@@ -1866,9 +1863,6 @@ namespace SharePortfolioManager
         private void DgvPortfolioMarketValue_MouseEnter(object sender, EventArgs e)
         {
             ((DataGridView)sender).Focus();
-
-            // Close open window
-            FrmChart?.Close();
         }
 
         #endregion Data grid view enter
@@ -2009,12 +2003,15 @@ namespace SharePortfolioManager
                 FrmChart.Text = ShareObjectListFinalValue[_isFirstRowIndex].Name;
 
                 // Set location for the chart window
-                var locationPoint = Point.Empty;
-                locationPoint.X = MousePosition.X + 10;
-                locationPoint.Y = MousePosition.Y + 10;
-                FrmChart.Location = locationPoint;
+                var width = MarketValueOverviewTabSelected ? dgvPortfolioMarketValue.Width : dgvPortfolioFinalValue.Width;
+                var locationPointOfDgv = dgvPortfolioFinalValue.PointToScreen(Point.Empty);
 
-                FrmChart.Show();
+                locationPointOfDgv.X += 5;
+                locationPointOfDgv.Y += 25;
+                FrmChart.Location = locationPointOfDgv;
+
+                FrmChart.Size = new Size(width - 10, FrmChart.Height);
+                FrmChart.ShowDialog();
             }
 
             // Allow the MouseDown event handler to process clicks again.

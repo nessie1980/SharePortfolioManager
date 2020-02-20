@@ -42,7 +42,8 @@ namespace SharePortfolioManager.Classes
             Logger logger, string languageName, Language language,
             DateTime startDate,
             System.Windows.Forms.DataVisualization.Charting.Chart chartDailyValues,
-            ChartValues chartValues
+            ChartValues chartValues,
+            System.Windows.Forms.Label lblBoxNoDataMessage
             )
         {
             #region Set private values
@@ -70,17 +71,53 @@ namespace SharePortfolioManager.Classes
             _chartDailyValues.Legends.Clear();
 
             // Check if no graph values have been given
-            if ( _chartValues.GraphValuesList.Count <= 0) return;
+            if (_chartValues?.GraphValuesList == null || _chartValues.GraphValuesList.Count <= 0)
+            {
+                // Check if a no "no data message label" has been given
+                if (lblBoxNoDataMessage == null) return;
+
+                // Set text to the no data message label
+                lblBoxNoDataMessage.Text = _language.GetLanguageTextByXPath(@"/Chart/Errors/NoGraphDataGiven", _languageName);
+
+                // Show no data message label
+                lblBoxNoDataMessage.Visible = true;
+
+                return;
+            }
 
             if (_marketValueOverviewTabSelected)
             {
                 if (_shareObjectMarketValue.DailyValues.Count == 0)
+                {
+                    // Check if a no "no data message label" has been given
+                    if (lblBoxNoDataMessage == null) return;
+
+                    // Set text to the no data message label
+                    lblBoxNoDataMessage.Text = Helper.BuildNewLineTextFromStringList(
+                        _language.GetLanguageTextListByXPath(@"/Chart/Errors/NoData/*", _languageName));
+
+                    // Show no data message label
+                    lblBoxNoDataMessage.Visible = true;
+
                     return;
+                }
             }
             else
             {
                 if (_shareObjectFinalValue.DailyValues.Count == 0)
+                {
+                    // Check if a no "no data message label" has been given
+                    if (lblBoxNoDataMessage == null) return;
+
+                    // Set text to the no data message label
+                    lblBoxNoDataMessage.Text = Helper.BuildNewLineTextFromStringList(
+                        _language.GetLanguageTextListByXPath(@"/Chart/Errors/NoData/*", _languageName));
+
+                    // Show no data message label
+                    lblBoxNoDataMessage.Visible = true;
+
                     return;
+                }
             }
 
             _chartDailyValues.DataSource = null;
@@ -96,7 +133,20 @@ namespace SharePortfolioManager.Classes
             var dailyValuesList = GetDailyValuesOfInterval(startDate, _chartValues.Amount);
 
             // Check if daily values are found for the given timespan
-            if (dailyValuesList.Count <= 0) return;
+            if (dailyValuesList.Count <= 0)
+            {
+                // Check if a no "no data message label" has been given
+                if (lblBoxNoDataMessage == null) return;
+
+                // Set text to the no data message label
+                lblBoxNoDataMessage.Text = Helper.BuildNewLineTextFromStringList(
+                    _language.GetLanguageTextListByXPath(@"/Chart/Errors/NoData/*", _languageName));
+
+                // Show no data message label
+                lblBoxNoDataMessage.Visible = true;
+
+                return;
+            }
 
             if (dailyValuesList.Count > 0)
                 GetMinMax(dailyValuesList, _chartValues.UseAxisY2 , out decMinValueY, out decMaxValueY, out decMinValueY2, out decMaxValueY2);
@@ -106,7 +156,7 @@ namespace SharePortfolioManager.Classes
             #endregion Selection
 
 #if DEBUG
-            if (dailyValuesList.Count != 0)
+            if (dailyValuesList.Count > 0)
             {
                 var startDateTime = dailyValuesList.First().Date;
                 var endDateTime = dailyValuesList.Last().Date;

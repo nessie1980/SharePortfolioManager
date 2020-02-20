@@ -30,5 +30,12 @@ namespace SharePortfolioManager.InvalidLanguageKeysForm
         {
             InitializeComponent();
         }
+
+#if DEBUG_LANGUAGE
+        public void SetText(string strText)
+        {
+            richTextBox1.Text = strText;
+        }
+#endif
     }
 }

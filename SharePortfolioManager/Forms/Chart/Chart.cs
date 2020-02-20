@@ -82,13 +82,12 @@ namespace SharePortfolioManager.Chart
 
             var chartValues =
                 new ChartingDailyValues.ChartValues(
-                    // TODO Radiobox
+                    // TODO Radiobox or Settings.xml
                     ChartingInterval.Month,
                     1,
                     @"dd.MM.yy",
                     DateTimeIntervalType.Days,
                     graphValuesList);
-
 
             ChartingDailyValues.Charting(
                 MarketValueOverviewTabSelected,
@@ -96,7 +95,8 @@ namespace SharePortfolioManager.Chart
                 Logger, LanguageName, Language,
                 DateTime.Now,
                 chartDailyValues,
-                chartValues
+                chartValues,
+                lblNoDataMessage
             );
 
         }
@@ -115,6 +115,16 @@ namespace SharePortfolioManager.Chart
                     e.LegendItems.RemoveAt(0);
                 }
             }
+        }
+
+        private void OnLblNoDataMessage_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void OnChartDailyValues_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

@@ -202,6 +202,29 @@ namespace SharePortfolioManager.Classes
 
         #endregion Show error / warning message
 
+        #region Text new line builder
+
+        public static string BuildNewLineTextFromStringList(List<string> stringList)
+        {
+            if (stringList == null || stringList.Count <= 0)
+                return @"null";
+
+            var stringResult = @"";
+            for (var i = 0; i < stringList.Count; i++)
+            {
+                if (i == 0)
+                {
+                    stringResult += stringList[i];
+                }
+                else
+                    stringResult += Environment.NewLine + stringList[i];
+            }
+
+            return stringResult;
+        }
+
+        #endregion Text new line builder 
+
         #region Add status message to the text box and to the logger
 
         /// <summary>

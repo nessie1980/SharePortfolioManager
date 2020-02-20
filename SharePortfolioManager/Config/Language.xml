@@ -422,7 +422,7 @@
 
 			<!-- Message -->
 			<Messages>
-				<UpdatePossible text="Share should be updated! Data may not be up to date.." />
+				<UpdatePossible text="Share should be updated! Data may not be up to date." />
 			</Messages>
 
 			<!-- Errors -->
@@ -1115,12 +1115,23 @@
 				<Volume text="Volume" />
 				<VolumeYTitle text="Amount" />
 			</Legend>
+			
+			<!-- ToolTip -->
 			<ToolTip>
 				<Date text="Date:" />
 				<Value text="Value:" />
 				<Minimum text="Min:" />
 				<Maximum text="Max:" />
 			</ToolTip>
+
+			<!-- Errors -->
+			<Errors>
+				<NoGraphDataGiven text="No values passed for drawing a graph!" />
+				<NoData>
+					<Line1 text="No values available for drawing a graph!" />
+					<Line2 text="Data may not be up to date and the share values should be updated." />
+				</NoData>
+			</Errors>
 		</Chart>						
 		
 		<!-- Logger settings -->
@@ -2374,12 +2385,23 @@
 				<Volume text="Volume" />
 				<VolumeYTitle text="Anzahl" />
 			</Legend>
+
+			<!-- ToolTip -->
 			<ToolTip>
 				<Date text="Datum:" />
 				<Value text="Wert:" />
 				<Minimum text="Min:" />
 				<Maximum text="Max:" />
 			</ToolTip>
+			
+			<!-- Errors -->
+			<Errors>
+				<NoGraphDataGiven text="Keine Werte für das Zeichnen eines Graphen übergeben!" />
+				<NoData>
+					<Line1 text="Keine Werte für das Zeichnen eines Graphen vorhanden!" />
+					<Line2 text="Daten sind evtl. nicht auf dem aktuellen Stand und die Aktien- Werte sollte aktualisiert werden." />
+				</NoData>
+			</Errors>
 		</Chart>
 
 		<!-- Logger settings -->

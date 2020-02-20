@@ -30,6 +30,7 @@ using System.Drawing;
 using System.IO;
 #endif
 using System.Windows.Forms;
+using SharePortfolioManager.InvalidLanguageKeysForm;
 
 namespace SharePortfolioManager
 {

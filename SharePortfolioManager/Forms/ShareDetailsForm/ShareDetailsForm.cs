@@ -549,7 +549,8 @@ namespace SharePortfolioManager.ShareDetailsForm
                 Logger, LanguageName, Language,
                 dateTimePickerStartDate.Value,
                 chartDailyValues,
-                ChartValues
+                ChartValues,
+                null
             );
         }
 
