@@ -40,18 +40,6 @@ namespace SharePortfolioManager.Classes.Sales
         public string SaleYear { get; internal set; } = @"-";
 
         [Browsable(false)]
-        public decimal SalePayoutYear { get; internal set; } = -1;
-
-        [Browsable(false)]
-        public string SalePayoutYearAsStr => Helper.FormatDecimal(SalePayoutYear, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", SaleCultureInfo);
-
-        [Browsable(false)]
-        public string SalePayoutYearWithUnitAsStr => Helper.FormatDecimal(SalePayoutYear, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
-
-        [Browsable(false)]
-        public decimal SalePayoutWithoutBrokerageYear { get; internal set; } = -1;
-
-        [Browsable(false)]
         public decimal SaleVolumeYear { get; internal set; } = -1;
 
         [Browsable(false)]
@@ -61,13 +49,64 @@ namespace SharePortfolioManager.Classes.Sales
         public decimal SalePurchaseValueYear { get; internal set; } = -1;
 
         [Browsable(false)]
+        public decimal SalePurchaseValueBrokerageYear { get; internal set; } = -1;
+
+        [Browsable(false)]
+        public decimal SalePurchaseValueReductionYear { get; internal set; } = -1;
+
+        [Browsable(false)]
+        public decimal SalePurchaseValueBrokerageReductionYear { get; internal set; } = -1;
+
+        [Browsable(false)]
+        public decimal SalePayoutYear { get; internal set; } = -1;
+
+        [Browsable(false)]
+        public string SalePayoutYearAsStr => Helper.FormatDecimal(SalePayoutYear, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", SaleCultureInfo);
+
+        [Browsable(false)]
+        public string SalePayoutYearWithUnitAsStr => Helper.FormatDecimal(SalePayoutYear, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
+
+        [Browsable(false)]
+        public decimal SalePayoutBrokerageYear { get; internal set; } = -1;
+
+        [Browsable(false)]
+        public string SalePayoutBrokerageYearUnitAsStr => Helper.FormatDecimal(SalePayoutBrokerageYear, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
+
+        [Browsable(false)]
+        public decimal SalePayoutReductionYear { get; internal set; } = -1;
+
+        [Browsable(false)]
+        public string SalePayoutReductionYearUnitAsStr => Helper.FormatDecimal(SalePayoutReductionYear, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
+
+        [Browsable(false)]
+        public decimal SalePayoutBrokerageReductionYear { get; internal set; } = -1;
+
+        [Browsable(false)]
+        public string SalePayoutBrokerageReductionYearUnitAsStr => Helper.FormatDecimal(SalePayoutBrokerageReductionYear, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
+
+        [Browsable(false)]
         public decimal SaleProfitLossYear { get; internal set; } = -1;
 
         [Browsable(false)]
         public string SaleProfitLossYearWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossYear, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
 
         [Browsable(false)]
-        public decimal SaleProfitLossWithoutBrokerageYear { get; internal set; } = -1;
+        public decimal SaleProfitLossBrokerageYear { get; internal set; } = -1;
+
+        [Browsable(false)]
+        public string SaleProfitLossBrokerageYearWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossBrokerageYear, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
+
+        [Browsable(false)]
+        public decimal SaleProfitLossReductionYear { get; internal set; } = -1;
+
+        [Browsable(false)]
+        public string SaleProfitLossReductionYearWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossReductionYear, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
+
+        [Browsable(false)]
+        public decimal SaleProfitLossBrokerageReductionYear { get; internal set; } = -1;
+
+        [Browsable(false)]
+        public string SaleProfitLossBrokerageReductionYearWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossBrokerageReductionYear, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
 
         [Browsable(false)]
         public List<SaleObject> SaleListYear { get; } = new List<SaleObject>();
@@ -115,7 +154,7 @@ namespace SharePortfolioManager.Classes.Sales
         public bool AddSaleObject(CultureInfo cultureInfo,  string strGuid, string strDate, string strOrderNumber, decimal decVolume, decimal decSalePrice, List<SaleBuyDetails> usedBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
              decimal decSolidarityTax, BrokerageReductionObject brokerageObject, string strDoc = "")
         {
-#if DEBUG_SALE
+#if false
             Console.WriteLine(@"AddSaleObject");
 #endif
             try
@@ -126,7 +165,9 @@ namespace SharePortfolioManager.Classes.Sales
                 // Create new SaleObject
                 var addObject = new SaleObject(cultureInfo, strGuid, strDate, strOrderNumber, decVolume, decSalePrice, usedBuyDetails, decTaxAtSource, decCapitalGainsTax, decSolidarityTax, brokerageObject, strDoc);
 
-                var addProfitLossObject = new ProfitLossObject(cultureInfo, strGuid, strDate, addObject.ProfitLossBrokerage, strDoc);
+                var addProfitLossObject = new ProfitLossObject(cultureInfo, strGuid, strDate,
+                    addObject.ProfitLoss, addObject.ProfitLossBrokerage, addObject.ProfitLossReduction, addObject.ProfitLossBrokerageReduction,
+                    strDoc);
 
                 // Add object to the list
                 SaleListYear.Add(addObject);
@@ -140,14 +181,6 @@ namespace SharePortfolioManager.Classes.Sales
                 DateTime.TryParse(strDate, out var dateTime);
                 SaleYear = dateTime.Year.ToString();
 
-                // Calculate sale value
-                if (SalePayoutYear == -1)
-                    SalePayoutYear = 0;
-                SalePayoutYear += addObject.PayoutBrokerage;
-                if (SalePayoutWithoutBrokerageYear == -1)
-                    SalePayoutWithoutBrokerageYear = 0;
-                SalePayoutWithoutBrokerageYear += addObject.Payout;
-
                 // Calculate sale volume
                 if (SaleVolumeYear == -1)
                     SaleVolumeYear = 0;
@@ -157,22 +190,54 @@ namespace SharePortfolioManager.Classes.Sales
                 if (SalePurchaseValueYear == -1)
                     SalePurchaseValueYear = 0;
                 SalePurchaseValueYear += addObject.BuyValue;
+                if (SalePurchaseValueBrokerageYear == -1)
+                    SalePurchaseValueBrokerageYear = 0;
+                SalePurchaseValueBrokerageYear += addObject.BuyValueBrokerage;
+                if (SalePurchaseValueReductionYear == -1)
+                    SalePurchaseValueReductionYear = 0;
+                SalePurchaseValueReductionYear += addObject.BuyValueReduction;
+                if (SalePurchaseValueBrokerageReductionYear == -1)
+                    SalePurchaseValueBrokerageReductionYear = 0;
+                SalePurchaseValueBrokerageReductionYear += addObject.BuyValueBrokerageReduction;
+
+                // Calculate sale payout value
+                if (SalePayoutYear == -1)
+                    SalePayoutYear = 0;
+                SalePayoutYear += addObject.Payout;
+                if (SalePayoutBrokerageYear == -1)
+                    SalePayoutBrokerageYear = 0;
+                SalePayoutBrokerageYear += addObject.PayoutBrokerage;
+                if (SalePayoutReductionYear == -1)
+                    SalePayoutReductionYear = 0;
+                SalePayoutReductionYear += addObject.PayoutReduction;
+                if (SalePayoutBrokerageReductionYear == -1)
+                    SalePayoutBrokerageReductionYear = 0;
+                SalePayoutBrokerageReductionYear += addObject.PayoutBrokerageReduction;
 
                 // Calculate sale profit or loss
                 if (SaleProfitLossYear == -1)
                     SaleProfitLossYear = 0;
-                SaleProfitLossYear += addObject.ProfitLossBrokerage;
-                if (SaleProfitLossWithoutBrokerageYear == -1)
-                    SaleProfitLossWithoutBrokerageYear = 0;
-                SaleProfitLossWithoutBrokerageYear += addObject.ProfitLoss;
-
-#if DEBUG_SALE
-                Console.WriteLine(@"SalePayoutYear: {0}", SalePayoutYear);
-                Console.WriteLine(@"SalePayoutWithoutBrokerageYear: {0}", SalePayoutWithoutBrokerageYear);
+                SaleProfitLossYear += addObject.ProfitLoss;
+                if (SaleProfitLossBrokerageYear == -1)
+                    SaleProfitLossBrokerageYear = 0;
+                SaleProfitLossBrokerageYear += addObject.ProfitLossBrokerage;
+                if (SaleProfitLossReductionYear == -1)
+                    SaleProfitLossReductionYear = 0;
+                SaleProfitLossReductionYear += addObject.ProfitLossReduction;
+                if (SaleProfitLossBrokerageReductionYear == -1)
+                    SaleProfitLossBrokerageReductionYear = 0;
+                SaleProfitLossBrokerageReductionYear += addObject.ProfitLossBrokerageReduction;
+#if false
                 Console.WriteLine(@"SaleVolumeYear: {0}", SaleVolumeYear);
                 Console.WriteLine(@"SalePurchaseValueYear: {0}", SalePurchaseValueYear);
+                Console.WriteLine(@"SalePayoutYear: {0}", SalePayoutYear);
+                Console.WriteLine(@"SalePayoutBrokerageYear: {0}", SalePayoutBrokerageYear);
+                Console.WriteLine(@"SalePayoutReductionYear: {0}", SalePayoutReductionYear);
+                Console.WriteLine(@"SalePayoutBrokerageReductionYear: {0}", SalePayoutBrokerageReductionYear);
                 Console.WriteLine(@"SaleProfitLossYear: {0}", SaleProfitLossYear);
-                Console.WriteLine(@"SaleProfitLossWithoutBrokerageYear: {0}", SaleProfitLossWithoutBrokerageYear);
+                Console.WriteLine(@"SaleProfitLossBrokerageYear: {0}", SaleProfitLossBrokerageYear);
+                Console.WriteLine(@"SaleProfitLossReductionYear: {0}", SaleProfitLossReductionYear);
+                Console.WriteLine(@"SaleProfitLossBrokerageReductionYear: {0}", SaleProfitLossBrokerageReductionYear);
                 Console.WriteLine(@"");
 #endif
             }
@@ -192,7 +257,7 @@ namespace SharePortfolioManager.Classes.Sales
         /// <returns>Flag if the remove was successfully</returns>
         public bool RemoveSaleObject(string strGuid)
         {
-#if DEBUG_SALE
+#if false
             Console.WriteLine(@"RemoveSaleObject");
 #endif
             try
@@ -212,16 +277,23 @@ namespace SharePortfolioManager.Classes.Sales
                 // Remove object from the list
                 SaleListYear.Remove(removeObject);
 
-                // Calculate sale value
-                SalePayoutYear -= removeObject.PayoutBrokerage;
-                SalePayoutWithoutBrokerageYear -= removeObject.Payout;
                 // Calculate sale volume
                 SaleVolumeYear -= removeObject.Volume;
+
                 // Calculate purchase vale
                 SalePurchaseValueYear -= removeObject.BuyValue;
+
+                // Calculate sale payout value
+                SalePayoutYear -= removeObject.Payout;
+                SalePayoutBrokerageYear -= removeObject.PayoutBrokerage;
+                SalePayoutReductionYear -= removeObject.PayoutReduction;
+                SalePayoutBrokerageReductionYear -= removeObject.PayoutBrokerageReduction;
+
                 // Calculate sale profit or loss
-                SaleProfitLossYear -= removeObject.ProfitLossBrokerage;
-                SaleProfitLossWithoutBrokerageYear -= removeObject.ProfitLoss;
+                SaleProfitLossYear -= removeObject.ProfitLoss;
+                SaleProfitLossBrokerageYear -= removeObject.ProfitLossBrokerage;
+                SaleProfitLossReductionYear -= removeObject.ProfitLossReduction;
+                SaleProfitLossBrokerageReductionYear -= removeObject.ProfitLossBrokerageReduction;
 
                 // Search for the remove object
                 iFoundIndex = -1;
@@ -238,7 +310,7 @@ namespace SharePortfolioManager.Classes.Sales
                 // Remove object from the list
                 ProfitLossListYear.Remove(removeProfitLossObject);
 
-#if DEBUG_SALE
+#if false
                 Console.WriteLine(@"SalePayoutYear: {0}", SalePayoutYear);
                 Console.WriteLine(@"SalePayoutWithoutBrokerageYear: {0}", SalePayoutWithoutBrokerageYear);
                 Console.WriteLine(@"SaleVolumeYear: {0}", SaleVolumeYear);
@@ -262,7 +334,7 @@ namespace SharePortfolioManager.Classes.Sales
         /// <returns>Flag if the set was successfully</returns>
         public bool SetDocumentSaleObject(string strGuid, string strDocument)
         {
-#if DEBUG_BUY
+#if false
             Console.WriteLine(@"SetDocumentSaleObject");
 #endif
             try

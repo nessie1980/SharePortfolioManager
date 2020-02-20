@@ -20,13 +20,13 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using System;
-using System.IO;
-using System.Windows.Forms;
 using SharePortfolioManager.BuysForm.Model;
 using SharePortfolioManager.BuysForm.View;
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.Costs;
+using System;
+using System.IO;
+using System.Windows.Forms;
 
 namespace SharePortfolioManager.BuysForm.Presenter
 {
@@ -62,7 +62,6 @@ namespace SharePortfolioManager.BuysForm.Presenter
             _view.TraderPlaceFee = _model.TraderPlaceFee;
             _view.Reduction = _model.Reduction;
             _view.Brokerage = _model.Brokerage;
-            _view.BrokerageWithReduction = _model.BrokerageWithReduction;
             _view.BuyValue = _model.BuyValue;
             _view.BuyValueBrokerageReduction = _model.BuyValueBrokerageReduction;
             _view.Document = _model.Document;
@@ -106,7 +105,6 @@ namespace SharePortfolioManager.BuysForm.Presenter
             _model.TraderPlaceFee = _view.TraderPlaceFee;
             _model.Reduction = _view.Reduction;
             _model.Brokerage = _view.Brokerage;
-            _model.BrokerageWithReduction = _view.BrokerageWithReduction;
             _model.BuyValue = _view.BuyValue;
             _model.BuyValueBrokerageReduction = _view.BuyValueBrokerageReduction;
             _model.Document = _view.Document;
@@ -312,10 +310,9 @@ namespace SharePortfolioManager.BuysForm.Presenter
                 Helper.CalcBuyValues(_model.VolumeDec, _model.SharePriceDec,
                     _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec,
                     out var decBuyValue, out var decBuyValueReduction, out var decBuyValueBrokerage, out var decBuyValueBrokerageReduction,
-                    out var decBrokerage, out var decBrokerageWithReduction);
+                    out var decBrokerage);
 
                 _model.BrokerageDec = decBrokerage;
-                _model.BrokerageWithReductionDec = decBrokerageWithReduction;
                 _model.BuyValueDec = decBuyValue;
                 _model.BuyValueReductionDec = decBuyValueReduction;
                 _model.BuyValueBrokerageDec = decBuyValueBrokerage;
@@ -323,7 +320,6 @@ namespace SharePortfolioManager.BuysForm.Presenter
 
 #if DEBUG_BUY || DEBUG
                 Console.WriteLine(@"BrokerageDec: {0}", _model.BrokerageDec);
-                Console.WriteLine(@"BrokerageWithReductionDec: {0}", _model.BrokerageWithReductionDec);
                 Console.WriteLine(@"BuyValueDec: {0}", _model.BuyValueDec);
                 Console.WriteLine(@"BuyValueReductionDec: {0}", _model.BuyValueReductionDec);
                 Console.WriteLine(@"BuyValueBrokerageDec: {0}", _model.BuyValueBrokerageDec);
@@ -338,7 +334,6 @@ namespace SharePortfolioManager.BuysForm.Presenter
                     MessageBoxIcon.Error);
 #endif
                 _model.BrokerageDec = 0;
-                _model.BrokerageWithReductionDec = 0;
                 _model.BuyValueDec = 0;
                 _model.BuyValueReductionDec = 0;
                 _model.BuyValueBrokerageDec = 0;

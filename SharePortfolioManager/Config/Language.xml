@@ -106,12 +106,14 @@
 						<DgvPortfolio>
 							<ColHeader_WKN text="WKN" />
 							<ColHeader_Name text="Name"/>
+							<ColHeader_Volume text="Volume"/>
+							<ColHeader_BrokerageDividend text="Brokorage\nDividends" />
 							<ColHeader_Price text="Price" />
 							<ColHeader_PrevDay text="Pre. day" />
-							<ColHeader_Volume text="Volume"/>
-							<ColHeader_Performance text="Performance" />
-							<ColHeader_BrokerageDividend text="Brokorage\nDividends" />
-							<ColHeader_PurchaseMarketValue text="Purchase\n Market" />
+							<ColHeader_Performance text="Current\nPerformance" />
+							<ColHeader_PurchaseMarketValue text="Purchase\nMarket" />
+							<ColHeader_CompletePerformance text="Complete\nPerformance" />
+							<ColHeader_CompletePurchaseMarketValue text="Cpl. Purchase\nCpl. Market" />							
 						</DgvPortfolio>
 						<DgvPortfolio_Error>
 							<ConfigurationFailed text="Configuration of the datagridview 'portfolio' failed!" />
@@ -137,17 +139,19 @@
 
 					<!-- TabPage with market values (Market values - brokerage)  -->
 					<TabPgMarketDepotValue>
-						<Caption text="Markte values" />
+						<Caption text="Market depot values" />
 
 						<!-- DataGridView portfolio -->
 						<DgvPortfolio>
 							<ColHeader_WKN text="WKN" />
 							<ColHeader_Name text="Name"/>
+							<ColHeader_Volume text="Volume"/>
 							<ColHeader_Price text="Price" />
 							<ColHeader_PrevDay text="Pre. day" />
-							<ColHeader_Volume text="Volume"/>
-							<ColHeader_Performance text="Perf." />
-							<ColHeader_PurchaseMarketValue text="  Purchase\nMarket" />
+							<ColHeader_Performance text="Current\nPerformance" />
+							<ColHeader_PurchaseMarketValue text="Purchase\nMarket" />
+							<ColHeader_CompletePerformance text="Complete\nPerformance" />
+							<ColHeader_CompletePurchaseMarketValue text="Cpl. Purchase\nCpl. Market" />							
 						</DgvPortfolio>
 						
 						<!-- DataGridView portfolio footer -->
@@ -312,43 +316,81 @@
 
 					<!-- TabPage with dividend and brokerage -->
 					<TabPgWithDividendBrokerage>
-						<Caption text="With dividend / brokerage" />
+						<Caption text="Complete depot values" />
 						
 						<!-- Labels -->
 						<Labels>
 							<Date text="Share date:" />
-							<Volume text="Volume:"/>
-							<TotalDividend text="Dividend (total):" />		
-							<TotalBrokerage text="Brokerage (total):" />
-							<CurrentPrice text="Current share price:" />
-							<DiffPerformancePrevDay text="Performance (pre. day)"/>
-							<DiffSumPrevDay text="Profit / loss (pre. day):" />
-							<PricePrevDay text="Share price (pre. day):" />
-							<Purchase text="Purchase:" />
-							<TotalPerformance text="Performance (total):" />
-							<TotalProfitLoss text="Profit / loss (total):" />
-							<TotalSum text="Sum (total):" />
+							<Total>
+								<Caption text="Overall stock calculation" />
+								<Volume text="Volume:"/>
+								<CurrentPrice text="Current price:" />
+								<Purchase text="Purchase:" />
+								<Dividend text="Dividends:" />
+								<Sale text="Sales:" />
+								<Sum text="Sum:" />
+								<SalePurchase text="Sold purchase:" />
+								<ProfitLoss text="Profit / loss ( total ):" />
+								<Performance text="Performance:" />
+							</Total>
+							<Current>
+								<Caption text="Current stock calculation" />
+								<Volume text="Volume:"/>
+								<CurrentPrice text="Current price:" />
+								<Purchase text="Purchase:" />
+								<Dividend text="Dividends:" />
+								<ProfitLoss text="Profit / loss ( sales ):" />
+								<Sum text="Sum:" />
+							</Current>
+							<PrevDay>
+								<Caption text="Prev. day calculation" />
+								<CurrentPrice text="Current price:" />
+								<PrevPrice text="Prev. day price:" />
+								<DiffPrice text="Price perf.:"/>
+								<DiffPerformance text="Performance:"/>
+								<Volume text="Volume:"/>
+								<DiffSum text="Profit / loss:" />
+							</PrevDay>
 						</Labels>
 					</TabPgWithDividendBrokerage>
 					
 					<!-- Tab without dividend and brokerage -->
 					<TabPgWithOutDividendBrokerage>
-						<Caption text="Without dividend / brokerage" />
+						<Caption text="Complete market values" />
 						
 						<!-- Labels -->
 						<Labels>
 							<Date text="Share date:" />
-							<Volume text="Volume:"/>
-							<TotalDividend text="Dividend (total):" />		
-							<TotalBrokerage text="Brokerage (total):" />
-							<DiffPerformancePrevDay text="Performance (pre. day)"/>
-							<CurrentPrice text="Current share price:" />
-							<DiffSumPrevDay text="Profit / loss (pre. day):" />
-							<PricePrevDay text="Share price (pre. day):" />
-							<Purchase text="Purchase:" />
-							<TotalPerformance text="Performance (total):" />
-							<TotalProfitLoss text="Profit / loss (total):" />
-							<TotalSum text="Sum (total):" />
+							<Total>
+								<Caption text="Overall stock calculation" />
+								<Volume text="Volume:"/>
+								<CurrentPrice text="Current price:" />
+								<Purchase text="Purchase:" />
+								<Dividend text="Dividends:" />
+								<Sale text="Sales:" />
+								<Sum text="Sum:" />
+								<SalePurchase text="Sold purchase:" />
+								<ProfitLoss text="Profit / loss ( total ):" />
+								<Performance text="Performance:" />
+							</Total>
+							<Current>
+								<Caption text="Current stock calculation" />
+								<Volume text="Volume:"/>
+								<CurrentPrice text="Current price:" />
+								<Purchase text="Purchase:" />
+								<Dividend text="Dividends:" />
+								<ProfitLoss text="Profit / loss ( sales ):" />
+								<Sum text="Sum:" />
+							</Current>
+							<PrevDay>
+								<Caption text="Prev. day calculation" />
+								<CurrentPrice text="Current price:" />
+								<PrevPrice text="Prev. day price:" />
+								<DiffPrice text="Price perf.:"/>
+								<DiffPerformance text="Performance:"/>
+								<Volume text="Volume:"/>
+								<DiffSum text="Profit / loss:" />
+							</PrevDay>
 						</Labels>
 					</TabPgWithOutDividendBrokerage>					
 					<TabPgWithWithOutDividendBrokerageErrors>
@@ -664,7 +706,7 @@
 						<ColHeader_Volume text="Volume" />
 						<ColHeader_Price text="Price" />
 						<ColHeader_Brokerage text="Brokerage" />
-						<ColHeader_Deposit text="Deposit" />
+						<ColHeader_Purchase text="Purchase" />
 						<ColHeader_Document text="Document" />
 					</DgvBuyOverview>
 				</TabCtrl>
@@ -980,8 +1022,6 @@
 				<VolumeEmpty text="Please insert a volume." />
 				<VolumeWrongFormat text="Format for the value 'Volume' is invalid." />
 				<VolumeWrongValue text="The value for 'Volume' must be higher than '0'." />
-				<VolumeMaxValue_1 text="The value for 'Volume' is too high. The maximum value for 'Volume' is '" />
-				<VolumeMaxValue_2 text="'!" />
 				<AddFailed text="Dividend add has been failed!" />
 				<EditFailed text="Dividend changes save has been failed!" />
 				<DeleteFailed text="Delete of the dividend entry has been failed!" />
@@ -1058,6 +1098,8 @@
 						<ColHeader_Date text="Date" />
 						<ColHeader_Year text="Year" />
 						<ColHeader_Brokerage text="Brokerage" />
+						<ColHeader_Reduction text="Reduction" />
+						<ColHeader_BrokerageReduction text="Broker. - Red." />
 						<ColHeader_Document text="Document" />
 					</DgvBrokerageOverview>
 				</TabCtrl>
@@ -1114,6 +1156,10 @@
 				<BottomYTitle text="Price" />
 				<Volume text="Volume" />
 				<VolumeYTitle text="Amount" />
+				<LastBuy text="Last buy" />
+				<LastSale text="Last sale" />
+				<Period text="Period" />
+				<Development text="Development" />
 			</Legend>
 			
 			<!-- ToolTip -->
@@ -1377,12 +1423,14 @@
 						<DgvPortfolio>
 							<ColHeader_WKN text="WKN" />
 							<ColHeader_Name text="Name"/>
+							<ColHeader_Volume text="Anteile"/>
+							<ColHeader_BrokerageDividend text="Kosten\nDividenden" />
 							<ColHeader_Price text="Preis" />
 							<ColHeader_PrevDay text="Vortag" />
-							<ColHeader_Volume text="Anteile"/>
-							<ColHeader_Performance text="Entw." />
-							<ColHeader_BrokerageDividend text="Kosten\nDividenden" />
+							<ColHeader_Performance text="Aktuelle\nEntwicklung" />
 							<ColHeader_PurchaseMarketValue text="Einzahlung\nMarktwert" />
+							<ColHeader_CompletePerformance text="Komplette\nEntwicklung" />
+							<ColHeader_CompletePurchaseMarketValue text="Kpl. Einzahlung\nKpl. Marktwert" />
 						</DgvPortfolio>
 						<DgvPortfolio_Error>
 							<ConfigurationFailed text="Konfiguration des DataGridView 'Portfolio' fehlgeschlagen!" />
@@ -1408,17 +1456,19 @@
 
 					<!-- TabPage with market values (Market values - brokerage)  -->
 					<TabPgMarketDepotValue>
-						<Caption text="Marktwert" />
+						<Caption text="Kompletter Marktwert" />
 
 						<!-- DataGridView portfolio -->
 						<DgvPortfolio>
 							<ColHeader_WKN text="WKN" />
 							<ColHeader_Name text="Name"/>
+							<ColHeader_Volume text="Anteile"/>
 							<ColHeader_Price text="Preis" />
 							<ColHeader_PrevDay text="Vortag" />
-							<ColHeader_Volume text="Anteile"/>
-							<ColHeader_Performance text="Entw." />
-							<ColHeader_PurchaseMarketValue text=" Einzahlung / Marktwert" />
+							<ColHeader_Performance text="Aktuelle\nEntwicklung" />
+							<ColHeader_PurchaseMarketValue text="Einzahlung\nMarktwert" />
+							<ColHeader_CompletePerformance text="Komplette\nEntwicklung" />
+							<ColHeader_CompletePurchaseMarketValue text="Kpl. Einzahlung\nKpl. Marktwert" />
 						</DgvPortfolio>
 						
 						<!-- DataGridView portfolio footer -->
@@ -1584,43 +1634,81 @@
 
 					<!-- TabPage with dividend and brokerage -->
 					<TabPgWithDividendBrokerage>
-						<Caption text="Mit Dividenden / Kosten" />
+						<Caption text="Komplette Depotbewertung" />
 						
 						<!-- Labels -->
 						<Labels>
 							<Date text="Aktien- Datum:" />
-							<Volume text="Anteile:"/>
-							<TotalDividend text="Dividenden (gesamt):" />		
-							<TotalBrokerage text="Kosten (gesamt):" />
-							<CurrentPrice text="Aktueller Aktien- Preis:" />
-							<DiffPerformancePrevDay text="Entwicklung (Vortag)"/>
-							<DiffSumPrevDay text="Gewinn / Verlust (Vortag):" />
-							<PricePrevDay text="Aktien- Preis (Vortag):" />
-							<Purchase text="Einzahlungen:" />
-							<TotalPerformance text="Entwicklung (gesamt):" />
-							<TotalProfitLoss text="Gewinn / Verlust (gesamt):" />
-							<TotalSum text="Summe (gesamt):" />
+							<Total>
+								<Caption text="Gesamt- Bestandsberechung" />
+								<Volume text="Anteile:"/>
+								<CurrentPrice text="Aktueller Preis:" />
+								<Purchase text="Einzahlungen:" />
+								<Dividend text="Dividenden:" />
+								<Sale text="Verkäufe:" />
+								<Sum text="Summe:" />
+								<SalePurchase text="Verkaufte Einzahlungen:" />
+								<ProfitLoss text="Gewinn / Verlust ( gesamt ):" />
+								<Performance text="Entwicklung:" />
+							</Total>
+							<Current>
+								<Caption text="Aktuelle Bestandsberechnung" />
+								<Volume text="Anteile:"/>
+								<CurrentPrice text="Aktueller Preis:" />
+								<Purchase text="Einzahlungen:" />
+								<Dividend text="Dividenden:" />
+								<ProfitLoss text="Gewinn / Verlust ( Verkäufe ):" />
+								<Sum text="Summe:" />
+							</Current>
+							<PrevDay>
+								<Caption text="Vortag- Bestandsberechung" />
+								<CurrentPrice text="Aktueller Preis:" />
+								<PrevPrice text="Vortages- Preis:" />
+								<DiffPrice text="Preis- Entw.:"/>
+								<DiffPerformance text="Entwicklung:"/>
+								<Volume text="Anteile:"/>
+								<DiffSum text="Gewinn / Verlust:" />
+							</PrevDay>
 						</Labels>
 					</TabPgWithDividendBrokerage>
 					
 					<!-- Tab without dividend and brokerage -->
 					<TabPgWithOutDividendBrokerage>
-						<Caption text="Ohne Dividenden / Kosten" />
+						<Caption text="Komplette Marktbewertung" />
 						
 						<!-- Labels -->
 						<Labels>
 							<Date text="Aktien- Datum:" />
-							<Volume text="Anteile:"/>
-							<TotalDividend text="Dividenden (gesamt):" />		
-							<TotalBrokerage text="Kosten (gesamt):" />
-							<CurrentPrice text="Aktueller Aktien- Preis:" />
-							<DiffPerformancePrevDay text="Entwicklung (Vortag)"/>
-							<DiffSumPrevDay text="Gewinn / Verlust (Vortag):" />
-							<PricePrevDay text="Aktien- Preis (Vortag):" />
-							<Purchase text="Einzahlungen:" />
-							<TotalPerformance text="Entwicklung (gesamt):" />
-							<TotalProfitLoss text="Gewinn / Verlust (gesamt):" />
-							<TotalSum text="Summe (gesamt):" />
+							<Total>
+								<Caption text="Gesamt- Bestandsberechung" />
+								<Volume text="Anteile:"/>
+								<CurrentPrice text="Aktueller Preis:" />
+								<Purchase text="Einzahlungen:" />
+								<Dividend text="Dividenden:" />
+								<Sale text="Verkäufe:" />
+								<Sum text="Summe:" />
+								<SalePurchase text="Verkaufte Einzahlungen:" />
+								<ProfitLoss text="Gewinn / Verlust ( gesamt ):" />
+								<Performance text="Entwicklung:" />
+							</Total>
+							<Current>
+								<Caption text="Aktuelle Bestandsberechnung" />
+								<Volume text="Anteile:"/>
+								<CurrentPrice text="Aktueller Preis:" />
+								<Purchase text="Einzahlungen:" />
+								<Dividend text="Dividenden:" />
+								<ProfitLoss text="Gewinn / Verlust ( Verkäufe ):" />
+								<Sum text="Summe:" />
+							</Current>
+							<PrevDay>
+								<Caption text="Vortag- Bestandsberechung" />
+								<CurrentPrice text="Aktueller Preis:" />
+								<PrevPrice text="Vortages- Preis:" />
+								<DiffPrice text="Preis- Entw.:"/>
+								<DiffPerformance text="Entwicklung:"/>
+								<Volume text="Anteile:"/>
+								<DiffSum text="Gewinn / Verlust:" />
+							</PrevDay>
 						</Labels>
 					</TabPgWithOutDividendBrokerage>
 					<TabPgWithWithOutDividendBrokerageErrors>
@@ -1937,7 +2025,7 @@
 						<ColHeader_Volume text="Anteile" />
 						<ColHeader_Price text="Kurswert" />
 						<ColHeader_Brokerage text="Gebühren" />
-						<ColHeader_Deposit text="Einzahlung" />
+						<ColHeader_Purchase text="Einzahlung" />
 						<ColHeader_Document text="Dokument" />
 					</DgvBuyOverview>
 				</TabCtrl>
@@ -2251,8 +2339,6 @@
 				<VolumeEmpty text="Bitte geben Sie einen Anteile- Wert ein." />
 				<VolumeWrongFormat text="Format für den 'Anteile'- Wert ist ungültig." />
 				<VolumeWrongValue text="Der Wert für 'Anteile' muss größer als '0' sein." />
-				<VolumeMaxValue_1 text="Der Wert für 'Anteile' ist zu groß. Der Höchstwerte für 'Anteile' '" />
-				<VolumeMaxValue_2 text="' ist!" />
 				<AddFailed text="Hinzufügen der Dividende ist fehlgeschlagen!" />
 				<EditFailed text="Speichern der Dividenden- Änderung ist fehlgeschlagen!" />
 				<DeleteFailed text="Entfernen des Dividenden- Eintrags ist fehlgeschlagen!" />
@@ -2328,6 +2414,8 @@
 						<ColHeader_Date text="Datum" />
 						<ColHeader_Year text="Jahr" />
 						<ColHeader_Brokerage text="Kosten" />
+						<ColHeader_Reduction text="Rabatt" />
+						<ColHeader_BrokerageReduction text="Kosten - Rabatt" />
 						<ColHeader_Document text="Dokument" />
 					</DgvBrokerageOverview>
 				</TabCtrl>
@@ -2384,6 +2472,10 @@
 				<BottomYTitle text="Preis" />
 				<Volume text="Volume" />
 				<VolumeYTitle text="Anzahl" />
+				<LastBuy text="Letzter Kauf" />
+				<LastSale text="Letzter Verkauf" />
+				<Period text="Zeitraum" />
+				<Development text="Entwicklung" />
 			</Legend>
 
 			<!-- ToolTip -->

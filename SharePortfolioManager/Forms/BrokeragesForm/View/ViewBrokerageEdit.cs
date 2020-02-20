@@ -20,6 +20,12 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+using LanguageHandler;
+using Logging;
+using SharePortfolioManager.Classes;
+using SharePortfolioManager.Classes.ShareObjects;
+using SharePortfolioManager.OwnMessageBoxForm;
+using SharePortfolioManager.Properties;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -27,12 +33,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using LanguageHandler;
-using Logging;
-using SharePortfolioManager.Classes;
-using SharePortfolioManager.Classes.ShareObjects;
-using SharePortfolioManager.OwnMessageBoxForm;
-using SharePortfolioManager.Properties;
 
 namespace SharePortfolioManager.BrokeragesForm.View
 {
@@ -1256,9 +1256,9 @@ namespace SharePortfolioManager.BrokeragesForm.View
 
                     // Set TabPage caption
                     Text = Language.GetLanguageTextByXPath(
-                               @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/TabPgOverview/Overview", 
+                               @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/TabPgOverview/Overview",
                                LanguageName)
-                           + @" (" + ShareObjectFinalValue.AllBrokerageEntries.BrokerageWithReductionValueTotalWithUnitAsStr +
+                           + @" (" + ShareObjectFinalValue.AllBrokerageEntries.BrokerageWithReductionValueTotalAsStr +
                            @")"
                 };
 
@@ -1266,21 +1266,30 @@ namespace SharePortfolioManager.BrokeragesForm.View
 
                 #region Data source, data binding and data grid view
 
-                // Create Binding source for the brokerage data
-                var bindingSourceOverview = new BindingSource();
-                if (ShareObjectFinalValue.AllBrokerageEntries.GetAllBrokerageTotalValues().Count > 0)
-                    bindingSourceOverview.DataSource =
-                        ShareObjectFinalValue.AllBrokerageEntries.GetAllBrokerageTotalValues();
+                // Check if brokerage exists
+                if (ShareObjectFinalValue.AllBrokerageEntries.GetAllBrokerageTotalValues().Count <= 0) return;
+
+                // Reverse list so the latest is a top of the data grid view
+                var reversDataSourceOverview = ShareObjectFinalValue.AllBrokerageEntries.GetAllBrokerageTotalValues();
+                reversDataSourceOverview.Reverse();
+
+                var bindingSourceOverview = new BindingSource
+                {
+                    DataSource = reversDataSourceOverview
+                };
 
                 // Create DataGridView
                 var dataGridViewBrokerageOverviewOfAYears = new DataGridView
                 {
-                    // TODO correct
                     Name = @"Overview",
                     Dock = DockStyle.Fill,
 
                     // Bind source with brokerage values to the DataGridView
-                    DataSource = bindingSourceOverview
+                    DataSource = bindingSourceOverview,
+
+                    // Disable column header resize
+                    ColumnHeadersHeightSizeMode =
+                        DataGridViewColumnHeadersHeightSizeMode.DisableResizing
                 };
 
                 #endregion Data source, data binding and data grid view
@@ -1304,7 +1313,9 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 dataGridViewBrokerageOverviewOfAYears.ColumnHeadersDefaultCellStyle.Alignment =
                     DataGridViewContentAlignment.MiddleCenter;
                 dataGridViewBrokerageOverviewOfAYears.ColumnHeadersDefaultCellStyle.BackColor =
-                    SystemColors.ControlLight;
+                    DataGridViewHelper.DataGridViewHeaderColors;
+                dataGridViewBrokerageOverviewOfAYears.ColumnHeadersDefaultCellStyle.SelectionBackColor =
+                    DataGridViewHelper.DataGridViewHeaderColors;
                 dataGridViewBrokerageOverviewOfAYears.ColumnHeadersHeight = 25;
                 dataGridViewBrokerageOverviewOfAYears.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
                 // Column styling
@@ -1357,7 +1368,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                         // Set TabPage caption
                         Text = keyName + @" (" +
                                ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageReductionOfTheShareDictionary[keyName]
-                                   .BrokerageWithReductionValueYearWithUnitAsStr
+                                   .BrokerageValueYearWithUnitAsStr
                                + @")"
                     };
 
@@ -1365,12 +1376,16 @@ namespace SharePortfolioManager.BrokeragesForm.View
 
                     #region Data source, data binding and data grid view
 
+                    // Reverse list so the latest is a top of the data grid view
+                    var reversDataSource =
+                        ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageReductionOfTheShareDictionary[keyName]
+                            .BrokerageReductionListYear;
+                    reversDataSource.Reverse();
+
                     // Create Binding source for the brokerage data
                     var bindingSource = new BindingSource
                     {
-                        DataSource = 
-                            ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageReductionOfTheShareDictionary[keyName]
-                                .BrokerageReductionListYear
+                        DataSource = reversDataSource
                     };
 
                     // Create DataGridView
@@ -1380,7 +1395,11 @@ namespace SharePortfolioManager.BrokeragesForm.View
                         Dock = DockStyle.Fill,
 
                         // Bind source with brokerage values to the DataGridView
-                        DataSource = bindingSource
+                        DataSource = bindingSource,
+
+                        // Disable column header resize
+                        ColumnHeadersHeightSizeMode =
+                            DataGridViewColumnHeadersHeightSizeMode.DisableResizing
                     };
 
                     #endregion Data source, data binding and data grid view
@@ -1406,7 +1425,9 @@ namespace SharePortfolioManager.BrokeragesForm.View
                     dataGridViewBrokerageOfAYear.ColumnHeadersDefaultCellStyle.Alignment =
                         DataGridViewContentAlignment.MiddleCenter;
                     dataGridViewBrokerageOfAYear.ColumnHeadersDefaultCellStyle.BackColor =
-                        SystemColors.ControlLight;
+                        DataGridViewHelper.DataGridViewHeaderColors;
+                    dataGridViewBrokerageOfAYear.ColumnHeadersDefaultCellStyle.SelectionBackColor =
+                        DataGridViewHelper.DataGridViewHeaderColors;
                     dataGridViewBrokerageOfAYear.ColumnHeadersHeight = 25;
                     dataGridViewBrokerageOfAYear.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
                     // Column styling
@@ -1472,6 +1493,9 @@ namespace SharePortfolioManager.BrokeragesForm.View
                     ((DataGridView)sender).Columns[i].DefaultCellStyle.Alignment =
                         DataGridViewContentAlignment.MiddleCenter;
 
+                    // Disable sorting of the columns ( remove sort arrow )
+                    ((DataGridView)sender).Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
+
                     switch (i)
                     {
                         case 0:
@@ -1483,36 +1507,52 @@ namespace SharePortfolioManager.BrokeragesForm.View
                                         @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Year",
                                         LanguageName);
                             }
-                        }
-                        break;
+                        } break;
                         case 1:
-                            if (((DataGridView)sender).Name == @"Overview")
+                        {
+                            if (((DataGridView) sender).Name == @"Overview")
                             {
-                                ((DataGridView)sender).Columns[i].HeaderText =
+                                ((DataGridView) sender).Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Brokerage",
                                         LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
                             }
                             else
                             {
-                                ((DataGridView)sender).Columns[i].HeaderText =
+                                ((DataGridView) sender).Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Date",
                                         LanguageName);
                             }
-                            break;
+                        } break;
                         case 2:
-                            ((DataGridView)sender).Columns[i].HeaderText =
+                        {
+                            ((DataGridView) sender).Columns[i].HeaderText =
                                 Language.GetLanguageTextByXPath(
                                     @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Brokerage",
                                     LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
-                            break;
+                        } break;
                         case 3:
-                            ((DataGridView)sender).Columns[i].HeaderText =
+                        {
+                            ((DataGridView) sender).Columns[i].HeaderText =
+                                Language.GetLanguageTextByXPath(
+                                    @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Reduction",
+                                    LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
+                        } break;
+                        case 4:
+                        {
+                            ((DataGridView) sender).Columns[i].HeaderText =
+                                Language.GetLanguageTextByXPath(
+                                    @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_BrokerageReduction",
+                                    LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
+                        } break;
+                        case 5:
+                        {
+                            ((DataGridView) sender).Columns[i].HeaderText =
                                 Language.GetLanguageTextByXPath(
                                     @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Document",
                                     LanguageName);
-                            break;
+                        } break;
                     }
                 }
 
@@ -1788,7 +1828,8 @@ namespace SharePortfolioManager.BrokeragesForm.View
                         txtBoxBrokerFee.Text = selectedBrokerageObject.BrokerFeeValueAsStr;
                         txtBoxTraderPlaceFee.Text = selectedBrokerageObject.TraderPlaceFeeValueAsStr;
                         txtBoxReduction.Text = selectedBrokerageObject.ReductionValueAsStr;
-                        txtBoxBrokerage.Text = selectedBrokerageObject.BrokerageReductionValueAsStr;
+                        // TODO
+                        //txtBoxBrokerage.Text = selectedBrokerageObject.BrokerageReductionValueAsStr;
                         txtBoxDocument.Text = selectedBrokerageObject.BrokerageDocument;
                     }
                     else

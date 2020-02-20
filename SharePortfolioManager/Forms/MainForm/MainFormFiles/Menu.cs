@@ -20,15 +20,15 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using SharePortfolioManager.Classes;
 using SharePortfolioManager.AboutForm;
+using SharePortfolioManager.Classes;
+using SharePortfolioManager.LoggerSettingsForm;
+using SharePortfolioManager.OwnMessageBoxForm;
 using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml;
-using SharePortfolioManager.LoggerSettingsForm;
-using SharePortfolioManager.OwnMessageBoxForm;
 
 namespace SharePortfolioManager
 {

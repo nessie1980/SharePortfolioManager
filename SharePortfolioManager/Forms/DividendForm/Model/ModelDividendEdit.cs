@@ -20,15 +20,15 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using System.Collections.Generic;
-using System.Globalization;
-using System.Windows.Forms;
 using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.Dividend;
 using SharePortfolioManager.Classes.ShareObjects;
 using SharePortfolioManager.DividendForm.View;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Windows.Forms;
 
 namespace SharePortfolioManager.DividendForm.Model
 {

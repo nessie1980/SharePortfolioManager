@@ -22,7 +22,9 @@
 
 using System;
 using System.Collections.Generic;
+#if DEBUG
 using System.Windows.Forms;
+#endif
 using System.Xml;
 using Parser;
 using SharePortfolioManager.Classes.ParserRegex;
@@ -31,7 +33,7 @@ namespace SharePortfolioManager.Classes
 {
     public static class DocumentParsingConfiguration
     {
-        #region Error codes
+#region Error codes
 
         // Error codes of the DocumentParsingConfiguration class
         public enum DocumentParsingErrorCode
@@ -47,9 +49,9 @@ namespace SharePortfolioManager.Classes
             ConfigurationLoadFailed = -8
         };
 
-        #endregion Error codes
+#endregion Error codes
 
-        #region Document types
+#region Document types
 
         // Types of the DocumentParsingConfiguration class
         public enum DocumentTypes
@@ -60,9 +62,9 @@ namespace SharePortfolioManager.Classes
             BrokerageDocument = 3
         };
 
-        #endregion Document types
+#endregion Document types
 
-        #region Properties
+#region Properties
 
         /// <summary>
         /// Flag if the configuration load was successful
@@ -95,9 +97,9 @@ namespace SharePortfolioManager.Classes
         /// </summary>
         public static List<BankRegex> BankRegexList { get; set; } = new List<BankRegex>();
 
-        #region XML attribute names
+#region XML attribute names
 
-        #region Bank sections
+#region Bank sections
 
         public const short BankTagCount = 7; // BankIdentifier / BuyIdentifier / SaleIdentifier / DividendIdentifier + 3 x documents (BuyIdentifier / SaleIdentifier / DividendIdentifier)
 
@@ -110,16 +112,16 @@ namespace SharePortfolioManager.Classes
         public const string SaleIdentifierTagName = "SaleIdentifier";
         public const string DividendIdentifierTagName = "DividendIdentifier";
 
-        #endregion Bank sections
+#endregion Bank sections
 
-        #region Document sections
+#region Document sections
 
         public const string DocumentTagName = "Document";
         public const string DocumentTypeAttrName = "Type";
         public const string DocumentIdentifierValueAttrName = "TypeIdentifierValue";
         public const string DocumentEncodingAttrName = "Encoding";
 
-        #region Buy section values
+#region Buy section values
 
         public const string DocumentTypeBuy = "Buy";
         public const string DocumentTypeBuyWkn = "Wkn";
@@ -134,9 +136,9 @@ namespace SharePortfolioManager.Classes
         public const string DocumentTypeBuyTraderPlaceFee = "TraderPlaceFee";
         public const string DocumentTypeBuyReduction = "Reduction";
 
-        #endregion Buy section values
+#endregion Buy section values
 
-        #region Sale section values
+#region Sale section values
 
         public const string DocumentTypeSale = "Sale";
         public const string DocumentTypeSaleWkn = "Wkn";
@@ -153,9 +155,9 @@ namespace SharePortfolioManager.Classes
         public const string DocumentTypeSaleTraderPlaceFee = "TraderPlaceFee";
         public const string DocumentTypeSaleReduction = "Reduction";
 
-        #endregion Sale section values
+#endregion Sale section values
 
-        #region Dividend section values
+#region Dividend section values
 
         public const string DocumentTypeDividend = "Dividend";
         public const string DocumentTypeDividendWkn = "Wkn";
@@ -168,13 +170,13 @@ namespace SharePortfolioManager.Classes
         public const string DocumentTypeDividendCapitalGainTax = "CapitalGainTax";
         public const string DocumentTypeDividendSolidarityTax = "SolidarityTax";
 
-        #endregion Dividend section values
+#endregion Dividend section values
 
         public const string DocumentTypeBrokerage = "Brokerage";
 
-        #endregion Document sections
+#endregion Document sections
 
-        #region Typ sections
+#region Typ sections
 
         public const string NameAttrName = "Name";
 
@@ -184,13 +186,13 @@ namespace SharePortfolioManager.Classes
 
         public const string RegexOptionsAttrName = "RegexOptions";
 
-        #endregion Typ sections
+#endregion Typ sections
 
-        #endregion XML attribute names
+#endregion XML attribute names
 
-        #endregion Properties
+#endregion Properties
 
-        #region Load document configurations
+#region Load document configurations
 
         /// <summary>
         /// This function loads the document configurations from the Documents.XML
@@ -452,6 +454,6 @@ namespace SharePortfolioManager.Classes
             }
         }
 
-        #endregion Load website configurations
+#endregion Load website configurations
     }
 }

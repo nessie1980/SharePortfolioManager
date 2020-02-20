@@ -22,7 +22,9 @@
 
 using System;
 using System.Collections.Generic;
+#if DEBUG
 using System.Windows.Forms;
+#endif
 using System.Xml;
 using Parser;
 using SharePortfolioManager.Classes.ParserRegex;
@@ -31,7 +33,7 @@ namespace SharePortfolioManager.Classes
 {
     public static class WebSiteConfiguration
     {
-        #region Error codes
+#region Error codes
 
         // Error codes of the WebSiteConfiguration class
         public enum WebSiteErrorCode
@@ -43,9 +45,9 @@ namespace SharePortfolioManager.Classes
             ConfigurationLoadFailed = - 4
         };
 
-        #endregion Error codes
+#endregion Error codes
 
-        #region Properties
+#region Properties
 
         /// <summary>
         /// Flag if the configuration load was successful
@@ -78,7 +80,7 @@ namespace SharePortfolioManager.Classes
         /// </summary>
         public static List<WebSiteRegex> WebSiteRegexList { get; set; } = new List<WebSiteRegex>();
 
-        #region XML attribute names
+#region XML attribute names
 
         private const string IdAttrName = "Id";
 
@@ -94,11 +96,11 @@ namespace SharePortfolioManager.Classes
 
         private const string RegexOptionsAttrName = "RegexOptions";
 
-        #endregion XML attribute names
+#endregion XML attribute names
 
-        #endregion Properties
+#endregion Properties
 
-        #region Load website configurations
+#region Load website configurations
 
         /// <summary>
         /// This function loads the website configurations from the WebSites.XML
@@ -266,6 +268,6 @@ namespace SharePortfolioManager.Classes
             }
         }
 
-        #endregion Load website configurations
+#endregion Load website configurations
     }
 }

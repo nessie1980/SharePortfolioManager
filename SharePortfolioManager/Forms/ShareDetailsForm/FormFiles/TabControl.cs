@@ -22,6 +22,7 @@
 
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.ShareObjects;
+using SharePortfolioManager.OwnMessageBoxForm;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -30,7 +31,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using SharePortfolioManager.OwnMessageBoxForm;
 
 namespace SharePortfolioManager.ShareDetailsForm
 {
@@ -72,53 +72,111 @@ namespace SharePortfolioManager.ShareDetailsForm
             // Tab captions
             if (tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsFinalValue))
                 tabCtrlDetails.TabPages[_tabPageDetailsFinalValue].Text =
-                Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Caption",
-                    LanguageName);
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Caption",
+                        LanguageName);
 
             if (tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsMarketValue))
                 tabCtrlDetails.TabPages[_tabPageDetailsMarketValue].Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Caption",
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Caption",
                         LanguageName);
 
             if (tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsProfitLossValue))
                 tabCtrlDetails.TabPages[_tabPageDetailsProfitLossValue].Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Caption", LanguageName);
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Caption", LanguageName);
 
             if (tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsDividendValue))
                 tabCtrlDetails.TabPages[_tabPageDetailsDividendValue].Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/Caption", LanguageName);
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/Caption", LanguageName);
 
             if (tabCtrlDetails.TabPages.ContainsKey(_tabPageDetailsBrokerageValue))
                 tabCtrlDetails.TabPages[_tabPageDetailsBrokerageValue].Text =
-                Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/Caption", LanguageName);
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/Caption", LanguageName);
 
             // Label values of the market value
             lblDetailsMarketValueDateValue.Text = @"";
-            lblDetailsMarketValueVolumeValue.Text = @"";
-            lblDetailsMarketValueDividendValue.Text = @"";
-            lblDetailsMarketValueBrokerageValue.Text = @"";
-            lblDetailsMarketValueCurPriceValue.Text = @"";
-            lblDetailsMarketValueDiffPerformancePrevValue.Text = @"";
-            lblDetailsMarketValueDiffSumPrevValue.Text = @"";
-            lblDetailsMarketValuePrevPriceValue.Text = @"";
-            lblDetailsMarketValuePurchaseValue.Text = @"";
-            lblDetailsMarketValueTotalPerformanceValue.Text = @"";
-            lblDetailsMarketValueTotalProfitValue.Text = @"";
+
+            #region Overall calculation
+
+            lblDetailsMarketValueTotalVolumeValue.Text = @"";
+            lblDetailsMarketValueTotalCurPriceValue.Text = @"";
+            lblDetailsMarketValueTotalPurchaseValue.Text = @"";
+            lblDetailsMarketValueTotalDividendValue.Text = @"";
+            lblDetailsMarketValueTotalSaleValue.Text = @"";
             lblDetailsMarketValueTotalSumValue.Text = @"";
+            lblDetailsMarketValueTotalSalePurchaseValue.Text = @"";
+            lblDetailsMarketValueTotalProfitLossValue.Text = @"";
+            lblDetailsMarketValueTotalPerformanceValue.Text = @"";
+
+            #endregion Overall calculation
+
+            #region Current calculation
+
+            lblDetailsMarketValueCurrentVolumeValue.Text = @"";
+            lblDetailsMarketValueCurrentCurPriceValue.Text = @"";
+            lblDetailsMarketValueCurrentPurchaseValue.Text = @"";
+            lblDetailsMarketValueCurrentDividendValue.Text = @"";
+            lblDetailsMarketValueCurrentProfitLossSaleValue.Text = @"";
+            lblDetailsMarketValueCurrentSumValue.Text = @"";
+
+            #endregion Curren calculation
+
+            #region Daily calculation
+
+            lblDetailsMarketValuePrevDayCurPriceValue.Text = @"";
+            lblDetailsMarketValuePrevDayPrevPriceValue.Text = @"";
+            lblDetailsMarketValuePrevDayDiffPriceValue.Text = @"";
+            lblDetailsMarketValuePrevDayDiffPerformanceValue.Text = @"";
+            lblDetailsMarketValuePrevDayVolumeValue.Text = @"";
+            lblDetailsMarketValuePrevDayDiffPriceValueValue.Text = @"";
+            lblDetailsMarketValueDiffSumPrevValue.Text = @"";
+
+            #endregion Daily calculation
 
             // Label values of the final value
             lblDetailsFinalValueDateValue.Text = @"";
-            lblDetailsFinalValueVolumeValue.Text = @"";
-            lblDetailsFinalValueDividendValue.Text = @"";
-            lblDetailsFinalValueBrokerageValue.Text = @"";
-            lblDetailsFinalValueCurPriceValue.Text = @"";
-            lblDetailsFinalValueDiffPerformancePrevValue.Text = @"";
-            lblDetailsFinalValueDiffSumPrevValue.Text = @"";
-            lblDetailsFinalValuePrevPriceValue.Text = @"";
-            lblDetailsFinalValuePurchaseValue.Text = @"";
-            lblDetailsFinalValueTotalPerformanceValue.Text = @"";
-            lblDetailsFinalValueTotalProfitValue.Text = @"";
+
+            #region Overall calculation
+
+            lblDetailsFinalValueTotalVolumeValue.Text = @"";
+            lblDetailsFinalValueTotalCurPriceValue.Text = @"";
+            lblDetailsFinalValueTotalPurchaseValue.Text = @"";
+            lblDetailsFinalValueTotalDividendValue.Text = @"";
+            lblDetailsFinalValueTotalSaleValue.Text = @"";
             lblDetailsFinalValueTotalSumValue.Text = @"";
+            lblDetailsFinalValueTotalSalePurchaseValue.Text = @"";
+            lblDetailsFinalValueTotalProfitLossValue.Text = @"";
+            lblDetailsFinalValueTotalPerformanceValue.Text = @"";
+
+            #endregion Overall calculation
+
+            #region Current calculation
+
+            lblDetailsFinalValueCurrentVolumeValue.Text = @"";
+            lblDetailsFinalValueCurrentCurPriceValue.Text = @"";
+            lblDetailsFinalValueCurrentPurchaseValue.Text = @"";
+            lblDetailsFinalValueCurrentDividendValue.Text = @"";
+            lblDetailsFinalValueCurrentProfitLossSaleValue.Text = @"";
+            lblDetailsFinalValueCurrentSumValue.Text = @"";
+
+            #endregion Current calculation
+
+            #region Daily calculation
+
+            lblDetailsFinalValuePrevDayCurPriceValue.Text = @"";
+            lblDetailsFinalValuePrevDayPrevPriceValue.Text = @"";
+            lblDetailsFinalValuePrevDayDiffPriceValue.Text = @"";
+            lblDetailsFinalValuePrevDayDiffPerformanceValue.Text = @"";
+            lblDetailsFinalValuePrevDayVolumeValue.Text = @"";
+            lblDetailsFinalValuePrevDayDiffPriceValueValue.Text = @"";
+            lblDetailsFinalValueDiffSumPrevValue.Text = @"";
+
+            #endregion Daily calculation
+
         }
 
         #endregion Reset group box details
@@ -156,36 +214,34 @@ namespace SharePortfolioManager.ShareDetailsForm
 
                     // Set GroupBox caption
                     // Check if an update has already done
-                    if (ShareObjectMarketValue.LastUpdateInternet == DateTime.MinValue)
+                    if (ShareObjectMarketValue.LastUpdateViaInternet == DateTime.MinValue)
                     {
-                        grpBoxShareDetails.Text = ShareObjectMarketValue.Name + @" ( " +
-                                                  Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/ShareType",
-                                                      LanguageName) +
-                                                  @" " +
-                                                  Helper.GetComboBoxItems(@" / ComboBoxItemsShareType/*", LanguageName,
-                                                      Language)[ShareObjectMarketValue.ShareType] +
-                                                  @" / " +
-                                                  Language.GetLanguageTextByXPath(
-                                                      @"/ShareDetailsForm/GrpBoxDetails/ShareUpdate",
-                                                      LanguageName) + @" " +
-                                                  Language.GetLanguageTextByXPath(
-                                                      @"/ShareDetailsForm/GrpBoxDetails/ShareUpdateNotDone", LanguageName) +
-                                                  @" )";
+                        grpBoxShareDetails.Text = 
+                            Language.GetLanguageTextByXPath(
+                                @"/ShareDetailsForm/GrpBoxDetails/ShareUpdate",
+                                LanguageName) + @" " +
+                            Language.GetLanguageTextByXPath(
+                                @"/ShareDetailsForm/GrpBoxDetails/ShareUpdateNotDone", LanguageName) +
+                            @" / " +
+                            Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/ShareType",
+                                LanguageName) +
+                            @" " +
+                            Helper.GetComboBoxItems(@" / ComboBoxItemsShareType/*", LanguageName,
+                                Language)[ShareObjectMarketValue.ShareType];
                     }
                     else
                     {
-                        grpBoxShareDetails.Text = ShareObjectMarketValue.Name + @" ( " +
-                                                  Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/ShareType",
-                                                      LanguageName) +
-                                                  @" " +
-                                                  Helper.GetComboBoxItems(@" / ComboBoxItemsShareType/*", LanguageName,
-                                                      Language)[ShareObjectMarketValue.ShareType] +
-                                                  @" / " +
-                                                  Language.GetLanguageTextByXPath(
-                                                      @"/ShareDetailsForm/GrpBoxDetails/ShareUpdate",
-                                                      LanguageName) + @" " +
-                                                  string.Format(Helper.DateFullTimeShortFormat, ShareObjectMarketValue.LastUpdateInternet)
-                                                       + @" )";
+                        grpBoxShareDetails.Text =
+                            Language.GetLanguageTextByXPath(
+                                @"/ShareDetailsForm/GrpBoxDetails/ShareUpdate",
+                                LanguageName) + @" " +
+                            string.Format(Helper.DateFullTimeShortFormat, ShareObjectMarketValue.LastUpdateViaInternet) +
+                            @" / " +
+                            Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/ShareType",
+                                LanguageName) +
+                            @" " +
+                            Helper.GetComboBoxItems(@" / ComboBoxItemsShareType/*", LanguageName,
+                                Language)[ShareObjectMarketValue.ShareType];
                     }
 
                     if (ShareObjectMarketValue.LastUpdateShare == DateTime.MinValue)
@@ -204,62 +260,126 @@ namespace SharePortfolioManager.ShareDetailsForm
                             string.Format(Helper.DateFullFormat, ShareObjectMarketValue.LastUpdateShare) + @" " +
                             string.Format(Helper.TimeShortFormat, ShareObjectMarketValue.LastUpdateShare);
                     }
+
+                    #region Overall calculation
+
                     // Set share volume
-                    lblDetailsMarketValueVolumeValue.Text = ShareObjectMarketValue.VolumeAsStrUnit;
+                    lblDetailsMarketValueTotalVolumeValue.Text =
+                        ShareObjectMarketValue.VolumeAsStrUnit;
 
-                    // Set dividend value
-                    lblDetailsMarketValueDividendValue.Text = @"-";
-                    // Disable the dividend labels 
-                    lblDetailsMarketValueDividend.Enabled = false;
-                    lblDetailsMarketValueDividendValue.Enabled = false;
-
-                    // Set brokerage value
-                    lblDetailsMarketValueBrokerageValue.Text = @"-";
-                    // Disable the Brokerage labels 
-                    lblDetailsMarketValueBrokerage.Enabled = false;
-                    lblDetailsMarketValueBrokerageValue.Enabled = false;
-
-                    // Set the current price value
-                    lblDetailsMarketValueCurPriceValue.Text =
+                    // Set current price
+                    lblDetailsMarketValueTotalCurPriceValue.Text =
                         ShareObjectMarketValue.CurPriceAsStrUnit;
-                    // Set performance previous value
-                    lblDetailsMarketValueDiffPerformancePrevValue.Text =
-                        ShareObjectMarketValue.PrevDayPerformanceAsStrUnit;
-                    // Set difference previous value
-                    lblDetailsMarketValueDiffSumPrevValue.Text =
-                        ShareObjectMarketValue.PrevDayProfitLossAsStrUnit;
-                    // Set previous price value
-                    lblDetailsMarketValuePrevPriceValue.Text =
-                        ShareObjectMarketValue.PrevDayPriceAsStrUnit;
 
                     // Set purchase value
-                    lblDetailsMarketValuePurchaseValue.Text =
-                        ShareObjectMarketValue.PurchaseValueAsStrUnit;
+                    lblDetailsMarketValueTotalPurchaseValue.Text =
+                        ShareObjectMarketValue.MarketValueAsStrUnit;
+
+                    // Set sale value
+                    lblDetailsMarketValueTotalSaleValue.Text =
+                        ShareObjectMarketValue.SalePayoutReductionAsStrUnit;
+
+                    // Set dividend value
+                    lblDetailsMarketValueTotalDividendValue.Text = @"-";
+                    // Disable the dividend labels 
+                    lblDetailsMarketValueTotalDividend.Enabled = false;
+                    lblDetailsMarketValueTotalDividendValue.Enabled = false;
+
+                    // Set total share value
+                    lblDetailsMarketValueTotalSumValue.Text =
+                        ShareObjectMarketValue.CompleteMarketValueAsStrUnit;
+                    
+                    // Set total purchase value
+                    lblDetailsMarketValueTotalSalePurchaseValue.Text =
+                        ShareObjectMarketValue.BuyValueReductionAsStrUnit;
+
+                    // Set profit or lose of the share
+                    lblDetailsMarketValueTotalProfitLossValue.Text =
+                        ShareObjectMarketValue.CompleteProfitLossValueAsStrUnit;
+
                     // Set performance of the share
                     lblDetailsMarketValueTotalPerformanceValue.Text =
-                        ShareObjectMarketValue.PerformanceValueAsStrUnit;
-                    // Set profit or lose of the share
-                    lblDetailsMarketValueTotalProfitValue.Text =
-                        ShareObjectMarketValue.ProfitLossValueAsStrUnit;
-                    // Set total value of the share
-                    lblDetailsMarketValueTotalSumValue.Text =
-                        ShareObjectMarketValue.MarketValueAsStrUnit;
+                        ShareObjectMarketValue.CompletePerformanceValueAsStrUnit;
 
                     // Format performance value
                     if (ShareObjectMarketValue.PerformanceValue >= 0)
                     {
                         lblDetailsMarketValueTotalPerformanceValue.ForeColor = Color.Green;
-                        lblDetailsMarketValueTotalProfitValue.ForeColor = Color.Green;
+                        lblDetailsMarketValueTotalProfitLossValue.ForeColor = Color.Green;
                     }
                     else
                     {
                         lblDetailsMarketValueTotalPerformanceValue.ForeColor = Color.Red;
-                        lblDetailsMarketValueTotalProfitValue.ForeColor = Color.Red;
+                        lblDetailsMarketValueTotalProfitLossValue.ForeColor = Color.Red;
                     }
 
-                    lblDetailsMarketValueDiffPerformancePrevValue.ForeColor = ShareObjectMarketValue.PrevDayPerformance >= 0 ? Color.Green : Color.Red;
+                    #endregion Overall calculation
 
-                    lblDetailsMarketValueDiffSumPrevValue.ForeColor = ShareObjectMarketValue.PrevDayProfitLoss >= 0 ? Color.Green : Color.Red;
+                    #region Current calculation
+
+                    // Set share volume
+                    lblDetailsMarketValueCurrentVolumeValue.Text =
+                        ShareObjectMarketValue.VolumeAsStrUnit;
+
+                    // Set the current price value
+                    lblDetailsMarketValueCurrentCurPriceValue.Text =
+                        ShareObjectMarketValue.CurPriceAsStrUnit;
+
+                    // Set current value of the volume of the shares
+                    lblDetailsMarketValueCurrentPurchaseValue.Text =
+                        ShareObjectMarketValue.MarketValueAsStrUnit;
+
+                    // Set dividend value
+                    lblDetailsMarketValueCurrentDividendValue.Text = @"-";
+                    // Disable the dividend labels 
+                    lblDetailsMarketValueCurrentDividend.Enabled = false;
+                    lblDetailsMarketValueCurrentDividendValue.Enabled = false;
+
+                    // Set total share value
+                    lblDetailsMarketValueCurrentProfitLossSaleValue.Text =
+                        ShareObjectMarketValue.SaleProfitLossReductionAsStrUnit;
+
+                    // Set total value of the share
+                    lblDetailsMarketValueCurrentSumValue.Text =
+                        ShareObjectMarketValue.MarketValueWithProfitLossAsStrUnit;
+
+                    #endregion Current calculation
+
+                    #region Daily calculation
+
+                    // Set the current price value
+                    lblDetailsMarketValuePrevDayCurPriceValue.Text =
+                        ShareObjectMarketValue.CurPriceAsStrUnit;
+
+                    // Set previous price value
+                    lblDetailsMarketValuePrevDayPrevPriceValue.Text =
+                        ShareObjectMarketValue.PrevPriceAsStrUnit;
+
+                    // Set difference price value
+                    lblDetailsMarketValuePrevDayDiffPriceValue.Text =
+                        ShareObjectMarketValue.CurPrevDayPriceDifferenceAsStrUnit;
+
+                    // Set performance previous value
+                    lblDetailsMarketValuePrevDayDiffPerformanceValue.Text =
+                        ShareObjectMarketValue.CurPrevDayPricePerformanceAsStrUnit;
+
+                    // Set share volume
+                    lblDetailsMarketValuePrevDayVolumeValue.Text =
+                        ShareObjectMarketValue.VolumeAsStrUnit;
+
+                    // Set difference price value
+                    lblDetailsMarketValuePrevDayDiffPriceValueValue.Text =
+                        ShareObjectMarketValue.CurPrevDayPriceDifferenceAsStrUnit;
+
+                    // Set difference previous value
+                    lblDetailsMarketValueDiffSumPrevValue.Text =
+                        ShareObjectMarketValue.CurPrevDayProfitLossAsStrUnit;
+
+                    lblDetailsMarketValuePrevDayDiffPriceValue.ForeColor = ShareObjectMarketValue.CurPrevDayPricePerformance >= 0 ? Color.Green : Color.Red;
+                    lblDetailsMarketValuePrevDayDiffPerformanceValue.ForeColor = ShareObjectMarketValue.CurPrevDayPricePerformance >= 0 ? Color.Green : Color.Red;
+                    lblDetailsFinalValueDiffSumPrevValue.ForeColor = ShareObjectMarketValue.CurPrevDayProfitLoss >= 0 ? Color.Green : Color.Red;
+
+                    #endregion Daily calclation
                 }
                 else
                 {
@@ -290,48 +410,46 @@ namespace SharePortfolioManager.ShareDetailsForm
 
                     // Set GroupBox caption
                     // Check if an update has already done
-                    if (ShareObjectFinalValue.LastUpdateInternet == DateTime.MinValue)
+                    if (ShareObjectFinalValue.LastUpdateViaInternet == DateTime.MinValue)
                     {
-                        grpBoxShareDetails.Text = ShareObjectFinalValue.Name + @" ( " +
-                                                  Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/ShareType",
-                                                      LanguageName) +
-                                                  @" " +
-                                                  Helper.GetComboBoxItems(@" / ComboBoxItemsShareType/*", LanguageName,
-                                                      Language)[ShareObjectFinalValue.ShareType] +
-                                                  @" / " +
-                                                  Language.GetLanguageTextByXPath(
-                                                      @"/ShareDetailsForm/GrpBoxDetails/ShareUpdate",
-                                                      LanguageName) + @" " +
-                                                  Language.GetLanguageTextByXPath(
-                                                      @"/ShareDetailsForm/GrpBoxDetails/ShareUpdateNotDone", LanguageName) +
-                                                  @" )";
+                        grpBoxShareDetails.Text =
+                            Language.GetLanguageTextByXPath(
+                                @"/ShareDetailsForm/GrpBoxDetails/ShareUpdate",
+                                LanguageName) + @" " +
+                            Language.GetLanguageTextByXPath(
+                                @"/ShareDetailsForm/GrpBoxDetails/ShareUpdateNotDone", LanguageName) +
+                            @" / " +
+                            Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/ShareType",
+                                LanguageName) +
+                            @" " +
+                            Helper.GetComboBoxItems(@" / ComboBoxItemsShareType/*", LanguageName,
+                                Language)[ShareObjectFinalValue.ShareType];
                     }
                     else
                     {
-                        grpBoxShareDetails.Text = ShareObjectFinalValue.Name + @" ( " +
-                                                  Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/ShareType",
-                                                      LanguageName) +
-                                                  @" " +
-                                                  Helper.GetComboBoxItems(@" / ComboBoxItemsShareType/*", LanguageName,
-                                                      Language)[ShareObjectFinalValue.ShareType] +
-                                                  @" / " +
-                                                  Language.GetLanguageTextByXPath(
-                                                      @"/ShareDetailsForm/GrpBoxDetails/ShareUpdate",
-                                                      LanguageName) + @" " +
-                                                  string.Format(Helper.DateFullTimeShortFormat, ShareObjectFinalValue.LastUpdateInternet)
-                                                       + @" )";
+                        grpBoxShareDetails.Text =
+                            Language.GetLanguageTextByXPath(
+                                @"/ShareDetailsForm/GrpBoxDetails/ShareUpdate",
+                                LanguageName) + @" " +
+                            string.Format(Helper.DateFullTimeShortFormat, ShareObjectFinalValue.LastUpdateViaInternet) +
+                            @" / " +
+                            Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/ShareType",
+                                LanguageName) +
+                            @" " +
+                            Helper.GetComboBoxItems(@" / ComboBoxItemsShareType/*", LanguageName,
+                                Language)[ShareObjectFinalValue.ShareType];
                     }
 
                     if (ShareObjectFinalValue.LastUpdateShare == DateTime.MinValue)
                     {
                         // Set the share update date
-                        lblDetailsFinalValueDateValue.Text =
+                        lblDetailsFinalValueDateValue.Text += @" " +
                             Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/ShareUpdateNotDone", LanguageName);
                     }
                     else
                     {
                         // Set the share update date
-                        lblDetailsFinalValueDateValue.Text =
+                        lblDetailsFinalValueDateValue.Text += @" " +
                             string.Format(Helper.DateFullFormat, ShareObjectFinalValue.LastUpdateShare) + @" " +
                             string.Format(Helper.TimeShortFormat, ShareObjectFinalValue.LastUpdateShare);
                         lblDetailsMarketValueDateValue.Text =
@@ -339,64 +457,121 @@ namespace SharePortfolioManager.ShareDetailsForm
                             string.Format(Helper.TimeShortFormat, ShareObjectFinalValue.LastUpdateShare);
                     }
 
+                    #region Overall calculation
+
                     // Set share volume
-                    lblDetailsFinalValueVolumeValue.Text = ShareObjectFinalValue.VolumeAsStrUnit;
-
-                    // Set dividend value
-                    lblDetailsFinalValueDividendValue.Text =
-                        ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesWithUnitAsStr;
-                    // Disable the dividend labels 
-                    lblDetailsMarketValueDividend.Enabled = false;
-                    lblDetailsMarketValueDividendValue.Enabled = false;
-
-                    // Set brokerage value
-                    lblDetailsFinalValueBrokerageValue.Text =
-                        ShareObjectFinalValue.AllBrokerageEntries.BrokerageValueTotalWithUnitAsStr;
-                    // Disable the brokerage labels 
-                    lblDetailsMarketValueBrokerage.Enabled = false;
-                    lblDetailsMarketValueBrokerageValue.Enabled = false;
+                    lblDetailsFinalValueTotalVolumeValue.Text =
+                        ShareObjectFinalValue.VolumeAsStrUnit;
 
                     // Set the current price value
-                    lblDetailsFinalValueCurPriceValue.Text =
+                    lblDetailsFinalValueTotalCurPriceValue.Text =
                         ShareObjectFinalValue.CurPriceAsStrUnit;
-                    // Set performance previous value
-                    lblDetailsFinalValueDiffPerformancePrevValue.Text =
-                        ShareObjectFinalValue.PrevDayPerformanceAsStrUnit;
-                    // Set difference previous value
-                    lblDetailsFinalValueDiffSumPrevValue.Text =
-                        ShareObjectFinalValue.PrevDayProfitLossAsStrUnit;
-                    // Set previous price value
-                    lblDetailsFinalValuePrevPriceValue.Text =
-                        ShareObjectFinalValue.PrevDayPriceAsStrUnit;
 
-                    // Set purchase value
-                    lblDetailsFinalValuePurchaseValue.Text =
-                        ShareObjectFinalValue.PurchaseValueAsStrUnit;
+                    // Set current value of the volume of the shares
+                    lblDetailsFinalValueTotalPurchaseValue.Text =
+                        ShareObjectFinalValue.FinalValueAsStrUnit;
+
+                    // Set dividend value
+                    lblDetailsFinalValueTotalDividendValue.Text =
+                        ShareObjectFinalValue.DividendValueTotalAsStrUnit;
+
+                    // Set sale value
+                    lblDetailsFinalValueTotalSaleValue.Text =
+                        ShareObjectFinalValue.SalePayoutBrokerageReductionAsStrUnit;
+
+                    // Set total share value
+                    lblDetailsFinalValueTotalSumValue.Text =
+                        ShareObjectFinalValue.CompleteFinalValueAsStrUnit;
+
+                    // Set total purchase value
+                    lblDetailsFinalValueTotalSalePurchaseValue.Text =
+                        ShareObjectFinalValue.BuyValueBrokerageReductionAsStrUnit;
+
+                    // Set profit or lose of the share
+                    lblDetailsFinalValueTotalProfitLossValue.Text =
+                        ShareObjectFinalValue.CompleteProfitLossValueAsStrUnit;
+
                     // Set performance of the share
                     lblDetailsFinalValueTotalPerformanceValue.Text =
-                        ShareObjectFinalValue.PerformanceValueAsStrUnit;
-                    // Set profit or lose of the share
-                    lblDetailsFinalValueTotalProfitValue.Text =
-                        ShareObjectFinalValue.ProfitLossValueAsStrUnit;
-                    // Set total value of the share
-                    lblDetailsFinalValueTotalSumValue.Text =
-                        ShareObjectFinalValue.FinalValueAsStrUnit;
+                        ShareObjectFinalValue.CompletePerformanceValueAsStrUnit;
 
                     // Format performance value
                     if (ShareObjectFinalValue.PerformanceValue >= 0)
                     {
                         lblDetailsFinalValueTotalPerformanceValue.ForeColor = Color.Green;
-                        lblDetailsFinalValueTotalProfitValue.ForeColor = Color.Green;
+                        lblDetailsFinalValueTotalProfitLossValue.ForeColor = Color.Green;
                     }
                     else
                     {
                         lblDetailsFinalValueTotalPerformanceValue.ForeColor = Color.Red;
-                        lblDetailsFinalValueTotalProfitValue.ForeColor = Color.Red;
+                        lblDetailsFinalValueTotalProfitLossValue.ForeColor = Color.Red;
                     }
 
-                    lblDetailsFinalValueDiffPerformancePrevValue.ForeColor = ShareObjectFinalValue.PrevDayPerformance >= 0 ? Color.Green : Color.Red;
+                    #endregion Overall calculation
 
-                    lblDetailsFinalValueDiffSumPrevValue.ForeColor = ShareObjectFinalValue.PrevDayProfitLoss >= 0 ? Color.Green : Color.Red;
+                    #region Current calculation
+
+                    // Set share volume
+                    lblDetailsFinalValueCurrentVolumeValue.Text =
+                        ShareObjectFinalValue.VolumeAsStrUnit;
+
+                    // Set the current price value
+                    lblDetailsFinalValueCurrentCurPriceValue.Text =
+                        ShareObjectFinalValue.CurPriceAsStrUnit;
+
+                    // Set current value of the volume of the shares
+                    lblDetailsFinalValueCurrentPurchaseValue.Text =
+                        ShareObjectFinalValue.FinalValueAsStrUnit;
+
+                    // Set dividend value
+                    lblDetailsFinalValueCurrentDividendValue.Text =
+                        ShareObjectFinalValue.DividendValueTotalAsStrUnit;
+
+                    // Set total share value
+                    lblDetailsFinalValueCurrentProfitLossSaleValue.Text =
+                        ShareObjectFinalValue.SaleProfitLossBrokerageReductionAsStrUnit;
+
+                    // Set total value of the share
+                    lblDetailsFinalValueCurrentSumValue.Text =
+                        ShareObjectFinalValue.FinalValueWithProfitLossAsStrUnit;
+
+                    #endregion Current calculation
+
+                    #region Previous day calculation
+
+                    // Set the current price value
+                    lblDetailsFinalValuePrevDayCurPriceValue.Text =
+                        ShareObjectFinalValue.CurPriceAsStrUnit;
+
+                    // Set previous price value
+                    lblDetailsFinalValuePrevDayPrevPriceValue.Text =
+                        ShareObjectFinalValue.PrevPriceAsStrUnit;
+
+                    // Set difference price value
+                    lblDetailsFinalValuePrevDayDiffPriceValue.Text =
+                        ShareObjectFinalValue.CurPrevDayPriceDifferenceAsStrUnit;
+
+                    // Set performance previous value
+                    lblDetailsFinalValuePrevDayDiffPerformanceValue.Text =
+                        ShareObjectFinalValue.CurPrevDayPricePerformanceAsStrUnit;
+
+                    // Set share volume
+                    lblDetailsFinalValuePrevDayVolumeValue.Text =
+                        ShareObjectFinalValue.VolumeAsStrUnit;
+
+                    // Set difference price value
+                    lblDetailsFinalValuePrevDayDiffPriceValueValue.Text =
+                        ShareObjectFinalValue.CurPrevDayPriceDifferenceAsStrUnit;
+
+                    // Set difference previous value
+                    lblDetailsFinalValueDiffSumPrevValue.Text =
+                        ShareObjectFinalValue.CurPrevDayProfitLossAsStrUnit;
+
+                    lblDetailsFinalValuePrevDayDiffPriceValue.ForeColor = ShareObjectFinalValue.CurPrevDayPricePerformance >= 0 ? Color.Green : Color.Red;
+                    lblDetailsFinalValuePrevDayDiffPerformanceValue.ForeColor = ShareObjectFinalValue.CurPrevDayPricePerformance >= 0 ? Color.Green : Color.Red;
+                    lblDetailsFinalValueDiffSumPrevValue.ForeColor = ShareObjectFinalValue.CurPrevDayProfitLoss >= 0 ? Color.Green : Color.Red;
+
+                    #endregion Previous day calculation
                 }
             }
             catch (Exception ex)
@@ -510,6 +685,8 @@ namespace SharePortfolioManager.ShareDetailsForm
                         DataSource = bindingSourceOverview
                     };
 
+                    #region Events
+
                     // Set the delegate for the DataBindingComplete event
                     dataGridViewProfitLossOverviewOfAYears.DataBindingComplete +=
                         DataGridViewProfitLossOfAYear_DataBindingComplete;
@@ -518,30 +695,13 @@ namespace SharePortfolioManager.ShareDetailsForm
                     dataGridViewProfitLossOverviewOfAYears.SelectionChanged +=
                         DataGridViewProfitLossOfYears_SelectionChanged;
 
-                    // Advanced configuration DataGridView profit or loss
-                    var styleOverviewOfYears =
-                        dataGridViewProfitLossOverviewOfAYears.ColumnHeadersDefaultCellStyle;
-                    styleOverviewOfYears.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                    #endregion Events
 
-                    dataGridViewProfitLossOverviewOfAYears.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-                    dataGridViewProfitLossOverviewOfAYears.ColumnHeadersBorderStyle =
-                        DataGridViewHeaderBorderStyle.Single;
-                    dataGridViewProfitLossOverviewOfAYears.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+                    #region Style
+                    
+                    DataGridViewHelper.DataGridViewConfiguration(dataGridViewProfitLossOverviewOfAYears);
 
-                    dataGridViewProfitLossOverviewOfAYears.RowHeadersVisible = false;
-                    dataGridViewProfitLossOverviewOfAYears.RowsDefaultCellStyle.BackColor = Color.White;
-                    dataGridViewProfitLossOverviewOfAYears.DefaultCellStyle.SelectionBackColor = Color.Blue;
-                    dataGridViewProfitLossOverviewOfAYears.DefaultCellStyle.SelectionForeColor = Color.Yellow;
-
-                    dataGridViewProfitLossOverviewOfAYears.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-
-                    dataGridViewProfitLossOverviewOfAYears.MultiSelect = false;
-
-                    dataGridViewProfitLossOverviewOfAYears.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                    dataGridViewProfitLossOverviewOfAYears.AllowUserToResizeColumns = false;
-                    dataGridViewProfitLossOverviewOfAYears.AllowUserToResizeRows = false;
-
-                    dataGridViewProfitLossOverviewOfAYears.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                    #endregion Style
 
                     newTabPageOverviewYears.Controls.Add(dataGridViewProfitLossOverviewOfAYears);
                     dataGridViewProfitLossOverviewOfAYears.Parent = newTabPageOverviewYears;
@@ -582,10 +742,11 @@ namespace SharePortfolioManager.ShareDetailsForm
                                 DataSource = bindingSource
                             };
 
+                            #region Events
+
                             // Set the delegate for the DataBindingComplete event
                             dataGridViewProfitLossOfAYear.DataBindingComplete +=
                                 DataGridViewProfitLossOfAYear_DataBindingComplete;
-
                             // Set row select event
                             dataGridViewProfitLossOfAYear.SelectionChanged +=
                                 DataGridViewProfitLossOfAYear_SelectionChanged;
@@ -593,29 +754,14 @@ namespace SharePortfolioManager.ShareDetailsForm
                             dataGridViewProfitLossOfAYear.CellContentDoubleClick +=
                                 DataGridViewProfitLossOfAYear_CellContentDoubleClick;
 
-                            // Advanced configuration DataGridView profit or loss
-                            var style = dataGridViewProfitLossOfAYear.ColumnHeadersDefaultCellStyle;
-                            style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                            #endregion Events
 
-                            dataGridViewProfitLossOfAYear.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-                            dataGridViewProfitLossOfAYear.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-                            dataGridViewProfitLossOfAYear.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+                            #region Style
 
-                            dataGridViewProfitLossOfAYear.RowHeadersVisible = false;
-                            dataGridViewProfitLossOfAYear.RowsDefaultCellStyle.BackColor = Color.White;
-                            dataGridViewProfitLossOfAYear.DefaultCellStyle.SelectionBackColor = Color.Blue;
-                            dataGridViewProfitLossOfAYear.DefaultCellStyle.SelectionForeColor = Color.Yellow;
+                            DataGridViewHelper.DataGridViewConfiguration(dataGridViewProfitLossOfAYear);
 
-                            dataGridViewProfitLossOfAYear.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-
-                            dataGridViewProfitLossOfAYear.MultiSelect = false;
-
-                            dataGridViewProfitLossOfAYear.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                            dataGridViewProfitLossOfAYear.AllowUserToResizeColumns = false;
-                            dataGridViewProfitLossOfAYear.AllowUserToResizeRows = false;
-
-                            dataGridViewProfitLossOfAYear.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
+                            #endregion Style
+                            
                             newTabPage.Controls.Add(dataGridViewProfitLossOfAYear);
                             dataGridViewProfitLossOfAYear.Parent = newTabPage;
                             tabCtrlProfitLoss.Controls.Add(newTabPage);
@@ -1024,6 +1170,8 @@ namespace SharePortfolioManager.ShareDetailsForm
                         DataSource = bindingSourceOverview
                     };
 
+                    #region Events
+
                     // Set the delegate for the DataBindingComplete event
                     dataGridViewDividendsOverviewOfAYears.DataBindingComplete +=
                         DataGridViewDividendsOfAYear_DataBindingComplete;
@@ -1032,32 +1180,13 @@ namespace SharePortfolioManager.ShareDetailsForm
                     dataGridViewDividendsOverviewOfAYears.SelectionChanged +=
                         DataGridViewDividendsOfYears_SelectionChanged;
 
-                    // Advanced configuration DataGridView dividends
-                    var styleOverviewOfYears =
-                        dataGridViewDividendsOverviewOfAYears.ColumnHeadersDefaultCellStyle;
-                    styleOverviewOfYears.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                    #endregion Events
 
-                    dataGridViewDividendsOverviewOfAYears.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-                    dataGridViewDividendsOverviewOfAYears.ColumnHeadersBorderStyle =
-                        DataGridViewHeaderBorderStyle.Single;
-                    dataGridViewDividendsOverviewOfAYears.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+                    #region Style
 
+                    DataGridViewHelper.DataGridViewConfiguration(dataGridViewDividendsOverviewOfAYears);
 
-                    dataGridViewDividendsOverviewOfAYears.RowHeadersVisible = false;
-                    dataGridViewDividendsOverviewOfAYears.RowsDefaultCellStyle.BackColor = Color.White;
-                    dataGridViewDividendsOverviewOfAYears.DefaultCellStyle.SelectionBackColor = Color.Blue;
-                    dataGridViewDividendsOverviewOfAYears.DefaultCellStyle.SelectionForeColor = Color.Yellow;
-
-                    dataGridViewDividendsOverviewOfAYears.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-
-                    dataGridViewDividendsOverviewOfAYears.MultiSelect = false;
-
-                    dataGridViewDividendsOverviewOfAYears.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                    dataGridViewDividendsOverviewOfAYears.AllowUserToResizeColumns = false;
-                    dataGridViewDividendsOverviewOfAYears.AllowUserToResizeRows = false;
-
-
-                    dataGridViewDividendsOverviewOfAYears.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                    #endregion Style
 
                     newTabPageOverviewYears.Controls.Add(dataGridViewDividendsOverviewOfAYears);
                     dataGridViewDividendsOverviewOfAYears.Parent = newTabPageOverviewYears;
@@ -1101,6 +1230,8 @@ namespace SharePortfolioManager.ShareDetailsForm
                                 DataSource = bindingSource
                             };
 
+                            #region Events
+
                             // Set the delegate for the DataBindingComplete event
                             dataGridViewDividendsOfAYear.DataBindingComplete +=
                                 DataGridViewDividendsOfAYear_DataBindingComplete;
@@ -1109,28 +1240,13 @@ namespace SharePortfolioManager.ShareDetailsForm
                             dataGridViewDividendsOfAYear.SelectionChanged +=
                                 DataGridViewDividendsOfAYear_SelectionChanged;
 
-                            // Advanced configuration DataGridView dividends
-                            var style = dataGridViewDividendsOfAYear.ColumnHeadersDefaultCellStyle;
-                            style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                            #endregion Events
 
-                            dataGridViewDividendsOfAYear.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-                            dataGridViewDividendsOfAYear.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-                            dataGridViewDividendsOfAYear.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+                            #region Style
 
-                            dataGridViewDividendsOfAYear.RowHeadersVisible = false;
-                            dataGridViewDividendsOfAYear.RowsDefaultCellStyle.BackColor = Color.White;
-                            dataGridViewDividendsOfAYear.DefaultCellStyle.SelectionBackColor = Color.Blue;
-                            dataGridViewDividendsOfAYear.DefaultCellStyle.SelectionForeColor = Color.Yellow;
+                            DataGridViewHelper.DataGridViewConfiguration(dataGridViewDividendsOfAYear);
 
-                            dataGridViewDividendsOfAYear.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-
-                            dataGridViewDividendsOfAYear.MultiSelect = false;
-
-                            dataGridViewDividendsOfAYear.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                            dataGridViewDividendsOfAYear.AllowUserToResizeColumns = false;
-                            dataGridViewDividendsOfAYear.AllowUserToResizeRows = false;
-
-                            dataGridViewDividendsOfAYear.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                            #endregion Style
 
                             newTabPage.Controls.Add(dataGridViewDividendsOfAYear);
                             dataGridViewDividendsOfAYear.Parent = newTabPage;
@@ -1253,6 +1369,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     // Set alignment of the column
                     ((DataGridView)sender).Columns[i].DefaultCellStyle.Alignment =
                         DataGridViewContentAlignment.MiddleCenter;
+                    ((DataGridView)sender).Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
 
                     switch (i)
                     {
@@ -1450,36 +1567,24 @@ namespace SharePortfolioManager.ShareDetailsForm
                         // Bind source with brokerage values to the DataGridView
                         DataSource = bindingSourceOverview
                     };
+
+                    #region Events
+
                     // Set the delegate for the DataBindingComplete event
                     dataGridViewBrokerageOverviewOfAYears.DataBindingComplete +=
                         DataGridViewBrokerageOfAYear_DataBindingComplete;
 
                     // Set row select event
-                    dataGridViewBrokerageOverviewOfAYears.SelectionChanged += DataGridViewBrokerageOfYears_SelectionChanged;
+                    dataGridViewBrokerageOverviewOfAYears.SelectionChanged +=
+                        DataGridViewBrokerageOfYears_SelectionChanged;
 
-                    // Advanced configuration DataGridView brokerage
-                    var styleOverviewOfYears =
-                        dataGridViewBrokerageOverviewOfAYears.ColumnHeadersDefaultCellStyle;
-                    styleOverviewOfYears.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                    #endregion Events
 
-                    dataGridViewBrokerageOverviewOfAYears.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-                    dataGridViewBrokerageOverviewOfAYears.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-                    dataGridViewBrokerageOverviewOfAYears.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+                    #region Style
 
-                    dataGridViewBrokerageOverviewOfAYears.RowHeadersVisible = false;
-                    dataGridViewBrokerageOverviewOfAYears.RowsDefaultCellStyle.BackColor = Color.White;
-                    dataGridViewBrokerageOverviewOfAYears.DefaultCellStyle.SelectionBackColor = Color.Blue;
-                    dataGridViewBrokerageOverviewOfAYears.DefaultCellStyle.SelectionForeColor = Color.Yellow;
+                    DataGridViewHelper.DataGridViewConfiguration(dataGridViewBrokerageOverviewOfAYears);
 
-                    dataGridViewBrokerageOverviewOfAYears.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-
-                    dataGridViewBrokerageOverviewOfAYears.MultiSelect = false;
-
-                    dataGridViewBrokerageOverviewOfAYears.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                    dataGridViewBrokerageOverviewOfAYears.AllowUserToResizeColumns = false;
-                    dataGridViewBrokerageOverviewOfAYears.AllowUserToResizeRows = false;
-
-                    dataGridViewBrokerageOverviewOfAYears.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                    #endregion Style
 
                     newTabPageOverviewYears.Controls.Add(dataGridViewBrokerageOverviewOfAYears);
                     dataGridViewBrokerageOverviewOfAYears.Parent = newTabPageOverviewYears;
@@ -1520,35 +1625,23 @@ namespace SharePortfolioManager.ShareDetailsForm
                                 DataSource = bindingSource
                             };
 
+                            #region Events
+
                             // Set the delegate for the DataBindingComplete event
                             dataGridViewBrokerageOfAYear.DataBindingComplete +=
                                 DataGridViewBrokerageOfAYear_DataBindingComplete;
 
                             // Set row select event
-                            dataGridViewBrokerageOfAYear.SelectionChanged += DataGridViewBrokerageOfAYear_SelectionChanged;
+                            dataGridViewBrokerageOfAYear.SelectionChanged +=
+                                DataGridViewBrokerageOfAYear_SelectionChanged;
 
-                            // Advanced configuration DataGridView brokerage
-                            var style = dataGridViewBrokerageOfAYear.ColumnHeadersDefaultCellStyle;
-                            style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                            #endregion Events
 
-                            dataGridViewBrokerageOfAYear.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-                            dataGridViewBrokerageOfAYear.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-                            dataGridViewBrokerageOfAYear.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+                            #region Style
 
-                            dataGridViewBrokerageOfAYear.RowHeadersVisible = false;
-                            dataGridViewBrokerageOfAYear.RowsDefaultCellStyle.BackColor = Color.White;
-                            dataGridViewBrokerageOfAYear.DefaultCellStyle.SelectionBackColor = Color.Blue;
-                            dataGridViewBrokerageOfAYear.DefaultCellStyle.SelectionForeColor = Color.Yellow;
+                            DataGridViewHelper.DataGridViewConfiguration(dataGridViewBrokerageOfAYear);
 
-                            dataGridViewBrokerageOfAYear.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-
-                            dataGridViewBrokerageOfAYear.MultiSelect = false;
-
-                            dataGridViewBrokerageOfAYear.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                            dataGridViewBrokerageOfAYear.AllowUserToResizeColumns = false;
-                            dataGridViewBrokerageOfAYear.AllowUserToResizeRows = false;
-
-                            dataGridViewBrokerageOfAYear.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                            #endregion Style
 
                             newTabPage.Controls.Add(dataGridViewBrokerageOfAYear);
                             dataGridViewBrokerageOfAYear.Parent = newTabPage;

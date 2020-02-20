@@ -21,12 +21,12 @@
 //SOFTWARE.
 
 using SharePortfolioManager.Classes;
+using SharePortfolioManager.Classes.ParserRegex;
+using SharePortfolioManager.Classes.ShareObjects;
 using SharePortfolioManager.ShareAddForm.View;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using SharePortfolioManager.Classes.ParserRegex;
-using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager.ShareAddForm.Model
 {
@@ -73,8 +73,6 @@ namespace SharePortfolioManager.ShareAddForm.Model
         decimal ReductionDec { get; set; }
         string Brokerage { get; set; }
         decimal BrokerageDec { get; set; }
-        string BrokerageWithReduction { get; set; }
-        decimal BrokerageWithReductionDec { get; set; }
         string BuyValue { get; set; }
         decimal BuyValueDec { get; set; }
         string BuyValueReduction { get; set; }
@@ -119,8 +117,6 @@ namespace SharePortfolioManager.ShareAddForm.Model
         private decimal _reductionDec;
         private string _brokerage;
         private decimal _brokerageDec;
-        private string _brokerageWithReduction;
-        private decimal _brokerageWithReductionDec;
         private string _buyValue;
         private decimal _buyValueDec;
         private string _buyValueReduction;
@@ -501,30 +497,6 @@ namespace SharePortfolioManager.ShareAddForm.Model
                 if (Equals(_brokerageDec, value))
                     return;
                 _brokerageDec = value;
-
-                UpdateView = true;
-            }
-        }
-
-        public string BrokerageWithReduction
-        {
-            get => _brokerageWithReductionDec >= 0 ? Helper.FormatDecimal(_brokerageWithReductionDec, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength) : _brokerageWithReduction;
-            set
-            {
-                if (Equals(_brokerageWithReduction, value))
-                    return;
-                _brokerageWithReduction = value;
-            }
-        }
-
-        public decimal BrokerageWithReductionDec
-        {
-            get => _brokerageWithReductionDec;
-            set
-            {
-                if (Equals(_brokerageWithReductionDec, value))
-                    return;
-                _brokerageWithReductionDec = value;
 
                 UpdateView = true;
             }

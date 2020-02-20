@@ -40,6 +40,12 @@ namespace SharePortfolioManager.Classes.Costs
 
         public string BrokerageValueTotalWithUnitAsStr => Helper.FormatDecimal(BrokerageValueTotal, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", CultureInfo);
 
+        public decimal ReductionValueTotal { get; internal set; }
+
+        public string ReductionValueTotalAsStr => Helper.FormatDecimal(ReductionValueTotal, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
+
+        public string ReductionValueTotalWithUnitAsStr => Helper.FormatDecimal(ReductionValueTotal, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", CultureInfo);
+
         public decimal BrokerageWithReductionValueTotal { get; internal set; }
 
         public string BrokerageWithReductionValueTotalAsStr => Helper.FormatDecimal(BrokerageWithReductionValueTotal, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
@@ -78,8 +84,8 @@ namespace SharePortfolioManager.Classes.Costs
         public bool AddBrokerageReduction(string strGuid, bool bPartOfABuy, bool bPartOfASale, string strGuidBuySale,
             string strDateTime, decimal decProvisionValue, decimal decBrokerFeeValue, decimal decTraderPlaceFeeValue, decimal decReductionValue, string strDoc = "")
         {
-#if DEBUG_BROKERAGE
-            Console.WriteLine(@"Add BrokerageWithReductionYearOfTheShare");
+#if false
+            Console.WriteLine(@"AddBrokerageReduction()");
 #endif
             try
             {
@@ -109,19 +115,22 @@ namespace SharePortfolioManager.Classes.Costs
                         return false;
                 }
 
-                // Calculate the total brokerage values
-                // Reset total brokerage values
+                // Calculate the total brokerage and reduction values
+                // Reset values
                 BrokerageValueTotal = 0;
+                ReductionValueTotal = 0;
                 BrokerageWithReductionValueTotal = 0;
 
                 // Calculate the new total brokerage value
                 foreach (var calcObject in AllBrokerageReductionOfTheShareDictionary.Values)
                 {
                     BrokerageValueTotal += calcObject.BrokerageValueYear;
+                    ReductionValueTotal += calcObject.ReductionValueYear;
                     BrokerageWithReductionValueTotal += calcObject.BrokerageWithReductionValueYear;
                 }
-#if DEBUG_BROKERAGE
+#if false
                 Console.WriteLine(@"BrokerageValueTotal:{0}", BrokerageValueTotal);
+                Console.WriteLine(@"ReductionValueTotal:{0}", ReductionValueTotal);
                 Console.WriteLine(@"BrokerageWithReductionValueTotal:{0}", BrokerageWithReductionValueTotal);
 #endif
             }
@@ -141,8 +150,8 @@ namespace SharePortfolioManager.Classes.Costs
         /// <returns></returns>
         public bool RemoveBrokerageReduction(string strGuid, string strDate)
         {
-#if DEBUG_BROKERAGE
-            Console.WriteLine(@"Remove BrokerageWithReductionYearOfTheShare");
+#if false
+            Console.WriteLine(@"RemoveBrokerageReduction()");
 #endif
             try
             {
@@ -168,20 +177,23 @@ namespace SharePortfolioManager.Classes.Costs
                     return false;
                 }
 
-                // Calculate the total brokerage values
-                // Reset total brokerage values
+                // Calculate the total brokerage and reduction values
+                // Reset values
                 BrokerageValueTotal = 0;
+                ReductionValueTotal = 0;
                 BrokerageWithReductionValueTotal = 0;
 
                 // Calculate the new total brokerage value
                 foreach (var calcObject in AllBrokerageReductionOfTheShareDictionary.Values)
                 {
                     BrokerageValueTotal += calcObject.BrokerageValueYear;
+                    ReductionValueTotal += calcObject.ReductionValueYear;
                     BrokerageWithReductionValueTotal += calcObject.BrokerageWithReductionValueYear;
                 }
 
-#if DEBUG_BROKERAGE
+#if false
                 Console.WriteLine(@"BrokerageValueTotal:{0}", BrokerageValueTotal);
+                Console.WriteLine(@"ReductionValueTotal:{0}", ReductionValueTotal);
                 Console.WriteLine(@"BrokerageWithReductionValueTotal:{0}", BrokerageWithReductionValueTotal);
 #endif
             }

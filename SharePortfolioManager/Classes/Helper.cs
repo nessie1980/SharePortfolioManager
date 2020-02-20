@@ -20,22 +20,22 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+using LanguageHandler;
+using Logging;
+using SharePortfolioManager.Properties;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
-using Logging;
-using LanguageHandler;
-using System.Runtime.CompilerServices;
-using System.Diagnostics;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using SharePortfolioManager.Properties;
+using System.Windows.Forms;
 using MenuItem = System.Windows.Forms.MenuItem;
 
 namespace SharePortfolioManager.Classes
@@ -55,6 +55,7 @@ namespace SharePortfolioManager.Classes
         /// Stores the date time format
         /// </summary>
         public const string DateTimeFullFormat = "{0:dd/MM/yyyy HH:mm:ss}";
+
         public const string DateTimeFullFormat2 = "{0:dd/MM/yyyy 1:HH:mm:ss}";
         public const string DateFullTimeShortFormat = "{0:dd/MM/yyyy HH:mm}";
         public const string TimeFullFormat = "{0:HH:mm:ss}";
@@ -69,6 +70,7 @@ namespace SharePortfolioManager.Classes
         /// Stores currency format (price, deposit, brokerage, buys...)
         /// </summary>
         public const int CurrencySixLength = 6;
+
         public const int CurrencyFiveLength = 5;
         public const int CurrencyFourLength = 4;
         public const int CurrencyThreeLength = 3;
@@ -89,17 +91,18 @@ namespace SharePortfolioManager.Classes
         /// <summary>
         /// Stores percentage format (performance...)
         /// </summary>
-        public const int Percentagefivelength = 5;
-        public const int Percentagefourlength = 4;
-        public const int Percentagethreelength = 3;
-        public const int Percentagetwolength = 2;
-        public const int Percentageonelength = 1;
+        public const int PercentageFiveLength = 5;
 
-        public const int Percentagefourfixlength = 4;
-        public const int Percentagethreefixlength = 3;
-        public const int Percentagetwofixlength = 2;
-        public const int Percentageonefixlength = 1;
-        public const int Percentagenonefixlength = 0;
+        public const int PercentageFourLength = 4;
+        public const int PercentageThreeLength = 3;
+        public const int PercentageTwoLength = 2;
+        public const int PercentageOneLength = 1;
+
+        public const int PercentageFourFixLength = 4;
+        public const int PercentageThreeFixLength = 3;
+        public const int PercentageTwoFixLength = 2;
+        public const int PercentageOneFixLength = 1;
+        public const int PercentageNoneFixLength = 0;
 
         #endregion Percentage
 
@@ -108,20 +111,42 @@ namespace SharePortfolioManager.Classes
         /// <summary>
         /// Stores volume format (pcs.)
         /// </summary>
-        public const int Volumefivelength = 5;
-        public const int Volumefourlength = 4;
-        public const int Volumethreelength = 3;
-        public const int Volumetwolength = 2;
-        public const int Volumeonelength = 1;
+        public const int VolumeFiveLength = 5;
 
-        public const int Volumefivefixlength = 5;
-        public const int Volumefourfixlength = 4;
-        public const int Volumethreefixlength = 3;
-        public const int Volumetwofixlength = 2;
-        public const int Volumeonefixlength = 1;
-        public const int Volumenonefixlength = 0;
+        public const int VolumeFourLength = 4;
+        public const int VolumeThreeLength = 3;
+        public const int VolumeTwoLength = 2;
+        public const int VolumeOneLength = 1;
+
+        public const int VolumeFiveFixLength = 5;
+        public const int VolumeFourFixLength = 4;
+        public const int VolumeThreeFixLength = 3;
+        public const int VolumeTwoFixLength = 2;
+        public const int VolumeOneFixLength = 1;
+        public const int VolumeNoneFixLength = 0;
 
         #endregion Volume
+
+        #region Dividend
+
+        /// <summary>
+        /// Stores dividend format
+        /// </summary>
+        public const int DividendFiveLength = 5;
+
+        public const int DividendFourLength = 4;
+        public const int DividendThreeLength = 3;
+        public const int DividendTwoLength = 2;
+        public const int DividendOneLength = 1;
+
+        public const int DividendFiveFixLength = 5;
+        public const int DividendFourFixLength = 4;
+        public const int DividendThreeFixLength = 3;
+        public const int DividendTwoFixLength = 2;
+        public const int DividendOneFixLength = 1;
+        public const int DividendNoneFixLength = 0;
+
+        #endregion Dividend
 
         #endregion Constants formatting
 
@@ -130,7 +155,8 @@ namespace SharePortfolioManager.Classes
         public static string PdfConverterApplication =
             Path.GetDirectoryName(Application.ExecutablePath) + "\\Tools\\pdftotext.exe";
 
-        public static string ParsingDocumentFileName = Path.GetDirectoryName(Application.ExecutablePath) + "\\Tools\\Parsing.txt";
+        public static string ParsingDocumentFileName =
+            Path.GetDirectoryName(Application.ExecutablePath) + "\\Tools\\Parsing.txt";
 
         #endregion Variables
 
@@ -223,7 +249,7 @@ namespace SharePortfolioManager.Classes
             return stringResult;
         }
 
-        #endregion Text new line builder 
+        #endregion Text new line builder
 
         #region Add status message to the text box and to the logger
 
@@ -240,7 +266,8 @@ namespace SharePortfolioManager.Classes
         /// <param name="stateLevel">Level of the state (e.g. Info)</param>
         /// <param name="componentLevel">Level of the component (e.g. Application)</param>
         /// <returns>Flag if the add was successful</returns>
-        public static bool AddStatusMessage(object showObject, string stateMessage, Language xmlLanguage, string language, Color color, Logger logger, int stateLevel, int componentLevel)
+        public static bool AddStatusMessage(object showObject, string stateMessage, Language xmlLanguage,
+            string language, Color color, Logger logger, int stateLevel, int componentLevel)
         {
             try
             {
@@ -252,38 +279,44 @@ namespace SharePortfolioManager.Classes
                     try
                     {
                         // Get color for the message
-                        color = logger.GetColorOfStateLevel((Logger.ELoggerStateLevels)stateLevel);
+                        color = logger.GetColorOfStateLevel((Logger.ELoggerStateLevels) stateLevel);
 
                         // Add state message to the log entry list
-                        logger.AddEntry(stateMessage, (Logger.ELoggerStateLevels)stateLevel, (Logger.ELoggerComponentLevels)componentLevel);
+                        logger.AddEntry(stateMessage, (Logger.ELoggerStateLevels) stateLevel,
+                            (Logger.ELoggerComponentLevels) componentLevel);
                     }
                     catch (LoggerException ex)
                     {
                         if (ex.LoggerState == Logger.ELoggerState.CleanUpLogFilesFailed)
-                            stateMessageError = xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerStateMessages/CleanUpLogFilesFailed", language);
-                    }   
+                            stateMessageError =
+                                xmlLanguage.GetLanguageTextByXPath(@"/Logger/LoggerStateMessages/CleanUpLogFilesFailed",
+                                    language);
+                    }
                 }
 
                 // RichTextBox
                 if (logger != null && showObject.GetType() == typeof(RichTextBox))
                 {
-                    var castControl = (RichTextBox)showObject;
+                    var castControl = (RichTextBox) showObject;
 
                     // Create a temporary rich text box with no word wrap
                     var tempControl = castControl;
                     tempControl.WordWrap = false;
 
                     // Add time stamp
-                    stateMessage = string.Format(TimeFullFormat, DateTime.Now) + @" " + stateMessage + Environment.NewLine;
+                    stateMessage = string.Format(TimeFullFormat, DateTime.Now) + @" " + stateMessage +
+                                   Environment.NewLine;
 
                     // Check if the logger add failed
                     if (stateMessageError != "")
-                        stateMessage += string.Format(TimeFullFormat, DateTime.Now) + @" " + stateMessageError + Environment.NewLine;
+                        stateMessage += string.Format(TimeFullFormat, DateTime.Now) + @" " + stateMessageError +
+                                        Environment.NewLine;
 
                     // Check if the maximum of lines is reached and delete last line
                     if (tempControl.Lines.Any() && tempControl.Lines.Length > logger.LoggerSize)
                     {
-                        tempControl.SelectionStart = tempControl.GetFirstCharIndexFromLine(tempControl.Lines.Length - 2);
+                        tempControl.SelectionStart =
+                            tempControl.GetFirstCharIndexFromLine(tempControl.Lines.Length - 2);
                         tempControl.SelectionLength = tempControl.Lines[tempControl.Lines.Length - 2].Length + 1;
                         tempControl.SelectedText = string.Empty;
                     }
@@ -302,7 +335,7 @@ namespace SharePortfolioManager.Classes
                 // Label
                 if (showObject.GetType() == typeof(Label))
                 {
-                    var castControl = (Label)showObject;
+                    var castControl = (Label) showObject;
 
                     // Set color
                     var oldColor = castControl.ForeColor;
@@ -323,16 +356,16 @@ namespace SharePortfolioManager.Classes
                 // ToolStripStatusLabel
                 if (showObject.GetType() == typeof(ToolStripStatusLabel))
                 {
-                    var castControl = (ToolStripStatusLabel)showObject;
+                    var castControl = (ToolStripStatusLabel) showObject;
 
                     // Set color
-                   // var oldColor = castControl.ForeColor;
+                    // var oldColor = castControl.ForeColor;
                     castControl.ForeColor = color;
 
                     // Check if the logger add failed
                     if (stateMessageError != "")
                         stateMessage += @" " + stateMessageError + Environment.NewLine;
-                    
+
                     // Set state message
                     castControl.Text = stateMessage;
                     // Reset color
@@ -377,7 +410,9 @@ namespace SharePortfolioManager.Classes
                     if (control.GetType() == typeof(GroupBox))
                     {
                         var castControl = (GroupBox) control;
+#if false
                         Console.WriteLine(castControl.Name);
+#endif
 
                         if (listControlNames.Contains(castControl.Name))
                             castControl.Enabled = flag;
@@ -390,7 +425,9 @@ namespace SharePortfolioManager.Classes
                     if (control.GetType() == typeof(Button))
                     {
                         var castControl = (Button) control;
+#if false
                         Console.WriteLine(castControl.Name);
+#endif
 
                         if (listControlNames.Contains(castControl.Name))
                             castControl.Enabled = flag;
@@ -403,7 +440,9 @@ namespace SharePortfolioManager.Classes
                     if (control.GetType() == typeof(MenuStrip))
                     {
                         var castControl = (MenuStrip) control;
+#if false
                         Console.WriteLine(castControl.Name);
+#endif
 
                         if (listControlNames.Contains(castControl.Name))
                             castControl.Enabled = flag;
@@ -416,7 +455,9 @@ namespace SharePortfolioManager.Classes
                     if (control.GetType() == typeof(MenuItem))
                     {
                         var castControl = (MenuStrip) control;
+#if false
                         Console.WriteLine(castControl.Name);
+#endif
 
                         if (listControlNames.Contains(castControl.Name))
                             castControl.Enabled = flag;
@@ -429,7 +470,9 @@ namespace SharePortfolioManager.Classes
                     if (control.GetType() == typeof(DataGridView))
                     {
                         var castControl = (DataGridView) control;
+#if false
                         Console.WriteLine(castControl.Name);
+#endif
 
                         if (listControlNames.Contains(castControl.Name))
                             castControl.Enabled = flag;
@@ -441,8 +484,10 @@ namespace SharePortfolioManager.Classes
                     // DataGridView
                     if (control.GetType() == typeof(TableLayoutPanel))
                     {
-                        var castControl = (TableLayoutPanel)control;
+                        var castControl = (TableLayoutPanel) control;
+#if false
                         Console.WriteLine(castControl.Name);
+#endif
 
                         if (listControlNames.Contains(castControl.Name))
                             castControl.Enabled = flag;
@@ -455,8 +500,9 @@ namespace SharePortfolioManager.Classes
                     if (control.GetType() != typeof(TabControl)) continue;
                     {
                         var castControl = (TabControl) control;
+#if false
                         Console.WriteLine(castControl.Name);
-
+#endif
                         if (listControlNames.Contains(castControl.Name))
                             castControl.Enabled = flag;
 
@@ -486,8 +532,8 @@ namespace SharePortfolioManager.Classes
                 return Resources.doc_pdf_image_24;
             }
 
-            if(string.Compare(strExtension, @".xlsx", StringComparison.OrdinalIgnoreCase) == 0 ||
-               string.Compare(strExtension, @".xls", StringComparison.OrdinalIgnoreCase) == 0
+            if (string.Compare(strExtension, @".xlsx", StringComparison.OrdinalIgnoreCase) == 0 ||
+                string.Compare(strExtension, @".xls", StringComparison.OrdinalIgnoreCase) == 0
             )
             {
                 return Resources.doc_excel_image_24;
@@ -515,7 +561,8 @@ namespace SharePortfolioManager.Classes
         /// <param name="index">Index of the row where to scroll</param>
         /// <param name="lastDisplayedRowIndex">Index of the last displayed row of the data grid view</param>
         /// <param name="bAllowScrollUp">Flag if a scroll to the top is allowed</param>
-        public static void ScrollDgvToIndex(DataGridView dataGridView, int index, int lastDisplayedRowIndex, bool bAllowScrollUp = false)
+        public static void ScrollDgvToIndex(DataGridView dataGridView, int index, int lastDisplayedRowIndex,
+            bool bAllowScrollUp = false)
         {
             // Check if DataGridView is valid
             if (dataGridView == null || dataGridView.RowCount <= 0) return;
@@ -557,7 +604,7 @@ namespace SharePortfolioManager.Classes
 #endif
         }
 
-#endregion Scroll DataGridView to given index
+        #endregion Scroll DataGridView to given index
 
         #region Formatting functions
 
@@ -573,7 +620,8 @@ namespace SharePortfolioManager.Classes
         /// <param name="strUnit">String with the given unit</param>
         /// <param name="cultureInfo">Culture info for the formatting</param>
         /// <returns>Formatted string value of the given double</returns>
-        public static string FormatDouble(double dblValue, int iPrecision, bool bFixed, int iFixedPrecision = 0, bool bUnit = false, string strUnit = "", CultureInfo cultureInfo = null)
+        public static string FormatDouble(double dblValue, int iPrecision, bool bFixed, int iFixedPrecision = 0,
+            bool bUnit = false, string strUnit = "", CultureInfo cultureInfo = null)
         {
             var strFormatString = "";
 
@@ -628,7 +676,9 @@ namespace SharePortfolioManager.Classes
             }
 
             // Format with the given culture info
-            var strResult = cultureInfo != null ? dblValue.ToString(strFormatString, cultureInfo) : dblValue.ToString(strFormatString);
+            var strResult = cultureInfo != null
+                ? dblValue.ToString(strFormatString, cultureInfo)
+                : dblValue.ToString(strFormatString);
 
             // Check if a unit is given or should be set
             if (!bUnit)
@@ -660,7 +710,8 @@ namespace SharePortfolioManager.Classes
         /// <param name="strUnit">String with the given unit</param>
         /// <param name="cultureInfo">Culture info for the formatting</param>
         /// <returns>Formatted string of the given decimal</returns>
-        public static string FormatDecimal(decimal decValue, int iPrecision, bool bFixed, int iFixedPrecision = 0, bool bUnit = false, string strUnit = "", CultureInfo cultureInfo = null)
+        public static string FormatDecimal(decimal decValue, int iPrecision, bool bFixed, int iFixedPrecision = 0,
+            bool bUnit = false, string strUnit = "", CultureInfo cultureInfo = null)
         {
             var strFormatString = "";
 
@@ -715,7 +766,9 @@ namespace SharePortfolioManager.Classes
             }
 
             // Format with the given culture info
-            var strResult = cultureInfo != null ? decValue.ToString(strFormatString, cultureInfo) : decValue.ToString(strFormatString);
+            var strResult = cultureInfo != null
+                ? decValue.ToString(strFormatString, cultureInfo)
+                : decValue.ToString(strFormatString);
 
             // Check if a unit is given or should be set
             if (!bUnit)
@@ -745,53 +798,53 @@ namespace SharePortfolioManager.Classes
         /// <param name="strRegexOptions">The RegEx options string. Options must be separated by ","</param>
         /// <returns>List with the RegexOptions</returns>
         public static List<RegexOptions> GetRegexOptions(string strRegexOptions)
+        {
+            var regexOptionsList = new List<RegexOptions>();
+
+            // Remove white space
+            strRegexOptions = strRegexOptions.Replace(" ", "");
+            foreach (var regexOption in strRegexOptions.Split(','))
             {
-                var regexOptionsList = new List<RegexOptions>();
-
-                // Remove white space
-                strRegexOptions = strRegexOptions.Replace(" ", "");
-                foreach (var regexOption in strRegexOptions.Split(','))
+                switch (regexOption)
                 {
-                    switch (regexOption)
-                    {
-                        case "Compiled":
-                            regexOptionsList.Add(RegexOptions.Compiled);
-                            break;
-                        case "CultureInvariant":
-                            regexOptionsList.Add(RegexOptions.CultureInvariant);
-                            break;
-                        case "ECMAScript":
-                            regexOptionsList.Add(RegexOptions.ECMAScript);
-                            break;
-                        case "ExplicitCapture":
-                            regexOptionsList.Add(RegexOptions.ExplicitCapture);
-                            break;
-                        case "IgnoreCase":
-                            regexOptionsList.Add(RegexOptions.IgnoreCase);
-                            break;
-                        case "IgnorePatternWhitespace":
-                            regexOptionsList.Add(RegexOptions.IgnorePatternWhitespace);
-                            break;
-                        case "Multiline":
-                            regexOptionsList.Add(RegexOptions.Multiline);
-                            break;
-                        case "None":
-                            regexOptionsList.Add(RegexOptions.None);
-                            break;
-                        case "RightToLeft":
-                            regexOptionsList.Add(RegexOptions.RightToLeft);
-                            break;
-                        case "Singleline":
-                            regexOptionsList.Add(RegexOptions.Singleline);
-                            break;
-                        default:
-                            regexOptionsList.Add(RegexOptions.Singleline);
-                            break;
-                    }
+                    case "Compiled":
+                        regexOptionsList.Add(RegexOptions.Compiled);
+                        break;
+                    case "CultureInvariant":
+                        regexOptionsList.Add(RegexOptions.CultureInvariant);
+                        break;
+                    case "ECMAScript":
+                        regexOptionsList.Add(RegexOptions.ECMAScript);
+                        break;
+                    case "ExplicitCapture":
+                        regexOptionsList.Add(RegexOptions.ExplicitCapture);
+                        break;
+                    case "IgnoreCase":
+                        regexOptionsList.Add(RegexOptions.IgnoreCase);
+                        break;
+                    case "IgnorePatternWhitespace":
+                        regexOptionsList.Add(RegexOptions.IgnorePatternWhitespace);
+                        break;
+                    case "Multiline":
+                        regexOptionsList.Add(RegexOptions.Multiline);
+                        break;
+                    case "None":
+                        regexOptionsList.Add(RegexOptions.None);
+                        break;
+                    case "RightToLeft":
+                        regexOptionsList.Add(RegexOptions.RightToLeft);
+                        break;
+                    case "Singleline":
+                        regexOptionsList.Add(RegexOptions.Singleline);
+                        break;
+                    default:
+                        regexOptionsList.Add(RegexOptions.Singleline);
+                        break;
                 }
-
-                return regexOptionsList.Count > 0 ? regexOptionsList : null;
             }
+
+            return regexOptionsList.Count > 0 ? regexOptionsList : null;
+        }
 
         #endregion Get RegEx options
 
@@ -880,6 +933,7 @@ namespace SharePortfolioManager.Classes
 
             return strCurrentPortfolio;
         }
+
         #endregion Open file dialog for loading portfolio
 
         #region Get file name of the given path
@@ -909,22 +963,23 @@ namespace SharePortfolioManager.Classes
         public static void CreateNameCultureInfoCurrencySymbolList()
         {
             ListNameCultureInfoCurrencySymbol = CultureInfo
-            .GetCultures(CultureTypes.AllCultures)
-            .Where(c => !c.IsNeutralCulture)
-            .Select(culture =>
-            {
-                try
+                .GetCultures(CultureTypes.AllCultures)
+                .Where(c => !c.IsNeutralCulture)
+                .Select(culture =>
                 {
-                    return new KeyValuePair<string, CultureInformation>(culture.Name, new CultureInformation(culture, new RegionInfo(culture.LCID).CurrencySymbol));
-                }
-                catch
-                {
-                    return new KeyValuePair<string, CultureInformation>(null, null);
-                }
-            })
-            .Where(ci => ci.Key != null)
-            .OrderBy(ci => ci.Key)
-            .ToDictionary(x => x.Key, x => x.Value);
+                    try
+                    {
+                        return new KeyValuePair<string, CultureInformation>(culture.Name,
+                            new CultureInformation(culture, new RegionInfo(culture.LCID).CurrencySymbol));
+                    }
+                    catch
+                    {
+                        return new KeyValuePair<string, CultureInformation>(null, null);
+                    }
+                })
+                .Where(ci => ci.Key != null)
+                .OrderBy(ci => ci.Key)
+                .ToDictionary(x => x.Key, x => x.Value);
 
             ListNameCultureInfoCurrencySymbol = ListNameCultureInfoCurrencySymbol.OrderBy(ci => ci.Key);
         }
@@ -951,13 +1006,11 @@ namespace SharePortfolioManager.Classes
 
         public static void CalcBuyValues(decimal decVolume, decimal decSharePrice,
             decimal decProvision, decimal decBrokerFee, decimal decTraderPlaceFee, decimal decReduction,
-            out decimal decBuyValue, out decimal decBuyValueReduction, out decimal decBuyValueBrokerage, out decimal decBuyValueBrokerageReduction, out decimal decBrokerage, out decimal decBrokerageReduction)
+            out decimal decBuyValue, out decimal decBuyValueReduction, out decimal decBuyValueBrokerage,
+            out decimal decBuyValueBrokerageReduction, out decimal decBrokerage)
         {
-            decBrokerage = 0;
-            decBrokerageReduction = 0;
-
             // Calculate brokerage
-            CalcBrokerageValues(decProvision, decBrokerFee, decTraderPlaceFee, decReduction, out decBrokerage, out decBrokerageReduction);
+            CalcBrokerageValues(decProvision, decBrokerFee, decTraderPlaceFee, out decBrokerage);
 
             // Calculate market value and deposit ( market value + brokerage )
             if (decVolume > 0 && decSharePrice > 0)
@@ -976,21 +1029,15 @@ namespace SharePortfolioManager.Classes
             }
         }
 
-        #endregion   Calculate market value, market value plus brokerage
+        #endregion Calculate market value, market value plus brokerage
 
         #region Calculate brokerage value
 
-        public static void CalcBrokerageValues(decimal decProvision, decimal decBrokerFee, decimal decTraderPlaceFee, decimal decReduction,
-            out decimal decBrokerage, out decimal decBrokerageReduction)
+        public static void CalcBrokerageValues(decimal decProvision, decimal decBrokerFee, decimal decTraderPlaceFee,
+            out decimal decBrokerage)
         {
             // Calculate brokerage
             decBrokerage = decProvision + decBrokerFee + decTraderPlaceFee;
-            // Calculate brokerage minus reduction
-            // Check if the brokerage minus reduction is equal or higher then 0
-            if (decBrokerage - decReduction >= 0)
-                decBrokerageReduction = decBrokerage - decReduction;
-            else
-                decBrokerageReduction = 0;
         }
 
         #endregion Calculate brokerage value
@@ -1008,13 +1055,14 @@ namespace SharePortfolioManager.Classes
             try
             {
                 var urlCheck = new Uri(url);
-                var request = (HttpWebRequest)WebRequest.Create(urlCheck);
+                var request = (HttpWebRequest) WebRequest.Create(urlCheck);
                 request.Timeout = timeout;
-                request.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9.0.13) Gecko/2009073022 Firefox/3.0.13";
+                request.UserAgent =
+                    "Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9.0.13) Gecko/2009073022 Firefox/3.0.13";
 
-                response = (HttpWebResponse)request.GetResponse();
+                response = (HttpWebResponse) request.GetResponse();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(@"Exception: {0}", ex.Message);
                 return false; //could not connect to the inter net (maybe) 
@@ -1043,7 +1091,7 @@ namespace SharePortfolioManager.Classes
             return strWebSite;
         }
 
-#endregion URL checker
+        #endregion URL checker
 
         #region Get combo box items
 
@@ -1052,13 +1100,16 @@ namespace SharePortfolioManager.Classes
             return language.GetLanguageTextListByXPath(xPath, languageName);
         }
 
-        #endregion  Get combo box items
+        #endregion Get combo box items
 
         #region Remove double whitespaces and line feeds ( \n \r )
 
         public static string RemoveDoubleWhiteSpaces(string strInput)
         {
-            if (strInput == null) { return null; }
+            if (strInput == null)
+            {
+                return null;
+            }
 
             var builder = new StringBuilder();
             var ignoreWhitespace = false;
@@ -1068,8 +1119,10 @@ namespace SharePortfolioManager.Classes
                 {
                     builder.Append(c);
                 }
+
                 ignoreWhitespace = c == ' ';
             }
+
             return builder.ToString();
         }
 
@@ -1103,7 +1156,7 @@ namespace SharePortfolioManager.Classes
                 Console.WriteLine(ex);
                 throw;
             }
-            catch(InvalidOperationException ex)
+            catch (InvalidOperationException ex)
             {
                 Console.WriteLine(ex);
                 throw;
@@ -1136,7 +1189,7 @@ namespace SharePortfolioManager.Classes
 
         #region Time function
 
-        public static string BuildDailyValuesUrl(List<Parser.DailyValues>dailyValues, string webSiteUrl, int shareType)
+        public static string BuildDailyValuesUrl(List<Parser.DailyValues> dailyValues, string webSiteUrl, int shareType)
         {
             var strDailyValuesWebSite = "";
 
@@ -1193,7 +1246,8 @@ namespace SharePortfolioManager.Classes
                             strDailyValuesWebSite = string.Format(webSiteUrl,
                                 DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy"), "Y5");
                         }
-                    } break;
+                    }
+                        break;
                     // Share type "Fond"
                     case 1:
                     {
@@ -1217,7 +1271,8 @@ namespace SharePortfolioManager.Classes
                             strDailyValuesWebSite = string.Format(webSiteUrl,
                                 DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy"), "5Y");
                         }
-                    } break;
+                    }
+                        break;
                 }
             }
 
@@ -1229,8 +1284,8 @@ namespace SharePortfolioManager.Classes
 
         public static int GetTotalMonthsFrom(DateTime dt1, DateTime dt2)
         {
-            DateTime earlyDate = (dt1 > dt2) ? dt2.Date : dt1.Date;
-            DateTime lateDate = (dt1 > dt2) ? dt1.Date : dt2.Date;
+            var earlyDate = (dt1 > dt2) ? dt2.Date : dt1.Date;
+            var lateDate = (dt1 > dt2) ? dt1.Date : dt2.Date;
 
             // Start with 1 month's difference and keep incrementing
             // until we overshoot the late date
@@ -1242,7 +1297,66 @@ namespace SharePortfolioManager.Classes
 
             return monthsDiff - 1;
         }
+
         #endregion Time function
+
+        #endregion Methods
+    }
+
+    internal static class DataGridViewHelper
+    {
+        #region Constants DataGridView
+
+        public static readonly Color DataGridViewHeaderColors = SystemColors.GrayText;
+
+        #endregion Constatns DataGridView
+
+        #region Methods
+
+        public static void DataGridViewConfiguration( DataGridView dgv)
+        {
+            dgv.Font = new Font(@"Consolas", 9);
+
+            // Column header styling
+            dgv.EnableHeadersVisualStyles = false;
+            dgv.ColumnHeadersHeight = 25;
+            dgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+
+            var styleColumnHeader = dgv.ColumnHeadersDefaultCellStyle;
+            styleColumnHeader.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            styleColumnHeader.BackColor = DataGridViewHeaderColors;
+            styleColumnHeader.SelectionBackColor = DataGridViewHeaderColors;
+
+            // Column styling
+            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            // Row styling
+            dgv.RowHeadersVisible = false;
+            dgv.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
+            dgv.RowsDefaultCellStyle.BackColor = Color.White;
+            dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgv.MultiSelect = false;
+
+            // Cell styling
+            dgv.DefaultCellStyle.SelectionBackColor = Color.Blue;
+            dgv.DefaultCellStyle.SelectionForeColor = Color.Yellow;
+            dgv.CellBorderStyle = DataGridViewCellBorderStyle.Single;
+            dgv.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            
+            // Allow styling
+            dgv.AllowUserToResizeColumns = false;
+            dgv.AllowUserToResizeRows = false;
+            dgv.AllowUserToAddRows = false;
+            dgv.AllowUserToDeleteRows = false;
+
+            //dataGridViewDividendsOverviewOfAYears.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            //dataGridViewDividendsOverviewOfAYears.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+
+            //// Does resize the row to display the complete content
+            //dataGridViewDividendsOverviewOfAYears.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
+
+            //dataGridViewDividendsOverviewOfAYears.BorderStyle = BorderStyle.FixedSingle;
+        }
 
         #endregion Methods
     }
@@ -1331,33 +1445,35 @@ namespace SharePortfolioManager.Classes
                 _imageSize = value.Size;
 
                 var inheritedPadding = InheritedStyle.Padding;
-                Style.Padding = new Padding(_imageSize.Width, inheritedPadding.Top, inheritedPadding.Right, inheritedPadding.Bottom);
+                Style.Padding = new Padding(_imageSize.Width, inheritedPadding.Top, inheritedPadding.Right,
+                    inheritedPadding.Bottom);
             }
         }
 
         protected override void Paint(Graphics graphics, Rectangle clipBounds,
-        Rectangle cellBounds, int rowIndex, DataGridViewElementStates cellState,
-        object value, object formattedValue, string errorText,
-        DataGridViewCellStyle cellStyle,
-        DataGridViewAdvancedBorderStyle advancedBorderStyle,
-        DataGridViewPaintParts paintParts)
+            Rectangle cellBounds, int rowIndex, DataGridViewElementStates cellState,
+            object value, object formattedValue, string errorText,
+            DataGridViewCellStyle cellStyle,
+            DataGridViewAdvancedBorderStyle advancedBorderStyle,
+            DataGridViewPaintParts paintParts)
         {
             // Set image to the vertical middle of the cell
             var newLocation = cellBounds.Location;
             if (Image != null)
-                newLocation = new Point(cellBounds.X + 1, cellBounds.Location.Y + cellBounds.Height / 2 - Image.Size.Height / 2);
+                newLocation = new Point(cellBounds.X + 1,
+                    cellBounds.Location.Y + cellBounds.Height / 2 - Image.Size.Height / 2);
 
             // Paint the base content
             base.Paint(graphics, clipBounds, cellBounds, rowIndex, cellState,
-               value, formattedValue, errorText, cellStyle,
-               advancedBorderStyle, paintParts);
+                value, formattedValue, errorText, cellStyle,
+                advancedBorderStyle, paintParts);
 
             if (Image == null) return;
 
             // Draw the image clipped to the cell.
             var container = graphics.BeginContainer();
             graphics.SetClip(cellBounds);
-            graphics.DrawImageUnscaled(Image, newLocation/*cellBounds.Location*/);
+            graphics.DrawImageUnscaled(Image, newLocation /*cellBounds.Location*/);
 
             graphics.EndContainer(container);
         }
@@ -1365,7 +1481,7 @@ namespace SharePortfolioManager.Classes
         private TextAndImageColumn OwningTextAndImageColumn => OwningColumn as TextAndImageColumn;
     }
 
-    #endregion
+    #endregion Text and image in a DataGridView cell
 
     // This class stores the information of a culture info
     public class CultureInformation

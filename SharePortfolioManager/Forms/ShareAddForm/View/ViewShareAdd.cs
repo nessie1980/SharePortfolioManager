@@ -24,6 +24,7 @@ using LanguageHandler;
 using Logging;
 using Parser;
 using SharePortfolioManager.Classes;
+using SharePortfolioManager.Classes.ParserRegex;
 using SharePortfolioManager.Classes.ShareObjects;
 using SharePortfolioManager.Properties;
 using System;
@@ -35,7 +36,6 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using SharePortfolioManager.Classes.ParserRegex;
 
 namespace SharePortfolioManager.ShareAddForm.View
 {
@@ -1606,25 +1606,25 @@ namespace SharePortfolioManager.ShareAddForm.View
                                         switch (DocumentType)
                                         {
                                             case DocumentParsingConfiguration.DocumentTypes.BuyDocument:
-                                                {
-                                                    var parsingValues = DocumentTypeParser.ParsingValues;
-                                                    DocumentTypeParser.ParsingValues = new ParsingValues(
-                                                        parsingValues.WebSiteUrl,
-                                                        parsingValues.EncodingType,
-                                                        DocumentParsingConfiguration
-                                                            .BankRegexList[_bankCounter]
-                                                            .DictionaryDocumentRegex[
-                                                                DocumentParsingConfiguration.DocumentTypeBuy].
-                                                            DocumentRegexList
-                                                    );
-                                                    DocumentTypeParser.StartParsing();
-                                                    break;
-                                                }
+                                            {
+                                                var parsingValues = DocumentTypeParser.ParsingValues;
+                                                DocumentTypeParser.ParsingValues = new ParsingValues(
+                                                    parsingValues.ParsingText,
+                                                    parsingValues.EncodingType,
+                                                    DocumentParsingConfiguration
+                                                        .BankRegexList[_bankCounter]
+                                                        .DictionaryDocumentRegex[
+                                                            DocumentParsingConfiguration.DocumentTypeBuy].
+                                                        DocumentRegexList
+                                                );
+                                                DocumentTypeParser.StartParsing();
+                                            }
+                                            break;
                                             case DocumentParsingConfiguration.DocumentTypes.SaleDocument:
                                             {
                                                 var parsingValues = DocumentTypeParser.ParsingValues;
                                                 DocumentTypeParser.ParsingValues = new ParsingValues(
-                                                    parsingValues.WebSiteUrl,
+                                                    parsingValues.ParsingText,
                                                     parsingValues.EncodingType,
                                                     DocumentParsingConfiguration
                                                         .BankRegexList[_bankCounter]
@@ -1633,13 +1633,13 @@ namespace SharePortfolioManager.ShareAddForm.View
                                                         DocumentRegexList
                                                 );
                                                 DocumentTypeParser.StartParsing();
-                                                break;
                                             }
+                                            break;
                                             case DocumentParsingConfiguration.DocumentTypes.DividendDocument:
                                             {
                                                 var parsingValues = DocumentTypeParser.ParsingValues;
                                                 DocumentTypeParser.ParsingValues = new ParsingValues(
-                                                    parsingValues.WebSiteUrl,
+                                                    parsingValues.ParsingText,
                                                     parsingValues.EncodingType,
                                                     DocumentParsingConfiguration
                                                         .BankRegexList[_bankCounter]
@@ -1648,13 +1648,13 @@ namespace SharePortfolioManager.ShareAddForm.View
                                                         DocumentRegexList
                                                 );
                                                 DocumentTypeParser.StartParsing();
-                                                break;
                                             }
+                                            break;
                                             case DocumentParsingConfiguration.DocumentTypes.BrokerageDocument:
                                             {
                                                 var parsingValues = DocumentTypeParser.ParsingValues;
                                                 DocumentTypeParser.ParsingValues = new ParsingValues(
-                                                    parsingValues.WebSiteUrl,
+                                                    parsingValues.ParsingText,
                                                     parsingValues.EncodingType,
                                                     DocumentParsingConfiguration
                                                         .BankRegexList[_bankCounter]
@@ -1663,13 +1663,13 @@ namespace SharePortfolioManager.ShareAddForm.View
                                                         DocumentRegexList
                                                 );
                                                     DocumentTypeParser.StartParsing();
-                                                break;
                                             }
+                                            break;
                                             default:
                                             {
                                                 _documentTypNotImplemented = true;
-                                                break;
                                             }
+                                            break;
                                         }
                                     }
                                 }
@@ -1682,7 +1682,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                                 {
                                     var parsingValues = DocumentTypeParser.ParsingValues;
                                     DocumentTypeParser.ParsingValues = new ParsingValues(
-                                        parsingValues.WebSiteUrl,
+                                        parsingValues.ParsingText,
                                         parsingValues.EncodingType,
                                         DocumentParsingConfiguration
                                             .BankRegexList[_bankCounter].BankRegexList

@@ -23,11 +23,11 @@
 using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Classes;
+using SharePortfolioManager.OwnMessageBoxForm;
 using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using SharePortfolioManager.OwnMessageBoxForm;
 
 namespace SharePortfolioManager.LoggerSettingsForm
 {

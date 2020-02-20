@@ -22,6 +22,7 @@
 
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.ShareObjects;
+using SharePortfolioManager.OwnMessageBoxForm;
 using SharePortfolioManager.ShareAddForm.Model;
 using SharePortfolioManager.ShareAddForm.Presenter;
 using SharePortfolioManager.ShareAddForm.View;
@@ -31,7 +32,6 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
-using SharePortfolioManager.OwnMessageBoxForm;
 
 namespace SharePortfolioManager
 {
@@ -149,7 +149,7 @@ namespace SharePortfolioManager
                 }
 
                 // Check if any share set for updating so enable the refresh all button
-                btnRefreshAll.Enabled = ShareObjectListFinalValue.Count(p => p.Update && p.WebSiteConfigurationValid) >= 1;
+                btnRefreshAll.Enabled = ShareObjectListFinalValue.Count(p => p.DoInternetUpdate && p.WebSiteConfigurationFound) >= 1;
 
                 // Throw exception which is thrown in the SaveShareObject function
                 if (exception != null)
@@ -277,7 +277,7 @@ namespace SharePortfolioManager
                     }
 
                     // Check if any share set for updating so enable the refresh all button
-                    btnRefreshAll.Enabled = ShareObjectListFinalValue.Count(p => p.Update && p.WebSiteConfigurationValid) >= 1;
+                    btnRefreshAll.Enabled = ShareObjectListFinalValue.Count(p => p.DoInternetUpdate && p.WebSiteConfigurationFound) >= 1;
 
                     // Throw exception which is thrown in the SaveShareObject function
                     if (exception != null)
@@ -426,7 +426,7 @@ namespace SharePortfolioManager
                     DgvPortfolioBindingSourceFinalValue.ResetBindings(false);
 
                     // Check if any share set for updating so enable the refresh all button
-                    btnRefreshAll.Enabled = ShareObjectListFinalValue.Count(p => p.Update && p.WebSiteConfigurationValid) >= 1;
+                    btnRefreshAll.Enabled = ShareObjectListFinalValue.Count(p => p.DoInternetUpdate && p.WebSiteConfigurationFound) >= 1;
                 }
                 catch (Exception ex)
                 {

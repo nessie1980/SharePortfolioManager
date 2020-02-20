@@ -20,11 +20,11 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+using SharePortfolioManager.Classes.Costs;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using SharePortfolioManager.Classes.Costs;
 
 namespace SharePortfolioManager.Classes.Sales
 {
@@ -44,17 +44,39 @@ namespace SharePortfolioManager.Classes.Sales
 
         public CultureInfo SaleCultureInfo { get; internal set; }
 
+        public decimal SaleVolumeTotal { get; internal set; }
+
+        public decimal SalePurchaseValueTotal { get; internal set; }
+
+        public decimal SalePurchaseValueBrokerageTotal { get; internal set; }
+
+        public decimal SalePurchaseValueReductionTotal { get; internal set; }
+
+        public decimal SalePurchaseValueBrokerageReductionTotal { get; internal set; }
+
         public decimal SalePayoutTotal { get; internal set; }
 
         public string SalePayoutTotalAsStr => Helper.FormatDecimal(SalePayoutTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", SaleCultureInfo);
 
         public string SalePayoutTotalWithUnitAsStr => Helper.FormatDecimal(SalePayoutTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
 
-        public decimal SalePayoutWithoutBrokerageTotal { get; internal set; }
+        public decimal SalePayoutBrokerageTotal { get; internal set; }
+        
+        public string SalePayoutBrokerageTotalAsStr => Helper.FormatDecimal(SalePayoutBrokerageTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", SaleCultureInfo);
 
-        public decimal SaleVolumeTotal { get; internal set; }
+        public string SalePayoutBrokerageTotalWithUnitAsStr => Helper.FormatDecimal(SalePayoutBrokerageTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
 
-        public decimal SalePurchaseValueTotal { get; internal set; }
+        public decimal SalePayoutReductionTotal { get; internal set; }
+
+        public string SalePayoutReductionTotalAsStr => Helper.FormatDecimal(SalePayoutReductionTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", SaleCultureInfo);
+
+        public string SalePayoutReductionTotalWithUnitAsStr => Helper.FormatDecimal(SalePayoutReductionTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
+
+        public decimal SalePayoutBrokerageReductionTotal { get; internal set; }
+
+        public string SalePayoutBrokerageReductionTotalAsStr => Helper.FormatDecimal(SalePayoutBrokerageReductionTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", SaleCultureInfo);
+
+        public string SalePayoutBrokerageReductionTotalWithUnitAsStr => Helper.FormatDecimal(SalePayoutBrokerageReductionTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
 
         public decimal SaleProfitLossTotal { get; internal set; }
 
@@ -62,7 +84,23 @@ namespace SharePortfolioManager.Classes.Sales
 
         public string SaleProfitLossTotalWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
 
-        public decimal SaleProfitLossTotalWithoutBrokerage { get; internal set; }
+        public decimal SaleProfitLossBrokerageTotal { get; internal set; }
+
+        public string SaleProfitLossBrokerageTotalAsStr => Helper.FormatDecimal(SaleProfitLossBrokerageTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", SaleCultureInfo);
+
+        public string SaleProfitLossBrokerageTotalWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossBrokerageTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
+
+        public decimal SaleProfitLossReductionTotal { get; internal set; }
+
+        public string SaleProfitLossReductionTotalAsStr => Helper.FormatDecimal(SaleProfitLossReductionTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", SaleCultureInfo);
+
+        public string SaleProfitLossReductionTotalWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossReductionTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
+
+        public decimal SaleProfitLossBrokerageReductionTotal { get; internal set; }
+
+        public string SaleProfitLossBrokerageReductionTotalAsStr => Helper.FormatDecimal(SaleProfitLossBrokerageReductionTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", SaleCultureInfo);
+
+        public string SaleProfitLossBrokerageReductionTotalWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossBrokerageReductionTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
 
         public SortedDictionary<string, SalesYearOfTheShare> AllSalesOfTheShareDictionary => _allSalesOfTheShareDictionary;
 
@@ -97,7 +135,7 @@ namespace SharePortfolioManager.Classes.Sales
         public bool AddSale(string strGuid, string strDate, string strOrderNumber, decimal decVolume, decimal decSalePrice, List<SaleBuyDetails> usedBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
              decimal decSolidarityTax, BrokerageReductionObject brokerageObject, string strDoc = "")
         {
-#if DEBUG_SALE
+#if false
             Console.WriteLine(@"Add AllSalesOfTheShare");
 #endif
             try
@@ -128,30 +166,54 @@ namespace SharePortfolioManager.Classes.Sales
 
                 // Calculate the total sale value, total sale volume and sale profit or loss
                 // Reset total sale value, sale volume and profit or loss
-                SalePayoutTotal = 0;
-                SalePayoutWithoutBrokerageTotal = 0;
                 SaleVolumeTotal = 0;
+
                 SalePurchaseValueTotal = 0;
+                SalePurchaseValueBrokerageTotal = 0;
+                SalePurchaseValueReductionTotal = 0;
+                SalePurchaseValueBrokerageReductionTotal = 0;
+
+                SalePayoutTotal = 0;
+                SalePayoutBrokerageTotal = 0;
+                SalePayoutReductionTotal = 0;
+                SalePayoutBrokerageReductionTotal = 0;
+
                 SaleProfitLossTotal = 0;
-                SaleProfitLossTotalWithoutBrokerage = 0;
+                SaleProfitLossBrokerageTotal = 0;
+                SaleProfitLossReductionTotal = 0;
+                SaleProfitLossBrokerageReductionTotal = 0;
 
                 // Calculate the new total sale value, sale volume and profit or loss
                 foreach (var calcObject in AllSalesOfTheShareDictionary.Values)
                 {
-                    SalePayoutTotal += calcObject.SalePayoutYear;
-                    SalePayoutWithoutBrokerageTotal += calcObject.SalePayoutWithoutBrokerageYear;
                     SaleVolumeTotal += calcObject.SaleVolumeYear;
+
                     SalePurchaseValueTotal += calcObject.SalePurchaseValueYear;
+                    SalePurchaseValueBrokerageTotal += calcObject.SalePurchaseValueBrokerageYear;
+                    SalePurchaseValueReductionTotal += calcObject.SalePurchaseValueReductionYear;
+                    SalePurchaseValueBrokerageReductionTotal += calcObject.SalePurchaseValueBrokerageReductionYear;
+
+                    SalePayoutTotal += calcObject.SalePayoutYear;
+                    SalePayoutBrokerageTotal += calcObject.SalePayoutBrokerageYear;
+                    SalePayoutReductionTotal += calcObject.SalePayoutReductionYear;
+                    SalePayoutBrokerageReductionTotal += calcObject.SalePayoutBrokerageReductionYear;
+
                     SaleProfitLossTotal += calcObject.SaleProfitLossYear;
-                    SaleProfitLossTotalWithoutBrokerage += calcObject.SaleProfitLossWithoutBrokerageYear;
+                    SaleProfitLossBrokerageTotal += calcObject.SaleProfitLossBrokerageYear;
+                    SaleProfitLossReductionTotal += calcObject.SaleProfitLossReductionYear;
+                    SaleProfitLossBrokerageReductionTotal += calcObject.SaleProfitLossBrokerageReductionYear;
                 }
-#if DEBUG_SALE
-                Console.WriteLine(@"SalePayoutTotal:{0}", SalePayoutTotal);
-                Console.WriteLine(@"SalePayoutWithoutBrokerageTotal:{0}", SalePayoutWithoutBrokerageTotal);
+#if false
                 Console.WriteLine(@"SaleVolumeTotal:{0}", SaleVolumeTotal);
                 Console.WriteLine(@"SalePurchaseValueTotal:{0}", SalePurchaseValueTotal);
+                Console.WriteLine(@"SalePayoutTotal:{0}", SalePayoutTotal);
+                Console.WriteLine(@"SalePayoutBrokerageTotal:{0}", SalePayoutBrokerageTotal);
+                Console.WriteLine(@"SalePayoutReductionTotal:{0}", SalePayoutReductionTotal);
+                Console.WriteLine(@"SalePayoutBrokerageReductionTotal:{0}", SalePayoutBrokerageReductionTotal);
                 Console.WriteLine(@"SaleProfitLossTotal:{0}", SaleProfitLossTotal);
-                Console.WriteLine(@"SaleProfitLossTotalWithoutBrokerage:{0}", SaleProfitLossTotalWithoutBrokerage);
+                Console.WriteLine(@"SaleProfitLossBrokerageTotal:{0}", SaleProfitLossBrokerageTotal);
+                Console.WriteLine(@"SaleProfitLossReductionTotal:{0}", SaleProfitLossReductionTotal);
+                Console.WriteLine(@"SaleProfitLossBrokerageReductionTotal:{0}", SaleProfitLossBrokerageReductionTotal);
 #endif
             }
             catch
@@ -200,30 +262,55 @@ namespace SharePortfolioManager.Classes.Sales
 
                 // Calculate the total sale value, volume and profit or loss
                 // Reset total sale value, volume and profit or loss
-                SalePayoutTotal = 0;
-                SalePayoutWithoutBrokerageTotal = 0;
                 SaleVolumeTotal = 0;
+
+                SalePurchaseValueTotal = 0;
+                SalePurchaseValueBrokerageTotal = 0;
+                SalePurchaseValueReductionTotal = 0;
+                SalePurchaseValueBrokerageReductionTotal = 0;
+
+                SalePayoutTotal = 0;
+                SalePayoutBrokerageTotal = 0;
+                SalePayoutReductionTotal = 0;
+                SalePayoutBrokerageReductionTotal = 0;
+
                 SaleProfitLossTotal = 0;
-                SaleProfitLossTotalWithoutBrokerage = 0;
+                SaleProfitLossBrokerageTotal = 0;
+                SaleProfitLossReductionTotal = 0;
+                SaleProfitLossBrokerageReductionTotal = 0;
 
                 // Calculate the new total sale value, volume and profit or loss
                 foreach (var calcObject in AllSalesOfTheShareDictionary.Values)
                 {
-                    SalePayoutTotal += calcObject.SalePayoutYear;
-                    SalePayoutWithoutBrokerageTotal += calcObject.SalePayoutWithoutBrokerageYear;
                     SaleVolumeTotal += calcObject.SaleVolumeYear;
+
                     SalePurchaseValueTotal += calcObject.SalePurchaseValueYear;
+                    SalePurchaseValueBrokerageTotal += calcObject.SalePurchaseValueBrokerageYear;
+                    SalePurchaseValueReductionTotal += calcObject.SalePurchaseValueReductionYear;
+                    SalePurchaseValueBrokerageReductionTotal += calcObject.SalePurchaseValueBrokerageReductionYear;
+
+                    SalePayoutTotal += calcObject.SalePayoutYear;
+                    SalePayoutBrokerageTotal += calcObject.SalePayoutBrokerageYear;
+                    SalePayoutReductionTotal += calcObject.SalePayoutReductionYear;
+                    SalePayoutBrokerageReductionTotal += calcObject.SalePayoutBrokerageReductionYear;
+
                     SaleProfitLossTotal += calcObject.SaleProfitLossYear;
-                    SaleProfitLossTotalWithoutBrokerage += calcObject.SaleProfitLossWithoutBrokerageYear;
+                    SaleProfitLossBrokerageTotal += calcObject.SaleProfitLossBrokerageYear;
+                    SaleProfitLossReductionTotal += calcObject.SaleProfitLossReductionYear;
+                    SaleProfitLossBrokerageReductionTotal += calcObject.SaleProfitLossBrokerageReductionYear;
                 }
 
-#if DEBUG_SALE
-                Console.WriteLine(@"SaleValueTotal:{0}", SalePayoutTotal);
-                Console.WriteLine(@"SalePayoutWithoutBrokerageYear:{0}", SalePayoutWithoutBrokerageTotal);
+#if false
                 Console.WriteLine(@"SaleVolumeTotal:{0}", SaleVolumeTotal);
                 Console.WriteLine(@"SalePurchaseValueTotal:{0}", SalePurchaseValueTotal);
+                Console.WriteLine(@"SalePayoutTotal:{0}", SalePayoutTotal);
+                Console.WriteLine(@"SalePayoutBrokerageTotal:{0}", SalePayoutBrokerageTotal);
+                Console.WriteLine(@"SalePayoutReductionTotal:{0}", SalePayoutReductionTotal);
+                Console.WriteLine(@"SalePayoutBrokerageReductionTotal:{0}", SalePayoutBrokerageReductionTotal);
                 Console.WriteLine(@"SaleProfitLossTotal:{0}", SaleProfitLossTotal);
-                Console.WriteLine(@"SaleProfitLossTotalWithoutBrokerage:{0}", SaleProfitLossTotalWithoutBrokerage);
+                Console.WriteLine(@"SaleProfitLossBrokerageTotal:{0}", SaleProfitLossBrokerageTotal);
+                Console.WriteLine(@"SaleProfitLossReductionTotal:{0}", SaleProfitLossReductionTotal);
+                Console.WriteLine(@"SaleProfitLossBrokerageReductionTotal:{0}", SaleProfitLossBrokerageReductionTotal);
 #endif
             }
             catch

@@ -20,24 +20,24 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Windows.Forms;
 using LanguageHandler;
 using Logging;
-using SharePortfolioManager.Classes;
-using SharePortfolioManager.Properties;
-using System.Linq;
-using System.IO;
-using System.ComponentModel;
-using System.Text;
-using System.Threading;
 using Parser;
+using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.Sales;
 using SharePortfolioManager.Classes.ShareObjects;
 using SharePortfolioManager.OwnMessageBoxForm;
+using SharePortfolioManager.Properties;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace SharePortfolioManager.SalesForm.View
 {
@@ -1923,7 +1923,7 @@ namespace SharePortfolioManager.SalesForm.View
                 @"",
                 @"",
                 @"",
-                UsedBuyDetails.Sum(x => x.SaleBuyValue)
+                UsedBuyDetails.Sum(x => x.SaleBuyValueBrokerageReduction)
             );
             strMessage += strMessageResult;
 
@@ -2212,11 +2212,17 @@ namespace SharePortfolioManager.SalesForm.View
 
                 #region Data source, data binding and data grid view
 
-                // Create Binding source for the sale data
-                var bindingSourceOverview = new BindingSource();
-                if (ShareObjectFinalValue.AllSaleEntries.GetAllSalesTotalValues().Count > 0)
-                    bindingSourceOverview.DataSource =
-                        ShareObjectFinalValue.AllSaleEntries.GetAllSalesTotalValues();
+                // Check if sales exists
+                if (ShareObjectFinalValue.AllSaleEntries.GetAllSalesTotalValues().Count <= 0) return;
+
+                // Reverse list so the latest is a top of the data grid view
+                var reversDataSourceOverview = ShareObjectFinalValue.AllSaleEntries.GetAllSalesTotalValues();
+                reversDataSourceOverview.Reverse();
+
+                var bindingSourceOverview = new BindingSource
+                {
+                    DataSource = reversDataSourceOverview
+                };
 
                 // Create DataGridView
                 var dataGridViewSalesOverviewOfAYears = new DataGridView
@@ -2224,8 +2230,12 @@ namespace SharePortfolioManager.SalesForm.View
                     Name = @"Overview",
                     Dock = DockStyle.Fill,
 
-                    // Bind source with buy values to the DataGridView
-                    DataSource = bindingSourceOverview
+                    // Bind source with sale values to the DataGridView
+                    DataSource = bindingSourceOverview,
+
+                    // Disable column header resize
+                    ColumnHeadersHeightSizeMode =
+                    DataGridViewColumnHeadersHeightSizeMode.DisableResizing
                 };
 
                 #endregion Data source, data binding and data grid view
@@ -2249,7 +2259,9 @@ namespace SharePortfolioManager.SalesForm.View
                 dataGridViewSalesOverviewOfAYears.ColumnHeadersDefaultCellStyle.Alignment =
                     DataGridViewContentAlignment.MiddleCenter;
                 dataGridViewSalesOverviewOfAYears.ColumnHeadersDefaultCellStyle.BackColor =
-                    SystemColors.ControlLight;
+                    DataGridViewHelper.DataGridViewHeaderColors;
+                dataGridViewSalesOverviewOfAYears.ColumnHeadersDefaultCellStyle.SelectionBackColor =
+                    DataGridViewHelper.DataGridViewHeaderColors;
                 dataGridViewSalesOverviewOfAYears.ColumnHeadersHeight = 25;
                 dataGridViewSalesOverviewOfAYears.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
                 // Column styling
@@ -2313,11 +2325,16 @@ namespace SharePortfolioManager.SalesForm.View
 
                     #region Data source, data binding and data grid view
 
+                    // Reverse list so the latest is a top of the data grid view
+                    var reversDataSource =
+                        ShareObjectFinalValue.AllSaleEntries.AllSalesOfTheShareDictionary[keyName]
+                            .SaleListYear;
+                    reversDataSource.Reverse();
+
                     // Create Binding source for the sale data
                     var bindingSource = new BindingSource
                     {
-                        DataSource = ShareObjectFinalValue.AllSaleEntries.AllSalesOfTheShareDictionary[keyName]
-                            .SaleListYear
+                        DataSource = reversDataSource
                     };
 
                     // Create DataGridView
@@ -2326,8 +2343,12 @@ namespace SharePortfolioManager.SalesForm.View
                         Name = keyName,
                         Dock = DockStyle.Fill,
 
-                        // Bind source with buy values to the DataGridView
-                        DataSource = bindingSource
+                        // Bind source with sale values to the DataGridView
+                        DataSource = bindingSource,
+
+                        // Disable column header resize
+                        ColumnHeadersHeightSizeMode =
+                            DataGridViewColumnHeadersHeightSizeMode.DisableResizing
                     };
 
                     #endregion Data source, data binding and data grid view
@@ -2352,7 +2373,10 @@ namespace SharePortfolioManager.SalesForm.View
                     // Column header styling
                     dataGridViewSalesOfAYear.ColumnHeadersDefaultCellStyle.Alignment =
                         DataGridViewContentAlignment.MiddleCenter;
-                    dataGridViewSalesOfAYear.ColumnHeadersDefaultCellStyle.BackColor = SystemColors.ControlLight;
+                    dataGridViewSalesOfAYear.ColumnHeadersDefaultCellStyle.BackColor =
+                        DataGridViewHelper.DataGridViewHeaderColors;
+                    dataGridViewSalesOfAYear.ColumnHeadersDefaultCellStyle.SelectionBackColor =
+                        DataGridViewHelper.DataGridViewHeaderColors;
                     dataGridViewSalesOfAYear.ColumnHeadersHeight = 25;
                     dataGridViewSalesOfAYear.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
                     // Column styling
@@ -2421,6 +2445,9 @@ namespace SharePortfolioManager.SalesForm.View
                     // Set alignment of the column
                     ((DataGridView)sender).Columns[i].DefaultCellStyle.Alignment =
                         DataGridViewContentAlignment.MiddleCenter;
+
+                    // Disable sorting of the columns ( remove sort arrow )
+                    ((DataGridView)sender).Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
 
                     switch (i)
                     {
@@ -2810,8 +2837,8 @@ namespace SharePortfolioManager.SalesForm.View
                             txtBoxBrokerFee.Text = selectedSaleObject.BrokerFeeAsStr;
                             txtBoxTraderPlaceFee.Text = selectedSaleObject.TraderPlaceFeeAsStr;
                             txtBoxReduction.Text = selectedSaleObject.ReductionAsStr;
-                            txtBoxProfitLoss.Text = selectedSaleObject.ProfitLossBrokerageAsStr;
-                            txtBoxPayout.Text = selectedSaleObject.PayoutBrokerageAsStr;
+                            txtBoxProfitLoss.Text = selectedSaleObject.ProfitLossBrokerageReductionAsStr;
+                            txtBoxPayout.Text = selectedSaleObject.PayoutBrokerageReductionAsStr;
                             txtBoxDocument.Text = selectedSaleObject.Document;
                         }
                         else
@@ -3129,7 +3156,8 @@ namespace SharePortfolioManager.SalesForm.View
                 {
                     if (DocumentTypeParser == null)
                         DocumentTypeParser = new Parser.Parser();
-                    DocumentTypeParser.ParsingValues = new ParsingValues(ParsingText,
+                    DocumentTypeParser.ParsingValues = new ParsingValues(
+                        ParsingText,
                         DocumentParsingConfiguration.BankRegexList[_bankCounter].BankEncodingType,
                         DocumentParsingConfiguration.BankRegexList[_bankCounter].BankRegexList
                     );
@@ -3328,7 +3356,7 @@ namespace SharePortfolioManager.SalesForm.View
                                             {
                                                 var parsingValues = DocumentTypeParser.ParsingValues;
                                                 DocumentTypeParser.ParsingValues = new ParsingValues(
-                                                    parsingValues.WebSiteUrl,
+                                                    parsingValues.ParsingText,
                                                     parsingValues.EncodingType,
                                                     DocumentParsingConfiguration
                                                         .BankRegexList[_bankCounter]
@@ -3337,13 +3365,13 @@ namespace SharePortfolioManager.SalesForm.View
                                                         .DocumentRegexList
                                                 );
                                                 DocumentTypeParser.StartParsing();
-                                                break;
                                             }
+                                            break;
                                             case DocumentParsingConfiguration.DocumentTypes.SaleDocument:
                                             {
                                                 var parsingValues = DocumentTypeParser.ParsingValues;
                                                 DocumentTypeParser.ParsingValues = new ParsingValues(
-                                                    parsingValues.WebSiteUrl,
+                                                    parsingValues.ParsingText,
                                                     parsingValues.EncodingType,
                                                     DocumentParsingConfiguration
                                                         .BankRegexList[_bankCounter]
@@ -3352,13 +3380,13 @@ namespace SharePortfolioManager.SalesForm.View
                                                         .DocumentRegexList
                                                 );
                                                 DocumentTypeParser.StartParsing();
-                                                break;
                                             }
+                                            break;
                                             case DocumentParsingConfiguration.DocumentTypes.DividendDocument:
                                             {
                                                 var parsingValues = DocumentTypeParser.ParsingValues;
                                                 DocumentTypeParser.ParsingValues = new ParsingValues(
-                                                    parsingValues.WebSiteUrl,
+                                                    parsingValues.ParsingText,
                                                     parsingValues.EncodingType,
                                                     DocumentParsingConfiguration
                                                         .BankRegexList[_bankCounter]
@@ -3368,13 +3396,13 @@ namespace SharePortfolioManager.SalesForm.View
                                                 );
 
                                                     DocumentTypeParser.StartParsing();
-                                                break;
                                             }
+                                            break;
                                             case DocumentParsingConfiguration.DocumentTypes.BrokerageDocument:
                                             {
                                                 var parsingValues = DocumentTypeParser.ParsingValues;
                                                 DocumentTypeParser.ParsingValues = new ParsingValues(
-                                                    parsingValues.WebSiteUrl,
+                                                    parsingValues.ParsingText,
                                                     parsingValues.EncodingType,
                                                     DocumentParsingConfiguration
                                                         .BankRegexList[_bankCounter]
@@ -3384,13 +3412,13 @@ namespace SharePortfolioManager.SalesForm.View
                                                 );
 
                                                     DocumentTypeParser.StartParsing();
-                                                break;
                                             }
+                                            break;
                                             default:
                                             {
                                                 _documentTypNotImplemented = true;
-                                                break;
                                             }
+                                            break;
                                         }
                                     }
                                 }
@@ -3403,7 +3431,7 @@ namespace SharePortfolioManager.SalesForm.View
                                 {
                                     var parsingValues = DocumentTypeParser.ParsingValues;
                                     DocumentTypeParser.ParsingValues = new ParsingValues(
-                                        parsingValues.WebSiteUrl,
+                                        parsingValues.ParsingText,
                                         parsingValues.EncodingType,
                                         DocumentParsingConfiguration.
                                             BankRegexList[_bankCounter].BankRegexList
@@ -3587,7 +3615,7 @@ namespace SharePortfolioManager.SalesForm.View
                 // Check if the WKN has been found and if the WKN is the right one
                 if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration
                     .DocumentTypeSaleWkn) || DictionaryParsingResult[DocumentParsingConfiguration
-                        .DocumentTypeSaleWkn][0] != ShareObjectFinalValue.WknAsStr)
+                        .DocumentTypeSaleWkn][0] != ShareObjectFinalValue.Wkn)
                 {
                     toolStripStatusLabelMessageSaleDocumentParsing.ForeColor = Color.Red;
                     toolStripStatusLabelMessageSaleDocumentParsing.Text = 

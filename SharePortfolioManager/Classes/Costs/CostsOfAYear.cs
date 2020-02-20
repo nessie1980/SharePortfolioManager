@@ -45,6 +45,12 @@ namespace SharePortfolioManager.Classes.Costs
         public string BrokerageValueYearWithUnitAsStr => Helper.FormatDecimal(BrokerageValueYear, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", BrokerageReductionCultureInfo);
 
         [Browsable(false)]
+        public decimal ReductionValueYear { get; internal set; } = -1;
+
+        [Browsable(false)]
+        public string ReductionValueYearWithUnitAsStr => Helper.FormatDecimal(ReductionValueYear, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", BrokerageReductionCultureInfo);
+
+        [Browsable(false)]
         public decimal BrokerageWithReductionValueYear { get; internal set; } = -1;
 
         [Browsable(false)]
@@ -86,9 +92,9 @@ namespace SharePortfolioManager.Classes.Costs
         public bool AddBrokerageReductionObject(string strGuid, bool bPartOfABuy, bool bPartOfASale, CultureInfo cultureInfo, string strGuidBuySale,
             string strDate, decimal decProvisionValue, decimal decBrokerFreeValue, decimal decTraderPlaceFeeValue, decimal decReductionValue, string strDoc = "")
         {
-#if DEBUG_BROKERAGE
+#if false
             Console.WriteLine(@"");
-            Console.WriteLine(@"AddBrokerageReductionObject");
+            Console.WriteLine(@"AddBrokerageReductionObject()");
 #endif
             try
             {
@@ -111,14 +117,19 @@ namespace SharePortfolioManager.Classes.Costs
                     BrokerageValueYear = 0;
                 BrokerageValueYear += addObject.BrokerageValue;
 
+                // Calculate reduction value
+                if (ReductionValueYear == -1)
+                    ReductionValueYear = 0;
+                ReductionValueYear += addObject.ReductionValue;
+
                 // Calculate brokerage minus reduction value
                 if (BrokerageWithReductionValueYear == -1)
                     BrokerageWithReductionValueYear = 0;
                 BrokerageWithReductionValueYear += addObject.BrokerageReductionValue;
 
-#if DEBUG_BROKERAGE
+#if false
                 Console.WriteLine(@"BrokerageValueYear: {0}", BrokerageValueYear);
-                Console.WriteLine(@"BrokerageWithReductionValueYear: {0}", BrokerageWithReductionValueYear);
+                Console.WriteLine(@"ReductionValueYear: {0}", ReductionValueYear);
                 Console.WriteLine(@"");
 #endif
             }
@@ -138,8 +149,9 @@ namespace SharePortfolioManager.Classes.Costs
         /// <returns>Flag if the remove was successfully</returns>
         public bool RemoveBrokerageReductionObject(string strGuid)
         {
-#if DEBUG_BROKERAGE
-            Console.WriteLine(@"RemoveBrokerageReductionObject");
+#if false
+            Console.WriteLine(@"");
+            Console.WriteLine(@"RemoveBrokerageReductionObject()");
 #endif
             try
             {
@@ -159,14 +171,15 @@ namespace SharePortfolioManager.Classes.Costs
                 // Remove object from the list
                 BrokerageReductionListYear.Remove(removeObject);
 
-                // Calculate brokerage value
-                BrokerageValueYear -= removeObject.BrokerageValue;
-
+                // Calculate brokerage and reduction value
+                BrokerageValueYear -= removeObject.BrokerageValue; 
+                ReductionValueYear -= removeObject.ReductionValue;
                 // Calculate brokerage minus reduction value
                 BrokerageWithReductionValueYear -= removeObject.BrokerageReductionValue;
 
-#if DEBUG_BROKERAGE
+#if false
                 Console.WriteLine(@"BrokerageValueYear: {0}", BrokerageValueYear);
+                Console.WriteLine(@"ReductionValueYear: {0}", ReductionValueYear);
                 Console.WriteLine(@"");
 #endif
             }

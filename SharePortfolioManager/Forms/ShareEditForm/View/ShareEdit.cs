@@ -115,13 +115,13 @@ namespace SharePortfolioManager
                     dateTimeStockMarketLaunchDate.Value = DateTime.Parse(ShareObjectFinalValue.StockMarketLaunchDate);
                     lblDateValue.Text = ShareObjectFinalValue.AllBuyEntries.AllBuysOfTheShareDictionary.Values.First().BuyListYear.First().Date;
                     txtBoxName.Text = ShareObjectFinalValue.Name;
-                    chkBoxUpdate.CheckState = ShareObjectFinalValue.Update ? CheckState.Checked : CheckState.Unchecked;
+                    chkBoxUpdate.CheckState = ShareObjectFinalValue.DoInternetUpdate ? CheckState.Checked : CheckState.Unchecked;
                     lblPurchaseValue.Text = ShareObjectFinalValue.PurchaseValueAsStr;
                     lblDepositUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                     lblVolumeValue.Text = ShareObjectFinalValue.VolumeAsStr;
                     lblVolumeUnit.Text = ShareObject.PieceUnit;
-                    txtBoxWebSite.Text = ShareObjectFinalValue.WebSite;
-                    txtBoxDailyValuesWebSite.Text = ShareObjectFinalValue.DailyValuesWebSite;
+                    txtBoxWebSite.Text = ShareObjectFinalValue.UpdateWebSiteUrl;
+                    txtBoxDailyValuesWebSite.Text = ShareObjectFinalValue.DailyValuesUpdateWebSiteUrl;
 
                     #region Get culture info
 
@@ -157,15 +157,15 @@ namespace SharePortfolioManager
                     
                     #region GroupBox EarningsExpenditure
 
-                    lblBuysValue.Text = ShareObjectFinalValue.AllBuyEntries.BuyValueBrokerageReductionTotalAsStr;
+                    lblBuysValue.Text = ShareObjectFinalValue.BuyValueBrokerageReductionAsStr;
                     lblBuysUnit.Text = ShareObjectFinalValue.CurrencyUnit;
-                    lblSalesValue.Text = ShareObjectFinalValue.AllSaleEntries.SalePayoutTotalAsStr;
+                    lblSalesValue.Text = ShareObjectFinalValue.SalePayoutBrokerageReductionAsStr;
                     lblSalesUnit.Text = ShareObjectFinalValue.CurrencyUnit;
-                    lblProfitLossValue.Text = ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotalAsStr;
+                    lblProfitLossValue.Text = ShareObjectFinalValue.SaleProfitLossBrokerageReductionAsStr;
                     lblProfitLossUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                     lblDividendValue.Text = ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesAsStr;
                     lblDividendUnit.Text = ShareObjectFinalValue.CurrencyUnit;
-                    lblBrokerageValue.Text = ShareObjectFinalValue.AllBrokerageEntries.BrokerageWithReductionValueTotalAsStr;
+                    lblBrokerageValue.Text = ShareObjectFinalValue.BrokerageValueTotalAsStr;
                     lblBrokerageUnit.Text = ShareObjectFinalValue.CurrencyUnit;
 
                     #endregion GroupBox EarningsExpenditure
@@ -416,7 +416,7 @@ namespace SharePortfolioManager
                     foreach (var shareObjectMarketValue in ParentWindow.ShareObjectListMarketValue)
                     {
                         if (txtBoxWebSite.Text == @"" ||
-                            shareObjectMarketValue.WebSite != txtBoxWebSite.Text ||
+                            shareObjectMarketValue.UpdateWebSiteUrl != txtBoxWebSite.Text ||
                             shareObjectMarketValue == ShareObjectMarketValue) continue;
 
                         errorFlag = true;
@@ -436,7 +436,7 @@ namespace SharePortfolioManager
                         foreach (var shareObjectFinalValue in ParentWindow.ShareObjectListFinalValue)
                         {
                             if (txtBoxWebSite.Text == @"" ||
-                                shareObjectFinalValue.WebSite != txtBoxWebSite.Text ||
+                                shareObjectFinalValue.UpdateWebSiteUrl != txtBoxWebSite.Text ||
                                 shareObjectFinalValue == ShareObjectFinalValue) continue;
 
                             errorFlag = true;
@@ -479,7 +479,7 @@ namespace SharePortfolioManager
                     foreach (var shareObjectMarketValue in ParentWindow.ShareObjectListMarketValue)
                     {
                         if (txtBoxWebSite.Text == @"" ||
-                            shareObjectMarketValue.DailyValuesWebSite != txtBoxDailyValuesWebSite.Text ||
+                            shareObjectMarketValue.DailyValuesUpdateWebSiteUrl != txtBoxDailyValuesWebSite.Text ||
                             shareObjectMarketValue == ShareObjectMarketValue) continue;
 
                         errorFlag = true;
@@ -499,7 +499,7 @@ namespace SharePortfolioManager
                         foreach (var shareObjectFinalValue in ParentWindow.ShareObjectListFinalValue)
                         {
                             if (txtBoxWebSite.Text == @"" ||
-                                shareObjectFinalValue.DailyValuesWebSite != txtBoxDailyValuesWebSite.Text ||
+                                shareObjectFinalValue.DailyValuesUpdateWebSiteUrl != txtBoxDailyValuesWebSite.Text ||
                                 shareObjectFinalValue == ShareObjectFinalValue) continue;
 
                             errorFlag = true;
@@ -528,18 +528,18 @@ namespace SharePortfolioManager
                 // Market value share
                 ShareObjectMarketValue.Name = txtBoxName.Text;
                 ShareObjectMarketValue.StockMarketLaunchDate = dateTimeStockMarketLaunchDate.Value.ToShortDateString();
-                ShareObjectMarketValue.Update = chkBoxUpdate.Checked;
-                ShareObjectMarketValue.WebSite = txtBoxWebSite.Text;
-                ShareObjectMarketValue.DailyValuesWebSite = txtBoxDailyValuesWebSite.Text;
+                ShareObjectMarketValue.DoInternetUpdate = chkBoxUpdate.Checked;
+                ShareObjectMarketValue.UpdateWebSiteUrl = txtBoxWebSite.Text;
+                ShareObjectMarketValue.DailyValuesUpdateWebSiteUrl = txtBoxDailyValuesWebSite.Text;
                 ShareObjectMarketValue.CultureInfo = cultureInfo;
                 ShareObjectMarketValue.ShareType = cbxShareType.SelectedIndex;
 
                 // Final value share
                 ShareObjectFinalValue.Name = txtBoxName.Text;
                 ShareObjectFinalValue.StockMarketLaunchDate = dateTimeStockMarketLaunchDate.Value.ToShortDateString();
-                ShareObjectFinalValue.Update = chkBoxUpdate.Checked;
-                ShareObjectFinalValue.WebSite = txtBoxWebSite.Text;
-                ShareObjectFinalValue.DailyValuesWebSite = txtBoxDailyValuesWebSite.Text;
+                ShareObjectFinalValue.DoInternetUpdate = chkBoxUpdate.Checked;
+                ShareObjectFinalValue.UpdateWebSiteUrl = txtBoxWebSite.Text;
+                ShareObjectFinalValue.DailyValuesUpdateWebSiteUrl = txtBoxDailyValuesWebSite.Text;
                 ShareObjectFinalValue.CultureInfo = cultureInfo;
                 ShareObjectFinalValue.DividendPayoutInterval = cbxDividendPayoutInterval.SelectedIndex;
                 ShareObjectFinalValue.ShareType = cbxShareType.SelectedIndex;
@@ -651,11 +651,12 @@ namespace SharePortfolioManager
         {
             lblVolumeValue.Text = ShareObjectFinalValue.VolumeAsStr;
             lblPurchaseValue.Text = ShareObjectFinalValue.PurchaseValueAsStr;
-            lblBuysValue.Text = ShareObjectFinalValue.AllBuyEntries.BuyValueBrokerageReductionTotalAsStr;
-            lblSalesValue.Text = ShareObjectFinalValue.AllSaleEntries.SalePayoutTotalAsStr;
-            lblBrokerageValue.Text = ShareObjectFinalValue.BrokerageValueTotalAsStr;
-            lblProfitLossValue.Text = ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotalAsStr;
+
+            lblBuysValue.Text = ShareObjectFinalValue.BuyValueBrokerageReductionAsStr;
+            lblSalesValue.Text = ShareObjectFinalValue.SalePayoutBrokerageReductionAsStr;
+            lblProfitLossValue.Text = ShareObjectFinalValue.SaleProfitLossBrokerageReductionAsStr;
             lblDividendValue.Text = ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesAsStr;
+            lblBrokerageValue.Text = ShareObjectFinalValue.BrokerageValueTotalAsStr;
         }
 
         #endregion Button

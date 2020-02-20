@@ -927,21 +927,21 @@ namespace SharePortfolioManager
                             LastFirstDisplayedRowIndex);
 
                         // Check if the current share should not be updated so check the next share
-                        if (ShareObjectMarketValue != null && !ShareObjectMarketValue.Update && SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1)
+                        if (ShareObjectMarketValue != null && !ShareObjectMarketValue.DoInternetUpdate && SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1)
                             // Increase index to get the next share
                             SelectedDataGridViewShareIndex++;
 
                     } while (ShareObjectMarketValue != null &&
-                             !ShareObjectMarketValue.Update &&
+                             !ShareObjectMarketValue.DoInternetUpdate &&
                              SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1);
 
                     // Check if the share should be update
-                    if (ShareObjectMarketValue != null && ShareObjectMarketValue.Update &&
-                        ShareObjectMarketValue.WebSiteConfigurationValid)
+                    if (ShareObjectMarketValue != null && ShareObjectMarketValue.DoInternetUpdate &&
+                        ShareObjectMarketValue.WebSiteConfigurationFound)
                     {
                         // Start the asynchronous operation of the Parser for the market values
                         ParserMarketValues.ParsingValues = new ParsingValues(
-                            new Uri(ShareObjectMarketValue.WebSite),
+                            new Uri(ShareObjectMarketValue.UpdateWebSiteUrl),
                             ShareObjectMarketValue.WebSiteEncodingType,
                             ShareObjectMarketValue.RegexList
                         );
@@ -951,7 +951,7 @@ namespace SharePortfolioManager
                         ParserDailyValues.ParsingValues = new ParsingValues(
                             new Uri(Helper.BuildDailyValuesUrl(
                                 ShareObjectMarketValue.DailyValues,
-                                ShareObjectMarketValue.DailyValuesWebSite,
+                                ShareObjectMarketValue.DailyValuesUpdateWebSiteUrl,
                                 ShareObjectMarketValue.ShareType
                             )),
                             ShareObjectMarketValue.WebSiteEncodingType
@@ -964,16 +964,16 @@ namespace SharePortfolioManager
                     do
                     {
                         // Check if the current share should not be updated so check the next share
-                        if (!ShareObjectListFinalValue[SelectedDataGridViewShareIndex].Update && SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1)
+                        if (!ShareObjectListFinalValue[SelectedDataGridViewShareIndex].DoInternetUpdate && SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1)
                             // Increase index to get the next share
                             SelectedDataGridViewShareIndex++;
 
-                    } while (!ShareObjectListFinalValue[SelectedDataGridViewShareIndex].Update &&
+                    } while (!ShareObjectListFinalValue[SelectedDataGridViewShareIndex].DoInternetUpdate &&
                              SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1);
 
                     // Select the new share update
-                    if (ShareObjectListFinalValue[SelectedDataGridViewShareIndex].Update &&
-                        ShareObjectListFinalValue[SelectedDataGridViewShareIndex].WebSiteConfigurationValid
+                    if (ShareObjectListFinalValue[SelectedDataGridViewShareIndex].DoInternetUpdate &&
+                        ShareObjectListFinalValue[SelectedDataGridViewShareIndex].WebSiteConfigurationFound
                         )
                     { 
                         dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
@@ -984,7 +984,7 @@ namespace SharePortfolioManager
                         
                         // Start the asynchronous operation of the Parser for the market values
                         ParserMarketValues.ParsingValues = new ParsingValues(
-                            new Uri(ShareObjectFinalValue.WebSite),
+                            new Uri(ShareObjectFinalValue.UpdateWebSiteUrl),
                             ShareObjectFinalValue.WebSiteEncodingType,
                             ShareObjectFinalValue.RegexList
                         );
@@ -994,7 +994,7 @@ namespace SharePortfolioManager
                         ParserDailyValues.ParsingValues = new ParsingValues(
                             new Uri(Helper.BuildDailyValuesUrl(
                                 ShareObjectFinalValue.DailyValues,
-                                ShareObjectFinalValue.DailyValuesWebSite,
+                                ShareObjectFinalValue.DailyValuesUpdateWebSiteUrl,
                                 ShareObjectFinalValue.ShareType
                             )),
                             ShareObjectFinalValue.WebSiteEncodingType

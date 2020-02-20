@@ -20,13 +20,13 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using System;
-using System.IO;
-using System.Windows.Forms;
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.Dividend;
 using SharePortfolioManager.DividendForm.Model;
 using SharePortfolioManager.DividendForm.View;
+using System;
+using System.IO;
+using System.Windows.Forms;
 
 namespace SharePortfolioManager.DividendForm.Presenter
 {
@@ -368,11 +368,6 @@ namespace SharePortfolioManager.DividendForm.Presenter
                 else if (decVolume <= 0 && bErrorFlag == false)
                 {
                     _model.ErrorCode = DividendErrorCode.VolumeWrongValue;
-                    bErrorFlag = true;
-                }
-                else if (decVolume > _model.ShareObjectFinalValue.Volume && bErrorFlag == false)
-                {
-                    _model.ErrorCode = DividendErrorCode.VolumeMaxValue;
                     bErrorFlag = true;
                 }
 

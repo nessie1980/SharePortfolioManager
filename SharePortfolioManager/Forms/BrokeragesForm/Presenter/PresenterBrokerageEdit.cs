@@ -20,11 +20,11 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using System;
-using System.IO;
 using SharePortfolioManager.BrokeragesForm.Model;
 using SharePortfolioManager.BrokeragesForm.View;
 using SharePortfolioManager.Classes;
+using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace SharePortfolioManager.BrokeragesForm.Presenter
@@ -205,14 +205,12 @@ namespace SharePortfolioManager.BrokeragesForm.Presenter
         {
             try
             {
-                Helper.CalcBrokerageValues(_model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec,
-                    out var decBrokerage, out var decBrokerageWithReduction);
+                Helper.CalcBrokerageValues(_model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, out var decBrokerage);
                 
-                _model.BrokerageDec = decBrokerageWithReduction;
+                _model.BrokerageDec = decBrokerage;
 
 #if DEBUG_BUY || DEBUG
-                Console.WriteLine(@"decBrokerage: {0}", decBrokerage);
-                Console.WriteLine(@"BrokerageWithReductionDec: {0}", _model.BrokerageDec);
+                Console.WriteLine(@"BrokerageDec: {0}", _model.BrokerageDec);
 #endif
             }
             catch (Exception ex)

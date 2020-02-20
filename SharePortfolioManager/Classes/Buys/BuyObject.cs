@@ -20,12 +20,12 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+using SharePortfolioManager.Classes.Costs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
-using SharePortfolioManager.Classes.Costs;
 
 namespace SharePortfolioManager.Classes.Buys
 {
@@ -84,11 +84,6 @@ namespace SharePortfolioManager.Classes.Buys
         /// </summary>
         private decimal _brokerage;
 
-        /// <summary>
-        /// Stores the brokerage minus reduction value of the buy
-        /// </summary>
-        private decimal _brokerageWithReduction;
-
         #endregion Brokerage values
 
         #endregion Variables
@@ -144,7 +139,7 @@ namespace SharePortfolioManager.Classes.Buys
         /// Volume of the buy as string
         /// </summary>
         [Browsable(false)]
-        public string VolumeAsStr => Helper.FormatDecimal(Volume, Helper.Volumefivelength, false, Helper.Volumetwofixlength, false, @"", BuyCultureInfo);
+        public string VolumeAsStr => Helper.FormatDecimal(Volume, Helper.VolumeFiveLength, false, Helper.VolumeTwoFixLength, false, @"", BuyCultureInfo);
 
         /// <summary>
         /// Volume which is already sold of this buy
@@ -165,7 +160,7 @@ namespace SharePortfolioManager.Classes.Buys
         /// Volume which is already sold if this buy as string
         /// </summary>
         [Browsable(false)]
-        public string VolumeSoldAsStr => Helper.FormatDecimal(VolumeSold, Helper.Volumefivelength, false, Helper.Volumetwofixlength, false, @"", BuyCultureInfo);
+        public string VolumeSoldAsStr => Helper.FormatDecimal(VolumeSold, Helper.VolumeFiveLength, false, Helper.VolumeTwoFixLength, false, @"", BuyCultureInfo);
 
         /// <summary>
         /// Price of one share of this share
@@ -311,22 +306,6 @@ namespace SharePortfolioManager.Classes.Buys
         [Browsable(false)]
         public string BrokerageAsStr => Helper.FormatDecimal(Brokerage, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, false, @"", BuyCultureInfo);
 
-        /// <summary>
-        /// Complete brokerage with reduction of this buy
-        /// Brokerage with reduction = brokerage - reduction
-        /// </summary>
-        [Browsable(false)]
-        public decimal BrokerageWithReduction
-        {
-            get => _brokerageWithReduction;
-            internal set
-            {
-                if (_brokerageWithReduction.Equals(value))
-                    return;
-                _brokerageWithReduction = value;
-            }
-        }
-
         #endregion Brokerage values
 
         /// <summary>
@@ -466,6 +445,24 @@ namespace SharePortfolioManager.Classes.Buys
 
             Document = strDoc;
 
+#if false
+            Console.WriteLine(@"");
+            Console.WriteLine(@"New BuyObject created");
+            Console.WriteLine(@"Guid: {0}", strGuid);
+            Console.WriteLine(@"OrderNumber: {0}", OrderNumber);
+            Console.WriteLine(@"BuyCultureInfo: {0}", BuyCultureInfo);
+            Console.WriteLine(@"Date: {0}", strDate);
+            Console.WriteLine(@"Volume: {0}", Volume);
+            Console.WriteLine(@"VolumeSold: {0}", VolumeSold);
+            Console.WriteLine(@"Price: {0}", Price);
+            Console.WriteLine(@"BrokerageGuid: {0}", BrokerageGuid);
+            Console.WriteLine(@"Provision: {0}", Provision);
+            Console.WriteLine(@"BrokerFee: {0}", BrokerFee);
+            Console.WriteLine(@"TraderPlaceFee: {0}", TraderPlaceFee);
+            Console.WriteLine(@"Reduction: {0}", Reduction);
+            Console.WriteLine(@"Document: {0}", strDoc);
+            Console.WriteLine(@"");
+#endif
             // Calculate the market values and brokerage
             CalculateValues();
         }
@@ -477,21 +474,30 @@ namespace SharePortfolioManager.Classes.Buys
         /// - the buy value with brokerage
         /// - the buy value with brokerage and reduction
         /// - the brokerage value
-        /// - the brokerage value with the reduction
         /// with the given volume and share price of the buy
         /// </summary>
         private void CalculateValues()
         {
             Helper.CalcBuyValues( Volume, Price,
                 Provision, BrokerFee, TraderPlaceFee, Reduction,
-                out var decBuyValue, out var decBuyValueReduction, out var decBuyValueBrokerage, out var decBuyValueWithBrokerageWithReduction, out var decBrokerage, out var decBrokerageReduction);
+                out var decBuyValue, out var decBuyValueReduction, out var decBuyValueBrokerage, out var decBuyValueWithBrokerageWithReduction, out var decBrokerage);
 
             Brokerage = decBrokerage;
-            BrokerageWithReduction = decBrokerageReduction;
             BuyValue = decBuyValue;
             BuyValueReduction = decBuyValueReduction;
             BuyValueBrokerage = decBuyValueBrokerage;
             BuyValueBrokerageReduction = decBuyValueWithBrokerageWithReduction;
+
+#if false
+            Console.WriteLine(@"");
+            Console.WriteLine(@"CalculateValues()");
+            Console.WriteLine(@"Brokerage: {0}", Brokerage);
+            Console.WriteLine(@"BuyValue: {0}", BuyValue);
+            Console.WriteLine(@"BuyValueReduction: {0}", BuyValueReduction);
+            Console.WriteLine(@"BuyValueBrokerage: {0}", BuyValueBrokerage);
+            Console.WriteLine(@"BuyValueBrokerageReduction: {0}", BuyValueBrokerageReduction);
+            Console.WriteLine(@"");
+#endif
         }
 
         #endregion Methods

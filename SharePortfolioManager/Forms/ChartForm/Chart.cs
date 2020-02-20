@@ -29,6 +29,8 @@ namespace SharePortfolioManager.Chart
 
         public int ChartingAmount;
 
+        public string Title;
+
         #endregion Properties
 
         #region Share objects
@@ -73,6 +75,7 @@ namespace SharePortfolioManager.Chart
                 true,
                 SeriesChartType.Line,
                 2,
+                // TODO use settings value
                 Color.Black,
                 DailyValues.DateName,
                 DailyValues.ClosingPriceName
@@ -90,13 +93,18 @@ namespace SharePortfolioManager.Chart
                     graphValuesList);
 
             ChartingDailyValues.Charting(
+                out Title,
                 MarketValueOverviewTabSelected,
                 ShareObjectFinalValue, ShareObjectMarketValue,
                 Logger, LanguageName, Language,
                 DateTime.Now,
                 chartDailyValues,
                 chartValues,
-                lblNoDataMessage
+                lblNoDataMessage,
+                true,
+                // TODO use settings value
+                Color.Blue,
+                Color.Red
             );
 
         }
@@ -107,23 +115,25 @@ namespace SharePortfolioManager.Chart
         {
             var customItems = ((System.Windows.Forms.DataVisualization.Charting.Chart)sender).Legends[0].CustomItems.Count;
 
-            if (customItems > 0)
+            if (customItems <= 0) return;
+
+            var numberOfAutoItems = e.LegendItems.Count - customItems;
+            for (var i = 0; i < numberOfAutoItems; i++)
             {
-                var numberOfAutoItems = e.LegendItems.Count - customItems;
-                for (var i = 0; i < numberOfAutoItems; i++)
-                {
-                    e.LegendItems.RemoveAt(0);
-                }
+                e.LegendItems.RemoveAt(0);
             }
         }
 
-        private void OnLblNoDataMessage_Click(object sender, EventArgs e)
+
+        private void OnChartDailyValues_MouseLeave(object sender, EventArgs e)
         {
+            Console.WriteLine(@"MouseLeaveChart");
             Close();
         }
 
-        private void OnChartDailyValues_Click(object sender, EventArgs e)
+        private void OnLblNoDataMessage_MouseLeave(object sender, EventArgs e)
         {
+            Console.WriteLine(@"MouseLeaveLbl");
             Close();
         }
     }

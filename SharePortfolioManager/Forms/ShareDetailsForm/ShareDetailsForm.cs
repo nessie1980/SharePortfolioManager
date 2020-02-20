@@ -102,7 +102,9 @@ namespace SharePortfolioManager.ShareDetailsForm
         internal int ChartingAmount = 1;
 
         internal ChartingDailyValues.ChartValues ChartValues;
-        
+
+        internal string Title;
+
         #endregion Charting
 
         #endregion Properties
@@ -143,123 +145,318 @@ namespace SharePortfolioManager.ShareDetailsForm
             grpBoxShareDetails.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/Caption",
                 LanguageName);
 
-            tabCtrlDetails.TabPages[_tabPageDetailsChart].Text =
-                Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/Caption",
-                LanguageName);
-            lblDailyValuesSelection.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/Selection",
-                LanguageName);
-            lblStartDate.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/StartDate",
-                LanguageName);
-            lblIntervalSelection.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/Interval",
-                LanguageName);
-            lblAmount.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/Amount",
-                LanguageName);
+            if (tabCtrlDetails.TabPages[_tabPageDetailsChart] != null)
+            {
+                tabCtrlDetails.TabPages[_tabPageDetailsChart].Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/Caption",
+                        LanguageName);
+                lblDailyValuesSelection.Text = Language.GetLanguageTextByXPath(
+                    @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/Selection",
+                    LanguageName);
+                lblStartDate.Text = Language.GetLanguageTextByXPath(
+                    @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/StartDate",
+                    LanguageName);
+                lblIntervalSelection.Text = Language.GetLanguageTextByXPath(
+                    @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/Interval",
+                    LanguageName);
+                lblAmount.Text = Language.GetLanguageTextByXPath(
+                    @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/Amount",
+                    LanguageName);
 
-            chkClosingPrice.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/ClosingPrice",
-                LanguageName);
-            chkOpeningPrice.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/OpeningPrice",
-                LanguageName);
-            chkTop.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/Top",
-                LanguageName);
-            chkBottom.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/Bottom",
-                LanguageName);
-            chkVolume.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/Volume",
-                LanguageName);
+                chkClosingPrice.Text = Language.GetLanguageTextByXPath(
+                    @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/ClosingPrice",
+                    LanguageName);
+                chkOpeningPrice.Text = Language.GetLanguageTextByXPath(
+                    @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/OpeningPrice",
+                    LanguageName);
+                chkTop.Text = Language.GetLanguageTextByXPath(
+                    @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/Top",
+                    LanguageName);
+                chkBottom.Text = Language.GetLanguageTextByXPath(
+                    @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/Bottom",
+                    LanguageName);
+                chkVolume.Text = Language.GetLanguageTextByXPath(
+                    @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChart/Volume",
+                    LanguageName);
+            }
 
             if (tabCtrlDetails.TabPages[_tabPageDetailsFinalValue] != null)
             {
                 tabCtrlDetails.TabPages[_tabPageDetailsFinalValue].Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Caption",
-                        LanguageName);
-                lblDetailsFinalValueDate.Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/Date",
-                        LanguageName);
-                lblDetailsFinalValueVolume.Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/Volume",
-                        LanguageName);
-                lblDetailsFinalValueDividend.Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/TotalDividend",
-                        LanguageName);
-                lblDetailsFinalValueBrokerage.Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/TotalBrokerage",
-                        LanguageName);
-                lblDetailsFinaValueCurPrice.Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/CurrentPrice",
-                        LanguageName);
-                lblDetailsFinalValueDiffPerformancePrev.Text =
                     Language.GetLanguageTextByXPath(
-                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/DiffPerformancePrevDay", LanguageName);
-                lblDetailsFinalValueDiffSumPrev.Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/DiffSumPrevDay",
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Caption",
                         LanguageName);
-                lblDetailsFinalValuePrevPrice.Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/PricePrevDay",
+                lblDetailsFinalValueDateValue.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/Date",
                         LanguageName);
-                lblDetailsPurchase.Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/Purchase",
+
+                #region Overall calcuation
+
+                lblDetailsFinalValueOverallCalculation.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/Total/Caption",
                         LanguageName);
-                lblDetailsFinalValuePerformance.Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/TotalPerformance",
+                lblDetailsFinalValueTotalVolume.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/Total/Volume",
                         LanguageName);
-                lblDetailsFinalVinalTotalProfit.Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/TotalProfitLoss",
+                lblDetailsFinalValueTotalCurPrice.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/Total/CurrentPrice",
+                        LanguageName);
+                lblDetailsFinalValueTotalPurchase.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/Total/Purchase",
+                        LanguageName);
+                lblDetailsFinalValueTotalDividend.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/Total/Dividend",
+                        LanguageName);
+                lblDetailsFinalValueTotalSale.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/Total/Sale",
                         LanguageName);
                 lblDetailsFinalValueTotalSum.Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/TotalSum",
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/Total/Sum",
                         LanguageName);
+                lblDetailsFinalValueTotalSalePurchase.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/Total/SalePurchase",
+                        LanguageName);
+                lblDetailsFinalFinalTotalProfitLoss.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/Total/ProfitLoss",
+                        LanguageName);
+                lblDetailsFinalValueTotalPerformance.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/Total/Performance",
+                        LanguageName);
+
+                #endregion Overall calcuation
+
+                #region Current calcuation
+
+                lblDetailsFinalValueCurrentCalculation.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/Current/Caption",
+                        LanguageName);
+                lblDetailsFinalValueCurrentVolume.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/Current/Volume",
+                        LanguageName);
+                lblDetailsFinalValueCurrentCurPrice.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/Current/CurrentPrice",
+                        LanguageName);
+                lblDetailsFinalValueCurrentPurchase.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/Current/Purchase",
+                        LanguageName);
+                lblDetailsFinalValueCurrentDividend.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/Current/Dividend",
+                        LanguageName);
+                lblDetailsFinalValueCurrentProfitLossSale.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/Current/ProfitLoss",
+                        LanguageName);
+                lblDetailsFinalValueCurrentSum.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/Current/Sum",
+                        LanguageName);
+
+                #endregion Current calcuation
+
+                #region Previous day calcuation
+
+                lblDetailsFinalValuePrevDayCalculation.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/PrevDay/Caption",
+                        LanguageName);
+                lblDetailsFinalValuePrevDayCurPrice.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/PrevDay/CurrentPrice",
+                        LanguageName);
+                lblDetailsFinalValuePrevDayPrevPrice.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/PrevDay/PrevPrice",
+                        LanguageName);
+                lblDetailsFinalValuePrevDayDiffPrice.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/PrevDay/DiffPrice",
+                        LanguageName);
+                lblDetailsFinalValuePrevDayDiffPerformance.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/PrevDay/DiffPerformance",
+                        LanguageName);
+                lblDetailsFinalValuePrevDayVolume.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/PrevDay/Volume",
+                        LanguageName);
+                lblDetailsFinalValuePrevDayDiffValue.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/PrevDay/DiffPrice",
+                        LanguageName);
+                lblDetailsFinalValueDiffSumPrev.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithDividendBrokerage/Labels/PrevDay/DiffSum",
+                        LanguageName);
+
+                #endregion Previous day calcuation
             }
 
             if (tabCtrlDetails.TabPages[_tabPageDetailsMarketValue] != null)
             {
                 tabCtrlDetails.TabPages[_tabPageDetailsMarketValue].Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Caption",
-                        LanguageName);
-                lblDetailsMarketValueDate.Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/Date",
-                        LanguageName);
-                lblDetailsMarketValueVolume.Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/Volume",
-                        LanguageName);
-                lblDetailsMarketValueDividend.Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/TotalDividend",
-                        LanguageName);
-                lblDetailsMarketValueBrokerage.Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/TotalBrokerage",
-                        LanguageName);
-                lblDetailsMarketValueCurPrice.Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/CurrentPrice",
-                        LanguageName);
-                lblDetailsMarketValueDiffPerformancePrev.Text =
                     Language.GetLanguageTextByXPath(
-                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/DiffPerformancePrevDay", LanguageName);
-                lblDetailsMarketValueDiffSumPrev.Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/DiffSumPrevDay",
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Caption",
                         LanguageName);
-                lblDetailsMarketValuePrevPrice.Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/PricePrevDay",
+                lblDetailsMarketValueDateValue.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/Date",
                         LanguageName);
-                lblDetailsMarketValuePurchase.Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/Purchase",
+
+                #region Overall calcuation
+
+                lblDetailsMarketValueOverallCalculation.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/Total/Caption",
+                        LanguageName);
+                lblDetailsMarketValueTotalVolume.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/Total/Volume",
+                        LanguageName);
+                lblDetailsMarketValueTotalCurPrice.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/Total/CurrentPrice",
+                        LanguageName);
+                lblDetailsMarketValueTotalPurchase.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/Total/Purchase",
+                        LanguageName);
+                lblDetailsMarketValueTotalDividend.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/Total/Dividend",
+                        LanguageName);
+                lblDetailsMarketValueTotalSale.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/Total/Sale",
+                        LanguageName);
+                lblDetailsMarketValueTotalSum.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/Total/Sum",
+                        LanguageName);
+                lblDetailsMarketValueTotalSalePurchase.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/Total/SalePurchase",
+                        LanguageName);
+                lblDetailsMarketValueTotalProfitLoss.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/Total/ProfitLoss",
                         LanguageName);
                 lblDetailsMarketValueTotalPerformance.Text =
                     Language.GetLanguageTextByXPath(
-                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/TotalPerformance", LanguageName);
-                lblDetailsMarketValueTotalProfit.Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/TotalProfitLoss",
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/Total/Performance",
                         LanguageName);
-                lblDetailsMarketValueTotalSum.Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/TotalSum",
+
+                #endregion Overall calcuation
+
+                #region Current calcuation
+
+                lblDetailsMarketValueCurrentCalculation.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/Current/Caption",
                         LanguageName);
+                lblDetailsMarketValueCurrentVolume.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/Current/Volume",
+                        LanguageName);
+                lblDetailsMarketValueCurrentCurPrice.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/Current/CurrentPrice",
+                        LanguageName);
+                lblDetailsMarketValueCurrentPurchase.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/Current/Purchase",
+                        LanguageName);
+                lblDetailsMarketValueCurrentDividend.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/Current/Dividend",
+                        LanguageName);
+                lblDetailsMarketValueCurrentProfitLossSale.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/Current/ProfitLoss",
+                        LanguageName);
+                lblDetailsMarketValueCurrentSum.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/Current/Sum",
+                        LanguageName);
+
+                #endregion Current calcuation
+
+                #region Previous day calcuation
+
+                lblDetailsMarketValuePrevDayCalculation.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/PrevDay/Caption",
+                        LanguageName);
+                lblDetailsMarketValuePrevDayCurPrice.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/PrevDay/CurrentPrice",
+                        LanguageName);
+                lblDetailsMarketValuePrevDayPrevPrice.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/PrevDay/PrevPrice",
+                        LanguageName);
+                lblDetailsMarketValuePrevDayDiffPrice.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/PrevDay/DiffPrice",
+                        LanguageName);
+                lblDetailsMarketValuePrevDayDiffPerformance.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/PrevDay/DiffPerformance",
+                        LanguageName);
+                lblDetailsMarketValuePrevDayVolume.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/PrevDay/Volume",
+                        LanguageName);
+                lblDetailsMarketValuePrevDayDiffValue.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/PrevDay/DiffPrice",
+                        LanguageName);
+                lblDetailsMarketValueDiffSumPrev.Text =
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithOutDividendBrokerage/Labels/PrevDay/DiffSum",
+                        LanguageName);
+
+                #endregion Previous day calcuation
             }
 
             if (tabCtrlDetails.TabPages[_tabPageDetailsDividendValue] != null)
             {
+                tabCtrlDetails.TabPages[_tabPageDetailsDividendValue].BackColor = tabCtrlDetails.BackColor;
+                tabCtrlDetails.TabPages[_tabPageDetailsDividendValue].Padding = new Padding(0, 8, 0, 0);
+
                 tabCtrlDetails.TabPages[_tabPageDetailsDividendValue].Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/Caption", LanguageName);
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/Caption", LanguageName);
+            }
+
+            if (tabCtrlDetails.TabPages[_tabPageDetailsBrokerageValue] != null)
+            {
                 tabCtrlDetails.TabPages[_tabPageDetailsBrokerageValue].Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/Caption", LanguageName);
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/Caption", LanguageName);
+            }
+
+            if (tabCtrlDetails.TabPages[_tabPageDetailsProfitLossValue] != null)
+            {
                 tabCtrlDetails.TabPages[_tabPageDetailsProfitLossValue].Text =
-                    Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Caption", LanguageName);
+                    Language.GetLanguageTextByXPath(
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Caption", LanguageName);
             }
 
             #endregion GrpBox for the details
@@ -377,8 +574,8 @@ namespace SharePortfolioManager.ShareDetailsForm
             try
             {
                 System.Diagnostics.Process.Start(MarketValueOverviewTabSelected
-                    ? ShareObjectMarketValue.WebSite
-                    : ShareObjectFinalValue.WebSite);
+                    ? ShareObjectMarketValue.UpdateWebSiteUrl
+                    : ShareObjectFinalValue.UpdateWebSiteUrl);
             }
             catch (Win32Exception noBrowser)
             {
@@ -443,6 +640,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     true,
                     SeriesChartType.Line,
                     2,
+                    // TODO use settings value
                     Color.Black,
                     DailyValues.DateName,
                     DailyValues.ClosingPriceName
@@ -457,6 +655,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     true,
                     SeriesChartType.Line,
                     2,
+                    // TODO use settings value
                     Color.DarkGreen,
                     DailyValues.DateName,
                     DailyValues.OpeningPriceName
@@ -471,6 +670,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     true,
                     SeriesChartType.Line,
                     2,
+                    // TODO use settings value
                     Color.DarkBlue,
                     DailyValues.DateName,
                     DailyValues.TopName
@@ -485,6 +685,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     true,
                     SeriesChartType.Line,
                     2,
+                    // TODO use settings value
                     Color.DarkRed,
                     DailyValues.DateName,
                     DailyValues.BottomName
@@ -499,6 +700,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     true,
                     SeriesChartType.Line,
                     2,
+                    // TODO use settings value
                     Color.Goldenrod,
                     DailyValues.DateName,
                     DailyValues.VolumeName
@@ -544,14 +746,21 @@ namespace SharePortfolioManager.ShareDetailsForm
 
             // Draw chart with the given values
             ChartingDailyValues.Charting(
+                out Title,
                 MarketValueOverviewTabSelected,
                 ShareObjectFinalValue, ShareObjectMarketValue,
                 Logger, LanguageName, Language,
                 dateTimePickerStartDate.Value,
                 chartDailyValues,
                 ChartValues,
-                null
-            );
+                null,
+                false,
+                // TODO use settings value
+                Color.Blue,
+                Color.Red
+                );
+
+            Text = Title;
         }
 
         private void SetStartEndDateAtDateTimePicker()
@@ -619,5 +828,6 @@ namespace SharePortfolioManager.ShareDetailsForm
         }
 
         #endregion Selection change
+
     }
 }

@@ -19,16 +19,18 @@
 			<Reduction Name="Reduction" FoundIndex="0" ResultEmpty="true" RegexOptions="None"></Reduction>
 		</Document>
 		<Document Type="Sale" TypeIdentifierValue="Wertpapier Abrechnung Verkauf" Encoding="UTF-8">
+			<Wkn Name="Wkn" FoundIndex="1" ResultEmpty="true" RegexOptions="None">[(]((?:[A-Za-z0-9]{1,}))[)]</Wkn>
+			<OrderNumber Name="OrderNumber" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Auftragsnummer(.*\s)</OrderNumber>
 			<Date Name="Date" FoundIndex="0" ResultEmpty="false" RegexOptions="None">Schlusstag/-Zeit([0-9:. ]{1,})Auftraggeber</Date>
 			<Time Name="Time" FoundIndex="0" ResultEmpty="false" RegexOptions="None">Schlusstag/-Zeit([0-9:. ]{1,})Auftraggeber</Time>
-			<Volume Name="Volume" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Volume>
-			<Price Name="Price" FoundIndex="0" ResultEmpty="false" RegexOptions="None"></Price>
+			<Volume Name="Volume" FoundIndex="0" ResultEmpty="false" RegexOptions="None">Stück([0-9., ]{1,})</Volume>
+			<Price Name="Price" FoundIndex="0" ResultEmpty="false" RegexOptions="None">Ausführungskurs([0-9., ]{1,})</Price>
 			<TaxAtSource Name="TaxAtSource" FoundIndex="0" ResultEmpty="true" RegexOptions="None"></TaxAtSource>
 			<CapitalGainTax Name="CapitalGainTax" FoundIndex="0" ResultEmpty="true" RegexOptions="None"></CapitalGainTax>
 			<SolidarityTax Name="SolidarityTax" FoundIndex="0" ResultEmpty="true" RegexOptions="None"></SolidarityTax>
-			<Provision Name="Provision" FoundIndex="0" ResultEmpty="true" RegexOptions="None"></Provision>
-			<BrokerFee Name="BrokerFee" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Ausführungskurs([0-9., ]{1,})</BrokerFee>
-			<TraderPlaceFee Name="TraderPlaceFee" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Ausführungskurs([0-9., ]{1,})</TraderPlaceFee>
+			<Provision Name="Provision" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Provision([0-9., ]{1,})</Provision>
+			<BrokerFee Name="BrokerFee" FoundIndex="0" ResultEmpty="true" RegexOptions="None"></BrokerFee>
+			<TraderPlaceFee Name="TraderPlaceFee" FoundIndex="0" ResultEmpty="true" RegexOptions="None"></TraderPlaceFee>
 			<Reduction Name="Reduction" FoundIndex="0" ResultEmpty="true" RegexOptions="None"></Reduction>
 		</Document>
 		<Document Type="Dividend" TypeIdentifierValue="Dividendengutschrift" Encoding="UTF-8">
@@ -45,7 +47,7 @@
 	</Bank>
 	<Bank Name="ING" BankIdentifierValue="8006189848" Encoding="UTF-8">
 		<BankIdentifier Name="BankIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Direkt-Depot Nr.:\s+([0-9]{1,10})</BankIdentifier>
-		<BuyIdentifier Name="BuyIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">91413 Neustadt\s+([A-Za-z]{1,})\s+(Kauf)</BuyIdentifier>
+		<BuyIdentifier Name="BuyIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">91180 Heideck\s+([A-Za-z]{1,})\s+(Kauf)</BuyIdentifier>
 		<SaleIdentifier Name="SaleIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">(Verkauf)</SaleIdentifier>
 		<DividendIdentifier Name="DividendIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">(Dividendengutschrift)</DividendIdentifier>
 		<Document Type="Buy" TypeIdentifierValue="Wertpapierabrechnung" Encoding="UTF-8">

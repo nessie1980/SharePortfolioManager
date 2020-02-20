@@ -20,11 +20,11 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+using SharePortfolioManager.Classes.Costs;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using SharePortfolioManager.Classes.Costs;
 
 namespace SharePortfolioManager.Classes.Buys
 {
@@ -63,9 +63,24 @@ namespace SharePortfolioManager.Classes.Buys
         public decimal BuyValueTotal { get; internal set; }
 
         /// <summary>
+        /// Total buy value of all buys as string with unit
+        /// </summary>
+        public string BuyValueTotalAsStrUnit => Helper.FormatDecimal(BuyValueTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", BuyCultureInfo);
+
+        /// <summary>
         /// Total buy value minus reduction of all buys
         /// </summary>
         public decimal BuyValueReductionTotal { get; internal set; }
+
+        /// <summary>
+        /// Total buy value minus reduction of all buys as string
+        /// </summary>
+        public string BuyValueReductionTotalAsStr => Helper.FormatDecimal(BuyValueReductionTotal, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength);
+
+        /// <summary>
+        /// Total buy value minus reduction of all buys as string with unit
+        /// </summary>
+        public string BuyValueReductionTotalAsStrUnit => Helper.FormatDecimal(BuyValueReductionTotal, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", BuyCultureInfo);
 
         /// <summary>
         /// Total buy value plus brokerage of all buys
@@ -120,6 +135,9 @@ namespace SharePortfolioManager.Classes.Buys
         public bool AddBuy(string strGuid, string strOrderNumber, string strDate, decimal decVolume, decimal decVolumeSold, decimal decSharePrice,
             BrokerageReductionObject brokerageObject, string strDoc = "")
         {
+#if false
+            Console.WriteLine(@"AddBuy()");
+#endif
             try
             {
                 // Get year of the date of the new buy
@@ -170,6 +188,14 @@ namespace SharePortfolioManager.Classes.Buys
             {
                 return false;
             }
+
+#if false
+            Console.WriteLine(@"BuyVolumeTotal: {0}", BuyVolumeTotal);
+            Console.WriteLine(@"BuyValueTotal: {0}", BuyValueTotal);
+            Console.WriteLine(@"BuyValueReductionTotal: {0}", BuyValueReductionTotal);
+            Console.WriteLine(@"BuyValueBrokerageTotal: {0}", BuyValueBrokerageTotal);
+            Console.WriteLine(@"BuyValueBrokerageReductionTotal: {0}", BuyValueBrokerageReductionTotal);
+#endif
 
             return true;
         }

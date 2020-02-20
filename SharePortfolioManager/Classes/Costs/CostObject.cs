@@ -58,7 +58,7 @@ namespace SharePortfolioManager.Classes.Costs
         public string Date { get; set; }
 
         [Browsable(false)]
-        public string DateAsStr => Date;
+        public string DateAsStr => DateTime.Parse(Date).Date.ToShortDateString();
 
         [Browsable(false)]
         public decimal ProvisionValue { get; set; }
@@ -113,6 +113,12 @@ namespace SharePortfolioManager.Classes.Costs
         public string DgvBrokerageDate => DateAsStr;
 
         [Browsable(true)]
+        public string DgvBrokerageValueAsStr => BrokerageValueAsStr;
+
+        [Browsable(true)]
+        public string DgvReductionValueAsStr => ReductionValueAsStr;
+
+        [Browsable(true)]
         public string DgvBrokerageReductionValueAsStr => BrokerageReductionValueAsStr;
 
         [Browsable(true)]
@@ -153,15 +159,15 @@ namespace SharePortfolioManager.Classes.Costs
             BrokerageDocument = strDoc;
 
             // Calculate and set brokerage value
-            Helper.CalcBrokerageValues(decProvisionValue, decBrokerFeeValue, decTraderPlaceFeeValue, ReductionValue, out var brokerageValue, out var brokerageWithReductionValue);
+            Helper.CalcBrokerageValues(decProvisionValue, decBrokerFeeValue, decTraderPlaceFeeValue, out var brokerageValue);
             BrokerageValue = brokerageValue;
-            BrokerageReductionValue = brokerageWithReductionValue;
+            BrokerageReductionValue = BrokerageValue - decReductionValue;
 
-#if DEBUG_BROKERAGE
+#if false
             Console.WriteLine(@"");
-            Console.WriteLine(@"New BrokerageObject created");
+            Console.WriteLine(@"BrokerageReductionObject()");
             Console.WriteLine(@"Guid: {0}", strGuid);
-            Console.WriteLine(@"BrokerageOfABuy: {0}", BrokerageOfABuy);
+            Console.WriteLine(@"bBrokerageOfABuy: {0}", bBrokerageOfABuy);
             Console.WriteLine(@"bBrokerageOfASale: {0}", bBrokerageOfASale);
             Console.WriteLine(@"Date: {0}", strDate);
             Console.WriteLine(@"Provision: {0}", decProvisionValue);
@@ -169,7 +175,7 @@ namespace SharePortfolioManager.Classes.Costs
             Console.WriteLine(@"TraderPlaceFeeValue: {0}", decTraderPlaceFeeValue);
             Console.WriteLine(@"ReductionValue: {0}", decReductionValue);
             Console.WriteLine(@"Brokerage: {0}", BrokerageValue);
-            Console.WriteLine(@"brokerageWithReductionValue: {0}", brokerageWithReductionValue);
+            Console.WriteLine(@"BrokerageReductionValue: {0}", BrokerageReductionValue);
             Console.WriteLine(@"Document: {0}", strDoc);
             Console.WriteLine(@"");
 #endif

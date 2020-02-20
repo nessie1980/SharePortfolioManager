@@ -20,11 +20,11 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+using SharePortfolioManager.Classes.Costs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using SharePortfolioManager.Classes.Costs;
 
 namespace SharePortfolioManager.Classes.Buys
 {
@@ -136,13 +136,17 @@ namespace SharePortfolioManager.Classes.Buys
         public bool AddBuyObject(CultureInfo cultureInfo, string strGuid, string strOrderNumber, string strDate, decimal decVolume, decimal decVolumeSold, decimal decSharePrice,
             BrokerageReductionObject brokerageObject, string strDoc = "")
         {
+#if false
+            Console.WriteLine(@"AddBuyObject()");
+#endif
             try
             {
                 // Set culture info of the share
                 BuyCultureInfo = cultureInfo;
 
                 // Create new BuyObject
-                var addObject = new BuyObject(cultureInfo, strGuid, strOrderNumber, strDate, decVolume, decVolumeSold, decSharePrice,
+                var addObject = new BuyObject(cultureInfo, strGuid, strOrderNumber, strDate, decVolume, decVolumeSold,
+                    decSharePrice,
                     brokerageObject, strDoc);
 
                 // Add object to the list
@@ -183,6 +187,17 @@ namespace SharePortfolioManager.Classes.Buys
                 return false;
             }
 
+#if false
+            Console.WriteLine(@"");
+            Console.WriteLine(@"CalculateValues()");
+            Console.WriteLine(@"BuyYear: {0}", BuyYear);
+            Console.WriteLine(@"BuyValueYear: {0}", BuyValueYear);
+            Console.WriteLine(@"BuyValueReductionYear: {0}", BuyValueReductionYear);
+            Console.WriteLine(@"BuyValueBrokerageYear: {0}", BuyValueBrokerageYear);
+            Console.WriteLine(@"BuyValueBrokerageReductionYear: {0}", BuyValueBrokerageReductionYear);
+            Console.WriteLine(@"BuyVolumeYear: {0}", BuyVolumeYear);
+            Console.WriteLine(@"");
+#endif
             return true;
         }
 
@@ -194,6 +209,10 @@ namespace SharePortfolioManager.Classes.Buys
         /// <returns>Flag if the remove was successfully</returns>
         public bool RemoveBuyObject(string strGuid)
         {
+#if true
+            Console.WriteLine(@"RemoveBuyObject()");
+#endif
+
             try
             {
                 // Search for the remove object
@@ -231,6 +250,17 @@ namespace SharePortfolioManager.Classes.Buys
                 return false;
             }
 
+#if true
+            Console.WriteLine(@"");
+            Console.WriteLine(@"CalculateValues()");
+            Console.WriteLine(@"BuyYear: {0}", BuyYear);
+            Console.WriteLine(@"BuyValueYear: {0}", BuyValueYear);
+            Console.WriteLine(@"BuyValueReductionYear: {0}", BuyValueReductionYear);
+            Console.WriteLine(@"BuyValueBrokerageYear: {0}", BuyValueBrokerageYear);
+            Console.WriteLine(@"BuyValueBrokerageReductionYear: {0}", BuyValueBrokerageReductionYear);
+            Console.WriteLine(@"BuyVolumeYear: {0}", BuyVolumeYear);
+            Console.WriteLine(@"");
+#endif
             return true;
         }
 

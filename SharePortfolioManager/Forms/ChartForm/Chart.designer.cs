@@ -42,11 +42,11 @@
             this.chartDailyValues.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chartDailyValues.Location = new System.Drawing.Point(0, 0);
             this.chartDailyValues.Name = "chartDailyValues";
-            this.chartDailyValues.Size = new System.Drawing.Size(684, 334);
+            this.chartDailyValues.Size = new System.Drawing.Size(700, 350);
             this.chartDailyValues.TabIndex = 1;
             this.chartDailyValues.Text = "Daily values";
             this.chartDailyValues.CustomizeLegend += new System.EventHandler<System.Windows.Forms.DataVisualization.Charting.CustomizeLegendEventArgs>(this.OnChartDailyValues_CustomizeLegend);
-            this.chartDailyValues.Click += new System.EventHandler(this.OnChartDailyValues_Click);
+            this.chartDailyValues.MouseLeave += new System.EventHandler(this.OnChartDailyValues_MouseLeave);
             // 
             // lblNoDataMessage
             // 
@@ -56,25 +56,27 @@
             this.lblNoDataMessage.ForeColor = System.Drawing.Color.Red;
             this.lblNoDataMessage.Location = new System.Drawing.Point(0, 0);
             this.lblNoDataMessage.Name = "lblNoDataMessage";
-            this.lblNoDataMessage.Size = new System.Drawing.Size(684, 334);
+            this.lblNoDataMessage.Size = new System.Drawing.Size(700, 350);
             this.lblNoDataMessage.TabIndex = 2;
             this.lblNoDataMessage.Text = "_NoDataMessage";
             this.lblNoDataMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.lblNoDataMessage.Visible = false;
-            this.lblNoDataMessage.Click += new System.EventHandler(this.OnLblNoDataMessage_Click);
+            this.lblNoDataMessage.MouseLeave += new System.EventHandler(this.OnLblNoDataMessage_MouseLeave);
             // 
             // FrmChart
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(684, 334);
+            this.ClientSize = new System.Drawing.Size(700, 350);
             this.Controls.Add(this.lblNoDataMessage);
             this.Controls.Add(this.chartDailyValues);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(700, 350);
             this.Name = "FrmChart";
+            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Chart";
             this.TopMost = true;

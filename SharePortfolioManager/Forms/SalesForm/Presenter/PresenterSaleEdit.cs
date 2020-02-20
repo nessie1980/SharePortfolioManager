@@ -492,7 +492,7 @@ namespace SharePortfolioManager.SalesForm.Presenter
         {
             try
             {
-                var soldVolume = new decimal(0.0);
+                var alreadySoldVolume = new decimal(0.0);
 
                 if (_model.UsedBuyDetails == null)
                     _model.UsedBuyDetails = new List<SaleBuyDetails>();
@@ -520,31 +520,33 @@ namespace SharePortfolioManager.SalesForm.Presenter
                 }
 
                 // Loop through the buys and check which buy should be used for this sale
-                foreach (var buy in _model.ShareObjectFinalValue.AllBuyEntries.GetAllBuysOfTheShare())
+                foreach (var currentBuyObject in _model.ShareObjectFinalValue.AllBuyEntries.GetAllBuysOfTheShare())
                 {
                     // Check if this buy is already completely sold
-                    if (buy.VolumeSold == buy.Volume) continue;
+                    if (currentBuyObject.VolumeSold == currentBuyObject.Volume) continue;
 
                     // Calculate the already sold volume
                     if (_model.UsedBuyDetails != null && _model.UsedBuyDetails.Count > 0)
-                        soldVolume = _model.UsedBuyDetails.Sum(x => x.DecVolume);
+                        alreadySoldVolume = _model.UsedBuyDetails.Sum(x => x.DecVolume);
 
                     // Calculate the volume which has to be sold 
-                    var toBeSold = _model.VolumeDec - soldVolume;
+                    var toBeSoldVolume = _model.VolumeDec - alreadySoldVolume;
 
                     // Check if all sale are done
-                    if (toBeSold <= 0) break;
+                    if (toBeSoldVolume <= 0) break;
 
                     // Salable volume
-                    var salableVolume = buy.Volume - buy.VolumeSold;
+                    var salableVolume = currentBuyObject.Volume - currentBuyObject.VolumeSold;
 
                     // Check if the remaining buy volume is greater than the volume which must be sold
-                    if (toBeSold >= buy.Volume - buy.VolumeSold)
+                    if (toBeSoldVolume >= currentBuyObject.Volume - currentBuyObject.VolumeSold)
                     {
                         // Calculate brokerage / reduction value
-                        var brokerageReductionPart = Math.Round(buy.BrokerageWithReduction * salableVolume / buy.Volume, 5);
+                        var brokerageWithReductionPart = Math.Round(currentBuyObject.Brokerage * salableVolume / currentBuyObject.Volume, 5);
+                        var reductionPart = Math.Round(currentBuyObject.Reduction * salableVolume / currentBuyObject.Volume, 5);
 
-                        decimal decAlreadyUsedBrokerageReductionValue = 0;
+                        decimal decAlreadyUsedBrokerageValue = 0;
+                        decimal decAlreadyUsedReductionValue = 0;
                         // Get already used brokerage / reduction value ( rounding errors )
                         foreach (var saleObject in _model.ShareObjectFinalValue.AllSaleEntries.GetAllSalesOfTheShare())
                         {
@@ -553,47 +555,59 @@ namespace SharePortfolioManager.SalesForm.Presenter
 
                             foreach (var saleObjectSaleBuyDetail in saleObject.SaleBuyDetails)
                             {
-                                if (saleObjectSaleBuyDetail.BuyGuid == buy.Guid)
-                                    decAlreadyUsedBrokerageReductionValue +=
-                                        saleObjectSaleBuyDetail.BrokerageReductionPart;
+                                if (saleObjectSaleBuyDetail.BuyGuid == currentBuyObject.Guid)
+                                    decAlreadyUsedBrokerageValue +=
+                                        saleObjectSaleBuyDetail.BrokeragePart;
+                                if (saleObjectSaleBuyDetail.BuyGuid == currentBuyObject.Guid)
+                                    decAlreadyUsedReductionValue +=
+                                        saleObjectSaleBuyDetail.ReductionPart;
                             }
                         }
 
                         // Check if the brokerage / reduction value is not equal to the rest calculation
-                        if (!brokerageReductionPart.Equals(buy.BrokerageWithReduction - decAlreadyUsedBrokerageReductionValue))
-                            brokerageReductionPart = buy.BrokerageWithReduction - decAlreadyUsedBrokerageReductionValue;
+                        if (!brokerageWithReductionPart.Equals(currentBuyObject.Brokerage - decAlreadyUsedBrokerageValue))
+                            brokerageWithReductionPart = currentBuyObject.Brokerage - decAlreadyUsedBrokerageValue;
+
+                        // Check if the reduction value is not equal to the rest calculation
+                        if (!reductionPart.Equals(currentBuyObject.Reduction - decAlreadyUsedReductionValue)) 
+                            reductionPart = currentBuyObject.Reduction - decAlreadyUsedReductionValue;
 
                         _model.UsedBuyDetails?.Add(new SaleBuyDetails(_model.ShareObjectFinalValue.CultureInfo,
-                            buy.DateAsStr, salableVolume, buy.Price, brokerageReductionPart, buy.Guid));
+                            currentBuyObject.DateAsStr, salableVolume, currentBuyObject.Price, 
+                             reductionPart, brokerageWithReductionPart, currentBuyObject.Guid));
 
                         // Add sale volume to the sold volume of the buy
-                        _model.ShareObjectFinalValue.AllBuyEntries.AddSaleVolumeByGuid(buy.Guid,
+                        _model.ShareObjectFinalValue.AllBuyEntries.AddSaleVolumeByGuid(currentBuyObject.Guid,
                             salableVolume);
                         // Add sale volume to the sold volume of the buy
-                        _model.ShareObjectMarketValue.AllBuyEntries.AddSaleVolumeByGuid(buy.Guid,
+                        _model.ShareObjectMarketValue.AllBuyEntries.AddSaleVolumeByGuid(currentBuyObject.Guid,
                             salableVolume);
                     }
                     else
                     {
                         // Calculate brokerage / reduction value
-                        var brokerageReductionPart = Math.Round(buy.BrokerageWithReduction * toBeSold / buy.Volume, 5);
+                        var brokeragePart = Math.Round(currentBuyObject.Brokerage * toBeSoldVolume / currentBuyObject.Volume, 5);
+
+                        // Calculate reduction value
+                        var reductionPart = Math.Round(currentBuyObject.Reduction * toBeSoldVolume / currentBuyObject.Volume, 5);
 
                         _model.UsedBuyDetails?.Add(new SaleBuyDetails(_model.ShareObjectFinalValue.CultureInfo,
-                            buy.DateAsStr, toBeSold, buy.Price, brokerageReductionPart, buy.Guid));
+                            currentBuyObject.DateAsStr, toBeSoldVolume, currentBuyObject.Price,
+                            reductionPart, brokeragePart, currentBuyObject.Guid));
 
                         // Add sale volume to the sold volume of the buy
-                        _model.ShareObjectFinalValue.AllBuyEntries.AddSaleVolumeByGuid(buy.Guid,
-                            toBeSold);
+                        _model.ShareObjectFinalValue.AllBuyEntries.AddSaleVolumeByGuid(currentBuyObject.Guid,
+                            toBeSoldVolume);
                         // Add sale volume to the sold volume of the buy
-                        _model.ShareObjectMarketValue.AllBuyEntries.AddSaleVolumeByGuid(buy.Guid,
-                            toBeSold);
+                        _model.ShareObjectMarketValue.AllBuyEntries.AddSaleVolumeByGuid(currentBuyObject.Guid,
+                            toBeSoldVolume);
                     }
                 }
 
                 decimal decProfitLoss = 0;
                 if (_model.UsedBuyDetails != null)
                     decProfitLoss = _model.SalePriceDec* _model.VolumeDec -
-                    _model.UsedBuyDetails.Sum(x => x.SaleBuyValue);
+                    _model.UsedBuyDetails.Sum(x => x.SaleBuyValueBrokerageReduction);
                 else
                     if (_model.UsedBuyDetails != null)
                         decProfitLoss = _model.SalePriceDec * _model.VolumeDec;
@@ -603,7 +617,7 @@ namespace SharePortfolioManager.SalesForm.Presenter
                 var decPayout = decProfitLoss - _model.TaxAtSourceDec - _model.CapitalGainsTaxDec -
                                 _model.SolidarityTaxDec - decBrokerage;
 
-                _model.SaleBuyValueDec = _model.UsedBuyDetails != null ? Math.Round(_model.UsedBuyDetails.Sum(x => x.SaleBuyValue), 2) : 0;
+                _model.SaleBuyValueDec = _model.UsedBuyDetails != null ? Math.Round(_model.UsedBuyDetails.Sum(x => x.SaleBuyValueBrokerageReduction), 2) : 0;
 
                 _model.ProfitLossDec = decProfitLoss;
                 _model.BrokerageDec = decBrokerage;

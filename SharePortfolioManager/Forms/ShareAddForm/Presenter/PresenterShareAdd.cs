@@ -21,6 +21,7 @@
 //SOFTWARE.
 
 using SharePortfolioManager.Classes;
+using SharePortfolioManager.Classes.ShareObjects;
 using SharePortfolioManager.ShareAddForm.Model;
 using SharePortfolioManager.ShareAddForm.View;
 using System;
@@ -28,7 +29,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager.ShareAddForm.Presenter
 {
@@ -138,10 +138,9 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                 Helper.CalcBuyValues(_model.VolumeDec, _model.SharePriceDec,
                     _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec,
                     out var decBuyValue, out var decBuyValueReduction, out var decBuyValueBrokerage, out var decBuyValueBrokerageReduction,
-                    out var decBrokerage, out var decBrokerageWithReduction);
+                    out var decBrokerage);
 
                 _model.BrokerageDec = decBrokerage;
-                _model.BrokerageWithReductionDec = decBrokerageWithReduction;
                 _model.BuyValueDec = decBuyValue;
                 _model.BuyValueReductionDec = decBuyValueReduction;
                 _model.BuyValueBrokerageDec = decBuyValueBrokerage;
@@ -149,7 +148,6 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
 
 #if DEBUG_BUY || DEBUG
                 Console.WriteLine(@"BrokerageDec: {0}", _model.BrokerageDec);
-                Console.WriteLine(@"BrokerageWithReductionDec: {0}", _model.BrokerageWithReductionDec);
                 Console.WriteLine(@"BuyValueDec: {0}", _model.BuyValueDec);
                 Console.WriteLine(@"BuyValueReductionDec: {0}", _model.BuyValueReductionDec);
                 Console.WriteLine(@"BuyValueBrokerageDec: {0}", _model.BuyValueBrokerageDec);
@@ -164,7 +162,6 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                     MessageBoxIcon.Error);
 #endif
                 _model.BrokerageDec = 0;
-                _model.BrokerageWithReductionDec = 0;
                 _model.BuyValueDec = 0;
                 _model.BuyValueReductionDec = 0;
                 _model.BuyValueBrokerageDec = 0;
@@ -328,11 +325,11 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                     // Set website configuration and encoding to the share object.
                     // The encoding is necessary for the Parser for encoding the download result.
                     _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1]
-                        .WebSiteConfigurationValid = _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1]
+                        .WebSiteConfigurationFound = _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1]
                         .SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList);
 
                     _model.ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1]
-                        .WebSiteConfigurationValid = _model.ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1]
+                        .WebSiteConfigurationFound = _model.ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1]
                         .SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList);
 
                     // Sort portfolio list in order of the share names
@@ -589,7 +586,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                 // Check if a market value share with the given website already exists
                 foreach (var shareObjectMarketValue in _model.ShareObjectListMarketValue)
                 {
-                    if (shareObjectMarketValue.WebSite != _model.WebSite ||
+                    if (shareObjectMarketValue.UpdateWebSiteUrl != _model.WebSite ||
                         shareObjectMarketValue == _model.ShareObjectMarketValue) continue;
 
                     _model.ErrorCode = ShareAddErrorCode.WebSiteExists;
@@ -602,7 +599,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                     // Check if a final value share with the given website already exists
                     foreach (var shareObjectFinalValue in _model.ShareObjectListFinalValue)
                     {
-                        if (shareObjectFinalValue.WebSite != _model.WebSite ||
+                        if (shareObjectFinalValue.UpdateWebSiteUrl != _model.WebSite ||
                             shareObjectFinalValue == _model.ShareObjectFinalValue) continue;
 
                         _model.ErrorCode = ShareAddErrorCode.WebSiteExists;
@@ -631,7 +628,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                 // Check if a market value share with the given daily values website already exists
                 foreach (var shareObjectMarketValue in _model.ShareObjectListMarketValue)
                 {
-                    if (shareObjectMarketValue.DailyValuesWebSite != _model.DailyValuesWebSite ||
+                    if (shareObjectMarketValue.DailyValuesUpdateWebSiteUrl != _model.DailyValuesWebSite ||
                         shareObjectMarketValue == _model.ShareObjectMarketValue) continue;
 
                     _model.ErrorCode = ShareAddErrorCode.DailyValuesWebSiteExists;
@@ -644,7 +641,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                     // Check if a final value share with the given daily values website already exists
                     foreach (var shareObjectFinalValue in _model.ShareObjectListFinalValue)
                     {
-                        if (shareObjectFinalValue.DailyValuesWebSite != _model.DailyValuesWebSite ||
+                        if (shareObjectFinalValue.DailyValuesUpdateWebSiteUrl != _model.DailyValuesWebSite ||
                             shareObjectFinalValue == _model.ShareObjectFinalValue) continue;
 
                         _model.ErrorCode = ShareAddErrorCode.DailyValuesWebSiteExists;

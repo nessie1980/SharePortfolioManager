@@ -20,6 +20,13 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+using LanguageHandler;
+using Logging;
+using Parser;
+using SharePortfolioManager.Classes;
+using SharePortfolioManager.Classes.ShareObjects;
+using SharePortfolioManager.OwnMessageBoxForm;
+using SharePortfolioManager.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,13 +37,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using LanguageHandler;
-using Logging;
-using Parser;
-using SharePortfolioManager.Classes;
-using SharePortfolioManager.Classes.ShareObjects;
-using SharePortfolioManager.OwnMessageBoxForm;
-using SharePortfolioManager.Properties;
 
 namespace SharePortfolioManager.BuysForm.View
 {
@@ -124,7 +124,6 @@ namespace SharePortfolioManager.BuysForm.View
         string BrokerFee { get; set; }
         string TraderPlaceFee { get; set; }
         string Brokerage { get; set; }
-        string BrokerageWithReduction { get; set; }
         string BuyValue { get; set; }
         string BuyValueBrokerageReduction { get; set; }
         string Document { get; set; }
@@ -403,8 +402,6 @@ namespace SharePortfolioManager.BuysForm.View
                 txtBoxBrokerage.Text = value;
             }
         }
-
-        public string BrokerageWithReduction { get; set; }
 
         public string BuyValue
         {
@@ -1812,11 +1809,17 @@ namespace SharePortfolioManager.BuysForm.View
 
                 #region Data source, data binding and data grid view
 
-                // Create Binding source for the buy data
-                var bindingSourceOverview = new BindingSource();
-                if (ShareObjectFinalValue.AllBuyEntries.GetAllBuysTotalValues().Count > 0)
-                    bindingSourceOverview.DataSource =
-                        ShareObjectFinalValue.AllBuyEntries.GetAllBuysTotalValues();
+                // Check if buys exists
+                if (ShareObjectFinalValue.AllBuyEntries.GetAllBuysTotalValues().Count <= 0) return;
+
+                // Reverse list so the latest is a top of the data grid view
+                var reserveDataSourceOverview = ShareObjectFinalValue.AllBuyEntries.GetAllBuysTotalValues();
+                reserveDataSourceOverview.Reverse();
+
+                var bindingSourceOverview = new BindingSource
+                {
+                    DataSource = reserveDataSourceOverview
+                };
 
                 // Create DataGridView
                 var dataGridViewBuysOverviewOfAYears = new DataGridView
@@ -1825,8 +1828,13 @@ namespace SharePortfolioManager.BuysForm.View
                     Dock = DockStyle.Fill,
 
                     // Bind source with buy values to the DataGridView
-                    DataSource = bindingSourceOverview
+                    DataSource = bindingSourceOverview,
+
+                    // Disable column header resize
+                    ColumnHeadersHeightSizeMode =
+                        DataGridViewColumnHeadersHeightSizeMode.DisableResizing
                 };
+
 
                 #endregion Data source, data binding and data grid view
 
@@ -1841,35 +1849,9 @@ namespace SharePortfolioManager.BuysForm.View
 
                 #endregion Events
 
-                #region Style 
+                #region Style
 
-                // Advanced configuration DataGridView buys
-                dataGridViewBuysOverviewOfAYears.EnableHeadersVisualStyles = false;
-                // Column header styling
-                dataGridViewBuysOverviewOfAYears.ColumnHeadersDefaultCellStyle.Alignment =
-                    DataGridViewContentAlignment.MiddleCenter;
-                dataGridViewBuysOverviewOfAYears.ColumnHeadersDefaultCellStyle.BackColor =
-                    SystemColors.ControlLight;
-                dataGridViewBuysOverviewOfAYears.ColumnHeadersHeight = 25;
-                dataGridViewBuysOverviewOfAYears.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-                // Column styling
-                dataGridViewBuysOverviewOfAYears.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                // Row styling
-                dataGridViewBuysOverviewOfAYears.RowHeadersVisible = false;
-                dataGridViewBuysOverviewOfAYears.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
-                dataGridViewBuysOverviewOfAYears.RowsDefaultCellStyle.BackColor = Color.White;
-                dataGridViewBuysOverviewOfAYears.MultiSelect = false;
-                dataGridViewBuysOverviewOfAYears.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                // Cell styling
-                dataGridViewBuysOverviewOfAYears.DefaultCellStyle.SelectionBackColor = Color.Blue;
-                dataGridViewBuysOverviewOfAYears.DefaultCellStyle.SelectionForeColor = Color.Yellow;
-                dataGridViewBuysOverviewOfAYears.CellBorderStyle = DataGridViewCellBorderStyle.Single;
-                dataGridViewBuysOverviewOfAYears.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-                // Allow styling
-                dataGridViewBuysOverviewOfAYears.AllowUserToResizeColumns = false;
-                dataGridViewBuysOverviewOfAYears.AllowUserToResizeRows = false;
-                dataGridViewBuysOverviewOfAYears.AllowUserToAddRows = false;
-                dataGridViewBuysOverviewOfAYears.AllowUserToDeleteRows = false;
+                DataGridViewHelper.DataGridViewConfiguration(dataGridViewBuysOverviewOfAYears);
 
                 #endregion Style
 
@@ -1909,12 +1891,17 @@ namespace SharePortfolioManager.BuysForm.View
 
                     #region Data source, data binding and data grid view
 
+                    // Reverse list so the latest is a top of the data grid view
+                    var reversDataSource =
+                        ShareObjectFinalValue.AllBuyEntries.AllBuysOfTheShareDictionary[keyName]
+                            .BuyListYear;
+                    reversDataSource.Reverse();
+
                     // Create Binding source for the buy data
                     var bindingSource = new BindingSource
                     {
-                        DataSource =
-                            ShareObjectFinalValue.AllBuyEntries.AllBuysOfTheShareDictionary[keyName]
-                                .BuyListYear
+                        DataSource = reversDataSource
+
                     };
 
                     // Create DataGridView
@@ -1924,7 +1911,11 @@ namespace SharePortfolioManager.BuysForm.View
                         Dock = DockStyle.Fill,
 
                         // Bind source with buy values to the DataGridView
-                        DataSource = bindingSource
+                        DataSource = bindingSource,
+
+                        // Disable column header resize
+                        ColumnHeadersHeightSizeMode =
+                            DataGridViewColumnHeadersHeightSizeMode.DisableResizing
                     };
 
                     #endregion Data source, data binding and data grid view
@@ -1944,33 +1935,7 @@ namespace SharePortfolioManager.BuysForm.View
 
                     #region Style
 
-                    // Advanced configuration DataGridView buys
-                    dataGridViewBuysOfAYear.EnableHeadersVisualStyles = false;
-                    // Column header styling
-                    dataGridViewBuysOfAYear.ColumnHeadersDefaultCellStyle.Alignment =
-                        DataGridViewContentAlignment.MiddleCenter;
-                    dataGridViewBuysOfAYear.ColumnHeadersDefaultCellStyle.BackColor =
-                        SystemColors.ControlLight;
-                    dataGridViewBuysOfAYear.ColumnHeadersHeight = 25;
-                    dataGridViewBuysOfAYear.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-                    // Column styling
-                    dataGridViewBuysOfAYear.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                    // Row styling
-                    dataGridViewBuysOfAYear.RowHeadersVisible = false;
-                    dataGridViewBuysOfAYear.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
-                    dataGridViewBuysOfAYear.RowsDefaultCellStyle.BackColor = Color.White;
-                    dataGridViewBuysOfAYear.MultiSelect = false;
-                    dataGridViewBuysOfAYear.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                    // Cell styling
-                    dataGridViewBuysOfAYear.DefaultCellStyle.SelectionBackColor = Color.Blue;
-                    dataGridViewBuysOfAYear.DefaultCellStyle.SelectionForeColor = Color.Yellow;
-                    dataGridViewBuysOfAYear.CellBorderStyle = DataGridViewCellBorderStyle.Single;
-                    dataGridViewBuysOfAYear.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-                    // Allow styling
-                    dataGridViewBuysOfAYear.AllowUserToResizeColumns = false;
-                    dataGridViewBuysOfAYear.AllowUserToResizeRows = false;
-                    dataGridViewBuysOfAYear.AllowUserToAddRows = false;
-                    dataGridViewBuysOfAYear.AllowUserToDeleteRows = false;
+                    DataGridViewHelper.DataGridViewConfiguration(dataGridViewBuysOfAYear);
 
                     #endregion Style
 
@@ -2017,6 +1982,9 @@ namespace SharePortfolioManager.BuysForm.View
                     ((DataGridView) sender).Columns[i].DefaultCellStyle.Alignment =
                         DataGridViewContentAlignment.MiddleCenter;
 
+                    // Disable sorting of the columns ( remove sort arrow )
+                    ((DataGridView) sender).Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
+
                     switch (i)
                     {
                         case 0:
@@ -2051,7 +2019,7 @@ namespace SharePortfolioManager.BuysForm.View
                             {
                                 ((DataGridView) sender).Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
-                                        @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Deposit",
+                                        @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Purchase",
                                         LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
                             }
                             else
@@ -2078,7 +2046,7 @@ namespace SharePortfolioManager.BuysForm.View
                         case 5:
                             ((DataGridView) sender).Columns[i].HeaderText =
                                 Language.GetLanguageTextByXPath(
-                                    @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Deposit",
+                                    @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Purchase",
                                     LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
                             break;
                         case 6:
@@ -2898,22 +2866,22 @@ namespace SharePortfolioManager.BuysForm.View
                                             {
                                                 var parsingValues = DocumentTypeParser.ParsingValues;
                                                 DocumentTypeParser.ParsingValues = new ParsingValues(
-                                                    parsingValues.WebSiteUrl,
+                                                    parsingValues.ParsingText,
                                                     parsingValues.EncodingType,
                                                     DocumentParsingConfiguration
                                                         .BankRegexList[_bankCounter]
                                                         .DictionaryDocumentRegex[
                                                             DocumentParsingConfiguration.DocumentTypeBuy]
                                                         .DocumentRegexList
-                                                    );
+                                                );
                                                 DocumentTypeParser.StartParsing();
-                                                break;
                                             }
+                                            break;
                                             case DocumentParsingConfiguration.DocumentTypes.SaleDocument:
                                             {
                                                 var parsingValues = DocumentTypeParser.ParsingValues;
                                                 DocumentTypeParser.ParsingValues = new ParsingValues(
-                                                    parsingValues.WebSiteUrl,
+                                                    parsingValues.ParsingText,
                                                     parsingValues.EncodingType,
                                                     DocumentParsingConfiguration
                                                         .BankRegexList[_bankCounter]
@@ -2922,13 +2890,13 @@ namespace SharePortfolioManager.BuysForm.View
                                                         .DocumentRegexList
                                                     );
                                                 DocumentTypeParser.StartParsing();
-                                                break;
                                             }
+                                            break;
                                             case DocumentParsingConfiguration.DocumentTypes.DividendDocument:
                                             {
                                                 var parsingValues = DocumentTypeParser.ParsingValues;
                                                 DocumentTypeParser.ParsingValues = new ParsingValues(
-                                                    parsingValues.WebSiteUrl,
+                                                    parsingValues.ParsingText,
                                                     parsingValues.EncodingType,
                                                     DocumentParsingConfiguration
                                                         .BankRegexList[_bankCounter]
@@ -2937,13 +2905,13 @@ namespace SharePortfolioManager.BuysForm.View
                                                         .DocumentRegexList
                                                     );
                                                 DocumentTypeParser.StartParsing();
-                                                break;
                                             }
+                                            break;
                                             case DocumentParsingConfiguration.DocumentTypes.BrokerageDocument:
                                             {
                                                 var parsingValues = DocumentTypeParser.ParsingValues;
                                                 DocumentTypeParser.ParsingValues = new ParsingValues(
-                                                    parsingValues.WebSiteUrl,
+                                                    parsingValues.ParsingText,
                                                     parsingValues.EncodingType,
                                                     DocumentParsingConfiguration
                                                         .BankRegexList[_bankCounter]
@@ -2952,13 +2920,13 @@ namespace SharePortfolioManager.BuysForm.View
                                                         .DocumentRegexList
                                                 );
                                                 DocumentTypeParser.StartParsing();
-                                                break;
                                             }
+                                            break;
                                             default:
                                             {
                                                 _documentTypNotImplemented = true;
-                                                break;
                                             }
+                                            break;
                                         }
                                     }
                                 }
@@ -2971,7 +2939,7 @@ namespace SharePortfolioManager.BuysForm.View
                                 {
                                     var parsingValues = DocumentTypeParser.ParsingValues;
                                     DocumentTypeParser.ParsingValues = new ParsingValues(
-                                        parsingValues.WebSiteUrl,
+                                        parsingValues.ParsingText,
                                         parsingValues.EncodingType,
                                         DocumentParsingConfiguration
                                             .BankRegexList[_bankCounter].BankRegexList
@@ -3157,7 +3125,7 @@ namespace SharePortfolioManager.BuysForm.View
                 // Check if the WKN has been found and if the WKN is the right one
                 if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration
                     .DocumentTypeBuyWkn) || DictionaryParsingResult[DocumentParsingConfiguration
-                        .DocumentTypeBuyWkn][0] != ShareObjectFinalValue.WknAsStr)
+                        .DocumentTypeBuyWkn][0] != ShareObjectFinalValue.Wkn)
                 {
                     toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Red;
                     toolStripStatusLabelMessageBuyDocumentParsing.Text = 

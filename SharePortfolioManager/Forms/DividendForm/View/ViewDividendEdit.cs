@@ -25,6 +25,7 @@ using Logging;
 using Parser;
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.ShareObjects;
+using SharePortfolioManager.OwnMessageBoxForm;
 using SharePortfolioManager.Properties;
 using System;
 using System.Collections.Generic;
@@ -37,7 +38,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using SharePortfolioManager.OwnMessageBoxForm;
 
 namespace SharePortfolioManager.DividendForm.View
 {
@@ -60,7 +60,6 @@ namespace SharePortfolioManager.DividendForm.View
         VolumeEmpty,
         VolumeWrongFormat,
         VolumeWrongValue,
-        VolumeMaxValue,
         TaxAtSourceWrongFormat,
         TaxAtSourceWrongValue,
         CapitalGainsTaxWrongFormat,
@@ -802,20 +801,6 @@ namespace SharePortfolioManager.DividendForm.View
                     {
                         strMessage =
                             Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/VolumeWrongValue", LanguageName);
-                        clrMessage = Color.Red;
-                        stateLevel = FrmMain.EStateLevels.Error;
-
-                        Enabled = true;
-                        txtBoxVolume.Focus();
-
-                        break;
-                    }
-                case DividendErrorCode.VolumeMaxValue:
-                    {
-                        strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/VolumeMaxValue_1", LanguageName) +
-                            ShareObjectFinalValue.Volume +
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/VolumeMaxValue_2", LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -1847,11 +1832,17 @@ namespace SharePortfolioManager.DividendForm.View
 
                 #region Data source, data binding and data grid view
 
-                // Create Binding source for the dividend data
-                var bindingSourceOverview = new BindingSource();
-                if (ShareObjectFinalValue.AllDividendEntries.GetAllDividendsTotalValues().Count > 0)
-                    bindingSourceOverview.DataSource =
-                        ShareObjectFinalValue.AllDividendEntries.GetAllDividendsTotalValues();
+                // Check if dividends exists
+                if (ShareObjectFinalValue.AllDividendEntries.GetAllDividendsTotalValues().Count <= 0) return;
+
+                // Reverse list so the latest is a top of the data grid view
+                var reversDataSourceOverview = ShareObjectFinalValue.AllDividendEntries.GetAllDividendsTotalValues();
+                reversDataSourceOverview.Reverse();
+
+                var bindingSourceOverview = new BindingSource
+                {
+                    DataSource = reversDataSourceOverview
+                };
 
                 // Create DataGridView
                 var dataGridViewDividendsOverviewOfAYears = new DataGridView
@@ -1860,7 +1851,11 @@ namespace SharePortfolioManager.DividendForm.View
                     Dock = DockStyle.Fill,
 
                     // Bind source with dividend values to the DataGridView
-                    DataSource = bindingSourceOverview
+                    DataSource = bindingSourceOverview,
+
+                    // Disable column header resize
+                    ColumnHeadersHeightSizeMode =
+                        DataGridViewColumnHeadersHeightSizeMode.DisableResizing
                 };
 
                 #endregion Data source, data binding and data grid view
@@ -1868,11 +1863,14 @@ namespace SharePortfolioManager.DividendForm.View
                 #region Events
 
                 // Set the delegate for the DataBindingComplete event
-                dataGridViewDividendsOverviewOfAYears.DataBindingComplete += OnDataGridViewDividends_DataBindingComplete;
+                dataGridViewDividendsOverviewOfAYears.DataBindingComplete +=
+                    OnDataGridViewDividends_DataBindingComplete;
                 // Set the delegate for the mouse enter event
-                dataGridViewDividendsOverviewOfAYears.MouseEnter += OnDataGridViewDividendsOfYears_MouseEnter;
+                dataGridViewDividendsOverviewOfAYears.MouseEnter +=
+                    OnDataGridViewDividendsOfYears_MouseEnter;
                 // Set row select event
-                dataGridViewDividendsOverviewOfAYears.SelectionChanged += DataGridViewDividendsOfYears_SelectionChanged;
+                dataGridViewDividendsOverviewOfAYears.SelectionChanged +=
+                    DataGridViewDividendsOfYears_SelectionChanged;
 
                 #endregion Events
 
@@ -1884,7 +1882,9 @@ namespace SharePortfolioManager.DividendForm.View
                 dataGridViewDividendsOverviewOfAYears.ColumnHeadersDefaultCellStyle.Alignment =
                     DataGridViewContentAlignment.MiddleCenter;
                 dataGridViewDividendsOverviewOfAYears.ColumnHeadersDefaultCellStyle.BackColor =
-                    SystemColors.ControlLight;
+                    DataGridViewHelper.DataGridViewHeaderColors;
+                dataGridViewDividendsOverviewOfAYears.ColumnHeadersDefaultCellStyle.SelectionBackColor =
+                    DataGridViewHelper.DataGridViewHeaderColors;
                 dataGridViewDividendsOverviewOfAYears.ColumnHeadersHeight = 25;
                 dataGridViewDividendsOverviewOfAYears.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
                 // Column styling
@@ -1944,12 +1944,17 @@ namespace SharePortfolioManager.DividendForm.View
 
                     #region Data source, data binding and data grid view
 
+                    // Reverse list so the latest is a top of the data grid view
+                    var reversDataSource =
+                        ShareObjectFinalValue.AllDividendEntries.AllDividendsOfTheShareDictionary[keyName]
+                            .DividendListYear;
+                    reversDataSource.Reverse();
+
                     // Create Binding source for the dividend data
                     var bindingSource = new BindingSource
                     {
-                        DataSource =
-                            ShareObjectFinalValue.AllDividendEntries.AllDividendsOfTheShareDictionary[keyName]
-                                .DividendListYear
+                        DataSource = reversDataSource
+
                     };
 
                     // Create DataGridView
@@ -1959,7 +1964,11 @@ namespace SharePortfolioManager.DividendForm.View
                         Dock = DockStyle.Fill,
 
                         // Bind source with dividend values to the DataGridView
-                        DataSource = bindingSource
+                        DataSource = bindingSource,
+
+                        // Disable column header resize
+                        ColumnHeadersHeightSizeMode =
+                            DataGridViewColumnHeadersHeightSizeMode.DisableResizing
                     };
 
                     #endregion Data source, data binding and data grid view
@@ -1985,7 +1994,9 @@ namespace SharePortfolioManager.DividendForm.View
                     dataGridViewDividendsOfAYear.ColumnHeadersDefaultCellStyle.Alignment =
                         DataGridViewContentAlignment.MiddleCenter;
                     dataGridViewDividendsOfAYear.ColumnHeadersDefaultCellStyle.BackColor =
-                        SystemColors.ControlLight;
+                        DataGridViewHelper.DataGridViewHeaderColors;
+                    dataGridViewDividendsOfAYear.ColumnHeadersDefaultCellStyle.SelectionBackColor =
+                        DataGridViewHelper.DataGridViewHeaderColors;
                     dataGridViewDividendsOfAYear.ColumnHeadersHeight = 25;
                     dataGridViewDividendsOfAYear.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
                     // Column styling
@@ -2053,6 +2064,9 @@ namespace SharePortfolioManager.DividendForm.View
                     // Set alignment of the column
                     ((DataGridView)sender).Columns[i].DefaultCellStyle.Alignment =
                         DataGridViewContentAlignment.MiddleCenter;
+
+                    // Disable sorting of the columns ( remove sort arrow )
+                    ((DataGridView)sender).Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
 
                     switch (i)
                     {
@@ -2953,62 +2967,70 @@ namespace SharePortfolioManager.DividendForm.View
                                         switch (DocumentType)
                                         {
                                             case DocumentParsingConfiguration.DocumentTypes.BuyDocument:
-                                                {
-                                                    var parsingValues = DocumentTypeParser.ParsingValues;
-                                                    DocumentTypeParser.ParsingValues = new ParsingValues(
-                                                        parsingValues.WebSiteUrl,
-                                                        parsingValues.EncodingType,
-                                                        DocumentParsingConfiguration
-                                                            .BankRegexList[_bankCounter]
-                                                            .DictionaryDocumentRegex[DocumentParsingConfiguration.DocumentTypeBuy].DocumentRegexList
-                                                    );
-                                                    DocumentTypeParser.StartParsing();
-                                                    break;
-                                                }
+                                            {
+                                                var parsingValues = DocumentTypeParser.ParsingValues;
+                                                DocumentTypeParser.ParsingValues = new ParsingValues(
+                                                    parsingValues.ParsingText,
+                                                    parsingValues.EncodingType,
+                                                    DocumentParsingConfiguration
+                                                        .BankRegexList[_bankCounter]
+                                                        .DictionaryDocumentRegex[
+                                                            DocumentParsingConfiguration.DocumentTypeBuy]
+                                                        .DocumentRegexList
+                                                );
+                                                DocumentTypeParser.StartParsing();
+                                            }
+                                            break;
                                             case DocumentParsingConfiguration.DocumentTypes.SaleDocument:
-                                                {
-                                                    var parsingValues = DocumentTypeParser.ParsingValues;
-                                                    DocumentTypeParser.ParsingValues = new ParsingValues(
-                                                        parsingValues.WebSiteUrl,
-                                                        parsingValues.EncodingType,
-                                                        DocumentParsingConfiguration
-                                                            .BankRegexList[_bankCounter]
-                                                            .DictionaryDocumentRegex[DocumentParsingConfiguration.DocumentTypeSale].DocumentRegexList
-                                                    );
-                                                    DocumentTypeParser.StartParsing();
-                                                    break;
-                                                }
+                                            {
+                                                var parsingValues = DocumentTypeParser.ParsingValues;
+                                                DocumentTypeParser.ParsingValues = new ParsingValues(
+                                                    parsingValues.ParsingText,
+                                                    parsingValues.EncodingType,
+                                                    DocumentParsingConfiguration
+                                                        .BankRegexList[_bankCounter]
+                                                        .DictionaryDocumentRegex[
+                                                            DocumentParsingConfiguration.DocumentTypeSale]
+                                                        .DocumentRegexList
+                                                );
+                                                DocumentTypeParser.StartParsing();
+                                            }
+                                            break;
                                             case DocumentParsingConfiguration.DocumentTypes.DividendDocument:
-                                                {
-                                                    var parsingValues = DocumentTypeParser.ParsingValues;
-                                                    DocumentTypeParser.ParsingValues = new ParsingValues(
-                                                        parsingValues.WebSiteUrl,
-                                                        parsingValues.EncodingType,
-                                                        DocumentParsingConfiguration
-                                                            .BankRegexList[_bankCounter]
-                                                            .DictionaryDocumentRegex[DocumentParsingConfiguration.DocumentTypeDividend].DocumentRegexList
-                                                    );
-                                                    DocumentTypeParser.StartParsing();
-                                                    break;
-                                                }
+                                            {
+                                                var parsingValues = DocumentTypeParser.ParsingValues;
+                                                DocumentTypeParser.ParsingValues = new ParsingValues(
+                                                    parsingValues.ParsingText,
+                                                    parsingValues.EncodingType,
+                                                    DocumentParsingConfiguration
+                                                        .BankRegexList[_bankCounter]
+                                                        .DictionaryDocumentRegex[
+                                                            DocumentParsingConfiguration.DocumentTypeDividend]
+                                                        .DocumentRegexList
+                                                );
+                                                DocumentTypeParser.StartParsing();
+                                            }
+                                            break;
                                             case DocumentParsingConfiguration.DocumentTypes.BrokerageDocument:
-                                                {
-                                                    var parsingValues = DocumentTypeParser.ParsingValues;
-                                                    DocumentTypeParser.ParsingValues = new ParsingValues(
-                                                        parsingValues.WebSiteUrl,
-                                                        parsingValues.EncodingType,
-                                                        DocumentParsingConfiguration
-                                                            .BankRegexList[_bankCounter]
-                                                            .DictionaryDocumentRegex[DocumentParsingConfiguration.DocumentTypeBrokerage].DocumentRegexList
-                                                    );
-                                                    DocumentTypeParser.StartParsing();
-                                                    break;
-                                                }
+                                            {
+                                                var parsingValues = DocumentTypeParser.ParsingValues;
+                                                DocumentTypeParser.ParsingValues = new ParsingValues(
+                                                    parsingValues.ParsingText,
+                                                    parsingValues.EncodingType,
+                                                    DocumentParsingConfiguration
+                                                        .BankRegexList[_bankCounter]
+                                                        .DictionaryDocumentRegex[
+                                                            DocumentParsingConfiguration.DocumentTypeBrokerage]
+                                                        .DocumentRegexList
+                                                );
+                                                DocumentTypeParser.StartParsing();
+                                            }
+                                            break;
                                             default:
-                                                {
-                                                    _documentTypNotImplemented = true;
-                                                    break;
-                                                }
+                                            {
+                                                _documentTypNotImplemented = true;
+                                            }
+                                            break;
                                         }
                                     }
                                 }
@@ -3021,7 +3043,7 @@ namespace SharePortfolioManager.DividendForm.View
                                 {
                                     var parsingValues = DocumentTypeParser.ParsingValues;
                                     DocumentTypeParser.ParsingValues = new ParsingValues(
-                                        parsingValues.WebSiteUrl,
+                                        parsingValues.ParsingText,
                                         parsingValues.EncodingType,
                                         DocumentParsingConfiguration
                                             .BankRegexList[_bankCounter].BankRegexList
@@ -3209,7 +3231,7 @@ namespace SharePortfolioManager.DividendForm.View
                 // Check if the WKN has been found and if the WKN is the right one
                 if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration
                     .DocumentTypeDividendWkn) || DictionaryParsingResult[DocumentParsingConfiguration
-                        .DocumentTypeDividendWkn][0] != ShareObjectFinalValue.WknAsStr)
+                        .DocumentTypeDividendWkn][0] != ShareObjectFinalValue.Wkn)
                 {
                     toolStripStatusLabelMessageDividendDocumentParsing.ForeColor = Color.Red;
                     toolStripStatusLabelMessageDividendDocumentParsing.Text =
