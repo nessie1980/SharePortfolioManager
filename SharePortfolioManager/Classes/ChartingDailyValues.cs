@@ -231,6 +231,7 @@ namespace SharePortfolioManager.Classes
                         _chartDailyValues.Series[DailyValues.ClosingPriceName].Color = graphValues.Color;
                         _chartDailyValues.Series[DailyValues.ClosingPriceName].XValueMember = DailyValues.DateName;
                         _chartDailyValues.Series[DailyValues.ClosingPriceName].XValueType = ChartValueType.DateTime;
+                        _chartDailyValues.Series[DailyValues.ClosingPriceName].IsXValueIndexed = true;
                         _chartDailyValues.Series[DailyValues.ClosingPriceName].YValueMembers = DailyValues.ClosingPriceName;
                         _chartDailyValues.Series[DailyValues.ClosingPriceName].YValueType = ChartValueType.Double;
                         _chartDailyValues.Series[DailyValues.ClosingPriceName].YAxisType = AxisType.Primary;
@@ -301,6 +302,7 @@ namespace SharePortfolioManager.Classes
                         _chartDailyValues.Series[DailyValues.OpeningPriceName].Color = graphValues.Color;
                         _chartDailyValues.Series[DailyValues.OpeningPriceName].XValueMember = DailyValues.DateName;
                         _chartDailyValues.Series[DailyValues.OpeningPriceName].XValueType = ChartValueType.DateTime;
+                        _chartDailyValues.Series[DailyValues.OpeningPriceName].IsXValueIndexed = true;
                         _chartDailyValues.Series[DailyValues.OpeningPriceName].YValueMembers = DailyValues.OpeningPriceName;
                         _chartDailyValues.Series[DailyValues.OpeningPriceName].YValueType = ChartValueType.Double;
                         _chartDailyValues.Series[DailyValues.OpeningPriceName].YAxisType = AxisType.Primary;
@@ -371,6 +373,7 @@ namespace SharePortfolioManager.Classes
                         _chartDailyValues.Series[DailyValues.TopName].Color = graphValues.Color;
                         _chartDailyValues.Series[DailyValues.TopName].XValueMember = DailyValues.DateName;
                         _chartDailyValues.Series[DailyValues.TopName].XValueType = ChartValueType.DateTime;
+                        _chartDailyValues.Series[DailyValues.TopName].IsXValueIndexed = true;
                         _chartDailyValues.Series[DailyValues.TopName].YValueMembers = DailyValues.TopName;
                         _chartDailyValues.Series[DailyValues.TopName].YValueType = ChartValueType.Double;
                         _chartDailyValues.Series[DailyValues.TopName].YAxisType = AxisType.Primary;
@@ -441,6 +444,7 @@ namespace SharePortfolioManager.Classes
                         _chartDailyValues.Series[DailyValues.BottomName].Color = graphValues.Color;
                         _chartDailyValues.Series[DailyValues.BottomName].XValueMember = DailyValues.DateName;
                         _chartDailyValues.Series[DailyValues.BottomName].XValueType = ChartValueType.DateTime;
+                        _chartDailyValues.Series[DailyValues.BottomName].IsXValueIndexed = true;
                         _chartDailyValues.Series[DailyValues.BottomName].YValueMembers = DailyValues.BottomName;
                         _chartDailyValues.Series[DailyValues.BottomName].YValueType = ChartValueType.Double;
                         _chartDailyValues.Series[DailyValues.BottomName].YAxisType = AxisType.Primary;
@@ -519,6 +523,7 @@ namespace SharePortfolioManager.Classes
                             _chartDailyValues.Series[DailyValues.VolumeName].Color = graphValues.Color;
                             _chartDailyValues.Series[DailyValues.VolumeName].XValueMember = DailyValues.DateName;
                             _chartDailyValues.Series[DailyValues.VolumeName].XValueType = ChartValueType.DateTime;
+                            _chartDailyValues.Series[DailyValues.VolumeName].IsXValueIndexed = true;
                             _chartDailyValues.Series[DailyValues.VolumeName].YValueMembers = DailyValues.VolumeName;
                             _chartDailyValues.Series[DailyValues.VolumeName].YValueType = ChartValueType.Double;
                             _chartDailyValues.Series[DailyValues.VolumeName].YAxisType = AxisType.Secondary;
@@ -584,6 +589,7 @@ namespace SharePortfolioManager.Classes
                             _chartDailyValues.Series[DailyValues.VolumeName].Color = graphValues.Color;
                             _chartDailyValues.Series[DailyValues.VolumeName].XValueMember = DailyValues.DateName;
                             _chartDailyValues.Series[DailyValues.VolumeName].XValueType = ChartValueType.DateTime;
+                            _chartDailyValues.Series[DailyValues.VolumeName].IsXValueIndexed = true;
                             _chartDailyValues.Series[DailyValues.VolumeName].YValueMembers = DailyValues.VolumeName;
                             _chartDailyValues.Series[DailyValues.VolumeName].YValueType = ChartValueType.Double;
                             _chartDailyValues.Series[DailyValues.VolumeName].YAxisType = AxisType.Primary;
