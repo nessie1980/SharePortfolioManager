@@ -343,6 +343,9 @@ namespace SharePortfolioManager
             this.dgvPortfolioFinalValue.AllowUserToDeleteRows = false;
             this.dgvPortfolioFinalValue.AllowUserToResizeColumns = false;
             this.dgvPortfolioFinalValue.AllowUserToResizeRows = false;
+            this.dgvPortfolioFinalValue.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvPortfolioFinalValue.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvPortfolioFinalValue.Location = new System.Drawing.Point(0, 0);
             this.dgvPortfolioFinalValue.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
