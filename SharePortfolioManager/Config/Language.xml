@@ -115,12 +115,6 @@
 							<ColHeader_CompletePerformance text="Complete\nPerformance" />
 							<ColHeader_CompletePurchaseMarketValue text="Cpl. Purchase\nCpl. Market" />							
 						</DgvPortfolio>
-						<DgvPortfolio_Error>
-							<ConfigurationFailed text="Configuration of the datagridview 'portfolio' failed!" />
-							<DisplayFailed text="Show of the shares failed!"/>
-							<CellFormattingFailed text="Formatting the cells failed!"/>
-							<CellPaintingBorderFailed text="Formatting the border failed!"/>
-						</DgvPortfolio_Error>
 						
 						<!-- DataGridView portfolio footer -->
 						<DgvPortfolioFooter>
@@ -129,12 +123,6 @@
 							<RowContent_TotalPerformance text="Performance (total) " />
 							<RowContent_TotalDepotValue text="Current value of the depot " />
 						</DgvPortfolioFooter>
-						<DgvPortfolioFooter_Error>
-							<ConfigurationFailed text="Configuration of the datagridview 'portfolio footer' failed!" />
-							<CellFormattingFailed text="Formatting the cells failed!"/>
-							<CellPaintingBorderFailed text="Formatting the border failed!"/>
-							<RefreshFailed text="Refresh of the footer failed!"/>
-						</DgvPortfolioFooter_Error>
 					</TabPgCompleteDepotValue>
 
 					<!-- TabPage with market values (Market values - brokerage)  -->
@@ -161,6 +149,22 @@
 							<RowContent_TotalDepotValue text="Current value of the depot " />
 						</DgvPortfolioFooter>
 					</TabPgMarketDepotValue>
+
+					<!-- DataGridView portfolio error -->
+					<DgvPortfolio_Error>
+						<ColumnsHeaderNameFailed text="Setting the column names failed!" />
+						<ColumnsHeaderCaptionFailed text="Setting the column caption failed!" />
+						<ConfigurationFailed text="Configuration of the datagridview 'portfolio' failed!" />
+						<CellFormattingFailed text="Formatting the cells of the datagridview 'portfolio' failed!"/>
+						<CellPaintingBorderFailed text="Formatting the border of the datagridview 'portfolio' failed!"/>
+						<DisplayFailed text="Show of the shares failed!"/>
+					</DgvPortfolio_Error>
+					<DgvPortfolioFooter_Error>
+						<ConfigurationFailed text="Configuration of the datagridview 'portfolio footer' failed!" />
+						<CellFormattingFailed text="Formatting the cells of the datagridview 'portfolio footer' failed!"/>
+						<CellPaintingBorderFailed text="Formatting the border of the datagridview 'portfolio footer' failed!"/>
+						<RefreshFailed text="Refresh of the footer failed!"/>
+					</DgvPortfolioFooter_Error>
 				</TabCtrlShareOverviews>
 				
 				<!-- Buttons -->
@@ -226,6 +230,7 @@
 					<CancelThread_1 text="Update of the 'MarketValues' of the share '" />
 					<CancelThread_2 text="' has been cancelled." />
 					<UpdateFailed text="Update of the 'MarketValues' failed!" />
+					<SaveFailed text="Save of the share failed!" />
 					<Failure text="Update of the 'MarketValues' has been failed. Error: " />
 				</MarketValues>
 				<DailyValues>
@@ -279,6 +284,7 @@
 				<DeleteErrorFailed text="An error occurred after the share delete!" />
 				<SaveSettingsFailed text="Settings save failed!" />
 				<SelectionChangeFailed text="The selection change failed!" />
+				<ResizeFailed text="Resize failed!" />
 				<ChangeLanguageFailed text="Changing the language failed!" />
 			</Errors>
 		</MainForm>	
@@ -289,8 +295,9 @@
 			<GrpBoxDetails>
 				<Caption text="Share details" /> <!-- only a place holder -->
 				<ShareType text="Type:" />
-				<ShareUpdate text="Last update:" />
+				<ShareUpdate text="Last internet update:" />
 				<ShareUpdateNotDone text="-" />
+				<ShareDateTime text="Last website update:" />
 
 				<!-- TabControl with the details -->
 				<TabCtrlDetails>
@@ -314,8 +321,8 @@
 						<NoBrowserInstalled text="No installed browser found!" />
 					</TabPgChartErrors>
 
-					<!-- TabPage with dividend and brokerage -->
-					<TabPgWithDividendBrokerage>
+					<!-- TabPage complete depot values -->
+					<TabPgCompleteDepotValue>
 						<Caption text="Complete depot values" />
 						
 						<!-- Labels -->
@@ -352,10 +359,10 @@
 								<DiffSum text="Profit / loss:" />
 							</PrevDay>
 						</Labels>
-					</TabPgWithDividendBrokerage>
+					</TabPgCompleteDepotValue>
 					
-					<!-- Tab without dividend and brokerage -->
-					<TabPgWithOutDividendBrokerage>
+					<!-- TabPage market depot values -->
+					<TabPgMarketDepotValue>
 						<Caption text="Complete market values" />
 						
 						<!-- Labels -->
@@ -392,10 +399,33 @@
 								<DiffSum text="Profit / loss:" />
 							</PrevDay>
 						</Labels>
-					</TabPgWithOutDividendBrokerage>					
-					<TabPgWithWithOutDividendBrokerageErrors>
-						<ShowFailed text="An error occurred while the share details should be shown!" />
-					</TabPgWithWithOutDividendBrokerageErrors>
+					</TabPgMarketDepotValue>
+
+					<!-- TabPage complete / market depot values error -->
+					<TabPgWithCompleteMarketDepotValuesErrors>
+						<ShowFailed text="An error occurred while share details should be shown!" />
+					</TabPgWithCompleteMarketDepotValuesErrors>
+
+					<!-- Tab profit or loss overview -->
+					<TabPgProfitLoss>
+						<Caption text="Profit / loss" />
+						<Overview text="Overview" />
+
+						<!-- DataGridView profit or loss -->
+						<DgvProfitLossOverview>
+							<ColHeader_Date text="Date" />
+							<ColHeader_Year text="Year" />
+							<ColHeader_Volume text="Volume" />
+							<ColHeader_ProfitLoss text="Profit / Loss" />
+							<ColHeader_Document text="Document" />
+						</DgvProfitLossOverview>
+					</TabPgProfitLoss>
+					<TabPgProfitLoss_Error>
+						<ShowFailed text="An error occurred while the profit / loss details should be shown!" />
+						<RenameHeaderFailed text="Renaming of the column headers failed!" />
+						<SelectionChangeFailed text="The selection change failed!" />
+						<DocumentShowFailed text="Show of the document failed!" />
+					</TabPgProfitLoss_Error>
 
 					<!-- Tab dividend overview -->
 					<TabPgDividend>
@@ -406,17 +436,19 @@
 						<DgvDividendOverview>
 							<ColHeader_Date text="Date" />
 							<ColHeader_Year text="Year" />
-							<ColHeader_Payout text="Payout" />
-							<ColHeader_Dividend text="Dividend" />
-							<ColHeader_Yield text="Yield" />
-							<ColHeader_Price text="Price" />
 							<ColHeader_Volume text="Volume" />
+							<ColHeader_Dividend text="Dividend" />
+							<ColHeader_Taxes text="Taxes" />
+							<ColHeader_Payout text="Payout" />
+							<ColHeader_Yield text="Yield" />
 							<ColHeader_Document text="Document" />
 						</DgvDividendOverview>
 					</TabPgDividend>
 					<TabPgDividend_Error>
 						<ShowFailed text="An error occurred while the dividends details should be shown!" />
 						<RenameHeaderFailed text="Renaming of the column headers failed!" />
+						<SelectionChangeFailed text="The selection change failed!" />
+						<DocumentShowFailed text="Show of the document failed!" />
 					</TabPgDividend_Error>
 					
 					<!-- Tab brokerage overview -->
@@ -429,30 +461,18 @@
 							<ColHeader_Date text="Date" />
 							<ColHeader_Year text="Year" />
 							<ColHeader_Brokerage text="Brokerage" />
+							<ColHeader_Reduction text="Reduction" />
+							<ColHeader_BrokerageReduction text="Brokerage - Reduction" />
 							<ColHeader_Document text="Document" />
 						</DgvBrokerageOverview>
 					</TabPgBrokerage>
 					<TabPgBrokerage_Error>
 						<ShowFailed text="An error occurred while the brokerage details should be shown!" />
 						<RenameHeaderFailed text="Renaming of the column headers failed!" />
+						<SelectionChangeFailed text="The selection change failed!" />
+						<DocumentShowFailed text="Show of the document failed!" />
 					</TabPgBrokerage_Error>
 					
-					<!-- Tab profit or loss overview -->
-					<TabPgProfitLoss>
-						<Caption text="Profit / loss" />
-						<Overview text="Overview" />
-
-						<!-- DataGridView profit or loss -->
-						<DgvProfitLossOverview>
-							<ColHeader_Date text="Date" />
-							<ColHeader_Year text="Year" />
-							<ColHeader_ProfitLoss text="Profit / Loss" />
-							<ColHeader_Document text="Document" />
-						</DgvProfitLossOverview>
-					</TabPgProfitLoss>
-					<TabPgProfitLoss_Error>
-						<ShowFailed text="An error occurred while the profit / loss details should be shown!" />
-					</TabPgProfitLoss_Error>
 				</TabCtrlDetails>
 			</GrpBoxDetails>
 			
@@ -564,6 +584,7 @@
 				<ChoseDocumentFailed text="An error occurred. Failed to select file!" />
 				<DocumentDirectoryDoesNotExists text="The specified directory does not exist!" />
 				<DocumentFileDoesNotExists text="The specified file does not exist!" />
+				<UnknownState text="Unknown state!" />
 			</Errors>
 			<ParsingErrors>
 				<ParsingBankIdentifierFailed text="Bank identifier not found!" />
@@ -981,6 +1002,7 @@
 						<ColHeader_Dividend text="Dividend" />
 						<ColHeader_Volume text="Volume" />
 						<ColHeader_TaxSum text="Taxes" />
+						<ColHeader_PayoutWithTaxes text="Payout" />
 						<ColHeader_Yield text="Yield" />
 						<ColHeader_Document text="Document" />
 					</DgvDividendOverview>
@@ -1174,9 +1196,13 @@
 			<Errors>
 				<NoGraphDataGiven text="No values passed for drawing a graph!" />
 				<NoData>
-					<Line1 text="No values available for drawing a graph!" />
-					<Line2 text="Data may not be up to date and the share values should be updated." />
+					<Lines>
+						<Line1 text="No values available for drawing a graph!" />
+						<Line2 text="Data may not be up to date and the share values should be updated." />
+					</Lines>
 				</NoData>
+				<ShowFailed text="Show of the graph failed!" />
+				<LegendCustomize text="Customize of the chart legend failed!" />
 			</Errors>
 		</Chart>						
 		
@@ -1251,6 +1277,7 @@
 				<LoggerSettingsShowFailed text="An exception occurred. Showing the dialog failed!" />
 				<SaveSettingsFailed text="An exception occurred. Save of the settings failed!" />
 				<SaveSettingsSuccessful text="Save of the settings successful." />
+				<LogFileCleanUpFailed text="Log file cleanup failed!" />
 			</Errors>
 		</LoggerSettingsForm>
 		
@@ -1280,8 +1307,9 @@
 				<DividendDelete text="Do you realy want to remove this dividend?" />
 				<BrokerageDelete text="Do you realy want to remove this brokerage?" />
 				<DocumentDoesNotExistDelete text="The document does not exist. Would you delete the document from the data?"/>
+				<DocumentDoesNotExist text="The document does not exist! Mayby network drive mapped?"/>
 				<ShareDelete text="Do you really want to delete this share from the portfolio?"/>
-				<LoggerSetttingsReboot text="The changes of the logger settings will be used after a software restarted"/>
+				<LoggerSettingsReboot text="The changes of the logger settings will be used after a software restarted"/>
 				<InputPortfolioName text="Please input the portfolio name:"/>
 				<PortfolioNameExists text="A portfolio with the given name already exists. Should this portfolio be overwritten?"/>
 			</Content>
@@ -1432,12 +1460,6 @@
 							<ColHeader_CompletePerformance text="Komplette\nEntwicklung" />
 							<ColHeader_CompletePurchaseMarketValue text="Kpl. Einzahlung\nKpl. Marktwert" />
 						</DgvPortfolio>
-						<DgvPortfolio_Error>
-							<ConfigurationFailed text="Konfiguration des DataGridView 'Portfolio' fehlgeschlagen!" />
-							<DisplayFailed text="Anzeigen der Aktien ist fehlgeschlagen!"/>
-							<CellFormattingFailed text="Formatieren der Zellen ist fehlgeschlagen!"/>
-							<CellPaintingBorderFailed text="Formatieren der Umrandung ist fehlgeschlagen!"/>
-						</DgvPortfolio_Error>
 						
 						<!-- DataGridView portfolio footer -->
 						<DgvPortfolioFooter>
@@ -1446,12 +1468,6 @@
 							<RowContent_TotalPerformance text="Entwicklung (gesamt) " />
 							<RowContent_TotalDepotValue text="Aktueller Depotstand " />
 						</DgvPortfolioFooter>
-						<DgvPortfolioFooter_Error>
-							<ConfigurationFailed text="Konfiguration des DataGridView für den 'Portfolio- Footer' fehlgeschlagen!" />
-							<CellFormattingFailed text="Formatieren der Zellen ist fehlgeschlagen!"/>
-							<CellPaintingBorderFailed text="Formatieren der Umrandung ist fehlgeschlagen!"/>
-							<RefreshFailed text="Aktualierung des Footer ist fehlgeschlagen!"/>
-						</DgvPortfolioFooter_Error>
 					</TabPgCompleteDepotValue>
 
 					<!-- TabPage with market values (Market values - brokerage)  -->
@@ -1478,6 +1494,22 @@
 							<RowContent_TotalDepotValue text="Aktueller Depotstand " />
 						</DgvPortfolioFooter>
 					</TabPgMarketDepotValue>
+
+					<!-- DataGridView portfolio error -->
+					<DgvPortfolio_Error>
+						<ColumnsHeaderNameFailed text="Setzen der Spaltennamen fehlgeschlagen!" />
+						<ColumnsHeaderCaptionFailed text="Setzen der Spaltenbeschriftung fehlgeschlagen!" />
+						<ConfigurationFailed text="Konfiguration des DataGridView 'Portfolio' fehlgeschlagen!" />
+						<CellFormattingFailed text="Formatieren der Zellen des DataGridView 'Portfolio' ist fehlgeschlagen!"/>
+						<CellPaintingBorderFailed text="Formatieren der Umrandung des DataGridView 'Portfolio' ist fehlgeschlagen!"/>
+						<DisplayFailed text="Anzeigen der Aktien ist fehlgeschlagen!"/>
+					</DgvPortfolio_Error>
+					<DgvPortfolioFooter_Error>
+						<ConfigurationFailed text="Konfiguration des DataGridView für den 'Portfolio- Footer' fehlgeschlagen!" />
+						<CellFormattingFailed text="Formatieren der Zellen des DataGridView für den 'Portfolio- Footer' ist fehlgeschlagen!"/>
+						<CellPaintingBorderFailed text="Formatieren der Umrandung des DataGridView für den 'Portfolio- Footer' ist fehlgeschlagen!"/>
+						<RefreshFailed text="Aktualierung des Footer ist fehlgeschlagen!"/>
+					</DgvPortfolioFooter_Error>
 				</TabCtrlShareOverviews>
 					
 				<!-- Buttons -->
@@ -1543,6 +1575,7 @@
 					<CancelThread_1 text="Aktualisierung der 'Kurswerte' der Aktie '" />
 					<CancelThread_2 text="' wurde abgebrochen." />
 					<UpdateFailed text="Aktualisieren der 'Kurswerte' ist fehlgeschlagen!" />
+					<SaveFailed text="Speichern der Aktien- Daten fehlgeschlagen!" />
 					<Failure text="Aktualisierung der 'Kurswerte' ist fehlgeschalgen. Fehler: " />
 				</MarketValues>
 				<DailyValues>
@@ -1596,6 +1629,7 @@
 				<DeleteErrorFailed text="Es trat ein Fehler nach dem Entfernen der Aktie auf!" />
 				<SaveSettingsFailed text="Speichern der Einstellungen fehlgeschalgen!" />
 				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
+				<ResizeFailed text="Ändern der Größe ist fehlgeschlagen!" />
 				<ChangeLanguageFailed text="Ändern der Sprache fehlgeschlagen!" />
 			</Errors>
 		</MainForm>	
@@ -1606,8 +1640,9 @@
 			<GrpBoxDetails>
 				<Caption text="Aktien- Details" /> <!-- only a place holder -->
 				<ShareType text="Typ:" />
-				<ShareUpdate text="Letzte Aktualisierung:" />
+				<ShareUpdate text="Letzte Internet- Aktualisierung:" />
 				<ShareUpdateNotDone text="-" />
+				<ShareDateTime text="Letzte Website- Aktualierung:" />
 
 				<!-- TabControl with the details -->
 				<TabCtrlDetails>
@@ -1625,15 +1660,13 @@
 						<Interval text="Interval:" />
 						<Amount text="Anzahl:" />
 					</TabPgChart>
-										
-					<!-- Error messages -->
 					<TabPgChartErrors>
 						<OpenWebSiteFailed text="Öffnen der WebSite ist fehlgeschlagen!" />
 						<NoBrowserInstalled text="Kein installierter Browser gefunden!" />
 					</TabPgChartErrors>
 
-					<!-- TabPage with dividend and brokerage -->
-					<TabPgWithDividendBrokerage>
+					<!-- TabPage complete depot values -->
+					<TabPgCompleteDepotValue>
 						<Caption text="Komplette Depotbewertung" />
 						
 						<!-- Labels -->
@@ -1670,10 +1703,10 @@
 								<DiffSum text="Gewinn / Verlust:" />
 							</PrevDay>
 						</Labels>
-					</TabPgWithDividendBrokerage>
+					</TabPgCompleteDepotValue>
 					
-					<!-- Tab without dividend and brokerage -->
-					<TabPgWithOutDividendBrokerage>
+					<!-- TabPage market depot values -->
+					<TabPgMarketDepotValue>
 						<Caption text="Komplette Marktbewertung" />
 						
 						<!-- Labels -->
@@ -1710,10 +1743,33 @@
 								<DiffSum text="Gewinn / Verlust:" />
 							</PrevDay>
 						</Labels>
-					</TabPgWithOutDividendBrokerage>
-					<TabPgWithWithOutDividendBrokerageErrors>
+					</TabPgMarketDepotValue>
+
+					<!-- TabPage complete / market depot values error -->
+					<TabPgWithCompleteMarketDepotValuesErrors>
 						<ShowFailed text="Es trat ein Fehler beim Anzeigen der Aktien- Details auf!" />
-					</TabPgWithWithOutDividendBrokerageErrors>
+					</TabPgWithCompleteMarketDepotValuesErrors>
+
+					<!-- Tab profit or loss overview -->
+					<TabPgProfitLoss>
+						<Caption text="Gewinne / Verluste" />
+						<Overview text="Übersicht" />
+
+						<!-- DataGridView profit or loss -->
+						<DgvProfitLossOverview>
+							<ColHeader_Date text="Datum" />
+							<ColHeader_Year text="Jahr" />
+							<ColHeader_Volume text="Anteile" />
+							<ColHeader_ProfitLoss text="Gewinn / Verlust" />
+							<ColHeader_Document text="Dokument" />
+						</DgvProfitLossOverview>
+					</TabPgProfitLoss>
+					<TabPgProfitLoss_Error>
+						<ShowFailed text="Es trat ein Fehler beim Anzeigen der Gewinn / Verlust- Details auf!" />
+						<RenameHeaderFailed text="Umbennenen der Spalten- Namen ist fehlgeschlagen!" />
+						<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
+						<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
+					</TabPgProfitLoss_Error>
 					
 					<!-- Tab dividend overview -->
 					<TabPgDividend>
@@ -1724,17 +1780,19 @@
 						<DgvDividendOverview>
 							<ColHeader_Date text="Datum" />
 							<ColHeader_Year text="Jahr" />
-							<ColHeader_Payout text="Auszahlung" />
-							<ColHeader_Dividend text="Dividende" />
-							<ColHeader_Yield text="Rendite" />
-							<ColHeader_Price text="Preis" />
 							<ColHeader_Volume text="Anteile" />
+							<ColHeader_Dividend text="Dividende" />
+							<ColHeader_Taxes text="Steuern" />
+							<ColHeader_Payout text="Auszahlung" />
+							<ColHeader_Yield text="Rendite" />
 							<ColHeader_Document text="Dokument" />
 						</DgvDividendOverview>
 					</TabPgDividend>
 					<TabPgDividend_Error>
 						<ShowFailed text="Es trat ein Fehler beim Anzeigen der Dividenden- Details auf!" />
 						<RenameHeaderFailed text="Umbennenen der Spalten- Namen ist fehlgeschlagen!" />
+						<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
+						<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
 					</TabPgDividend_Error>
 					
 					<!-- Tab brokerage overview -->
@@ -1747,30 +1805,17 @@
 							<ColHeader_Date text="Datum" />
 							<ColHeader_Year text="Jahr" />
 							<ColHeader_Brokerage text="Kosten" />
+							<ColHeader_Reduction text="Rabatt" />
+							<ColHeader_BrokerageReduction text="Kosten - Rabatt" />
 							<ColHeader_Document text="Dokument" />
 						</DgvBrokerageOverview>
 					</TabPgBrokerage>
 					<TabPgBrokerage_Error>
 						<ShowFailed text="Es trat ein Fehler beim Anzeigen der Kosten- Details auf!" />
 						<RenameHeaderFailed text="Umbennenen der Spalten- Namen ist fehlgeschlagen!" />
+						<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
+						<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
 					</TabPgBrokerage_Error>
-					
-					<!-- Tab profit or loss overview -->
-					<TabPgProfitLoss>
-						<Caption text="Gewinne / Verluste" />
-						<Overview text="Übersicht" />
-
-						<!-- DataGridView profit or loss -->
-						<DgvProfitLossOverview>
-							<ColHeader_Date text="Datum" />
-							<ColHeader_Year text="Jahr" />
-							<ColHeader_ProfitLoss text="Gewinn / Verlust" />
-							<ColHeader_Document text="Dokument" />
-						</DgvProfitLossOverview>
-					</TabPgProfitLoss>
-					<TabPgProfitLoss_Error>
-						<ShowFailed text="Es trat ein Fehler beim Anzeigen der Gewinn / Verlust- Details auf!" />
-					</TabPgProfitLoss_Error>
 				</TabCtrlDetails>
 			</GrpBoxDetails>
 			
@@ -1882,7 +1927,8 @@
 				<AddSaveFailed text="Es trat ein Fehler auf. Hinzufügen der Aktien ist fehlgeschlagen!" />
 				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
 				<DocumentDirectoryDoesNotExists text="Das angegebene Verzeichnis existiert nicht!" />
-				<DocumentFileDoesNotExists text="Die angegebene Datei existiert nicht!" />				
+				<DocumentFileDoesNotExists text="Die angegebene Datei existiert nicht!" />
+				<UnknownState text="Unbekannter Status!" />
 			</Errors>
 			<ParsingErrors>
 				<ParsingBankIdentifierFailed text="Banken- Typ nicht gefunden!" />
@@ -2296,8 +2342,9 @@
 					<DgvDividendOverview>
 						<ColHeader_Date text="Datum" />
 						<ColHeader_Dividend text="Dividende" />
-						<ColHeader_Volume text="Anteile." />
+						<ColHeader_Volume text="Anteile" />
 						<ColHeader_TaxSum text="Steuern" />
+						<ColHeader_PayoutWithTaxes text="Ausz." />
 						<ColHeader_Yield text="Rendite" />
 						<ColHeader_Document text="Dokument" />
 					</DgvDividendOverview>
@@ -2490,9 +2537,13 @@
 			<Errors>
 				<NoGraphDataGiven text="Keine Werte für das Zeichnen eines Graphen übergeben!" />
 				<NoData>
-					<Line1 text="Keine Werte für das Zeichnen eines Graphen vorhanden!" />
-					<Line2 text="Daten sind evtl. nicht auf dem aktuellen Stand und die Aktien- Werte sollte aktualisiert werden." />
+					<Lines>
+						<Line1 text="Keine Werte für das Zeichnen eines Graphen vorhanden!" />	
+						<Line2 text="Daten sind evtl. nicht auf dem aktuellen Stand und die Aktien- Werte sollte aktualisiert werden." />					
+					</Lines>
 				</NoData>
+				<ShowFailed text="Anzeigen des Graphen fehlgeschlagen!" />
+				<LegendCustomize text="Anpassen der Graph- Legende ist fehlgeschlagen!" />
 			</Errors>
 		</Chart>
 
@@ -2567,6 +2618,7 @@
 				<LoggerSettingsShowFailed text="Es trat ein Fehler auf. Anzeigen des Dialogs fehlgeschlagen!" />
 				<SaveSettingsFailed text="Es trat ein Fehler auf. Speichern der Einstellungen fehlgeschlagen!" />
 				<SaveSettingsSuccessful text="Speichern der Einstellung erfolgreich." />
+				<LogFileCleanUpFailed text="Säubern der Log- Dateien fehlgeschlagen!" />
 			</Errors>
 		</LoggerSettingsForm>
 		
@@ -2595,9 +2647,10 @@
 				<SaleDelete text="Möchten Sie den Verkauf wirklich entfernen"/>
 				<DividendDelete text="Möchten Sie den Dividenden- Eintrag wirklich entfernen?" />
 				<BrokerageDelete text="Möchten Sie den Kosten- Eintrag wirklich entfernen?" />
-				<DocumentDoesNotExistDelete text="Das Dokument existiert nicht mehr. Möchten Sie das Dokument aus den Daten entfernen?"/>
+				<DocumentDoesNotExistDelete text="Das Dokument existiert nicht. Möchten Sie das Dokument aus den Daten entfernen?"/>
+				<DocumentDoesNotExist text="Das Dokument existiert nicht! Evtl. ist das Netzwerk- Laufwerk nicht verbunden?"/>
 				<ShareDelete text="Möchten Sie den Aktien- Eintrag wirklich aus dem Portfolio entfernen?"/>
-				<LoggerSetttingsReboot text="Die Änderungen der Logger- Einstellung werden erst nach meinem Software- Neustart angewendet."/>
+				<LoggerSettingsReboot text="Die Änderungen der Logger- Einstellung werden erst nach meinem Software- Neustart angewendet."/>
 				<InputPortfolioName text="Bitte geben Sie den Portfolioname ein:"/>
 				<PortfolioNameExists text="Es existiert bereits in Portfolio mit dem angegeben Namen. Soll dieses Portfolio überschrieben werden?"/>
 			</Content>

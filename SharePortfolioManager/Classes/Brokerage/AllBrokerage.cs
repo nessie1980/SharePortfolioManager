@@ -20,12 +20,15 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_ALL_BROKERAGE
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
-namespace SharePortfolioManager.Classes.Costs
+namespace SharePortfolioManager.Classes.Brokerage
 {
     [Serializable]
     public class AllBrokerageReductionOfTheShare
@@ -36,23 +39,32 @@ namespace SharePortfolioManager.Classes.Costs
 
         public decimal BrokerageValueTotal { get; internal set; }
 
-        public string BrokerageValueTotalAsStr => Helper.FormatDecimal(BrokerageValueTotal, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
+        public string BrokerageValueTotalAsStr => Helper.FormatDecimal(BrokerageValueTotal, Helper.CurrencyFiveLength,
+            false, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
 
-        public string BrokerageValueTotalWithUnitAsStr => Helper.FormatDecimal(BrokerageValueTotal, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", CultureInfo);
+        public string BrokerageValueTotalAsStrUnit => Helper.FormatDecimal(BrokerageValueTotal,
+            Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", CultureInfo);
 
         public decimal ReductionValueTotal { get; internal set; }
 
-        public string ReductionValueTotalAsStr => Helper.FormatDecimal(ReductionValueTotal, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
+        public string ReductionValueTotalAsStr => Helper.FormatDecimal(ReductionValueTotal, Helper.CurrencyFiveLength,
+            false, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
 
-        public string ReductionValueTotalWithUnitAsStr => Helper.FormatDecimal(ReductionValueTotal, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", CultureInfo);
+        public string ReductionValueTotalAsStrUnit => Helper.FormatDecimal(ReductionValueTotal,
+            Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", CultureInfo);
 
         public decimal BrokerageWithReductionValueTotal { get; internal set; }
 
-        public string BrokerageWithReductionValueTotalAsStr => Helper.FormatDecimal(BrokerageWithReductionValueTotal, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
+        public string BrokerageWithReductionValueTotalAsStr => Helper.FormatDecimal(BrokerageWithReductionValueTotal,
+            Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
 
-        public string BrokerageWithReductionValueTotalWithUnitAsStr => Helper.FormatDecimal(BrokerageWithReductionValueTotal, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", CultureInfo);
+        public string BrokerageWithReductionValueTotalAsStrUnit => Helper.FormatDecimal(
+            BrokerageWithReductionValueTotal, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"",
+            CultureInfo);
 
-        public SortedDictionary<string, BrokerageReductionYearOfTheShare> AllBrokerageReductionOfTheShareDictionary { get; } = new SortedDictionary<string, BrokerageReductionYearOfTheShare>();
+        public SortedDictionary<string, BrokerageReductionYearOfTheShare>
+            AllBrokerageReductionOfTheShareDictionary { get; } =
+            new SortedDictionary<string, BrokerageReductionYearOfTheShare>();
 
         #endregion Properties
 
@@ -84,7 +96,7 @@ namespace SharePortfolioManager.Classes.Costs
         public bool AddBrokerageReduction(string strGuid, bool bPartOfABuy, bool bPartOfASale, string strGuidBuySale,
             string strDateTime, decimal decProvisionValue, decimal decBrokerFeeValue, decimal decTraderPlaceFeeValue, decimal decReductionValue, string strDoc = "")
         {
-#if false
+#if DEBUG_ALL_BROKERAGE
             Console.WriteLine(@"AddBrokerageReduction()");
 #endif
             try
@@ -128,14 +140,16 @@ namespace SharePortfolioManager.Classes.Costs
                     ReductionValueTotal += calcObject.ReductionValueYear;
                     BrokerageWithReductionValueTotal += calcObject.BrokerageWithReductionValueYear;
                 }
-#if false
+#if DEBUG_ALL_BROKERAGE
                 Console.WriteLine(@"BrokerageValueTotal:{0}", BrokerageValueTotal);
                 Console.WriteLine(@"ReductionValueTotal:{0}", ReductionValueTotal);
                 Console.WriteLine(@"BrokerageWithReductionValueTotal:{0}", BrokerageWithReductionValueTotal);
 #endif
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
+
                 return false;
             }
 
@@ -150,7 +164,7 @@ namespace SharePortfolioManager.Classes.Costs
         /// <returns></returns>
         public bool RemoveBrokerageReduction(string strGuid, string strDate)
         {
-#if false
+#if DEBUG_ALL_BROKERAGE
             Console.WriteLine(@"RemoveBrokerageReduction()");
 #endif
             try
@@ -190,15 +204,16 @@ namespace SharePortfolioManager.Classes.Costs
                     ReductionValueTotal += calcObject.ReductionValueYear;
                     BrokerageWithReductionValueTotal += calcObject.BrokerageWithReductionValueYear;
                 }
-
-#if false
+#if DEBUG_ALL_BROKERAGE
                 Console.WriteLine(@"BrokerageValueTotal:{0}", BrokerageValueTotal);
                 Console.WriteLine(@"ReductionValueTotal:{0}", ReductionValueTotal);
                 Console.WriteLine(@"BrokerageWithReductionValueTotal:{0}", BrokerageWithReductionValueTotal);
 #endif
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
+
                 return false;
             }
 

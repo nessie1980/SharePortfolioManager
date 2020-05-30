@@ -20,12 +20,15 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_BROKERAGE_YEAR
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 
-namespace SharePortfolioManager.Classes.Costs
+namespace SharePortfolioManager.Classes.Brokerage
 {
     [Serializable]
     public class BrokerageReductionYearOfTheShare
@@ -36,25 +39,29 @@ namespace SharePortfolioManager.Classes.Costs
         public CultureInfo BrokerageReductionCultureInfo { get; internal set; }
 
         [Browsable(false)]
-        public string BrokerageYear { get; internal set; } = @"-";
+        public string BrokerageYearAsStr { get; internal set; } = @"-";
 
         [Browsable(false)]
         public decimal BrokerageValueYear { get; internal set; } = -1;
 
         [Browsable(false)]
-        public string BrokerageValueYearWithUnitAsStr => Helper.FormatDecimal(BrokerageValueYear, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", BrokerageReductionCultureInfo);
+        public string BrokerageValueYearAsStrUnit => Helper.FormatDecimal(BrokerageValueYear,
+            Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", BrokerageReductionCultureInfo);
 
         [Browsable(false)]
         public decimal ReductionValueYear { get; internal set; } = -1;
 
         [Browsable(false)]
-        public string ReductionValueYearWithUnitAsStr => Helper.FormatDecimal(ReductionValueYear, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", BrokerageReductionCultureInfo);
+        public string ReductionValueYearWitAsStrUnit => Helper.FormatDecimal(ReductionValueYear,
+            Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", BrokerageReductionCultureInfo);
 
         [Browsable(false)]
         public decimal BrokerageWithReductionValueYear { get; internal set; } = -1;
 
         [Browsable(false)]
-        public string BrokerageWithReductionValueYearWithUnitAsStr => Helper.FormatDecimal(BrokerageWithReductionValueYear, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", BrokerageReductionCultureInfo);
+        public string BrokerageWithReductionValueYearAsStrUnit => Helper.FormatDecimal(
+            BrokerageWithReductionValueYear, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"",
+            BrokerageReductionCultureInfo);
 
         [Browsable(false)]
         public List<BrokerageReductionObject> BrokerageReductionListYear { get; } = new List<BrokerageReductionObject>();
@@ -64,10 +71,10 @@ namespace SharePortfolioManager.Classes.Costs
         #region Data grid view properties
 
         [Browsable(true)]
-        public string DgvBrokerageYear => BrokerageYear;
+        public string DgvBrokerageYear => BrokerageYearAsStr;
 
         [Browsable(true)]
-        public decimal DgvBrokerageWithReductionValueYear => BrokerageWithReductionValueYear;
+        public string DgvBrokerageWithReductionValueYear => BrokerageWithReductionValueYearAsStrUnit;
 
         #endregion Data grid view properties
 
@@ -92,7 +99,7 @@ namespace SharePortfolioManager.Classes.Costs
         public bool AddBrokerageReductionObject(string strGuid, bool bPartOfABuy, bool bPartOfASale, CultureInfo cultureInfo, string strGuidBuySale,
             string strDate, decimal decProvisionValue, decimal decBrokerFreeValue, decimal decTraderPlaceFeeValue, decimal decReductionValue, string strDoc = "")
         {
-#if false
+#if DEBUG_BROKERAGE_YEAR
             Console.WriteLine(@"");
             Console.WriteLine(@"AddBrokerageReductionObject()");
 #endif
@@ -110,7 +117,7 @@ namespace SharePortfolioManager.Classes.Costs
 
                 // Set year
                 DateTime.TryParse(strDate, out var dateTime);
-                BrokerageYear = dateTime.Year.ToString();
+                BrokerageYearAsStr = dateTime.Year.ToString();
 
                 // Calculate brokerage value
                 if (BrokerageValueYear == -1)
@@ -127,14 +134,16 @@ namespace SharePortfolioManager.Classes.Costs
                     BrokerageWithReductionValueYear = 0;
                 BrokerageWithReductionValueYear += addObject.BrokerageReductionValue;
 
-#if false
+#if DEBUG_BROKERAGE_YEAR
                 Console.WriteLine(@"BrokerageValueYear: {0}", BrokerageValueYear);
                 Console.WriteLine(@"ReductionValueYear: {0}", ReductionValueYear);
                 Console.WriteLine(@"");
 #endif
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
+
                 return false;
             }
 
@@ -149,7 +158,7 @@ namespace SharePortfolioManager.Classes.Costs
         /// <returns>Flag if the remove was successfully</returns>
         public bool RemoveBrokerageReductionObject(string strGuid)
         {
-#if false
+#if DEBUG_BROKERAGE_YEAR
             Console.WriteLine(@"");
             Console.WriteLine(@"RemoveBrokerageReductionObject()");
 #endif
@@ -177,14 +186,16 @@ namespace SharePortfolioManager.Classes.Costs
                 // Calculate brokerage minus reduction value
                 BrokerageWithReductionValueYear -= removeObject.BrokerageReductionValue;
 
-#if false
+#if DEBUG_BROKERAGE_YEAR
                 Console.WriteLine(@"BrokerageValueYear: {0}", BrokerageValueYear);
                 Console.WriteLine(@"ReductionValueYear: {0}", ReductionValueYear);
                 Console.WriteLine(@"");
 #endif
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
+
                 return false;
             }
 

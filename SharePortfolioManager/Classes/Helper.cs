@@ -20,10 +20,14 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_HELPER
+
 using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Properties;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -158,6 +162,8 @@ namespace SharePortfolioManager.Classes
         public static string ParsingDocumentFileName =
             Path.GetDirectoryName(Application.ExecutablePath) + "\\Tools\\Parsing.txt";
 
+        public static bool ShowExceptionMessageFlag;
+
         #endregion Variables
 
         #region Properties
@@ -198,36 +204,6 @@ namespace SharePortfolioManager.Classes
             return verApp;
         }
 
-        #region Get name of current method
-
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        public static string GetMyMethodName()
-        {
-            var st = new StackTrace(new StackFrame(1));
-            return st.GetFrame(0).GetMethod().Name;
-        }
-
-        #endregion Get name of current method
-
-        #region Show error / waring message
-
-        public static void ShowMessage(string strCaption, Exception ex)
-        {
-            var message = GetMyMethodName()
-                          + Environment.NewLine + Environment.NewLine
-                          + ex.Message
-                          + Environment.NewLine + Environment.NewLine
-                          + Helper.ParsingDocumentFileName
-                          + Environment.NewLine + Environment.NewLine
-                          + ex.StackTrace
-                          + Environment.NewLine + Environment.NewLine
-                          + ex.HelpLink;
-            MessageBox.Show(message, strCaption, MessageBoxButtons.OK,
-                MessageBoxIcon.Error);
-        }
-
-        #endregion Show error / warning message
-
         #region Text new line builder
 
         public static string BuildNewLineTextFromStringList(List<string> stringList)
@@ -251,26 +227,83 @@ namespace SharePortfolioManager.Classes
 
         #endregion Text new line builder
 
-        #region Add status message to the text box and to the logger
+        #region Functions for the logging and debugging
+
+        /// <summary>
+        /// This functions determines the name of the methods where it is called
+        /// </summary>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static string GetMethodName()
+        {
+            var st = new StackTrace(new StackFrame(1));
+            return st.GetFrame(0).GetMethod().Name;
+        }
+
+        /// <summary>
+        /// This functions shows a message box with the given caption and some exception information
+        /// </summary>
+        /// <param name="ex">Exception which should be shown</param>
+        public static void ShowExceptionMessage(Exception ex)
+        {
+            // Check if not all necessary values for the show are given
+            if (!ShowExceptionMessageFlag || ex == null) return;
+
+            var caption = $"An exception occurred";
+
+            var message = @"Source: " + Environment.NewLine + ex.Source
+                          + Environment.NewLine + Environment.NewLine
+                          + @"Function: " + Environment.NewLine + ex.TargetSite
+                          + Environment.NewLine + Environment.NewLine
+                          + @"Message: "
+                          + Environment.NewLine
+                          + ex.Message
+                          + Environment.NewLine + Environment.NewLine
+                          + @"StackTrace: "
+                          + Environment.NewLine
+                          + ex.StackTrace;
+
+            if (ex.Data.Count > 0)
+                message += @"Data: " + Environment.NewLine;
+
+            foreach (DictionaryEntry entry in ex.Data)
+            {
+                message += entry.Value
+                           + Environment.NewLine + Environment.NewLine;
+            }
+
+            if (ex.HelpLink != null)
+            {
+                message += Environment.NewLine + Environment.NewLine
+                                               + @"HelpLink: "
+                                               + Environment.NewLine
+                                               + ex.HelpLink;
+            }
+
+            MessageBox.Show(message, caption, MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+        }
 
         /// <summary>
         /// This function adds a state message to the top of the status message RichEditBox
         /// and to the logger if the logger is initialized
         /// </summary>
-        /// <param name="showObject">Object where the message should be shown (RichTextBox / Label)</param>
-        /// <param name="xmlLanguage">Language file</param>
+        /// <param name="showControl">Control where the message should be shown (RichTextBox / Label / ToolStripStatusLabel)</param>
         /// <param name="stateMessage">State message which should be added</param>
+        /// <param name="xmlLanguage">Language file</param>
         /// <param name="language">Language</param>
-        /// <param name="color">Color of the message in the RichEditBox if the logger is not initialized</param>
+        /// <param name="color">Color of the message in the RichEditBox if the logger is not initialized or the color could not be determine</param>
         /// <param name="logger">Logger for the logging</param>
         /// <param name="stateLevel">Level of the state (e.g. Info)</param>
         /// <param name="componentLevel">Level of the component (e.g. Application)</param>
+        /// <param name="exception">Given exception which should be shown</param>
         /// <returns>Flag if the add was successful</returns>
-        public static bool AddStatusMessage(object showObject, string stateMessage, Language xmlLanguage,
-            string language, Color color, Logger logger, int stateLevel, int componentLevel)
+        public static bool AddStatusMessage(object showControl, string stateMessage, Language xmlLanguage,
+            string language, Color color, Logger logger, int stateLevel, int componentLevel, Exception exception = null)
         {
             try
             {
+                var result = false;
                 var stateMessageError = "";
 
                 // Check if the given logger is initialized
@@ -295,9 +328,9 @@ namespace SharePortfolioManager.Classes
                 }
 
                 // RichTextBox
-                if (logger != null && showObject.GetType() == typeof(RichTextBox))
+                if (logger != null && showControl.GetType() == typeof(RichTextBox))
                 {
-                    var castControl = (RichTextBox) showObject;
+                    var castControl = (RichTextBox) showControl;
 
                     // Create a temporary rich text box with no word wrap
                     var tempControl = castControl;
@@ -329,13 +362,13 @@ namespace SharePortfolioManager.Classes
 
                     tempControl.WordWrap = true;
 
-                    return true;
+                    result = true;
                 }
 
                 // Label
-                if (showObject.GetType() == typeof(Label))
+                if (showControl.GetType() == typeof(Label))
                 {
-                    var castControl = (Label) showObject;
+                    var castControl = (Label) showControl;
 
                     // Set color
                     var oldColor = castControl.ForeColor;
@@ -350,13 +383,13 @@ namespace SharePortfolioManager.Classes
                     // Reset color
                     castControl.ForeColor = oldColor;
 
-                    return true;
+                    result = true;
                 }
 
                 // ToolStripStatusLabel
-                if (showObject.GetType() == typeof(ToolStripStatusLabel))
+                if (showControl.GetType() == typeof(ToolStripStatusLabel))
                 {
-                    var castControl = (ToolStripStatusLabel) showObject;
+                    var castControl = (ToolStripStatusLabel) showControl;
 
                     // Set color
                     // var oldColor = castControl.ForeColor;
@@ -371,20 +404,23 @@ namespace SharePortfolioManager.Classes
                     // Reset color
                     //castControl.ForeColor = oldColor;
 
-                    return true;
+                    result =  true;
                 }
 
-                return false;
+                // Check show given exception 
+                ShowExceptionMessage(exception);
+
+                return result;
             }
             catch (Exception ex)
             {
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowExceptionMessage(ex);
+
                 return false;
             }
         }
 
-        #endregion Add status message to the text box and to the logger
+        #endregion Functions for the logging and debugging
 
         #region Enable or disable controls
 
@@ -410,7 +446,7 @@ namespace SharePortfolioManager.Classes
                     if (control.GetType() == typeof(GroupBox))
                     {
                         var castControl = (GroupBox) control;
-#if false
+#if DEBUG_HELPER
                         Console.WriteLine(castControl.Name);
 #endif
 
@@ -425,7 +461,7 @@ namespace SharePortfolioManager.Classes
                     if (control.GetType() == typeof(Button))
                     {
                         var castControl = (Button) control;
-#if false
+#if DEBUG_HELPER
                         Console.WriteLine(castControl.Name);
 #endif
 
@@ -440,7 +476,7 @@ namespace SharePortfolioManager.Classes
                     if (control.GetType() == typeof(MenuStrip))
                     {
                         var castControl = (MenuStrip) control;
-#if false
+#if DEBUG_HELPER
                         Console.WriteLine(castControl.Name);
 #endif
 
@@ -455,7 +491,7 @@ namespace SharePortfolioManager.Classes
                     if (control.GetType() == typeof(MenuItem))
                     {
                         var castControl = (MenuStrip) control;
-#if false
+#if DEBUG_HELPER
                         Console.WriteLine(castControl.Name);
 #endif
 
@@ -470,7 +506,7 @@ namespace SharePortfolioManager.Classes
                     if (control.GetType() == typeof(DataGridView))
                     {
                         var castControl = (DataGridView) control;
-#if false
+#if DEBUG_HELPER
                         Console.WriteLine(castControl.Name);
 #endif
 
@@ -485,7 +521,7 @@ namespace SharePortfolioManager.Classes
                     if (control.GetType() == typeof(TableLayoutPanel))
                     {
                         var castControl = (TableLayoutPanel) control;
-#if false
+#if DEBUG_HELPER
                         Console.WriteLine(castControl.Name);
 #endif
 
@@ -500,7 +536,7 @@ namespace SharePortfolioManager.Classes
                     if (control.GetType() != typeof(TabControl)) continue;
                     {
                         var castControl = (TabControl) control;
-#if false
+#if DEBUG_HELPER
                         Console.WriteLine(castControl.Name);
 #endif
                         if (listControlNames.Contains(castControl.Name))
@@ -513,8 +549,7 @@ namespace SharePortfolioManager.Classes
             }
             catch (Exception ex)
             {
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowExceptionMessage(ex);
             }
         }
 
@@ -1064,7 +1099,8 @@ namespace SharePortfolioManager.Classes
             }
             catch (Exception ex)
             {
-                Console.WriteLine(@"Exception: {0}", ex.Message);
+                ShowExceptionMessage(ex);
+
                 return false; //could not connect to the inter net (maybe) 
             }
 
@@ -1093,14 +1129,14 @@ namespace SharePortfolioManager.Classes
 
         #endregion URL checker
 
-        #region Get combo box items
+        //#region Get combo box items
 
-        public static List<string> GetComboBoxItems(string xPath, string languageName, Language language)
-        {
-            return language.GetLanguageTextListByXPath(xPath, languageName);
-        }
+        //public static List<string> GetComboBoxItems(string xPath, string languageName, Language language)
+        //{
+        //    return language.GetLanguageTextListByXPath(xPath, languageName);
+        //}
 
-        #endregion Get combo box items
+        //#endregion Get combo box items
 
         #region Remove double whitespaces and line feeds ( \n \r )
 
@@ -1153,12 +1189,14 @@ namespace SharePortfolioManager.Classes
             }
             catch (OperationCanceledException ex)
             {
-                Console.WriteLine(ex);
+                ShowExceptionMessage(ex); 
+
                 throw;
             }
             catch (InvalidOperationException ex)
             {
-                Console.WriteLine(ex);
+                ShowExceptionMessage(ex);
+
                 throw;
             }
         }
@@ -1276,7 +1314,7 @@ namespace SharePortfolioManager.Classes
                 }
             }
 
-#if DEBUG
+#if DEBUG_HELPER
             Console.WriteLine(@"WebSite: {0}", strDailyValuesWebSite);
 #endif
             return strDailyValuesWebSite;
@@ -1313,7 +1351,7 @@ namespace SharePortfolioManager.Classes
 
         #region Methods
 
-        public static void DataGridViewConfiguration( DataGridView dgv)
+        public static void DataGridViewConfiguration(DataGridView dgv)
         {
             dgv.Font = new Font(@"Consolas", 9);
 
@@ -1342,25 +1380,16 @@ namespace SharePortfolioManager.Classes
             dgv.DefaultCellStyle.SelectionForeColor = Color.Yellow;
             dgv.CellBorderStyle = DataGridViewCellBorderStyle.Single;
             dgv.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            
+
             // Allow styling
             dgv.AllowUserToResizeColumns = false;
             dgv.AllowUserToResizeRows = false;
             dgv.AllowUserToAddRows = false;
             dgv.AllowUserToDeleteRows = false;
-
-            //dataGridViewDividendsOverviewOfAYears.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-            //dataGridViewDividendsOverviewOfAYears.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-
-            //// Does resize the row to display the complete content
-            //dataGridViewDividendsOverviewOfAYears.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
-
-            //dataGridViewDividendsOverviewOfAYears.BorderStyle = BorderStyle.FixedSingle;
         }
 
         #endregion Methods
     }
-
     #region Text and image in a DataGridView cell
 
     // Taken from this website

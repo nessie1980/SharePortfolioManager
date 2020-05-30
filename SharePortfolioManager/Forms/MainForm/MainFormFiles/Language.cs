@@ -20,8 +20,10 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_MAIN_FORM_LANGUAGE
+
 using LanguageHandler;
-using Logging;
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.ShareObjects;
 using System;
@@ -63,43 +65,47 @@ namespace SharePortfolioManager
                     // Check if an language key is not defined in the Language.XML file and then create a
                     // a dialog with the undefined language keys
 #if DEBUG_LANGUAGE
-                        var strProjectPath =
-                            Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\"));
-                        Language.CheckLanguageKeysOfProject(strProjectPath);
-                        Language.CheckLanguageKeysOfXml(strProjectPath);
+                    var strProjectPath =
+                        Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\"));
+                    Language.CheckLanguageKeysOfProject(strProjectPath);
+                    Language.CheckLanguageKeysOfXml(strProjectPath);
 
-                        if (Language.InvalidLanguageKeysOfProject.Count != 0 || Language.InvalidLanguageKeysOfXml.Count != 0)
+                    if (Language.InvalidLanguageKeysOfProject.Count != 0 ||
+                        Language.InvalidLanguageKeysOfXml.Count != 0)
+                    {
+                        var strInvalidKeys = @"";
+
+                        if (Language.InvalidLanguageKeysOfProject.Count != 0)
                         {
-                            var strInvalidKeys = @"";
+                            strInvalidKeys =
+                                Language.InvalidLanguageKeysOfProject.Count +
+                                " invalid language keys in the project files.\n";
 
-                            if (Language.InvalidLanguageKeysOfProject.Count != 0)
+                            foreach (var invalidKeyProject in Language.InvalidLanguageKeysOfProject)
                             {
-                                strInvalidKeys =
- Language.InvalidLanguageKeysOfProject.Count + " invalid language keys in the project files.\n";
-
-                                foreach (var invalidKeyProject in Language.InvalidLanguageKeysOfProject)
-                                {
-                                    strInvalidKeys += invalidKeyProject + Environment.NewLine;
-                                }
-
-                                strInvalidKeys += Environment.NewLine;
+                                strInvalidKeys += invalidKeyProject + Environment.NewLine;
                             }
 
-                            if (Language.InvalidLanguageKeysOfXml.Count != 0)
-                            {
-                                strInvalidKeys +=
- Language.InvalidLanguageKeysOfXml.Count + " unused XML language keys in file \"" + LanguageFileName + Environment.NewLine;
-                                foreach (var invalidKeyXml in Language.InvalidLanguageKeysOfXml)
-                                {
-                                    strInvalidKeys += invalidKeyXml + Environment.NewLine;
-                                    
-                                }
-                            }
-                            FrmInvalidLanguageKeys invalidLanguageKeysDlg = new FrmInvalidLanguageKeys();
-                            invalidLanguageKeysDlg.Text += @" - (Project path: " + strProjectPath + @")";
-                            invalidLanguageKeysDlg.SetText(strInvalidKeys);
-                            invalidLanguageKeysDlg.ShowDialog();
+                            strInvalidKeys += Environment.NewLine;
                         }
+
+                        if (Language.InvalidLanguageKeysOfXml.Count != 0)
+                        {
+                            strInvalidKeys +=
+                                Language.InvalidLanguageKeysOfXml.Count + " unused XML language keys in file \"" +
+                                LanguageFileName + Environment.NewLine;
+                            foreach (var invalidKeyXml in Language.InvalidLanguageKeysOfXml)
+                            {
+                                strInvalidKeys += invalidKeyXml + Environment.NewLine;
+
+                            }
+                        }
+
+                        FrmInvalidLanguageKeys invalidLanguageKeysDlg = new FrmInvalidLanguageKeys();
+                        invalidLanguageKeysDlg.Text += @" - (Project path: " + strProjectPath + @")";
+                        invalidLanguageKeysDlg.SetText(strInvalidKeys);
+                        invalidLanguageKeysDlg.ShowDialog();
+                    }
 #endif
 
                     #region Load logger language
@@ -168,37 +174,26 @@ namespace SharePortfolioManager
                 }
                 else
                 {
-#if DEBUG
-                    var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine +
-                                  Language.LastException.Message;
-                    MessageBox.Show(message,
-                        @"Error", MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-#endif
                     // Set initialization flag
                     InitFlag = false;
 
-                    // Add status message
                     Helper.AddStatusMessage(rchTxtBoxStateMessage, @"Could not load '" + LanguageFileName + @"' file!",
                         Language, LanguageName,
-                        Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application);
+                        Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Application);
                 }
+
+                throw new Exception();
+
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message,
-                    @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
                 // Set initialization flag
                 InitFlag = false;
 
-                // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage, @"Could not load '" + LanguageFileName + @"' file!",
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -287,13 +282,13 @@ namespace SharePortfolioManager
                 if (dgvPortfolioMarketValue.Columns.Count ==
                     (int) ColumnIndicesPortfolioMarketValue.ECompleteMarketValueColumnIndex + 1)
                 {
-                    OnSetDgvMarketValueColumnHeaderTexts();
+                    OnSetDgvPortfolioMarketValueColumnHeaderCaptions();
                 }
 
                 if (dgvPortfolioFinalValue.Columns.Count ==
                     (int) ColumnIndicesPortfolioFinalValue.ECompleteFinalValueColumnIndex + 1)
                 {
-                    OnSetDgvFinalValueColumnHeaderTexts();
+                    OnSetDgvPortfolioFinalValueColumnHeaderTexts();
                 }
 
                 #endregion DataGirdView for the market value / complete depot
@@ -425,40 +420,17 @@ namespace SharePortfolioManager
                 ShareObject.PieceUnit = Language.GetLanguageTextByXPath(@"/PieceUnit", LanguageName);
 
                 #endregion Set share object unit and percentage unit
-
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-#endif
-                if (Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadAllLanguageKeys", LanguageName) !=
-                    Language.InvalidLanguageKeyValue)
-                {
-                    // Set status message
-                    lblWebParserMarketValuesState.Text =
-                        Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadAllLanguageKeys", LanguageName);
-                    //Helper.AddStatusMessage(richTextBox1, statusMessage, Color.Red);
-
-                    // Write log
-                    Logger.AddEntry(
-                        Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadAllLanguageKeys", LanguageName),
-                        (Logger.ELoggerStateLevels) EStateLevels.Start,
-                        (Logger.ELoggerComponentLevels) EComponentLevels.LanguageHandler);
-                }
-                else
-                {
-                    // Set status message
-                    lblWebParserMarketValuesState.Text = lblWebParserMarketValuesState.Text =
-                        @"Could not set all language keys to the controls!";
-                    //Helper.AddStatusMessage(richTextBox1, statusMessage, Color.Red);
-
-                    // Write log
-                    Logger.AddEntry(@"Could not set all language keys to the controls!",
-                        (Logger.ELoggerStateLevels) EStateLevels.Start,
-                        (Logger.ELoggerComponentLevels) EComponentLevels.LanguageHandler);
-                }
+                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadAllLanguageKeys", LanguageName) !=
+                    Language.InvalidLanguageKeyValue
+                        ? Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadAllLanguageKeys", LanguageName)
+                        : @"Could not set all language keys to the controls!",
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.LanguageHandler,
+                    ex);
 
                 // Update control list
                 EnableDisableControlNames.Add("btnRefreshAll");
@@ -470,6 +442,8 @@ namespace SharePortfolioManager
 
                 // Set initialization flag
                 InitFlag = false;
+
+                Helper.ShowExceptionMessage(ex);
             }
         }
 

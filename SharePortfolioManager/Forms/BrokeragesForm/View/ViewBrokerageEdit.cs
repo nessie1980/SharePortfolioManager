@@ -20,6 +20,9 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_BROKERAGE_EDIT_VIEW
+
 using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Classes;
@@ -712,16 +715,11 @@ namespace SharePortfolioManager.BrokeragesForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_BROKERAGE || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/ShowFailed", LanguageName),
                    Language, LanguageName, Color.DarkRed, Logger,
-                   (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                   (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
+                   ex);
             }
         }
 
@@ -1078,16 +1076,11 @@ namespace SharePortfolioManager.BrokeragesForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_BROKERAGE || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/AddFailed", LanguageName),
                    Language, LanguageName,
-                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
+                   ex);
             }
         }
 
@@ -1108,7 +1101,8 @@ namespace SharePortfolioManager.BrokeragesForm.View
 
                 toolStripStatusLabelMessageBrokerageEdit.Text = @"";
 
-                var strCaption = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Info", LanguageName);
+                var strCaption = Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
+                    (int)EOwnMessageBoxInfoType.Info];
                 var strMessage = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/BrokerageDelete",
                     LanguageName);
                 var strOk = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", LanguageName);
@@ -1124,16 +1118,11 @@ namespace SharePortfolioManager.BrokeragesForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_BROKERAGE || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/DeleteFailed", LanguageName),
                    Language, LanguageName,
-                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
+                   ex);
             }
         }
 
@@ -1151,16 +1140,11 @@ namespace SharePortfolioManager.BrokeragesForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_BROKERAGE || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/CancelFailure", LanguageName),
                    Language, LanguageName,
-                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
+                   ex);
             }
         }
 
@@ -1262,8 +1246,6 @@ namespace SharePortfolioManager.BrokeragesForm.View
                            @")"
                 };
 
-                #endregion Add page
-
                 #region Data source, data binding and data grid view
 
                 // Check if brokerage exists
@@ -1349,6 +1331,8 @@ namespace SharePortfolioManager.BrokeragesForm.View
 
                 #endregion Control add
 
+                #endregion Add page
+
                 // Check if brokerage exists
                 if (ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageReductionOfTheShareDictionary.Count <= 0) return;
 
@@ -1368,7 +1352,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                         // Set TabPage caption
                         Text = keyName + @" (" +
                                ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageReductionOfTheShareDictionary[keyName]
-                                   .BrokerageValueYearWithUnitAsStr
+                                   .BrokerageValueYearAsStrUnit
                                + @")"
                     };
 
@@ -1464,16 +1448,11 @@ namespace SharePortfolioManager.BrokeragesForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_BROKERAGE || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/ShowFailed", LanguageName),
                    Language, LanguageName, Color.DarkRed, Logger,
-                   (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                   (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
+                   ex);
             }
         }
 
@@ -1510,12 +1489,13 @@ namespace SharePortfolioManager.BrokeragesForm.View
                         } break;
                         case 1:
                         {
+                            // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                             if (((DataGridView) sender).Name == @"Overview")
                             {
                                 ((DataGridView) sender).Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Brokerage",
-                                        LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
+                                        LanguageName);
                             }
                             else
                             {
@@ -1530,21 +1510,21 @@ namespace SharePortfolioManager.BrokeragesForm.View
                             ((DataGridView) sender).Columns[i].HeaderText =
                                 Language.GetLanguageTextByXPath(
                                     @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Brokerage",
-                                    LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
+                                    LanguageName);
                         } break;
                         case 3:
                         {
                             ((DataGridView) sender).Columns[i].HeaderText =
                                 Language.GetLanguageTextByXPath(
                                     @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Reduction",
-                                    LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
+                                    LanguageName);
                         } break;
                         case 4:
                         {
                             ((DataGridView) sender).Columns[i].HeaderText =
                                 Language.GetLanguageTextByXPath(
                                     @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_BrokerageReduction",
-                                    LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
+                                    LanguageName);
                         } break;
                         case 5:
                         {
@@ -1570,16 +1550,11 @@ namespace SharePortfolioManager.BrokeragesForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_BROKERAGE || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/RenameColHeaderFailed", LanguageName),
                    Language, LanguageName,
-                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
+                   ex);
             }
         }
 
@@ -1607,16 +1582,11 @@ namespace SharePortfolioManager.BrokeragesForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_BROKERAGE || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/DeselectFailed", LanguageName),
                    Language, LanguageName,
-                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
+                   ex);
             }
         }
 
@@ -1748,16 +1718,11 @@ namespace SharePortfolioManager.BrokeragesForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_BROKERAGE || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/SelectionChangeFailed", LanguageName),
                    Language, LanguageName,
-                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
+                   ex);
             }
         }
 
@@ -1830,7 +1795,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                         txtBoxReduction.Text = selectedBrokerageObject.ReductionValueAsStr;
                         // TODO
                         //txtBoxBrokerage.Text = selectedBrokerageObject.BrokerageReductionValueAsStr;
-                        txtBoxDocument.Text = selectedBrokerageObject.BrokerageDocument;
+                        txtBoxDocument.Text = selectedBrokerageObject.DocumentAsStr;
                     }
                     else
                     {
@@ -1935,16 +1900,11 @@ namespace SharePortfolioManager.BrokeragesForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_BROKERAGE || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/SelectionChangeFailed", LanguageName),
                    Language, LanguageName,
-                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
+                   ex);
 
                 ResetInputValues();
 
@@ -1997,14 +1957,13 @@ namespace SharePortfolioManager.BrokeragesForm.View
                     if (temp.Guid != strGuidBuy) continue;
 
                     // Check if the file still exists
-                    if (File.Exists(temp.BrokerageDocument))
+                    if (File.Exists(temp.DocumentAsStr))
                         // Open the file
-                        Process.Start(temp.BrokerageDocument);
+                        Process.Start(temp.DocumentAsStr);
                     else
                     {
-                        var strCaption =
-                            Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Error",
-                                LanguageName);
+                        var strCaption = Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
+                            (int)EOwnMessageBoxInfoType.Error];
                         var strMessage =
                             Language.GetLanguageTextByXPath(
                                 @"/MessageBoxForm/Content/DocumentDoesNotExistDelete",
@@ -2034,7 +1993,6 @@ namespace SharePortfolioManager.BrokeragesForm.View
                                 ResetInputValues();
                                 OnShowBrokerage();
 
-                                // Add status message
                                 Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormBrokerage/StateMessages/EditSuccess", LanguageName),
@@ -2059,17 +2017,12 @@ namespace SharePortfolioManager.BrokeragesForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_BROKERAGE || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/DocumentShowFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError,
-                    (int)FrmMain.EComponentLevels.Application);
+                    (int)FrmMain.EComponentLevels.Application,
+                    ex);
             }
         }
 

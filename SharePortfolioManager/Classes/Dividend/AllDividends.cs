@@ -20,6 +20,9 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_ALL_DIVIDEND
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -39,7 +42,7 @@ namespace SharePortfolioManager.Classes.Dividend
 
         public string DividendValueTotalWithTaxesAsStr => Helper.FormatDecimal(DividendValueTotalWithTaxes, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", DividendCultureInfo);
 
-        public string DividendValueTotalWithTaxesWithUnitAsStr => Helper.FormatDecimal(DividendValueTotalWithTaxes, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", DividendCultureInfo);
+        public string DividendValueTotalWithTaxesAsStrUnit => Helper.FormatDecimal(DividendValueTotalWithTaxes, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", DividendCultureInfo);
 
         public SortedDictionary<string, DividendYearOfTheShare> AllDividendsOfTheShareDictionary { get; } = new SortedDictionary<string, DividendYearOfTheShare>();
 
@@ -75,7 +78,7 @@ namespace SharePortfolioManager.Classes.Dividend
         public bool AddDividend(CultureInfo cultureInfoFc, CheckState csEnableFc, decimal decExchangeRatio, string strGuid, string strDate, decimal decRate, decimal decVolume,
             decimal decTaxAtSource, decimal decCapitalGainsTax, decimal decSolidarityTax, decimal decSharePrice, string strDoc = "")
         {
-#if DEBUG_DIVIDEND
+#if DEBUG_ALL_DIVIDEND
             Console.WriteLine(@"Add DividendYearOfTheShare");
 #endif
             try
@@ -116,12 +119,14 @@ namespace SharePortfolioManager.Classes.Dividend
                 {
                     DividendValueTotalWithTaxes += calcObject.DividendValueYear;
                 }
-#if DEBUG_DIVIDEND
+#if DEBUG_ALL_DIVIDEND
                 Console.WriteLine(@"DividendValueTotalWithTaxes:{0}", DividendValueTotalWithTaxes);
 #endif
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
+
                 return false;
             }
 
@@ -171,8 +176,10 @@ namespace SharePortfolioManager.Classes.Dividend
                     DividendValueTotalWithTaxes += calcObject.DividendValueYear;
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
+
                 return false;
             }
 

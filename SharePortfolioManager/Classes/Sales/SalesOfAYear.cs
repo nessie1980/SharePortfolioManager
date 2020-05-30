@@ -20,11 +20,15 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using SharePortfolioManager.Classes.Costs;
+// Define for DEBUGGING
+//#define DEBUG_SALE_YEARS
+
+using SharePortfolioManager.Classes.Brokerage;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager.Classes.Sales
 {
@@ -37,13 +41,15 @@ namespace SharePortfolioManager.Classes.Sales
         public CultureInfo SaleCultureInfo { get; internal set; }
 
         [Browsable(false)]
-        public string SaleYear { get; internal set; } = @"-";
+        public string SaleYearAsStr { get; internal set; } = @"-";
 
         [Browsable(false)]
         public decimal SaleVolumeYear { get; internal set; } = -1;
 
         [Browsable(false)]
-        public string SaleVolumeYearAsStr => Helper.FormatDecimal(SaleVolumeYear, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", SaleCultureInfo);
+        public string SaleVolumeYearAsStr => SaleVolumeYear > 0
+            ? Helper.FormatDecimal(SaleVolumeYear, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength)
+            : @"";
 
         [Browsable(false)]
         public decimal SalePurchaseValueYear { get; internal set; } = -1;
@@ -61,52 +67,78 @@ namespace SharePortfolioManager.Classes.Sales
         public decimal SalePayoutYear { get; internal set; } = -1;
 
         [Browsable(false)]
-        public string SalePayoutYearAsStr => Helper.FormatDecimal(SalePayoutYear, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", SaleCultureInfo);
+        public string SalePayoutYearAsStr => SalePayoutYear > 0
+            ? Helper.FormatDecimal(SalePayoutYear, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength)
+            : @"";
 
         [Browsable(false)]
-        public string SalePayoutYearWithUnitAsStr => Helper.FormatDecimal(SalePayoutYear, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
+        public string SalePayoutYearWithUnitAsStr => SalePayoutYear > 0
+            ? Helper.FormatDecimal(SalePayoutYear, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength, true,
+                @"", SaleCultureInfo)
+            : @"";
 
         [Browsable(false)]
         public decimal SalePayoutBrokerageYear { get; internal set; } = -1;
 
         [Browsable(false)]
-        public string SalePayoutBrokerageYearUnitAsStr => Helper.FormatDecimal(SalePayoutBrokerageYear, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
+        public string SalePayoutBrokerageYearUnitAsStr => SalePayoutBrokerageYear > 0
+            ? Helper.FormatDecimal(SalePayoutBrokerageYear, Helper.CurrencyTwoLength, false,
+                Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo)
+            : @"";
 
         [Browsable(false)]
         public decimal SalePayoutReductionYear { get; internal set; } = -1;
 
         [Browsable(false)]
-        public string SalePayoutReductionYearUnitAsStr => Helper.FormatDecimal(SalePayoutReductionYear, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
+        public string SalePayoutReductionYearUnitAsStr => SalePayoutReductionYear > 0
+            ? Helper.FormatDecimal(SalePayoutReductionYear, Helper.CurrencyTwoLength, false,
+                Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo)
+            : @"";
 
         [Browsable(false)]
         public decimal SalePayoutBrokerageReductionYear { get; internal set; } = -1;
 
         [Browsable(false)]
-        public string SalePayoutBrokerageReductionYearUnitAsStr => Helper.FormatDecimal(SalePayoutBrokerageReductionYear, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
+        public string SalePayoutBrokerageReductionYearUnitAsStr => SalePayoutBrokerageReductionYear > 0
+            ? Helper.FormatDecimal(SalePayoutBrokerageReductionYear, Helper.CurrencyTwoLength, false,
+                Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo)
+            : @"";
 
         [Browsable(false)]
         public decimal SaleProfitLossYear { get; internal set; } = -1;
 
         [Browsable(false)]
-        public string SaleProfitLossYearWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossYear, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
+        public string SaleProfitLossYearWithUnitAsStr => SaleProfitLossYear > 0
+            ? Helper.FormatDecimal(SaleProfitLossYear, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength,
+                true, @"", SaleCultureInfo)
+            : @"";
 
         [Browsable(false)]
         public decimal SaleProfitLossBrokerageYear { get; internal set; } = -1;
 
         [Browsable(false)]
-        public string SaleProfitLossBrokerageYearWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossBrokerageYear, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
+        public string SaleProfitLossBrokerageYearWithUnitAsStr => SaleProfitLossBrokerageYear > 0
+            ? Helper.FormatDecimal(SaleProfitLossBrokerageYear, Helper.CurrencyTwoLength, false,
+                Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo)
+            : @"";
 
         [Browsable(false)]
         public decimal SaleProfitLossReductionYear { get; internal set; } = -1;
 
         [Browsable(false)]
-        public string SaleProfitLossReductionYearWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossReductionYear, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
+        public string SaleProfitLossReductionYearWithUnitAsStr => SaleProfitLossReductionYear > 0
+            ? Helper.FormatDecimal(SaleProfitLossReductionYear, Helper.CurrencyTwoLength, false,
+                Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo)
+            : @"";
 
         [Browsable(false)]
         public decimal SaleProfitLossBrokerageReductionYear { get; internal set; } = -1;
 
         [Browsable(false)]
-        public string SaleProfitLossBrokerageReductionYearWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossBrokerageReductionYear, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
+        public string SaleProfitLossBrokerageReductionYearWithUnitAsStr => SaleProfitLossBrokerageReductionYear > 0
+            ? Helper.FormatDecimal(SaleProfitLossBrokerageReductionYear, Helper.CurrencyTwoLength, false,
+                Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo)
+            : @"";
 
         [Browsable(false)]
         public List<SaleObject> SaleListYear { get; } = new List<SaleObject>();
@@ -120,15 +152,32 @@ namespace SharePortfolioManager.Classes.Sales
 
         [Browsable(true)]
         [DisplayName(@"Year")]
-        public string DgvSaleYear => SaleYear;
+        // ReSharper disable once UnusedMember.Global
+        public string DgvSaleYear => SaleYearAsStr;
 
         [Browsable(true)]
         [DisplayName(@"YearVolume")]
-        public string DgvSaleVolumeYear => SaleVolumeYearAsStr;
+        // ReSharper disable once UnusedMember.Global
+        public string DgvSaleVolumeYear => SaleVolumeYear > 0
+            ? Helper.FormatDecimal(SaleVolumeYear, Helper.CurrencyTwoLength, false,
+                Helper.CurrencyTwoFixLength, true, ShareObject.PieceUnit, SaleCultureInfo)
+            : @"-";
         
         [Browsable(true)]
         [DisplayName(@"YearPayout")]
-        public string DgvSalePayoutYearAsStr => SalePayoutYearAsStr;
+        // ReSharper disable once UnusedMember.Global
+        public string DgvSalePayoutYearAsStr => SalePayoutYear > 0
+            ? Helper.FormatDecimal(SalePayoutYear, Helper.CurrencyTwoLength, false,
+                Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo)
+            : @"-";
+
+        [Browsable(true)]
+        [DisplayName(@"YearProfitLoss")]
+        // ReSharper disable once UnusedMember.Global
+        public string DgvSaleProfitLossYearAsStr => SaleProfitLossBrokerageReductionYear > 0
+            ? Helper.FormatDecimal(SaleProfitLossBrokerageReductionYear, Helper.CurrencyTwoLength, false,
+                Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo)
+            : @"-";
 
         #endregion Data grid view properties
 
@@ -154,7 +203,7 @@ namespace SharePortfolioManager.Classes.Sales
         public bool AddSaleObject(CultureInfo cultureInfo,  string strGuid, string strDate, string strOrderNumber, decimal decVolume, decimal decSalePrice, List<SaleBuyDetails> usedBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
              decimal decSolidarityTax, BrokerageReductionObject brokerageObject, string strDoc = "")
         {
-#if false
+#if DEBUG_SALE_YEARS
             Console.WriteLine(@"AddSaleObject");
 #endif
             try
@@ -165,7 +214,7 @@ namespace SharePortfolioManager.Classes.Sales
                 // Create new SaleObject
                 var addObject = new SaleObject(cultureInfo, strGuid, strDate, strOrderNumber, decVolume, decSalePrice, usedBuyDetails, decTaxAtSource, decCapitalGainsTax, decSolidarityTax, brokerageObject, strDoc);
 
-                var addProfitLossObject = new ProfitLossObject(cultureInfo, strGuid, strDate,
+                var addProfitLossObject = new ProfitLossObject(cultureInfo, strGuid, strDate, addObject.Volume,
                     addObject.ProfitLoss, addObject.ProfitLossBrokerage, addObject.ProfitLossReduction, addObject.ProfitLossBrokerageReduction,
                     strDoc);
 
@@ -179,7 +228,7 @@ namespace SharePortfolioManager.Classes.Sales
 
                 // Set year
                 DateTime.TryParse(strDate, out var dateTime);
-                SaleYear = dateTime.Year.ToString();
+                SaleYearAsStr = dateTime.Year.ToString();
 
                 // Calculate sale volume
                 if (SaleVolumeYear == -1)
@@ -227,7 +276,8 @@ namespace SharePortfolioManager.Classes.Sales
                 if (SaleProfitLossBrokerageReductionYear == -1)
                     SaleProfitLossBrokerageReductionYear = 0;
                 SaleProfitLossBrokerageReductionYear += addObject.ProfitLossBrokerageReduction;
-#if false
+
+#if DEBUG_SALE_YEARS
                 Console.WriteLine(@"SaleVolumeYear: {0}", SaleVolumeYear);
                 Console.WriteLine(@"SalePurchaseValueYear: {0}", SalePurchaseValueYear);
                 Console.WriteLine(@"SalePayoutYear: {0}", SalePayoutYear);
@@ -241,8 +291,10 @@ namespace SharePortfolioManager.Classes.Sales
                 Console.WriteLine(@"");
 #endif
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
+
                 return false;
             }
 
@@ -257,7 +309,7 @@ namespace SharePortfolioManager.Classes.Sales
         /// <returns>Flag if the remove was successfully</returns>
         public bool RemoveSaleObject(string strGuid)
         {
-#if false
+#if DEBUG_SALE_YEARS
             Console.WriteLine(@"RemoveSaleObject");
 #endif
             try
@@ -310,7 +362,7 @@ namespace SharePortfolioManager.Classes.Sales
                 // Remove object from the list
                 ProfitLossListYear.Remove(removeProfitLossObject);
 
-#if false
+#if DEBUG_SALE_YEARS
                 Console.WriteLine(@"SalePayoutYear: {0}", SalePayoutYear);
                 Console.WriteLine(@"SalePayoutWithoutBrokerageYear: {0}", SalePayoutWithoutBrokerageYear);
                 Console.WriteLine(@"SaleVolumeYear: {0}", SaleVolumeYear);
@@ -318,8 +370,10 @@ namespace SharePortfolioManager.Classes.Sales
                 Console.WriteLine(@"");
 #endif
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
+
                 return false;
             }
 
@@ -334,7 +388,7 @@ namespace SharePortfolioManager.Classes.Sales
         /// <returns>Flag if the set was successfully</returns>
         public bool SetDocumentSaleObject(string strGuid, string strDocument)
         {
-#if false
+#if DEBUG_SALE_YEARS
             Console.WriteLine(@"SetDocumentSaleObject");
 #endif
             try
@@ -344,15 +398,17 @@ namespace SharePortfolioManager.Classes.Sales
                 {
                     if (saleObject.Guid != strGuid) continue;
 
-                    saleObject.Document = strDocument;
+                    saleObject.DocumentAsStr = strDocument;
 
                     return true;
                 }
 
                 return false;
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
+
                 return false;
             }
         }

@@ -20,6 +20,9 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_SETTINGS
+
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.ShareDetailsForm;
 using System;
@@ -317,7 +320,8 @@ namespace SharePortfolioManager
                 #region Logger cleanup at startup enable
 
                 // Read the flag if the logger should be used
-                var nodeLoggerCleanUpAtStartUpEnabled = Settings.SelectSingleNode("/Settings/Logger/LogCleanUpAtStartUpEnable");
+                var nodeLoggerCleanUpAtStartUpEnabled =
+                    Settings.SelectSingleNode("/Settings/Logger/LogCleanUpAtStartUpEnable");
                 if (nodeLoggerCleanUpAtStartUpEnabled != null)
                 {
                     if (bool.TryParse(nodeLoggerCleanUpAtStartUpEnabled.InnerText, out var bOutResult))
@@ -371,7 +375,7 @@ namespace SharePortfolioManager
                 var nodeLogColors = Settings.SelectSingleNode("/Settings/Logger/LogColors");
                 if (nodeLogColors != null)
                 {
-                    foreach(XmlNode color in nodeLogColors.ChildNodes)
+                    foreach (XmlNode color in nodeLogColors.ChildNodes)
                     {
                         loggerConsoleColorListString.Add(color.InnerText);
                     }
@@ -384,7 +388,7 @@ namespace SharePortfolioManager
                 foreach (var colorName in loggerConsoleColorListString)
                 {
                     foreach (var colors in Enum.GetNames(typeof(KnownColor)).Where(
-                    item => !item.StartsWith("Control")).OrderBy(item => item))
+                        item => !item.StartsWith("Control")).OrderBy(item => item))
                     {
                         if (colors != colorName) continue;
 
@@ -399,28 +403,39 @@ namespace SharePortfolioManager
 
                 #endregion Logger colors
 
+                #region Show exception messages
+
+                // Read the flag if exception messages should be shown
+                var nodeShowExceptionMessages = Settings.SelectSingleNode("/Settings/ShowExceptionMessages");
+                if (nodeShowExceptionMessages != null)
+                {
+                    if (bool.TryParse(nodeShowExceptionMessages.InnerText, out var bOutResult))
+                        Helper.ShowExceptionMessageFlag = bOutResult;
+                    else
+                        loadSettings = false;
+                }
+                else
+                    loadSettings = false;
+
+                #endregion Show exception messages
+
                 // Check if a settings value could not be load and add status message
                 if (loadSettings == false)
                     Helper.AddStatusMessage(rchTxtBoxStateMessage, "Settings file incomplete or corrupt!",
                         Language, LanguageName,
-                        Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                        Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Application);
 
                 InitFlag = true;
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
                 // Set initialization flag
                 InitFlag = false;
 
-                // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage, "Could not load '" + SettingsFileName + @"' file!",
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
+                    ex);
 
                 // Close reader
                 ReaderSettings?.Close();

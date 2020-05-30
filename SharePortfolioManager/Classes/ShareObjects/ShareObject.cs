@@ -20,6 +20,9 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_SHARE_OBJECT
+
 using Parser;
 using SharePortfolioManager.Classes.Buys;
 using SharePortfolioManager.Classes.ParserRegex;
@@ -34,7 +37,6 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
-using SharePortfolioManager.Classes.Dividend;
 
 namespace SharePortfolioManager.Classes.ShareObjects
 {
@@ -1016,8 +1018,10 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
+
                 return false;
             }
         }

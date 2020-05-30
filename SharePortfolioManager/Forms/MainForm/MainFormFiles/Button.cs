@@ -20,6 +20,9 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_MAIN_FORM_BUTTON
+
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.ShareObjects;
 using SharePortfolioManager.OwnMessageBoxForm;
@@ -47,7 +50,8 @@ namespace SharePortfolioManager
         /// <param name="e">EventArgs</param>
         private void OnBtnRefreshAll_Click(object sender, EventArgs e)
         {
-            if (btnRefreshAll.Text == Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAll", LanguageName))
+            if (btnRefreshAll.Text ==
+                Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAll", LanguageName))
             {
                 UpdateAllFlag = true;
 
@@ -72,10 +76,13 @@ namespace SharePortfolioManager
         /// <param name="e">EventArgs</param>
         private void OnBtnRefresh_Click(object sender, EventArgs e)
         {
-            if (btnRefresh.Text == Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Refresh", LanguageName))
+            if (btnRefresh.Text ==
+                Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Refresh", LanguageName))
             {
                 // Set row index
-                 SelectedDataGridViewShareIndex = MarketValueOverviewTabSelected ? dgvPortfolioMarketValue.SelectedRows[0].Index : dgvPortfolioFinalValue.SelectedRows[0].Index;
+                SelectedDataGridViewShareIndex = MarketValueOverviewTabSelected
+                    ? dgvPortfolioMarketValue.SelectedRows[0].Index
+                    : dgvPortfolioFinalValue.SelectedRows[0].Index;
 
                 // Refresh share
                 RefreshOne();
@@ -100,7 +107,8 @@ namespace SharePortfolioManager
 
                 // Create add share form
                 IModelShareAdd model = new ModelShareAdd();
-                IViewShareAdd view = new ViewShareAdd(this, Logger, Language, LanguageName, WebSiteConfiguration.WebSiteRegexList);
+                IViewShareAdd view = new ViewShareAdd(this, Logger, Language, LanguageName,
+                    WebSiteConfiguration.WebSiteRegexList);
                 // ReSharper disable once UnusedVariable
                 var presenterBuyEdit = new PresenterShareAdd(view, model);
 
@@ -111,13 +119,13 @@ namespace SharePortfolioManager
                 AddFlagFinalValue = true;
 
                 // Save the share values only of the final value object to the XML (The market value object contains the same values)
-                if (ShareObjectFinalValue.SaveShareObject(ShareObjectFinalValue, ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio, _portfolioFileName, out var exception))
+                if (ShareObjectFinalValue.SaveShareObject(ShareObjectFinalValue, ref _portfolio, ref _readerPortfolio,
+                    ref _readerSettingsPortfolio, _portfolioFileName, out var exception))
                 {
-                    // Add status message
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
                         Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/AddSaveSuccessful", LanguageName),
                         Language, LanguageName,
-                        Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
+                        Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Application);
 
                     // Enable controls
                     additionalButtons.Add("btnRefreshAll");
@@ -129,11 +137,11 @@ namespace SharePortfolioManager
                 }
                 else
                 {
-                    // Add status message
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
                         Language.GetLanguageTextByXPath(@"/MainForm/Errors/AddSaveFailed", LanguageName),
                         Language, LanguageName,
-                        Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
+                        Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Application,
+                        exception);
 
                     // Enable buttons only if a share exists in the DataGridView
                     if (dgvPortfolioFinalValue.RowCount > 0 && dgvPortfolioMarketValue.RowCount > 0)
@@ -149,7 +157,8 @@ namespace SharePortfolioManager
                 }
 
                 // Check if any share set for updating so enable the refresh all button
-                btnRefreshAll.Enabled = ShareObjectListFinalValue.Count(p => p.DoInternetUpdate && p.WebSiteConfigurationFound) >= 1;
+                btnRefreshAll.Enabled =
+                    ShareObjectListFinalValue.Count(p => p.DoInternetUpdate && p.WebSiteConfigurationFound) >= 1;
 
                 // Throw exception which is thrown in the SaveShareObject function
                 if (exception != null)
@@ -165,7 +174,8 @@ namespace SharePortfolioManager
                 else
                     DgvPortfolioBindingSourceFinalValue.ResetBindings(false);
 
-                if (DgvPortfolioBindingSourceMarketValue.DataSource == null && dgvPortfolioMarketValue.DataSource == null)
+                if (DgvPortfolioBindingSourceMarketValue.DataSource == null &&
+                    dgvPortfolioMarketValue.DataSource == null)
                 {
                     DgvPortfolioBindingSourceMarketValue.DataSource = ShareObjectListMarketValue;
                     dgvPortfolioMarketValue.DataSource = DgvPortfolioBindingSourceMarketValue;
@@ -175,16 +185,11 @@ namespace SharePortfolioManager
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                   Language.GetLanguageTextByXPath(@"/MainForm/Errors/AddSaveErrorFailed", LanguageName),
-                   Language, LanguageName,
-                   Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/AddSaveErrorFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -203,7 +208,7 @@ namespace SharePortfolioManager
                 if (MarketValueOverviewTabSelected &&
                     dgvPortfolioMarketValue.SelectedCells[0].Value != null &&
                     dgvPortfolioMarketValue.SelectedCells[0].Value.ToString() != ""
-                   )
+                )
                 {
                     wkn = dgvPortfolioMarketValue.SelectedCells[0].Value.ToString();
                     SelectedDataGridViewShareIndex = dgvPortfolioMarketValue.SelectedRows[0].Index;
@@ -212,7 +217,7 @@ namespace SharePortfolioManager
                 if (MarketValueOverviewTabSelected == false &&
                     dgvPortfolioFinalValue.SelectedCells[0].Value != null &&
                     dgvPortfolioFinalValue.SelectedCells[0].Value.ToString() != ""
-                   )
+                )
                 {
                     wkn = dgvPortfolioFinalValue.SelectedCells[0].Value.ToString();
                     SelectedDataGridViewShareIndex = dgvPortfolioFinalValue.SelectedRows[0].Index;
@@ -231,7 +236,9 @@ namespace SharePortfolioManager
                     // Get WKN of the selected object
                     var tempShareObjectFinalValue = ShareObjectListFinalValue[SelectedDataGridViewShareIndex];
 
-                    if (ShareObjectFinalValue.SaveShareObject(ShareObjectListFinalValue[SelectedDataGridViewShareIndex], ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio, _portfolioFileName, out var exception))
+                    if (ShareObjectFinalValue.SaveShareObject(ShareObjectListFinalValue[SelectedDataGridViewShareIndex],
+                        ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio, _portfolioFileName, 
+                        out var exception))
                     {
                         // Sort portfolio list in order of the share names
                         ShareObjectListFinalValue.Sort(new ShareObjectListComparer());
@@ -241,19 +248,16 @@ namespace SharePortfolioManager
                         var searchObject = new ShareObjectSearch(tempShareObjectFinalValue.Wkn);
                         SelectedDataGridViewShareIndex = ShareObjectListFinalValue.FindIndex(searchObject.Compare);
 
-                        // Add status message
                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/EditSaveSuccessful", LanguageName),
+                            Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/EditSaveSuccessful",
+                                LanguageName),
                             Language, LanguageName,
-                            Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
+                            Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Application);
 
                         // Reset / refresh DataGridView portfolio BindingSource
                         DgvPortfolioBindingSourceMarketValue.ResetBindings(false);
                         DgvPortfolioBindingSourceFinalValue.ResetBindings(false);
 
-#if DEBUG
-                        Console.WriteLine(@"Index: {0}", SelectedDataGridViewShareIndex);
-#endif
                         if (SelectedDataGridViewShareIndex > 0)
                         {
                             if (MarketValueOverviewTabSelected)
@@ -269,15 +273,16 @@ namespace SharePortfolioManager
                     }
                     else
                     {
-                        // Add status message
                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
                             Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
                             Language, LanguageName,
-                            Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
+                            Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Application,
+                            exception);
                     }
 
                     // Check if any share set for updating so enable the refresh all button
-                    btnRefreshAll.Enabled = ShareObjectListFinalValue.Count(p => p.DoInternetUpdate && p.WebSiteConfigurationFound) >= 1;
+                    btnRefreshAll.Enabled =
+                        ShareObjectListFinalValue.Count(p => p.DoInternetUpdate && p.WebSiteConfigurationFound) >= 1;
 
                     // Throw exception which is thrown in the SaveShareObject function
                     if (exception != null)
@@ -285,25 +290,19 @@ namespace SharePortfolioManager
                 }
                 else
                 {
-                    // Add status message
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                       Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/SelectAShare", LanguageName),
-                       Language, LanguageName,
-                       Color.Orange, Logger, (int)EStateLevels.Warning, (int)EComponentLevels.Application);
+                        Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/SelectAShare", LanguageName),
+                        Language, LanguageName,
+                        Color.Orange, Logger, (int) EStateLevels.Warning, (int) EComponentLevels.Application);
                 }
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                   Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveErrorFailed", LanguageName),
-                   Language, LanguageName,
-                   Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveErrorFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -321,21 +320,26 @@ namespace SharePortfolioManager
                 dgvPortfolioFinalValue.SelectedCells.Count > 0 &&
                 dgvPortfolioFinalValue.SelectedCells[0].Value != null &&
                 dgvPortfolioFinalValue.SelectedCells[0].Value.ToString() != ""
-               )
+            )
                 wkn = dgvPortfolioFinalValue.SelectedCells[0].Value.ToString();
 
             if (MarketValueOverviewTabSelected &&
                 dgvPortfolioMarketValue.SelectedCells.Count > 0 &&
                 dgvPortfolioMarketValue.SelectedCells[0].Value != null &&
                 dgvPortfolioMarketValue.SelectedCells[0].Value.ToString() != ""
-               )
+            )
                 wkn = dgvPortfolioMarketValue.SelectedCells[0].Value.ToString();
 
             if (wkn != @"")
             {
                 try
                 {
-                    var ownDeleteMessageBox = new OwnMessageBox(Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Info", LanguageName), Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/ShareDelete", LanguageName), Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Yes", LanguageName), Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/No", LanguageName));
+                    var ownDeleteMessageBox = new OwnMessageBox(
+                        Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
+                            (int) EOwnMessageBoxInfoType.Info],
+                        Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/ShareDelete", LanguageName),
+                        Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Yes", LanguageName),
+                        Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/No", LanguageName));
                     if (ownDeleteMessageBox.ShowDialog() != DialogResult.OK) return;
 
                     // Set delete flag
@@ -359,7 +363,7 @@ namespace SharePortfolioManager
                     #endregion Delete from XML file
 
                     #region Delete from share lists
-                        
+
                     // Find index of the share which should be deleted
                     var indexRemove = -1;
                     if (MarketValueOverviewTabSelected)
@@ -384,19 +388,17 @@ namespace SharePortfolioManager
                         ShareObjectListFinalValue.RemoveAt(indexRemove);
                         ShareObjectFinalValue = null;
 
-                        // Add status message
                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
                             Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/DeleteSuccessful", LanguageName),
                             Language, LanguageName,
-                            Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
+                            Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Application);
                     }
                     else
                     {
-                        // Add status message
                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
                             Language.GetLanguageTextByXPath(@"/MainForm/Errors/DeleteFailed", LanguageName),
                             Language, LanguageName,
-                            Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
+                            Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Application);
                     }
 
                     #endregion Delete from share lists
@@ -426,29 +428,24 @@ namespace SharePortfolioManager
                     DgvPortfolioBindingSourceFinalValue.ResetBindings(false);
 
                     // Check if any share set for updating so enable the refresh all button
-                    btnRefreshAll.Enabled = ShareObjectListFinalValue.Count(p => p.DoInternetUpdate && p.WebSiteConfigurationFound) >= 1;
+                    btnRefreshAll.Enabled =
+                        ShareObjectListFinalValue.Count(p => p.DoInternetUpdate && p.WebSiteConfigurationFound) >= 1;
                 }
                 catch (Exception ex)
                 {
-#if DEBUG
-                    var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                    MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-#endif
-                    // Add status message
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
                         Language.GetLanguageTextByXPath(@"/MainForm/Errors/DeleteErrorFailed", LanguageName),
                         Language, LanguageName,
-                        Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                        Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
+                        ex);
                 }
             }
             else
             {
-                // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/SelectAShare", LanguageName),
                     Language, LanguageName,
-                    Color.Orange, Logger, (int)EStateLevels.Warning, (int)EComponentLevels.Application);
+                    Color.Orange, Logger, (int) EStateLevels.Warning, (int) EComponentLevels.Application);
             }
         }
 

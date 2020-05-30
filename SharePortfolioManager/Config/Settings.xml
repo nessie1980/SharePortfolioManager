@@ -30,4 +30,5 @@
 			<FatalError>DarkRed</FatalError>
 		</LogColors>
 	</Logger>
+	<ShowExceptionMessages>true</ShowExceptionMessages>
 </Settings>

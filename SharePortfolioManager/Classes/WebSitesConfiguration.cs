@@ -20,11 +20,11 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_WEBSITES_CONFIGURATIONS
+
 using System;
 using System.Collections.Generic;
-#if DEBUG
-using System.Windows.Forms;
-#endif
 using System.Xml;
 using Parser;
 using SharePortfolioManager.Classes.ParserRegex;
@@ -33,7 +33,7 @@ namespace SharePortfolioManager.Classes
 {
     public static class WebSiteConfiguration
     {
-#region Error codes
+        #region Error codes
 
         // Error codes of the WebSiteConfiguration class
         public enum WebSiteErrorCode
@@ -42,12 +42,12 @@ namespace SharePortfolioManager.Classes
             ConfigurationEmpty = -1,
             ConfigurationAttributeError = -2,
             ConfigurationSyntaxError = -3,
-            ConfigurationLoadFailed = - 4
+            ConfigurationLoadFailed = -4
         };
 
-#endregion Error codes
+        #endregion Error codes
 
-#region Properties
+        #region Properties
 
         /// <summary>
         /// Flag if the configuration load was successful
@@ -80,7 +80,7 @@ namespace SharePortfolioManager.Classes
         /// </summary>
         public static List<WebSiteRegex> WebSiteRegexList { get; set; } = new List<WebSiteRegex>();
 
-#region XML attribute names
+        #region XML attribute names
 
         private const string IdAttrName = "Id";
 
@@ -96,17 +96,17 @@ namespace SharePortfolioManager.Classes
 
         private const string RegexOptionsAttrName = "RegexOptions";
 
-#endregion XML attribute names
+        #endregion XML attribute names
 
-#endregion Properties
+        #endregion Properties
 
-#region Load website configurations
+        #region Load website configurations
 
         /// <summary>
         /// This function loads the website configurations from the WebSites.XML
         /// This configuration is used by the Parser for parsing the given websites
         /// </summary>
-        public static void LoadWebSiteConfigurations( bool initFlag)
+        public static void LoadWebSiteConfigurations(bool initFlag)
         {
             InitFlag = initFlag;
 
@@ -155,7 +155,8 @@ namespace SharePortfolioManager.Classes
                             var regexList = new RegExList();
 
                             // Check if all elements are available
-                            if (nodeElement.Attributes?[IdAttrName] == null || nodeElement.Attributes[EncodingAttrName] == null)
+                            if (nodeElement.Attributes?[IdAttrName] == null ||
+                                nodeElement.Attributes[EncodingAttrName] == null)
                                 loadSettings = false;
                             else
                             {
@@ -232,11 +233,9 @@ namespace SharePortfolioManager.Classes
             {
                 // Set last exception 
                 LastException = ex;
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
+
+                Helper.ShowExceptionMessage(ex);
+
                 // Close website reader
                 XmlReader?.Close();
 
@@ -251,11 +250,7 @@ namespace SharePortfolioManager.Classes
                 // Set last exception 
                 LastException = ex;
 
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
+                Helper.ShowExceptionMessage(ex);
 
                 // Close website reader
                 XmlReader?.Close();
@@ -268,6 +263,6 @@ namespace SharePortfolioManager.Classes
             }
         }
 
-#endregion Load website configurations
+        #endregion Load website configurations
     }
 }

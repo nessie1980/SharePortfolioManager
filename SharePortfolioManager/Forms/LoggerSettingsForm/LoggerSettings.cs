@@ -20,6 +20,9 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_LOGGER_SETTINGS
+
 using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Classes;
@@ -264,16 +267,13 @@ namespace SharePortfolioManager.LoggerSettingsForm
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                   Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/LoggerSettingsShowFailed", LanguageName),
-                   Language, LanguageName,
-                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/LoggerSettingsShowFailed",
+                        LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                    (int) FrmMain.EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -296,57 +296,68 @@ namespace SharePortfolioManager.LoggerSettingsForm
                 Helper.AddStatusMessage(toolStripStatusLabel1,
                     Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/NotInitialized", LanguageName),
                     Language, LanguageName,
-                    Color.Black, Logger, (int)FrmMain.EStateLevels.Info, (int)FrmMain.EComponentLevels.Application);
+                    Color.Black, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
             }
             catch (LoggerException loggerException)
             {
-#if DEBUG
-                MessageBox.Show(loggerException.Message, @"Error - FrmMain()", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
+                var message = @"invalid";
+
                 // Check the logger initialization state
                 switch (Logger.InitState)
-                {
+                    {
                     case Logger.EInitState.NotInitialized:
-                        Helper.AddStatusMessage(toolStripStatusLabel1, Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/NotInitialized", LanguageName), Language, LanguageName, Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                        message = Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/NotInitialized",
+                            LanguageName);
                         break;
                     case Logger.EInitState.WrongSize:
-                        Helper.AddStatusMessage(toolStripStatusLabel1, Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/WrongSize", LanguageName), Language, LanguageName, Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                        message = Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/WrongSize",
+                            LanguageName);
                         break;
                     case Logger.EInitState.ComponentLevelInvalid:
-                        Helper.AddStatusMessage(toolStripStatusLabel1, Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/ComponentLevelInvalid", LanguageName), Language, LanguageName, Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                        message = Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/ComponentLevelInvalid",
+                            LanguageName);
                         break;
                     case Logger.EInitState.ComponentNamesMaxCount:
-                        Helper.AddStatusMessage(toolStripStatusLabel1, Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/ComponentNamesMaxCount", LanguageName), Language, LanguageName, Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                        message = Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/ComponentNamesMaxCount",
+                            LanguageName);
                         break;
                     case Logger.EInitState.StateLevelInvalid:
-                        Helper.AddStatusMessage(toolStripStatusLabel1, Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/StateLevelInvalid", LanguageName), Language, LanguageName, Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                        message = Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/StateLevelInvalid",
+                            LanguageName);
                         break;
                     case Logger.EInitState.StatesMaxCount:
-                        Helper.AddStatusMessage(toolStripStatusLabel1, Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/StatesMaxCount", LanguageName), Language, LanguageName, Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                        message = Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/StatesMaxCount",
+                            LanguageName);
                         break;
                     case Logger.EInitState.ColorsMaxCount:
-                        Helper.AddStatusMessage(toolStripStatusLabel1, Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/ColorsMaxCount", LanguageName), Language, LanguageName, Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                        message = Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/ColorsMaxCount",
+                            LanguageName);
                         break;
                     case Logger.EInitState.WriteStartupFailed:
-                        Helper.AddStatusMessage(toolStripStatusLabel1, Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/WriteStartupFailed", LanguageName), Language, LanguageName, Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                        message = Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/WriteStartupFailed",
+                            LanguageName);
                         break;
                     case Logger.EInitState.LogPathCreationFailed:
-                        Helper.AddStatusMessage(toolStripStatusLabel1, Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/LogPathCreationFailed", LanguageName), Language, LanguageName, Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                        message = Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/LogPathCreationFailed",
+                            LanguageName);
                         break;
                     case Logger.EInitState.InitializationFailed:
-                        Helper.AddStatusMessage(toolStripStatusLabel1, Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/InitializationFailed", LanguageName), Language, LanguageName, Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                        message = Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/InitializationFailed",
+                            LanguageName);
                         break;
                 }
+
+                Helper.AddStatusMessage(toolStripStatusLabel1,
+                    message, Language, LanguageName,
+                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.Error, (int) FrmMain.EComponentLevels.Application,
+                    loggerException);
             }
             catch (Exception ex)
             {
-#if DEBUG
-                MessageBox.Show(ex.Message, @"Error - FrmMain()", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                var message = $"Error occurred\r\n\r\nMessage: {ex.Message}";
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Helper.AddStatusMessage(toolStripStatusLabel1,
+                    Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/LogFileCleanUpFailed", LanguageName), Language, LanguageName,
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -488,33 +499,29 @@ namespace SharePortfolioManager.LoggerSettingsForm
                     #endregion State levels
 
                     // Show own message box that a restart of the software should be done
-                    var ombReboot = new OwnMessageBox(Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Info", LanguageName),
-                        Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/LoggerSetttingsReboot", LanguageName),
+                    var ombReboot = new OwnMessageBox(Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
+                        (int)EOwnMessageBoxInfoType.Info],
+                        Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/LoggerSettingsReboot", LanguageName),
                         Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", LanguageName),
                         Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", LanguageName));
                     ombReboot.ShowDialog();
                 }
                 catch (Exception ex)
                 {
-#if DEBUG
-                    var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                    MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-#endif
                     StopFomClosingFlag = true;
 
-                    // Add status message
                     Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                       Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/SaveSettingsFailed", LanguageName),
-                       Language, LanguageName,
-                       Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                        Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/SaveSettingsFailed", LanguageName),
+                        Language, LanguageName,
+                        Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                        (int) FrmMain.EComponentLevels.Application,
+                        ex);
                 }
             }
             else
             {
                 StopFomClosingFlag = true;
 
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
                    Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/SaveSettingsFailed", LanguageName),
                    Language, LanguageName,
@@ -539,13 +546,13 @@ namespace SharePortfolioManager.LoggerSettingsForm
                 if (e.Index < 0) { return; }
 
                 //Create A Rectangle To Fit New Item
-                var colourSize = new Rectangle(0, e.Bounds.Top,
+                var colorSize = new Rectangle(0, e.Bounds.Top,
                    e.Bounds.Width, e.Bounds.Height);
 
                 var item = (ComboBoxItem)Items[e.Index];
                     Brush brush = new SolidBrush(item.ForeColor);
 
-                e.Graphics.FillRectangle(brush, colourSize);
+                e.Graphics.FillRectangle(brush, colorSize);
 
                 if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
                 { brush = Brushes.Yellow; }
@@ -571,23 +578,16 @@ namespace SharePortfolioManager.LoggerSettingsForm
 
         public class ComboBoxItem
         {
-            public ComboBoxItem() { }
-
-            public ComboBoxItem(string pText, object pValue)
-            {
-                Text = pText; Value = pValue;
-            }
-
             public ComboBoxItem(string pText, object pValue, Color pColor)
             {
                 Text = pText; Value = pValue; ForeColor = pColor;
             }
 
-            public string Text { get; set; } = "";
+            public string Text { get; set; }
 
             public object Value { get; set; }
 
-            public Color ForeColor { get; set; } = Color.Black;
+            public Color ForeColor { get; set; }
 
             public override string ToString()
             {

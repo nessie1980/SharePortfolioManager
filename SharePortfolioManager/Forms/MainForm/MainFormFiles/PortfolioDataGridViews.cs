@@ -20,7 +20,9 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using SharePortfolioManager.Chart;
+// Define for DEBUGGING
+//#define DEBUG_MAIN_FRM_PORTFOLIO_DGV
+
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.ShareObjects;
 using SharePortfolioManager.Properties;
@@ -30,6 +32,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using SharePortfolioManager.ChartForm;
 
 namespace SharePortfolioManager
 {
@@ -141,7 +144,7 @@ namespace SharePortfolioManager
 
         #region Properties
 
-        public ShareDetailsForm.ShareDetailsForm FrmShareDetailsForm;
+        public FrmShareDetails FrmShareDetailsForm;
 
         public BindingSource DgvPortfolioBindingSourceMarketValue { get; } = new BindingSource();
 
@@ -160,6 +163,7 @@ namespace SharePortfolioManager
         #region Methods
 
         #region TabControl for the data grid views
+
         private void tabCtrlShareOverviews_SelectedIndexChanged(object sender, EventArgs e)
         {
             MarketValueOverviewTabSelected = tabCtrlShareOverviews.SelectedIndex != 0;
@@ -210,25 +214,20 @@ namespace SharePortfolioManager
 
                 // Check if the "Update" button should be disabled or enabled
                 if (!UpdateAllFlag)
-                    btnRefresh.Enabled = ShareObjectMarketValue.DoInternetUpdate && ShareObjectMarketValue.WebSiteConfigurationFound;
+                    btnRefresh.Enabled = ShareObjectMarketValue.DoInternetUpdate &&
+                                         ShareObjectMarketValue.WebSiteConfigurationFound;
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
                 // Set initialization flag
                 InitFlag = false;
 
-                // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(
                         @"/MainForm/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -272,25 +271,20 @@ namespace SharePortfolioManager
 
                 // Check if the "Update" button should be disabled or enabled
                 if (!UpdateAllFlag)
-                    btnRefresh.Enabled = ShareObjectFinalValue.DoInternetUpdate && ShareObjectFinalValue.WebSiteConfigurationFound;
+                    btnRefresh.Enabled = ShareObjectFinalValue.DoInternetUpdate &&
+                                         ShareObjectFinalValue.WebSiteConfigurationFound;
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
                 // Set initialization flag
                 InitFlag = false;
 
-                // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(
                         @"/MainForm/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -316,7 +310,7 @@ namespace SharePortfolioManager
                 dgvPortfolioFooterFinalValue.SelectedRows[0].Selected = false;
         }
 
-        #endregion Data grid view portfolio and portfolio footer selection changed 
+        #endregion Data grid view portfolio and portfolio footer selection changed
 
         #region Data grid view portfolio and portfolio footer resize
 
@@ -381,11 +375,14 @@ namespace SharePortfolioManager
                     if (vScrollbarPortfolio.Visible)
                     {
                         var vScrollbarWidth = vScrollbarPortfolio.Width;
-                        dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.EMarketValueColumnIndex].Width = MarketFinalValueColumnSize + vScrollbarWidth;
+                        dgvPortfolioFooterMarketValue
+                                .Columns[(int) ColumnIndicesPortfolioFooterMarketValue.EMarketValueColumnIndex].Width =
+                            MarketFinalValueColumnSize + vScrollbarWidth;
                     }
                     else
                     {
-                        dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.EMarketValueColumnIndex].Width =
+                        dgvPortfolioFooterMarketValue
+                                .Columns[(int) ColumnIndicesPortfolioFooterMarketValue.EMarketValueColumnIndex].Width =
                             MarketFinalValueColumnSize;
                     }
                 }
@@ -402,33 +399,40 @@ namespace SharePortfolioManager
                 if (vScrollbarPortfolio.Visible)
                 {
                     var vScrollbarWidth = vScrollbarPortfolio.Width;
-                    dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.EFinalValueColumnIndex].Width = MarketFinalValueColumnSize + vScrollbarWidth;
+                    dgvPortfolioFooterFinalValue
+                            .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.EFinalValueColumnIndex].Width =
+                        MarketFinalValueColumnSize + vScrollbarWidth;
                 }
                 else
                 {
-                    dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.EFinalValueColumnIndex].Width =
+                    dgvPortfolioFooterFinalValue
+                            .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.EFinalValueColumnIndex].Width =
                         MarketFinalValueColumnSize;
                 }
 
-                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.EBrokerageDividendIndex].Width = BrokerageDividendColumnSize;
-                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelTotalColumnIndex].Width = columnLabelTotalWidth;
+                dgvPortfolioFooterFinalValue
+                        .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.EBrokerageDividendIndex].Width =
+                    BrokerageDividendColumnSize;
+                dgvPortfolioFooterFinalValue
+                        .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.ELabelTotalColumnIndex].Width =
+                    columnLabelTotalWidth;
 
                 #endregion dgvPortfolioFooterFinalValue
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
+                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(
+                        @"/MainForm/Errors/ResizeFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
+                    ex);
             }
         }
 
         #endregion DataGridView portfolio and portfolio footer resize
 
-        #region Add shares to data grid view portfolio and configure data grid view footer 
+        #region Add shares to data grid view portfolio and configure data grid view footer
 
         /// <summary>
         /// This function add the shares to the DataGridView portfolio.
@@ -637,21 +641,16 @@ namespace SharePortfolioManager
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
                 // Set initialization flag
                 InitFlag = false;
 
-                // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(
-                        @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio_Error/DisplayFailed", LanguageName),
+                        @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/DgvPortfolio_Error/DisplayFailed",
+                        LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -671,10 +670,12 @@ namespace SharePortfolioManager
                 #region dgvPortfolioFooterMarketValue
 
                 // Check if the share object list has items
-                if (ShareObjectListMarketValue != null && ShareObject.ObjectCounter > 0 && dgvPortfolioMarketValue.Rows.Count > 0)
+                if (ShareObjectListMarketValue != null && ShareObject.ObjectCounter > 0 &&
+                    dgvPortfolioMarketValue.Rows.Count > 0)
                 {
                     // Set row colors
-                    if (dgvPortfolioMarketValue.RowsDefaultCellStyle.BackColor == Color.LightGray && dgvPortfolioMarketValue.RowCount % 2 == 0)
+                    if (dgvPortfolioMarketValue.RowsDefaultCellStyle.BackColor == Color.LightGray &&
+                        dgvPortfolioMarketValue.RowCount % 2 == 0)
                     {
                         dgvPortfolioFooterMarketValue.RowsDefaultCellStyle.BackColor = Color.LightGray;
                         dgvPortfolioFooterMarketValue.AlternatingRowsDefaultCellStyle.BackColor = Color.White;
@@ -747,7 +748,8 @@ namespace SharePortfolioManager
 
                 {
                     // Set row colors
-                    if (dgvPortfolioFinalValue.RowsDefaultCellStyle.BackColor == Color.LightGray && dgvPortfolioFinalValue.RowCount % 2 == 0)
+                    if (dgvPortfolioFinalValue.RowsDefaultCellStyle.BackColor == Color.LightGray &&
+                        dgvPortfolioFinalValue.RowCount % 2 == 0)
                     {
                         dgvPortfolioFooterFinalValue.RowsDefaultCellStyle.BackColor = Color.LightGray;
                         dgvPortfolioFooterFinalValue.AlternatingRowsDefaultCellStyle.BackColor = Color.White;
@@ -817,28 +819,23 @@ namespace SharePortfolioManager
 
                     // Add padding for centralize the content vertical
                     dgvPortfolioFooterFinalValue.Rows[dgvPortfolioFooterFinalValue.Rows.Count - 1].DefaultCellStyle
-                        .Padding= new Padding(0, FooterBorderWidth, 0,0);
+                        .Padding = new Padding(0, FooterBorderWidth, 0, 0);
                 }
 
                 #endregion dgvPortfolioFooterFinalValue
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
                 // Set initialization flag
                 InitFlag = false;
 
-                // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(
-                        @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter_Error/ConfigurationFailed", LanguageName),
+                        @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/DgvPortfolioFooter_Error/ConfigurationFailed",
+                        LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -901,9 +898,10 @@ namespace SharePortfolioManager
                 var wkn = dgvPortfolioFinalValue.Rows[index].Cells[0].Value.ToString();
                 var shareObject = ShareObjectListFinalValue.Find(x => (x.Wkn == wkn));
                 {
-                    ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[0]).Image = shareObject.DoInternetUpdate
-                        ? Resources.state_update_16
-                        : Resources.state_no_update_16;
+                    ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[0]).Image =
+                        shareObject.DoInternetUpdate
+                            ? Resources.state_update_16
+                            : Resources.state_no_update_16;
 
                     if (shareObject.PerformanceValue > 0)
                     {
@@ -912,30 +910,35 @@ namespace SharePortfolioManager
                     }
                     else if (shareObject.PerformanceValue == 0)
                     {
-                        ((TextAndImageCell)dgvPortfolioFinalValue.Rows[index].Cells[6]).Image = Resources.neutral_development_24;
+                        ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[6]).Image =
+                            Resources.neutral_development_24;
                     }
                     else
                     {
-                        ((TextAndImageCell)dgvPortfolioFinalValue.Rows[index].Cells[6]).Image = Resources.negativ_development_24;
+                        ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[6]).Image =
+                            Resources.negativ_development_24;
                     }
 
                     if (shareObject.CompletePerformanceValue > 0)
                     {
-                        ((TextAndImageCell)dgvPortfolioFinalValue.Rows[index].Cells[8]).Image = Resources.positiv_development_24;
+                        ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[8]).Image =
+                            Resources.positiv_development_24;
                     }
                     else if (shareObject.PerformanceValue == 0)
                     {
-                        ((TextAndImageCell)dgvPortfolioFinalValue.Rows[index].Cells[8]).Image = Resources.neutral_development_24;
+                        ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[8]).Image =
+                            Resources.neutral_development_24;
                     }
                     else
                     {
-                        ((TextAndImageCell)dgvPortfolioFinalValue.Rows[index].Cells[8]).Image = Resources.negativ_development_24;
+                        ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[8]).Image =
+                            Resources.negativ_development_24;
                     }
                 }
             }
         }
 
-        #endregion Add shares to data grid view portfolio and configure data grid view footer 
+        #endregion Add shares to data grid view portfolio and configure data grid view footer
 
         #region DataBinding data grid view portfolio
 
@@ -955,60 +958,110 @@ namespace SharePortfolioManager
                     (int) ColumnIndicesPortfolioMarketValue.ECompleteMarketValueColumnIndex + 1) return;
 
                 // Set market value data grid view column header names
-                OnSetDgvMarketValueColumnHeaderNames();
+                OnSetDgvPortfolioMarketValueColumnHeaderNames();
 
                 // Set market value data grid view column header texts
-                OnSetDgvMarketValueColumnHeaderTexts();
+                OnSetDgvPortfolioMarketValueColumnHeaderCaptions();
 
                 #region Width configuration
 
-                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex].Width = WknColumnSize;
-                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EVolumeColumnIndex].Width = VolumeColumnSize;
-                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EPriceColumnIndex].Width = PriceColumnSize;
-                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EPerformancePrevDayColumnIndex].Width = PerformancePrevDayColumnSize;
-                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EPerformanceColumnIndex].Width = PerformanceColumnSize;
-                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EMarketValueColumnIndex].Width = MarketFinalValueColumnSize;
-                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ECompletePerformanceColumnIndex].Width = CompletePerformanceColumnSize;
-                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ECompleteMarketValueColumnIndex].Width = CompleteMarketFinalValueColumnSize;
+                dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex].Width =
+                    WknColumnSize;
+                dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.EVolumeColumnIndex].Width =
+                    VolumeColumnSize;
+                dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.EPriceColumnIndex].Width =
+                    PriceColumnSize;
+                dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.EPerformancePrevDayColumnIndex]
+                        .Width =
+                    PerformancePrevDayColumnSize;
+                dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.EPerformanceColumnIndex].Width =
+                    PerformanceColumnSize;
+                dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.EMarketValueColumnIndex].Width =
+                    MarketFinalValueColumnSize;
+                dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.ECompletePerformanceColumnIndex]
+                        .Width =
+                    CompletePerformanceColumnSize;
+                dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.ECompleteMarketValueColumnIndex]
+                        .Width =
+                    CompleteMarketFinalValueColumnSize;
 
-                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ENameColumnIndex].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ENameColumnIndex].FillWeight = 10;
+                dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.ENameColumnIndex].AutoSizeMode =
+                    DataGridViewAutoSizeColumnMode.Fill;
+                dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.ENameColumnIndex].FillWeight =
+                    10;
 
                 #endregion Width configuration
 
                 #region Alignment configuration
 
-                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ENameColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EVolumeColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EPriceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EPerformancePrevDayColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EPerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.EMarketValueColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ECompletePerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvPortfolioMarketValue.Columns[(int)ColumnIndicesPortfolioMarketValue.ECompleteMarketValueColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                    .DefaultCellStyle
+                    .Alignment = DataGridViewContentAlignment.MiddleCenter;
+                dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.ENameColumnIndex]
+                    .DefaultCellStyle
+                    .Alignment = DataGridViewContentAlignment.MiddleLeft;
+                dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.EVolumeColumnIndex]
+                    .DefaultCellStyle
+                    .Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.EPriceColumnIndex]
+                    .DefaultCellStyle
+                    .Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.EPerformancePrevDayColumnIndex]
+                    .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.EPerformanceColumnIndex]
+                    .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.EMarketValueColumnIndex]
+                    .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.ECompletePerformanceColumnIndex]
+                    .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.ECompleteMarketValueColumnIndex]
+                    .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
                 #endregion Alignment configuration
 
                 #region Footer width configuration
 
-                dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.EPerformanceColumnIndex].Width = PerformanceColumnSize;
-                dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.EMarketValueColumnIndex].Width = MarketFinalValueColumnSize;
-                dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ECompletePerformanceColumnIndex].Width = CompletePerformanceColumnSize;
-                dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ECompleteMarketValueColumnIndex].Width = CompleteMarketFinalValueColumnSize;
+                dgvPortfolioFooterMarketValue
+                    .Columns[(int) ColumnIndicesPortfolioFooterMarketValue.EPerformanceColumnIndex]
+                    .Width = PerformanceColumnSize;
+                dgvPortfolioFooterMarketValue
+                    .Columns[(int) ColumnIndicesPortfolioFooterMarketValue.EMarketValueColumnIndex]
+                    .Width = MarketFinalValueColumnSize;
+                dgvPortfolioFooterMarketValue
+                        .Columns[(int) ColumnIndicesPortfolioFooterMarketValue.ECompletePerformanceColumnIndex].Width =
+                    CompletePerformanceColumnSize;
+                dgvPortfolioFooterMarketValue
+                        .Columns[(int) ColumnIndicesPortfolioFooterMarketValue.ECompleteMarketValueColumnIndex].Width =
+                    CompleteMarketFinalValueColumnSize;
 
-                dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ELabelTotalColumnIndex].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ELabelTotalColumnIndex].FillWeight = 10;
+                dgvPortfolioFooterMarketValue
+                    .Columns[(int) ColumnIndicesPortfolioFooterMarketValue.ELabelTotalColumnIndex]
+                    .AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                dgvPortfolioFooterMarketValue
+                    .Columns[(int) ColumnIndicesPortfolioFooterMarketValue.ELabelTotalColumnIndex]
+                    .FillWeight = 10;
 
                 #endregion Footer width configuration
 
                 #region Footer aligment configuration
 
-                dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ELabelTotalColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.EPerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.EMarketValueColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ECompletePerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvPortfolioFooterMarketValue.Columns[(int)ColumnIndicesPortfolioFooterMarketValue.ECompleteMarketValueColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFooterMarketValue
+                    .Columns[(int) ColumnIndicesPortfolioFooterMarketValue.ELabelTotalColumnIndex]
+                    .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFooterMarketValue
+                    .Columns[(int) ColumnIndicesPortfolioFooterMarketValue.EPerformanceColumnIndex]
+                    .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFooterMarketValue
+                    .Columns[(int) ColumnIndicesPortfolioFooterMarketValue.EMarketValueColumnIndex]
+                    .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFooterMarketValue
+                    .Columns[(int) ColumnIndicesPortfolioFooterMarketValue.ECompletePerformanceColumnIndex]
+                    .DefaultCellStyle
+                    .Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFooterMarketValue
+                    .Columns[(int) ColumnIndicesPortfolioFooterMarketValue.ECompleteMarketValueColumnIndex]
+                    .DefaultCellStyle
+                    .Alignment = DataGridViewContentAlignment.MiddleRight;
 
                 #endregion Footer aligment configuration
 
@@ -1018,7 +1071,8 @@ namespace SharePortfolioManager
                 if (AddFlagMarketValue == false && DeleteFlagMarketValue == false)
                 {
                     // Scroll to the selected row
-                    Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
+                    Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex,
+                        LastFirstDisplayedRowIndex);
                 }
 
                 // When a share has been added clear the data grid view market value selection
@@ -1035,7 +1089,8 @@ namespace SharePortfolioManager
                     dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
 
                     // Scroll to the selected row
-                    Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
+                    Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex,
+                        LastFirstDisplayedRowIndex);
 
                     if (dgvPortfolioMarketValue.RowCount == 1)
                     {
@@ -1073,7 +1128,9 @@ namespace SharePortfolioManager
                     dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
 
                     // Scroll to the selected row
-                    Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
+                    Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex,
+                        LastFirstDisplayedRowIndex,
+                        true);
                 }
                 else
                 {
@@ -1086,21 +1143,16 @@ namespace SharePortfolioManager
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
                 // Set initialization flag
                 InitFlag = false;
 
-                // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(
-                        @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio_Error/DisplayFailed", LanguageName),
+                        @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/DgvPortfolio_Error/DisplayFailed",
+                        LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
+                    ex);
             }
 
         }
@@ -1121,65 +1173,113 @@ namespace SharePortfolioManager
                     (int) ColumnIndicesPortfolioFinalValue.ECompleteFinalValueColumnIndex + 1) return;
 
                 // Set final value data grid view column header names and texts
-                OnSetDgvFinalValueColumnHeaderNames();
+                OnSetDgvPortfolioFinalValueColumnHeaderNames();
 
                 // Set final value data grid view column header texts
-                OnSetDgvFinalValueColumnHeaderTexts();
+                OnSetDgvPortfolioFinalValueColumnHeaderTexts();
 
                 #region Width configuration
 
-                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex].Width = WknColumnSize;
-                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EVolumeColumnIndex].Width = VolumeColumnSize;
-                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EBrokerageDividendColumnIndex].Width = BrokerageDividendColumnSize;
-                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EPriceColumnIndex].Width = PriceColumnSize;
-                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EPerformancePrevDayColumnIndex].Width = PerformancePrevDayColumnSize;
-                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EPerformanceColumnIndex].Width = PerformanceColumnSize;
-                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EFinalValueColumnIndex].Width = MarketFinalValueColumnSize;
-                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ECompletePerformanceColumnIndex].Width = CompletePerformanceColumnSize;
-                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ECompleteFinalValueColumnIndex].Width = CompleteMarketFinalValueColumnSize;
+                dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex].Width =
+                    WknColumnSize;
+                dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EVolumeColumnIndex].Width =
+                    VolumeColumnSize;
+                dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EBrokerageDividendColumnIndex]
+                    .Width = BrokerageDividendColumnSize;
+                dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EPriceColumnIndex].Width =
+                    PriceColumnSize;
+                dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EPerformancePrevDayColumnIndex]
+                    .Width = PerformancePrevDayColumnSize;
+                dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EPerformanceColumnIndex].Width =
+                    PerformanceColumnSize;
+                dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EFinalValueColumnIndex].Width =
+                    MarketFinalValueColumnSize;
+                dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.ECompletePerformanceColumnIndex]
+                    .Width = CompletePerformanceColumnSize;
+                dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.ECompleteFinalValueColumnIndex]
+                    .Width = CompleteMarketFinalValueColumnSize;
 
-                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ENameColumnIndex].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ENameColumnIndex].FillWeight = 10;
+                dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.ENameColumnIndex].AutoSizeMode =
+                    DataGridViewAutoSizeColumnMode.Fill;
+                dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.ENameColumnIndex].FillWeight = 10;
 
                 #endregion With configuration
 
                 #region Alignment configuration
 
-                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ENameColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EVolumeColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EBrokerageDividendColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EPriceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EPerformancePrevDayColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EPerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.EFinalValueColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ECompletePerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvPortfolioFinalValue.Columns[(int)ColumnIndicesPortfolioFinalValue.ECompleteFinalValueColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex].DefaultCellStyle
+                    .Alignment = DataGridViewContentAlignment.MiddleCenter;
+                dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.ENameColumnIndex].DefaultCellStyle
+                    .Alignment = DataGridViewContentAlignment.MiddleLeft;
+                dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EVolumeColumnIndex]
+                    .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EBrokerageDividendColumnIndex]
+                    .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EPriceColumnIndex]
+                    .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EPerformancePrevDayColumnIndex]
+                    .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EPerformanceColumnIndex]
+                    .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EFinalValueColumnIndex]
+                    .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.ECompletePerformanceColumnIndex]
+                    .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.ECompleteFinalValueColumnIndex]
+                    .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
                 #endregion Alignment configuration
 
                 #region Footer configuration
 
-                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.EBrokerageDividendIndex].Width = BrokerageDividendColumnSize;
-                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.EPerformanceColumnIndex].Width = PerformanceColumnSize;
-                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.EFinalValueColumnIndex].Width = MarketFinalValueColumnSize;
-                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ECompletePerformanceColumnIndex].Width = CompletePerformanceColumnSize;
-                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ECompleteFinalValueColumnIndex].Width = CompleteMarketFinalValueColumnSize;
+                dgvPortfolioFooterFinalValue
+                        .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.EBrokerageDividendIndex].Width =
+                    BrokerageDividendColumnSize;
+                dgvPortfolioFooterFinalValue
+                        .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.EPerformanceColumnIndex].Width =
+                    PerformanceColumnSize;
+                dgvPortfolioFooterFinalValue
+                        .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.EFinalValueColumnIndex].Width =
+                    MarketFinalValueColumnSize;
+                dgvPortfolioFooterFinalValue
+                        .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.ECompletePerformanceColumnIndex].Width =
+                    CompletePerformanceColumnSize;
+                dgvPortfolioFooterFinalValue
+                        .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.ECompleteFinalValueColumnIndex].Width =
+                    CompleteMarketFinalValueColumnSize;
 
-                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelBrokerageDividendIndex].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelBrokerageDividendIndex].FillWeight = 10;
+                dgvPortfolioFooterFinalValue
+                        .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.ELabelBrokerageDividendIndex]
+                        .AutoSizeMode =
+                    DataGridViewAutoSizeColumnMode.Fill;
+                dgvPortfolioFooterFinalValue
+                    .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.ELabelBrokerageDividendIndex].FillWeight = 10;
 
                 #endregion Footer configuration
 
                 #region Footer aligment configuration
 
-                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelBrokerageDividendIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.EBrokerageDividendIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelTotalColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.EPerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.EFinalValueColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ECompletePerformanceColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvPortfolioFooterFinalValue.Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ECompleteFinalValueColumnIndex].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFooterFinalValue
+                    .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.ELabelBrokerageDividendIndex].DefaultCellStyle
+                    .Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFooterFinalValue
+                    .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.EBrokerageDividendIndex].DefaultCellStyle
+                    .Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFooterFinalValue
+                    .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.ELabelTotalColumnIndex].DefaultCellStyle
+                    .Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFooterFinalValue
+                    .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.EPerformanceColumnIndex].DefaultCellStyle
+                    .Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFooterFinalValue
+                    .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.EFinalValueColumnIndex].DefaultCellStyle
+                    .Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFooterFinalValue
+                    .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.ECompletePerformanceColumnIndex]
+                    .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dgvPortfolioFooterFinalValue
+                    .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.ECompleteFinalValueColumnIndex]
+                    .DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
                 #endregion Footer aligment configuration
 
@@ -1189,7 +1289,8 @@ namespace SharePortfolioManager
                 if (AddFlagFinalValue == false && DeleteFlagFinalValue == false)
                 {
                     // Scroll to the selected row
-                    Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
+                    Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex,
+                        LastFirstDisplayedRowIndex);
                 }
 
                 // When a share has been added clear the data grid view final value selection
@@ -1206,7 +1307,8 @@ namespace SharePortfolioManager
                     dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
 
                     // Scroll to the selected row
-                    Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
+                    Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex,
+                        LastFirstDisplayedRowIndex);
 
                     if (dgvPortfolioFinalValue.RowCount == 1)
                     {
@@ -1247,7 +1349,8 @@ namespace SharePortfolioManager
                     dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
 
                     // Scroll to the selected row
-                    Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
+                    Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex,
+                        LastFirstDisplayedRowIndex, true);
                 }
                 else
                 {
@@ -1260,21 +1363,16 @@ namespace SharePortfolioManager
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
                 // Set initialization flag
                 InitFlag = false;
 
-                // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(
-                        @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio_Error/DisplayFailed", LanguageName),
+                        @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/DgvPortfolio_Error/DisplayFailed",
+                        LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -1292,7 +1390,8 @@ namespace SharePortfolioManager
                 #region dgvPortfolioMarketValue
 
                 // Set colors correctly corresponding to the data grid view market value row colors
-                if (dgvPortfolioMarketValue.RowsDefaultCellStyle.BackColor == Color.LightGray && dgvPortfolioMarketValue.RowCount % 2 == 0)
+                if (dgvPortfolioMarketValue.RowsDefaultCellStyle.BackColor == Color.LightGray &&
+                    dgvPortfolioMarketValue.RowCount % 2 == 0)
                 {
                     dgvPortfolioFooterMarketValue.RowsDefaultCellStyle.BackColor = Color.LightGray;
                     dgvPortfolioFooterMarketValue.AlternatingRowsDefaultCellStyle.BackColor = Color.White;
@@ -1342,7 +1441,8 @@ namespace SharePortfolioManager
                 #region dgvPortfolioFinalValue
 
                 // Set colors correctly corresponding to the data grid view final value row colors
-                if (dgvPortfolioFinalValue.RowsDefaultCellStyle.BackColor == Color.LightGray && dgvPortfolioFinalValue.RowCount % 2 == 0)
+                if (dgvPortfolioFinalValue.RowsDefaultCellStyle.BackColor == Color.LightGray &&
+                    dgvPortfolioFinalValue.RowCount % 2 == 0)
                 {
                     dgvPortfolioFooterFinalValue.RowsDefaultCellStyle.BackColor = Color.LightGray;
                     dgvPortfolioFooterFinalValue.AlternatingRowsDefaultCellStyle.BackColor = Color.White;
@@ -1353,7 +1453,8 @@ namespace SharePortfolioManager
                     dgvPortfolioFooterFinalValue.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
                 }
 
-                if (dgvPortfolioFooterFinalValue.Rows.Count == 3 && ShareObjectListFinalValue.Count > 0 && ShareObjectListFinalValue[0] != null)
+                if (dgvPortfolioFooterFinalValue.Rows.Count == 3 && ShareObjectListFinalValue.Count > 0 &&
+                    ShareObjectListFinalValue[0] != null)
                 {
                     // Set purchase value of the current stock volume
                     dgvPortfolioFooterFinalValue.Rows[0].Cells[
@@ -1377,12 +1478,12 @@ namespace SharePortfolioManager
 
                     // Set performance value of all transactions
                     dgvPortfolioFooterFinalValue.Rows[1].Cells[
-                            (int)ColumnIndicesPortfolioFooterFinalValue.ECompletePerformanceColumnIndex].Value =
+                            (int) ColumnIndicesPortfolioFooterFinalValue.ECompletePerformanceColumnIndex].Value =
                         ShareObjectListMarketValue[0].PortfolioCompleteProfitLossPerformanceAsStrUnit;
 
                     // Set final value of all transactions
                     dgvPortfolioFooterFinalValue.Rows[2].Cells[
-                            (int)ColumnIndicesPortfolioFooterFinalValue.ECompleteFinalValueColumnIndex].Value =
+                            (int) ColumnIndicesPortfolioFooterFinalValue.ECompleteFinalValueColumnIndex].Value =
                         ShareObjectListMarketValue[0].PortfolioCompleteMarketValueWithProfitLossAsStrUnit;
                 }
 
@@ -1390,21 +1491,16 @@ namespace SharePortfolioManager
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
                 // Set initialization flag
                 InitFlag = false;
 
-                // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(
-                        @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter_Error/RefreshFailed", LanguageName),
+                        @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/DgvPortfolioFooter_Error/RefreshFailed",
+                        LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -1419,7 +1515,7 @@ namespace SharePortfolioManager
         /// <param name="e">EventArgs</param>
         private void DgvPortfolioFinalValue_MouseEnter(object sender, EventArgs e)
         {
-            ((DataGridView)sender).Focus();
+            ((DataGridView) sender).Focus();
         }
 
         /// <summary>
@@ -1429,7 +1525,7 @@ namespace SharePortfolioManager
         /// <param name="e">EventArgs</param>
         private void DgvPortfolioMarketValue_MouseEnter(object sender, EventArgs e)
         {
-            ((DataGridView)sender).Focus();
+            ((DataGridView) sender).Focus();
         }
 
         #endregion Data grid view enter
@@ -1516,7 +1612,8 @@ namespace SharePortfolioManager
                 // Check if the second clicked row is the not same as the first clicked row
                 // and if the time between the first and second click is not greater than the double click detection time
                 // so no double click has been made
-                if (_isFirstRowIndex != e.RowIndex || _checkDoubleClickMilliSeconds >= SystemInformation.DoubleClickTime) return;
+                if (_isFirstRowIndex != e.RowIndex ||
+                    _checkDoubleClickMilliSeconds >= SystemInformation.DoubleClickTime) return;
 
                 _isDoubleRowIndex = e.RowIndex;
                 _isSecondCellClick = true;
@@ -1560,9 +1657,13 @@ namespace SharePortfolioManager
             // Offset smaller than selected data grid view
             const int offSetX = 0;
             // Width of the selected data grid view
-            var dgvWidth = MarketValueOverviewTabSelected ? dgvPortfolioMarketValue.Width : dgvPortfolioFinalValue.Width;
+            var dgvWidth = MarketValueOverviewTabSelected
+                ? dgvPortfolioMarketValue.Width
+                : dgvPortfolioFinalValue.Width;
             // Get location point of the selected data grid view
-            var dgvLocation = MarketValueOverviewTabSelected ? dgvPortfolioMarketValue.PointToScreen(Point.Empty) : dgvPortfolioFinalValue.PointToScreen(Point.Empty);
+            var dgvLocation = MarketValueOverviewTabSelected
+                ? dgvPortfolioMarketValue.PointToScreen(Point.Empty)
+                : dgvPortfolioFinalValue.PointToScreen(Point.Empty);
 
             // Check if the chart form should be shown under or above the mouse pointer
             if (MousePosition.Y - Location.Y + FrmChart.Height - offSetY <= Height)
@@ -1617,7 +1718,7 @@ namespace SharePortfolioManager
                     timerMouseCellDownDoubleClick.Enabled = false;
 
                     // Create ShareDetails form
-                    FrmShareDetailsForm = new ShareDetailsForm.ShareDetailsForm(MarketValueOverviewTabSelected,
+                    FrmShareDetailsForm = new FrmShareDetails(MarketValueOverviewTabSelected,
                         ShareObjectFinalValue, ShareObjectMarketValue,
                         rchTxtBoxStateMessage, Logger,
                         Language, LanguageName);
@@ -1628,9 +1729,13 @@ namespace SharePortfolioManager
                     // Offset smaller than selected data grid view
                     const int offSetX = 0;
                     // Width of the selected data grid view
-                    var dgvWidth = MarketValueOverviewTabSelected ? dgvPortfolioMarketValue.Width : dgvPortfolioFinalValue.Width;
+                    var dgvWidth = MarketValueOverviewTabSelected
+                        ? dgvPortfolioMarketValue.Width
+                        : dgvPortfolioFinalValue.Width;
                     // Get location point of the selected data grid view
-                    var dgvLocation = MarketValueOverviewTabSelected ? dgvPortfolioMarketValue.PointToScreen(Point.Empty) : dgvPortfolioFinalValue.PointToScreen(Point.Empty);
+                    var dgvLocation = MarketValueOverviewTabSelected
+                        ? dgvPortfolioMarketValue.PointToScreen(Point.Empty)
+                        : dgvPortfolioFinalValue.PointToScreen(Point.Empty);
 
                     // Check if the chart form should be shown under or above the mouse pointer
                     if (MousePosition.Y - Location.Y + FrmShareDetailsForm.Height - offSetY <= Height)
@@ -1656,21 +1761,13 @@ namespace SharePortfolioManager
                     FrmShareDetailsForm.ShowDialog();
                     FrmShareDetailsForm = null;
                 }
-#if DEBUG
                 catch (Exception ex)
                 {
-                    var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                    MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-#else           
-                catch
-                { 
-#endif
-                // Add status message
-                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
                         Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
                         Language, LanguageName,
-                        Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
+                        Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
+                        ex);
                 }
             }
 

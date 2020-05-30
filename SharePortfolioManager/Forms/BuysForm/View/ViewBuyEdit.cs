@@ -20,6 +20,9 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_BUY_EDIT_VIEW
+
 using LanguageHandler;
 using Logging;
 using Parser;
@@ -1014,16 +1017,11 @@ namespace SharePortfolioManager.BuysForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_BUY || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ShowFailed", LanguageName),
                     Language, LanguageName, Color.DarkRed, Logger,
-                    (int) FrmMain.EStateLevels.FatalError, (int) FrmMain.EComponentLevels.Application);
+                    (int) FrmMain.EStateLevels.FatalError, (int) FrmMain.EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -1524,12 +1522,8 @@ namespace SharePortfolioManager.BuysForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                Helper.ShowExceptionMessage(ex);
 
-#endif
                 toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Red;
                 toolStripStatusLabelMessageBuyDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingErrors/ParsingFailed", LanguageName);
 
@@ -1582,17 +1576,12 @@ namespace SharePortfolioManager.BuysForm.View
         }
         catch (Exception ex)
         {
-#if DEBUG_BUY || DEBUG
-            var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-            MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                MessageBoxIcon.Error);
-#endif
-            // Add status message
             Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
                 Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/AddFailed", LanguageName),
                 Language, LanguageName,
                 Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
-                (int) FrmMain.EComponentLevels.Application);
+                (int) FrmMain.EComponentLevels.Application,
+                ex);
         }
     }
 
@@ -1616,8 +1605,8 @@ namespace SharePortfolioManager.BuysForm.View
                 toolStripStatusLabelMessageBuyDocumentParsing.Text = string.Empty;
                 toolStripProgressBarBuyDocumentParsing.Visible = false;
 
-                var strCaption = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Info",
-                    LanguageName);
+                var strCaption = Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
+                    (int) EOwnMessageBoxInfoType.Info];
                 var strMessage = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/BuyDelete",
                     LanguageName);
                 var strOk = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok",
@@ -1657,17 +1646,12 @@ namespace SharePortfolioManager.BuysForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_BUY || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DeleteFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
-                    (int) FrmMain.EComponentLevels.Application);
+                    (int) FrmMain.EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -1685,17 +1669,13 @@ namespace SharePortfolioManager.BuysForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_BUY || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
+
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/CancelFailure", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
-                    (int) FrmMain.EComponentLevels.Application);
+                    (int) FrmMain.EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -1953,16 +1933,11 @@ namespace SharePortfolioManager.BuysForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_BUY || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ShowFailed", LanguageName),
                     Language, LanguageName, Color.DarkRed, Logger,
-                    (int) FrmMain.EStateLevels.FatalError, (int) FrmMain.EComponentLevels.Application);
+                    (int) FrmMain.EStateLevels.FatalError, (int) FrmMain.EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -1998,12 +1973,13 @@ namespace SharePortfolioManager.BuysForm.View
 
                             break;
                         case 1:
+                            // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                             if (((DataGridView) sender).Name == @"Overview")
                             {
                                 ((DataGridView) sender).Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Volume",
-                                        LanguageName) + @" (" + ShareObject.PieceUnit + @")";
+                                        LanguageName);
                             }
                             else
                             {
@@ -2015,19 +1991,20 @@ namespace SharePortfolioManager.BuysForm.View
 
                             break;
                         case 2:
+                            // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                             if (((DataGridView) sender).Name == @"Overview")
                             {
                                 ((DataGridView) sender).Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Purchase",
-                                        LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
+                                        LanguageName);
                             }
                             else
                             {
                                 ((DataGridView) sender).Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Volume",
-                                        LanguageName) + @" (" + ShareObject.PieceUnit + @")";
+                                        LanguageName);
                             }
 
                             break;
@@ -2035,19 +2012,19 @@ namespace SharePortfolioManager.BuysForm.View
                             ((DataGridView) sender).Columns[i].HeaderText =
                                 Language.GetLanguageTextByXPath(
                                     @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Price",
-                                    LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
+                                    LanguageName);
                             break;
                         case 4:
                             ((DataGridView) sender).Columns[i].HeaderText =
                                 Language.GetLanguageTextByXPath(
                                     @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Brokerage",
-                                    LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
+                                    LanguageName);
                             break;
                         case 5:
                             ((DataGridView) sender).Columns[i].HeaderText =
                                 Language.GetLanguageTextByXPath(
                                     @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/DgvBuyOverview/ColHeader_Purchase",
-                                    LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
+                                    LanguageName);
                             break;
                         case 6:
                             ((DataGridView) sender).Columns[i].HeaderText =
@@ -2072,17 +2049,12 @@ namespace SharePortfolioManager.BuysForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_BUY || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/RenameColHeaderFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
-                    (int) FrmMain.EComponentLevels.Application);
+                    (int) FrmMain.EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -2110,17 +2082,12 @@ namespace SharePortfolioManager.BuysForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_BUY || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DeselectFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
-                    (int) FrmMain.EComponentLevels.Application);
+                    (int) FrmMain.EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -2155,17 +2122,12 @@ namespace SharePortfolioManager.BuysForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_BUY || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
-                    (int) FrmMain.EComponentLevels.Application);
+                    (int) FrmMain.EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -2274,17 +2236,12 @@ namespace SharePortfolioManager.BuysForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_BUY || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
-                    (int) FrmMain.EComponentLevels.Application);
+                    (int) FrmMain.EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -2358,7 +2315,7 @@ namespace SharePortfolioManager.BuysForm.View
                         txtBoxBrokerFee.Text = selectedBuyObject.BrokerFeeAsStr;
                         txtBoxTraderPlaceFee.Text = selectedBuyObject.TraderPlaceFeeAsStr;
                         txtBoxReduction.Text = selectedBuyObject.ReductionAsStr;
-                        txtBoxDocument.Text = selectedBuyObject.Document;
+                        txtBoxDocument.Text = selectedBuyObject.DocumentAsStr;
                     }
                     else
                     {
@@ -2461,17 +2418,12 @@ namespace SharePortfolioManager.BuysForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_BUY || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
-                    (int) FrmMain.EComponentLevels.Application);
+                    (int) FrmMain.EComponentLevels.Application,
+                    ex);
 
                 OnShowBuys();
             }
@@ -2520,17 +2472,17 @@ namespace SharePortfolioManager.BuysForm.View
                     if (temp.Guid != strGuid) continue;
 
                     // Check if a file is set for this buy
-                    if (temp.Document != "")
+                    if (temp.DocumentAsStr != "")
                     {
                         // Check if the file still exists
-                        if (File.Exists(temp.Document))
+                        if (File.Exists(temp.DocumentAsStr))
                             // Open the file
-                            Process.Start(temp.Document);
+                            Process.Start(temp.DocumentAsStr);
                         else
                         {
                             var strCaption =
-                                Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Error",
-                                    LanguageName);
+                                Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
+                                    (int) EOwnMessageBoxInfoType.Error];
                             var strMessage =
                                 Language.GetLanguageTextByXPath(
                                     @"/MessageBoxForm/Content/DocumentDoesNotExistDelete",
@@ -2555,7 +2507,6 @@ namespace SharePortfolioManager.BuysForm.View
 
                                     OnShowBuys();
 
-                                    // Add status message
                                     Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
                                         Language.GetLanguageTextByXPath(
                                             @"/AddEditFormBuy/StateMessages/EditSuccess", LanguageName),
@@ -2580,17 +2531,12 @@ namespace SharePortfolioManager.BuysForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_BUY || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DocumentShowFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
-                    (int) FrmMain.EComponentLevels.Application);
+                    (int) FrmMain.EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -2638,20 +2584,14 @@ namespace SharePortfolioManager.BuysForm.View
             }
             catch (OperationCanceledException ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error 1", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
+                Helper.ShowExceptionMessage(ex);
+
                 _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error 2", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
+                Helper.ShowExceptionMessage(ex);
+
                 _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
             }
         }
@@ -2700,11 +2640,8 @@ namespace SharePortfolioManager.BuysForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
+                Helper.ShowExceptionMessage(ex);
+
                 _parsingThreadFinished = true;
                 _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingFailed);
             }
@@ -2994,11 +2931,8 @@ namespace SharePortfolioManager.BuysForm.View
                     }
                     catch (Exception ex)
                     {
-#if DEBUG
-                        var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                        MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                            MessageBoxIcon.Error);
-#endif
+                        Helper.ShowExceptionMessage(ex);
+
                         DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
                         _parsingThreadFinished = true;
                         _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
@@ -3007,11 +2941,8 @@ namespace SharePortfolioManager.BuysForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
+                Helper.ShowExceptionMessage(ex);
+
                 DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
                 _parsingThreadFinished = true;
                 _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);

@@ -1,6 +1,6 @@
 ﻿namespace SharePortfolioManager.ShareDetailsForm
 {
-    partial class ShareDetailsForm
+    partial class FrmShareDetails
     {
         /// <summary>
         /// Required designer variable.
@@ -31,23 +31,23 @@
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             this.grpBoxShareDetails = new System.Windows.Forms.GroupBox();
             this.tblLayPnlShareDetailsTabControls = new System.Windows.Forms.TableLayoutPanel();
-            this.tabCtrlDetails = new System.Windows.Forms.TabControl();
-            this.tabPgDetailsChart = new System.Windows.Forms.TabPage();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.tabCtrlShareDetails = new System.Windows.Forms.TabControl();
+            this.tabPgDetailsChartValues = new System.Windows.Forms.TabPage();
+            this.statusStripChart = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelUpdate = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpShareDetailsButtons = new System.Windows.Forms.TableLayoutPanel();
             this.btnOk = new System.Windows.Forms.Button();
             this.btnOpenWebSite = new System.Windows.Forms.Button();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpShareDetailsChart = new System.Windows.Forms.TableLayoutPanel();
             this.chartDailyValues = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.lblDailyValuesSelection = new System.Windows.Forms.Label();
-            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpShareDetailsStartDate = new System.Windows.Forms.TableLayoutPanel();
             this.lblStartDate = new System.Windows.Forms.Label();
             this.dateTimePickerStartDate = new System.Windows.Forms.DateTimePicker();
-            this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpShareDetailsInterval = new System.Windows.Forms.TableLayoutPanel();
             this.lblIntervalSelection = new System.Windows.Forms.Label();
             this.cbxIntervalSelection = new System.Windows.Forms.ComboBox();
-            this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpShareDetailsAmount = new System.Windows.Forms.TableLayoutPanel();
             this.lblAmount = new System.Windows.Forms.Label();
             this.numDrpDwnAmount = new System.Windows.Forms.NumericUpDown();
             this.chkClosingPrice = new System.Windows.Forms.CheckBox();
@@ -56,7 +56,9 @@
             this.chkBottom = new System.Windows.Forms.CheckBox();
             this.chkVolume = new System.Windows.Forms.CheckBox();
             this.tabPgDetailsFinalValue = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel7 = new System.Windows.Forms.TableLayoutPanel();
+            this.statusStripCompleteValues = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabelCompleteValues = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlpCompleteValuesCurrentCalculation = new System.Windows.Forms.TableLayoutPanel();
             this.label27 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
@@ -77,7 +79,7 @@
             this.lblDetailsFinalValueCurrentDividend = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
             this.lblDetailsFinalValueCurrentCurPriceValue = new System.Windows.Forms.Label();
-            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpCompleteValuesOverCalculation = new System.Windows.Forms.TableLayoutPanel();
             this.lblDetailsFinalValueTotalPerformanceValue = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.lblDetailsFinalValueTotalProfitLossValue = new System.Windows.Forms.Label();
@@ -107,7 +109,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.lblDetailsFinalValueTotalSaleValue = new System.Windows.Forms.Label();
             this.lblDetailsFinalValueTotalDividendValue = new System.Windows.Forms.Label();
-            this.tlpPrevDayValues = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpCompleteValuesPrevDayValues = new System.Windows.Forms.TableLayoutPanel();
             this.lblDetailsFinalValuePrevDayCalculation = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
@@ -130,7 +132,9 @@
             this.lblDetailsFinalValueDiffSumPrevValue = new System.Windows.Forms.Label();
             this.lblDetailsFinalValueDateValue = new System.Windows.Forms.Label();
             this.tabPgDetailsMarketValue = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel8 = new System.Windows.Forms.TableLayoutPanel();
+            this.statusStripMarketValues = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabelMarketValues = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlpMarketValuesCurrentCalculation = new System.Windows.Forms.TableLayoutPanel();
             this.label28 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
@@ -151,7 +155,7 @@
             this.lblDetailsMarketValueCurrentDividend = new System.Windows.Forms.Label();
             this.label40 = new System.Windows.Forms.Label();
             this.lblDetailsMarketValueCurrentCurPriceValue = new System.Windows.Forms.Label();
-            this.tableLayoutPanel9 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpMarketValuesOverallCalculation = new System.Windows.Forms.TableLayoutPanel();
             this.lblDetailsMarketValueTotalPerformanceValue = new System.Windows.Forms.Label();
             this.label43 = new System.Windows.Forms.Label();
             this.lblDetailsMarketValueTotalProfitLossValue = new System.Windows.Forms.Label();
@@ -181,7 +185,7 @@
             this.label68 = new System.Windows.Forms.Label();
             this.lblDetailsMarketValueTotalSaleValue = new System.Windows.Forms.Label();
             this.lblDetailsMarketValueTotalDividendValue = new System.Windows.Forms.Label();
-            this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpMarketValuesPreDayValues = new System.Windows.Forms.TableLayoutPanel();
             this.lblDetailsMarketValuePrevDayCalculation = new System.Windows.Forms.Label();
             this.label72 = new System.Windows.Forms.Label();
             this.label73 = new System.Windows.Forms.Label();
@@ -203,35 +207,37 @@
             this.lblDetailsMarketValueDiffSumPrev = new System.Windows.Forms.Label();
             this.lblDetailsMarketValueDiffSumPrevValue = new System.Windows.Forms.Label();
             this.lblDetailsMarketValueDateValue = new System.Windows.Forms.Label();
-            this.tabPgProfitLoss = new System.Windows.Forms.TabPage();
-            this.tabCtrlProfitLoss = new System.Windows.Forms.TabControl();
-            this.tabPgDividends = new System.Windows.Forms.TabPage();
-            this.tabCtrlDividends = new System.Windows.Forms.TabControl();
-            this.tabPgBrokerage = new System.Windows.Forms.TabPage();
-            this.tabCtrlBrokerage = new System.Windows.Forms.TabControl();
+            this.tabPgDetailsProfitLoss = new System.Windows.Forms.TabPage();
+            this.tabPgDetailsProfitLossValues = new System.Windows.Forms.TabControl();
+            this.tabPgDetailsDividends = new System.Windows.Forms.TabPage();
+            this.tabPgDetailsDividendValues = new System.Windows.Forms.TabControl();
+            this.tabPgDetailsBrokerages = new System.Windows.Forms.TabPage();
+            this.tabPgDetailsBrokerageValues = new System.Windows.Forms.TabControl();
             this.grpBoxShareDetails.SuspendLayout();
             this.tblLayPnlShareDetailsTabControls.SuspendLayout();
-            this.tabCtrlDetails.SuspendLayout();
-            this.tabPgDetailsChart.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
-            this.tableLayoutPanel2.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.tabCtrlShareDetails.SuspendLayout();
+            this.tabPgDetailsChartValues.SuspendLayout();
+            this.statusStripChart.SuspendLayout();
+            this.tlpShareDetailsButtons.SuspendLayout();
+            this.tlpShareDetailsChart.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartDailyValues)).BeginInit();
-            this.tableLayoutPanel3.SuspendLayout();
-            this.tableLayoutPanel4.SuspendLayout();
-            this.tableLayoutPanel5.SuspendLayout();
+            this.tlpShareDetailsStartDate.SuspendLayout();
+            this.tlpShareDetailsInterval.SuspendLayout();
+            this.tlpShareDetailsAmount.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numDrpDwnAmount)).BeginInit();
             this.tabPgDetailsFinalValue.SuspendLayout();
-            this.tableLayoutPanel7.SuspendLayout();
-            this.tableLayoutPanel6.SuspendLayout();
-            this.tlpPrevDayValues.SuspendLayout();
+            this.statusStripCompleteValues.SuspendLayout();
+            this.tlpCompleteValuesCurrentCalculation.SuspendLayout();
+            this.tlpCompleteValuesOverCalculation.SuspendLayout();
+            this.tlpCompleteValuesPrevDayValues.SuspendLayout();
             this.tabPgDetailsMarketValue.SuspendLayout();
-            this.tableLayoutPanel8.SuspendLayout();
-            this.tableLayoutPanel9.SuspendLayout();
-            this.tableLayoutPanel10.SuspendLayout();
-            this.tabPgProfitLoss.SuspendLayout();
-            this.tabPgDividends.SuspendLayout();
-            this.tabPgBrokerage.SuspendLayout();
+            this.statusStripMarketValues.SuspendLayout();
+            this.tlpMarketValuesCurrentCalculation.SuspendLayout();
+            this.tlpMarketValuesOverallCalculation.SuspendLayout();
+            this.tlpMarketValuesPreDayValues.SuspendLayout();
+            this.tabPgDetailsProfitLoss.SuspendLayout();
+            this.tabPgDetailsDividends.SuspendLayout();
+            this.tabPgDetailsBrokerages.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpBoxShareDetails
@@ -256,7 +262,7 @@
             this.tblLayPnlShareDetailsTabControls.ColumnCount = 1;
             this.tblLayPnlShareDetailsTabControls.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblLayPnlShareDetailsTabControls.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tblLayPnlShareDetailsTabControls.Controls.Add(this.tabCtrlDetails, 0, 0);
+            this.tblLayPnlShareDetailsTabControls.Controls.Add(this.tabCtrlShareDetails, 0, 0);
             this.tblLayPnlShareDetailsTabControls.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tblLayPnlShareDetailsTabControls.Location = new System.Drawing.Point(3, 19);
             this.tblLayPnlShareDetailsTabControls.Margin = new System.Windows.Forms.Padding(3, 3, 3, 5);
@@ -267,46 +273,46 @@
             this.tblLayPnlShareDetailsTabControls.Size = new System.Drawing.Size(1571, 481);
             this.tblLayPnlShareDetailsTabControls.TabIndex = 0;
             // 
-            // tabCtrlDetails
+            // tabCtrlShareDetails
             // 
-            this.tabCtrlDetails.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-            this.tabCtrlDetails.Controls.Add(this.tabPgDetailsChart);
-            this.tabCtrlDetails.Controls.Add(this.tabPgDetailsFinalValue);
-            this.tabCtrlDetails.Controls.Add(this.tabPgDetailsMarketValue);
-            this.tabCtrlDetails.Controls.Add(this.tabPgProfitLoss);
-            this.tabCtrlDetails.Controls.Add(this.tabPgDividends);
-            this.tabCtrlDetails.Controls.Add(this.tabPgBrokerage);
-            this.tabCtrlDetails.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabCtrlDetails.Location = new System.Drawing.Point(3, 0);
-            this.tabCtrlDetails.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
-            this.tabCtrlDetails.MinimumSize = new System.Drawing.Size(906, 402);
-            this.tabCtrlDetails.Name = "tabCtrlDetails";
-            this.tabCtrlDetails.SelectedIndex = 0;
-            this.tabCtrlDetails.Size = new System.Drawing.Size(1565, 478);
-            this.tabCtrlDetails.TabIndex = 0;
-            this.tabCtrlDetails.SelectedIndexChanged += new System.EventHandler(this.TabCtrlDetails_SelectedIndexChanged);
+            this.tabCtrlShareDetails.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
+            this.tabCtrlShareDetails.Controls.Add(this.tabPgDetailsChartValues);
+            this.tabCtrlShareDetails.Controls.Add(this.tabPgDetailsFinalValue);
+            this.tabCtrlShareDetails.Controls.Add(this.tabPgDetailsMarketValue);
+            this.tabCtrlShareDetails.Controls.Add(this.tabPgDetailsProfitLoss);
+            this.tabCtrlShareDetails.Controls.Add(this.tabPgDetailsDividends);
+            this.tabCtrlShareDetails.Controls.Add(this.tabPgDetailsBrokerages);
+            this.tabCtrlShareDetails.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabCtrlShareDetails.Location = new System.Drawing.Point(3, 0);
+            this.tabCtrlShareDetails.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
+            this.tabCtrlShareDetails.MinimumSize = new System.Drawing.Size(906, 402);
+            this.tabCtrlShareDetails.Name = "tabCtrlShareDetails";
+            this.tabCtrlShareDetails.SelectedIndex = 0;
+            this.tabCtrlShareDetails.Size = new System.Drawing.Size(1565, 478);
+            this.tabCtrlShareDetails.TabIndex = 0;
+            this.tabCtrlShareDetails.SelectedIndexChanged += new System.EventHandler(this.TabCtrlDetails_SelectedIndexChanged);
             // 
-            // tabPgDetailsChart
+            // tabPgDetailsChartValues
             // 
-            this.tabPgDetailsChart.Controls.Add(this.statusStrip1);
-            this.tabPgDetailsChart.Controls.Add(this.tableLayoutPanel2);
-            this.tabPgDetailsChart.Controls.Add(this.tableLayoutPanel1);
-            this.tabPgDetailsChart.Location = new System.Drawing.Point(4, 26);
-            this.tabPgDetailsChart.Name = "tabPgDetailsChart";
-            this.tabPgDetailsChart.Size = new System.Drawing.Size(1557, 448);
-            this.tabPgDetailsChart.TabIndex = 5;
-            this.tabPgDetailsChart.Text = "tabPgDetailsChart_";
-            this.tabPgDetailsChart.UseVisualStyleBackColor = true;
+            this.tabPgDetailsChartValues.Controls.Add(this.statusStripChart);
+            this.tabPgDetailsChartValues.Controls.Add(this.tlpShareDetailsButtons);
+            this.tabPgDetailsChartValues.Controls.Add(this.tlpShareDetailsChart);
+            this.tabPgDetailsChartValues.Location = new System.Drawing.Point(4, 26);
+            this.tabPgDetailsChartValues.Name = "tabPgDetailsChartValues";
+            this.tabPgDetailsChartValues.Size = new System.Drawing.Size(1557, 448);
+            this.tabPgDetailsChartValues.TabIndex = 5;
+            this.tabPgDetailsChartValues.Text = "ShareChart_";
+            this.tabPgDetailsChartValues.UseVisualStyleBackColor = true;
             // 
-            // statusStrip1
+            // statusStripChart
             // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusStripChart.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelUpdate});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 426);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1557, 22);
-            this.statusStrip1.TabIndex = 3;
-            this.statusStrip1.Text = "statusStrip1";
+            this.statusStripChart.Location = new System.Drawing.Point(0, 426);
+            this.statusStripChart.Name = "statusStripChart";
+            this.statusStripChart.Size = new System.Drawing.Size(1557, 22);
+            this.statusStripChart.TabIndex = 3;
+            this.statusStripChart.Text = "statusStrip1";
             // 
             // toolStripStatusLabelUpdate
             // 
@@ -314,23 +320,24 @@
             this.toolStripStatusLabelUpdate.Size = new System.Drawing.Size(0, 17);
             this.toolStripStatusLabelUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // tableLayoutPanel2
+            // tlpShareDetailsButtons
             // 
-            this.tableLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.tlpShareDetailsButtons.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel2.ColumnCount = 3;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel2.Controls.Add(this.btnOk, 2, 0);
-            this.tableLayoutPanel2.Controls.Add(this.btnOpenWebSite, 1, 0);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 386);
-            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 1;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(1551, 35);
-            this.tableLayoutPanel2.TabIndex = 2;
+            this.tlpShareDetailsButtons.ColumnCount = 3;
+            this.tlpShareDetailsButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpShareDetailsButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
+            this.tlpShareDetailsButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
+            this.tlpShareDetailsButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpShareDetailsButtons.Controls.Add(this.btnOk, 2, 0);
+            this.tlpShareDetailsButtons.Controls.Add(this.btnOpenWebSite, 1, 0);
+            this.tlpShareDetailsButtons.Location = new System.Drawing.Point(3, 388);
+            this.tlpShareDetailsButtons.Name = "tlpShareDetailsButtons";
+            this.tlpShareDetailsButtons.RowCount = 1;
+            this.tlpShareDetailsButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpShareDetailsButtons.Size = new System.Drawing.Size(1551, 35);
+            this.tlpShareDetailsButtons.TabIndex = 2;
             // 
             // btnOk
             // 
@@ -364,40 +371,40 @@
             this.btnOpenWebSite.UseVisualStyleBackColor = true;
             this.btnOpenWebSite.Click += new System.EventHandler(this.OnBtnOpenWebSite_Click);
             // 
-            // tableLayoutPanel1
+            // tlpShareDetailsChart
             // 
-            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.tlpShareDetailsChart.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 210F));
-            this.tableLayoutPanel1.Controls.Add(this.chartDailyValues, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.lblDailyValuesSelection, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 1, 6);
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel4, 1, 7);
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel5, 1, 8);
-            this.tableLayoutPanel1.Controls.Add(this.chkClosingPrice, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.chkOpeningPrice, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.chkTop, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.chkBottom, 1, 4);
-            this.tableLayoutPanel1.Controls.Add(this.chkVolume, 1, 5);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 10;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1551, 380);
-            this.tableLayoutPanel1.TabIndex = 1;
+            this.tlpShareDetailsChart.ColumnCount = 2;
+            this.tlpShareDetailsChart.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpShareDetailsChart.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 210F));
+            this.tlpShareDetailsChart.Controls.Add(this.chartDailyValues, 0, 0);
+            this.tlpShareDetailsChart.Controls.Add(this.lblDailyValuesSelection, 1, 0);
+            this.tlpShareDetailsChart.Controls.Add(this.tlpShareDetailsStartDate, 1, 6);
+            this.tlpShareDetailsChart.Controls.Add(this.tlpShareDetailsInterval, 1, 7);
+            this.tlpShareDetailsChart.Controls.Add(this.tlpShareDetailsAmount, 1, 8);
+            this.tlpShareDetailsChart.Controls.Add(this.chkClosingPrice, 1, 1);
+            this.tlpShareDetailsChart.Controls.Add(this.chkOpeningPrice, 1, 2);
+            this.tlpShareDetailsChart.Controls.Add(this.chkTop, 1, 3);
+            this.tlpShareDetailsChart.Controls.Add(this.chkBottom, 1, 4);
+            this.tlpShareDetailsChart.Controls.Add(this.chkVolume, 1, 5);
+            this.tlpShareDetailsChart.Location = new System.Drawing.Point(3, 3);
+            this.tlpShareDetailsChart.Name = "tlpShareDetailsChart";
+            this.tlpShareDetailsChart.RowCount = 10;
+            this.tlpShareDetailsChart.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpShareDetailsChart.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpShareDetailsChart.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpShareDetailsChart.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpShareDetailsChart.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpShareDetailsChart.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpShareDetailsChart.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tlpShareDetailsChart.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tlpShareDetailsChart.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tlpShareDetailsChart.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpShareDetailsChart.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpShareDetailsChart.Size = new System.Drawing.Size(1551, 379);
+            this.tlpShareDetailsChart.TabIndex = 1;
             // 
             // chartDailyValues
             // 
@@ -407,8 +414,8 @@
             this.chartDailyValues.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chartDailyValues.Location = new System.Drawing.Point(3, 3);
             this.chartDailyValues.Name = "chartDailyValues";
-            this.tableLayoutPanel1.SetRowSpan(this.chartDailyValues, 10);
-            this.chartDailyValues.Size = new System.Drawing.Size(1335, 374);
+            this.tlpShareDetailsChart.SetRowSpan(this.chartDailyValues, 10);
+            this.chartDailyValues.Size = new System.Drawing.Size(1335, 373);
             this.chartDailyValues.TabIndex = 0;
             this.chartDailyValues.Text = "Daily values";
             // 
@@ -423,21 +430,21 @@
             this.lblDailyValuesSelection.Text = "lblDailyValuesSelction_";
             this.lblDailyValuesSelection.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // tableLayoutPanel3
+            // tlpShareDetailsStartDate
             // 
-            this.tableLayoutPanel3.ColumnCount = 2;
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Controls.Add(this.lblStartDate, 0, 0);
-            this.tableLayoutPanel3.Controls.Add(this.dateTimePickerStartDate, 1, 0);
-            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(1344, 147);
-            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 1;
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(204, 26);
-            this.tableLayoutPanel3.TabIndex = 14;
+            this.tlpShareDetailsStartDate.ColumnCount = 2;
+            this.tlpShareDetailsStartDate.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpShareDetailsStartDate.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpShareDetailsStartDate.Controls.Add(this.lblStartDate, 0, 0);
+            this.tlpShareDetailsStartDate.Controls.Add(this.dateTimePickerStartDate, 1, 0);
+            this.tlpShareDetailsStartDate.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpShareDetailsStartDate.Location = new System.Drawing.Point(1344, 147);
+            this.tlpShareDetailsStartDate.Name = "tlpShareDetailsStartDate";
+            this.tlpShareDetailsStartDate.RowCount = 1;
+            this.tlpShareDetailsStartDate.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpShareDetailsStartDate.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.tlpShareDetailsStartDate.Size = new System.Drawing.Size(204, 26);
+            this.tlpShareDetailsStartDate.TabIndex = 14;
             // 
             // lblStartDate
             // 
@@ -462,20 +469,20 @@
             this.dateTimePickerStartDate.TabIndex = 9;
             this.dateTimePickerStartDate.ValueChanged += new System.EventHandler(this.OnDateTimePickerStartDate_ValueChanged);
             // 
-            // tableLayoutPanel4
+            // tlpShareDetailsInterval
             // 
-            this.tableLayoutPanel4.ColumnCount = 2;
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel4.Controls.Add(this.lblIntervalSelection, 0, 0);
-            this.tableLayoutPanel4.Controls.Add(this.cbxIntervalSelection, 1, 0);
-            this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(1344, 179);
-            this.tableLayoutPanel4.Name = "tableLayoutPanel4";
-            this.tableLayoutPanel4.RowCount = 1;
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(204, 26);
-            this.tableLayoutPanel4.TabIndex = 15;
+            this.tlpShareDetailsInterval.ColumnCount = 2;
+            this.tlpShareDetailsInterval.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpShareDetailsInterval.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpShareDetailsInterval.Controls.Add(this.lblIntervalSelection, 0, 0);
+            this.tlpShareDetailsInterval.Controls.Add(this.cbxIntervalSelection, 1, 0);
+            this.tlpShareDetailsInterval.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpShareDetailsInterval.Location = new System.Drawing.Point(1344, 179);
+            this.tlpShareDetailsInterval.Name = "tlpShareDetailsInterval";
+            this.tlpShareDetailsInterval.RowCount = 1;
+            this.tlpShareDetailsInterval.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpShareDetailsInterval.Size = new System.Drawing.Size(204, 26);
+            this.tlpShareDetailsInterval.TabIndex = 15;
             // 
             // lblIntervalSelection
             // 
@@ -505,21 +512,21 @@
             this.cbxIntervalSelection.TabIndex = 11;
             this.cbxIntervalSelection.SelectedIndexChanged += new System.EventHandler(this.OnCbxIntervalSelection_SelectedIndexChanged);
             // 
-            // tableLayoutPanel5
+            // tlpShareDetailsAmount
             // 
-            this.tableLayoutPanel5.ColumnCount = 2;
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel5.Controls.Add(this.lblAmount, 0, 0);
-            this.tableLayoutPanel5.Controls.Add(this.numDrpDwnAmount, 1, 0);
-            this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(1344, 211);
-            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-            this.tableLayoutPanel5.RowCount = 1;
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(204, 26);
-            this.tableLayoutPanel5.TabIndex = 16;
+            this.tlpShareDetailsAmount.ColumnCount = 2;
+            this.tlpShareDetailsAmount.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpShareDetailsAmount.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpShareDetailsAmount.Controls.Add(this.lblAmount, 0, 0);
+            this.tlpShareDetailsAmount.Controls.Add(this.numDrpDwnAmount, 1, 0);
+            this.tlpShareDetailsAmount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpShareDetailsAmount.Location = new System.Drawing.Point(1344, 211);
+            this.tlpShareDetailsAmount.Name = "tlpShareDetailsAmount";
+            this.tlpShareDetailsAmount.RowCount = 1;
+            this.tlpShareDetailsAmount.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpShareDetailsAmount.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.tlpShareDetailsAmount.Size = new System.Drawing.Size(204, 26);
+            this.tlpShareDetailsAmount.TabIndex = 16;
             // 
             // lblAmount
             // 
@@ -617,10 +624,11 @@
             // 
             // tabPgDetailsFinalValue
             // 
-            this.tabPgDetailsFinalValue.BackColor = System.Drawing.Color.LightGray;
-            this.tabPgDetailsFinalValue.Controls.Add(this.tableLayoutPanel7);
-            this.tabPgDetailsFinalValue.Controls.Add(this.tableLayoutPanel6);
-            this.tabPgDetailsFinalValue.Controls.Add(this.tlpPrevDayValues);
+            this.tabPgDetailsFinalValue.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPgDetailsFinalValue.Controls.Add(this.statusStripCompleteValues);
+            this.tabPgDetailsFinalValue.Controls.Add(this.tlpCompleteValuesCurrentCalculation);
+            this.tabPgDetailsFinalValue.Controls.Add(this.tlpCompleteValuesOverCalculation);
+            this.tabPgDetailsFinalValue.Controls.Add(this.tlpCompleteValuesPrevDayValues);
             this.tabPgDetailsFinalValue.Controls.Add(this.lblDetailsFinalValueDateValue);
             this.tabPgDetailsFinalValue.Location = new System.Drawing.Point(4, 26);
             this.tabPgDetailsFinalValue.Margin = new System.Windows.Forms.Padding(0);
@@ -629,53 +637,70 @@
             this.tabPgDetailsFinalValue.TabIndex = 0;
             this.tabPgDetailsFinalValue.Text = "DetailsFinalValue_";
             // 
-            // tableLayoutPanel7
+            // statusStripCompleteValues
             // 
-            this.tableLayoutPanel7.ColumnCount = 5;
-            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
-            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
-            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
-            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
-            this.tableLayoutPanel7.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel7.Controls.Add(this.label27, 0, 3);
-            this.tableLayoutPanel7.Controls.Add(this.label14, 1, 6);
-            this.tableLayoutPanel7.Controls.Add(this.label20, 3, 7);
-            this.tableLayoutPanel7.Controls.Add(this.lblDetailsFinalValueCurrentSumValue, 4, 7);
-            this.tableLayoutPanel7.Controls.Add(this.lblDetailsFinalValueCurrentPurchaseValue, 4, 2);
-            this.tableLayoutPanel7.Controls.Add(this.lblDetailsFinalValueCurrentSum, 0, 7);
-            this.tableLayoutPanel7.Controls.Add(this.lblDetailsFinalValueCurrentCalculation, 0, 0);
-            this.tableLayoutPanel7.Controls.Add(this.lblDetailsFinalValueCurrentVolume, 0, 1);
-            this.tableLayoutPanel7.Controls.Add(this.lblDetailsFinalValueCurrentProfitLossSaleValue, 4, 5);
-            this.tableLayoutPanel7.Controls.Add(this.lblDetailsFinalValueCurrentDividendValue, 4, 4);
-            this.tableLayoutPanel7.Controls.Add(this.label23, 3, 5);
-            this.tableLayoutPanel7.Controls.Add(this.lblDetailsFinalValueCurrentCurPrice, 2, 1);
-            this.tableLayoutPanel7.Controls.Add(this.lblDetailsFinalValueCurrentProfitLossSale, 0, 5);
-            this.tableLayoutPanel7.Controls.Add(this.lblDetailsFinalValueCurrentPurchase, 4, 1);
-            this.tableLayoutPanel7.Controls.Add(this.lblDetailsFinalValueCurrentVolumeValue, 0, 2);
-            this.tableLayoutPanel7.Controls.Add(this.label26, 3, 2);
-            this.tableLayoutPanel7.Controls.Add(this.label22, 3, 4);
-            this.tableLayoutPanel7.Controls.Add(this.lblDetailsFinalValueCurrentDividend, 0, 4);
-            this.tableLayoutPanel7.Controls.Add(this.label21, 1, 2);
-            this.tableLayoutPanel7.Controls.Add(this.lblDetailsFinalValueCurrentCurPriceValue, 2, 2);
-            this.tableLayoutPanel7.Location = new System.Drawing.Point(8, 285);
-            this.tableLayoutPanel7.Name = "tableLayoutPanel7";
-            this.tableLayoutPanel7.RowCount = 8;
-            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel7.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel7.Size = new System.Drawing.Size(545, 156);
-            this.tableLayoutPanel7.TabIndex = 86;
+            this.statusStripCompleteValues.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabelCompleteValues});
+            this.statusStripCompleteValues.Location = new System.Drawing.Point(0, 426);
+            this.statusStripCompleteValues.Name = "statusStripCompleteValues";
+            this.statusStripCompleteValues.Size = new System.Drawing.Size(1557, 22);
+            this.statusStripCompleteValues.TabIndex = 87;
+            this.statusStripCompleteValues.Text = "statusStrip2";
+            // 
+            // toolStripStatusLabelCompleteValues
+            // 
+            this.toolStripStatusLabelCompleteValues.Name = "toolStripStatusLabelCompleteValues";
+            this.toolStripStatusLabelCompleteValues.Size = new System.Drawing.Size(0, 17);
+            this.toolStripStatusLabelCompleteValues.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tlpCompleteValuesCurrentCalculation
+            // 
+            this.tlpCompleteValuesCurrentCalculation.BackColor = System.Drawing.Color.LightGray;
+            this.tlpCompleteValuesCurrentCalculation.ColumnCount = 5;
+            this.tlpCompleteValuesCurrentCalculation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
+            this.tlpCompleteValuesCurrentCalculation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.tlpCompleteValuesCurrentCalculation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
+            this.tlpCompleteValuesCurrentCalculation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.tlpCompleteValuesCurrentCalculation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpCompleteValuesCurrentCalculation.Controls.Add(this.label27, 0, 3);
+            this.tlpCompleteValuesCurrentCalculation.Controls.Add(this.label14, 1, 6);
+            this.tlpCompleteValuesCurrentCalculation.Controls.Add(this.label20, 3, 7);
+            this.tlpCompleteValuesCurrentCalculation.Controls.Add(this.lblDetailsFinalValueCurrentSumValue, 4, 7);
+            this.tlpCompleteValuesCurrentCalculation.Controls.Add(this.lblDetailsFinalValueCurrentPurchaseValue, 4, 2);
+            this.tlpCompleteValuesCurrentCalculation.Controls.Add(this.lblDetailsFinalValueCurrentSum, 0, 7);
+            this.tlpCompleteValuesCurrentCalculation.Controls.Add(this.lblDetailsFinalValueCurrentCalculation, 0, 0);
+            this.tlpCompleteValuesCurrentCalculation.Controls.Add(this.lblDetailsFinalValueCurrentVolume, 0, 1);
+            this.tlpCompleteValuesCurrentCalculation.Controls.Add(this.lblDetailsFinalValueCurrentProfitLossSaleValue, 4, 5);
+            this.tlpCompleteValuesCurrentCalculation.Controls.Add(this.lblDetailsFinalValueCurrentDividendValue, 4, 4);
+            this.tlpCompleteValuesCurrentCalculation.Controls.Add(this.label23, 3, 5);
+            this.tlpCompleteValuesCurrentCalculation.Controls.Add(this.lblDetailsFinalValueCurrentCurPrice, 2, 1);
+            this.tlpCompleteValuesCurrentCalculation.Controls.Add(this.lblDetailsFinalValueCurrentProfitLossSale, 0, 5);
+            this.tlpCompleteValuesCurrentCalculation.Controls.Add(this.lblDetailsFinalValueCurrentPurchase, 4, 1);
+            this.tlpCompleteValuesCurrentCalculation.Controls.Add(this.lblDetailsFinalValueCurrentVolumeValue, 0, 2);
+            this.tlpCompleteValuesCurrentCalculation.Controls.Add(this.label26, 3, 2);
+            this.tlpCompleteValuesCurrentCalculation.Controls.Add(this.label22, 3, 4);
+            this.tlpCompleteValuesCurrentCalculation.Controls.Add(this.lblDetailsFinalValueCurrentDividend, 0, 4);
+            this.tlpCompleteValuesCurrentCalculation.Controls.Add(this.label21, 1, 2);
+            this.tlpCompleteValuesCurrentCalculation.Controls.Add(this.lblDetailsFinalValueCurrentCurPriceValue, 2, 2);
+            this.tlpCompleteValuesCurrentCalculation.Location = new System.Drawing.Point(585, 246);
+            this.tlpCompleteValuesCurrentCalculation.Name = "tlpCompleteValuesCurrentCalculation";
+            this.tlpCompleteValuesCurrentCalculation.RowCount = 8;
+            this.tlpCompleteValuesCurrentCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpCompleteValuesCurrentCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpCompleteValuesCurrentCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpCompleteValuesCurrentCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpCompleteValuesCurrentCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpCompleteValuesCurrentCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpCompleteValuesCurrentCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpCompleteValuesCurrentCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpCompleteValuesCurrentCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpCompleteValuesCurrentCalculation.Size = new System.Drawing.Size(545, 156);
+            this.tlpCompleteValuesCurrentCalculation.TabIndex = 86;
             // 
             // label27
             // 
             this.label27.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tableLayoutPanel7.SetColumnSpan(this.label27, 5);
+            this.tlpCompleteValuesCurrentCalculation.SetColumnSpan(this.label27, 5);
             this.label27.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label27.Location = new System.Drawing.Point(1, 74);
             this.label27.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
@@ -686,7 +711,7 @@
             // label14
             // 
             this.label14.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tableLayoutPanel7.SetColumnSpan(this.label14, 4);
+            this.tlpCompleteValuesCurrentCalculation.SetColumnSpan(this.label14, 4);
             this.label14.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label14.Location = new System.Drawing.Point(146, 128);
             this.label14.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
@@ -736,7 +761,7 @@
             // lblDetailsFinalValueCurrentSum
             // 
             this.lblDetailsFinalValueCurrentSum.BackColor = System.Drawing.Color.LightGray;
-            this.tableLayoutPanel7.SetColumnSpan(this.lblDetailsFinalValueCurrentSum, 3);
+            this.tlpCompleteValuesCurrentCalculation.SetColumnSpan(this.lblDetailsFinalValueCurrentSum, 3);
             this.lblDetailsFinalValueCurrentSum.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsFinalValueCurrentSum.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDetailsFinalValueCurrentSum.Location = new System.Drawing.Point(1, 133);
@@ -750,7 +775,7 @@
             // lblDetailsFinalValueCurrentCalculation
             // 
             this.lblDetailsFinalValueCurrentCalculation.BackColor = System.Drawing.Color.LightGray;
-            this.tableLayoutPanel7.SetColumnSpan(this.lblDetailsFinalValueCurrentCalculation, 5);
+            this.tlpCompleteValuesCurrentCalculation.SetColumnSpan(this.lblDetailsFinalValueCurrentCalculation, 5);
             this.lblDetailsFinalValueCurrentCalculation.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsFinalValueCurrentCalculation.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDetailsFinalValueCurrentCalculation.Location = new System.Drawing.Point(5, 1);
@@ -759,7 +784,7 @@
             this.lblDetailsFinalValueCurrentCalculation.Size = new System.Drawing.Size(539, 22);
             this.lblDetailsFinalValueCurrentCalculation.TabIndex = 0;
             this.lblDetailsFinalValueCurrentCalculation.Text = "CurrentCalculation_";
-            this.lblDetailsFinalValueCurrentCalculation.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblDetailsFinalValueCurrentCalculation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblDetailsFinalValueCurrentVolume
             // 
@@ -829,7 +854,7 @@
             // lblDetailsFinalValueCurrentProfitLossSale
             // 
             this.lblDetailsFinalValueCurrentProfitLossSale.BackColor = System.Drawing.Color.LightGray;
-            this.tableLayoutPanel7.SetColumnSpan(this.lblDetailsFinalValueCurrentProfitLossSale, 3);
+            this.tlpCompleteValuesCurrentCalculation.SetColumnSpan(this.lblDetailsFinalValueCurrentProfitLossSale, 3);
             this.lblDetailsFinalValueCurrentProfitLossSale.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsFinalValueCurrentProfitLossSale.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDetailsFinalValueCurrentProfitLossSale.Location = new System.Drawing.Point(1, 103);
@@ -894,7 +919,7 @@
             // lblDetailsFinalValueCurrentDividend
             // 
             this.lblDetailsFinalValueCurrentDividend.BackColor = System.Drawing.Color.LightGray;
-            this.tableLayoutPanel7.SetColumnSpan(this.lblDetailsFinalValueCurrentDividend, 3);
+            this.tlpCompleteValuesCurrentCalculation.SetColumnSpan(this.lblDetailsFinalValueCurrentDividend, 3);
             this.lblDetailsFinalValueCurrentDividend.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsFinalValueCurrentDividend.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDetailsFinalValueCurrentDividend.Location = new System.Drawing.Point(1, 79);
@@ -931,61 +956,62 @@
             this.lblDetailsFinalValueCurrentCurPriceValue.Text = "PriceValue_";
             this.lblDetailsFinalValueCurrentCurPriceValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // tableLayoutPanel6
+            // tlpCompleteValuesOverCalculation
             // 
-            this.tableLayoutPanel6.ColumnCount = 5;
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel6.Controls.Add(this.lblDetailsFinalValueTotalPerformanceValue, 4, 11);
-            this.tableLayoutPanel6.Controls.Add(this.label16, 1, 9);
-            this.tableLayoutPanel6.Controls.Add(this.lblDetailsFinalValueTotalProfitLossValue, 4, 10);
-            this.tableLayoutPanel6.Controls.Add(this.lblDetailsFinalValueTotalPerformance, 0, 11);
-            this.tableLayoutPanel6.Controls.Add(this.lblDetailsFinalValueOverallCalculation, 0, 0);
-            this.tableLayoutPanel6.Controls.Add(this.label6, 0, 3);
-            this.tableLayoutPanel6.Controls.Add(this.lblDetailsFinalValueTotalVolume, 0, 1);
-            this.tableLayoutPanel6.Controls.Add(this.label19, 3, 10);
-            this.tableLayoutPanel6.Controls.Add(this.lblDetailsFinalValueTotalCurPrice, 2, 1);
-            this.tableLayoutPanel6.Controls.Add(this.lblDetailsFinalValueTotalPurchase, 4, 1);
-            this.tableLayoutPanel6.Controls.Add(this.lblDetailsFinalValueTotalVolumeValue, 0, 2);
-            this.tableLayoutPanel6.Controls.Add(this.label1, 1, 2);
-            this.tableLayoutPanel6.Controls.Add(this.lblDetailsFinalValueTotalCurPriceValue, 2, 2);
-            this.tableLayoutPanel6.Controls.Add(this.lblDetailsFinalFinalTotalProfitLoss, 0, 10);
-            this.tableLayoutPanel6.Controls.Add(this.label4, 3, 2);
-            this.tableLayoutPanel6.Controls.Add(this.lblDetailsFinalValueTotalPurchaseValue, 4, 2);
-            this.tableLayoutPanel6.Controls.Add(this.lblDetailsFinalValueTotalDividend, 0, 4);
-            this.tableLayoutPanel6.Controls.Add(this.lblDetailsFinalValueTotalSalePurchaseValue, 4, 8);
-            this.tableLayoutPanel6.Controls.Add(this.lblDetailsFinalValueTotalSumValue, 4, 7);
-            this.tableLayoutPanel6.Controls.Add(this.label17, 3, 8);
-            this.tableLayoutPanel6.Controls.Add(this.lblDetailsFinalValueTotalSalePurchase, 0, 8);
-            this.tableLayoutPanel6.Controls.Add(this.label5, 3, 4);
-            this.tableLayoutPanel6.Controls.Add(this.label15, 1, 6);
-            this.tableLayoutPanel6.Controls.Add(this.lblDetailsFinalValueTotalSum, 0, 7);
-            this.tableLayoutPanel6.Controls.Add(this.lblDetailsFinalValueTotalSale, 0, 5);
-            this.tableLayoutPanel6.Controls.Add(this.label18, 3, 7);
-            this.tableLayoutPanel6.Controls.Add(this.label2, 3, 5);
-            this.tableLayoutPanel6.Controls.Add(this.lblDetailsFinalValueTotalSaleValue, 4, 5);
-            this.tableLayoutPanel6.Controls.Add(this.lblDetailsFinalValueTotalDividendValue, 4, 4);
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(8, 35);
-            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
-            this.tableLayoutPanel6.RowCount = 12;
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel6.Size = new System.Drawing.Size(545, 236);
-            this.tableLayoutPanel6.TabIndex = 85;
+            this.tlpCompleteValuesOverCalculation.BackColor = System.Drawing.Color.LightGray;
+            this.tlpCompleteValuesOverCalculation.ColumnCount = 5;
+            this.tlpCompleteValuesOverCalculation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
+            this.tlpCompleteValuesOverCalculation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.tlpCompleteValuesOverCalculation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
+            this.tlpCompleteValuesOverCalculation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.tlpCompleteValuesOverCalculation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.lblDetailsFinalValueTotalPerformanceValue, 4, 11);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.label16, 1, 9);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.lblDetailsFinalValueTotalProfitLossValue, 4, 10);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.lblDetailsFinalValueTotalPerformance, 0, 11);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.lblDetailsFinalValueOverallCalculation, 0, 0);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.label6, 0, 3);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.lblDetailsFinalValueTotalVolume, 0, 1);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.label19, 3, 10);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.lblDetailsFinalValueTotalCurPrice, 2, 1);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.lblDetailsFinalValueTotalPurchase, 4, 1);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.lblDetailsFinalValueTotalVolumeValue, 0, 2);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.label1, 1, 2);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.lblDetailsFinalValueTotalCurPriceValue, 2, 2);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.lblDetailsFinalFinalTotalProfitLoss, 0, 10);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.label4, 3, 2);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.lblDetailsFinalValueTotalPurchaseValue, 4, 2);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.lblDetailsFinalValueTotalDividend, 0, 4);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.lblDetailsFinalValueTotalSalePurchaseValue, 4, 8);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.lblDetailsFinalValueTotalSumValue, 4, 7);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.label17, 3, 8);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.lblDetailsFinalValueTotalSalePurchase, 0, 8);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.label5, 3, 4);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.label15, 1, 6);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.lblDetailsFinalValueTotalSum, 0, 7);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.lblDetailsFinalValueTotalSale, 0, 5);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.label18, 3, 7);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.label2, 3, 5);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.lblDetailsFinalValueTotalSaleValue, 4, 5);
+            this.tlpCompleteValuesOverCalculation.Controls.Add(this.lblDetailsFinalValueTotalDividendValue, 4, 4);
+            this.tlpCompleteValuesOverCalculation.Location = new System.Drawing.Point(8, 35);
+            this.tlpCompleteValuesOverCalculation.Name = "tlpCompleteValuesOverCalculation";
+            this.tlpCompleteValuesOverCalculation.RowCount = 12;
+            this.tlpCompleteValuesOverCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpCompleteValuesOverCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpCompleteValuesOverCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpCompleteValuesOverCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpCompleteValuesOverCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpCompleteValuesOverCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpCompleteValuesOverCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpCompleteValuesOverCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpCompleteValuesOverCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpCompleteValuesOverCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpCompleteValuesOverCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpCompleteValuesOverCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpCompleteValuesOverCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpCompleteValuesOverCalculation.Size = new System.Drawing.Size(545, 236);
+            this.tlpCompleteValuesOverCalculation.TabIndex = 85;
             // 
             // lblDetailsFinalValueTotalPerformanceValue
             // 
@@ -1003,7 +1029,7 @@
             // label16
             // 
             this.label16.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tableLayoutPanel6.SetColumnSpan(this.label16, 4);
+            this.tlpCompleteValuesOverCalculation.SetColumnSpan(this.label16, 4);
             this.label16.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label16.Location = new System.Drawing.Point(145, 182);
             this.label16.Margin = new System.Windows.Forms.Padding(0, 2, 1, 2);
@@ -1028,7 +1054,7 @@
             // lblDetailsFinalValueTotalPerformance
             // 
             this.lblDetailsFinalValueTotalPerformance.BackColor = System.Drawing.Color.LightGray;
-            this.tableLayoutPanel6.SetColumnSpan(this.lblDetailsFinalValueTotalPerformance, 3);
+            this.tlpCompleteValuesOverCalculation.SetColumnSpan(this.lblDetailsFinalValueTotalPerformance, 3);
             this.lblDetailsFinalValueTotalPerformance.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsFinalValueTotalPerformance.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDetailsFinalValueTotalPerformance.Location = new System.Drawing.Point(1, 211);
@@ -1042,7 +1068,7 @@
             // lblDetailsFinalValueOverallCalculation
             // 
             this.lblDetailsFinalValueOverallCalculation.BackColor = System.Drawing.Color.LightGray;
-            this.tableLayoutPanel6.SetColumnSpan(this.lblDetailsFinalValueOverallCalculation, 5);
+            this.tlpCompleteValuesOverCalculation.SetColumnSpan(this.lblDetailsFinalValueOverallCalculation, 5);
             this.lblDetailsFinalValueOverallCalculation.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsFinalValueOverallCalculation.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDetailsFinalValueOverallCalculation.Location = new System.Drawing.Point(5, 1);
@@ -1051,12 +1077,12 @@
             this.lblDetailsFinalValueOverallCalculation.Size = new System.Drawing.Size(539, 22);
             this.lblDetailsFinalValueOverallCalculation.TabIndex = 79;
             this.lblDetailsFinalValueOverallCalculation.Text = "OverallCalculation_";
-            this.lblDetailsFinalValueOverallCalculation.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblDetailsFinalValueOverallCalculation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label6
             // 
             this.label6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tableLayoutPanel6.SetColumnSpan(this.label6, 5);
+            this.tlpCompleteValuesOverCalculation.SetColumnSpan(this.label6, 5);
             this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label6.Location = new System.Drawing.Point(1, 74);
             this.label6.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
@@ -1157,7 +1183,7 @@
             // lblDetailsFinalFinalTotalProfitLoss
             // 
             this.lblDetailsFinalFinalTotalProfitLoss.BackColor = System.Drawing.Color.LightGray;
-            this.tableLayoutPanel6.SetColumnSpan(this.lblDetailsFinalFinalTotalProfitLoss, 3);
+            this.tlpCompleteValuesOverCalculation.SetColumnSpan(this.lblDetailsFinalFinalTotalProfitLoss, 3);
             this.lblDetailsFinalFinalTotalProfitLoss.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsFinalFinalTotalProfitLoss.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDetailsFinalFinalTotalProfitLoss.Location = new System.Drawing.Point(1, 187);
@@ -1196,7 +1222,7 @@
             // lblDetailsFinalValueTotalDividend
             // 
             this.lblDetailsFinalValueTotalDividend.BackColor = System.Drawing.Color.LightGray;
-            this.tableLayoutPanel6.SetColumnSpan(this.lblDetailsFinalValueTotalDividend, 3);
+            this.tlpCompleteValuesOverCalculation.SetColumnSpan(this.lblDetailsFinalValueTotalDividend, 3);
             this.lblDetailsFinalValueTotalDividend.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsFinalValueTotalDividend.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDetailsFinalValueTotalDividend.Location = new System.Drawing.Point(1, 79);
@@ -1247,7 +1273,7 @@
             // lblDetailsFinalValueTotalSalePurchase
             // 
             this.lblDetailsFinalValueTotalSalePurchase.BackColor = System.Drawing.Color.LightGray;
-            this.tableLayoutPanel6.SetColumnSpan(this.lblDetailsFinalValueTotalSalePurchase, 3);
+            this.tlpCompleteValuesOverCalculation.SetColumnSpan(this.lblDetailsFinalValueTotalSalePurchase, 3);
             this.lblDetailsFinalValueTotalSalePurchase.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsFinalValueTotalSalePurchase.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDetailsFinalValueTotalSalePurchase.Location = new System.Drawing.Point(1, 157);
@@ -1274,7 +1300,7 @@
             // label15
             // 
             this.label15.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tableLayoutPanel6.SetColumnSpan(this.label15, 4);
+            this.tlpCompleteValuesOverCalculation.SetColumnSpan(this.label15, 4);
             this.label15.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label15.Location = new System.Drawing.Point(145, 128);
             this.label15.Margin = new System.Windows.Forms.Padding(0, 2, 1, 2);
@@ -1285,7 +1311,7 @@
             // 
             // lblDetailsFinalValueTotalSum
             // 
-            this.tableLayoutPanel6.SetColumnSpan(this.lblDetailsFinalValueTotalSum, 3);
+            this.tlpCompleteValuesOverCalculation.SetColumnSpan(this.lblDetailsFinalValueTotalSum, 3);
             this.lblDetailsFinalValueTotalSum.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsFinalValueTotalSum.Location = new System.Drawing.Point(1, 133);
             this.lblDetailsFinalValueTotalSum.Margin = new System.Windows.Forms.Padding(1);
@@ -1297,7 +1323,7 @@
             // 
             // lblDetailsFinalValueTotalSale
             // 
-            this.tableLayoutPanel6.SetColumnSpan(this.lblDetailsFinalValueTotalSale, 3);
+            this.tlpCompleteValuesOverCalculation.SetColumnSpan(this.lblDetailsFinalValueTotalSale, 3);
             this.lblDetailsFinalValueTotalSale.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsFinalValueTotalSale.Location = new System.Drawing.Point(1, 103);
             this.lblDetailsFinalValueTotalSale.Margin = new System.Windows.Forms.Padding(1);
@@ -1358,54 +1384,55 @@
             this.lblDetailsFinalValueTotalDividendValue.Text = "DividendValue_";
             this.lblDetailsFinalValueTotalDividendValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // tlpPrevDayValues
+            // tlpCompleteValuesPrevDayValues
             // 
-            this.tlpPrevDayValues.ColumnCount = 5;
-            this.tlpPrevDayValues.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
-            this.tlpPrevDayValues.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
-            this.tlpPrevDayValues.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
-            this.tlpPrevDayValues.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
-            this.tlpPrevDayValues.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayCalculation, 0, 0);
-            this.tlpPrevDayValues.Controls.Add(this.label9, 0, 3);
-            this.tlpPrevDayValues.Controls.Add(this.label10, 1, 4);
-            this.tlpPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayCurPrice, 0, 1);
-            this.tlpPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayDiffPriceValue, 2, 4);
-            this.tlpPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayDiffPrice, 0, 4);
-            this.tlpPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayCurPriceValue, 2, 1);
-            this.tlpPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayPrevPrice, 0, 2);
-            this.tlpPrevDayValues.Controls.Add(this.label12, 1, 2);
-            this.tlpPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayPrevPriceValue, 2, 2);
-            this.tlpPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayDiffPerformance, 0, 5);
-            this.tlpPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayDiffPerformanceValue, 2, 5);
-            this.tlpPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayVolume, 0, 7);
-            this.tlpPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayVolumeValue, 0, 8);
-            this.tlpPrevDayValues.Controls.Add(this.label8, 1, 8);
-            this.tlpPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayDiffValue, 2, 7);
-            this.tlpPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayDiffPriceValueValue, 2, 8);
-            this.tlpPrevDayValues.Controls.Add(this.label7, 3, 8);
-            this.tlpPrevDayValues.Controls.Add(this.lblDetailsFinalValueDiffSumPrev, 4, 7);
-            this.tlpPrevDayValues.Controls.Add(this.lblDetailsFinalValueDiffSumPrevValue, 4, 8);
-            this.tlpPrevDayValues.Location = new System.Drawing.Point(585, 35);
-            this.tlpPrevDayValues.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpPrevDayValues.Name = "tlpPrevDayValues";
-            this.tlpPrevDayValues.RowCount = 9;
-            this.tlpPrevDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tlpPrevDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tlpPrevDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tlpPrevDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpPrevDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tlpPrevDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tlpPrevDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 6F));
-            this.tlpPrevDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tlpPrevDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tlpPrevDayValues.Size = new System.Drawing.Size(545, 180);
-            this.tlpPrevDayValues.TabIndex = 83;
+            this.tlpCompleteValuesPrevDayValues.BackColor = System.Drawing.Color.LightGray;
+            this.tlpCompleteValuesPrevDayValues.ColumnCount = 5;
+            this.tlpCompleteValuesPrevDayValues.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
+            this.tlpCompleteValuesPrevDayValues.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.tlpCompleteValuesPrevDayValues.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
+            this.tlpCompleteValuesPrevDayValues.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.tlpCompleteValuesPrevDayValues.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpCompleteValuesPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayCalculation, 0, 0);
+            this.tlpCompleteValuesPrevDayValues.Controls.Add(this.label9, 0, 3);
+            this.tlpCompleteValuesPrevDayValues.Controls.Add(this.label10, 1, 4);
+            this.tlpCompleteValuesPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayCurPrice, 0, 1);
+            this.tlpCompleteValuesPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayDiffPriceValue, 2, 4);
+            this.tlpCompleteValuesPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayDiffPrice, 0, 4);
+            this.tlpCompleteValuesPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayCurPriceValue, 2, 1);
+            this.tlpCompleteValuesPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayPrevPrice, 0, 2);
+            this.tlpCompleteValuesPrevDayValues.Controls.Add(this.label12, 1, 2);
+            this.tlpCompleteValuesPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayPrevPriceValue, 2, 2);
+            this.tlpCompleteValuesPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayDiffPerformance, 0, 5);
+            this.tlpCompleteValuesPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayDiffPerformanceValue, 2, 5);
+            this.tlpCompleteValuesPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayVolume, 0, 7);
+            this.tlpCompleteValuesPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayVolumeValue, 0, 8);
+            this.tlpCompleteValuesPrevDayValues.Controls.Add(this.label8, 1, 8);
+            this.tlpCompleteValuesPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayDiffValue, 2, 7);
+            this.tlpCompleteValuesPrevDayValues.Controls.Add(this.lblDetailsFinalValuePrevDayDiffPriceValueValue, 2, 8);
+            this.tlpCompleteValuesPrevDayValues.Controls.Add(this.label7, 3, 8);
+            this.tlpCompleteValuesPrevDayValues.Controls.Add(this.lblDetailsFinalValueDiffSumPrev, 4, 7);
+            this.tlpCompleteValuesPrevDayValues.Controls.Add(this.lblDetailsFinalValueDiffSumPrevValue, 4, 8);
+            this.tlpCompleteValuesPrevDayValues.Location = new System.Drawing.Point(585, 35);
+            this.tlpCompleteValuesPrevDayValues.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpCompleteValuesPrevDayValues.Name = "tlpCompleteValuesPrevDayValues";
+            this.tlpCompleteValuesPrevDayValues.RowCount = 9;
+            this.tlpCompleteValuesPrevDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpCompleteValuesPrevDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpCompleteValuesPrevDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpCompleteValuesPrevDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpCompleteValuesPrevDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpCompleteValuesPrevDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpCompleteValuesPrevDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 6F));
+            this.tlpCompleteValuesPrevDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpCompleteValuesPrevDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpCompleteValuesPrevDayValues.Size = new System.Drawing.Size(545, 180);
+            this.tlpCompleteValuesPrevDayValues.TabIndex = 83;
             // 
             // lblDetailsFinalValuePrevDayCalculation
             // 
             this.lblDetailsFinalValuePrevDayCalculation.BackColor = System.Drawing.Color.LightGray;
-            this.tlpPrevDayValues.SetColumnSpan(this.lblDetailsFinalValuePrevDayCalculation, 5);
+            this.tlpCompleteValuesPrevDayValues.SetColumnSpan(this.lblDetailsFinalValuePrevDayCalculation, 5);
             this.lblDetailsFinalValuePrevDayCalculation.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsFinalValuePrevDayCalculation.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDetailsFinalValuePrevDayCalculation.Location = new System.Drawing.Point(5, 1);
@@ -1414,12 +1441,12 @@
             this.lblDetailsFinalValuePrevDayCalculation.Size = new System.Drawing.Size(539, 22);
             this.lblDetailsFinalValuePrevDayCalculation.TabIndex = 80;
             this.lblDetailsFinalValuePrevDayCalculation.Text = "PrevDayCalculation_";
-            this.lblDetailsFinalValuePrevDayCalculation.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblDetailsFinalValuePrevDayCalculation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label9
             // 
             this.label9.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tlpPrevDayValues.SetColumnSpan(this.label9, 3);
+            this.tlpCompleteValuesPrevDayValues.SetColumnSpan(this.label9, 3);
             this.label9.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label9.Location = new System.Drawing.Point(1, 74);
             this.label9.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
@@ -1671,6 +1698,7 @@
             // lblDetailsFinalValueDateValue
             // 
             this.lblDetailsFinalValueDateValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblDetailsFinalValueDateValue.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.lblDetailsFinalValueDateValue.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDetailsFinalValueDateValue.Location = new System.Drawing.Point(10, 1);
             this.lblDetailsFinalValueDateValue.Margin = new System.Windows.Forms.Padding(1);
@@ -1678,14 +1706,15 @@
             this.lblDetailsFinalValueDateValue.Size = new System.Drawing.Size(542, 23);
             this.lblDetailsFinalValueDateValue.TabIndex = 0;
             this.lblDetailsFinalValueDateValue.Text = "Date_";
-            this.lblDetailsFinalValueDateValue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblDetailsFinalValueDateValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tabPgDetailsMarketValue
             // 
-            this.tabPgDetailsMarketValue.BackColor = System.Drawing.Color.LightGray;
-            this.tabPgDetailsMarketValue.Controls.Add(this.tableLayoutPanel8);
-            this.tabPgDetailsMarketValue.Controls.Add(this.tableLayoutPanel9);
-            this.tabPgDetailsMarketValue.Controls.Add(this.tableLayoutPanel10);
+            this.tabPgDetailsMarketValue.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPgDetailsMarketValue.Controls.Add(this.statusStripMarketValues);
+            this.tabPgDetailsMarketValue.Controls.Add(this.tlpMarketValuesCurrentCalculation);
+            this.tabPgDetailsMarketValue.Controls.Add(this.tlpMarketValuesOverallCalculation);
+            this.tabPgDetailsMarketValue.Controls.Add(this.tlpMarketValuesPreDayValues);
             this.tabPgDetailsMarketValue.Controls.Add(this.lblDetailsMarketValueDateValue);
             this.tabPgDetailsMarketValue.Location = new System.Drawing.Point(4, 26);
             this.tabPgDetailsMarketValue.Name = "tabPgDetailsMarketValue";
@@ -1693,53 +1722,70 @@
             this.tabPgDetailsMarketValue.TabIndex = 3;
             this.tabPgDetailsMarketValue.Text = "DetailsMarketValue_";
             // 
-            // tableLayoutPanel8
+            // statusStripMarketValues
             // 
-            this.tableLayoutPanel8.ColumnCount = 5;
-            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
-            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
-            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
-            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
-            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel8.Controls.Add(this.label28, 0, 3);
-            this.tableLayoutPanel8.Controls.Add(this.label3, 1, 6);
-            this.tableLayoutPanel8.Controls.Add(this.label11, 3, 7);
-            this.tableLayoutPanel8.Controls.Add(this.lblDetailsMarketValueCurrentSumValue, 4, 7);
-            this.tableLayoutPanel8.Controls.Add(this.lblDetailsMarketValueCurrentPurchaseValue, 4, 2);
-            this.tableLayoutPanel8.Controls.Add(this.lblDetailsMarketValueCurrentSum, 0, 7);
-            this.tableLayoutPanel8.Controls.Add(this.lblDetailsMarketValueCurrentCalculation, 0, 0);
-            this.tableLayoutPanel8.Controls.Add(this.lblDetailsMarketValueCurrentVolume, 0, 1);
-            this.tableLayoutPanel8.Controls.Add(this.lblDetailsMarketValueCurrentProfitLossSaleValue, 4, 5);
-            this.tableLayoutPanel8.Controls.Add(this.lblDetailsMarketValueCurrentDividendValue, 4, 4);
-            this.tableLayoutPanel8.Controls.Add(this.label32, 3, 5);
-            this.tableLayoutPanel8.Controls.Add(this.lblDetailsMarketValueCurrentCurPrice, 2, 1);
-            this.tableLayoutPanel8.Controls.Add(this.lblDetailsMarketValueCurrentProfitLossSale, 0, 5);
-            this.tableLayoutPanel8.Controls.Add(this.lblDetailsMarketValueCurrentPurchase, 4, 1);
-            this.tableLayoutPanel8.Controls.Add(this.lblDetailsMarketValueCurrentVolumeValue, 0, 2);
-            this.tableLayoutPanel8.Controls.Add(this.label37, 3, 2);
-            this.tableLayoutPanel8.Controls.Add(this.label38, 3, 4);
-            this.tableLayoutPanel8.Controls.Add(this.lblDetailsMarketValueCurrentDividend, 0, 4);
-            this.tableLayoutPanel8.Controls.Add(this.label40, 1, 2);
-            this.tableLayoutPanel8.Controls.Add(this.lblDetailsMarketValueCurrentCurPriceValue, 2, 2);
-            this.tableLayoutPanel8.Location = new System.Drawing.Point(8, 285);
-            this.tableLayoutPanel8.Name = "tableLayoutPanel8";
-            this.tableLayoutPanel8.RowCount = 8;
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(545, 156);
-            this.tableLayoutPanel8.TabIndex = 91;
+            this.statusStripMarketValues.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabelMarketValues});
+            this.statusStripMarketValues.Location = new System.Drawing.Point(0, 426);
+            this.statusStripMarketValues.Name = "statusStripMarketValues";
+            this.statusStripMarketValues.Size = new System.Drawing.Size(1557, 22);
+            this.statusStripMarketValues.TabIndex = 92;
+            this.statusStripMarketValues.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabelMarketValues
+            // 
+            this.toolStripStatusLabelMarketValues.Name = "toolStripStatusLabelMarketValues";
+            this.toolStripStatusLabelMarketValues.Size = new System.Drawing.Size(0, 17);
+            this.toolStripStatusLabelMarketValues.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tlpMarketValuesCurrentCalculation
+            // 
+            this.tlpMarketValuesCurrentCalculation.BackColor = System.Drawing.Color.LightGray;
+            this.tlpMarketValuesCurrentCalculation.ColumnCount = 5;
+            this.tlpMarketValuesCurrentCalculation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
+            this.tlpMarketValuesCurrentCalculation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.tlpMarketValuesCurrentCalculation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
+            this.tlpMarketValuesCurrentCalculation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.tlpMarketValuesCurrentCalculation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpMarketValuesCurrentCalculation.Controls.Add(this.label28, 0, 3);
+            this.tlpMarketValuesCurrentCalculation.Controls.Add(this.label3, 1, 6);
+            this.tlpMarketValuesCurrentCalculation.Controls.Add(this.label11, 3, 7);
+            this.tlpMarketValuesCurrentCalculation.Controls.Add(this.lblDetailsMarketValueCurrentSumValue, 4, 7);
+            this.tlpMarketValuesCurrentCalculation.Controls.Add(this.lblDetailsMarketValueCurrentPurchaseValue, 4, 2);
+            this.tlpMarketValuesCurrentCalculation.Controls.Add(this.lblDetailsMarketValueCurrentSum, 0, 7);
+            this.tlpMarketValuesCurrentCalculation.Controls.Add(this.lblDetailsMarketValueCurrentCalculation, 0, 0);
+            this.tlpMarketValuesCurrentCalculation.Controls.Add(this.lblDetailsMarketValueCurrentVolume, 0, 1);
+            this.tlpMarketValuesCurrentCalculation.Controls.Add(this.lblDetailsMarketValueCurrentProfitLossSaleValue, 4, 5);
+            this.tlpMarketValuesCurrentCalculation.Controls.Add(this.lblDetailsMarketValueCurrentDividendValue, 4, 4);
+            this.tlpMarketValuesCurrentCalculation.Controls.Add(this.label32, 3, 5);
+            this.tlpMarketValuesCurrentCalculation.Controls.Add(this.lblDetailsMarketValueCurrentCurPrice, 2, 1);
+            this.tlpMarketValuesCurrentCalculation.Controls.Add(this.lblDetailsMarketValueCurrentProfitLossSale, 0, 5);
+            this.tlpMarketValuesCurrentCalculation.Controls.Add(this.lblDetailsMarketValueCurrentPurchase, 4, 1);
+            this.tlpMarketValuesCurrentCalculation.Controls.Add(this.lblDetailsMarketValueCurrentVolumeValue, 0, 2);
+            this.tlpMarketValuesCurrentCalculation.Controls.Add(this.label37, 3, 2);
+            this.tlpMarketValuesCurrentCalculation.Controls.Add(this.label38, 3, 4);
+            this.tlpMarketValuesCurrentCalculation.Controls.Add(this.lblDetailsMarketValueCurrentDividend, 0, 4);
+            this.tlpMarketValuesCurrentCalculation.Controls.Add(this.label40, 1, 2);
+            this.tlpMarketValuesCurrentCalculation.Controls.Add(this.lblDetailsMarketValueCurrentCurPriceValue, 2, 2);
+            this.tlpMarketValuesCurrentCalculation.Location = new System.Drawing.Point(585, 246);
+            this.tlpMarketValuesCurrentCalculation.Name = "tlpMarketValuesCurrentCalculation";
+            this.tlpMarketValuesCurrentCalculation.RowCount = 8;
+            this.tlpMarketValuesCurrentCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpMarketValuesCurrentCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpMarketValuesCurrentCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpMarketValuesCurrentCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpMarketValuesCurrentCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpMarketValuesCurrentCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpMarketValuesCurrentCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpMarketValuesCurrentCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpMarketValuesCurrentCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpMarketValuesCurrentCalculation.Size = new System.Drawing.Size(545, 156);
+            this.tlpMarketValuesCurrentCalculation.TabIndex = 91;
             // 
             // label28
             // 
             this.label28.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tableLayoutPanel8.SetColumnSpan(this.label28, 5);
+            this.tlpMarketValuesCurrentCalculation.SetColumnSpan(this.label28, 5);
             this.label28.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label28.Location = new System.Drawing.Point(1, 74);
             this.label28.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
@@ -1750,7 +1796,7 @@
             // label3
             // 
             this.label3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tableLayoutPanel8.SetColumnSpan(this.label3, 4);
+            this.tlpMarketValuesCurrentCalculation.SetColumnSpan(this.label3, 4);
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label3.Location = new System.Drawing.Point(146, 128);
             this.label3.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
@@ -1800,7 +1846,7 @@
             // lblDetailsMarketValueCurrentSum
             // 
             this.lblDetailsMarketValueCurrentSum.BackColor = System.Drawing.Color.LightGray;
-            this.tableLayoutPanel8.SetColumnSpan(this.lblDetailsMarketValueCurrentSum, 3);
+            this.tlpMarketValuesCurrentCalculation.SetColumnSpan(this.lblDetailsMarketValueCurrentSum, 3);
             this.lblDetailsMarketValueCurrentSum.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsMarketValueCurrentSum.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDetailsMarketValueCurrentSum.Location = new System.Drawing.Point(1, 133);
@@ -1814,7 +1860,7 @@
             // lblDetailsMarketValueCurrentCalculation
             // 
             this.lblDetailsMarketValueCurrentCalculation.BackColor = System.Drawing.Color.LightGray;
-            this.tableLayoutPanel8.SetColumnSpan(this.lblDetailsMarketValueCurrentCalculation, 5);
+            this.tlpMarketValuesCurrentCalculation.SetColumnSpan(this.lblDetailsMarketValueCurrentCalculation, 5);
             this.lblDetailsMarketValueCurrentCalculation.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsMarketValueCurrentCalculation.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDetailsMarketValueCurrentCalculation.Location = new System.Drawing.Point(5, 1);
@@ -1823,7 +1869,7 @@
             this.lblDetailsMarketValueCurrentCalculation.Size = new System.Drawing.Size(539, 22);
             this.lblDetailsMarketValueCurrentCalculation.TabIndex = 80;
             this.lblDetailsMarketValueCurrentCalculation.Text = "CurrentCalculation_";
-            this.lblDetailsMarketValueCurrentCalculation.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblDetailsMarketValueCurrentCalculation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblDetailsMarketValueCurrentVolume
             // 
@@ -1893,7 +1939,7 @@
             // lblDetailsMarketValueCurrentProfitLossSale
             // 
             this.lblDetailsMarketValueCurrentProfitLossSale.BackColor = System.Drawing.Color.LightGray;
-            this.tableLayoutPanel8.SetColumnSpan(this.lblDetailsMarketValueCurrentProfitLossSale, 3);
+            this.tlpMarketValuesCurrentCalculation.SetColumnSpan(this.lblDetailsMarketValueCurrentProfitLossSale, 3);
             this.lblDetailsMarketValueCurrentProfitLossSale.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsMarketValueCurrentProfitLossSale.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDetailsMarketValueCurrentProfitLossSale.Location = new System.Drawing.Point(1, 103);
@@ -1958,7 +2004,7 @@
             // lblDetailsMarketValueCurrentDividend
             // 
             this.lblDetailsMarketValueCurrentDividend.BackColor = System.Drawing.Color.LightGray;
-            this.tableLayoutPanel8.SetColumnSpan(this.lblDetailsMarketValueCurrentDividend, 3);
+            this.tlpMarketValuesCurrentCalculation.SetColumnSpan(this.lblDetailsMarketValueCurrentDividend, 3);
             this.lblDetailsMarketValueCurrentDividend.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsMarketValueCurrentDividend.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDetailsMarketValueCurrentDividend.Location = new System.Drawing.Point(1, 79);
@@ -1995,61 +2041,62 @@
             this.lblDetailsMarketValueCurrentCurPriceValue.Text = "PriceValue_";
             this.lblDetailsMarketValueCurrentCurPriceValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // tableLayoutPanel9
+            // tlpMarketValuesOverallCalculation
             // 
-            this.tableLayoutPanel9.ColumnCount = 5;
-            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
-            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
-            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
-            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
-            this.tableLayoutPanel9.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel9.Controls.Add(this.lblDetailsMarketValueTotalPerformanceValue, 4, 11);
-            this.tableLayoutPanel9.Controls.Add(this.label43, 1, 9);
-            this.tableLayoutPanel9.Controls.Add(this.lblDetailsMarketValueTotalProfitLossValue, 4, 10);
-            this.tableLayoutPanel9.Controls.Add(this.lblDetailsMarketValueTotalPerformance, 0, 11);
-            this.tableLayoutPanel9.Controls.Add(this.lblDetailsMarketValueOverallCalculation, 0, 0);
-            this.tableLayoutPanel9.Controls.Add(this.label47, 0, 3);
-            this.tableLayoutPanel9.Controls.Add(this.lblDetailsMarketValueTotalVolume, 0, 1);
-            this.tableLayoutPanel9.Controls.Add(this.label49, 3, 10);
-            this.tableLayoutPanel9.Controls.Add(this.lblDetailsMarketValueTotalCurPrice, 2, 1);
-            this.tableLayoutPanel9.Controls.Add(this.lblDetailsMarketValueTotalPurchase, 4, 1);
-            this.tableLayoutPanel9.Controls.Add(this.lblDetailsMarketValueTotalVolumeValue, 0, 2);
-            this.tableLayoutPanel9.Controls.Add(this.label53, 1, 2);
-            this.tableLayoutPanel9.Controls.Add(this.lblDetailsMarketValueTotalCurPriceValue, 2, 2);
-            this.tableLayoutPanel9.Controls.Add(this.lblDetailsMarketValueTotalProfitLoss, 0, 10);
-            this.tableLayoutPanel9.Controls.Add(this.label56, 3, 2);
-            this.tableLayoutPanel9.Controls.Add(this.lblDetailsMarketValueTotalPurchaseValue, 4, 2);
-            this.tableLayoutPanel9.Controls.Add(this.lblDetailsMarketValueTotalDividend, 0, 4);
-            this.tableLayoutPanel9.Controls.Add(this.lblDetailsMarketValueTotalSalePurchaseValue, 4, 8);
-            this.tableLayoutPanel9.Controls.Add(this.lblDetailsMarketValueTotalSumValue, 4, 7);
-            this.tableLayoutPanel9.Controls.Add(this.label61, 3, 8);
-            this.tableLayoutPanel9.Controls.Add(this.lblDetailsMarketValueTotalSalePurchase, 0, 8);
-            this.tableLayoutPanel9.Controls.Add(this.label63, 3, 4);
-            this.tableLayoutPanel9.Controls.Add(this.label64, 1, 6);
-            this.tableLayoutPanel9.Controls.Add(this.lblDetailsMarketValueTotalSum, 0, 7);
-            this.tableLayoutPanel9.Controls.Add(this.lblDetailsMarketValueTotalSale, 0, 5);
-            this.tableLayoutPanel9.Controls.Add(this.label67, 3, 7);
-            this.tableLayoutPanel9.Controls.Add(this.label68, 3, 5);
-            this.tableLayoutPanel9.Controls.Add(this.lblDetailsMarketValueTotalSaleValue, 4, 5);
-            this.tableLayoutPanel9.Controls.Add(this.lblDetailsMarketValueTotalDividendValue, 4, 4);
-            this.tableLayoutPanel9.Location = new System.Drawing.Point(8, 35);
-            this.tableLayoutPanel9.Name = "tableLayoutPanel9";
-            this.tableLayoutPanel9.RowCount = 12;
-            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel9.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel9.Size = new System.Drawing.Size(545, 236);
-            this.tableLayoutPanel9.TabIndex = 90;
+            this.tlpMarketValuesOverallCalculation.BackColor = System.Drawing.Color.LightGray;
+            this.tlpMarketValuesOverallCalculation.ColumnCount = 5;
+            this.tlpMarketValuesOverallCalculation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
+            this.tlpMarketValuesOverallCalculation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.tlpMarketValuesOverallCalculation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
+            this.tlpMarketValuesOverallCalculation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.tlpMarketValuesOverallCalculation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.lblDetailsMarketValueTotalPerformanceValue, 4, 11);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.label43, 1, 9);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.lblDetailsMarketValueTotalProfitLossValue, 4, 10);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.lblDetailsMarketValueTotalPerformance, 0, 11);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.lblDetailsMarketValueOverallCalculation, 0, 0);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.label47, 0, 3);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.lblDetailsMarketValueTotalVolume, 0, 1);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.label49, 3, 10);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.lblDetailsMarketValueTotalCurPrice, 2, 1);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.lblDetailsMarketValueTotalPurchase, 4, 1);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.lblDetailsMarketValueTotalVolumeValue, 0, 2);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.label53, 1, 2);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.lblDetailsMarketValueTotalCurPriceValue, 2, 2);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.lblDetailsMarketValueTotalProfitLoss, 0, 10);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.label56, 3, 2);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.lblDetailsMarketValueTotalPurchaseValue, 4, 2);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.lblDetailsMarketValueTotalDividend, 0, 4);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.lblDetailsMarketValueTotalSalePurchaseValue, 4, 8);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.lblDetailsMarketValueTotalSumValue, 4, 7);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.label61, 3, 8);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.lblDetailsMarketValueTotalSalePurchase, 0, 8);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.label63, 3, 4);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.label64, 1, 6);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.lblDetailsMarketValueTotalSum, 0, 7);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.lblDetailsMarketValueTotalSale, 0, 5);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.label67, 3, 7);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.label68, 3, 5);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.lblDetailsMarketValueTotalSaleValue, 4, 5);
+            this.tlpMarketValuesOverallCalculation.Controls.Add(this.lblDetailsMarketValueTotalDividendValue, 4, 4);
+            this.tlpMarketValuesOverallCalculation.Location = new System.Drawing.Point(8, 35);
+            this.tlpMarketValuesOverallCalculation.Name = "tlpMarketValuesOverallCalculation";
+            this.tlpMarketValuesOverallCalculation.RowCount = 12;
+            this.tlpMarketValuesOverallCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpMarketValuesOverallCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpMarketValuesOverallCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpMarketValuesOverallCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpMarketValuesOverallCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpMarketValuesOverallCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpMarketValuesOverallCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpMarketValuesOverallCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpMarketValuesOverallCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpMarketValuesOverallCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpMarketValuesOverallCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpMarketValuesOverallCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpMarketValuesOverallCalculation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpMarketValuesOverallCalculation.Size = new System.Drawing.Size(545, 236);
+            this.tlpMarketValuesOverallCalculation.TabIndex = 90;
             // 
             // lblDetailsMarketValueTotalPerformanceValue
             // 
@@ -2067,7 +2114,7 @@
             // label43
             // 
             this.label43.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tableLayoutPanel9.SetColumnSpan(this.label43, 4);
+            this.tlpMarketValuesOverallCalculation.SetColumnSpan(this.label43, 4);
             this.label43.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label43.Location = new System.Drawing.Point(145, 182);
             this.label43.Margin = new System.Windows.Forms.Padding(0, 2, 1, 2);
@@ -2092,7 +2139,7 @@
             // lblDetailsMarketValueTotalPerformance
             // 
             this.lblDetailsMarketValueTotalPerformance.BackColor = System.Drawing.Color.LightGray;
-            this.tableLayoutPanel9.SetColumnSpan(this.lblDetailsMarketValueTotalPerformance, 3);
+            this.tlpMarketValuesOverallCalculation.SetColumnSpan(this.lblDetailsMarketValueTotalPerformance, 3);
             this.lblDetailsMarketValueTotalPerformance.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsMarketValueTotalPerformance.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDetailsMarketValueTotalPerformance.Location = new System.Drawing.Point(1, 211);
@@ -2106,7 +2153,7 @@
             // lblDetailsMarketValueOverallCalculation
             // 
             this.lblDetailsMarketValueOverallCalculation.BackColor = System.Drawing.Color.LightGray;
-            this.tableLayoutPanel9.SetColumnSpan(this.lblDetailsMarketValueOverallCalculation, 5);
+            this.tlpMarketValuesOverallCalculation.SetColumnSpan(this.lblDetailsMarketValueOverallCalculation, 5);
             this.lblDetailsMarketValueOverallCalculation.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsMarketValueOverallCalculation.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDetailsMarketValueOverallCalculation.Location = new System.Drawing.Point(5, 1);
@@ -2115,12 +2162,12 @@
             this.lblDetailsMarketValueOverallCalculation.Size = new System.Drawing.Size(539, 22);
             this.lblDetailsMarketValueOverallCalculation.TabIndex = 79;
             this.lblDetailsMarketValueOverallCalculation.Text = "OverallCalculation_";
-            this.lblDetailsMarketValueOverallCalculation.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblDetailsMarketValueOverallCalculation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label47
             // 
             this.label47.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tableLayoutPanel9.SetColumnSpan(this.label47, 5);
+            this.tlpMarketValuesOverallCalculation.SetColumnSpan(this.label47, 5);
             this.label47.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label47.Location = new System.Drawing.Point(1, 74);
             this.label47.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
@@ -2221,7 +2268,7 @@
             // lblDetailsMarketValueTotalProfitLoss
             // 
             this.lblDetailsMarketValueTotalProfitLoss.BackColor = System.Drawing.Color.LightGray;
-            this.tableLayoutPanel9.SetColumnSpan(this.lblDetailsMarketValueTotalProfitLoss, 3);
+            this.tlpMarketValuesOverallCalculation.SetColumnSpan(this.lblDetailsMarketValueTotalProfitLoss, 3);
             this.lblDetailsMarketValueTotalProfitLoss.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsMarketValueTotalProfitLoss.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDetailsMarketValueTotalProfitLoss.Location = new System.Drawing.Point(1, 187);
@@ -2260,7 +2307,7 @@
             // lblDetailsMarketValueTotalDividend
             // 
             this.lblDetailsMarketValueTotalDividend.BackColor = System.Drawing.Color.LightGray;
-            this.tableLayoutPanel9.SetColumnSpan(this.lblDetailsMarketValueTotalDividend, 3);
+            this.tlpMarketValuesOverallCalculation.SetColumnSpan(this.lblDetailsMarketValueTotalDividend, 3);
             this.lblDetailsMarketValueTotalDividend.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsMarketValueTotalDividend.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDetailsMarketValueTotalDividend.Location = new System.Drawing.Point(1, 79);
@@ -2311,7 +2358,7 @@
             // lblDetailsMarketValueTotalSalePurchase
             // 
             this.lblDetailsMarketValueTotalSalePurchase.BackColor = System.Drawing.Color.LightGray;
-            this.tableLayoutPanel9.SetColumnSpan(this.lblDetailsMarketValueTotalSalePurchase, 3);
+            this.tlpMarketValuesOverallCalculation.SetColumnSpan(this.lblDetailsMarketValueTotalSalePurchase, 3);
             this.lblDetailsMarketValueTotalSalePurchase.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsMarketValueTotalSalePurchase.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDetailsMarketValueTotalSalePurchase.Location = new System.Drawing.Point(1, 157);
@@ -2338,7 +2385,7 @@
             // label64
             // 
             this.label64.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tableLayoutPanel9.SetColumnSpan(this.label64, 4);
+            this.tlpMarketValuesOverallCalculation.SetColumnSpan(this.label64, 4);
             this.label64.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label64.Location = new System.Drawing.Point(145, 128);
             this.label64.Margin = new System.Windows.Forms.Padding(0, 2, 1, 2);
@@ -2349,7 +2396,7 @@
             // 
             // lblDetailsMarketValueTotalSum
             // 
-            this.tableLayoutPanel9.SetColumnSpan(this.lblDetailsMarketValueTotalSum, 3);
+            this.tlpMarketValuesOverallCalculation.SetColumnSpan(this.lblDetailsMarketValueTotalSum, 3);
             this.lblDetailsMarketValueTotalSum.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsMarketValueTotalSum.Location = new System.Drawing.Point(1, 133);
             this.lblDetailsMarketValueTotalSum.Margin = new System.Windows.Forms.Padding(1);
@@ -2361,7 +2408,7 @@
             // 
             // lblDetailsMarketValueTotalSale
             // 
-            this.tableLayoutPanel9.SetColumnSpan(this.lblDetailsMarketValueTotalSale, 3);
+            this.tlpMarketValuesOverallCalculation.SetColumnSpan(this.lblDetailsMarketValueTotalSale, 3);
             this.lblDetailsMarketValueTotalSale.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsMarketValueTotalSale.Location = new System.Drawing.Point(1, 103);
             this.lblDetailsMarketValueTotalSale.Margin = new System.Windows.Forms.Padding(1);
@@ -2422,54 +2469,55 @@
             this.lblDetailsMarketValueTotalDividendValue.Text = "DividendValue_";
             this.lblDetailsMarketValueTotalDividendValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // tableLayoutPanel10
+            // tlpMarketValuesPreDayValues
             // 
-            this.tableLayoutPanel10.ColumnCount = 5;
-            this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
-            this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
-            this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
-            this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
-            this.tableLayoutPanel10.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel10.Controls.Add(this.lblDetailsMarketValuePrevDayCalculation, 0, 0);
-            this.tableLayoutPanel10.Controls.Add(this.label72, 0, 3);
-            this.tableLayoutPanel10.Controls.Add(this.label73, 1, 4);
-            this.tableLayoutPanel10.Controls.Add(this.lblDetailsMarketValuePrevDayCurPrice, 0, 1);
-            this.tableLayoutPanel10.Controls.Add(this.lblDetailsMarketValuePrevDayDiffPriceValue, 2, 4);
-            this.tableLayoutPanel10.Controls.Add(this.lblDetailsMarketValuePrevDayDiffPrice, 0, 4);
-            this.tableLayoutPanel10.Controls.Add(this.lblDetailsMarketValuePrevDayCurPriceValue, 2, 1);
-            this.tableLayoutPanel10.Controls.Add(this.lblDetailsMarketValuePrevDayPrevPrice, 0, 2);
-            this.tableLayoutPanel10.Controls.Add(this.label79, 1, 2);
-            this.tableLayoutPanel10.Controls.Add(this.lblDetailsMarketValuePrevDayPrevPriceValue, 2, 2);
-            this.tableLayoutPanel10.Controls.Add(this.lblDetailsMarketValuePrevDayDiffPerformance, 0, 5);
-            this.tableLayoutPanel10.Controls.Add(this.lblDetailsMarketValuePrevDayDiffPerformanceValue, 2, 5);
-            this.tableLayoutPanel10.Controls.Add(this.lblDetailsMarketValuePrevDayVolume, 0, 7);
-            this.tableLayoutPanel10.Controls.Add(this.lblDetailsMarketValuePrevDayVolumeValue, 0, 8);
-            this.tableLayoutPanel10.Controls.Add(this.label85, 1, 8);
-            this.tableLayoutPanel10.Controls.Add(this.lblDetailsMarketValuePrevDayDiffValue, 2, 7);
-            this.tableLayoutPanel10.Controls.Add(this.lblDetailsMarketValuePrevDayDiffPriceValueValue, 2, 8);
-            this.tableLayoutPanel10.Controls.Add(this.label88, 3, 8);
-            this.tableLayoutPanel10.Controls.Add(this.lblDetailsMarketValueDiffSumPrev, 4, 7);
-            this.tableLayoutPanel10.Controls.Add(this.lblDetailsMarketValueDiffSumPrevValue, 4, 8);
-            this.tableLayoutPanel10.Location = new System.Drawing.Point(585, 35);
-            this.tableLayoutPanel10.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel10.Name = "tableLayoutPanel10";
-            this.tableLayoutPanel10.RowCount = 9;
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 6F));
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel10.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel10.Size = new System.Drawing.Size(545, 180);
-            this.tableLayoutPanel10.TabIndex = 89;
+            this.tlpMarketValuesPreDayValues.BackColor = System.Drawing.Color.LightGray;
+            this.tlpMarketValuesPreDayValues.ColumnCount = 5;
+            this.tlpMarketValuesPreDayValues.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
+            this.tlpMarketValuesPreDayValues.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.tlpMarketValuesPreDayValues.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 145F));
+            this.tlpMarketValuesPreDayValues.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.tlpMarketValuesPreDayValues.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpMarketValuesPreDayValues.Controls.Add(this.lblDetailsMarketValuePrevDayCalculation, 0, 0);
+            this.tlpMarketValuesPreDayValues.Controls.Add(this.label72, 0, 3);
+            this.tlpMarketValuesPreDayValues.Controls.Add(this.label73, 1, 4);
+            this.tlpMarketValuesPreDayValues.Controls.Add(this.lblDetailsMarketValuePrevDayCurPrice, 0, 1);
+            this.tlpMarketValuesPreDayValues.Controls.Add(this.lblDetailsMarketValuePrevDayDiffPriceValue, 2, 4);
+            this.tlpMarketValuesPreDayValues.Controls.Add(this.lblDetailsMarketValuePrevDayDiffPrice, 0, 4);
+            this.tlpMarketValuesPreDayValues.Controls.Add(this.lblDetailsMarketValuePrevDayCurPriceValue, 2, 1);
+            this.tlpMarketValuesPreDayValues.Controls.Add(this.lblDetailsMarketValuePrevDayPrevPrice, 0, 2);
+            this.tlpMarketValuesPreDayValues.Controls.Add(this.label79, 1, 2);
+            this.tlpMarketValuesPreDayValues.Controls.Add(this.lblDetailsMarketValuePrevDayPrevPriceValue, 2, 2);
+            this.tlpMarketValuesPreDayValues.Controls.Add(this.lblDetailsMarketValuePrevDayDiffPerformance, 0, 5);
+            this.tlpMarketValuesPreDayValues.Controls.Add(this.lblDetailsMarketValuePrevDayDiffPerformanceValue, 2, 5);
+            this.tlpMarketValuesPreDayValues.Controls.Add(this.lblDetailsMarketValuePrevDayVolume, 0, 7);
+            this.tlpMarketValuesPreDayValues.Controls.Add(this.lblDetailsMarketValuePrevDayVolumeValue, 0, 8);
+            this.tlpMarketValuesPreDayValues.Controls.Add(this.label85, 1, 8);
+            this.tlpMarketValuesPreDayValues.Controls.Add(this.lblDetailsMarketValuePrevDayDiffValue, 2, 7);
+            this.tlpMarketValuesPreDayValues.Controls.Add(this.lblDetailsMarketValuePrevDayDiffPriceValueValue, 2, 8);
+            this.tlpMarketValuesPreDayValues.Controls.Add(this.label88, 3, 8);
+            this.tlpMarketValuesPreDayValues.Controls.Add(this.lblDetailsMarketValueDiffSumPrev, 4, 7);
+            this.tlpMarketValuesPreDayValues.Controls.Add(this.lblDetailsMarketValueDiffSumPrevValue, 4, 8);
+            this.tlpMarketValuesPreDayValues.Location = new System.Drawing.Point(585, 35);
+            this.tlpMarketValuesPreDayValues.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpMarketValuesPreDayValues.Name = "tlpMarketValuesPreDayValues";
+            this.tlpMarketValuesPreDayValues.RowCount = 9;
+            this.tlpMarketValuesPreDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpMarketValuesPreDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpMarketValuesPreDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpMarketValuesPreDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpMarketValuesPreDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpMarketValuesPreDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpMarketValuesPreDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 6F));
+            this.tlpMarketValuesPreDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpMarketValuesPreDayValues.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tlpMarketValuesPreDayValues.Size = new System.Drawing.Size(545, 180);
+            this.tlpMarketValuesPreDayValues.TabIndex = 89;
             // 
             // lblDetailsMarketValuePrevDayCalculation
             // 
             this.lblDetailsMarketValuePrevDayCalculation.BackColor = System.Drawing.Color.LightGray;
-            this.tableLayoutPanel10.SetColumnSpan(this.lblDetailsMarketValuePrevDayCalculation, 5);
+            this.tlpMarketValuesPreDayValues.SetColumnSpan(this.lblDetailsMarketValuePrevDayCalculation, 5);
             this.lblDetailsMarketValuePrevDayCalculation.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDetailsMarketValuePrevDayCalculation.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDetailsMarketValuePrevDayCalculation.Location = new System.Drawing.Point(5, 1);
@@ -2478,12 +2526,12 @@
             this.lblDetailsMarketValuePrevDayCalculation.Size = new System.Drawing.Size(539, 22);
             this.lblDetailsMarketValuePrevDayCalculation.TabIndex = 80;
             this.lblDetailsMarketValuePrevDayCalculation.Text = "PrevDayCalculation_";
-            this.lblDetailsMarketValuePrevDayCalculation.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblDetailsMarketValuePrevDayCalculation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label72
             // 
             this.label72.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tableLayoutPanel10.SetColumnSpan(this.label72, 3);
+            this.tlpMarketValuesPreDayValues.SetColumnSpan(this.label72, 3);
             this.label72.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label72.Location = new System.Drawing.Point(1, 74);
             this.label72.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
@@ -2742,81 +2790,81 @@
             this.lblDetailsMarketValueDateValue.Size = new System.Drawing.Size(542, 23);
             this.lblDetailsMarketValueDateValue.TabIndex = 87;
             this.lblDetailsMarketValueDateValue.Text = "Date_";
-            this.lblDetailsMarketValueDateValue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblDetailsMarketValueDateValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // tabPgProfitLoss
+            // tabPgDetailsProfitLoss
             // 
-            this.tabPgProfitLoss.AutoScroll = true;
-            this.tabPgProfitLoss.AutoScrollMargin = new System.Drawing.Size(5, 5);
-            this.tabPgProfitLoss.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.tabPgProfitLoss.Controls.Add(this.tabCtrlProfitLoss);
-            this.tabPgProfitLoss.Location = new System.Drawing.Point(4, 26);
-            this.tabPgProfitLoss.Margin = new System.Windows.Forms.Padding(0);
-            this.tabPgProfitLoss.Name = "tabPgProfitLoss";
-            this.tabPgProfitLoss.Size = new System.Drawing.Size(1557, 448);
-            this.tabPgProfitLoss.TabIndex = 4;
-            this.tabPgProfitLoss.Text = "ProfitLoss_";
+            this.tabPgDetailsProfitLoss.AutoScroll = true;
+            this.tabPgDetailsProfitLoss.AutoScrollMargin = new System.Drawing.Size(5, 5);
+            this.tabPgDetailsProfitLoss.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.tabPgDetailsProfitLoss.Controls.Add(this.tabPgDetailsProfitLossValues);
+            this.tabPgDetailsProfitLoss.Location = new System.Drawing.Point(4, 26);
+            this.tabPgDetailsProfitLoss.Margin = new System.Windows.Forms.Padding(0);
+            this.tabPgDetailsProfitLoss.Name = "tabPgDetailsProfitLoss";
+            this.tabPgDetailsProfitLoss.Size = new System.Drawing.Size(1557, 448);
+            this.tabPgDetailsProfitLoss.TabIndex = 4;
+            this.tabPgDetailsProfitLoss.Text = "ProfitLoss_";
             // 
-            // tabCtrlProfitLoss
+            // tabPgDetailsProfitLossValues
             // 
-            this.tabCtrlProfitLoss.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-            this.tabCtrlProfitLoss.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabCtrlProfitLoss.Location = new System.Drawing.Point(0, 0);
-            this.tabCtrlProfitLoss.Name = "tabCtrlProfitLoss";
-            this.tabCtrlProfitLoss.SelectedIndex = 0;
-            this.tabCtrlProfitLoss.Size = new System.Drawing.Size(1557, 448);
-            this.tabCtrlProfitLoss.TabIndex = 0;
-            this.tabCtrlProfitLoss.SelectedIndexChanged += new System.EventHandler(this.TabCtrlProfitLoss_SelectedIndexChanged);
+            this.tabPgDetailsProfitLossValues.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
+            this.tabPgDetailsProfitLossValues.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabPgDetailsProfitLossValues.Location = new System.Drawing.Point(0, 0);
+            this.tabPgDetailsProfitLossValues.Name = "tabPgDetailsProfitLossValues";
+            this.tabPgDetailsProfitLossValues.SelectedIndex = 0;
+            this.tabPgDetailsProfitLossValues.Size = new System.Drawing.Size(1557, 448);
+            this.tabPgDetailsProfitLossValues.TabIndex = 0;
+            this.tabPgDetailsProfitLossValues.SelectedIndexChanged += new System.EventHandler(this.OnTabCtrlProfitLoss_SelectedIndexChanged);
             // 
-            // tabPgDividends
+            // tabPgDetailsDividends
             // 
-            this.tabPgDividends.AutoScroll = true;
-            this.tabPgDividends.AutoScrollMargin = new System.Drawing.Size(5, 5);
-            this.tabPgDividends.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.tabPgDividends.Controls.Add(this.tabCtrlDividends);
-            this.tabPgDividends.Location = new System.Drawing.Point(4, 26);
-            this.tabPgDividends.Margin = new System.Windows.Forms.Padding(0);
-            this.tabPgDividends.Name = "tabPgDividends";
-            this.tabPgDividends.Size = new System.Drawing.Size(1557, 448);
-            this.tabPgDividends.TabIndex = 1;
-            this.tabPgDividends.Text = "Dividends_";
+            this.tabPgDetailsDividends.AutoScroll = true;
+            this.tabPgDetailsDividends.AutoScrollMargin = new System.Drawing.Size(5, 5);
+            this.tabPgDetailsDividends.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.tabPgDetailsDividends.Controls.Add(this.tabPgDetailsDividendValues);
+            this.tabPgDetailsDividends.Location = new System.Drawing.Point(4, 26);
+            this.tabPgDetailsDividends.Margin = new System.Windows.Forms.Padding(0);
+            this.tabPgDetailsDividends.Name = "tabPgDetailsDividends";
+            this.tabPgDetailsDividends.Size = new System.Drawing.Size(1557, 448);
+            this.tabPgDetailsDividends.TabIndex = 1;
+            this.tabPgDetailsDividends.Text = "Dividends_";
             // 
-            // tabCtrlDividends
+            // tabPgDetailsDividendValues
             // 
-            this.tabCtrlDividends.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-            this.tabCtrlDividends.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabCtrlDividends.Location = new System.Drawing.Point(0, 0);
-            this.tabCtrlDividends.Name = "tabCtrlDividends";
-            this.tabCtrlDividends.SelectedIndex = 0;
-            this.tabCtrlDividends.Size = new System.Drawing.Size(1557, 448);
-            this.tabCtrlDividends.TabIndex = 0;
-            this.tabCtrlDividends.SelectedIndexChanged += new System.EventHandler(this.TabCtrlDividends_SelectedIndexChanged);
+            this.tabPgDetailsDividendValues.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
+            this.tabPgDetailsDividendValues.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabPgDetailsDividendValues.Location = new System.Drawing.Point(0, 0);
+            this.tabPgDetailsDividendValues.Name = "tabPgDetailsDividendValues";
+            this.tabPgDetailsDividendValues.SelectedIndex = 0;
+            this.tabPgDetailsDividendValues.Size = new System.Drawing.Size(1557, 448);
+            this.tabPgDetailsDividendValues.TabIndex = 0;
+            this.tabPgDetailsDividendValues.SelectedIndexChanged += new System.EventHandler(this.OnTabCtrlDividend_SelectedIndexChanged);
             // 
-            // tabPgBrokerage
+            // tabPgDetailsBrokerages
             // 
-            this.tabPgBrokerage.AutoScroll = true;
-            this.tabPgBrokerage.AutoScrollMargin = new System.Drawing.Size(5, 5);
-            this.tabPgBrokerage.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.tabPgBrokerage.Controls.Add(this.tabCtrlBrokerage);
-            this.tabPgBrokerage.Location = new System.Drawing.Point(4, 26);
-            this.tabPgBrokerage.Margin = new System.Windows.Forms.Padding(0);
-            this.tabPgBrokerage.Name = "tabPgBrokerage";
-            this.tabPgBrokerage.Size = new System.Drawing.Size(1557, 448);
-            this.tabPgBrokerage.TabIndex = 2;
-            this.tabPgBrokerage.Text = "Brokerage_";
+            this.tabPgDetailsBrokerages.AutoScroll = true;
+            this.tabPgDetailsBrokerages.AutoScrollMargin = new System.Drawing.Size(5, 5);
+            this.tabPgDetailsBrokerages.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.tabPgDetailsBrokerages.Controls.Add(this.tabPgDetailsBrokerageValues);
+            this.tabPgDetailsBrokerages.Location = new System.Drawing.Point(4, 26);
+            this.tabPgDetailsBrokerages.Margin = new System.Windows.Forms.Padding(0);
+            this.tabPgDetailsBrokerages.Name = "tabPgDetailsBrokerages";
+            this.tabPgDetailsBrokerages.Size = new System.Drawing.Size(1557, 448);
+            this.tabPgDetailsBrokerages.TabIndex = 2;
+            this.tabPgDetailsBrokerages.Text = "Brokerage_";
             // 
-            // tabCtrlBrokerage
+            // tabPgDetailsBrokerageValues
             // 
-            this.tabCtrlBrokerage.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-            this.tabCtrlBrokerage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabCtrlBrokerage.Location = new System.Drawing.Point(0, 0);
-            this.tabCtrlBrokerage.Name = "tabCtrlBrokerage";
-            this.tabCtrlBrokerage.SelectedIndex = 0;
-            this.tabCtrlBrokerage.Size = new System.Drawing.Size(1557, 448);
-            this.tabCtrlBrokerage.TabIndex = 0;
-            this.tabCtrlBrokerage.SelectedIndexChanged += new System.EventHandler(this.TabCtrlBrokerage_SelectedIndexChanged);
+            this.tabPgDetailsBrokerageValues.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
+            this.tabPgDetailsBrokerageValues.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabPgDetailsBrokerageValues.Location = new System.Drawing.Point(0, 0);
+            this.tabPgDetailsBrokerageValues.Name = "tabPgDetailsBrokerageValues";
+            this.tabPgDetailsBrokerageValues.SelectedIndex = 0;
+            this.tabPgDetailsBrokerageValues.Size = new System.Drawing.Size(1557, 448);
+            this.tabPgDetailsBrokerageValues.TabIndex = 0;
+            this.tabPgDetailsBrokerageValues.SelectedIndexChanged += new System.EventHandler(this.OnTabCtrlBrokerage_SelectedIndexChanged);
             // 
-            // ShareDetailsForm
+            // frmShareDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -2824,41 +2872,47 @@
             this.ClientSize = new System.Drawing.Size(1584, 511);
             this.Controls.Add(this.grpBoxShareDetails);
             this.MinimumSize = new System.Drawing.Size(1600, 550);
-            this.Name = "ShareDetailsForm";
+            this.Name = "frmShareDetails";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "ShareDetailsForm";
             this.Shown += new System.EventHandler(this.ShareDetailsForm_Shown);
             this.grpBoxShareDetails.ResumeLayout(false);
             this.tblLayPnlShareDetailsTabControls.ResumeLayout(false);
-            this.tabCtrlDetails.ResumeLayout(false);
-            this.tabPgDetailsChart.ResumeLayout(false);
-            this.tabPgDetailsChart.PerformLayout();
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
-            this.tableLayoutPanel2.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
+            this.tabCtrlShareDetails.ResumeLayout(false);
+            this.tabPgDetailsChartValues.ResumeLayout(false);
+            this.tabPgDetailsChartValues.PerformLayout();
+            this.statusStripChart.ResumeLayout(false);
+            this.statusStripChart.PerformLayout();
+            this.tlpShareDetailsButtons.ResumeLayout(false);
+            this.tlpShareDetailsChart.ResumeLayout(false);
+            this.tlpShareDetailsChart.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartDailyValues)).EndInit();
-            this.tableLayoutPanel3.ResumeLayout(false);
-            this.tableLayoutPanel3.PerformLayout();
-            this.tableLayoutPanel4.ResumeLayout(false);
-            this.tableLayoutPanel4.PerformLayout();
-            this.tableLayoutPanel5.ResumeLayout(false);
-            this.tableLayoutPanel5.PerformLayout();
+            this.tlpShareDetailsStartDate.ResumeLayout(false);
+            this.tlpShareDetailsStartDate.PerformLayout();
+            this.tlpShareDetailsInterval.ResumeLayout(false);
+            this.tlpShareDetailsInterval.PerformLayout();
+            this.tlpShareDetailsAmount.ResumeLayout(false);
+            this.tlpShareDetailsAmount.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numDrpDwnAmount)).EndInit();
             this.tabPgDetailsFinalValue.ResumeLayout(false);
-            this.tableLayoutPanel7.ResumeLayout(false);
-            this.tableLayoutPanel6.ResumeLayout(false);
-            this.tlpPrevDayValues.ResumeLayout(false);
-            this.tlpPrevDayValues.PerformLayout();
+            this.tabPgDetailsFinalValue.PerformLayout();
+            this.statusStripCompleteValues.ResumeLayout(false);
+            this.statusStripCompleteValues.PerformLayout();
+            this.tlpCompleteValuesCurrentCalculation.ResumeLayout(false);
+            this.tlpCompleteValuesOverCalculation.ResumeLayout(false);
+            this.tlpCompleteValuesPrevDayValues.ResumeLayout(false);
+            this.tlpCompleteValuesPrevDayValues.PerformLayout();
             this.tabPgDetailsMarketValue.ResumeLayout(false);
-            this.tableLayoutPanel8.ResumeLayout(false);
-            this.tableLayoutPanel9.ResumeLayout(false);
-            this.tableLayoutPanel10.ResumeLayout(false);
-            this.tableLayoutPanel10.PerformLayout();
-            this.tabPgProfitLoss.ResumeLayout(false);
-            this.tabPgDividends.ResumeLayout(false);
-            this.tabPgBrokerage.ResumeLayout(false);
+            this.tabPgDetailsMarketValue.PerformLayout();
+            this.statusStripMarketValues.ResumeLayout(false);
+            this.statusStripMarketValues.PerformLayout();
+            this.tlpMarketValuesCurrentCalculation.ResumeLayout(false);
+            this.tlpMarketValuesOverallCalculation.ResumeLayout(false);
+            this.tlpMarketValuesPreDayValues.ResumeLayout(false);
+            this.tlpMarketValuesPreDayValues.PerformLayout();
+            this.tabPgDetailsProfitLoss.ResumeLayout(false);
+            this.tabPgDetailsDividends.ResumeLayout(false);
+            this.tabPgDetailsBrokerages.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -2866,8 +2920,8 @@
         #endregion
         private System.Windows.Forms.GroupBox grpBoxShareDetails;
         private System.Windows.Forms.TableLayoutPanel tblLayPnlShareDetailsTabControls;
-        private System.Windows.Forms.TabControl tabCtrlDetails;
-        private System.Windows.Forms.TabPage tabPgDetailsChart;
+        private System.Windows.Forms.TabControl tabCtrlShareDetails;
+        private System.Windows.Forms.TabPage tabPgDetailsChartValues;
         private System.Windows.Forms.TabPage tabPgDetailsFinalValue;
         private System.Windows.Forms.Label lblDetailsFinalValuePrevDayPrevPrice;
         private System.Windows.Forms.Label lblDetailsFinalValueDiffSumPrev;
@@ -2876,17 +2930,17 @@
         private System.Windows.Forms.Label lblDetailsFinalValueDiffSumPrevValue;
         private System.Windows.Forms.Label lblDetailsFinalValuePrevDayDiffPerformanceValue;
         private System.Windows.Forms.TabPage tabPgDetailsMarketValue;
-        private System.Windows.Forms.TabPage tabPgProfitLoss;
-        private System.Windows.Forms.TabControl tabCtrlProfitLoss;
-        private System.Windows.Forms.TabPage tabPgDividends;
-        private System.Windows.Forms.TabControl tabCtrlDividends;
-        private System.Windows.Forms.TabPage tabPgBrokerage;
-        private System.Windows.Forms.TabControl tabCtrlBrokerage;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TabPage tabPgDetailsProfitLoss;
+        private System.Windows.Forms.TabControl tabPgDetailsProfitLossValues;
+        private System.Windows.Forms.TabPage tabPgDetailsDividends;
+        private System.Windows.Forms.TabControl tabPgDetailsDividendValues;
+        private System.Windows.Forms.TabPage tabPgDetailsBrokerages;
+        private System.Windows.Forms.TabControl tabPgDetailsBrokerageValues;
+        private System.Windows.Forms.TableLayoutPanel tlpShareDetailsChart;
         private System.Windows.Forms.Button btnOk;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.TableLayoutPanel tlpShareDetailsButtons;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartDailyValues;
-        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.StatusStrip statusStripChart;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelUpdate;
         private System.Windows.Forms.Label lblDailyValuesSelection;
         private System.Windows.Forms.Label lblStartDate;
@@ -2894,9 +2948,9 @@
         private System.Windows.Forms.Label lblIntervalSelection;
         private System.Windows.Forms.ComboBox cbxIntervalSelection;
         private System.Windows.Forms.NumericUpDown numDrpDwnAmount;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+        private System.Windows.Forms.TableLayoutPanel tlpShareDetailsStartDate;
+        private System.Windows.Forms.TableLayoutPanel tlpShareDetailsInterval;
+        private System.Windows.Forms.TableLayoutPanel tlpShareDetailsAmount;
         private System.Windows.Forms.Label lblAmount;
         private System.Windows.Forms.Button btnOpenWebSite;
         private System.Windows.Forms.CheckBox chkClosingPrice;
@@ -2962,15 +3016,15 @@
         private System.Windows.Forms.Label lblDetailsFinalValueOverallCalculation;
         private System.Windows.Forms.Label lblDetailsFinalValuePrevDayCalculation;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TableLayoutPanel tlpPrevDayValues;
+        private System.Windows.Forms.TableLayoutPanel tlpCompleteValuesPrevDayValues;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label lblDetailsFinalValuePrevDayDiffPrice;
         private System.Windows.Forms.Label lblDetailsFinalValuePrevDayDiffValue;
         private System.Windows.Forms.Label lblDetailsFinalValuePrevDayDiffPriceValueValue;
         private System.Windows.Forms.Label lblDetailsFinalValuePrevDayVolumeValue;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
+        private System.Windows.Forms.TableLayoutPanel tlpCompleteValuesOverCalculation;
+        private System.Windows.Forms.TableLayoutPanel tlpCompleteValuesCurrentCalculation;
+        private System.Windows.Forms.TableLayoutPanel tlpMarketValuesCurrentCalculation;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label lblDetailsMarketValueCurrentSumValue;
@@ -2990,7 +3044,7 @@
         private System.Windows.Forms.Label lblDetailsMarketValueCurrentDividend;
         private System.Windows.Forms.Label label40;
         private System.Windows.Forms.Label lblDetailsMarketValueCurrentCurPriceValue;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel9;
+        private System.Windows.Forms.TableLayoutPanel tlpMarketValuesOverallCalculation;
         private System.Windows.Forms.Label lblDetailsMarketValueTotalPerformanceValue;
         private System.Windows.Forms.Label label43;
         private System.Windows.Forms.Label lblDetailsMarketValueTotalProfitLossValue;
@@ -3020,7 +3074,7 @@
         private System.Windows.Forms.Label label68;
         private System.Windows.Forms.Label lblDetailsMarketValueTotalSaleValue;
         private System.Windows.Forms.Label lblDetailsMarketValueTotalDividendValue;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
+        private System.Windows.Forms.TableLayoutPanel tlpMarketValuesPreDayValues;
         private System.Windows.Forms.Label lblDetailsMarketValuePrevDayCalculation;
         private System.Windows.Forms.Label label72;
         private System.Windows.Forms.Label label73;
@@ -3044,5 +3098,9 @@
         private System.Windows.Forms.Label lblDetailsMarketValueDateValue;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.StatusStrip statusStripCompleteValues;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelCompleteValues;
+        private System.Windows.Forms.StatusStrip statusStripMarketValues;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelMarketValues;
     }
 }

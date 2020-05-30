@@ -20,9 +20,12 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_DOCUMENTS_CONFIGURATIONS
+
 using System;
 using System.Collections.Generic;
-#if DEBUG
+#if DEBUG_DOCUMENTS_CONFIGURATIONS
 using System.Windows.Forms;
 #endif
 using System.Xml;
@@ -33,7 +36,7 @@ namespace SharePortfolioManager.Classes
 {
     public static class DocumentParsingConfiguration
     {
-#region Error codes
+        #region Error codes
 
         // Error codes of the DocumentParsingConfiguration class
         public enum DocumentParsingErrorCode
@@ -49,9 +52,9 @@ namespace SharePortfolioManager.Classes
             ConfigurationLoadFailed = -8
         };
 
-#endregion Error codes
+        #endregion Error codes
 
-#region Document types
+        #region Document types
 
         // Types of the DocumentParsingConfiguration class
         public enum DocumentTypes
@@ -62,9 +65,9 @@ namespace SharePortfolioManager.Classes
             BrokerageDocument = 3
         };
 
-#endregion Document types
+        #endregion Document types
 
-#region Properties
+        #region Properties
 
         /// <summary>
         /// Flag if the configuration load was successful
@@ -97,11 +100,13 @@ namespace SharePortfolioManager.Classes
         /// </summary>
         public static List<BankRegex> BankRegexList { get; set; } = new List<BankRegex>();
 
-#region XML attribute names
+        #region XML attribute names
 
-#region Bank sections
+        #region Bank sections
 
-        public const short BankTagCount = 7; // BankIdentifier / BuyIdentifier / SaleIdentifier / DividendIdentifier + 3 x documents (BuyIdentifier / SaleIdentifier / DividendIdentifier)
+        public const short
+            BankTagCount =
+                7; // BankIdentifier / BuyIdentifier / SaleIdentifier / DividendIdentifier + 3 x documents (BuyIdentifier / SaleIdentifier / DividendIdentifier)
 
         public const string BankNameAttrName = "Name";
         public const string BankIdentifierValueAttrName = "BankIdentifierValue";
@@ -112,16 +117,16 @@ namespace SharePortfolioManager.Classes
         public const string SaleIdentifierTagName = "SaleIdentifier";
         public const string DividendIdentifierTagName = "DividendIdentifier";
 
-#endregion Bank sections
+        #endregion Bank sections
 
-#region Document sections
+        #region Document sections
 
         public const string DocumentTagName = "Document";
         public const string DocumentTypeAttrName = "Type";
         public const string DocumentIdentifierValueAttrName = "TypeIdentifierValue";
         public const string DocumentEncodingAttrName = "Encoding";
 
-#region Buy section values
+        #region Buy section values
 
         public const string DocumentTypeBuy = "Buy";
         public const string DocumentTypeBuyWkn = "Wkn";
@@ -136,9 +141,9 @@ namespace SharePortfolioManager.Classes
         public const string DocumentTypeBuyTraderPlaceFee = "TraderPlaceFee";
         public const string DocumentTypeBuyReduction = "Reduction";
 
-#endregion Buy section values
+        #endregion Buy section values
 
-#region Sale section values
+        #region Sale section values
 
         public const string DocumentTypeSale = "Sale";
         public const string DocumentTypeSaleWkn = "Wkn";
@@ -155,9 +160,9 @@ namespace SharePortfolioManager.Classes
         public const string DocumentTypeSaleTraderPlaceFee = "TraderPlaceFee";
         public const string DocumentTypeSaleReduction = "Reduction";
 
-#endregion Sale section values
+        #endregion Sale section values
 
-#region Dividend section values
+        #region Dividend section values
 
         public const string DocumentTypeDividend = "Dividend";
         public const string DocumentTypeDividendWkn = "Wkn";
@@ -170,13 +175,13 @@ namespace SharePortfolioManager.Classes
         public const string DocumentTypeDividendCapitalGainTax = "CapitalGainTax";
         public const string DocumentTypeDividendSolidarityTax = "SolidarityTax";
 
-#endregion Dividend section values
+        #endregion Dividend section values
 
         public const string DocumentTypeBrokerage = "Brokerage";
 
-#endregion Document sections
+        #endregion Document sections
 
-#region Typ sections
+        #region Typ sections
 
         public const string NameAttrName = "Name";
 
@@ -186,13 +191,13 @@ namespace SharePortfolioManager.Classes
 
         public const string RegexOptionsAttrName = "RegexOptions";
 
-#endregion Typ sections
+        #endregion Typ sections
 
-#endregion XML attribute names
+        #endregion XML attribute names
 
-#endregion Properties
+        #endregion Properties
 
-#region Load document configurations
+        #region Load document configurations
 
         /// <summary>
         /// This function loads the document configurations from the Documents.XML
@@ -278,15 +283,19 @@ namespace SharePortfolioManager.Classes
                                         // else read the identifier elements
                                         if (nodeElement.ChildNodes[i].Name == DocumentTagName &&
                                             nodeElement.ChildNodes[i].Attributes?[DocumentTypeAttrName] != null &&
-                                            nodeElement.ChildNodes[i].Attributes?[DocumentIdentifierValueAttrName] != null &&
+                                            nodeElement.ChildNodes[i].Attributes?[DocumentIdentifierValueAttrName] !=
+                                            null &&
                                             nodeElement.ChildNodes[i].Attributes?[DocumentEncodingAttrName] != null
-                                            )
+                                        )
                                         {
                                             var documentRegex = new RegExList();
 
-                                            var documentName = nodeElement.ChildNodes[i].Attributes[DocumentTypeAttrName].Value;
-                                            var typeIdentifier = nodeElement.ChildNodes[i].Attributes[DocumentIdentifierValueAttrName].Value;
-                                            var documentEncoding = nodeElement.ChildNodes[i].Attributes[DocumentEncodingAttrName].Value;
+                                            var documentName = nodeElement.ChildNodes[i]
+                                                .Attributes[DocumentTypeAttrName].Value;
+                                            var typeIdentifier = nodeElement.ChildNodes[i]
+                                                .Attributes[DocumentIdentifierValueAttrName].Value;
+                                            var documentEncoding = nodeElement.ChildNodes[i]
+                                                .Attributes[DocumentEncodingAttrName].Value;
 
                                             if (nodeElement.ChildNodes[i].HasChildNodes)
                                             {
@@ -310,26 +319,31 @@ namespace SharePortfolioManager.Classes
                                                     }
                                                     else
                                                     {
-                                                        var regexName = nodeElement.ChildNodes[i].ChildNodes[j].Attributes[NameAttrName]
+                                                        var regexName = nodeElement.ChildNodes[i].ChildNodes[j]
+                                                            .Attributes[NameAttrName]
                                                             .Value;
                                                         var iFoundIndex =
                                                             Convert.ToInt16(
-                                                                nodeElement.ChildNodes[i].ChildNodes[j].Attributes[FoundIndexAttrName]
+                                                                nodeElement.ChildNodes[i].ChildNodes[j]
+                                                                    .Attributes[FoundIndexAttrName]
                                                                     .Value);
                                                         var bResultEmpty =
                                                             Convert.ToBoolean(
-                                                                nodeElement.ChildNodes[i].ChildNodes[j].Attributes[ResultEmptyAttrName]
+                                                                nodeElement.ChildNodes[i].ChildNodes[j]
+                                                                    .Attributes[ResultEmptyAttrName]
                                                                     .Value);
                                                         var regexOptionsList =
                                                             Helper.GetRegexOptions(
-                                                                nodeElement.ChildNodes[i].ChildNodes[j].Attributes[RegexOptionsAttrName]
+                                                                nodeElement.ChildNodes[i].ChildNodes[j]
+                                                                    .Attributes[RegexOptionsAttrName]
                                                                     .Value);
 
                                                         // Parsing expression
-                                                        var regexExpression = nodeElement.ChildNodes[i].ChildNodes[j].InnerText;
+                                                        var regexExpression = nodeElement.ChildNodes[i].ChildNodes[j]
+                                                            .InnerText;
 
                                                         documentRegex.Add(
-                                                                regexName,
+                                                            regexName,
                                                             new RegexElement(regexExpression,
                                                                 iFoundIndex,
                                                                 bResultEmpty,
@@ -344,7 +358,10 @@ namespace SharePortfolioManager.Classes
                                                 break;
                                             }
 
-                                            dictionaryDocumentLists.Add(nodeElement.ChildNodes[i].Attributes[DocumentTypeAttrName].Value, new DocumentRegex(documentName, typeIdentifier, documentEncoding, documentRegex));
+                                            dictionaryDocumentLists.Add(
+                                                nodeElement.ChildNodes[i].Attributes[DocumentTypeAttrName].Value,
+                                                new DocumentRegex(documentName, typeIdentifier, documentEncoding,
+                                                    documentRegex));
                                         }
                                         else
                                         {
@@ -361,16 +378,19 @@ namespace SharePortfolioManager.Classes
                                             }
                                             else
                                             {
-                                                var regexName = nodeElement.ChildNodes[i].Attributes[NameAttrName].Value;
+                                                var regexName = nodeElement.ChildNodes[i].Attributes[NameAttrName]
+                                                    .Value;
                                                 var iFoundIndex =
                                                     Convert.ToInt16(
                                                         nodeElement.ChildNodes[i].Attributes[FoundIndexAttrName].Value);
                                                 var bResultEmpty =
                                                     Convert.ToBoolean(
-                                                        nodeElement.ChildNodes[i].Attributes[ResultEmptyAttrName].Value);
+                                                        nodeElement.ChildNodes[i].Attributes[ResultEmptyAttrName]
+                                                            .Value);
                                                 var regexOptionsList =
                                                     Helper.GetRegexOptions(
-                                                        nodeElement.ChildNodes[i].Attributes[RegexOptionsAttrName].Value);
+                                                        nodeElement.ChildNodes[i].Attributes[RegexOptionsAttrName]
+                                                            .Value);
 
                                                 // Parsing expression
                                                 var regexExpression = nodeElement.ChildNodes[i].InnerText;
@@ -386,7 +406,8 @@ namespace SharePortfolioManager.Classes
 
                                     // Add bank configuration to the global list
                                     if (loadSettings)
-                                        BankRegexList.Add(new BankRegex(bankName, bankIdentifier, bankEncoding, bankRegexList,
+                                        BankRegexList.Add(new BankRegex(bankName, bankIdentifier, bankEncoding,
+                                            bankRegexList,
                                             dictionaryDocumentLists));
                                 }
                             }
@@ -419,11 +440,9 @@ namespace SharePortfolioManager.Classes
             {
                 // Set last exception
                 LastException = ex;
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
+
+                Helper.ShowExceptionMessage(ex);
+
                 // Close website reader
                 XmlReader?.Close();
 
@@ -437,11 +456,8 @@ namespace SharePortfolioManager.Classes
             {
                 // Set last exception
                 LastException = ex;
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
+
+                Helper.ShowExceptionMessage(ex);
 
                 // Close website reader
                 XmlReader?.Close();
@@ -454,6 +470,6 @@ namespace SharePortfolioManager.Classes
             }
         }
 
-#endregion Load website configurations
+        #endregion Load website configurations
     }
 }

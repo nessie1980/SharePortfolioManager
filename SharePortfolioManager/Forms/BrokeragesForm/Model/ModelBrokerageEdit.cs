@@ -20,6 +20,9 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_BROKERAGE_EDIT_MODEL
+
 using LanguageHandler;
 using Logging;
 using SharePortfolioManager.BrokeragesForm.View;
@@ -28,6 +31,7 @@ using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager.BrokeragesForm.Model
 {
+
     /// <summary>
     /// Interface of the BrokerageEdit model
     /// </summary>

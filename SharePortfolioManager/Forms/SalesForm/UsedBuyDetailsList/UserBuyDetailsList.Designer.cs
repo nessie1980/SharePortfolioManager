@@ -73,12 +73,12 @@ namespace SharePortfolioManager.SalesForm.UsedBuyDetailsList
             this.tblLayPnlOnwMessageBox.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblLayPnlOnwMessageBox.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33F));
             this.tblLayPnlOnwMessageBox.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tblLayPnlOnwMessageBox.Size = new System.Drawing.Size(598, 195);
+            this.tblLayPnlOnwMessageBox.Size = new System.Drawing.Size(668, 197);
             this.tblLayPnlOnwMessageBox.TabIndex = 4;
             // 
             // btnOk
             // 
-            this.btnOk.Location = new System.Drawing.Point(418, 162);
+            this.btnOk.Location = new System.Drawing.Point(488, 164);
             this.btnOk.Margin = new System.Windows.Forms.Padding(0);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(180, 33);
@@ -95,7 +95,7 @@ namespace SharePortfolioManager.SalesForm.UsedBuyDetailsList
             this.rchTxtBoxUsedBuyDetails.Location = new System.Drawing.Point(3, 3);
             this.rchTxtBoxUsedBuyDetails.Name = "rchTxtBoxUsedBuyDetails";
             this.rchTxtBoxUsedBuyDetails.ReadOnly = true;
-            this.rchTxtBoxUsedBuyDetails.Size = new System.Drawing.Size(592, 156);
+            this.rchTxtBoxUsedBuyDetails.Size = new System.Drawing.Size(662, 158);
             this.rchTxtBoxUsedBuyDetails.TabIndex = 5;
             this.rchTxtBoxUsedBuyDetails.Text = "";
             // 
@@ -108,7 +108,7 @@ namespace SharePortfolioManager.SalesForm.UsedBuyDetailsList
             this.grpBoxUsedBuyDetails.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.grpBoxUsedBuyDetails.Location = new System.Drawing.Point(5, 5);
             this.grpBoxUsedBuyDetails.Name = "grpBoxUsedBuyDetails";
-            this.grpBoxUsedBuyDetails.Size = new System.Drawing.Size(604, 216);
+            this.grpBoxUsedBuyDetails.Size = new System.Drawing.Size(674, 218);
             this.grpBoxUsedBuyDetails.TabIndex = 5;
             this.grpBoxUsedBuyDetails.TabStop = false;
             this.grpBoxUsedBuyDetails.Text = "_UsedBuyDetails";
@@ -119,13 +119,13 @@ namespace SharePortfolioManager.SalesForm.UsedBuyDetailsList
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.ClientSize = new System.Drawing.Size(614, 224);
+            this.ClientSize = new System.Drawing.Size(684, 226);
             this.Controls.Add(this.grpBoxUsedBuyDetails);
             this.Font = new System.Drawing.Font("Consolas", 9F);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(630, 263);
+            this.MaximumSize = new System.Drawing.Size(700, 265);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(630, 263);
+            this.MinimumSize = new System.Drawing.Size(700, 265);
             this.Name = "UsedBuyDetailsList";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;

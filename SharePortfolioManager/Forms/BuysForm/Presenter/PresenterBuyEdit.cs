@@ -20,10 +20,13 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_BUY_EDIT_PRESENTER
+
 using SharePortfolioManager.BuysForm.Model;
 using SharePortfolioManager.BuysForm.View;
 using SharePortfolioManager.Classes;
-using SharePortfolioManager.Classes.Costs;
+using SharePortfolioManager.Classes.Brokerage;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -284,16 +287,10 @@ namespace SharePortfolioManager.BuysForm.Presenter
 
                 _view.DocumentBrowseFinish();
             }
-#if! DEBUG
-            catch
-            {
-#else
             catch (Exception ex)
             {
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
+                Helper.ShowExceptionMessage(ex);
+
                 _model.ErrorCode = BuyErrorCode.DocumentBrowseFailed;
             }
 
@@ -318,7 +315,7 @@ namespace SharePortfolioManager.BuysForm.Presenter
                 _model.BuyValueBrokerageDec = decBuyValueBrokerage;
                 _model.BuyValueBrokerageReductionDec = decBuyValueBrokerageReduction;
 
-#if DEBUG_BUY || DEBUG
+#if DEBUG_BUY_EDIT_PRESENTER
                 Console.WriteLine(@"BrokerageDec: {0}", _model.BrokerageDec);
                 Console.WriteLine(@"BuyValueDec: {0}", _model.BuyValueDec);
                 Console.WriteLine(@"BuyValueReductionDec: {0}", _model.BuyValueReductionDec);
@@ -328,11 +325,8 @@ namespace SharePortfolioManager.BuysForm.Presenter
             }
             catch (Exception ex)
             {
-#if DEBUG_BUY || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
+                Helper.ShowExceptionMessage(ex);
+
                 _model.BrokerageDec = 0;
                 _model.BuyValueDec = 0;
                 _model.BuyValueReductionDec = 0;
@@ -510,8 +504,10 @@ namespace SharePortfolioManager.BuysForm.Presenter
 
                 return bErrorFlag;
             }
-            catch
+            catch(Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
+
                 _model.ErrorCode = BuyErrorCode.InputValuesInvalid;
                 return true;
             }

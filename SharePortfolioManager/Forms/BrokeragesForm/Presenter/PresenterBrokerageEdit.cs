@@ -20,6 +20,9 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_BROKERAGE_EDIT_PRESENTER
+
 using SharePortfolioManager.BrokeragesForm.Model;
 using SharePortfolioManager.BrokeragesForm.View;
 using SharePortfolioManager.Classes;
@@ -187,11 +190,8 @@ namespace SharePortfolioManager.BrokeragesForm.Presenter
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
+                Helper.ShowExceptionMessage(ex);
+
                 _model.ErrorCode = BrokerageErrorCode.DocumentBrowseFailed;
             }
 
@@ -209,17 +209,14 @@ namespace SharePortfolioManager.BrokeragesForm.Presenter
                 
                 _model.BrokerageDec = decBrokerage;
 
-#if DEBUG_BUY || DEBUG
+#if DEBUG_BROKERAGE_EDIT_PRESENTER
                 Console.WriteLine(@"BrokerageDec: {0}", _model.BrokerageDec);
 #endif
             }
             catch (Exception ex)
             {
-#if DEBUG_BUY || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
+                Helper.ShowExceptionMessage(ex);
+
                 _model.BrokerageDec = 0;
             }
         }
@@ -340,10 +337,12 @@ namespace SharePortfolioManager.BrokeragesForm.Presenter
 
                 return bErrorFlag;
             }
-            catch
+            catch(Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
+
                 _model.ErrorCode = BrokerageErrorCode.InputValuesInvalid;
-                return true;
+                return false;
             }
         }
     }

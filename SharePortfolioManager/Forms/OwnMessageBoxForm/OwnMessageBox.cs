@@ -20,12 +20,26 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_OWN_MESSAGE_BOX
+
 using System;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace SharePortfolioManager.OwnMessageBoxForm
 {
+    /// <summary>
+    /// State levels for the logging (e.g. Info)
+    /// </summary>
+    public enum EOwnMessageBoxInfoType
+    {
+        Info = 0,
+        Warning = 1,
+        Error = 2,
+        InputFileName = 3
+    }
+
     public partial class OwnMessageBox : Form
     {
         #region Variables
@@ -52,7 +66,8 @@ namespace SharePortfolioManager.OwnMessageBoxForm
 
         #region Methods
 
-        public OwnMessageBox(string strCaption, string strMessage, string strOk, string strCancel, bool bInputBox = false )
+        public OwnMessageBox(string strCaption, string strMessage, string strOk, string strCancel,
+            bool bInputBox = false)
         {
             InitializeComponent();
 

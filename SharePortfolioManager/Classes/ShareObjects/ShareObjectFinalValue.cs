@@ -20,8 +20,11 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_FINAL_SHARE_OBJECT
+
 using Parser;
-using SharePortfolioManager.Classes.Costs;
+using SharePortfolioManager.Classes.Brokerage;
 using SharePortfolioManager.Classes.Dividend;
 using SharePortfolioManager.Classes.Sales;
 using System;
@@ -353,7 +356,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
                 _finalValue = value;
 
-#if false
+#if DEBUG_FINAL_SHARE_OBJECT
                 Console.WriteLine(@"");
                 Console.WriteLine(@"_finalValue: {0}", _finalValue);
                 Console.WriteLine(@"PortfolioFinalValue: {0}", PortfolioFinalValue);
@@ -1370,7 +1373,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
             try
             {
-#if false
+#if DEBUG_FINAL_SHARE_OBJECT
                 Console.WriteLine(@"");
                 Console.WriteLine(@"AddBrokerage() / FinalValue");
                 Console.WriteLine(@"bBrokerageOfABuy: {0}", bBrokerageOfABuy);
@@ -1422,14 +1425,15 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 // Recalculate the profit or lose of all shares
                 CalculatePortfolioProfitLoss();
 
-#if false
+#if DEBUG_FINAL_SHARE_OBJECT
                 Console.WriteLine(@"BrokerageValueTotal: {0}", BrokerageValueTotal);
                 Console.WriteLine(@"");
 #endif
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
                 return false;
             }
         }
@@ -1444,7 +1448,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
             try
             {
-#if false
+#if DEBUG_FINAL_SHARE_OBJECT
                 Console.WriteLine(@"");
                 Console.WriteLine(@"RemoveBrokerage() / FinalValue");
                 Console.WriteLine(@"strDateTime: {0}", strDateTime);
@@ -1494,14 +1498,15 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 // Recalculate the profit or lose of all shares
                 CalculatePortfolioProfitLoss();
 
-#if false
+#if DEBUG_FINAL_SHARE_OBJECT
                 Console.WriteLine(@"BrokerageValueTotal: {0}", BrokerageValueTotal);
                 Console.WriteLine(@"");
 #endif
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
                 return false;
             }
         }
@@ -1527,7 +1532,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
             try
             {
-#if false
+#if DEBUG_FINAL_SHARE_OBJECT
                 Console.WriteLine(@"");
                 Console.WriteLine(@"AddBuy() / FinalValue");
                 Console.WriteLine(@"strGuid: {0}", strGuid);
@@ -1564,7 +1569,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 PurchaseValue += AllBuyEntries.GetBuyObjectByGuidDate(strGuid, strDateTime).BuyValueBrokerageReduction;
                 PortfolioCompletePurchaseValue +=
                     AllBuyEntries.GetBuyObjectByGuidDate(strGuid, strDateTime).BuyValueBrokerageReduction;
-#if false
+
+#if DEBUG_FINAL_SHARE_OBJECT
                 Console.WriteLine(@"Volume: {0}", Volume);
                 Console.WriteLine(@"PurchaseValue: {0}", PurchaseValue);
                 Console.WriteLine(@"BuyValueBrokerageReduction: {0}", buyObject.BuyValueBrokerageReduction);
@@ -1572,8 +1578,9 @@ namespace SharePortfolioManager.Classes.ShareObjects
 #endif
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
                 return false;
             }
         }
@@ -1588,7 +1595,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
             try
             {
-#if false
+#if DEBUG_FINAL_SHARE_OBJECT
                 Console.WriteLine(@"");
                 Console.WriteLine(@"RemoveBuy() / FinalValue");
                 Console.WriteLine(@"strGuid: {0}", strGuid);
@@ -1608,7 +1615,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
                     PurchaseValue -= buyObject.BuyValueBrokerageReduction;
                     PortfolioCompletePurchaseValue -=
                         AllBuyEntries.GetBuyObjectByGuidDate(strGuid, strDateTime).BuyValueBrokerageReduction;
-#if false
+
+#if DEBUG_FINAL_SHARE_OBJECT
                     Console.WriteLine(@"Volume: {0}", Volume);
                     Console.WriteLine(@"PurchaseValue: {0}", PurchaseValue);
                     Console.WriteLine(@"BuyValueBrokerageReduction: {0}", buyObject.BuyValueBrokerageReduction);
@@ -1622,7 +1630,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Helper.ShowExceptionMessage(ex);
                 return false;
             }
         }
@@ -1638,7 +1646,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
             try
             {
-#if DEBUG_SHAREOBJECT_FINAL || DEBUG_BUY
+#if DEBUG_FINAL_SHARE_OBJECT
                 Console.WriteLine(@"");
                 Console.WriteLine(@"SetBuyDocument() / FinalValue");
                 Console.WriteLine(@"strGuid: {0}", strGuid);
@@ -1660,7 +1668,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Helper.ShowExceptionMessage(ex);
                 return false;
             }
         }
@@ -1689,7 +1697,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
             try
             {
-#if false
+#if DEBUG_FINAL_SHARE_OBJECT
                 Console.WriteLine(@"");
                 Console.WriteLine(@"AddSale() / FinalValue");
                 Console.WriteLine(@"strDateTime: {0}", strDate);
@@ -1732,15 +1740,16 @@ namespace SharePortfolioManager.Classes.ShareObjects
                         PortfolioCompleteFinalValue += (AllSaleEntries.GetSaleObjectByGuidDate(strGuid, strDate).PayoutBrokerageReduction);
                 }
 
-#if false
+#if DEBUG_FINAL_SHARE_OBJECT
                 Console.WriteLine(@"Volume: {0}", Volume);
                 Console.WriteLine(@"SalePurchaseValueTotal: {0}", SalePurchaseValueTotal);
                 Console.WriteLine(@"PurchaseValue: {0}", PurchaseValue);
 #endif
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
                 return false;
             }
         }
@@ -1755,7 +1764,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
             try
             {
-#if false
+#if DEBUG_FINAL_SHARE_OBJECT
                 Console.WriteLine(@"");
                 Console.WriteLine(@"RemoveSale() / FinalValue");
                 Console.WriteLine(@"strGuid: {0}", strGuid);
@@ -1778,7 +1787,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
                     // Calculate portfolio value
                     if (AllSaleEntries.GetSaleObjectByGuidDate(strGuid, strDateTime).PayoutBrokerageReduction > decimal.MinValue / 2 && FinalValue > decimal.MinValue / 2)
                         PortfolioCompleteFinalValue -= (AllSaleEntries.GetSaleObjectByGuidDate(strGuid, strDateTime).PayoutBrokerageReduction);
-#if false
+
+#if DEBUG_FINAL_SHARE_OBJECT
                     Console.WriteLine(@"Volume: {0}", Volume);
                     Console.WriteLine(@"SalePurchaseValueTotal: {0}", SalePurchaseValueTotal);
                     Console.WriteLine(@"PurchaseValue: {0}", PurchaseValue);
@@ -1789,8 +1799,9 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
                 return false;
             }
         }
@@ -1806,7 +1817,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
             try
             {
-#if false
+#if DEBUG_FINAL_SHARE_OBJECT
                 Console.WriteLine(@"");
                 Console.WriteLine(@"SetSaleDocument() / FinalValue");
                 Console.WriteLine(@"strGuid: {0}", strGuid);
@@ -1828,7 +1839,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Helper.ShowExceptionMessage(ex);
                 return false;
             }
         }
@@ -1858,7 +1869,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
             try
             {
-#if false
+#if DEBUG_FINAL_SHARE_OBJECT
                 Console.WriteLine(@"");
                 Console.WriteLine(@"AddDividend() / FinalValue");
                 Console.WriteLine(@"EnableFC: {0}", csEnableFc);
@@ -1904,14 +1915,15 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 // Recalculate the profit or lose of all shares
                 CalculatePortfolioProfitLoss();
 
-#if false
+#if DEBUG_FINAL_SHARE_OBJECT
                 Console.WriteLine(@"DividendValueTotal: {0}", DividendValueTotal);
                 Console.WriteLine(@"");
 #endif
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
                 return false;
             }
         }
@@ -1926,7 +1938,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
             try
             {
-#if false
+#if DEBUG_FINAL_SHARE_OBJECT
                 Console.WriteLine(@"");
                 Console.WriteLine(@"RemoveDividend() / FinalValue");
                 Console.WriteLine(@"strGuid: {0}", strGuid);
@@ -1964,14 +1976,15 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 // Recalculate the profit or lose of all shares
                 CalculatePortfolioProfitLoss();
 
-#if false
+#if DEBUG_FINAL_SHARE_OBJECT
                 Console.WriteLine(@"DividendValueTotal: {0}", DividendValueTotal);
                 Console.WriteLine(@"");
 #endif
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
                 return false;
             }
         }
@@ -2007,7 +2020,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 }
             }
 
-#if DEBUG_SHAREOBJECT_FINAL
+#if DEBUG_FINAL_SHARE_OBJECT
             Console.WriteLine(@"");
             Console.WriteLine(@"CalculateFinalValue() / FinalValue");
             Console.WriteLine(@"CurrentPrice: {0}", CurPrice);
@@ -2047,7 +2060,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 }
             }
 
-#if true
+#if DEBUG_FINAL_SHARE_OBJECT
             Console.WriteLine(@"");
             Console.WriteLine(@"CalculateProfitLoss() / FinalValue");
             Console.WriteLine(@"CurPrice: {0}", CurPrice);
@@ -2081,7 +2094,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 PerformanceValue = 0;
                 CompletePerformanceValue = 0;
             }
-#if false
+
+#if DEBUG_FINAL_SHARE_OBJECT
             Console.WriteLine(@"");
             Console.WriteLine(@"CalculatePerformance() / FinalValue");
             Console.WriteLine(@"FinalValue: {0}", FinalValue);
@@ -2107,12 +2121,15 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="strPortfolioFileName">Name of the portfolio XML</param>
         /// <param name="exception">Exception which may occur. If no exception occurs the value is null</param>
         /// <returns>Flag if the save was successful</returns>
-        public static bool SaveShareObject(ShareObjectFinalValue shareObject, ref XmlDocument xmlPortfolio, ref XmlReader xmlReaderPortfolio, ref XmlReaderSettings xmlReaderSettingsPortfolio, string strPortfolioFileName, out Exception exception)
+        public static bool SaveShareObject(ShareObjectFinalValue shareObject, ref XmlDocument xmlPortfolio,
+            ref XmlReader xmlReaderPortfolio, ref XmlReaderSettings xmlReaderSettingsPortfolio,
+            string strPortfolioFileName, out Exception exception)
         {
             try
             {
                 // Update existing share
-                var nodeListShares = xmlPortfolio.SelectNodes($"/{GeneralPortfolioAttrName}/{GeneralShareAttrName} [@{GeneralWknAttrName} = \"{shareObject.Wkn}\"]");
+                var nodeListShares = xmlPortfolio.SelectNodes(
+                    $"/{GeneralPortfolioAttrName}/{GeneralShareAttrName} [@{GeneralWknAttrName} = \"{shareObject.Wkn}\"]");
                 if (nodeListShares != null)
                 {
                     foreach (XmlNode nodeElement in nodeListShares)
@@ -2120,6 +2137,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                         if (!nodeElement.HasChildNodes || nodeElement.ChildNodes.Count != ShareObjectTagCount)
                         {
                             exception = null;
+
                             return false;
                         }
 
@@ -2133,35 +2151,35 @@ namespace SharePortfolioManager.Classes.ShareObjects
                             {
                                 #region General
 
-                                case (int)FrmMain.PortfolioParts.StockMarketLaunchDate:
+                                case (int) FrmMain.PortfolioParts.StockMarketLaunchDate:
                                     nodeElement.ChildNodes[i].InnerText =
                                         $@"{shareObject.StockMarketLaunchDate}";
                                     break;
-                                case (int)FrmMain.PortfolioParts.LastUpdateInternet:
+                                case (int) FrmMain.PortfolioParts.LastUpdateInternet:
                                     nodeElement.ChildNodes[i].InnerText =
                                         $@"{shareObject.LastUpdateViaInternet.ToShortDateString()} {
-                                            shareObject.LastUpdateViaInternet.ToShortTimeString()
-                                        }";
+                                                shareObject.LastUpdateViaInternet.ToShortTimeString()
+                                            }";
                                     break;
-                                case (int)FrmMain.PortfolioParts.LastUpdateShare:
+                                case (int) FrmMain.PortfolioParts.LastUpdateShare:
                                     nodeElement.ChildNodes[i].InnerText =
                                         $@"{shareObject.LastUpdateShare.ToShortDateString()} {
-                                            shareObject.LastUpdateShare.ToShortTimeString()
-                                        }";
+                                                shareObject.LastUpdateShare.ToShortTimeString()
+                                            }";
                                     break;
-                                case (int)FrmMain.PortfolioParts.SharePrice:
+                                case (int) FrmMain.PortfolioParts.SharePrice:
                                     nodeElement.ChildNodes[i].InnerText = shareObject.CurPriceAsStr;
                                     break;
-                                case (int)FrmMain.PortfolioParts.SharePriceBefore:
+                                case (int) FrmMain.PortfolioParts.SharePriceBefore:
                                     nodeElement.ChildNodes[i].InnerText = shareObject.PrevPriceAsStr;
                                     break;
-                                case (int)FrmMain.PortfolioParts.WebSite:
+                                case (int) FrmMain.PortfolioParts.WebSite:
                                     nodeElement.ChildNodes[i].InnerText = shareObject.UpdateWebSiteUrl;
                                     break;
-                                case (int)FrmMain.PortfolioParts.Culture:
+                                case (int) FrmMain.PortfolioParts.Culture:
                                     nodeElement.ChildNodes[i].InnerXml = shareObject.CultureInfoAsStr;
                                     break;
-                                case (int)FrmMain.PortfolioParts.ShareType:
+                                case (int) FrmMain.PortfolioParts.ShareType:
                                     nodeElement.ChildNodes[i].InnerXml = shareObject.ShareType.ToString();
                                     break;
 
@@ -2169,11 +2187,12 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
                                 #region Daily values
 
-                                case (int)FrmMain.PortfolioParts.DailyValues:
+                                case (int) FrmMain.PortfolioParts.DailyValues:
                                     // Remove old daily values
                                     while (nodeElement.ChildNodes[i].FirstChild != null)
                                         nodeElement.ChildNodes[i].RemoveChild(nodeElement.ChildNodes[i].FirstChild);
-                                    nodeElement.ChildNodes[i].Attributes[DailyValuesWebSiteAttrName].InnerText = shareObject.DailyValuesUpdateWebSiteUrl;
+                                    nodeElement.ChildNodes[i].Attributes[DailyValuesWebSiteAttrName].InnerText =
+                                        shareObject.DailyValuesUpdateWebSiteUrl;
 
                                     foreach (var dailyValue in shareObject.DailyValues)
                                     {
@@ -2190,16 +2209,17 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                         newDailyValuesElement.SetAttribute(DailyValuesBottomTagName,
                                             dailyValue.Bottom.ToString(CultureInfo.CurrentCulture));
                                         newDailyValuesElement.SetAttribute(DailyValuesVolumeTagName,
-                                           dailyValue.Volume.ToString(CultureInfo.CurrentCulture));
+                                            dailyValue.Volume.ToString(CultureInfo.CurrentCulture));
                                         nodeElement.ChildNodes[i].AppendChild(newDailyValuesElement);
                                     }
+
                                     break;
 
                                 #endregion Daily values
 
                                 #region Brokerage
 
-                                case (int)FrmMain.PortfolioParts.Brokerages:
+                                case (int) FrmMain.PortfolioParts.Brokerages:
                                     // Remove old brokerage
                                     nodeElement.ChildNodes[i].RemoveAll();
                                     foreach (var brokerageElementYear in shareObject.AllBrokerageEntries
@@ -2226,16 +2246,17 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                         newBrokerageElement.SetAttribute(BrokerageReductionAttrName,
                                             brokerageElementYear.ReductionValueAsStr);
                                         newBrokerageElement.SetAttribute(BrokerageDocumentAttrName,
-                                            brokerageElementYear.BrokerageDocument);
+                                            brokerageElementYear.DocumentAsStr);
                                         nodeElement.ChildNodes[i].AppendChild(newBrokerageElement);
                                     }
+
                                     break;
 
                                 #endregion Brokerage
 
                                 #region Buys
 
-                                case (int)FrmMain.PortfolioParts.Buys:
+                                case (int) FrmMain.PortfolioParts.Buys:
                                     // Remove old buys
                                     nodeElement.ChildNodes[i].RemoveAll();
                                     foreach (var buyElementYear in shareObject.AllBuyEntries
@@ -2258,16 +2279,17 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                         newBuyElement.SetAttribute(BuyBrokerageGuidAttrName,
                                             buyElementYear.BrokerageGuid);
                                         newBuyElement.SetAttribute(BuyDocumentAttrName,
-                                            buyElementYear.Document);
+                                            buyElementYear.DocumentAsStr);
                                         nodeElement.ChildNodes[i].AppendChild(newBuyElement);
                                     }
+
                                     break;
 
                                 #endregion Buys
 
                                 #region Sales
 
-                                case (int)FrmMain.PortfolioParts.Sales:
+                                case (int) FrmMain.PortfolioParts.Sales:
                                     // Remove old sales
                                     nodeElement.ChildNodes[i].RemoveAll();
                                     foreach (var saleElementYear in shareObject.AllSaleEntries
@@ -2296,7 +2318,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                         newSaleElement.SetAttribute(SaleBrokerageGuidAttrName,
                                             saleElementYear.BrokerageGuid);
                                         newSaleElement.SetAttribute(SaleDocumentAttrName,
-                                            saleElementYear.Document);
+                                            saleElementYear.DocumentAsStr);
 
                                         // Used buy details
                                         var newUsedBuysElement =
@@ -2326,7 +2348,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                                 newUsedBuyElement.SetAttribute(
                                                     SaleBuyGuidAttrName,
                                                     usedBuys.BuyGuid);
-                                                
+
                                                 // Add buy of the sale to the used buys
                                                 newUsedBuysElement.AppendChild(newUsedBuyElement);
                                             }
@@ -2338,13 +2360,14 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                         // Add new sale to the share
                                         nodeElement.ChildNodes[i].AppendChild(newSaleElement);
                                     }
+
                                     break;
 
                                 #endregion Sales
 
                                 #region Dividends
 
-                                case (int)FrmMain.PortfolioParts.Dividends:
+                                case (int) FrmMain.PortfolioParts.Dividends:
                                     // Remove old dividends
                                     nodeElement.ChildNodes[i].RemoveAll();
                                     ((XmlElement) nodeElement.ChildNodes[i]).SetAttribute(
@@ -2359,25 +2382,25 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                         newDividendElement.SetAttribute(DividendGuidAttrName,
                                             dividendObject.Guid);
                                         newDividendElement.SetAttribute(DividendDateAttrName,
-                                            dividendObject.DateStr);
+                                            dividendObject.DateAsStr);
                                         newDividendElement.SetAttribute(DividendRateAttrName,
-                                            dividendObject.Rate);
+                                            dividendObject.DividendAsStr);
                                         newDividendElement.SetAttribute(DividendVolumeAttrName,
-                                            dividendObject.Volume);
+                                            dividendObject.VolumeAsStr);
 
                                         newDividendElement.SetAttribute(DividendTaxAtSourceAttrName,
-                                            dividendObject.TaxAtSource);
+                                            dividendObject.TaxAtSourceAsStr);
                                         newDividendElement.SetAttribute(
                                             DividendCapitalGainsTaxAttrName,
-                                            dividendObject.CapitalGainsTax);
+                                            dividendObject.CapitalGainsTaxAsStr);
                                         newDividendElement.SetAttribute(
                                             DividendSolidarityTaxAttrName,
-                                            dividendObject.SolidarityTax);
+                                            dividendObject.SolidarityTaxAsStr);
 
                                         newDividendElement.SetAttribute(DividendPriceAttrName,
-                                            dividendObject.Price);
+                                            dividendObject.PriceAtPaydayAsStr);
                                         newDividendElement.SetAttribute(DividendDocumentAttrName,
-                                            dividendObject.Document);
+                                            dividendObject.DocumentAsStr);
 
                                         // Foreign currency information
                                         XmlElement newForeignCurrencyElement =
@@ -2385,13 +2408,13 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
                                         newForeignCurrencyElement.SetAttribute(
                                             DividendForeignCuFlagAttrName,
-                                            dividendObject.EnableFcStr);
+                                            dividendObject.EnableFcAsStr);
 
                                         if (dividendObject.EnableFc == CheckState.Checked)
                                         {
                                             newForeignCurrencyElement.SetAttribute(
                                                 DividendExchangeRatioAttrName,
-                                                dividendObject.ExchangeRatio);
+                                                dividendObject.ExchangeRatioAsStr);
                                             newForeignCurrencyElement.SetAttribute(
                                                 DividendNameAttrName,
                                                 dividendObject.CultureInfoFc.Name);
@@ -2404,10 +2427,12 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                                 DividendNameAttrName,
                                                 dividendObject.DividendCultureInfo.Name);
                                         }
+
                                         newDividendElement.AppendChild(newForeignCurrencyElement);
 
                                         nodeElement.ChildNodes[i].AppendChild(newDividendElement);
                                     }
+
                                     break;
 
                                 #endregion Dividends
@@ -2511,25 +2536,34 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
                         // Add child nodes (daily values)
                         var newDailyValues = xmlPortfolio.CreateElement(GeneralDailyValuesAttrName);
-                        newDailyValues.SetAttribute(DailyValuesWebSiteAttrName, shareObject.DailyValuesUpdateWebSiteUrl);
+                        newDailyValues.SetAttribute(DailyValuesWebSiteAttrName,
+                            shareObject.DailyValuesUpdateWebSiteUrl);
                         newShareNode.AppendChild(newDailyValues);
 
                         // Add child nodes (brokerage)
                         var newBrokerage = xmlPortfolio.CreateElement(GeneralBrokeragesAttrName);
                         newShareNode.AppendChild(newBrokerage);
-                        foreach (var brokerageElementYear in shareObject.AllBrokerageEntries.GetAllBrokerageOfTheShare())
+                        foreach (var brokerageElementYear in shareObject.AllBrokerageEntries.GetAllBrokerageOfTheShare()
+                        )
                         {
                             var newBrokerageElement = xmlPortfolio.CreateElement(BrokerageTagNamePre);
                             newBrokerageElement.SetAttribute(BrokerageGuidAttrName, brokerageElementYear.Guid);
-                            newBrokerageElement.SetAttribute(BrokerageBuyPartAttrName, brokerageElementYear.PartOfABuyAsStr);
-                            newBrokerageElement.SetAttribute(BrokerageSalePartAttrName, brokerageElementYear.PartOfASaleAsStr);
-                            newBrokerageElement.SetAttribute(BrokerageGuidBuySaleAttrName, brokerageElementYear.GuidBuySale);
+                            newBrokerageElement.SetAttribute(BrokerageBuyPartAttrName,
+                                brokerageElementYear.PartOfABuyAsStr);
+                            newBrokerageElement.SetAttribute(BrokerageSalePartAttrName,
+                                brokerageElementYear.PartOfASaleAsStr);
+                            newBrokerageElement.SetAttribute(BrokerageGuidBuySaleAttrName,
+                                brokerageElementYear.GuidBuySale);
                             newBrokerageElement.SetAttribute(BrokerageDateAttrName, brokerageElementYear.DateAsStr);
-                            newBrokerageElement.SetAttribute(BrokerageProvisionAttrName, brokerageElementYear.ProvisionValueAsStr);
-                            newBrokerageElement.SetAttribute(BrokerageBrokerFeeAttrName, brokerageElementYear.BrokerFeeValueAsStr);
-                            newBrokerageElement.SetAttribute(BrokerageTraderPlaceFeeAttrName, brokerageElementYear.TraderPlaceFeeValueAsStr);
-                            newBrokerageElement.SetAttribute(BrokerageReductionAttrName, brokerageElementYear.ReductionValueAsStr);
-                            newBrokerageElement.SetAttribute(BuyDocumentAttrName, brokerageElementYear.BrokerageDocument);
+                            newBrokerageElement.SetAttribute(BrokerageProvisionAttrName,
+                                brokerageElementYear.ProvisionValueAsStr);
+                            newBrokerageElement.SetAttribute(BrokerageBrokerFeeAttrName,
+                                brokerageElementYear.BrokerFeeValueAsStr);
+                            newBrokerageElement.SetAttribute(BrokerageTraderPlaceFeeAttrName,
+                                brokerageElementYear.TraderPlaceFeeValueAsStr);
+                            newBrokerageElement.SetAttribute(BrokerageReductionAttrName,
+                                brokerageElementYear.ReductionValueAsStr);
+                            newBrokerageElement.SetAttribute(BuyDocumentAttrName, brokerageElementYear.DocumentAsStr);
                             newBrokerage.AppendChild(newBrokerageElement);
                         }
 
@@ -2546,7 +2580,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                             newBuyElement.SetAttribute(BuyVolumeSoldAttrName, @"0");
                             newBuyElement.SetAttribute(BuyPriceAttrName, buyElementYear.PriceAsStr);
                             newBuyElement.SetAttribute(BuyBrokerageGuidAttrName, buyElementYear.BrokerageGuid);
-                            newBuyElement.SetAttribute(BuyDocumentAttrName, buyElementYear.Document);
+                            newBuyElement.SetAttribute(BuyDocumentAttrName, buyElementYear.DocumentAsStr);
                             newBuys.AppendChild(newBuyElement);
                         }
 
@@ -2569,6 +2603,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 else
                 {
                     exception = null;
+
                     return false;
                 }
 
@@ -2583,6 +2618,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             catch (Exception ex)
             {
                 exception = ex;
+
                 return false;
             }
 
@@ -2611,7 +2647,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             else
                 PortfolioCompletePerformanceValue = 0;
 
-#if DEBUG_SHAREOBJECT_FINAL
+#if DEBUG_FINAL_SHARE_OBJECT
             Console.WriteLine(@"");
             Console.WriteLine(@"CalculatePerformancePortfolio() / FinalValue");
             Console.WriteLine(@"PortfolioFinalValue: {0}", PortfolioFinalValue);
@@ -2629,7 +2665,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             PortfolioProfitLossValue = PortfolioFinalValue - PortfolioPurchaseValue;
             PortfolioCompleteProfitLossValue = PortfolioCompleteFinalValue - PortfolioCompletePurchaseValue;
 
-#if false
+#if DEBUG_FINAL_SHARE_OBJECT
             Console.WriteLine(@"");
             Console.WriteLine(@"CalculatePortfolioProfitLoss() / FinalValue");
             Console.WriteLine(@"PortfolioFinalValue: {0}", PortfolioFinalValue);
@@ -2675,7 +2711,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
             // Free any unmanaged objects here.
 
-#if SHAREOBJECT_DEBUG
+#if DEBUG_FINAL_SHARE_OBJECT
             Console.WriteLine(@"ShareObjectFinalValue destructor...");
 #endif
 

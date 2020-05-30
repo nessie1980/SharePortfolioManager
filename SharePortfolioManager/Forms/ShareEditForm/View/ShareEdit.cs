@@ -20,6 +20,9 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_SHARE_EDIT
+
 using LanguageHandler;
 using Logging;
 using SharePortfolioManager.BrokeragesForm.Model;
@@ -194,10 +197,10 @@ namespace SharePortfolioManager
 
                 lblDividendPayoutInterval.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/PayoutInterval", LanguageName);
                 // Add dividend payout interval values
-                Helper.GetComboBoxItems(@"/ComboBoxItemsPayout/*", LanguageName, Language).ForEach(item => cbxDividendPayoutInterval.Items.Add(item));
+                Language.GetLanguageTextListByXPath(@"/ComboBoxItemsPayout/*", LanguageName).ForEach(item => cbxDividendPayoutInterval.Items.Add(item));
                 lblShareType.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/ShareType", LanguageName);
                 // Add share type values
-                Helper.GetComboBoxItems(@"/ComboBoxItemsShareType/*", LanguageName, Language).ForEach(item => cbxShareType.Items.Add(item));
+                Language.GetLanguageTextListByXPath(@"/ComboBoxItemsShareType/*", LanguageName).ForEach(item => cbxShareType.Items.Add(item));
 
                 // Select the payout interval for the dividend
                 cbxDividendPayoutInterval.SelectedIndex = ShareObjectFinalValue.DividendPayoutInterval;
@@ -217,10 +220,21 @@ namespace SharePortfolioManager
                 btnShareSalesEdit.Text =
                     Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Buttons/Sales",
                     LanguageName);
-                lblProfitLoss.Text = Language.GetLanguageTextByXPath(
-                    ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotal < 0
-                        ? @"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Loss"
-                        : @"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Profit", LanguageName);
+
+                if (ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotal < 0)
+                {
+
+                    lblProfitLoss.Text =
+                        Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Loss",
+                            LanguageName);
+                }
+                else
+                {
+                    lblProfitLoss.Text =
+                        Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Profit",
+                            LanguageName);
+                }
+
                 lblDividend.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Dividend",
                     LanguageName);
                 btnShareDividendsEdit.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Buttons/Dividend",
@@ -248,16 +262,12 @@ namespace SharePortfolioManager
             }
             catch (Exception ex)
             {
-#if DEBUG_EDITSHARE || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(editShareStatusLabelMessage,
                     Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/ShowFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                    (int) FrmMain.EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -324,11 +334,12 @@ namespace SharePortfolioManager
                 if (txtBoxName.Text == @"")
                 {
                     txtBoxName.Focus();
-                    // Add status message
+
                     Helper.AddStatusMessage(editShareStatusLabelMessage,
                         Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/NameEmpty", LanguageName),
                         Language, LanguageName,
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                    
                     errorFlag = true;
                 }
                 else
@@ -342,11 +353,12 @@ namespace SharePortfolioManager
                         errorFlag = true;
                         StopFomClosingFlag = true;
                         txtBoxName.Focus();
-                        // Add status message
+
                         Helper.AddStatusMessage(editShareStatusLabelMessage,
                             Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/NameExists", LanguageName),
                             Language, LanguageName,
                             Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                        
                         break;
                     }
 
@@ -361,11 +373,12 @@ namespace SharePortfolioManager
                             errorFlag = true;
                             StopFomClosingFlag = true;
                             txtBoxName.Focus();
-                            // Add status message
+
                             Helper.AddStatusMessage(editShareStatusLabelMessage,
                                 Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/NameExists", LanguageName),
                                 Language, LanguageName,
                                 Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                            
                             break;
                         }
                     }
@@ -381,11 +394,12 @@ namespace SharePortfolioManager
                 if (txtBoxDailyValuesWebSite.Text == dummy.MinDate.ToShortDateString() && errorFlag == false)
                 {
                     txtBoxDailyValuesWebSite.Focus();
-                    // Add status message
+
                     Helper.AddStatusMessage(editShareStatusLabelMessage,
                         Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/StockMarketLaunchDateNotModified", LanguageName),
                         Language, LanguageName,
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                    
                     errorFlag = true;
                 }
 
@@ -393,21 +407,23 @@ namespace SharePortfolioManager
                 if (txtBoxWebSite.Text == @"" && chkBoxUpdate.CheckState == CheckState.Checked && errorFlag == false)
                 {
                     txtBoxWebSite.Focus();
-                    // Add status message
+
                     Helper.AddStatusMessage(editShareStatusLabelMessage,
                         Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteEmpty", LanguageName),
                         Language, LanguageName,
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                    
                     errorFlag = true;
                 }
                 else if (chkBoxUpdate.CheckState == CheckState.Checked && !Helper.UrlChecker(ref decodedUrlWebSite, 10000))
                 {
                     txtBoxWebSite.Focus();
-                    // Add status message
+                    
                     Helper.AddStatusMessage(editShareStatusLabelMessage,
                         Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteWrongFormat", LanguageName),
                         Language, LanguageName,
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                    
                     errorFlag = true;
                 }
                 else if (errorFlag == false)
@@ -422,11 +438,12 @@ namespace SharePortfolioManager
                         errorFlag = true;
                         StopFomClosingFlag = true;
                         txtBoxWebSite.Focus();
-                        // Add status message
+
                         Helper.AddStatusMessage(editShareStatusLabelMessage,
                             Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteExists", LanguageName),
                             Language, LanguageName,
                             Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                        
                         break;
                     }
 
@@ -442,11 +459,12 @@ namespace SharePortfolioManager
                             errorFlag = true;
                             StopFomClosingFlag = true;
                             txtBoxWebSite.Focus();
-                            // Add status message
+                        
                             Helper.AddStatusMessage(editShareStatusLabelMessage,
                                 Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteExists", LanguageName),
                                 Language, LanguageName,
                                 Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                            
                             break;
                         }
                     }
@@ -456,21 +474,23 @@ namespace SharePortfolioManager
                 if (txtBoxDailyValuesWebSite.Text == @"" && errorFlag == false)
                 {
                     txtBoxDailyValuesWebSite.Focus();
-                    // Add status message
+
                     Helper.AddStatusMessage(editShareStatusLabelMessage,
                         Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DailyValuesWebSiteEmpty", LanguageName),
                         Language, LanguageName,
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                    
                     errorFlag = true;
                 }
                 else if (!Helper.UrlChecker(ref decodeUrlDailyValuesWebSite, 10000))
                 {
                     txtBoxDailyValuesWebSite.Focus();
-                    // Add status message
+                    
                     Helper.AddStatusMessage(editShareStatusLabelMessage,
                         Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DailyValuesWebSiteWrongFormat", LanguageName),
                         Language, LanguageName,
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                    
                     errorFlag = true;
                 }
                 else if (errorFlag == false)
@@ -485,11 +505,12 @@ namespace SharePortfolioManager
                         errorFlag = true;
                         StopFomClosingFlag = true;
                         txtBoxDailyValuesWebSite.Focus();
-                        // Add status message
+                    
                         Helper.AddStatusMessage(editShareStatusLabelMessage,
                             Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DailyValuesWebSiteExists", LanguageName),
                             Language, LanguageName,
                             Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                        
                         break;
                     }
 
@@ -505,11 +526,12 @@ namespace SharePortfolioManager
                             errorFlag = true;
                             StopFomClosingFlag = true;
                             txtBoxDailyValuesWebSite.Focus();
-                            // Add status message
+                        
                             Helper.AddStatusMessage(editShareStatusLabelMessage,
                                 Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DailyValuesWebSiteExists", LanguageName),
                                 Language, LanguageName,
                                 Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                            
                             break;
                         }
                     }
@@ -546,18 +568,14 @@ namespace SharePortfolioManager
             }
             catch (Exception ex)
             {
-#if DEBUG_EDITSHARE || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
                 StopFomClosingFlag = true;
-                // Add status message
+
                 Helper.AddStatusMessage(editShareStatusLabelMessage,
                     Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/EditSaveFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
-                StopFomClosingFlag = true;
+                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                    (int) FrmMain.EComponentLevels.Application,
+                    ex);
             }
         }
 

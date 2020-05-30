@@ -20,13 +20,16 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_BROKERAGE_OBJECT
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 
-namespace SharePortfolioManager.Classes.Costs
+namespace SharePortfolioManager.Classes.Brokerage
 {
     [Serializable]
     public class BrokerageReductionObject
@@ -64,65 +67,101 @@ namespace SharePortfolioManager.Classes.Costs
         public decimal ProvisionValue { get; set; }
 
         [Browsable(false)]
-        public string ProvisionValueAsStr => Helper.FormatDecimal(ProvisionValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
+        public string ProvisionValueAsStr => ProvisionValue > 0
+            ? Helper.FormatDecimal(ProvisionValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength)
+            : @"";
 
         [Browsable(false)]
         public decimal BrokerFeeValue { get; set; }
 
         [Browsable(false)]
-        public string BrokerFeeValueAsStr => Helper.FormatDecimal(BrokerFeeValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
+        public string BrokerFeeValueAsStr => BrokerFeeValue > 0
+            ? Helper.FormatDecimal(BrokerFeeValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength)
+            : @"";
 
         [Browsable(false)]
         public decimal TraderPlaceFeeValue { get; set; }
 
         [Browsable(false)]
-        public string TraderPlaceFeeValueAsStr => Helper.FormatDecimal(TraderPlaceFeeValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
+        public string TraderPlaceFeeValueAsStr => TraderPlaceFeeValue > 0
+            ? Helper.FormatDecimal(TraderPlaceFeeValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength)
+            : @"";
 
         [Browsable(false)]
         public decimal ReductionValue { get; set; }
 
         [Browsable(false)]
-        public string ReductionValueAsStr => Helper.FormatDecimal(ReductionValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
+        public string ReductionValueAsStr => ReductionValue > 0
+            ? Helper.FormatDecimal(ReductionValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength)
+            : @"";
 
         [Browsable(false)]
         public decimal BrokerageValue { get; set; }
 
         [Browsable(false)]
-        public string BrokerageValueAsStr => Helper.FormatDecimal(BrokerageValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
+        public string BrokerageValueAsStr => BrokerageValue > 0
+            ? Helper.FormatDecimal(BrokerageValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength)
+            : @"";
 
         [Browsable(false)]
         public decimal BrokerageReductionValue { get; set; }
 
         [Browsable(false)]
-        public string BrokerageReductionValueAsStr => Helper.FormatDecimal(BrokerageReductionValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
+        public string BrokerageReductionValueAsStr => BrokerageReductionValue > 0
+            ? Helper.FormatDecimal(BrokerageReductionValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength)
+            : @"";
 
         [Browsable(false)]
-        public string BrokerageDocument { get; set; }
+        public string DocumentAsStr { get; set; }
 
         [Browsable(false)]
-        public string BrokerageDocumentFileName => Helper.GetFileName(BrokerageDocument);
+        public string BrokerageDocumentFileName => Helper.GetFileName(DocumentAsStr);
+
+        [Browsable(false)]
+        public Image DocumentGridImage => Helper.GetImageForFile(DocumentAsStr);
 
         #endregion Properties
 
         #region Data grid view properties
 
         [Browsable(true)]
+        [DisplayName(@"Guid")]
+        // ReSharper disable once UnusedMember.Global
         public string DgvGuid => Guid;
 
         [Browsable(true)]
+        [DisplayName(@"Date")]
+        // ReSharper disable once UnusedMember.Global
         public string DgvBrokerageDate => DateAsStr;
 
         [Browsable(true)]
-        public string DgvBrokerageValueAsStr => BrokerageValueAsStr;
+        [DisplayName(@"Brokerage")]
+        // ReSharper disable once UnusedMember.Global
+        public string DgvBrokerageValueAsStr => BrokerageValue > 0
+            ? Helper.FormatDecimal(BrokerageValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
+                @"", CultureInfo)
+            : @"-";
 
         [Browsable(true)]
-        public string DgvReductionValueAsStr => ReductionValueAsStr;
+        [DisplayName(@"Reduction")]
+        // ReSharper disable once UnusedMember.Global
+        public string DgvReductionValueAsStr => ReductionValue > 0
+            ? Helper.FormatDecimal(ReductionValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
+                @"", CultureInfo)
+            : @"-";
 
         [Browsable(true)]
-        public string DgvBrokerageReductionValueAsStr => BrokerageReductionValueAsStr;
+        [DisplayName(@"Broker. - Red.")]
+        // ReSharper disable once UnusedMember.Global
+        public string DgvBrokerageReductionValueAsStr => BrokerageReductionValue > 0
+            ? Helper.FormatDecimal(BrokerageReductionValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
+                @"", CultureInfo)
+            : @"-";
 
         [Browsable(true)]
-        public Image DocumentGrid => Helper.GetImageForFile(BrokerageDocument);
+        [DisplayName(@"Document")]
+        // ReSharper disable once UnusedMember.Global
+        public Image DgvDocumentGrid => DocumentGridImage;
 
 
         #endregion Data grid view properties
@@ -156,14 +195,14 @@ namespace SharePortfolioManager.Classes.Costs
             BrokerFeeValue = decBrokerFeeValue;
             TraderPlaceFeeValue = decTraderPlaceFeeValue;
             ReductionValue = decReductionValue;
-            BrokerageDocument = strDoc;
+            DocumentAsStr = strDoc;
 
             // Calculate and set brokerage value
             Helper.CalcBrokerageValues(decProvisionValue, decBrokerFeeValue, decTraderPlaceFeeValue, out var brokerageValue);
             BrokerageValue = brokerageValue;
             BrokerageReductionValue = BrokerageValue - decReductionValue;
 
-#if false
+#if DEBUG_BROKERAGE_OBJECT
             Console.WriteLine(@"");
             Console.WriteLine(@"BrokerageReductionObject()");
             Console.WriteLine(@"Guid: {0}", strGuid);

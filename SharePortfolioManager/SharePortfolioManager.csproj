@@ -177,13 +177,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\ApplicationController.cs" />
+    <Compile Include="Classes\Brokerage\AllBrokerage.cs" />
+    <Compile Include="Classes\Brokerage\BrokerageObject.cs" />
+    <Compile Include="Classes\Brokerage\BrokerageOfAYear.cs" />
     <Compile Include="Classes\Buys\BuyObject.cs" />
     <Compile Include="Classes\Buys\AllBuys.cs" />
     <Compile Include="Classes\Buys\BuysOfAYear.cs" />
     <Compile Include="Classes\ChartingDailyValues.cs" />
-    <Compile Include="Classes\Costs\CostObject.cs" />
-    <Compile Include="Classes\Costs\AllCosts.cs" />
-    <Compile Include="Classes\Costs\CostsOfAYear.cs" />
     <Compile Include="Classes\DailyValues.cs" />
     <Compile Include="Classes\Dividend\DividendObject.cs" />
     <Compile Include="Classes\Dividend\AllDividends.cs" />
@@ -245,13 +245,7 @@
     <Compile Include="Forms\LoggerSettingsForm\LoggerSettings.Designer.cs">
       <DependentUpon>LoggerSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\MainForm\DataGridViewsConfiguration.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms\MainForm\MainFormFiles\Button.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\MainForm\MainFormFiles\DataGridViews.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\MainForm\MainFormFiles\Language.cs">
@@ -261,6 +255,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\MainForm\MainFormFiles\Portfolio.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MainForm\MainFormFiles\PortfolioDataGridViews.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MainForm\MainFormFiles\PortfolioDataGridViewsConfiguration.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\MainForm\MainFormFiles\Settings.cs">
@@ -291,6 +291,15 @@
     </Compile>
     <Compile Include="Forms\ShareAddForm\View\ViewShareAdd.Designer.cs">
       <DependentUpon>ViewShareAdd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ShareDetailsForm\FormFiles\BrokerageDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ShareDetailsForm\FormFiles\DividendDetails.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ShareDetailsForm\FormFiles\ProfitLossDetails.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ShareDetailsForm\FormFiles\TabControl.cs">
       <SubType>Form</SubType>

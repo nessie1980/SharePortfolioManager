@@ -20,6 +20,9 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_SHARE_ADD_PRESENTER
+
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.ShareObjects;
 using SharePortfolioManager.ShareAddForm.Model;
@@ -137,7 +140,8 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
             {
                 Helper.CalcBuyValues(_model.VolumeDec, _model.SharePriceDec,
                     _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec,
-                    out var decBuyValue, out var decBuyValueReduction, out var decBuyValueBrokerage, out var decBuyValueBrokerageReduction,
+                    out var decBuyValue, out var decBuyValueReduction, out var decBuyValueBrokerage,
+                    out var decBuyValueBrokerageReduction,
                     out var decBrokerage);
 
                 _model.BrokerageDec = decBrokerage;
@@ -146,7 +150,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                 _model.BuyValueBrokerageDec = decBuyValueBrokerage;
                 _model.BuyValueBrokerageReductionDec = decBuyValueBrokerageReduction;
 
-#if DEBUG_BUY || DEBUG
+#if DEBUG_SHARE_ADD_PRESENTER
                 Console.WriteLine(@"BrokerageDec: {0}", _model.BrokerageDec);
                 Console.WriteLine(@"BuyValueDec: {0}", _model.BuyValueDec);
                 Console.WriteLine(@"BuyValueReductionDec: {0}", _model.BuyValueReductionDec);
@@ -156,11 +160,8 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
             }
             catch (Exception ex)
             {
-#if DEBUG_ADDSHARE || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
+                Helper.ShowExceptionMessage(ex);
+
                 _model.BrokerageDec = 0;
                 _model.BuyValueDec = 0;
                 _model.BuyValueReductionDec = 0;
@@ -238,7 +239,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                 // Check if for the given shares a website configuration exists
                 if (tempShareObjectMarketValue[0].SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList) &&
                     tempShareObjectFinalValue[0].SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList)
-                    )
+                )
                 {
                     // Generate Guid
                     var guid = Guid.NewGuid().ToString();
@@ -267,7 +268,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                         _model.CultureInfo,
                         _model.ShareType,
                         _model.Document
-                        ));
+                    ));
 
                     // Add final value share
                     _model.ShareObjectListFinalValue.Add(new ShareObjectFinalValue(
@@ -294,42 +295,51 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                         _model.DividendPayoutInterval,
                         _model.ShareType,
                         _model.Document
-                        ));
+                    ));
 
                     // Set parsing expression to the market value share list
-                    _model.ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1].SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList);
-                    _model.ShareObjectMarketValue = _model.ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1];
+                    _model.ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1]
+                        .SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList);
+                    _model.ShareObjectMarketValue =
+                        _model.ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1];
 
                     // Sort portfolio list in order of the share names
                     _model.ShareObjectListMarketValue.Sort(new ShareObjectListComparer());
 
                     // Set parsing expression to the  final value share list
-                    _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1].SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList);
-                    _model.ShareObjectFinalValue = _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1];
+                    _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1]
+                        .SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList);
+                    _model.ShareObjectFinalValue =
+                        _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1];
 
                     // Sort portfolio list in order of the share names
                     _model.ShareObjectListFinalValue.Sort(new ShareObjectListComparer());
 
                     // Brokerage entry if any brokerage value is not 0
-                    if (_model.ProvisionDec != 0 || _model.BrokerFeeDec != 0 || _model.TraderPlaceFeeDec != 0 || _model.ReductionDec != 0)
+                    if (_model.ProvisionDec != 0 || _model.BrokerFeeDec != 0 || _model.TraderPlaceFeeDec != 0 ||
+                        _model.ReductionDec != 0)
                     {
                         // Generate Guid
                         var strGuidBrokerage = _model
                             .ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1].AllBuyEntries
                             .AllBuysOfTheShareDictionary.Values.Last().BuyListYear.Last().BrokerageGuid;
 
-                        _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1].AddBrokerage(strGuidBrokerage, true,
-                            false, guid , strDateTime, _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec, _model.Document);
+                        _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1].AddBrokerage(
+                            strGuidBrokerage, true,
+                            false, guid, strDateTime, _model.ProvisionDec, _model.BrokerFeeDec,
+                            _model.TraderPlaceFeeDec, _model.ReductionDec, _model.Document);
                     }
 
                     // Set website configuration and encoding to the share object.
                     // The encoding is necessary for the Parser for encoding the download result.
                     _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1]
-                        .WebSiteConfigurationFound = _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1]
+                        .WebSiteConfigurationFound = _model
+                        .ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1]
                         .SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList);
 
                     _model.ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1]
-                        .WebSiteConfigurationFound = _model.ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1]
+                        .WebSiteConfigurationFound = _model
+                        .ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1]
                         .SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList);
 
                     // Sort portfolio list in order of the share names

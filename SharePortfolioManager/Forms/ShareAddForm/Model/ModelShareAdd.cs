@@ -20,6 +20,9 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_SHARE_ADD_MODEL
+
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.ParserRegex;
 using SharePortfolioManager.Classes.ShareObjects;

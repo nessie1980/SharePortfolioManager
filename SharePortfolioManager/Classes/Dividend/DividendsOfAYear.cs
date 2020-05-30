@@ -20,6 +20,9 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_DIVIDEND_YEARS
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -37,13 +40,16 @@ namespace SharePortfolioManager.Classes.Dividend
         public CultureInfo DividendCultureInfo { get; internal set; }
 
         [Browsable(false)]
-        public string DividendYear { get; internal set; } = @"-";
+        public string DividendYearAsStr { get; internal set; } = @"-";
 
         [Browsable(false)]
         public decimal DividendValueYear { get; internal set; } = -1;
 
         [Browsable(false)]
-        public string DividendValueYearWithUnitAsStr => Helper.FormatDecimal(DividendValueYear, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", DividendCultureInfo);
+        public string DividendValueYearAsStrUnit => DividendValueYear > 0
+            ? Helper.FormatDecimal(DividendValueYear, Helper.CurrencyTwoLength, false,
+                Helper.CurrencyTwoFixLength, true, @"", DividendCultureInfo)
+            : @"-";
 
         [Browsable(false)]
         public List<DividendObject> DividendListYear { get; } = new List<DividendObject>();
@@ -53,10 +59,13 @@ namespace SharePortfolioManager.Classes.Dividend
         #region Data grid view properties
 
         [Browsable(true)]
-        public string DgvDividendYear => DividendYear;
+        [DisplayName(@"Year")]
+        // ReSharper disable once UnusedMember.Global
+        public string DgvDividendYear => DividendYearAsStr;
 
         [Browsable(true)]
-        public string DgvDividendValueYearWithUnitAsStr => DividendValueYearWithUnitAsStr;
+        [DisplayName(@"Dividend")]
+        public string DgvDividendValueYearAsStrUnit => DividendValueYearAsStrUnit;
 
         #endregion Data grid view properties
 
@@ -83,7 +92,7 @@ namespace SharePortfolioManager.Classes.Dividend
         public bool AddDividendObject(CultureInfo cultureInfo, CultureInfo cultureInfoFc, CheckState csEnableFc, decimal decExchangeRatio, string strGuid, string strDate, decimal decRate, decimal decVolume,
             decimal decTaxAtSource, decimal decCapitalGainsTax, decimal decSolidarityTax, decimal decSharePrice, string strDoc = "")
         {
-#if DEBUG_DIVIDEND
+#if DEBUG_DIVIDEND_YEARS
             Console.WriteLine(@"AddDividendObject");
 #endif
             try
@@ -101,20 +110,22 @@ namespace SharePortfolioManager.Classes.Dividend
 
                 // Set year
                 DateTime.TryParse(strDate, out var dateTime);
-                DividendYear = dateTime.Year.ToString();
+                DividendYearAsStr = dateTime.Year.ToString();
 
                 // Calculate dividend value
                 if (DividendValueYear == -1)
                     DividendValueYear = 0;
 
-                DividendValueYear += addObject.PayoutWithTaxesDec;
-#if DEBUG_DIVIDEND
+                DividendValueYear += addObject.DividendPayoutWithTaxes;
+#if DEBUG_DIVIDEND_YEARS
                 Console.WriteLine(@"DividendValueYear: {0}", DividendValueYear);
                 Console.WriteLine(@"");
 #endif
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
+
                 return false;
             }
 
@@ -129,7 +140,7 @@ namespace SharePortfolioManager.Classes.Dividend
         /// <returns>Flag if the remove was successfully</returns>
         public bool RemoveDividendObject(string strGuid)
         {
-#if DEBUG_DIVIDEND
+#if DEBUG_DIVIDEND_YEARS
             Console.WriteLine(@"RemoveDividendObject");
 #endif
             try
@@ -150,14 +161,16 @@ namespace SharePortfolioManager.Classes.Dividend
                 DividendListYear.Remove(removeObject);
 
                 // Calculate dividend value
-                DividendValueYear -= removeObject.PayoutWithTaxesDec;
-#if DEBUG_DIVIDEND
+                DividendValueYear -= removeObject.DividendPayoutWithTaxes;
+#if DEBUG_DIVIDEND_YEARS
                 Console.WriteLine(@"DividendValueYear: {0}", DividendValueYear);
                 Console.WriteLine(@"");
 #endif
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
+
                 return false;
             }
 

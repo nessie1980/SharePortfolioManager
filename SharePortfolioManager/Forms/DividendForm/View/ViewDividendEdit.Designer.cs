@@ -332,10 +332,10 @@
             // 
             this.lblCapitalGainsTaxUnit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblCapitalGainsTaxUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCapitalGainsTaxUnit.Location = new System.Drawing.Point(738, 171);
-            this.lblCapitalGainsTaxUnit.Margin = new System.Windows.Forms.Padding(3);
+            this.lblCapitalGainsTaxUnit.Location = new System.Drawing.Point(736, 169);
+            this.lblCapitalGainsTaxUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblCapitalGainsTaxUnit.Name = "lblCapitalGainsTaxUnit";
-            this.lblCapitalGainsTaxUnit.Size = new System.Drawing.Size(54, 18);
+            this.lblCapitalGainsTaxUnit.Size = new System.Drawing.Size(58, 22);
             this.lblCapitalGainsTaxUnit.TabIndex = 56;
             this.lblCapitalGainsTaxUnit.Text = "_lblCapitalGainsTaxUnit";
             this.lblCapitalGainsTaxUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;

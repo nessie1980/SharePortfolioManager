@@ -20,11 +20,15 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using SharePortfolioManager.Classes.Costs;
+// Define for DEBUGGING
+//#define DEBUG_BUY_YEARS
+
+using SharePortfolioManager.Classes.Brokerage;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager.Classes.Buys
 {
@@ -46,7 +50,7 @@ namespace SharePortfolioManager.Classes.Buys
         /// Year of the buys
         /// </summary>
         [Browsable(false)]
-        public string BuyYear { get; internal set; } = @"-";
+        public string BuyYearAsStr { get; internal set; } = @"-";
 
         /// <summary>
         /// Volume of the buys of a year
@@ -82,7 +86,10 @@ namespace SharePortfolioManager.Classes.Buys
         /// Buy value plus brokerage and minus reduction of all buys of a year as string with unit
         /// </summary>
         [Browsable(false)]
-        public string BuyValueBrokerageReductionYearAsStrUnit => Helper.FormatDecimal(BuyValueBrokerageReductionYear, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", BuyCultureInfo);
+        public string BuyValueBrokerageReductionYearAsStrUnit => BuyValueBrokerageReductionYear > 0
+            ? Helper.FormatDecimal(BuyValueBrokerageReductionYear, Helper.CurrencyFiveLength, false,
+                Helper.CurrencyTwoFixLength, true, @"", BuyCultureInfo)
+            : @"";
 
         /// <summary>
         /// List of all buys of a year
@@ -99,21 +106,27 @@ namespace SharePortfolioManager.Classes.Buys
         /// </summary>
         [Browsable(true)]
         // ReSharper disable once UnusedMember.Global
-        public string DgvBuyYear => BuyYear;
+        public string DgvBuyYear => BuyYearAsStr;
 
         /// <summary>
         /// Volume of the buys of a year for the DataGridView display
         /// </summary>
         [Browsable(true)]
         // ReSharper disable once UnusedMember.Global
-        public decimal DgvBuyVolumeYear => BuyVolumeYear;
+        public string DgvBuyVolumeYear => BuyVolumeYear > 0
+            ? Helper.FormatDecimal(BuyVolumeYear, Helper.CurrencyFiveLength, false,
+                Helper.CurrencyTwoFixLength, true, ShareObject.PieceUnit, BuyCultureInfo)
+            : @"";
 
         /// <summary>
         /// Buy value plus brokerage and minus reduction of all buys of a year for the DataGridView display
         /// </summary>
         [Browsable(true)]
         // ReSharper disable once UnusedMember.Global
-        public decimal DgvBuyValueBrokerageReductionYear => BuyValueBrokerageReductionYear;
+        public string DgvBuyValueBrokerageReductionYear => BuyValueBrokerageReductionYear > 0
+            ? Helper.FormatDecimal(BuyValueBrokerageReductionYear, Helper.CurrencyFiveLength, false,
+                Helper.CurrencyTwoFixLength, true, @"", BuyCultureInfo)
+            : @"";
 
         #endregion Data grid view properties
 
@@ -136,7 +149,7 @@ namespace SharePortfolioManager.Classes.Buys
         public bool AddBuyObject(CultureInfo cultureInfo, string strGuid, string strOrderNumber, string strDate, decimal decVolume, decimal decVolumeSold, decimal decSharePrice,
             BrokerageReductionObject brokerageObject, string strDoc = "")
         {
-#if false
+#if DEBUG_BUY_YEARS
             Console.WriteLine(@"AddBuyObject()");
 #endif
             try
@@ -155,7 +168,7 @@ namespace SharePortfolioManager.Classes.Buys
 
                 // Set year
                 DateTime.TryParse(strDate, out var dateTime);
-                BuyYear = dateTime.Year.ToString();
+                BuyYearAsStr = dateTime.Year.ToString();
 
                 // Calculate buy value without brokerage and reduction
                 if (BuyValueYear == -1)
@@ -182,12 +195,14 @@ namespace SharePortfolioManager.Classes.Buys
                     BuyVolumeYear = 0;
                 BuyVolumeYear += addObject.Volume;
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
+
                 return false;
             }
 
-#if false
+#if DEBUG_BUY_YEARS
             Console.WriteLine(@"");
             Console.WriteLine(@"CalculateValues()");
             Console.WriteLine(@"BuyYear: {0}", BuyYear);
@@ -209,7 +224,7 @@ namespace SharePortfolioManager.Classes.Buys
         /// <returns>Flag if the remove was successfully</returns>
         public bool RemoveBuyObject(string strGuid)
         {
-#if true
+#if DEBUG_BUY_YEARS
             Console.WriteLine(@"RemoveBuyObject()");
 #endif
 
@@ -245,15 +260,17 @@ namespace SharePortfolioManager.Classes.Buys
                 // Calculate buy value with brokerage and reduction
                 BuyValueBrokerageReductionYear -= removeObject.BuyValueBrokerageReduction;
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
+
                 return false;
             }
 
-#if true
+#if DEBUG_BUY_YEARS
             Console.WriteLine(@"");
             Console.WriteLine(@"CalculateValues()");
-            Console.WriteLine(@"BuyYear: {0}", BuyYear);
+            Console.WriteLine(@"BuyYear: {0}", BuyYearAsStr);
             Console.WriteLine(@"BuyValueYear: {0}", BuyValueYear);
             Console.WriteLine(@"BuyValueReductionYear: {0}", BuyValueReductionYear);
             Console.WriteLine(@"BuyValueBrokerageYear: {0}", BuyValueBrokerageYear);
@@ -279,15 +296,17 @@ namespace SharePortfolioManager.Classes.Buys
                 {
                     if (buyObject.Guid != strGuid) continue;
 
-                    buyObject.Document = strDocument;
+                    buyObject.DocumentAsStr = strDocument;
 
                     return true;
                 }
 
                 return false;
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
+
                 return false;
             }
         }

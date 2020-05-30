@@ -20,8 +20,11 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_SALE_EDIT_PRESENTER
+
 using SharePortfolioManager.Classes;
-using SharePortfolioManager.Classes.Costs;
+using SharePortfolioManager.Classes.Brokerage;
 using SharePortfolioManager.Classes.Sales;
 using SharePortfolioManager.SalesForm.Model;
 using SharePortfolioManager.SalesForm.View;
@@ -470,19 +473,12 @@ namespace SharePortfolioManager.SalesForm.Presenter
 
                 _view.DocumentBrowseFinish();
             }
-#if! DEBUG
-            catch
-            {
-#else
             catch (Exception ex)
             {
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
+                Helper.ShowExceptionMessage(ex);
+
                 _model.ErrorCode = SaleErrorCode.DocumentBrowseFailed;
             }
-
         }
 
         /// <summary>
@@ -627,11 +623,11 @@ namespace SharePortfolioManager.SalesForm.Presenter
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
+                Helper.ShowExceptionMessage(ex);
+
+                _model.ProfitLossDec = 0;
+                _model.BrokerageDec = 0;
+                _model.PayoutDec = 0;
             }
         }
 
@@ -755,8 +751,10 @@ namespace SharePortfolioManager.SalesForm.Presenter
 
                 return bErrorFlag;
             }
-            catch
+            catch(Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
+
                 _model.ErrorCode = SaleErrorCode.InputValuesInvalid;
                 return true;
             }

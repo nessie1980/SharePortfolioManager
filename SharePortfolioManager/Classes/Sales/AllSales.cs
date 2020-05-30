@@ -20,7 +20,10 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using SharePortfolioManager.Classes.Costs;
+// Define for DEBUGGING
+//#define DEBUG_ALL_SALES
+
+using SharePortfolioManager.Classes.Brokerage;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -31,15 +34,6 @@ namespace SharePortfolioManager.Classes.Sales
     [Serializable]
     public class AllSalesOfTheShare
     {
-        #region Variables
-
-        /// <summary>
-        /// Stores the sales of a year of the share
-        /// </summary>
-        private readonly SortedDictionary<string, SalesYearOfTheShare> _allSalesOfTheShareDictionary = new SortedDictionary<string, SalesYearOfTheShare>();
-
-        #endregion Variables
-
         #region Properties
 
         public CultureInfo SaleCultureInfo { get; internal set; }
@@ -58,51 +52,54 @@ namespace SharePortfolioManager.Classes.Sales
 
         public string SalePayoutTotalAsStr => Helper.FormatDecimal(SalePayoutTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", SaleCultureInfo);
 
-        public string SalePayoutTotalWithUnitAsStr => Helper.FormatDecimal(SalePayoutTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
+        public string SalePayoutTotalAsStrUnit => Helper.FormatDecimal(SalePayoutTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
 
         public decimal SalePayoutBrokerageTotal { get; internal set; }
         
         public string SalePayoutBrokerageTotalAsStr => Helper.FormatDecimal(SalePayoutBrokerageTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", SaleCultureInfo);
 
-        public string SalePayoutBrokerageTotalWithUnitAsStr => Helper.FormatDecimal(SalePayoutBrokerageTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
+        public string SalePayoutBrokerageTotalAsStrUnit => Helper.FormatDecimal(SalePayoutBrokerageTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
 
         public decimal SalePayoutReductionTotal { get; internal set; }
 
         public string SalePayoutReductionTotalAsStr => Helper.FormatDecimal(SalePayoutReductionTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", SaleCultureInfo);
 
-        public string SalePayoutReductionTotalWithUnitAsStr => Helper.FormatDecimal(SalePayoutReductionTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
+        public string SalePayoutReductionTotalAsStrUnit => Helper.FormatDecimal(SalePayoutReductionTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
 
         public decimal SalePayoutBrokerageReductionTotal { get; internal set; }
 
         public string SalePayoutBrokerageReductionTotalAsStr => Helper.FormatDecimal(SalePayoutBrokerageReductionTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", SaleCultureInfo);
 
-        public string SalePayoutBrokerageReductionTotalWithUnitAsStr => Helper.FormatDecimal(SalePayoutBrokerageReductionTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
+        public string SalePayoutBrokerageReductionTotalAsStrUnit => Helper.FormatDecimal(SalePayoutBrokerageReductionTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
 
         public decimal SaleProfitLossTotal { get; internal set; }
 
         public string SaleProfitLossTotalAsStr => Helper.FormatDecimal(SaleProfitLossTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", SaleCultureInfo);
 
-        public string SaleProfitLossTotalWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
+        public string SaleProfitLossTotalAsStrUnit => Helper.FormatDecimal(SaleProfitLossTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
 
         public decimal SaleProfitLossBrokerageTotal { get; internal set; }
 
         public string SaleProfitLossBrokerageTotalAsStr => Helper.FormatDecimal(SaleProfitLossBrokerageTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", SaleCultureInfo);
 
-        public string SaleProfitLossBrokerageTotalWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossBrokerageTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
+        public string SaleProfitLossBrokerageTotalAsStrUnit => Helper.FormatDecimal(SaleProfitLossBrokerageTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
 
         public decimal SaleProfitLossReductionTotal { get; internal set; }
 
         public string SaleProfitLossReductionTotalAsStr => Helper.FormatDecimal(SaleProfitLossReductionTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", SaleCultureInfo);
 
-        public string SaleProfitLossReductionTotalWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossReductionTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
+        public string SaleProfitLossReductionTotalAsStrUnit => Helper.FormatDecimal(SaleProfitLossReductionTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
 
         public decimal SaleProfitLossBrokerageReductionTotal { get; internal set; }
 
         public string SaleProfitLossBrokerageReductionTotalAsStr => Helper.FormatDecimal(SaleProfitLossBrokerageReductionTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", SaleCultureInfo);
 
-        public string SaleProfitLossBrokerageReductionTotalWithUnitAsStr => Helper.FormatDecimal(SaleProfitLossBrokerageReductionTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
+        public string SaleProfitLossBrokerageReductionTotalAsStrUnit => Helper.FormatDecimal(SaleProfitLossBrokerageReductionTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
 
-        public SortedDictionary<string, SalesYearOfTheShare> AllSalesOfTheShareDictionary => _allSalesOfTheShareDictionary;
+        /// <summary>
+        /// Stores the sales of a year of the share
+        /// </summary>
+        public SortedDictionary<string, SalesYearOfTheShare> AllSalesOfTheShareDictionary { get; } = new SortedDictionary<string, SalesYearOfTheShare>();
 
         #endregion Properties
 
@@ -135,7 +132,7 @@ namespace SharePortfolioManager.Classes.Sales
         public bool AddSale(string strGuid, string strDate, string strOrderNumber, decimal decVolume, decimal decSalePrice, List<SaleBuyDetails> usedBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
              decimal decSolidarityTax, BrokerageReductionObject brokerageObject, string strDoc = "")
         {
-#if false
+#if DEBUG_ALL_SALES
             Console.WriteLine(@"Add AllSalesOfTheShare");
 #endif
             try
@@ -203,7 +200,7 @@ namespace SharePortfolioManager.Classes.Sales
                     SaleProfitLossReductionTotal += calcObject.SaleProfitLossReductionYear;
                     SaleProfitLossBrokerageReductionTotal += calcObject.SaleProfitLossBrokerageReductionYear;
                 }
-#if false
+#if DEBUG_ALL_SALES
                 Console.WriteLine(@"SaleVolumeTotal:{0}", SaleVolumeTotal);
                 Console.WriteLine(@"SalePurchaseValueTotal:{0}", SalePurchaseValueTotal);
                 Console.WriteLine(@"SalePayoutTotal:{0}", SalePayoutTotal);
@@ -216,8 +213,10 @@ namespace SharePortfolioManager.Classes.Sales
                 Console.WriteLine(@"SaleProfitLossBrokerageReductionTotal:{0}", SaleProfitLossBrokerageReductionTotal);
 #endif
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
+
                 return false;
             }
 
@@ -313,8 +312,10 @@ namespace SharePortfolioManager.Classes.Sales
                 Console.WriteLine(@"SaleProfitLossBrokerageReductionTotal:{0}", SaleProfitLossBrokerageReductionTotal);
 #endif
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
+
                 return false;
             }
 
@@ -352,8 +353,10 @@ namespace SharePortfolioManager.Classes.Sales
                     return false;
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
+
                 return false;
             }
 
@@ -400,13 +403,27 @@ namespace SharePortfolioManager.Classes.Sales
         /// and the total profit / loss value with brokerage of the years
         /// </summary>
         /// <returns>Dictionary with the years and the profit / loss values with brokerage of the year or empty dictionary if no year exist.</returns>
-        public Dictionary<string, string> GetAllProfitLossTotalValues()
+        public Dictionary<string, string> GetAllProfitLossTotalValuesAsDictionary()
         {
             var allProfitLossOfTheShare = new Dictionary<string, string>();
 
             foreach (var key in AllSalesOfTheShareDictionary.Keys)
             {
                 allProfitLossOfTheShare.Add(key, Helper.FormatDecimal(AllSalesOfTheShareDictionary[key].SaleProfitLossYear, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength, false, @"", SaleCultureInfo));
+            }
+            return allProfitLossOfTheShare;
+        }
+
+        public List<ProfitLossObject> GetAllProfitLossTotalValues()
+        {
+            var allProfitLossOfTheShare = new List<ProfitLossObject>();
+
+            foreach (var key in AllSalesOfTheShareDictionary.Keys)
+            {
+                foreach (var profitLossObject in AllSalesOfTheShareDictionary[key].ProfitLossListYear)
+                {
+                    allProfitLossOfTheShare.Add(profitLossObject);
+                }
             }
             return allProfitLossOfTheShare;
         }
@@ -444,7 +461,7 @@ namespace SharePortfolioManager.Classes.Sales
         /// <returns></returns>
         public bool OrderNumberAlreadyExists(string strOrderNumber, string strGuidSale)
         {
-            foreach (var saleList in _allSalesOfTheShareDictionary.Values)
+            foreach (var saleList in AllSalesOfTheShareDictionary.Values)
             {
                 foreach (var sale in saleList.SaleListYear)
                 {
@@ -463,9 +480,9 @@ namespace SharePortfolioManager.Classes.Sales
         /// <returns></returns>
         public bool IsLastSale(string strGuid)
         {
-            if (_allSalesOfTheShareDictionary.Count <= 0) return false;
+            if (AllSalesOfTheShareDictionary.Count <= 0) return false;
 
-            var lastYearEntries = _allSalesOfTheShareDictionary.Last().Value;
+            var lastYearEntries = AllSalesOfTheShareDictionary.Last().Value;
 
             if (lastYearEntries.SaleListYear.Count <= 0) return false;
 

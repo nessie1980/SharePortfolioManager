@@ -20,6 +20,9 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_MAIN_FORM_MENU
+
 using SharePortfolioManager.AboutForm;
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.LoggerSettingsForm;
@@ -47,7 +50,8 @@ namespace SharePortfolioManager
             var oldPortfolioFileName = _portfolioFileName;
 
             var dlgPortfolioFileName = new OwnMessageBox(
-                Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/InputPortfolioName", LanguageName),
+                Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
+                    (int) EOwnMessageBoxInfoType.InputFileName],
                 Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/InputPortfolioName", LanguageName),
                 Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", LanguageName),
                 Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", LanguageName),
@@ -62,7 +66,8 @@ namespace SharePortfolioManager
             if (File.Exists(_portfolioFileName))
             {
                 var dlgPortfolioFileExists = new OwnMessageBox(
-                    Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Info", LanguageName),
+                    Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
+                        (int) EOwnMessageBoxInfoType.Info],
                     Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/PortfolioNameExists", LanguageName),
                     Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", LanguageName),
                     Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", LanguageName));
@@ -114,7 +119,10 @@ namespace SharePortfolioManager
             var strOldPortfolioFileName = _portfolioFileName;
 
             const string strFilter = "XML (*.XML)|*.XML";
-            _portfolioFileName = Helper.LoadPortfolio(Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/OpenFileDialog/Title", LanguageName), strFilter, _portfolioFileName);
+            _portfolioFileName =
+                Helper.LoadPortfolio(
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/OpenFileDialog/Title",
+                        LanguageName), strFilter, _portfolioFileName);
 
             // Check if the portfolio file name has been changed
             if (strOldPortfolioFileName != _portfolioFileName)
@@ -171,14 +179,14 @@ namespace SharePortfolioManager
                 Settings.Load(ReaderSettings);
 
                 // Get settings menu item
-                var tmiSettings = (ToolStripMenuItem)menuStrip1.Items["settingsToolStripMenuItem"];
+                var tmiSettings = (ToolStripMenuItem) menuStrip1.Items["settingsToolStripMenuItem"];
                 // Get language menu item
-                var tmiLanguage = (ToolStripMenuItem)tmiSettings.DropDownItems["languageToolStripMenuItem"];
+                var tmiLanguage = (ToolStripMenuItem) tmiSettings.DropDownItems["languageToolStripMenuItem"];
 
                 // Loop through the menu language items and select or deselect the language entries
                 foreach (ToolStripMenuItem item in tmiLanguage.DropDownItems)
                 {
-                    item.Checked = item.Name == ((ToolStripMenuItem)sender).Name;
+                    item.Checked = item.Name == ((ToolStripMenuItem) sender).Name;
                 }
 
                 // Check if the language really change
@@ -190,7 +198,8 @@ namespace SharePortfolioManager
                 // Select the first item in the DataGridView portfolio
                 if (dgvPortfolioFinalValue.SelectedRows.Count > 0)
                 {
-                    if (dgvPortfolioFinalValue.Rows.Count > 0 && dgvPortfolioFinalValue.Rows.Count >= dgvPortfolioFinalValue.SelectedRows[0].Index)
+                    if (dgvPortfolioFinalValue.Rows.Count > 0 && dgvPortfolioFinalValue.Rows.Count >=
+                        dgvPortfolioFinalValue.SelectedRows[0].Index)
                     {
                         dgvPortfolioFinalValue.Rows[dgvPortfolioFinalValue.SelectedRows[0].Index].Selected = true;
                         // TODO
@@ -207,26 +216,21 @@ namespace SharePortfolioManager
                 lblWebParserDailyValuesState.Text = @"";
                 lblWebParserMarketValuesState.Text = @"";
 
-                // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/ChangeLanguageSuccessful", LanguageName),
                     Language, LanguageName,
-                    Color.Orange, Logger, (int)EStateLevels.Warning, (int)EComponentLevels.Application);
+                    Color.Orange, Logger, (int) EStateLevels.Warning, (int) EComponentLevels.Application);
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-#endif
                 // Set initialization flag
                 InitFlag = false;
 
-                // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/MainForm/Errors/ChangeLanguageFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -251,24 +255,18 @@ namespace SharePortfolioManager
                 ReaderSettings = XmlReader.Create(SettingsFileName, ReaderSettingsSettings);
                 Settings.Load(ReaderSettings);
 
-                // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/SaveSettingsSuccessful", LanguageName),
                     Language, LanguageName,
-                    Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
+                    Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Application);
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/SaveSettingsFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -286,18 +284,14 @@ namespace SharePortfolioManager
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-#endif
                 // Set initialization flag
                 InitFlag = false;
 
-                // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/AboutForm/Errors/ShowAboutBoxFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
+                    ex);
             }
         }
 

@@ -20,6 +20,9 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_SHARE_ADD_VIEW
+
 using LanguageHandler;
 using Logging;
 using Parser;
@@ -817,7 +820,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 default:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/UnknowState", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/UnknownState", LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     break;
@@ -911,11 +914,11 @@ namespace SharePortfolioManager.ShareAddForm.View
 
                 lblShareType.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/ShareType", LanguageName);
                 // Add share type values
-                Helper.GetComboBoxItems(@"/ComboBoxItemsShareType/*", LanguageName, Language).ForEach(item => cbxShareType.Items.Add(item));
+                Language.GetLanguageTextListByXPath(@"/ComboBoxItemsShareType/*", LanguageName).ForEach(item => cbxShareType.Items.Add(item));
 
                 lblDividendPayoutInterval.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/PayoutInterval", LanguageName);
                 // Add dividend payout interval values
-                Helper.GetComboBoxItems(@"/ComboBoxItemsPayout/*", LanguageName, Language).ForEach(item => cbxDividendPayoutInterval.Items.Add(item));
+                Language.GetLanguageTextListByXPath(@"/ComboBoxItemsPayout/*", LanguageName).ForEach(item => cbxDividendPayoutInterval.Items.Add(item));
 
                 lblCultureInfo.Text =
                     Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/CultureInfo", LanguageName);
@@ -984,19 +987,14 @@ namespace SharePortfolioManager.ShareAddForm.View
                 dateTimePickerDate.Value = DateTime.Now;
                 dateTimePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
             }
-#if DEBUG
             catch (Exception ex)
             {
-                Helper.ShowMessage(@"Error", ex);
-#else
-            catch
-            {
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageaAddShare,
                     Language.GetLanguageTextByXPath(@"/MainForm/Errors/AddShowFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                    (int) FrmMain.EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -1043,19 +1041,14 @@ namespace SharePortfolioManager.ShareAddForm.View
                     txtBoxDocument.Text = strCurrentFile;
                 }
             }
-#if DEBUG_ADDSHARE || DEBUG
             catch (Exception ex)
             {
-                Helper.ShowMessage(@"Error", ex);
-#else
-            catch
-            {
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageaAddShare,
                     Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ChoseDocumentFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                    (int) FrmMain.EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -1076,20 +1069,16 @@ namespace SharePortfolioManager.ShareAddForm.View
 
                 ShareAddEventHandler?.Invoke(this, new EventArgs());
             }
-#if DEBUG
             catch (Exception ex)
             {
-                Helper.ShowMessage(@"Error", ex);
-#else
-            catch
-            {
-#endif
                 StopFomClosingFlag = true;
-                // Add status message
+
                 Helper.AddStatusMessage(toolStripStatusLabelMessageaAddShare,
                     Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/AddSaveFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                    (int) FrmMain.EComponentLevels.Application,
+                    ex);
 
                 // Enable controls
                 Enabled = true;
@@ -1291,18 +1280,13 @@ namespace SharePortfolioManager.ShareAddForm.View
 
                 _parsingStartAllow = false;
             }
-#if DEBUG
             catch (Exception ex)
             {
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#else
-            catch
-            {
-#endif
-                toolStripStatusLabelMessageAddShareDocumentParsing.ForeColor = Color.Red;
-                toolStripStatusLabelMessageAddShareDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingErrors/ParsingFailed", LanguageName);
+                Helper.AddStatusMessage(toolStripStatusLabelMessageAddShareDocumentParsing,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingErrors/ParsingFailed", LanguageName),
+                    Language, LanguageName, Color.DarkRed, Logger,
+                    (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
+                    ex);
 
                 toolStripProgressBarAddShareDocumentParsing.Visible = false;
                 grpBoxGeneral.Enabled = true;
@@ -1373,23 +1357,17 @@ namespace SharePortfolioManager.ShareAddForm.View
                     Thread.Sleep(100);
                 }
             }
-#if DEBUG
             catch (OperationCanceledException ex)
             {
-                Helper.ShowMessage(@"Cancel", ex);
+                Helper.ShowExceptionMessage(ex);
+
                 _parsingBackgroundWorker.ReportProgress((int) ParsingErrorCode.ParsingDocumentFailed);
             }
             catch (Exception ex)
             {
-                Helper.ShowMessage(@"Error", ex);
+                Helper.ShowExceptionMessage(ex);
                 _parsingBackgroundWorker.ReportProgress((int) ParsingErrorCode.ParsingDocumentFailed);
             }
-#else
-            catch
-            { 
-                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
-            }
-#endif
         }
 
         /// <summary>
@@ -1434,14 +1412,10 @@ namespace SharePortfolioManager.ShareAddForm.View
                     _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingParsingDocumentError);
                 }
             }
-#if DEBUG
             catch (Exception ex)
             {
-                Helper.ShowMessage(@"Error", ex);
-#else
-            catch
-            {
-#endif
+                Helper.ShowExceptionMessage(ex);
+
                 _parsingThreadFinished = true;
                 _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingFailed);
             }
@@ -1734,30 +1708,20 @@ namespace SharePortfolioManager.ShareAddForm.View
                             }
                         }
                     }
-#if DEBUG
                     catch (Exception ex)
                     {
-                        var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                        MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                            MessageBoxIcon.Error);
-#else
-                    catch
-                    { 
-#endif
+                        Helper.ShowExceptionMessage(ex);
+
                         DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
                         _parsingThreadFinished = true;
                         _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
                     }
                 }
             }
-#if DEBUG
             catch (Exception ex)
             {
-                Helper.ShowMessage(@"Error", ex);
-#else
-            catch
-            {
-#endif
+                Helper.ShowExceptionMessage(ex);
+
                 DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
                 _parsingThreadFinished = true;
                 _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);

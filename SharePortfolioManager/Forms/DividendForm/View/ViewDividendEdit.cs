@@ -20,6 +20,9 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_DIVIDEND_EDIT_VIEW
+
 using LanguageHandler;
 using Logging;
 using Parser;
@@ -998,6 +1001,7 @@ namespace SharePortfolioManager.DividendForm.View
                 btnCancel.Image = Resources.button_back_24;
 
                 // Set dividend units to the edit boxes
+                // HINT: Foreign currencies are set in the function "CbxBoxAddDividendForeignCurrency_SelectedIndexChanged"
                 lblDividendRateUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                 lblVolumeUnit.Text = ShareObject.PieceUnit;
                 lblPayoutUnit.Text = ShareObjectFinalValue.CurrencyUnit;
@@ -1025,15 +1029,12 @@ namespace SharePortfolioManager.DividendForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_DIVIDEND || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-#endif
-                // Add status message
+
                 Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/ShowFailed", LanguageName),
                    Language, LanguageName,
-                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                   Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
+                   ex);
             }
         }
 
@@ -1181,6 +1182,7 @@ namespace SharePortfolioManager.DividendForm.View
         private void CbxBoxAddDividendForeignCurrency_SelectedIndexChanged(object sender, EventArgs e)
         {
             lblPayoutFCUnit.Text = ((ComboBox)sender).SelectedItem.ToString().Split('/')[1].Trim();
+            lblDividendRateUnit.Text = lblPayoutFCUnit.Text;
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CultureInfoFC"));
         }
@@ -1567,14 +1569,12 @@ namespace SharePortfolioManager.DividendForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-
-#endif
-                toolStripStatusLabelMessageDividendDocumentParsing.ForeColor = Color.Red;
-                toolStripStatusLabelMessageDividendDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/ParsingErrors/ParsingFailed", LanguageName);
+                Helper.AddStatusMessage(toolStripStatusLabelMessageDividendDocumentParsing,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/ParsingErrors/ParsingFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError,
+                    (int)FrmMain.EComponentLevels.Application,
+                    ex);
 
                 toolStripProgressBarDividendDocumentParsing.Visible = false;
                 grpBoxAddDividend.Enabled = true;
@@ -1623,16 +1623,12 @@ namespace SharePortfolioManager.DividendForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_DIVIDEND || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/AddFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                    (int) FrmMain.EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -1652,7 +1648,8 @@ namespace SharePortfolioManager.DividendForm.View
                 toolStripStatusLabelMessageDividendDocumentParsing.Text = string.Empty;
                 toolStripProgressBarDividendDocumentParsing.Visible = false;
 
-                var strCaption = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Info", LanguageName);
+                var strCaption = Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
+                    (int) EOwnMessageBoxInfoType.Info];
                 var strMessage = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/DividendDelete",
                     LanguageName);
                 var strOk = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", LanguageName);
@@ -1688,16 +1685,12 @@ namespace SharePortfolioManager.DividendForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_DIVIDEND || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DeleteFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                    (int) FrmMain.EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -1715,16 +1708,12 @@ namespace SharePortfolioManager.DividendForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_DIVIDEND || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/CancelFailure", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                    (int) FrmMain.EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -1824,7 +1813,7 @@ namespace SharePortfolioManager.DividendForm.View
                     // Set TabPage caption
                     Text = Language.GetLanguageTextByXPath(
                                @"/AddEditFormDividend/GrpBoxDividend/TabCtrl/TabPgOverview/Overview", LanguageName)
-                           + @" (" + ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesWithUnitAsStr +
+                           + @" (" + ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesAsStrUnit +
                            @")"
                 };
 
@@ -1936,7 +1925,7 @@ namespace SharePortfolioManager.DividendForm.View
                         // Set TabPage caption
                         Text = keyName + @" (" +
                                ShareObjectFinalValue.AllDividendEntries.AllDividendsOfTheShareDictionary[keyName]
-                                   .DividendValueYearWithUnitAsStr
+                                   .DividendValueYearAsStrUnit
                                + @")"
                     };
 
@@ -2036,16 +2025,12 @@ namespace SharePortfolioManager.DividendForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_DIVIDEND || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/ShowFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                    (int) FrmMain.EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -2085,7 +2070,7 @@ namespace SharePortfolioManager.DividendForm.View
                                 ((DataGridView)sender).Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormDividend/GrpBoxDividend/TabCtrl/DgvDividendOverview/ColHeader_Dividend",
-                                        LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
+                                        LanguageName);
                             }
                             else
                             {
@@ -2099,27 +2084,33 @@ namespace SharePortfolioManager.DividendForm.View
                             ((DataGridView)sender).Columns[i].HeaderText =
                                 Language.GetLanguageTextByXPath(
                                     @"/AddEditFormDividend/GrpBoxDividend/TabCtrl/DgvDividendOverview/ColHeader_Dividend",
-                                    LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
+                                    LanguageName);
                             break;
                         case 3:
                             ((DataGridView)sender).Columns[i].HeaderText =
                                 Language.GetLanguageTextByXPath(
                                     @"/AddEditFormDividend/GrpBoxDividend/TabCtrl/DgvDividendOverview/ColHeader_Volume",
-                                    LanguageName) + @" (" + ShareObject.PieceUnit + @")";
+                                    LanguageName);
                             break;
                         case 4:
                             ((DataGridView) sender).Columns[i].HeaderText =
                                 Language.GetLanguageTextByXPath(
                                     @"/AddEditFormDividend/GrpBoxDividend/TabCtrl/DgvDividendOverview/ColHeader_TaxSum",
-                                    LanguageName) + @" (" + ShareObjectFinalValue.CurrencyUnit + @")";
+                                    LanguageName);
                             break;
                         case 5:
+                            ((DataGridView)sender).Columns[i].HeaderText =
+                                Language.GetLanguageTextByXPath(
+                                    @"/AddEditFormDividend/GrpBoxDividend/TabCtrl/DgvDividendOverview/ColHeader_PayoutWithTaxes",
+                                    LanguageName);
+                            break;
+                        case 6:
                             ((DataGridView) sender).Columns[i].HeaderText =
                                 Language.GetLanguageTextByXPath(
                                     @"/AddEditFormDividend/GrpBoxDividend/TabCtrl/DgvDividendOverview/ColHeader_Yield",
-                                    LanguageName) + @" (" + ShareObject.PercentageUnit + @")";
+                                    LanguageName);
                             break;
-                        case 6:
+                        case 7:
                             ((DataGridView) sender).Columns[i].HeaderText =
                                 Language.GetLanguageTextByXPath(
                                     @"/AddEditFormDividend/GrpBoxDividend/TabCtrl/DgvDividendOverview/ColHeader_Document",
@@ -2142,16 +2133,12 @@ namespace SharePortfolioManager.DividendForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_DIVIDEND || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/RenameColHeaderFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                    (int) FrmMain.EComponentLevels.Application,
+                    ex);
             }
 
         }
@@ -2180,16 +2167,12 @@ namespace SharePortfolioManager.DividendForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_DIVIDEND || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DeselectFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                    (int) FrmMain.EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -2326,16 +2309,12 @@ namespace SharePortfolioManager.DividendForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_DIVIDEND || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                    (int) FrmMain.EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -2407,7 +2386,7 @@ namespace SharePortfolioManager.DividendForm.View
                             chkBoxEnableFC.CheckState = CheckState.Checked;
 
                             // Set foreign currency values
-                            txtBoxExchangeRatio.Text = selectedDividendObject.ExchangeRatio;
+                            txtBoxExchangeRatio.Text = selectedDividendObject.ExchangeRatioAsStr;
 
                             // Find correct currency
                             cbxBoxDividendFCUnit.SelectedIndex = cbxBoxDividendFCUnit.FindString(selectedDividendObject.CultureInfoFc.Name);
@@ -2416,7 +2395,7 @@ namespace SharePortfolioManager.DividendForm.View
                         }
                         else
                         {
-                            txtBoxDividendRate.Text = selectedDividendObject.Rate;
+                            txtBoxDividendRate.Text = selectedDividendObject.DividendAsStr;
 
                             // Chose USD item
                             var iIndex = cbxBoxDividendFCUnit.FindString("en-US");
@@ -2425,14 +2404,14 @@ namespace SharePortfolioManager.DividendForm.View
 
                         dateTimePickerDate.Value = Convert.ToDateTime(selectedDividendObject.Date);
                         dateTimePickerTime.Value = Convert.ToDateTime(selectedDividendObject.Date);
-                        txtBoxDividendRate.Text = selectedDividendObject.Rate;
-                        txtBoxVolume.Text = selectedDividendObject.Volume;
-                        txtBoxTaxAtSource.Text = selectedDividendObject.TaxAtSource;
-                        txtBoxCapitalGainsTax.Text = selectedDividendObject.CapitalGainsTax;
-                        txtBoxSolidarityTax.Text = selectedDividendObject.SolidarityTax;
-                        txtBoxYield.Text = selectedDividendObject.Yield;
-                        txtBoxSharePrice.Text = selectedDividendObject.Price;
-                        txtBoxDocument.Text = selectedDividendObject.Document;
+                        txtBoxDividendRate.Text = selectedDividendObject.DividendAsStr;
+                        txtBoxVolume.Text = selectedDividendObject.VolumeAsStr;
+                        txtBoxTaxAtSource.Text = selectedDividendObject.TaxAtSourceAsStr;
+                        txtBoxCapitalGainsTax.Text = selectedDividendObject.CapitalGainsTaxAsStr;
+                        txtBoxSolidarityTax.Text = selectedDividendObject.SolidarityTaxAsStr;
+                        txtBoxYield.Text = selectedDividendObject.YieldAsStr;
+                        txtBoxSharePrice.Text = selectedDividendObject.PriceAtPaydayAsStr;
+                        txtBoxDocument.Text = selectedDividendObject.DocumentAsStr;
                     }
                     else
                     {
@@ -2495,16 +2474,12 @@ namespace SharePortfolioManager.DividendForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_DIVIDEND || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                    (int) FrmMain.EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -2551,14 +2526,14 @@ namespace SharePortfolioManager.DividendForm.View
                     if (temp.Guid != strGuid) continue;
 
                     // Check if the file still exists
-                    if (File.Exists(temp.Document))
+                    if (File.Exists(temp.DocumentAsStr))
                         // Open the file
-                        Process.Start(temp.Document);
+                        Process.Start(temp.DocumentAsStr);
                     else
                     {
                         var strCaption =
-                            Language.GetLanguageTextByXPath(@"/MessageBoxForm/Captions/Error",
-                                LanguageName);
+                            Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
+                                (int) EOwnMessageBoxInfoType.Error];
                         var strMessage =
                             Language.GetLanguageTextByXPath(
                                 @"/MessageBoxForm/Content/DocumentDoesNotExistDelete",
@@ -2576,15 +2551,14 @@ namespace SharePortfolioManager.DividendForm.View
                         {
                             // Remove dividend object and add it with no document
                             if (ShareObjectFinalValue.RemoveDividend(temp.Guid, temp.Date) &&
-                                ShareObjectFinalValue.AddDividend(temp.CultureInfoFc, temp.EnableFc, temp.ExchangeRatioDec, temp.Guid, temp.Date, temp.RateDec, temp.VolumeDec,
-                                    temp.TaxAtSourceDec, temp.CapitalGainsTaxDec, temp.SolidarityTaxDec, temp.PriceDec))
+                                ShareObjectFinalValue.AddDividend(temp.CultureInfoFc, temp.EnableFc, temp.ExchangeRatio, temp.Guid, temp.Date, temp.Dividend, temp.Volume,
+                                    temp.TaxAtSource, temp.CapitalGainsTax, temp.SolidarityTax, temp.PriceAtPayday))
                             {
                                 // Set flag to save the share object.
                                 SaveFlag = true;
 
                                 OnShowDividends();
 
-                                // Add status message
                                 Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormDividend/StateMessages/EditSuccess", LanguageName),
@@ -2609,17 +2583,12 @@ namespace SharePortfolioManager.DividendForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG_DIVIDEND || DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-                // Add status message
                 Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DocumentShowFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError,
-                    (int)FrmMain.EComponentLevels.Application);
+                    (int)FrmMain.EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -2742,20 +2711,14 @@ namespace SharePortfolioManager.DividendForm.View
             }
             catch (OperationCanceledException ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error 1", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
+                Helper.ShowExceptionMessage(ex);
+
                 _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error 2", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
+                Helper.ShowExceptionMessage(ex);
+
                 _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
             }
         }
@@ -2804,11 +2767,8 @@ namespace SharePortfolioManager.DividendForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
+                Helper.ShowExceptionMessage(ex);
+
                 _parsingThreadFinished = true;
                 _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingFailed);
             }
@@ -3097,11 +3057,8 @@ namespace SharePortfolioManager.DividendForm.View
                     }
                     catch (Exception ex)
                     {
-#if DEBUG
-                        var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                        MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                            MessageBoxIcon.Error);
-#endif
+                        Helper.ShowExceptionMessage(ex);
+
                         DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
                         _parsingThreadFinished = true;
                         _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
@@ -3110,11 +3067,8 @@ namespace SharePortfolioManager.DividendForm.View
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
+                Helper.ShowExceptionMessage(ex);
+
                 DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
                 _parsingThreadFinished = true;
                 _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);

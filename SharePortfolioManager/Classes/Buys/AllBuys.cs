@@ -20,7 +20,10 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-using SharePortfolioManager.Classes.Costs;
+// Define for DEBUGGING
+//#define DEBUG_ALL_BUYS
+
+using SharePortfolioManager.Classes.Brokerage;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -135,7 +138,7 @@ namespace SharePortfolioManager.Classes.Buys
         public bool AddBuy(string strGuid, string strOrderNumber, string strDate, decimal decVolume, decimal decVolumeSold, decimal decSharePrice,
             BrokerageReductionObject brokerageObject, string strDoc = "")
         {
-#if false
+#if DEBUG_ALL_BUYS
             Console.WriteLine(@"AddBuy()");
 #endif
             try
@@ -184,12 +187,14 @@ namespace SharePortfolioManager.Classes.Buys
                     BuyValueBrokerageReductionTotal += calcObject.BuyValueBrokerageReductionYear;
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
+
                 return false;
             }
 
-#if false
+#if DEBUG_ALL_BUYS
             Console.WriteLine(@"BuyVolumeTotal: {0}", BuyVolumeTotal);
             Console.WriteLine(@"BuyValueTotal: {0}", BuyValueTotal);
             Console.WriteLine(@"BuyValueReductionTotal: {0}", BuyValueReductionTotal);
@@ -249,8 +254,10 @@ namespace SharePortfolioManager.Classes.Buys
                     BuyValueBrokerageReductionTotal += calcObject.BuyValueBrokerageReductionYear;
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
+
                 return false;
             }
 
@@ -285,8 +292,10 @@ namespace SharePortfolioManager.Classes.Buys
                     return false;
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Helper.ShowExceptionMessage(ex);
+
                 return false;
             }
 

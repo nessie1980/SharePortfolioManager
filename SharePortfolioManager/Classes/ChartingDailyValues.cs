@@ -20,6 +20,9 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_CHARTING_DAILY_VALUES
+
 using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Classes.ShareObjects;
@@ -43,7 +46,7 @@ namespace SharePortfolioManager.Classes
 
         private static ShareObjectFinalValue _shareObjectFinalValue;
 
-        private static System.Windows.Forms.DataVisualization.Charting.Chart _chartDailyValues;
+        private static Chart _chartDailyValues;
 
         private static ChartValues _chartValues;
 
@@ -69,7 +72,7 @@ namespace SharePortfolioManager.Classes
             ShareObjectFinalValue shareObjectFinalValue, ShareObjectMarketValue shareObjectMarketValue,
             Logger logger, string languageName, Language language,
             DateTime startDate,
-            System.Windows.Forms.DataVisualization.Charting.Chart chartDailyValues,
+            Chart chartDailyValues,
             ChartValues chartValues,
             System.Windows.Forms.Label lblBoxNoDataMessage,
             bool showTitle,
@@ -131,7 +134,7 @@ namespace SharePortfolioManager.Classes
 
                     // Set text to the no data message label
                     lblBoxNoDataMessage.Text = Helper.BuildNewLineTextFromStringList(
-                        _language.GetLanguageTextListByXPath(@"/Chart/Errors/NoData/*", _languageName));
+                        _language.GetLanguageTextListByXPath(@"/Chart/Errors/NoData/Lines/*", _languageName));
 
                     // Show no data message label
                     lblBoxNoDataMessage.Visible = true;
@@ -148,7 +151,7 @@ namespace SharePortfolioManager.Classes
 
                     // Set text to the no data message label
                     lblBoxNoDataMessage.Text = Helper.BuildNewLineTextFromStringList(
-                        _language.GetLanguageTextListByXPath(@"/Chart/Errors/NoData/*", _languageName));
+                        _language.GetLanguageTextListByXPath(@"/Chart/Errors/NoData/Lines/*", _languageName));
 
                     // Show no data message label
                     lblBoxNoDataMessage.Visible = true;
@@ -177,7 +180,7 @@ namespace SharePortfolioManager.Classes
 
                 // Set text to the no data message label
                 lblBoxNoDataMessage.Text = Helper.BuildNewLineTextFromStringList(
-                    _language.GetLanguageTextListByXPath(@"/Chart/Errors/NoData/*", _languageName));
+                    _language.GetLanguageTextListByXPath(@"/Chart/Errors/NoData/Lines/*", _languageName));
 
                 // Show no data message label
                 lblBoxNoDataMessage.Visible = true;
@@ -258,7 +261,7 @@ namespace SharePortfolioManager.Classes
 
             #endregion Selection
 
-#if DEBUG
+#if DEBUG_CHARTING_DAILY_VALUES
             if (dailyValuesList.Count > 0)
             {
                 var startDateTime = dailyValuesList.First().Date;
@@ -1089,7 +1092,7 @@ namespace SharePortfolioManager.Classes
                 }
             }
 
-#if DEBUG
+#if DEBUG_CHARTING_DAILY_VALUES
             Console.WriteLine(@"Place: {0}", iPlace);
             Console.WriteLine(@"Min: {0}", decMinValueY);
             Console.WriteLine(@"Max: {0}", decMaxValueY);
@@ -1111,7 +1114,7 @@ namespace SharePortfolioManager.Classes
             // Check if the min value is lower than 0 so set it to 0
             if (decMinValueY < 0) decMinValueY = 0;
 
-#if DEBUG
+#if DEBUG_CHARTING_DAILY_VALUES
             Console.WriteLine(@"Min: {0}", decMinValueY);
             Console.WriteLine(@"Max: {0}", decMaxValueY);
 #endif

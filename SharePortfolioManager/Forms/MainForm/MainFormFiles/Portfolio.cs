@@ -20,6 +20,9 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_MAIN_FORM_PORTFOLIO
+
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.Sales;
 using SharePortfolioManager.Classes.ShareObjects;
@@ -133,7 +136,6 @@ namespace SharePortfolioManager
                             EnableDisableControlNames.Add("btnDelete");
                             Helper.EnableDisableControls(true, tblLayPnlShareOverviews, EnableDisableControlNames);
 
-                            // Add status message
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
                                 Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/ChangingPortfolioSuccessful", LanguageName),
                                 Language, LanguageName,
@@ -159,13 +161,11 @@ namespace SharePortfolioManager
                             EnableDisableControlNames.Add("btnDelete");
                             Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
 
-                            // Add status message
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
                                 Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/ChangingPortfolioSuccessful", LanguageName),
                                 Language, LanguageName,
                                 Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
 
-                            // Add status message
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
                             Language.GetLanguageTextByXPath(@"/MainForm/Errors/PortfolioConfigurationListEmpty",
                                 LanguageName),
@@ -197,13 +197,12 @@ namespace SharePortfolioManager
                             // Disable controls
                             saveAsToolStripMenuItem.Enabled = false;
 
-                            // Add status message
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
                             Language.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists_1", LanguageName)
                             + _portfolioFileName
                             + Language.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists_2", LanguageName),
                             Language, LanguageName,
-                            Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                            Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
 
                             _portfolioFileName = @"";
                         }
@@ -218,15 +217,8 @@ namespace SharePortfolioManager
                 if (_portfolioFileName != @"")
                     Text += @" - (" + _portfolioFileName + @")";
             }
-#pragma warning disable 168
             catch (Exception ex)
-#pragma warning restore 168
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
                 // Close portfolio reader
                 ReaderPortfolio?.Close();
 
@@ -246,11 +238,11 @@ namespace SharePortfolioManager
                 EnableDisableControlNames.Add("btnDelete");
                 Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
 
-                // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/MainForm/Errors/ChangingPortfolioFailed", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -871,14 +863,13 @@ namespace SharePortfolioManager
                         InitFlag = false;
                         PortfolioLoadState = EStatePortfolioLoad.LoadFailed;
 
-                        // Add status message
                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
                             Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_1", LanguageName)
                             + _portfolioFileName
                             + Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_2", LanguageName)
                             + " " + Language.GetLanguageTextByXPath(@"/MainForm/Errors/PortfolioConfigurationListLoadFailed", LanguageName),
                             Language, LanguageName,
-                            Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                            Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
 
                         // Stop loading more portfolio configurations
                         break;
@@ -999,17 +990,10 @@ namespace SharePortfolioManager
             }
             catch (XmlException ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
-
                 // Set initialization flag
                 InitFlag = false;
                 PortfolioLoadState = EStatePortfolioLoad.LoadFailed;
 
-                // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_1", LanguageName)
                     + _portfolioFileName
@@ -1018,7 +1002,8 @@ namespace SharePortfolioManager
                     + _portfolioFileName
                     + Language.GetLanguageTextByXPath(@"/MainForm/Errors/XMLSyntaxFailure_2", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application,
+                    ex);
 
                 ShareObjectListMarketValue.Clear();
                 ShareObjectListFinalValue.Clear();
@@ -1028,11 +1013,6 @@ namespace SharePortfolioManager
             }
             catch (Exception ex)
             {
-#if DEBUG
-                var message = Helper.GetMyMethodName() + Environment.NewLine + Environment.NewLine + ex.Message;
-                MessageBox.Show(message, @"Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-#endif
                 // Close portfolio reader
                 ReaderPortfolio?.Close();
 
@@ -1040,13 +1020,13 @@ namespace SharePortfolioManager
                 InitFlag = false;
                 PortfolioLoadState = EStatePortfolioLoad.LoadFailed;
 
-                // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_1", LanguageName)
                     + _portfolioFileName
                     + Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_2", LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application);
+                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application,
+                    ex);
 
                 ShareObjectListMarketValue.Clear();
                 ShareObjectListFinalValue.Clear();
@@ -1166,7 +1146,6 @@ namespace SharePortfolioManager
         {
             if (regexSearchFailed.Count != 0 && regexSearchFailed.Count == 1)
             {
-                // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/MainForm/Errors/WebSiteRegexNotFound1_1", LanguageName)
                     + @"'"
@@ -1199,7 +1178,6 @@ namespace SharePortfolioManager
                 statusMessage +=
                     Language.GetLanguageTextByXPath(@"/MainForm/Errors/WebSiteRegexNotFound2_2", LanguageName);
 
-                // Add status message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage, statusMessage,
                     Language, LanguageName,
                     Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Application);

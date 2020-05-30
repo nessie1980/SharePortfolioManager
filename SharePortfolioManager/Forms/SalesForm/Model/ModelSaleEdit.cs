@@ -20,6 +20,9 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+// Define for DEBUGGING
+//#define DEBUG_SALE_EDIT_MODEL
+
 using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Classes;
