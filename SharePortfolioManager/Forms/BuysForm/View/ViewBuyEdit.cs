@@ -216,6 +216,8 @@ namespace SharePortfolioManager.BuysForm.View
 
         public string LanguageName { get; internal set; }
 
+        public string ParsingFileName { get; internal set; }
+
         #endregion Transfer parameter
 
         #region Flags
@@ -888,8 +890,10 @@ namespace SharePortfolioManager.BuysForm.View
         /// <param name="logger">Logger</param>
         /// <param name="language">Language file</param>
         /// <param name="languageName">Language</param>
+        /// <param name="parsingFileName">File name of the parsing file which is given via document capture</param>
         public ViewBuyEdit(ShareObjectMarketValue shareObjectMarketValue, ShareObjectFinalValue shareObjectFinalValue,
-            Logger logger, Language language, string languageName)
+            Logger logger, Language language, string languageName,
+            string parsingFileName = null)
         {
             InitializeComponent();
 
@@ -899,6 +903,8 @@ namespace SharePortfolioManager.BuysForm.View
             Logger = logger;
             Language = language;
             LanguageName = languageName;
+
+            ParsingFileName = parsingFileName;
 
             _focusedControl = txtBoxOrderNumber;
 
@@ -1012,6 +1018,13 @@ namespace SharePortfolioManager.BuysForm.View
 
                 // Load buys of the share
                 OnShowBuys();
+
+                // If a parsing file name is given the form directly starts with the document parsing
+                if (ParsingFileName != null)
+                {
+                    _parsingStartAllow = true;
+                    txtBoxDocument.Text = ParsingFileName;
+                }
 
                 txtBoxOrderNumber.Focus();
             }

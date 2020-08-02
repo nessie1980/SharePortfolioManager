@@ -69,7 +69,7 @@ namespace SharePortfolioManager.Classes.Brokerage
         [Browsable(false)]
         public string ProvisionValueAsStr => ProvisionValue > 0
             ? Helper.FormatDecimal(ProvisionValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength)
-            : @"";
+            : @"0,0";
 
         [Browsable(false)]
         public decimal BrokerFeeValue { get; set; }
@@ -77,7 +77,7 @@ namespace SharePortfolioManager.Classes.Brokerage
         [Browsable(false)]
         public string BrokerFeeValueAsStr => BrokerFeeValue > 0
             ? Helper.FormatDecimal(BrokerFeeValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength)
-            : @"";
+            : @"0,0";
 
         [Browsable(false)]
         public decimal TraderPlaceFeeValue { get; set; }
@@ -85,7 +85,7 @@ namespace SharePortfolioManager.Classes.Brokerage
         [Browsable(false)]
         public string TraderPlaceFeeValueAsStr => TraderPlaceFeeValue > 0
             ? Helper.FormatDecimal(TraderPlaceFeeValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength)
-            : @"";
+            : @"0,0";
 
         [Browsable(false)]
         public decimal ReductionValue { get; set; }
@@ -93,7 +93,7 @@ namespace SharePortfolioManager.Classes.Brokerage
         [Browsable(false)]
         public string ReductionValueAsStr => ReductionValue > 0
             ? Helper.FormatDecimal(ReductionValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength)
-            : @"";
+            : @"0,0";
 
         [Browsable(false)]
         public decimal BrokerageValue { get; set; }
@@ -101,7 +101,7 @@ namespace SharePortfolioManager.Classes.Brokerage
         [Browsable(false)]
         public string BrokerageValueAsStr => BrokerageValue > 0
             ? Helper.FormatDecimal(BrokerageValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength)
-            : @"";
+            : @"0,0";
 
         [Browsable(false)]
         public decimal BrokerageReductionValue { get; set; }
@@ -109,7 +109,7 @@ namespace SharePortfolioManager.Classes.Brokerage
         [Browsable(false)]
         public string BrokerageReductionValueAsStr => BrokerageReductionValue > 0
             ? Helper.FormatDecimal(BrokerageReductionValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength)
-            : @"";
+            : @"0,0";
 
         [Browsable(false)]
         public string DocumentAsStr { get; set; }

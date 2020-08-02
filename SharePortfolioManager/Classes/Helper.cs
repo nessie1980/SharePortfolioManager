@@ -545,6 +545,20 @@ namespace SharePortfolioManager.Classes
                         if (castControl.Controls.Count > 0)
                             EnableDisableControls(flag, castControl, listControlNames);
                     }
+
+                    // Textbox
+                    if (control.GetType() != typeof(TextBox)) continue;
+                    {
+                        var castControl = (TextBox)control;
+#if DEBUG_HELPER
+                        Console.WriteLine(castControl.Name);
+#endif
+                        if (listControlNames.Contains(castControl.Name))
+                            castControl.Enabled = flag;
+
+                        if (castControl.Controls.Count > 0)
+                            EnableDisableControls(flag, castControl, listControlNames);
+                    }
                 }
             }
             catch (Exception ex)

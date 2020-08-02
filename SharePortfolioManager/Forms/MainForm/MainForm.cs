@@ -463,6 +463,7 @@ namespace SharePortfolioManager
                             EnableDisableControlNames.Add("grpBoxShareDetails");
                             EnableDisableControlNames.Add("grpBoxStatusMessage");
                             EnableDisableControlNames.Add("grpBoxUpdateState");
+                            EnableDisableControlNames.Add("grpBoxDocumentCapture");
                             Helper.EnableDisableControls(true, this, EnableDisableControlNames);
                         }
                             break;
@@ -475,6 +476,7 @@ namespace SharePortfolioManager
                             EnableDisableControlNames.Add("grpBoxShareDetails");
                             EnableDisableControlNames.Add("grpBoxStatusMessage");
                             EnableDisableControlNames.Add("grpBoxUpdateState");
+                            EnableDisableControlNames.Add("grpBoxDocumentCapture");
                             Helper.EnableDisableControls(true, this, EnableDisableControlNames);
 
                             // Disable controls

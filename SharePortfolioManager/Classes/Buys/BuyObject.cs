@@ -145,7 +145,7 @@ namespace SharePortfolioManager.Classes.Buys
         [Browsable(false)]
         public string VolumeAsStr => Volume > 0
             ? Helper.FormatDecimal(Volume, Helper.VolumeFiveLength, false, Helper.VolumeTwoFixLength)
-            : @"";
+            : @"0,0";
 
         /// <summary>
         /// Volume which is already sold of this buy
@@ -168,7 +168,7 @@ namespace SharePortfolioManager.Classes.Buys
         [Browsable(false)]
         public string VolumeSoldAsStr => VolumeSold > 0
             ? Helper.FormatDecimal(VolumeSold, Helper.VolumeFiveLength, false, Helper.VolumeTwoFixLength)
-            : @"";
+            : @"0,0";
 
         /// <summary>
         /// Price of one share of this share
@@ -191,7 +191,7 @@ namespace SharePortfolioManager.Classes.Buys
         [Browsable(false)]
         public string PriceAsStr => Price > 0
             ? Helper.FormatDecimal(Price, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength)
-            : @"";
+            : @"0,0";
 
         #region Brokerage values
 
@@ -346,7 +346,7 @@ namespace SharePortfolioManager.Classes.Buys
         [Browsable(false)]
         public string BuyValueReductionAsStr => BuyValueReduction > 0
             ? Helper.FormatDecimal(BuyValueReduction, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength)
-            : @"";
+            : @"0,0";
 
         /// <summary>
         /// Value + brokerage of this buy

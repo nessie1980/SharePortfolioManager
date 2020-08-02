@@ -103,8 +103,6 @@ namespace SharePortfolioManager
         {
             try
             {
-                var additionalButtons = new List<string>();
-
                 // Create add share form
                 IModelShareAdd model = new ModelShareAdd();
                 IViewShareAdd view = new ViewShareAdd(this, Logger, Language, LanguageName,
@@ -114,74 +112,8 @@ namespace SharePortfolioManager
 
                 if (view.ShowDialog() != DialogResult.OK) return;
 
-                // Set add flag to true for selecting the new added share in the DataGridView portfolio
-                AddFlagMarketValue = true;
-                AddFlagFinalValue = true;
-
-                // Save the share values only of the final value object to the XML (The market value object contains the same values)
-                if (ShareObjectFinalValue.SaveShareObject(ShareObjectFinalValue, ref _portfolio, ref _readerPortfolio,
-                    ref _readerSettingsPortfolio, _portfolioFileName, out var exception))
-                {
-                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/AddSaveSuccessful", LanguageName),
-                        Language, LanguageName,
-                        Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Application);
-
-                    // Enable controls
-                    additionalButtons.Add("btnRefreshAll");
-                    additionalButtons.Add("btnRefresh");
-                    additionalButtons.Add("btnEdit");
-                    additionalButtons.Add("btnDelete");
-                    additionalButtons.Add("btnClearLogger");
-                    Helper.EnableDisableControls(true, tblLayPnlShareOverviews, additionalButtons);
-                }
-                else
-                {
-                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        Language.GetLanguageTextByXPath(@"/MainForm/Errors/AddSaveFailed", LanguageName),
-                        Language, LanguageName,
-                        Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Application,
-                        exception);
-
-                    // Enable buttons only if a share exists in the DataGridView
-                    if (dgvPortfolioFinalValue.RowCount > 0 && dgvPortfolioMarketValue.RowCount > 0)
-                    {
-                        // Enable controls
-                        additionalButtons.Add("btnRefreshAll");
-                        additionalButtons.Add("btnRefresh");
-                        additionalButtons.Add("btnEdit");
-                        additionalButtons.Add("btnDelete");
-                        additionalButtons.Add("btnClearLogger");
-                        Helper.EnableDisableControls(true, tblLayPnlShareOverviews, additionalButtons);
-                    }
-                }
-
-                // Check if any share set for updating so enable the refresh all button
-                btnRefreshAll.Enabled =
-                    ShareObjectListFinalValue.Count(p => p.DoInternetUpdate && p.WebSiteConfigurationFound) >= 1;
-
-                // Throw exception which is thrown in the SaveShareObject function
-                if (exception != null)
-                    throw exception;
-
-                // Check if the DataBinding is already done and
-                // than set the new share to the DataGridView
-                if (DgvPortfolioBindingSourceFinalValue.DataSource == null && dgvPortfolioFinalValue.DataSource == null)
-                {
-                    DgvPortfolioBindingSourceFinalValue.DataSource = ShareObjectListFinalValue;
-                    dgvPortfolioFinalValue.DataSource = DgvPortfolioBindingSourceFinalValue;
-                }
-                else
-                    DgvPortfolioBindingSourceFinalValue.ResetBindings(false);
-
-                if (DgvPortfolioBindingSourceMarketValue.DataSource == null &&
-                    dgvPortfolioMarketValue.DataSource == null)
-                {
-                    DgvPortfolioBindingSourceMarketValue.DataSource = ShareObjectListMarketValue;
-                    dgvPortfolioMarketValue.DataSource = DgvPortfolioBindingSourceMarketValue;
-                }
-                else
-                    DgvPortfolioBindingSourceMarketValue.ResetBindings(false);
+                // Add share and update UI
+                OnAddShare();
             }
             catch (Exception ex)
             {
@@ -229,64 +161,8 @@ namespace SharePortfolioManager
 
                     if (editShare.ShowDialog() != DialogResult.OK) return;
 
-                    // Set delete flag
-                    EditFlagMarketValue = true;
-
-                    // Save the share values to the XML
-                    // Get WKN of the selected object
-                    var tempShareObjectFinalValue = ShareObjectListFinalValue[SelectedDataGridViewShareIndex];
-
-                    if (ShareObjectFinalValue.SaveShareObject(ShareObjectListFinalValue[SelectedDataGridViewShareIndex],
-                        ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio, _portfolioFileName, 
-                        out var exception))
-                    {
-                        // Sort portfolio list in order of the share names
-                        ShareObjectListFinalValue.Sort(new ShareObjectListComparer());
-                        ShareObjectListMarketValue.Sort(new ShareObjectListComparer());
-
-                        // Select row of the new list index
-                        var searchObject = new ShareObjectSearch(tempShareObjectFinalValue.Wkn);
-                        SelectedDataGridViewShareIndex = ShareObjectListFinalValue.FindIndex(searchObject.Compare);
-
-                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/EditSaveSuccessful",
-                                LanguageName),
-                            Language, LanguageName,
-                            Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Application);
-
-                        // Reset / refresh DataGridView portfolio BindingSource
-                        DgvPortfolioBindingSourceMarketValue.ResetBindings(false);
-                        DgvPortfolioBindingSourceFinalValue.ResetBindings(false);
-
-                        if (SelectedDataGridViewShareIndex > 0)
-                        {
-                            if (MarketValueOverviewTabSelected)
-                                dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
-                            else
-                                dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
-                        }
-
-                        // Scroll to the selected row
-                        Helper.ScrollDgvToIndex(
-                            MarketValueOverviewTabSelected ? dgvPortfolioMarketValue : dgvPortfolioFinalValue,
-                            SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
-                    }
-                    else
-                    {
-                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
-                            Language, LanguageName,
-                            Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Application,
-                            exception);
-                    }
-
-                    // Check if any share set for updating so enable the refresh all button
-                    btnRefreshAll.Enabled =
-                        ShareObjectListFinalValue.Count(p => p.DoInternetUpdate && p.WebSiteConfigurationFound) >= 1;
-
-                    // Throw exception which is thrown in the SaveShareObject function
-                    if (exception != null)
-                        throw exception;
+                    // Save changed share data and update UI
+                    OnEditShare(SelectedDataGridViewShareIndex);
                 }
                 else
                 {
@@ -304,6 +180,71 @@ namespace SharePortfolioManager
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }
+        }
+
+        /// <summary>
+        /// This function saves the changed share data. It also updates the data grid views
+        /// </summary>
+        public void OnEditShare(int index)
+        {
+            // Set delete flag
+            EditFlagMarketValue = true;
+
+            // Save the share values to the XML
+            // Get WKN of the selected object
+            var tempShareObjectFinalValue = ShareObjectListFinalValue[index];
+
+            if (ShareObjectFinalValue.SaveShareObject(ShareObjectListFinalValue[index],
+                ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio, _portfolioFileName,
+                out var exception))
+            {
+                // Sort portfolio list in order of the share names
+                ShareObjectListFinalValue.Sort(new ShareObjectListComparer());
+                ShareObjectListMarketValue.Sort(new ShareObjectListComparer());
+
+                // Select row of the new list index
+                var searchObject = new ShareObjectSearch(tempShareObjectFinalValue.Wkn);
+                index = ShareObjectListFinalValue.FindIndex(searchObject.Compare);
+
+                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/EditSaveSuccessful",
+                        LanguageName),
+                    Language, LanguageName,
+                    Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
+
+                // Reset / refresh DataGridView portfolio BindingSource
+                DgvPortfolioBindingSourceMarketValue.ResetBindings(false);
+                DgvPortfolioBindingSourceFinalValue.ResetBindings(false);
+
+                if (index > 0)
+                {
+                    if (MarketValueOverviewTabSelected)
+                        dgvPortfolioMarketValue.Rows[index].Selected = true;
+                    else
+                        dgvPortfolioFinalValue.Rows[index].Selected = true;
+                }
+
+                // Scroll to the selected row
+                Helper.ScrollDgvToIndex(
+                    MarketValueOverviewTabSelected ? dgvPortfolioMarketValue : dgvPortfolioFinalValue,
+                    index, LastFirstDisplayedRowIndex, true);
+            }
+            else
+            {
+                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application,
+                    exception);
+            }
+
+            // Check if any share set for updating so enable the refresh all button
+            btnRefreshAll.Enabled =
+                ShareObjectListFinalValue.Count(p => p.DoInternetUpdate && p.WebSiteConfigurationFound) >= 1;
+
+            // Throw exception which is thrown in the SaveShareObject function
+            if (exception != null)
+                throw exception;
         }
 
         /// <summary>
@@ -449,6 +390,82 @@ namespace SharePortfolioManager
             }
         }
 
+        /// <summary>
+        /// This function saves the added share. It also updates the buttons and the data grid views
+        /// </summary>
+        public void OnAddShare()
+        {
+            // Set add flag to true for selecting the new added share in the DataGridView portfolio
+            AddFlagMarketValue = true;
+            AddFlagFinalValue = true;
+
+            var additionalButtons = new List<string>();
+
+            // Save the share values only of the final value object to the XML (The market value object contains the same values)
+            if (ShareObjectFinalValue.SaveShareObject(ShareObjectFinalValue, ref _portfolio, ref _readerPortfolio,
+                ref _readerSettingsPortfolio, _portfolioFileName, out var exception))
+            {
+                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/AddSaveSuccessful", LanguageName),
+                    Language, LanguageName,
+                    Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
+
+                // Enable controls
+                additionalButtons.Add("btnRefreshAll");
+                additionalButtons.Add("btnRefresh");
+                additionalButtons.Add("btnEdit");
+                additionalButtons.Add("btnDelete");
+                additionalButtons.Add("btnClearLogger");
+                Helper.EnableDisableControls(true, tblLayPnlShareOverviews, additionalButtons);
+            }
+            else
+            {
+                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/AddSaveFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application,
+                    exception);
+
+                // Enable buttons only if a share exists in the DataGridView
+                if (dgvPortfolioFinalValue.RowCount > 0 && dgvPortfolioMarketValue.RowCount > 0)
+                {
+                    // Enable controls
+                    additionalButtons.Add("btnRefreshAll");
+                    additionalButtons.Add("btnRefresh");
+                    additionalButtons.Add("btnEdit");
+                    additionalButtons.Add("btnDelete");
+                    additionalButtons.Add("btnClearLogger");
+                    Helper.EnableDisableControls(true, tblLayPnlShareOverviews, additionalButtons);
+                }
+            }
+
+            // Check if any share set for updating so enable the refresh all button
+            btnRefreshAll.Enabled =
+                ShareObjectListFinalValue.Count(p => p.DoInternetUpdate && p.WebSiteConfigurationFound) >= 1;
+
+            // Throw exception which is thrown in the SaveShareObject function
+            if (exception != null)
+                throw exception;
+
+            // Check if the DataBinding is already done and
+            // than set the new share to the DataGridView
+            if (DgvPortfolioBindingSourceFinalValue.DataSource == null && dgvPortfolioFinalValue.DataSource == null)
+            {
+                DgvPortfolioBindingSourceFinalValue.DataSource = ShareObjectListFinalValue;
+                dgvPortfolioFinalValue.DataSource = DgvPortfolioBindingSourceFinalValue;
+            }
+            else
+                DgvPortfolioBindingSourceFinalValue.ResetBindings(false);
+
+            if (DgvPortfolioBindingSourceMarketValue.DataSource == null &&
+                dgvPortfolioMarketValue.DataSource == null)
+            {
+                DgvPortfolioBindingSourceMarketValue.DataSource = ShareObjectListMarketValue;
+                dgvPortfolioMarketValue.DataSource = DgvPortfolioBindingSourceMarketValue;
+            }
+            else
+                DgvPortfolioBindingSourceMarketValue.ResetBindings(false);
+        }
         #endregion Button
     }
 }

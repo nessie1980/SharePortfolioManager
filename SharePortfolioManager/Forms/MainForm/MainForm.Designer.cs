@@ -73,6 +73,8 @@ namespace SharePortfolioManager
             this.lblShareDetailsWithOutDividendBrokerageSharePriceCurrentValue = new System.Windows.Forms.Label();
             this.timerStartNextShareUpdate = new System.Windows.Forms.Timer(this.components);
             this.timerMouseCellDownDoubleClick = new System.Windows.Forms.Timer(this.components);
+            this.grpBoxDocumentCapture = new System.Windows.Forms.GroupBox();
+            this.txtBoxDocumentCapture = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.grpBoxSharePortfolio.SuspendLayout();
             this.tblLayPnlShareOverviews.SuspendLayout();
@@ -87,6 +89,7 @@ namespace SharePortfolioManager
             this.tblLayPnlStatusMessages.SuspendLayout();
             this.grpBoxUpdateState.SuspendLayout();
             this.tblLayPnlUpdateState.SuspendLayout();
+            this.grpBoxDocumentCapture.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -208,7 +211,7 @@ namespace SharePortfolioManager
             this.grpBoxSharePortfolio.Location = new System.Drawing.Point(5, 25);
             this.grpBoxSharePortfolio.Name = "grpBoxSharePortfolio";
             this.grpBoxSharePortfolio.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.grpBoxSharePortfolio.Size = new System.Drawing.Size(1225, 571);
+            this.grpBoxSharePortfolio.Size = new System.Drawing.Size(1225, 522);
             this.grpBoxSharePortfolio.TabIndex = 3;
             this.grpBoxSharePortfolio.TabStop = false;
             this.grpBoxSharePortfolio.Text = "Share portfolio_";
@@ -238,7 +241,7 @@ namespace SharePortfolioManager
             this.tblLayPnlShareOverviews.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblLayPnlShareOverviews.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
             this.tblLayPnlShareOverviews.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tblLayPnlShareOverviews.Size = new System.Drawing.Size(1219, 548);
+            this.tblLayPnlShareOverviews.Size = new System.Drawing.Size(1219, 499);
             this.tblLayPnlShareOverviews.TabIndex = 13;
             // 
             // btnRefreshAll
@@ -248,7 +251,7 @@ namespace SharePortfolioManager
             this.btnRefreshAll.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRefreshAll.Image = global::SharePortfolioManager.Properties.Resources.button_update_all_24;
             this.btnRefreshAll.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnRefreshAll.Location = new System.Drawing.Point(1, 514);
+            this.btnRefreshAll.Location = new System.Drawing.Point(1, 465);
             this.btnRefreshAll.Margin = new System.Windows.Forms.Padding(1);
             this.btnRefreshAll.Name = "btnRefreshAll";
             this.btnRefreshAll.Size = new System.Drawing.Size(178, 33);
@@ -265,7 +268,7 @@ namespace SharePortfolioManager
             this.btnEdit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEdit.Image = global::SharePortfolioManager.Properties.Resources.button_pencil_24;
             this.btnEdit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnEdit.Location = new System.Drawing.Point(541, 514);
+            this.btnEdit.Location = new System.Drawing.Point(541, 465);
             this.btnEdit.Margin = new System.Windows.Forms.Padding(1);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(178, 33);
@@ -282,7 +285,7 @@ namespace SharePortfolioManager
             this.btnAdd.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAdd.Image = global::SharePortfolioManager.Properties.Resources.button_add_24;
             this.btnAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAdd.Location = new System.Drawing.Point(361, 514);
+            this.btnAdd.Location = new System.Drawing.Point(361, 465);
             this.btnAdd.Margin = new System.Windows.Forms.Padding(1);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(178, 33);
@@ -299,7 +302,7 @@ namespace SharePortfolioManager
             this.btnRefresh.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRefresh.Image = global::SharePortfolioManager.Properties.Resources.button_update_24;
             this.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnRefresh.Location = new System.Drawing.Point(181, 514);
+            this.btnRefresh.Location = new System.Drawing.Point(181, 465);
             this.btnRefresh.Margin = new System.Windows.Forms.Padding(1);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(178, 33);
@@ -322,7 +325,7 @@ namespace SharePortfolioManager
             this.tabCtrlShareOverviews.Name = "tabCtrlShareOverviews";
             this.tabCtrlShareOverviews.Padding = new System.Drawing.Point(0, 0);
             this.tabCtrlShareOverviews.SelectedIndex = 0;
-            this.tabCtrlShareOverviews.Size = new System.Drawing.Size(1213, 513);
+            this.tabCtrlShareOverviews.Size = new System.Drawing.Size(1213, 464);
             this.tabCtrlShareOverviews.TabIndex = 12;
             this.tabCtrlShareOverviews.SelectedIndexChanged += new System.EventHandler(this.tabCtrlShareOverviews_SelectedIndexChanged);
             // 
@@ -333,7 +336,7 @@ namespace SharePortfolioManager
             this.tabPgFinalValue.Location = new System.Drawing.Point(4, 26);
             this.tabPgFinalValue.Name = "tabPgFinalValue";
             this.tabPgFinalValue.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPgFinalValue.Size = new System.Drawing.Size(1205, 483);
+            this.tabPgFinalValue.Size = new System.Drawing.Size(1205, 434);
             this.tabPgFinalValue.TabIndex = 0;
             this.tabPgFinalValue.Text = "_tabPageCompleteDepotValues";
             this.tabPgFinalValue.UseVisualStyleBackColor = true;
@@ -355,7 +358,7 @@ namespace SharePortfolioManager
             this.dgvPortfolioFinalValue.ReadOnly = true;
             this.dgvPortfolioFinalValue.RowHeadersVisible = false;
             this.dgvPortfolioFinalValue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPortfolioFinalValue.Size = new System.Drawing.Size(1204, 408);
+            this.dgvPortfolioFinalValue.Size = new System.Drawing.Size(1204, 359);
             this.dgvPortfolioFinalValue.TabIndex = 9;
             this.dgvPortfolioFinalValue.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DgvPortfolioFinalValue_CellFormatting);
             this.dgvPortfolioFinalValue.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.OnDgvPortfolioFinalValue_CellMouseDown);
@@ -379,7 +382,7 @@ namespace SharePortfolioManager
             this.dgvPortfolioFooterFinalValue.ColumnHeadersVisible = false;
             this.dgvPortfolioFooterFinalValue.Enabled = false;
             this.dgvPortfolioFooterFinalValue.EnableHeadersVisualStyles = false;
-            this.dgvPortfolioFooterFinalValue.Location = new System.Drawing.Point(0, 408);
+            this.dgvPortfolioFooterFinalValue.Location = new System.Drawing.Point(0, 359);
             this.dgvPortfolioFooterFinalValue.MultiSelect = false;
             this.dgvPortfolioFooterFinalValue.Name = "dgvPortfolioFooterFinalValue";
             this.dgvPortfolioFooterFinalValue.ReadOnly = true;
@@ -402,7 +405,7 @@ namespace SharePortfolioManager
             this.tabPgMarketValue.Location = new System.Drawing.Point(4, 26);
             this.tabPgMarketValue.Name = "tabPgMarketValue";
             this.tabPgMarketValue.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPgMarketValue.Size = new System.Drawing.Size(1205, 483);
+            this.tabPgMarketValue.Size = new System.Drawing.Size(1205, 434);
             this.tabPgMarketValue.TabIndex = 1;
             this.tabPgMarketValue.Text = "_tabPageMarketValues";
             this.tabPgMarketValue.UseVisualStyleBackColor = true;
@@ -469,7 +472,7 @@ namespace SharePortfolioManager
             this.btnDelete.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDelete.Image = global::SharePortfolioManager.Properties.Resources.button_recycle_bin_24;
             this.btnDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDelete.Location = new System.Drawing.Point(721, 514);
+            this.btnDelete.Location = new System.Drawing.Point(721, 465);
             this.btnDelete.Margin = new System.Windows.Forms.Padding(1);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(178, 33);
@@ -487,7 +490,7 @@ namespace SharePortfolioManager
             this.btnClearLogger.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnClearLogger.Image = ((System.Drawing.Image)(resources.GetObject("btnClearLogger.Image")));
             this.btnClearLogger.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnClearLogger.Location = new System.Drawing.Point(901, 514);
+            this.btnClearLogger.Location = new System.Drawing.Point(901, 465);
             this.btnClearLogger.Margin = new System.Windows.Forms.Padding(1);
             this.btnClearLogger.Name = "btnClearLogger";
             this.btnClearLogger.Size = new System.Drawing.Size(178, 33);
@@ -505,11 +508,11 @@ namespace SharePortfolioManager
             this.grpBoxStatusMessage.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.grpBoxStatusMessage.Controls.Add(this.tblLayPnlStatusMessages);
             this.grpBoxStatusMessage.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpBoxStatusMessage.Location = new System.Drawing.Point(5, 603);
+            this.grpBoxStatusMessage.Location = new System.Drawing.Point(5, 554);
             this.grpBoxStatusMessage.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.grpBoxStatusMessage.Name = "grpBoxStatusMessage";
             this.grpBoxStatusMessage.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.grpBoxStatusMessage.Size = new System.Drawing.Size(770, 115);
+            this.grpBoxStatusMessage.Size = new System.Drawing.Size(770, 164);
             this.grpBoxStatusMessage.TabIndex = 5;
             this.grpBoxStatusMessage.TabStop = false;
             this.grpBoxStatusMessage.Text = "Status message_";
@@ -525,8 +528,8 @@ namespace SharePortfolioManager
             this.tblLayPnlStatusMessages.Name = "tblLayPnlStatusMessages";
             this.tblLayPnlStatusMessages.RowCount = 1;
             this.tblLayPnlStatusMessages.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblLayPnlStatusMessages.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 92F));
-            this.tblLayPnlStatusMessages.Size = new System.Drawing.Size(764, 92);
+            this.tblLayPnlStatusMessages.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 141F));
+            this.tblLayPnlStatusMessages.Size = new System.Drawing.Size(764, 141);
             this.tblLayPnlStatusMessages.TabIndex = 0;
             // 
             // rchTxtBoxStateMessage
@@ -537,7 +540,7 @@ namespace SharePortfolioManager
             this.rchTxtBoxStateMessage.Name = "rchTxtBoxStateMessage";
             this.rchTxtBoxStateMessage.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
             this.rchTxtBoxStateMessage.ShowSelectionMargin = true;
-            this.rchTxtBoxStateMessage.Size = new System.Drawing.Size(758, 86);
+            this.rchTxtBoxStateMessage.Size = new System.Drawing.Size(758, 135);
             this.rchTxtBoxStateMessage.TabIndex = 0;
             this.rchTxtBoxStateMessage.Text = "";
             // 
@@ -645,12 +648,37 @@ namespace SharePortfolioManager
             this.timerMouseCellDownDoubleClick.Interval = 500;
             this.timerMouseCellDownDoubleClick.Tick += new System.EventHandler(this.TimerMouseCellDownDoubleClick_Tick);
             // 
+            // grpBoxDocumentCapture
+            // 
+            this.grpBoxDocumentCapture.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpBoxDocumentCapture.Controls.Add(this.txtBoxDocumentCapture);
+            this.grpBoxDocumentCapture.Enabled = false;
+            this.grpBoxDocumentCapture.Location = new System.Drawing.Point(781, 553);
+            this.grpBoxDocumentCapture.Name = "grpBoxDocumentCapture";
+            this.grpBoxDocumentCapture.Size = new System.Drawing.Size(449, 43);
+            this.grpBoxDocumentCapture.TabIndex = 7;
+            this.grpBoxDocumentCapture.TabStop = false;
+            this.grpBoxDocumentCapture.Text = "Document capture_";
+            // 
+            // txtBoxDocumentCapture
+            // 
+            this.txtBoxDocumentCapture.AllowDrop = true;
+            this.txtBoxDocumentCapture.Location = new System.Drawing.Point(6, 15);
+            this.txtBoxDocumentCapture.Name = "txtBoxDocumentCapture";
+            this.txtBoxDocumentCapture.ReadOnly = true;
+            this.txtBoxDocumentCapture.Size = new System.Drawing.Size(438, 22);
+            this.txtBoxDocumentCapture.TabIndex = 0;
+            this.txtBoxDocumentCapture.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragDrop);
+            this.txtBoxDocumentCapture.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragEnter);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.ClientSize = new System.Drawing.Size(1235, 721);
+            this.Controls.Add(this.grpBoxDocumentCapture);
             this.Controls.Add(this.grpBoxUpdateState);
             this.Controls.Add(this.grpBoxStatusMessage);
             this.Controls.Add(this.grpBoxSharePortfolio);
@@ -683,6 +711,8 @@ namespace SharePortfolioManager
             this.tblLayPnlStatusMessages.ResumeLayout(false);
             this.grpBoxUpdateState.ResumeLayout(false);
             this.tblLayPnlUpdateState.ResumeLayout(false);
+            this.grpBoxDocumentCapture.ResumeLayout(false);
+            this.grpBoxDocumentCapture.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -730,6 +760,8 @@ namespace SharePortfolioManager
         private Timer timerStartNextShareUpdate;
         private ProgressBar progressBarWebParserDailyValues;
         private Timer timerMouseCellDownDoubleClick;
+        private GroupBox grpBoxDocumentCapture;
+        private TextBox txtBoxDocumentCapture;
     }
 }
 

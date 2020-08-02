@@ -240,6 +240,8 @@ namespace SharePortfolioManager.SalesForm.View
 
         public string LanguageName { get; internal set; }
 
+        public string ParsingFileName { get; internal set; }
+
         #endregion Transfer parameter
 
         #region Flags
@@ -1123,8 +1125,10 @@ namespace SharePortfolioManager.SalesForm.View
         /// <param name="logger">Logger</param>
         /// <param name="xmlLanguage">Language file</param>
         /// <param name="language">Language</param>
+        /// <param name="parsingFileName">File name of the parsing file which is given via document capture</param>
         public ViewSaleEdit(ShareObjectMarketValue shareObjectMarketValue, ShareObjectFinalValue shareObjectFinalValue,
-            Logger logger, Language xmlLanguage, string language)
+            Logger logger, Language xmlLanguage, string language,
+            string parsingFileName = null)
         {
             InitializeComponent();
 
@@ -1135,6 +1139,8 @@ namespace SharePortfolioManager.SalesForm.View
             Logger = logger;
             Language = xmlLanguage;
             LanguageName = language;
+
+            ParsingFileName = parsingFileName;
 
             _focusedControl = txtBoxOrderNumber;
 
@@ -1263,6 +1269,13 @@ namespace SharePortfolioManager.SalesForm.View
                 btnCancel.Image = Resources.button_back_24;
 
                 #endregion Image configuration
+
+                // If a parsing file name is given the form directly starts with the document parsing
+                if (ParsingFileName != null)
+                {
+                    _parsingStartAllow = true;
+                    txtBoxDocument.Text = ParsingFileName;
+                }
 
                 OnShowSales();
             }

@@ -845,45 +845,58 @@ namespace SharePortfolioManager
         /// </summary>
         private void OnDgvPortfolioMarketValue_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
+            Console.WriteLine(@"Rows: {0}", e.RowCount);
+            Console.WriteLine(@"Index: {0}", e.RowIndex);
+            Console.WriteLine(@"");
+
             for (var index = e.RowIndex; index <= e.RowIndex + e.RowCount - 1; index++)
             {
-                var wkn = dgvPortfolioMarketValue.Rows[index].Cells[0].Value.ToString();
-                var shareObject = ShareObjectListMarketValue.Find(x => (x.Wkn == wkn));
-                ((TextAndImageCell) dgvPortfolioMarketValue.Rows[index].Cells[0]).Image = shareObject.DoInternetUpdate
-                    ? Resources.state_update_16
-                    : Resources.state_no_update_16;
+                OnUpdateDataGridViewMarketValuesImages(index);
+            }
+        }
 
-                if (shareObject.PerformanceValue > 0)
-                {
-                    ((TextAndImageCell) dgvPortfolioMarketValue.Rows[index].Cells[5]).Image =
-                        Resources.positiv_development_24;
-                }
-                else if (shareObject.PerformanceValue == 0)
-                {
-                    ((TextAndImageCell) dgvPortfolioMarketValue.Rows[index].Cells[5]).Image =
-                        Resources.neutral_development_24;
-                }
-                else
-                {
-                    ((TextAndImageCell) dgvPortfolioMarketValue.Rows[index].Cells[5]).Image =
-                        Resources.negativ_development_24;
-                }
+        /// <summary>
+        /// This function updates the images of the given row index in the market values data grid view 
+        /// </summary>
+        /// <param name="index">Index of the row which should be updated.</param>
+        private void OnUpdateDataGridViewMarketValuesImages(int index)
+        {
+            var wkn = dgvPortfolioMarketValue.Rows[index].Cells[0].Value.ToString();
+            var shareObject = ShareObjectListMarketValue.Find(x => (x.Wkn == wkn));
+            ((TextAndImageCell)dgvPortfolioMarketValue.Rows[index].Cells[0]).Image = shareObject.DoInternetUpdate
+                ? Resources.state_update_16
+                : Resources.state_no_update_16;
 
-                if (shareObject.CompletePerformanceValue > 0)
-                {
-                    ((TextAndImageCell) dgvPortfolioMarketValue.Rows[index].Cells[7]).Image =
-                        Resources.positiv_development_24;
-                }
-                else if (shareObject.PerformanceValue == 0)
-                {
-                    ((TextAndImageCell) dgvPortfolioMarketValue.Rows[index].Cells[7]).Image =
-                        Resources.neutral_development_24;
-                }
-                else
-                {
-                    ((TextAndImageCell) dgvPortfolioMarketValue.Rows[index].Cells[7]).Image =
-                        Resources.negativ_development_24;
-                }
+            if (shareObject.PerformanceValue > 0)
+            {
+                ((TextAndImageCell)dgvPortfolioMarketValue.Rows[index].Cells[5]).Image =
+                    Resources.positiv_development_24;
+            }
+            else if (shareObject.PerformanceValue == 0)
+            {
+                ((TextAndImageCell)dgvPortfolioMarketValue.Rows[index].Cells[5]).Image =
+                    Resources.neutral_development_24;
+            }
+            else
+            {
+                ((TextAndImageCell)dgvPortfolioMarketValue.Rows[index].Cells[5]).Image =
+                    Resources.negativ_development_24;
+            }
+
+            if (shareObject.CompletePerformanceValue > 0)
+            {
+                ((TextAndImageCell)dgvPortfolioMarketValue.Rows[index].Cells[7]).Image =
+                    Resources.positiv_development_24;
+            }
+            else if (shareObject.PerformanceValue == 0)
+            {
+                ((TextAndImageCell)dgvPortfolioMarketValue.Rows[index].Cells[7]).Image =
+                    Resources.neutral_development_24;
+            }
+            else
+            {
+                ((TextAndImageCell)dgvPortfolioMarketValue.Rows[index].Cells[7]).Image =
+                    Resources.negativ_development_24;
             }
         }
 
@@ -895,59 +908,68 @@ namespace SharePortfolioManager
         {
             for (var index = e.RowIndex; index <= e.RowIndex + e.RowCount - 1; index++)
             {
-                var wkn = dgvPortfolioFinalValue.Rows[index].Cells[0].Value.ToString();
-                var shareObject = ShareObjectListFinalValue.Find(x => (x.Wkn == wkn));
+                OnUpdateDataGridViewFinalValuesImages(index);
+            }
+        }
+
+        /// <summary>
+        /// This function updates the images of the given row index in the final values data grid view 
+        /// </summary>
+        /// <param name="index">Index of the row which should be updated.</param>
+        private void OnUpdateDataGridViewFinalValuesImages(int index)
+        {
+            var wkn = dgvPortfolioFinalValue.Rows[index].Cells[0].Value.ToString();
+            var shareObject = ShareObjectListFinalValue.Find(x => (x.Wkn == wkn));
+            {
+                ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[0]).Image =
+                    shareObject.DoInternetUpdate
+                        ? Resources.state_update_16
+                        : Resources.state_no_update_16;
+
+                if (shareObject.PerformanceValue > 0)
                 {
-                    ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[0]).Image =
-                        shareObject.DoInternetUpdate
-                            ? Resources.state_update_16
-                            : Resources.state_no_update_16;
+                    ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[6]).Image =
+                        Resources.positiv_development_24;
+                }
+                else if (shareObject.PerformanceValue == 0)
+                {
+                    ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[6]).Image =
+                        Resources.neutral_development_24;
+                }
+                else
+                {
+                    ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[6]).Image =
+                        Resources.negativ_development_24;
+                }
 
-                    if (shareObject.PerformanceValue > 0)
-                    {
-                        ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[6]).Image =
-                            Resources.positiv_development_24;
-                    }
-                    else if (shareObject.PerformanceValue == 0)
-                    {
-                        ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[6]).Image =
-                            Resources.neutral_development_24;
-                    }
-                    else
-                    {
-                        ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[6]).Image =
-                            Resources.negativ_development_24;
-                    }
-
-                    if (shareObject.CompletePerformanceValue > 0)
-                    {
-                        ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[8]).Image =
-                            Resources.positiv_development_24;
-                    }
-                    else if (shareObject.PerformanceValue == 0)
-                    {
-                        ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[8]).Image =
-                            Resources.neutral_development_24;
-                    }
-                    else
-                    {
-                        ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[8]).Image =
-                            Resources.negativ_development_24;
-                    }
+                if (shareObject.CompletePerformanceValue > 0)
+                {
+                    ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[8]).Image =
+                        Resources.positiv_development_24;
+                }
+                else if (shareObject.PerformanceValue == 0)
+                {
+                    ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[8]).Image =
+                        Resources.neutral_development_24;
+                }
+                else
+                {
+                    ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[8]).Image =
+                        Resources.negativ_development_24;
                 }
             }
         }
 
         #endregion Add shares to data grid view portfolio and configure data grid view footer
 
-        #region DataBinding data grid view portfolio
+            #region DataBinding data grid view portfolio
 
-        /// <summary>
-        /// This function does data grid view market value configuration when the data binding is done.
-        /// </summary>
-        /// <param name="sender">Data grid view market value</param>
-        /// <param name="e">DataGridViewBindingCompleteEventArgs</param>
-        private void DgvPortfolioMarketValue_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+            /// <summary>
+            /// This function does data grid view market value configuration when the data binding is done.
+            /// </summary>
+            /// <param name="sender">Data grid view market value</param>
+            /// <param name="e">DataGridViewBindingCompleteEventArgs</param>
+            private void DgvPortfolioMarketValue_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             try
             {

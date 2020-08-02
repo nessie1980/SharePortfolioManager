@@ -106,7 +106,7 @@ namespace SharePortfolioManager.Classes
 
         public const short
             BankTagCount =
-                7; // BankIdentifier / BuyIdentifier / SaleIdentifier / DividendIdentifier + 3 x documents (BuyIdentifier / SaleIdentifier / DividendIdentifier)
+                9; // BankIdentifier / BuyIdentifier / SaleIdentifier / DividendIdentifier / BrokerageIdentifier + 4 x documents (BuyIdentifier / SaleIdentifier / DividendIdentifier / BrokerageIdentifier)
 
         public const string BankNameAttrName = "Name";
         public const string BankIdentifierValueAttrName = "BankIdentifierValue";
@@ -116,6 +116,7 @@ namespace SharePortfolioManager.Classes
         public const string BuyIdentifierTagName = "BuyIdentifier";
         public const string SaleIdentifierTagName = "SaleIdentifier";
         public const string DividendIdentifierTagName = "DividendIdentifier";
+        public const string BrokerageIdentifierTagName = "BrokerageIdentifier";
 
         #endregion Bank sections
 
@@ -177,7 +178,19 @@ namespace SharePortfolioManager.Classes
 
         #endregion Dividend section values
 
+        #region Brokerage section values
+
+        // TODO: (thomas:2020-07-29) This implementation may not be complete and must be corrected 
         public const string DocumentTypeBrokerage = "Brokerage";
+        public const string DocumentTypeBrokerageWkn = "Wkn";
+        public const string DocumentTypeBrokerageDate = "Date";
+        public const string DocumentTypeBrokerageTime = "Time";
+        public const string DocumentTypeBrokerageProvision = "Provision";
+        public const string DocumentTypeBrokerageBrokerFee = "BrokerFee";
+        public const string DocumentTypeBrokerageTraderPlaceFee = "TraderPlaceFee";
+        public const string DocumentTypeBrokerageReduction = "Reduction";
+
+        #endregion Brokerage section values
 
         #endregion Document sections
 

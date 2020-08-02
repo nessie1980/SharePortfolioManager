@@ -5,6 +5,7 @@
 		<BuyIdentifier Name="BuyIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">(Wertpapier Abrechnung Kauf)</BuyIdentifier>
 		<SaleIdentifier Name="SaleIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">(Wertpapier Abrechnung Verkauf)</SaleIdentifier>
 		<DividendIdentifier Name="DividendIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">(Dividendengutschrift)</DividendIdentifier>
+		<BrokerageIdentifier Name="BrokerageIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">(Ges. Kosten)</BrokerageIdentifier>
 		<Document Type="Buy" TypeIdentifierValue="Wertpapier Abrechnung Kauf" Encoding="UTF-8">
 			<Wkn Name="Wkn" FoundIndex="1" ResultEmpty="true" RegexOptions="None">[(]((?:[A-Za-z0-9]{1,}))[)]</Wkn>
 			<OrderNumber Name="OrderNumber" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Auftragsnummer(.*\s)</OrderNumber>
@@ -44,12 +45,22 @@
 			<CapitalGainTax Name="CapitalGainTax" FoundIndex="4" ResultEmpty="true" RegexOptions="None">([0-9., ]{1,})-</CapitalGainTax>
 			<SolidarityTax Name="SolidarityTax" FoundIndex="5" ResultEmpty="true" RegexOptions="None">([0-9., ]{1,})-</SolidarityTax>
 		</Document>
+		<Document Type="Brokerage" TypeIdentifierValue="Gebühren" Encoding="UTF-8">
+			<Wkn Name="Wkn" FoundIndex="0" ResultEmpty="true" RegexOptions="None">ISIN [(]WKN[)](?:[ ]{1,})(?:[A-Za-z0-9]{1,})(?:[ ]{1,})[(]([A-z0-9]{1,})[)]</Wkn>
+			<Date Name="Date" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Zahltag\s+([0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,4})</Date>
+			<Time Name="Time" FoundIndex="0" ResultEmpty="true" RegexOptions="None">([0-9]{1,2}[:][0-9]{1,2}[:][0-9]{1,2})</Time>
+			<Provision Name="Provision" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Provision(?:[ ]{1,})EUR([0-9,. ]{1,})</Provision>
+			<BrokerFee Name="BrokerFee" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Courtage(?:[ ]{1,})EUR([0-9,. ]{1,})</BrokerFee>
+			<TraderPlaceFee Name="TraderPlaceFee" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Handelsplatzgebühr(?:[ ]{1,})EUR([0-9,. ]{1,})</TraderPlaceFee>
+			<Reduction Name="Reduction" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Rabatt(?:[ ]{1,})EUR([0-9,. ]{1,})</Reduction>
+		</Document>
 	</Bank>
-	<Bank Name="ING" BankIdentifierValue="8006189848" Encoding="UTF-8">
+	<Bank Name="ING diba" BankIdentifierValue="8006189848" Encoding="UTF-8">
 		<BankIdentifier Name="BankIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Direkt-Depot Nr.:\s+([0-9]{1,10})</BankIdentifier>
-		<BuyIdentifier Name="BuyIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">91180 Heideck\s+([A-Za-z]{1,})\s+(Kauf)</BuyIdentifier>
+		<BuyIdentifier Name="BuyIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">(Kauf)</BuyIdentifier>
 		<SaleIdentifier Name="SaleIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">(Verkauf)</SaleIdentifier>
 		<DividendIdentifier Name="DividendIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">(Dividendengutschrift)</DividendIdentifier>
+		<BrokerageIdentifier Name="BrokerageIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">(Ges. Kosten)</BrokerageIdentifier>
 		<Document Type="Buy" TypeIdentifierValue="Wertpapierabrechnung" Encoding="UTF-8">
 			<Wkn Name="Wkn" FoundIndex="0" ResultEmpty="true" RegexOptions="None">ISIN [(]WKN[)](?:[ ]{1,})(?:[A-Za-z0-9]{1,})(?:[ ]{1,})[(]([A-z0-9]{1,})[)]</Wkn>
 			<OrderNumber Name="OrderNumber" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Ordernummer(.*\s+.*\s+)ISIN</OrderNumber>
@@ -89,12 +100,22 @@
 			<CapitalGainTax Name="CapitalGainTax" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Kapitalertragsteuer (?:[0-9]{0,}[,][0-9]{1,})%(?:[ ]{1,})EUR([0-9,. ]{1,})</CapitalGainTax>
 			<SolidarityTax Name="SolidarityTax" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Solidaritätszuschlag (?:[0-9]{0,}[,][0-9]{1,})%(?:[ ]{1,})EUR([0-9,. ]{1,})</SolidarityTax>
 		</Document>
+		<Document Type="Brokerage" TypeIdentifierValue="Gebühren" Encoding="UTF-8">
+			<Wkn Name="Wkn" FoundIndex="0" ResultEmpty="true" RegexOptions="None">ISIN [(]WKN[)](?:[ ]{1,})(?:[A-Za-z0-9]{1,})(?:[ ]{1,})[(]([A-z0-9]{1,})[)]</Wkn>
+			<Date Name="Date" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Zahltag\s+([0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,4})</Date>
+			<Time Name="Time" FoundIndex="0" ResultEmpty="true" RegexOptions="None">([0-9]{1,2}[:][0-9]{1,2}[:][0-9]{1,2})</Time>
+			<Provision Name="Provision" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Provision(?:[ ]{1,})EUR([0-9,. ]{1,})</Provision>
+			<BrokerFee Name="BrokerFee" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Courtage(?:[ ]{1,})EUR([0-9,. ]{1,})</BrokerFee>
+			<TraderPlaceFee Name="TraderPlaceFee" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Handelsplatzgebühr(?:[ ]{1,})EUR([0-9,. ]{1,})</TraderPlaceFee>
+			<Reduction Name="Reduction" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Rabatt(?:[ ]{1,})EUR([0-9,. ]{1,})</Reduction>
+		</Document>
 	</Bank>
 	<Bank Name="Cortal Consors" BankIdentifierValue="0878031421" Encoding="UTF-8">
 		<BankIdentifier Name="BankIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Depotnummer\s+([0-9]{1,10})|Depotnummer:\s+([0-9]{1,10})</BankIdentifier>
 		<BuyIdentifier Name="BuyIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">(ORDERABRECHNUNG\s+KAUF)</BuyIdentifier>
 		<SaleIdentifier Name="SaleIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None"></SaleIdentifier>
 		<DividendIdentifier Name="DividendIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">(Dividendengutschrift)</DividendIdentifier>
+		<BrokerageIdentifier Name="BrokerageIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">(Kosten)</BrokerageIdentifier>
 		<Document Type="Buy" TypeIdentifierValue="KAUF" Encoding="UTF-8">
 			<Wkn Name="Wkn" FoundIndex="0" ResultEmpty="true" RegexOptions="None">  ((?:[A-Za-z0-9]{6,6}))  </Wkn>
 			<OrderNumber Name="OrderNumber" FoundIndex="0" ResultEmpty="true" RegexOptions="None">NR. ([0-9,. ]{1,})</OrderNumber>
@@ -131,6 +152,15 @@
 			<TaxAtSource Name="TaxAtSource" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Quellsteuer\s+(?:[0-9]{0,}[,][0-9]{1,}) % von \s+(?:[0-9]{0,}[,][0-9]{1,}) EUR\s+([0-9]{0,}[,][0-9]{1,})</TaxAtSource>
 			<CapitalGainTax Name="CapitalGainTax" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Kapitalertragsteuer\s+(?:[0-9]{0,}[,][0-9]{1,}) % von \s+(?:[0-9]{0,}[,][0-9]{1,}) EUR\s+([0-9]{0,}[,][0-9]{1,})</CapitalGainTax>
 			<SolidarityTax Name="SolidarityTax" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Solidaritätszuschlag\s+(?:[0-9]{0,}[,][0-9]{1,}) % von \s+(?:[0-9]{0,}[,][0-9]{1,}) EUR\s+([0-9]{0,}[,][0-9]{1,})</SolidarityTax>
+		</Document>
+		<Document Type="Brokerage" TypeIdentifierValue="Gebühren" Encoding="UTF-8">
+			<Wkn Name="Wkn" FoundIndex="0" ResultEmpty="true" RegexOptions="None">ISIN [(]WKN[)](?:[ ]{1,})(?:[A-Za-z0-9]{1,})(?:[ ]{1,})[(]([A-z0-9]{1,})[)]</Wkn>
+			<Date Name="Date" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Zahltag\s+([0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,4})</Date>
+			<Time Name="Time" FoundIndex="0" ResultEmpty="true" RegexOptions="None">([0-9]{1,2}[:][0-9]{1,2}[:][0-9]{1,2})</Time>
+			<Provision Name="Provision" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Provision(?:[ ]{1,})EUR([0-9,. ]{1,})</Provision>
+			<BrokerFee Name="BrokerFee" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Courtage(?:[ ]{1,})EUR([0-9,. ]{1,})</BrokerFee>
+			<TraderPlaceFee Name="TraderPlaceFee" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Handelsplatzgebühr(?:[ ]{1,})EUR([0-9,. ]{1,})</TraderPlaceFee>
+			<Reduction Name="Reduction" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Rabatt(?:[ ]{1,})EUR([0-9,. ]{1,})</Reduction>
 		</Document>
 	</Bank>
 </Documents>

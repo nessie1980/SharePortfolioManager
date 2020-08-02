@@ -181,9 +181,6 @@ namespace SharePortfolioManager
                         Language, LanguageName,
                         Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Application);
                 }
-
-                throw new Exception();
-
             }
             catch (Exception ex)
             {
@@ -379,6 +376,13 @@ namespace SharePortfolioManager
                     @"/MainForm/GrpBoxStatusMessage/Caption", LanguageName);
 
                 #endregion GrpBox status message
+
+                #region GrpBox document capture
+
+                grpBoxDocumentCapture.Text = Language.GetLanguageTextByXPath(
+                    @"/MainForm/GrpBoxDocumentCapture/Caption", LanguageName);
+
+                #endregion GrpBox document capture
 
                 #region GrpBox update state
 

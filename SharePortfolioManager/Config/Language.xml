@@ -179,6 +179,11 @@
 					<ResetLogger text="Clear Logger" />
 				</Buttons>				
 			</GrpBoxPortfolio>
+
+			<!-- Groupbox document capture -->		
+			<GrpBoxDocumentCapture>
+				<Caption text="Document capture" />
+			</GrpBoxDocumentCapture>
 			
 			<!-- Groupbox update state -->		
 			<GrpBoxUpdateState>
@@ -289,6 +294,55 @@
 			</Errors>
 		</MainForm>	
 		
+		<!-- Document capture parsing -->
+		<DocumentCaptureParsing>
+			<Caption text="Document capture parsing" />
+
+			<!-- Groupbox -->
+			<GrpBoxDocumentCapture>
+				<Caption text="Parsing result" />
+
+				<!-- Labels -->
+				<Labels>
+					<BankName text="Bank name:" />
+					<DocumentType text="Document type:" />
+					<Wkn text="Wkn:" />
+				</Labels>
+
+				<!-- Document types -->
+				<DocumentTypes>
+					<Buy text="Buy document" />
+					<Sale text="Sale document" />
+					<Dividend text="Dividend document" />
+					<Brokerage text="Brokerage document" />
+				</DocumentTypes>
+				
+				<!-- Button -->
+				<Button>
+					<Close text="Close" />
+				</Button>
+			
+			</GrpBoxDocumentCapture>
+			
+			<!-- Parsing messages -->
+			<ParsingStateMessages>
+				<ParsingStarted text="Document parsing running..." />
+				<ParsingDocumentSuccessful text="Document parsing was successful!" />
+			</ParsingStateMessages>
+
+			<!-- Parsing errors -->
+			<ParsingErrors>
+				<ParsingBankIdentifierFailed text="Bank identifier not found!" />
+				<ParsingDocumentTypeIdentifierFailed text="Dokument identifier not found!" />
+				<ParsingDocumentNotImplemented text="Dokument type not implemented!" />
+				<ParsingWrongWkn text="The wrong WKN has been found in the document!" />
+				<ParsingFailed text="Parsing failed!" />
+				<ParsingDocumentFailed text="Document parsing failed!" />
+				<ParsingParsingDocumentError text="Error in document parsing configuration file!"/>
+				<ParsingIdentifierValuesFound text="Document identifier values found. Parsing buy values started..." />			
+			</ParsingErrors>
+		</DocumentCaptureParsing>
+
 		<!-- ShareDetailsForm -->
 		<ShareDetailsForm>
 			<!-- GroupBox details -->
@@ -1312,6 +1366,7 @@
 				<LoggerSettingsReboot text="The changes of the logger settings will be used after a software restarted"/>
 				<InputPortfolioName text="Please input the portfolio name:"/>
 				<PortfolioNameExists text="A portfolio with the given name already exists. Should this portfolio be overwritten?"/>
+				<DocumentCaptureOnlyPdf text="Document capture is only possible with PDFs!" />
 			</Content>
 		</MessageBoxForm>
 		
@@ -1525,6 +1580,11 @@
 				</Buttons>				
 			</GrpBoxPortfolio>
 			
+			<!-- Groupbox document capture -->		
+			<GrpBoxDocumentCapture>
+				<Caption text="Dokumentenerfassung" />
+			</GrpBoxDocumentCapture>
+			
 			<!-- Groupbox update state -->		
 			<GrpBoxUpdateState>
 				<Caption text="Aktualisierungs- Status" />
@@ -1634,6 +1694,55 @@
 			</Errors>
 		</MainForm>	
 
+		<!-- Document capture parsing -->
+		<DocumentCaptureParsing>
+			<Caption text="Dokumenten- Erfassungs- Analyse" />
+
+			<!-- Groupbox -->
+			<GrpBoxDocumentCapture>
+				<Caption text="Analyse- Ergebnis" />
+
+				<!-- Labels -->
+				<Labels>
+					<BankName text="Banken- Name:" />
+					<DocumentType text="Dokumenten- Typ:" />
+					<Wkn text="Wkn:" />
+				</Labels>
+		
+				<!-- Document types -->
+				<DocumentTypes>
+					<Buy text="Kauf- Dokument" />
+					<Sale text="Verkaufs- Dokument" />
+					<Dividend text="Dividend- Dokument" />
+					<Brokerage text="Gebühren- Dokument" />
+				</DocumentTypes>
+	
+				<!-- Button -->
+				<Button>
+					<Close text="Schließen" />
+				</Button>
+
+			</GrpBoxDocumentCapture>
+					
+			<!-- Parsing messages -->
+			<ParsingStateMessages>
+				<ParsingStarted text="Dokumenten- Analyse läuft..." />
+				<ParsingDocumentSuccessful text="Dokumenten- Analyse war erfolgreich." />
+			</ParsingStateMessages>
+			
+			<!-- Parsing errors -->
+			<ParsingErrors>
+				<ParsingBankIdentifierFailed text="Banken- Typ nicht gefunden!" />
+				<ParsingDocumentTypeIdentifierFailed text="Dokumenten- Typ nicht gefunden!" />
+				<ParsingDocumentNotImplemented text="Dokumenten- Typ ist nicht implementiert!" />
+				<ParsingWrongWkn text="Die falsche WKN wurde gefunden!" />
+				<ParsingFailed text="Analyse ist fehlgeschlagen!" />
+				<ParsingDocumentFailed text="Dokumenten- Analyse ist fehlgeschlagen!" />
+				<ParsingParsingDocumentError text="Fehler in der Dokumenten- Analyser- Konfigurations- Datei!"/>
+				<ParsingIdentifierValuesFound text="Dokumenten- Typ wurde gefunden. Analyse der Kaufwerte wurde gestartet..." />			
+			</ParsingErrors>	
+		</DocumentCaptureParsing>
+		
 		<!-- ShareDetailsForm -->
 		<ShareDetailsForm>
 			<!-- GroupBox details -->
@@ -2653,6 +2762,7 @@
 				<LoggerSettingsReboot text="Die Änderungen der Logger- Einstellung werden erst nach meinem Software- Neustart angewendet."/>
 				<InputPortfolioName text="Bitte geben Sie den Portfolioname ein:"/>
 				<PortfolioNameExists text="Es existiert bereits in Portfolio mit dem angegeben Namen. Soll dieses Portfolio überschrieben werden?"/>
+				<DocumentCaptureOnlyPdf text="Dokumentenerfassung ist nur mit PDFs möglich!" />
 			</Content>
 		</MessageBoxForm>
 					

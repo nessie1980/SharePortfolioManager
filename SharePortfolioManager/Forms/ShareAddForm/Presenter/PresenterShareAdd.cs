@@ -303,17 +303,11 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                     _model.ShareObjectMarketValue =
                         _model.ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1];
 
-                    // Sort portfolio list in order of the share names
-                    _model.ShareObjectListMarketValue.Sort(new ShareObjectListComparer());
-
                     // Set parsing expression to the  final value share list
                     _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1]
                         .SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList);
                     _model.ShareObjectFinalValue =
                         _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1];
-
-                    // Sort portfolio list in order of the share names
-                    _model.ShareObjectListFinalValue.Sort(new ShareObjectListComparer());
 
                     // Brokerage entry if any brokerage value is not 0
                     if (_model.ProvisionDec != 0 || _model.BrokerFeeDec != 0 || _model.TraderPlaceFeeDec != 0 ||
@@ -342,6 +336,8 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                         .ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1]
                         .SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList);
 
+                    // Sort portfolio list in order of the share names
+                    _model.ShareObjectListMarketValue.Sort(new ShareObjectListComparer());
                     // Sort portfolio list in order of the share names
                     _model.ShareObjectListFinalValue.Sort(new ShareObjectListComparer());
                 }

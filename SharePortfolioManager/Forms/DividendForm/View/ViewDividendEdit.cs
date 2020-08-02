@@ -217,6 +217,8 @@ namespace SharePortfolioManager.DividendForm.View
 
         public string LanguageName { get; internal set; }
 
+        public string ParsingFileName { get; internal set; }
+
         #endregion Transfer parameter
 
         #region Flags
@@ -900,8 +902,10 @@ namespace SharePortfolioManager.DividendForm.View
         /// <param name="logger">Logger</param>
         /// <param name="xmlLanguage">Language file</param>
         /// <param name="language">Language</param>
+        /// <param name="parsingFileName">File name of the parsing file which is given via document capture</param>
         public ViewDividendEdit(ShareObjectMarketValue shareObjectMarketValue, ShareObjectFinalValue shareObjectFinalValue,
-            Logger logger, Language xmlLanguage, string language)
+            Logger logger, Language xmlLanguage, string language,
+            string parsingFileName = null)
         {
             InitializeComponent();
 
@@ -911,6 +915,8 @@ namespace SharePortfolioManager.DividendForm.View
             Logger = logger;
             Language = xmlLanguage;
             LanguageName = language;
+
+            ParsingFileName = parsingFileName;
 
             SaveFlag = false;
 
@@ -937,6 +943,8 @@ namespace SharePortfolioManager.DividendForm.View
         {
             try
             {
+                #region Language configuration
+
                 Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Caption", LanguageName);
                 grpBoxAddDividend.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", LanguageName);
@@ -994,11 +1002,9 @@ namespace SharePortfolioManager.DividendForm.View
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Cancel",
                         LanguageName);
 
-                // Load button images
-                btnAddSave.Image = Resources.button_add_24;
-                btnDelete.Image = Resources.button_recycle_bin_24;
-                btnReset.Image = Resources.button_reset_24;
-                btnCancel.Image = Resources.button_back_24;
+                #endregion Language configuration
+
+                #region Unit configuration
 
                 // Set dividend units to the edit boxes
                 // HINT: Foreign currencies are set in the function "CbxBoxAddDividendForeignCurrency_SelectedIndexChanged"
@@ -1012,6 +1018,18 @@ namespace SharePortfolioManager.DividendForm.View
                 lblPayoutAfterTaxUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                 lblYieldUnit.Text = ShareObject.PercentageUnit;
                 lblPriceUnit.Text = ShareObjectFinalValue.CurrencyUnit;
+
+                #endregion Unit configuration
+
+                #region Image configuration
+
+                // Load button images
+                btnAddSave.Image = Resources.button_add_24;
+                btnDelete.Image = Resources.button_recycle_bin_24;
+                btnReset.Image = Resources.button_reset_24;
+                btnCancel.Image = Resources.button_back_24;
+
+                #endregion Image configuration
 
                 // Set currency to ComboBox
                 foreach (var temp in Helper.ListNameCultureInfoCurrencySymbol)
@@ -1046,6 +1064,13 @@ namespace SharePortfolioManager.DividendForm.View
         /// <param name="e"></param>
         private void ShareDividendEdit_Shown(object sender, EventArgs e)
         {
+            // If a parsing file name is given the form directly starts with the document parsing
+            if (ParsingFileName != null)
+            {
+                _parsingStartAllow = true;
+                txtBoxDocument.Text = ParsingFileName;
+            }
+
             txtBoxDividendRate.Focus();
         }
 

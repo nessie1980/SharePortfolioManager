@@ -208,6 +208,8 @@ namespace SharePortfolioManager.ShareAddForm.View
 
         public string LanguageName { get; set; }
 
+        public string ParsingFileName { get; set; }
+
         public bool StopFomClosingFlag { get; set; }
 
         #region Parsing
@@ -853,7 +855,7 @@ namespace SharePortfolioManager.ShareAddForm.View
         /// <summary>
         /// Constructor
         /// </summary>
-        public ViewShareAdd(FrmMain parentWindow, Logger logger, Language language, string strLanguage, List<WebSiteRegex> webSiteRegexList)
+        public ViewShareAdd(FrmMain parentWindow, Logger logger, Language language, string strLanguage, List<WebSiteRegex> webSiteRegexList, string strParsingFileName = null)
         {
             InitializeComponent();
 
@@ -862,6 +864,7 @@ namespace SharePortfolioManager.ShareAddForm.View
             Language = language;
             LanguageName = strLanguage;
             WebSiteRegexList = webSiteRegexList;
+            ParsingFileName = strParsingFileName;
             StopFomClosingFlag = false;
 
             #region Parsing backgroundworker
@@ -1007,6 +1010,13 @@ namespace SharePortfolioManager.ShareAddForm.View
         private void FrmShareAdd_Shown(object sender, EventArgs e)
         {
             FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+
+            // If a parsing file name is given the form directly starts with the document parsing
+            if (ParsingFileName != null)
+            {
+                _parsingStartAllow = true;
+                txtBoxDocument.Text = ParsingFileName;
+            }
 
             txtBoxWkn.Focus();
         }
