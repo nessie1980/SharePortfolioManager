@@ -873,8 +873,8 @@ namespace SharePortfolioManager
         /// <param name="rowIndex">Index of the currently selected data grid view row</param>
         private void OnDgvPortfolioMarketValueImageUpdate(int rowIndex)
         {
-            if (dgvPortfolioMarketValue.Rows[rowIndex]
-                .Cells.Count == (int)ColumnIndicesPortfolioMarketValue.ECompleteMarketValueColumnIndex)
+            if ((dgvPortfolioMarketValue.Rows[rowIndex]
+                .Cells.Count - 1) == (int)ColumnIndicesPortfolioMarketValue.ECompleteMarketValueColumnIndex)
             {
                 var wkn = dgvPortfolioMarketValue.Rows[rowIndex]
                     .Cells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex].Value.ToString();
@@ -931,8 +931,8 @@ namespace SharePortfolioManager
         /// <param name="rowIndex">Index of the currently selected data grid view row</param>
         private void OnDgvPortfolioFinalValueImageUpdate(int rowIndex)
         {
-            if (dgvPortfolioFinalValue.Rows[rowIndex]
-                .Cells.Count == (int) ColumnIndicesPortfolioFinalValue.ECompleteFinalValueColumnIndex)
+            if ((dgvPortfolioFinalValue.Rows[rowIndex]
+                .Cells.Count - 1) == (int) ColumnIndicesPortfolioFinalValue.ECompleteFinalValueColumnIndex)
             {
 
                 var wkn = dgvPortfolioFinalValue.Rows[rowIndex]
