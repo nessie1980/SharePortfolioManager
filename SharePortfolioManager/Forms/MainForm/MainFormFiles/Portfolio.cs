@@ -34,7 +34,9 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
+#if DEBUG
 using ConsoleTables;
+#endif
 
 namespace SharePortfolioManager
 {
@@ -61,7 +63,7 @@ namespace SharePortfolioManager
             Dividends
         };
 
-        #region Change portfolio
+#region Change portfolio
 
         /// <summary>
         /// This function does all the GUI changes
@@ -75,7 +77,7 @@ namespace SharePortfolioManager
                 // Set InitFlag to "true" for loading other portfolio
                 InitFlag = true;
 
-                #region Reset MarketValue values
+#region Reset MarketValue values
 
                 // Reset market value share object
                 ShareObjectMarketValue = null;
@@ -90,9 +92,9 @@ namespace SharePortfolioManager
                 dgvPortfolioFooterMarketValue.Refresh();
                 dgvPortfolioFooterMarketValue.ColumnHeadersVisible = false;
 
-                #endregion Reset MarketValue values
+#endregion Reset MarketValue values
 
-                #region Reset FinalValue values
+#region Reset FinalValue values
 
                 // Reset final value share object
                 ShareObjectFinalValue = null;
@@ -107,7 +109,7 @@ namespace SharePortfolioManager
                 dgvPortfolioFooterFinalValue.Refresh();
                 dgvPortfolioFooterFinalValue.ColumnHeadersVisible = false;
 
-                #endregion Reset FinalValue values
+#endregion Reset FinalValue values
 
                 // Load new portfolio
                 LoadPortfolio();
@@ -248,9 +250,9 @@ namespace SharePortfolioManager
             }
         }
 
-        #endregion Change portfolio
+#endregion Change portfolio
 
-        #region Load portfolio
+#region Load portfolio
 
         /// <summary>
         /// This function loads the portfolio from the portfolio file
@@ -368,7 +370,7 @@ namespace SharePortfolioManager
                                 {
                                     switch (i)
                                     {
-                                        #region General
+#region General
 
                                         case (int)PortfolioParts.StockMarketLaunchDate:
                                             ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].StockMarketLaunchDate =
@@ -419,9 +421,9 @@ namespace SharePortfolioManager
                                                 Convert.ToInt16(nodeElement.ChildNodes[i].InnerText);
                                             break;
 
-                                        #endregion General
+#endregion General
 
-                                        #region DailyValues
+#region DailyValues
 
                                         case (int)PortfolioParts.DailyValues:
                                             // Read daily values website
@@ -472,9 +474,9 @@ namespace SharePortfolioManager
                                             }
                                             break;
 
-                                        #endregion DailyValues
+#endregion DailyValues
 
-                                        #region Brokerages
+#region Brokerages
 
                                         case (int)PortfolioParts.Brokerages:
                                             foreach (XmlElement nodeList in nodeElement.ChildNodes[i].ChildNodes)
@@ -514,9 +516,9 @@ namespace SharePortfolioManager
                                             }
                                             break;
 
-                                        #endregion Brokerages
+#endregion Brokerages
 
-                                        #region Buys
+#region Buys
 
                                         case (int)PortfolioParts.Buys:
                                             foreach (XmlElement nodeList in nodeElement.ChildNodes[i].ChildNodes)
@@ -565,9 +567,9 @@ namespace SharePortfolioManager
                                             }
                                             break;
 
-                                        #endregion Buys
+#endregion Buys
 
-                                        #region Sales
+#region Sales
 
                                         case (int)PortfolioParts.Sales:
                                             foreach (XmlElement nodeList in nodeElement.ChildNodes[i].ChildNodes)
@@ -735,9 +737,9 @@ namespace SharePortfolioManager
                                             }
                                             break;
 
-                                        #endregion Sales
+#endregion Sales
 
-                                        #region Dividends
+#region Dividends
 
                                         case (int)PortfolioParts.Dividends:
                                             // Read dividend payout interval
@@ -800,7 +802,7 @@ namespace SharePortfolioManager
                                             }
                                             break;
 
-                                        #endregion Dividends
+#endregion Dividends
 
                                         default:
                                             break;
@@ -916,7 +918,7 @@ namespace SharePortfolioManager
                 // Check if any share set for updating so enable the refresh all button
                 btnRefreshAll.Enabled = ShareObjectListFinalValue.Count(p => p.DoInternetUpdate && p.WebSiteConfigurationFound) >= 1;
 
-#if true
+#if DEBUG
                 Console.WriteLine(@"");
 
                 var tableOptions = new ConsoleTableOptions
@@ -1088,9 +1090,9 @@ namespace SharePortfolioManager
             }
         }
 
-        #endregion Load portfolio
+#endregion Load portfolio
 
-        #region Show invalid website configuration(s)
+#region Show invalid website configuration(s)
 
         /// <summary>
         /// This function shows the list of the mismatching website configurations of the shares
@@ -1147,7 +1149,7 @@ namespace SharePortfolioManager
             }
         }
 
-        #endregion Show invalid website configuration(s)
+#endregion Show invalid website configuration(s)
     }
 
     /// <summary>
