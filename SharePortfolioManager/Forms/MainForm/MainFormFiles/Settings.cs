@@ -403,6 +403,34 @@ namespace SharePortfolioManager
 
                 #endregion Logger colors
 
+                #region Charting colors
+
+                // Read the colors for the various logger levels
+                var nodeChartingColorsDailyValues = Settings.SelectSingleNode("/Settings/Charting/Colors/DailyValues");
+                if (nodeChartingColorsDailyValues != null)
+                {
+                    foreach (XmlNode color in nodeChartingColorsDailyValues.ChildNodes)
+                    {
+                        ChartingColorDictionary.Add(color.Name, Color.FromName(color.InnerText));
+                    }
+                }
+                else
+                    loadSettings = false;
+
+                // Read the colors for the various logger levels
+                var nodeChartingColors = Settings.SelectSingleNode("/Settings/Charting/Colors/Information");
+                if (nodeChartingColors != null)
+                {
+                    foreach (XmlNode color in nodeChartingColors.ChildNodes)
+                    {
+                        ChartingColorDictionary.Add(color.Name, Color.FromName(color.InnerText));
+                    }
+                }
+                else
+                    loadSettings = false;
+
+                #endregion Charting colors
+
                 #region Show exception messages
 
                 // Read the flag if exception messages should be shown
@@ -418,6 +446,34 @@ namespace SharePortfolioManager
                     loadSettings = false;
 
                 #endregion Show exception messages
+
+                #region Read parser debugging flag
+
+                // Read the flag if parser for the market value should be enabled
+                var nodeMarketValuesParserDebugging = Settings.SelectSingleNode("/Settings/Parser/MarketValuesDebuggingEnable");
+                if (nodeMarketValuesParserDebugging != null)
+                {
+                    if (bool.TryParse(nodeMarketValuesParserDebugging.InnerText, out var bOutResult))
+                        ParserMarketValuesDebuggingEnable = bOutResult;
+                    else
+                        loadSettings = false;
+                }
+                else
+                    loadSettings = false;
+
+                // Read the flag if parser for the market value should be enabled
+                var nodeDailyValuesParserDebugging = Settings.SelectSingleNode("/Settings/Parser/DailyValuesDebuggingEnable");
+                if (nodeDailyValuesParserDebugging != null)
+                {
+                    if (bool.TryParse(nodeDailyValuesParserDebugging.InnerText, out var bOutResult))
+                        ParserDailyValuesDebuggingEnable = bOutResult;
+                    else
+                        loadSettings = false;
+                }
+                else
+                    loadSettings = false;
+
+                #endregion Read parser debugging flag
 
                 // Check if a settings value could not be load and add status message
                 if (loadSettings == false)

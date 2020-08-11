@@ -109,6 +109,11 @@ namespace SharePortfolioManager.Classes.ShareObjects
         private static decimal _portfolioCompleteBrokerage;
 
         /// <summary>
+        /// Stores the brokerage - reduction of all transactions of the portfolio (all shares) (final value)
+        /// </summary>
+        private static decimal _portfolioCompleteBrokerageReduction;
+
+        /// <summary>
         /// Stores the dividends of all transactions of the portfolio (all shares) (final value)
         /// </summary>
         private static decimal _portfolioCompleteDividends;
@@ -369,13 +374,15 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Stores the current final value of the current stock volume as string (final value)
         /// </summary>
         [Browsable(false)]
-        public string FinalValueAsStr => Helper.FormatDecimal(FinalValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
+        public string FinalValueAsStr => Helper.FormatDecimal(FinalValue, Helper.CurrencyTwoLength, true,
+            Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
 
         /// <summary>
         /// Stores the current final value of the current stock volume as string with unit (final value)
         /// </summary>
         [Browsable(false)]
-        public string FinalValueAsStrUnit => Helper.FormatDecimal(FinalValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true, @"", CultureInfo);
+        public string FinalValueAsStrUnit => Helper.FormatDecimal(FinalValue, Helper.CurrencyTwoLength, true,
+            Helper.CurrencyTwoFixLength, true, @"", CultureInfo);
 
         /// <summary>
         /// Stores the current final value of the current stock volume with profit / loss (final value)
@@ -401,53 +408,68 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Stores the current final value of the current stock volume with profit / loss as string (final value)
         /// </summary>
         [Browsable(false)]
-        public string FinalValueWithProfitLossAsStr => Helper.FormatDecimal(FinalValueWithProfitLoss, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, false, @"", CultureInfo);
+        public string FinalValueWithProfitLossAsStr => Helper.FormatDecimal(FinalValueWithProfitLoss,
+            Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, false, @"", CultureInfo);
 
         /// <summary>
         /// Stores the current final value of the current stock volume with profit / loss as string with unit (final value)
         /// </summary>
         [Browsable(false)]
-        public string FinalValueWithProfitLossAsStrUnit => Helper.FormatDecimal(FinalValueWithProfitLoss, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
+        public string FinalValueWithProfitLossAsStrUnit => Helper.FormatDecimal(FinalValueWithProfitLoss,
+            Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
 
         /// <summary>
         /// Complete final value with profit / loss of all transactions (final value)
         /// </summary>
         [Browsable(false)]
-        public decimal CompleteFinalValue => SalePayoutBrokerageReduction + FinalValue + DividendValueTotal;
+        public decimal CompleteFinalValue => SalePayoutBrokerageReduction + FinalValue + CompleteDividendValue;
 
         /// <summary>
         /// Complete final value with profit / loss of all transactions as string (final value)
         /// </summary>
         [Browsable(false)]
-        public string CompleteFinalValueAsStr => Helper.FormatDecimal(CompleteFinalValue, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
+        public string CompleteFinalValueAsStr => Helper.FormatDecimal(CompleteFinalValue, Helper.CurrencyTwoLength,
+            false, Helper.CurrencyTwoFixLength, false, @"", CultureInfo);
 
         /// <summary>
         /// Complete market value with profit / loss of all transactions as string with unit (final value)
         /// </summary>
         [Browsable(false)]
-        public string CompleteFinalValueAsStrUnit => Helper.FormatDecimal(CompleteFinalValue, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength, true, @"", CultureInfo);
+        public string CompleteFinalValueAsStrUnit => Helper.FormatDecimal(CompleteFinalValue, Helper.CurrencyTwoLength,
+            false, Helper.CurrencyTwoFixLength, true, @"", CultureInfo);
 
         #endregion Final value properties
 
         #region Brokerage properties
 
-        // TODO
         /// <summary>
-        /// Brokerage value of the final value of the share volume
+        /// Complete brokerage value of of all transactions (final value)
         /// </summary>
         [Browsable(false)]
-        public decimal BrokerageValueTotal { get; internal set; }
+        public decimal CompleteBrokerageValue { get; internal set; }
 
-        // TODO
         /// <summary>
-        /// Brokerage value of the final value of the share volume as string
+        /// Complete brokerage value of of all transactions as string (final value)
         /// </summary>
         [Browsable(false)]
-        public string BrokerageValueTotalAsStr => Helper.FormatDecimal(BrokerageValueTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, false, @"", CultureInfo);
+        public string CompleteBrokerageValueAsStr => Helper.FormatDecimal(CompleteBrokerageValue, Helper.CurrencyTwoLength,
+            true, Helper.CurrencyNoneFixLength, false, @"", CultureInfo);
 
-        // TODO
         /// <summary>
-        /// List of all brokerages of this share
+        /// Complete brokerage value - reduction value of all transactions (final value)
+        /// </summary>
+        [Browsable(false)]
+        public decimal CompleteBrokerageReductionValue { get; internal set; }
+
+        /// <summary>
+        /// Complete brokerage value - reduction value of all transactions as string (final value)
+        /// </summary>
+        [Browsable(false)]
+        public string CompleteBrokerageReductionValueAsStr => Helper.FormatDecimal(CompleteBrokerageReductionValue,
+            Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, false, @"", CultureInfo);
+
+        /// <summary>
+        /// List of all brokerages of all transactions (final value)
         /// </summary>
         [Browsable(false)]
         public AllBrokerageReductionOfTheShare AllBrokerageEntries { get; set; } = new AllBrokerageReductionOfTheShare();
@@ -456,37 +478,32 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
         #region Dividends properties
 
-        // TODO
         /// <summary>
-        /// Dividend value of the final value of the share volume
+        /// Complete dividend value of all transactions (final value)
         /// </summary>
         [Browsable(false)]
-        public decimal DividendValueTotal { get; internal set; }
+        public decimal CompleteDividendValue { get; internal set; }
 
-        // TODO
         /// <summary>
-        /// Dividend value of the final value of the share volume
+        /// Complete dividend value of all transactions as string (final value)
         /// </summary>
         [Browsable(false)]
-        public string DividendValueTotalAsStrUnit => Helper.FormatDecimal(DividendValueTotal, Helper.DividendTwoLength, true, Helper.DividendNoneFixLength, true, @"", CultureInfo);
+        public string CompleteDividendValueAsStrUnit => Helper.FormatDecimal(CompleteDividendValue, Helper.DividendTwoLength, true, Helper.DividendNoneFixLength, true, @"", CultureInfo);
 
-        // TODO
         /// <summary>
-        ///  Dividend payout interval
+        /// Dividend payout interval (final value)
         /// </summary>
         [Browsable(false)]
         public int DividendPayoutInterval { get; set; }
 
-        // TODO
         /// <summary>
-        ///  Dividend payout interval as string
+        /// Dividend payout interval as string (final value)
         /// </summary>
         [Browsable(false)]
         public string DividendPayoutIntervalAsStr => DividendPayoutInterval.ToString();
 
-        // TODO
         /// <summary>
-        /// List of all dividends of this share
+        /// List of all dividends of all transactions (final value)
         /// </summary>
         [Browsable(false)]
         public AllDividendsOfTheShare AllDividendEntries { get; set; } = new AllDividendsOfTheShare();
@@ -495,17 +512,16 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
         #region Brokerage and dividends with taxes
 
-        // TODO
         /// <summary>
-        /// Brokerage and dividends minus taxes of this share as string with unit and a line break
+        /// Complete brokerage - reduction and dividend of all transactions as string with unit and line break (all shares) (final value)
         /// </summary>
         [Browsable(false)]
-        public string BrokerageDividendTotalAsStrUnit
+        public string CompleteBrokerageReductionDividendTotalAsStrUnit
         {
             get
             {
-                var value = Helper.FormatDecimal(BrokerageValueTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
-                value += Environment.NewLine + Helper.FormatDecimal(DividendValueTotal, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
+                var value = Helper.FormatDecimal(CompleteBrokerageReductionValue, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
+                value += Environment.NewLine + Helper.FormatDecimal(CompleteDividendValue, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
                 return value;
             }
         }
@@ -980,6 +996,16 @@ namespace SharePortfolioManager.Classes.ShareObjects
         }
 
         /// <summary>
+        /// Stores the brokerage - reduction of all transactions of the portfolio (all shares) (final value)
+        /// </summary>
+        [Browsable(false)]
+        public decimal PortfolioCompleteBrokerageReduction
+        {
+            get => _portfolioCompleteBrokerageReduction;
+            internal set => _portfolioCompleteBrokerageReduction = value;
+        }
+
+        /// <summary>
         /// Stores the dividends of all transactions of the portfolio (all shares) (final value)
         /// </summary>
         [Browsable(false)]
@@ -1121,7 +1147,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
             get
             {
-                var value = Helper.FormatDecimal(PortfolioCompleteBrokerage, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
+                var value = Helper.FormatDecimal(PortfolioCompleteBrokerageReduction, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
                 value += Environment.NewLine + Helper.FormatDecimal(PortfolioCompleteDividends, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
                 return value;
             }
@@ -1145,7 +1171,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Profit / loss and performance of all transactions of the portfolio as string with unit and a line break (all shares) (final value)
         /// </summary>
         [Browsable(false)]
-        public string PortfolioCompleteProfitLossPerformanceValueAsStrUnit
+        public string PortfolioCompleteProfitLossPerformanceAsStrUnit
         {
             get
             {
@@ -1198,12 +1224,12 @@ namespace SharePortfolioManager.Classes.ShareObjects
         public string DgvVolumeAsStr => VolumeAsStr;
 
         /// <summary>
-        /// Brokerage and dividend of the share as string for the DataGridView display
+        /// Brokerage - reduction and dividend of the share as string for the DataGridView display
         /// </summary>
         [Browsable(true)]
-        [DisplayName(@"BrokerageDividendTotal")]
+        [DisplayName(@"BrokerageReductionDividendTotal")]
         // ReSharper disable once UnusedMember.Global
-        public string DgvBrokerageDividendWithTaxesAsStrUnit => BrokerageDividendTotalAsStrUnit;
+        public string DgvBrokerageDividendWithTaxesAsStrUnit => CompleteBrokerageReductionDividendTotalAsStrUnit;
 
         /// <summary>
         /// Previous day price of the share as string for the DataGridView display
@@ -1387,17 +1413,20 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 Console.WriteLine(@"strDoc: {0}", strDoc);
 #endif
                 // Remove current brokerage of the share from the brokerage of all shares
-                PortfolioCompleteBrokerage -= BrokerageValueTotal;
+                PortfolioCompleteBrokerage -= CompleteBrokerageValue;
+                PortfolioCompleteBrokerageReduction -= CompleteBrokerageReductionValue;
 
                 if (!AllBrokerageEntries.AddBrokerageReduction(strGuid, bBrokerageOfABuy, bBrokerageOfASale, strGuidBuySale,
                     strDateTime, decProvisionValue, decBrokerFeeValue, decTraderPlaceFeeValue, decReductionValue, strDoc))
                     return false;
 
                 // Set brokerage of the share
-                BrokerageValueTotal = AllBrokerageEntries.BrokerageValueTotal;
+                CompleteBrokerageValue = AllBrokerageEntries.BrokerageValueTotal;
+                CompleteBrokerageReductionValue = AllBrokerageEntries.BrokerageWithReductionValueTotal;
 
                 // Add new brokerage of the share to the brokerage of all shares
-                PortfolioCompleteBrokerage += BrokerageValueTotal;
+                PortfolioCompleteBrokerage += CompleteBrokerageValue;
+                PortfolioCompleteBrokerageReduction += CompleteBrokerageReductionValue;
 
                 // Recalculate purchase price
                 if (bBrokerageOfABuy == false && bBrokerageOfASale == false)
@@ -1426,7 +1455,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 CalculatePortfolioProfitLoss();
 
 #if DEBUG_FINAL_SHARE_OBJECT
-                Console.WriteLine(@"BrokerageValueTotal: {0}", BrokerageValueTotal);
+                Console.WriteLine(@"CompleteBrokerageValue: {0}", CompleteBrokerageValue);
+                Console.WriteLine(@"CompleteBrokerageReductionValue: {0}", CompleteBrokerageReductionValue);
                 Console.WriteLine(@"");
 #endif
                 return true;
@@ -1461,16 +1491,19 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
                 // Remove current brokerage the share to the brokerage of all shares
                 PortfolioCompleteBrokerage -= AllBrokerageEntries.BrokerageValueTotal;
+                PortfolioCompleteBrokerageReduction -= AllBrokerageEntries.BrokerageWithReductionValueTotal;
 
                 // Remove brokerage by date
                 if (!AllBrokerageEntries.RemoveBrokerageReduction(strGuid, strDateTime))
                     return false;
 
                 // Set brokerage of the share
-                BrokerageValueTotal = AllBrokerageEntries.BrokerageValueTotal;
+                CompleteBrokerageValue = AllBrokerageEntries.BrokerageValueTotal;
+                CompleteBrokerageReductionValue = AllBrokerageEntries.BrokerageWithReductionValueTotal;
 
                 // Add new brokerage of the share to the brokerage of all shares
                 PortfolioCompleteBrokerage += AllBrokerageEntries.BrokerageValueTotal;
+                PortfolioCompleteBrokerageReduction += AllBrokerageEntries.BrokerageWithReductionValueTotal;
 
                 // Recalculate purchase price
                 if (bPartOfABuy == false && bPartOfASale == false)
@@ -1499,7 +1532,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 CalculatePortfolioProfitLoss();
 
 #if DEBUG_FINAL_SHARE_OBJECT
-                Console.WriteLine(@"BrokerageValueTotal: {0}", BrokerageValueTotal);
+                Console.WriteLine(@"CompleteBrokerageValue: {0}", CompleteBrokerageValue);
+                Console.WriteLine(@"CompleteBrokerageReductionValue: {0}", CompleteBrokerageReductionValue);
                 Console.WriteLine(@"");
 #endif
                 return true;
@@ -1554,16 +1588,19 @@ namespace SharePortfolioManager.Classes.ShareObjects
                     Console.WriteLine(@"decReduction: {0}", 0);
                 }
                 Console.WriteLine(@"strDoc: {0}", strDoc);
+
+                Console.WriteLine(@"PurchaseValue: {0}", PurchaseValue);
+                Console.WriteLine(@"PortfolioCompletePurchaseValue: {0}", PortfolioCompletePurchaseValue);
 #endif
                 // Add buy with reductions and brokerage
                 if (!AllBuyEntries.AddBuy(strGuid, strOrderNumber, strDateTime, decVolume, decVolumeSold, decPrice,
                     brokerageObject, strDoc))
                     return false;
 
-                // Set new volume
-                Volume = AllBuyEntries.BuyVolumeTotal - AllSaleEntries.SaleVolumeTotal;
+                // Set current stock volume
+                Volume = BuyVolume - SaleVolume;
 
-                // Recalculate purchase price
+                // Recalculate current purchase value
                 if (PurchaseValue == decimal.MinValue / 2)
                     PurchaseValue = 0;
                 PurchaseValue += AllBuyEntries.GetBuyObjectByGuidDate(strGuid, strDateTime).BuyValueBrokerageReduction;
@@ -1572,8 +1609,9 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
 #if DEBUG_FINAL_SHARE_OBJECT
                 Console.WriteLine(@"Volume: {0}", Volume);
+                Console.WriteLine(@"BuyValueReduction: {0}", AllBuyEntries.GetBuyObjectByGuidDate(strGuid, strDateTime).BuyValueReduction);
                 Console.WriteLine(@"PurchaseValue: {0}", PurchaseValue);
-                Console.WriteLine(@"BuyValueBrokerageReduction: {0}", buyObject.BuyValueBrokerageReduction);
+                Console.WriteLine(@"PortfolioCompletePurchaseValue: {0}", PortfolioCompletePurchaseValue);
                 Console.WriteLine(@"");
 #endif
                 return true;
@@ -1613,8 +1651,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                     Volume = AllBuyEntries.BuyVolumeTotal - AllSaleEntries.SaleVolumeTotal;
 
                     PurchaseValue -= buyObject.BuyValueBrokerageReduction;
-                    PortfolioCompletePurchaseValue -=
-                        AllBuyEntries.GetBuyObjectByGuidDate(strGuid, strDateTime).BuyValueBrokerageReduction;
+                    PortfolioCompletePurchaseValue -= buyObject.BuyValueBrokerageReduction;
 
 #if DEBUG_FINAL_SHARE_OBJECT
                     Console.WriteLine(@"Volume: {0}", Volume);
@@ -1742,7 +1779,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
 #if DEBUG_FINAL_SHARE_OBJECT
                 Console.WriteLine(@"Volume: {0}", Volume);
-                Console.WriteLine(@"SalePurchaseValueTotal: {0}", SalePurchaseValueTotal);
+                Console.WriteLine(@"SoldPurchaseValue: {0}", SoldPurchaseValue);
                 Console.WriteLine(@"PurchaseValue: {0}", PurchaseValue);
 #endif
                 return true;
@@ -1785,12 +1822,12 @@ namespace SharePortfolioManager.Classes.ShareObjects
                     SoldPurchaseValue -= saleObject.BuyValue;
 
                     // Calculate portfolio value
-                    if (AllSaleEntries.GetSaleObjectByGuidDate(strGuid, strDateTime).PayoutBrokerageReduction > decimal.MinValue / 2 && FinalValue > decimal.MinValue / 2)
-                        PortfolioCompleteFinalValue -= (AllSaleEntries.GetSaleObjectByGuidDate(strGuid, strDateTime).PayoutBrokerageReduction);
+                    if (saleObject.PayoutBrokerageReduction > decimal.MinValue / 2 && FinalValue > decimal.MinValue / 2)
+                        PortfolioCompleteFinalValue -= saleObject.PayoutBrokerageReduction;
 
 #if DEBUG_FINAL_SHARE_OBJECT
                     Console.WriteLine(@"Volume: {0}", Volume);
-                    Console.WriteLine(@"SalePurchaseValueTotal: {0}", SalePurchaseValueTotal);
+                    Console.WriteLine(@"SoldPurchaseValue: {0}", SoldPurchaseValue);
                     Console.WriteLine(@"PurchaseValue: {0}", PurchaseValue);
 #endif
                 }
@@ -1890,15 +1927,15 @@ namespace SharePortfolioManager.Classes.ShareObjects
                     return false;
 
                 // Remove current dividend of the share from the dividend of all shares
-                PortfolioCompleteDividends -= DividendValueTotal;
-                PortfolioCompleteFinalValue -= DividendValueTotal;
+                PortfolioCompleteDividends -= CompleteDividendValue;
+                PortfolioCompleteFinalValue -= CompleteDividendValue;
 
                 // Set dividend of the share
-                DividendValueTotal = AllDividendEntries.DividendValueTotalWithTaxes;
+                CompleteDividendValue = AllDividendEntries.DividendValueTotalWithTaxes;
 
                 // Add new dividend of the share to the dividend of all shares
-                PortfolioCompleteDividends += DividendValueTotal;
-                PortfolioCompleteFinalValue += DividendValueTotal;
+                PortfolioCompleteDividends += CompleteDividendValue;
+                PortfolioCompleteFinalValue += CompleteDividendValue;
 
                 // Recalculate the total sum of the share
                 CalculateFinalValue();
@@ -1916,7 +1953,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 CalculatePortfolioProfitLoss();
 
 #if DEBUG_FINAL_SHARE_OBJECT
-                Console.WriteLine(@"DividendValueTotal: {0}", DividendValueTotal);
+                Console.WriteLine(@"CompleteDividendValue: {0}", CompleteDividendValue);
                 Console.WriteLine(@"");
 #endif
                 return true;
@@ -1944,22 +1981,20 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 Console.WriteLine(@"strGuid: {0}", strGuid);
                 Console.WriteLine(@"strDate: {0}", strDate);
 #endif
-                // Set dividend of all shares
-                PortfolioCompleteDividends -= DividendValueTotal;
-                PortfolioCompleteFinalValue -= DividendValueTotal;
+                // Remove dividend of all shares
+                PortfolioCompleteDividends -= CompleteDividendValue;
+                PortfolioCompleteFinalValue -= CompleteDividendValue;
 
                 // Remove dividend by date
                 if (!AllDividendEntries.RemoveDividend(strGuid, strDate))
                     return false;
 
                 // Set dividend of the share
-                DividendValueTotal = AllDividendEntries.DividendValueTotalWithTaxes;
+                CompleteDividendValue = AllDividendEntries.DividendValueTotalWithTaxes;
 
-                // Set dividend of all shares
-                PortfolioCompleteDividends += DividendValueTotal;
-
-                // Add new brokerage of the share to the brokerage of all shares
-                PortfolioCompleteBrokerage += BrokerageValueTotal;
+                // Add dividend of all shares
+                PortfolioCompleteDividends += CompleteDividendValue;
+                PortfolioCompleteFinalValue += CompleteDividendValue;
 
                 // Recalculate the total sum of the share
                 CalculateFinalValue();
@@ -1977,7 +2012,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 CalculatePortfolioProfitLoss();
 
 #if DEBUG_FINAL_SHARE_OBJECT
-                Console.WriteLine(@"DividendValueTotal: {0}", DividendValueTotal);
+                Console.WriteLine(@"CompleteDividendValue: {0}", CompleteDividendValue);
                 Console.WriteLine(@"");
 #endif
                 return true;
@@ -2049,8 +2084,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                       - PurchaseValue;
                     CompleteProfitLossValue = CurPrice * Volume
                                                - PurchaseValue
-                                               + AllDividendEntries.DividendValueTotalWithTaxes // TODO Property create
-                                               + AllSaleEntries.SaleProfitLossBrokerageReductionTotal; // TODO Property create
+                                               + AllDividendEntries.DividendValueTotalWithTaxes
+                                               + AllSaleEntries.SaleProfitLossBrokerageReductionTotal;
                 }
                 else
                 {
@@ -2092,7 +2127,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
             else
             {
                 PerformanceValue = 0;
-                CompletePerformanceValue = 0;
+                if (BuyValueBrokerageReduction != 0)
+                    CompletePerformanceValue = (CompleteFinalValue / BuyValueBrokerageReduction * 100) - 100;
             }
 
 #if DEBUG_FINAL_SHARE_OBJECT
@@ -2651,8 +2687,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             Console.WriteLine(@"");
             Console.WriteLine(@"CalculatePerformancePortfolio() / FinalValue");
             Console.WriteLine(@"PortfolioFinalValue: {0}", PortfolioFinalValue);
-            Console.WriteLine(@"PortfolioSalePurchaseValue: {0}", PortfolioSalePurchaseValue);
-            Console.WriteLine(@"PortfolioPurchasePrice: {0}", PortfolioPurchasePrice);
+            Console.WriteLine(@"PortfolioSalePurchaseValue: {0}", PortfolioPurchaseValue);
             Console.WriteLine(@"PortfolioPerformanceValue: {0}", PortfolioPerformanceValue);
 #endif
         }
@@ -2669,9 +2704,11 @@ namespace SharePortfolioManager.Classes.ShareObjects
             Console.WriteLine(@"");
             Console.WriteLine(@"CalculatePortfolioProfitLoss() / FinalValue");
             Console.WriteLine(@"PortfolioFinalValue: {0}", PortfolioFinalValue);
-            Console.WriteLine(@"PortfolioSalePurchaseValue: {0}", PortfolioSalePurchaseValue);
+            Console.WriteLine(@"PortfolioPurchaseValue: {0}", PortfolioPurchaseValue);
+            Console.WriteLine(@"PortfolioProfitLossValue: {0}", PortfolioProfitLossValue);
             Console.WriteLine(@"PortfolioCompleteFinalValue: {0}", PortfolioCompleteFinalValue);
             Console.WriteLine(@"PortfolioCompletePurchaseValue: {0}", PortfolioCompletePurchaseValue);
+            Console.WriteLine(@"PortfolioCompleteProfitLossValue: {0}", PortfolioCompleteProfitLossValue);
 #endif
         }
 
@@ -2719,10 +2756,12 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 PortfolioPurchaseValue -= PurchaseValue;
             if (FinalValue > decimal.MinValue / 2)
                 PortfolioFinalValue -= FinalValue;
-            if (DividendValueTotal > decimal.MinValue / 2)
-                PortfolioCompleteDividends -= DividendValueTotal;
-            if (BrokerageValueTotal > decimal.MinValue / 2)
-                PortfolioCompleteBrokerage -= BrokerageValueTotal;
+            if (CompleteDividendValue > decimal.MinValue / 2)
+                PortfolioCompleteDividends -= CompleteDividendValue;
+            if (CompleteBrokerageValue > decimal.MinValue / 2)
+                PortfolioCompleteBrokerage -= CompleteBrokerageValue;
+            if (CompleteBrokerageReductionValue > decimal.MinValue / 2)
+                PortfolioCompleteBrokerageReduction -= CompleteBrokerageReductionValue;
 
             Disposed = true;
 

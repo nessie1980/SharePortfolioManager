@@ -70,11 +70,6 @@ namespace SharePortfolioManager.DocumentCaptureParsing
         #region Parsing Fields
 
         /// <summary>
-        /// Flag if a parsing start is allows ( document browse / drag and drop )
-        /// </summary>
-        private readonly bool _parsingStartAllow;
-
-        /// <summary>
         /// Counter for the check bank type configurations
         /// </summary>
         private int _bankCounter;
@@ -235,21 +230,14 @@ namespace SharePortfolioManager.DocumentCaptureParsing
             _parsingBackgroundWorker.ProgressChanged += OnDocumentParsingProgressChanged;
             _parsingBackgroundWorker.RunWorkerCompleted += OnDocumentParsingRunWorkerCompleted;
 
-            _parsingStartAllow = true;
-
-            if (_parsingStartAllow)
+            if (_parsingBackgroundWorker.IsBusy)
             {
-                if (_parsingBackgroundWorker.IsBusy)
-                {
-                    _parsingBackgroundWorker.CancelAsync();
-                }
-                else
-                {
-                    _parsingBackgroundWorker.RunWorkerAsync();
-                }
+                _parsingBackgroundWorker.CancelAsync();
             }
-
-            _parsingStartAllow = false;
+            else
+            {
+                _parsingBackgroundWorker.RunWorkerAsync();
+            }
 
             #endregion Parsing backgroundworker
         }
@@ -324,7 +312,7 @@ namespace SharePortfolioManager.DocumentCaptureParsing
                         );
 
                     // Check if the Parser is in idle mode
-                    if (DocumentTypeParser != null && DocumentTypeParser.ParserInfoState.State == ParserState.Idle)
+                    if (DocumentTypeParser != null && DocumentTypeParser.ParserInfoState.State == DataTypes.ParserState.Idle)
                     {
                         DocumentTypeParser.OnParserUpdate += DocumentTypeParser_UpdateGUI;
 
@@ -362,7 +350,7 @@ namespace SharePortfolioManager.DocumentCaptureParsing
         /// </summary>
         /// <param name="sender">BackGroundWorker</param>
         /// <param name="e">ProgressChangedEventArgs</param>
-        private void DocumentTypeParser_UpdateGUI(object sender, OnParserUpdateEventArgs e)
+        private void DocumentTypeParser_UpdateGUI(object sender, DataTypes.OnParserUpdateEventArgs e)
         {
             try
             {
@@ -377,7 +365,7 @@ namespace SharePortfolioManager.DocumentCaptureParsing
                         //Console.WriteLine(@"Percentage: {0}", e.ParserInfoState.Percentage);
                         switch (e.ParserInfoState.LastErrorCode)
                         {
-                            case ParserErrorCodes.Finished:
+                            case DataTypes.ParserErrorCodes.Finished:
                                 {
 #if DEBUG_DOCUMENT_CAPTURE_PARSING
                                     if (e.ParserInfoState.SearchResult != null)
@@ -394,71 +382,71 @@ namespace SharePortfolioManager.DocumentCaptureParsing
 #endif
                                     break;
                                 }
-                            case ParserErrorCodes.SearchFinished:
+                            case DataTypes.ParserErrorCodes.SearchFinished:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.SearchRunning:
+                            case DataTypes.ParserErrorCodes.SearchRunning:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.SearchStarted:
+                            case DataTypes.ParserErrorCodes.SearchStarted:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.ContentLoadFinished:
+                            case DataTypes.ParserErrorCodes.ContentLoadFinished:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.ContentLoadStarted:
+                            case DataTypes.ParserErrorCodes.ContentLoadStarted:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.Started:
+                            case DataTypes.ParserErrorCodes.Started:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.Starting:
+                            case DataTypes.ParserErrorCodes.Starting:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.NoError:
+                            case DataTypes.ParserErrorCodes.NoError:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.StartFailed:
+                            case DataTypes.ParserErrorCodes.StartFailed:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.BusyFailed:
+                            case DataTypes.ParserErrorCodes.BusyFailed:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.InvalidWebSiteGiven:
+                            case DataTypes.ParserErrorCodes.InvalidWebSiteGiven:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.NoRegexListGiven:
+                            case DataTypes.ParserErrorCodes.NoRegexListGiven:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.NoWebContentLoaded:
+                            case DataTypes.ParserErrorCodes.NoWebContentLoaded:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.ParsingFailed:
+                            case DataTypes.ParserErrorCodes.ParsingFailed:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.CancelThread:
+                            case DataTypes.ParserErrorCodes.CancelThread:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.WebExceptionOccured:
+                            case DataTypes.ParserErrorCodes.WebExceptionOccured:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.ExceptionOccured:
+                            case DataTypes.ParserErrorCodes.ExceptionOccured:
                                 {
                                     break;
                                 }
@@ -468,7 +456,7 @@ namespace SharePortfolioManager.DocumentCaptureParsing
                             Thread.Sleep(100);
 
                         // Check if a error occurred or the process has been finished
-                        if (e.ParserInfoState.LastErrorCode < 0 || e.ParserInfoState.LastErrorCode == ParserErrorCodes.Finished)
+                        if (e.ParserInfoState.LastErrorCode < 0 || e.ParserInfoState.LastErrorCode == DataTypes.ParserErrorCodes.Finished)
                         {
                             if (e.ParserInfoState.LastErrorCode < 0)
                             {

@@ -1219,8 +1219,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
 #if DEBUG_MARKET_SHARE_OBJECT
                 Console.WriteLine(@"Volume: {0}", Volume);
-                Console.WriteLine(@"BuyValueReduction: {0}", AllBuyEntries.GetBuyObjectByGuidDate(strGuid, strDateTime).BuyValueReduction);
                 Console.WriteLine(@"PurchaseValue: {0}", PurchaseValue);
+                Console.WriteLine(@"BuyValueReduction: {0}", AllBuyEntries.GetBuyObjectByGuidDate(strGuid, strDateTime).BuyValueReduction);
                 Console.WriteLine(@"");
 #endif
                 return true;
@@ -1261,8 +1261,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
                     // Recalculate current purchase value
                     PurchaseValue -= buyObject.BuyValueReduction;
-                    PortfolioCompletePurchaseValue -=
-                        AllBuyEntries.GetBuyObjectByGuidDate(strGuid, strDateTime).BuyValueReduction;
+                    PortfolioCompletePurchaseValue -= buyObject.BuyValueReduction;
 
 #if DEBUG_MARKET_SHARE_OBJECT
                     Console.WriteLine(@"Volume: {0}", Volume);
@@ -1427,8 +1426,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
                     SoldPurchaseValue -= saleObject.BuyValue;
 
                     // Calculate portfolio value
-                    if (AllSaleEntries.GetSaleObjectByGuidDate(strGuid, strDateTime).PayoutBrokerageReduction > decimal.MinValue / 2 && MarketValue > decimal.MinValue / 2)
-                        PortfolioCompleteMarketValueWithProfitLoss -= (AllSaleEntries.GetSaleObjectByGuidDate(strGuid, strDateTime).PayoutBrokerageReduction);
+                    if (saleObject.PayoutBrokerageReduction > decimal.MinValue / 2 && MarketValue > decimal.MinValue / 2)
+                        PortfolioCompleteMarketValueWithProfitLoss -= saleObject.PayoutBrokerageReduction;
 
 #if DEBUG_MARKET_SHARE_OBJECT
                     Console.WriteLine(@"Volume: {0}", Volume);
@@ -1582,7 +1581,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
             else
             {
                 PerformanceValue = 0;
-                CompletePerformanceValue = 0;
+                if (BuyValueReduction != 0)
+                    CompletePerformanceValue = (CompleteMarketValue / BuyValueReduction * 100) - 100;
             }
 
 #if DEBUG_MARKET_SHARE_OBJECT
@@ -2048,6 +2048,9 @@ namespace SharePortfolioManager.Classes.ShareObjects
             Console.WriteLine(@"PortfolioMarketValue: {0}", PortfolioMarketValue);
             Console.WriteLine(@"PortfolioPurchaseValue: {0}", PortfolioPurchaseValue);
             Console.WriteLine(@"PortfolioProfitLossFinalValue: {0}", PortfolioProfitLossValue);
+            Console.WriteLine(@"PortfolioCompleteMarketValueWithProfitLoss: {0}", PortfolioCompleteMarketValueWithProfitLoss);
+            Console.WriteLine(@"PortfolioCompletePurchaseValue: {0}", PortfolioCompletePurchaseValue);
+            Console.WriteLine(@"PortfolioCompleteProfitLossValue: {0}", PortfolioCompleteProfitLossValue);
 #endif
         }
 

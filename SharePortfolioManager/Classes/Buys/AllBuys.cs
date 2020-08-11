@@ -242,7 +242,9 @@ namespace SharePortfolioManager.Classes.Buys
                 // Reset total buy value and volume
                 BuyVolumeTotal = 0;
                 BuyValueTotal = 0;
+                BuyValueReductionTotal = 0;
                 BuyValueBrokerageTotal = 0;
+                BuyValueBrokerageReductionTotal = 0;
 
                 // Calculate the new total buy value and volume
                 foreach (var calcObject in AllBuysOfTheShareDictionary.Values)
@@ -409,19 +411,35 @@ namespace SharePortfolioManager.Classes.Buys
         }
 
         /// <summary>
-        /// This function checks if the buy with the given Guid is the last buy of the entries
+        /// This function checks if the buy with the given Guid is the last buy
         /// </summary>
         /// <param name="strGuid">Given GUID</param>
-        /// <returns></returns>
+        /// <returns>Flag if this is the last buy</returns>
         public bool IsLastBuy(string strGuid)
         {
-            if (AllBuysOfTheShareDictionary.Count <= 0) return false;
+            if (GetAllBuysOfTheShare().Count <= 0) return false;
 
-            var lastYearEntries = AllBuysOfTheShareDictionary.Last().Value;
+            // Get current selected buy object
+            var buyObject = GetAllBuysOfTheShare().Find(x => x.Guid == strGuid);
 
-            if (lastYearEntries.BuyListYear.Count <= 0) return false;
+            if (buyObject == null)
+                return false;
 
-            return lastYearEntries.BuyListYear.Last().Guid == strGuid;
+            // Get date of the selected buy object
+            var selectedDate = DateTime.Parse(buyObject.Date);
+
+            // Check if the selected buy object is the last one
+            foreach (var buyObjectCompare in GetAllBuysOfTheShare())
+            {
+                var compareDate = DateTime.Parse(buyObjectCompare.Date);
+
+                // Check if the selected buy object is not the last one
+                if (DateTime.Compare(selectedDate, compareDate) < 0)
+                    return false;
+            }
+
+            // Selected object is the last one
+            return true;
         }
 
         /// <summary>

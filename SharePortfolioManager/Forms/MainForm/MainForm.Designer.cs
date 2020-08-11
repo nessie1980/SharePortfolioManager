@@ -427,7 +427,7 @@ namespace SharePortfolioManager
             this.dgvPortfolioMarketValue.ReadOnly = true;
             this.dgvPortfolioMarketValue.RowHeadersVisible = false;
             this.dgvPortfolioMarketValue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPortfolioMarketValue.Size = new System.Drawing.Size(1204, 408);
+            this.dgvPortfolioMarketValue.Size = new System.Drawing.Size(1204, 359);
             this.dgvPortfolioMarketValue.TabIndex = 11;
             this.dgvPortfolioMarketValue.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DgvPortfolioMarketValue_CellFormatting);
             this.dgvPortfolioMarketValue.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.OnDgvPortfolioMarketValue_CellMouseDown);
@@ -451,7 +451,7 @@ namespace SharePortfolioManager
             this.dgvPortfolioFooterMarketValue.ColumnHeadersVisible = false;
             this.dgvPortfolioFooterMarketValue.Enabled = false;
             this.dgvPortfolioFooterMarketValue.EnableHeadersVisualStyles = false;
-            this.dgvPortfolioFooterMarketValue.Location = new System.Drawing.Point(0, 408);
+            this.dgvPortfolioFooterMarketValue.Location = new System.Drawing.Point(0, 359);
             this.dgvPortfolioFooterMarketValue.MultiSelect = false;
             this.dgvPortfolioFooterMarketValue.Name = "dgvPortfolioFooterMarketValue";
             this.dgvPortfolioFooterMarketValue.ReadOnly = true;

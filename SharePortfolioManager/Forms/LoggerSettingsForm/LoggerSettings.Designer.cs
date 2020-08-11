@@ -33,9 +33,7 @@ namespace SharePortfolioManager.LoggerSettingsForm
         {
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelMessage = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.grpBoxLogLevel = new System.Windows.Forms.GroupBox();
             this.chkBoxFatalError = new System.Windows.Forms.CheckBox();
             this.chkBoxError = new System.Windows.Forms.CheckBox();
@@ -63,6 +61,7 @@ namespace SharePortfolioManager.LoggerSettingsForm
             this.lblStoredLogFiles = new System.Windows.Forms.Label();
             this.grpBoxCleanUpAtStartUp = new System.Windows.Forms.GroupBox();
             this.chkBoxEnableCleanUpAtStartUp = new System.Windows.Forms.CheckBox();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.grpBoxLogLevel.SuspendLayout();
             this.grpBoxLogColors.SuspendLayout();
             this.grpBoxComponents.SuspendLayout();
@@ -70,6 +69,7 @@ namespace SharePortfolioManager.LoggerSettingsForm
             this.grpBoxGUIEntries.SuspendLayout();
             this.grpBoxStoredLogFiles.SuspendLayout();
             this.grpBoxCleanUpAtStartUp.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnCancel
@@ -104,26 +104,11 @@ namespace SharePortfolioManager.LoggerSettingsForm
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.OnBtnSave_Click);
             // 
-            // statusStrip1
-            // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 334);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(734, 22);
-            this.statusStrip1.SizingGrip = false;
-            this.statusStrip1.TabIndex = 2;
-            this.statusStrip1.Text = "statusStrip";
-            // 
             // toolStripStatusLabelMessage
             // 
-            this.toolStripStatusLabelMessage.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.toolStripStatusLabelMessage.BackColor = System.Drawing.SystemColors.Control;
             this.toolStripStatusLabelMessage.Name = "toolStripStatusLabelMessage";
             this.toolStripStatusLabelMessage.Size = new System.Drawing.Size(0, 17);
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.BackColor = System.Drawing.SystemColors.Control;
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
             // 
             // grpBoxLogLevel
             // 
@@ -209,7 +194,7 @@ namespace SharePortfolioManager.LoggerSettingsForm
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblColorFatalError.BackColor = System.Drawing.Color.LightGray;
             this.lblColorFatalError.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblColorFatalError.Location = new System.Drawing.Point(10, 139);
+            this.lblColorFatalError.Location = new System.Drawing.Point(10, 138);
             this.lblColorFatalError.Name = "lblColorFatalError";
             this.lblColorFatalError.Size = new System.Drawing.Size(131, 23);
             this.lblColorFatalError.TabIndex = 9;
@@ -235,7 +220,7 @@ namespace SharePortfolioManager.LoggerSettingsForm
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblColorWarning.BackColor = System.Drawing.Color.LightGray;
             this.lblColorWarning.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblColorWarning.Location = new System.Drawing.Point(10, 79);
+            this.lblColorWarning.Location = new System.Drawing.Point(10, 80);
             this.lblColorWarning.Name = "lblColorWarning";
             this.lblColorWarning.Size = new System.Drawing.Size(131, 23);
             this.lblColorWarning.TabIndex = 7;
@@ -248,7 +233,7 @@ namespace SharePortfolioManager.LoggerSettingsForm
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblColorInfo.BackColor = System.Drawing.Color.LightGray;
             this.lblColorInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblColorInfo.Location = new System.Drawing.Point(10, 49);
+            this.lblColorInfo.Location = new System.Drawing.Point(10, 51);
             this.lblColorInfo.Name = "lblColorInfo";
             this.lblColorInfo.Size = new System.Drawing.Size(131, 23);
             this.lblColorInfo.TabIndex = 6;
@@ -442,12 +427,24 @@ namespace SharePortfolioManager.LoggerSettingsForm
             this.chkBoxEnableCleanUpAtStartUp.Text = "_chkBoxEnableCleanUpAtStartUp";
             this.chkBoxEnableCleanUpAtStartUp.UseVisualStyleBackColor = true;
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabelMessage});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 334);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(734, 22);
+            this.statusStrip1.TabIndex = 9;
+            this.statusStrip1.Text = "statusStrip";
+            // 
             // FrmLoggerSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.ClientSize = new System.Drawing.Size(734, 356);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.grpBoxCleanUpAtStartUp);
             this.Controls.Add(this.grpBoxStoredLogFiles);
             this.Controls.Add(this.grpBoxGUIEntries);
@@ -455,10 +452,9 @@ namespace SharePortfolioManager.LoggerSettingsForm
             this.Controls.Add(this.grpBoxComponents);
             this.Controls.Add(this.grpBoxLogColors);
             this.Controls.Add(this.grpBoxLogLevel);
-            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnCancel);
-            this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold);
+            this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(750, 395);
             this.MinimizeBox = false;
@@ -478,6 +474,8 @@ namespace SharePortfolioManager.LoggerSettingsForm
             this.grpBoxStoredLogFiles.ResumeLayout(false);
             this.grpBoxCleanUpAtStartUp.ResumeLayout(false);
             this.grpBoxCleanUpAtStartUp.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -487,7 +485,6 @@ namespace SharePortfolioManager.LoggerSettingsForm
 
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnSave;
-        private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelMessage;
         private System.Windows.Forms.GroupBox grpBoxLogLevel;
         private System.Windows.Forms.CheckBox chkBoxFatalError;
@@ -514,8 +511,8 @@ namespace SharePortfolioManager.LoggerSettingsForm
         private System.Windows.Forms.ComboBox cbxStoredLogFiles;
         private System.Windows.Forms.Label lblStoredLogFiles;
         private System.Windows.Forms.Button btnLogFileCleanUp;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.GroupBox grpBoxCleanUpAtStartUp;
         private System.Windows.Forms.CheckBox chkBoxEnableCleanUpAtStartUp;
+        private System.Windows.Forms.StatusStrip statusStrip1;
     }
 }

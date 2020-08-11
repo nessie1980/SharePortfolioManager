@@ -66,6 +66,9 @@ namespace SharePortfolioManager.BrokeragesForm.View
             this.lblBrokerage = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelMessageBrokerageEdit = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lblBrokerageReduction = new System.Windows.Forms.Label();
+            this.txtBoxBrokerageReduction = new System.Windows.Forms.TextBox();
+            this.lblAddBrokerageReductionUnit = new System.Windows.Forms.Label();
             this.grpBoxOverview.SuspendLayout();
             this.tblLayPnlOverviewTabControl.SuspendLayout();
             this.grpBoxAdd.SuspendLayout();
@@ -81,7 +84,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grpBoxOverview.Controls.Add(this.tblLayPnlOverviewTabControl);
             this.grpBoxOverview.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpBoxOverview.Location = new System.Drawing.Point(5, 282);
+            this.grpBoxOverview.Location = new System.Drawing.Point(5, 306);
             this.grpBoxOverview.Name = "grpBoxOverview";
             this.grpBoxOverview.Size = new System.Drawing.Size(825, 150);
             this.grpBoxOverview.TabIndex = 5;
@@ -129,7 +132,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
             this.grpBoxAdd.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grpBoxAdd.Location = new System.Drawing.Point(5, 5);
             this.grpBoxAdd.Name = "grpBoxAdd";
-            this.grpBoxAdd.Size = new System.Drawing.Size(825, 271);
+            this.grpBoxAdd.Size = new System.Drawing.Size(825, 295);
             this.grpBoxAdd.TabIndex = 4;
             this.grpBoxAdd.TabStop = false;
             this.grpBoxAdd.Text = "_grpBoxAddBrokerage";
@@ -147,7 +150,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
             this.tblLayPnlBrokerageButtons.Controls.Add(this.btnCancel, 4, 0);
             this.tblLayPnlBrokerageButtons.Controls.Add(this.btnReset, 3, 0);
             this.tblLayPnlBrokerageButtons.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tblLayPnlBrokerageButtons.Location = new System.Drawing.Point(3, 210);
+            this.tblLayPnlBrokerageButtons.Location = new System.Drawing.Point(3, 234);
             this.tblLayPnlBrokerageButtons.Name = "tblLayPnlBrokerageButtons";
             this.tblLayPnlBrokerageButtons.RowCount = 1;
             this.tblLayPnlBrokerageButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -231,10 +234,10 @@ namespace SharePortfolioManager.BrokeragesForm.View
             this.tblLayPnlBrokerageInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tblLayPnlBrokerageInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tblLayPnlBrokerageInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tblLayPnlBrokerageInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tblLayPnlBrokerageInput.Controls.Add(this.txtBoxReduction, 1, 5);
-            this.tblLayPnlBrokerageInput.Controls.Add(this.lblAddReductionUnit, 4, 5);
-            this.tblLayPnlBrokerageInput.Controls.Add(this.lblReduction, 0, 5);
+            this.tblLayPnlBrokerageInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tblLayPnlBrokerageInput.Controls.Add(this.lblAddBrokerageReductionUnit, 4, 7);
+            this.tblLayPnlBrokerageInput.Controls.Add(this.txtBoxBrokerageReduction, 1, 7);
+            this.tblLayPnlBrokerageInput.Controls.Add(this.lblBrokerageReduction, 0, 7);
             this.tblLayPnlBrokerageInput.Controls.Add(this.lblAddTraderPlaceFeeUnit, 4, 4);
             this.tblLayPnlBrokerageInput.Controls.Add(this.txtBoxTraderPlaceFee, 1, 4);
             this.tblLayPnlBrokerageInput.Controls.Add(this.lblTraderPlaceFee, 0, 4);
@@ -249,17 +252,20 @@ namespace SharePortfolioManager.BrokeragesForm.View
             this.tblLayPnlBrokerageInput.Controls.Add(this.datePickerTime, 3, 0);
             this.tblLayPnlBrokerageInput.Controls.Add(this.chkBoxBuyPart, 1, 1);
             this.tblLayPnlBrokerageInput.Controls.Add(this.chkBoxSalePart, 3, 1);
-            this.tblLayPnlBrokerageInput.Controls.Add(this.lblDocument, 0, 7);
-            this.tblLayPnlBrokerageInput.Controls.Add(this.txtBoxDocument, 1, 7);
-            this.tblLayPnlBrokerageInput.Controls.Add(this.btnDocumentBrowse, 4, 7);
-            this.tblLayPnlBrokerageInput.Controls.Add(this.lblAddBrokerageUnit, 4, 6);
-            this.tblLayPnlBrokerageInput.Controls.Add(this.txtBoxBrokerage, 1, 6);
-            this.tblLayPnlBrokerageInput.Controls.Add(this.lblBrokerage, 0, 6);
+            this.tblLayPnlBrokerageInput.Controls.Add(this.lblDocument, 0, 8);
+            this.tblLayPnlBrokerageInput.Controls.Add(this.txtBoxDocument, 1, 8);
+            this.tblLayPnlBrokerageInput.Controls.Add(this.btnDocumentBrowse, 4, 8);
+            this.tblLayPnlBrokerageInput.Controls.Add(this.lblReduction, 0, 6);
+            this.tblLayPnlBrokerageInput.Controls.Add(this.txtBoxReduction, 1, 6);
+            this.tblLayPnlBrokerageInput.Controls.Add(this.lblAddReductionUnit, 4, 6);
+            this.tblLayPnlBrokerageInput.Controls.Add(this.lblAddBrokerageUnit, 4, 5);
+            this.tblLayPnlBrokerageInput.Controls.Add(this.txtBoxBrokerage, 1, 5);
+            this.tblLayPnlBrokerageInput.Controls.Add(this.lblBrokerage, 0, 5);
             this.tblLayPnlBrokerageInput.Dock = System.Windows.Forms.DockStyle.Top;
             this.tblLayPnlBrokerageInput.Location = new System.Drawing.Point(3, 18);
             this.tblLayPnlBrokerageInput.Margin = new System.Windows.Forms.Padding(1);
             this.tblLayPnlBrokerageInput.Name = "tblLayPnlBrokerageInput";
-            this.tblLayPnlBrokerageInput.RowCount = 8;
+            this.tblLayPnlBrokerageInput.RowCount = 9;
             this.tblLayPnlBrokerageInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tblLayPnlBrokerageInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tblLayPnlBrokerageInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
@@ -268,7 +274,11 @@ namespace SharePortfolioManager.BrokeragesForm.View
             this.tblLayPnlBrokerageInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tblLayPnlBrokerageInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tblLayPnlBrokerageInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tblLayPnlBrokerageInput.Size = new System.Drawing.Size(819, 192);
+            this.tblLayPnlBrokerageInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlBrokerageInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tblLayPnlBrokerageInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tblLayPnlBrokerageInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tblLayPnlBrokerageInput.Size = new System.Drawing.Size(819, 216);
             this.tblLayPnlBrokerageInput.TabIndex = 12;
             // 
             // txtBoxReduction
@@ -277,7 +287,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
             this.tblLayPnlBrokerageInput.SetColumnSpan(this.txtBoxReduction, 3);
             this.txtBoxReduction.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtBoxReduction.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxReduction.Location = new System.Drawing.Point(251, 121);
+            this.txtBoxReduction.Location = new System.Drawing.Point(251, 145);
             this.txtBoxReduction.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxReduction.Name = "txtBoxReduction";
             this.txtBoxReduction.Size = new System.Drawing.Size(482, 22);
@@ -290,7 +300,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
             // 
             this.lblAddReductionUnit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblAddReductionUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddReductionUnit.Location = new System.Drawing.Point(735, 121);
+            this.lblAddReductionUnit.Location = new System.Drawing.Point(735, 145);
             this.lblAddReductionUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblAddReductionUnit.Name = "lblAddReductionUnit";
             this.lblAddReductionUnit.Size = new System.Drawing.Size(58, 22);
@@ -302,8 +312,9 @@ namespace SharePortfolioManager.BrokeragesForm.View
             // 
             this.lblReduction.BackColor = System.Drawing.Color.LightGray;
             this.lblReduction.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblReduction.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblReduction.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblReduction.Location = new System.Drawing.Point(1, 121);
+            this.lblReduction.Location = new System.Drawing.Point(1, 145);
             this.lblReduction.Margin = new System.Windows.Forms.Padding(1);
             this.lblReduction.Name = "lblReduction";
             this.lblReduction.Size = new System.Drawing.Size(248, 22);
@@ -508,7 +519,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
             this.lblDocument.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblDocument.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblDocument.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDocument.Location = new System.Drawing.Point(1, 169);
+            this.lblDocument.Location = new System.Drawing.Point(1, 193);
             this.lblDocument.Margin = new System.Windows.Forms.Padding(1);
             this.lblDocument.Name = "lblDocument";
             this.lblDocument.Size = new System.Drawing.Size(248, 22);
@@ -523,7 +534,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
             this.tblLayPnlBrokerageInput.SetColumnSpan(this.txtBoxDocument, 3);
             this.txtBoxDocument.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtBoxDocument.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxDocument.Location = new System.Drawing.Point(251, 169);
+            this.txtBoxDocument.Location = new System.Drawing.Point(251, 193);
             this.txtBoxDocument.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxDocument.Name = "txtBoxDocument";
             this.txtBoxDocument.Size = new System.Drawing.Size(482, 22);
@@ -541,7 +552,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
             this.btnDocumentBrowse.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDocumentBrowse.Image = global::SharePortfolioManager.Properties.Resources.menu_folder_open_16;
             this.btnDocumentBrowse.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDocumentBrowse.Location = new System.Drawing.Point(735, 169);
+            this.btnDocumentBrowse.Location = new System.Drawing.Point(735, 193);
             this.btnDocumentBrowse.Margin = new System.Windows.Forms.Padding(1);
             this.btnDocumentBrowse.Name = "btnDocumentBrowse";
             this.btnDocumentBrowse.Size = new System.Drawing.Size(83, 22);
@@ -556,7 +567,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
             // 
             this.lblAddBrokerageUnit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblAddBrokerageUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAddBrokerageUnit.Location = new System.Drawing.Point(735, 145);
+            this.lblAddBrokerageUnit.Location = new System.Drawing.Point(735, 121);
             this.lblAddBrokerageUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblAddBrokerageUnit.Name = "lblAddBrokerageUnit";
             this.lblAddBrokerageUnit.Size = new System.Drawing.Size(58, 22);
@@ -571,7 +582,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
             this.txtBoxBrokerage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtBoxBrokerage.Enabled = false;
             this.txtBoxBrokerage.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxBrokerage.Location = new System.Drawing.Point(251, 145);
+            this.txtBoxBrokerage.Location = new System.Drawing.Point(251, 121);
             this.txtBoxBrokerage.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxBrokerage.Name = "txtBoxBrokerage";
             this.txtBoxBrokerage.ReadOnly = true;
@@ -586,7 +597,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
             this.lblBrokerage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblBrokerage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBrokerage.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBrokerage.Location = new System.Drawing.Point(1, 145);
+            this.lblBrokerage.Location = new System.Drawing.Point(1, 121);
             this.lblBrokerage.Margin = new System.Windows.Forms.Padding(1);
             this.lblBrokerage.Name = "lblBrokerage";
             this.lblBrokerage.Size = new System.Drawing.Size(248, 22);
@@ -599,7 +610,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
             this.statusStrip1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelMessageBrokerageEdit});
-            this.statusStrip1.Location = new System.Drawing.Point(3, 246);
+            this.statusStrip1.Location = new System.Drawing.Point(3, 270);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(819, 22);
             this.statusStrip1.TabIndex = 11;
@@ -612,20 +623,61 @@ namespace SharePortfolioManager.BrokeragesForm.View
             this.toolStripStatusLabelMessageBrokerageEdit.Name = "toolStripStatusLabelMessageBrokerageEdit";
             this.toolStripStatusLabelMessageBrokerageEdit.Size = new System.Drawing.Size(0, 17);
             // 
+            // lblBrokerageReduction
+            // 
+            this.lblBrokerageReduction.BackColor = System.Drawing.Color.LightGray;
+            this.lblBrokerageReduction.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblBrokerageReduction.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBrokerageReduction.Location = new System.Drawing.Point(1, 169);
+            this.lblBrokerageReduction.Margin = new System.Windows.Forms.Padding(1);
+            this.lblBrokerageReduction.Name = "lblBrokerageReduction";
+            this.lblBrokerageReduction.Size = new System.Drawing.Size(248, 22);
+            this.lblBrokerageReduction.TabIndex = 33;
+            this.lblBrokerageReduction.Text = "_addBrokerageReductionValue";
+            this.lblBrokerageReduction.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtBoxBrokerageReduction
+            // 
+            this.txtBoxBrokerageReduction.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tblLayPnlBrokerageInput.SetColumnSpan(this.txtBoxBrokerageReduction, 3);
+            this.txtBoxBrokerageReduction.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtBoxBrokerageReduction.Enabled = false;
+            this.txtBoxBrokerageReduction.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBoxBrokerageReduction.Location = new System.Drawing.Point(251, 169);
+            this.txtBoxBrokerageReduction.Margin = new System.Windows.Forms.Padding(1);
+            this.txtBoxBrokerageReduction.Name = "txtBoxBrokerageReduction";
+            this.txtBoxBrokerageReduction.ReadOnly = true;
+            this.txtBoxBrokerageReduction.Size = new System.Drawing.Size(482, 22);
+            this.txtBoxBrokerageReduction.TabIndex = 34;
+            this.txtBoxBrokerageReduction.TabStop = false;
+            this.txtBoxBrokerageReduction.Text = "-";
+            // 
+            // lblAddBrokerageReductionUnit
+            // 
+            this.lblAddBrokerageReductionUnit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblAddBrokerageReductionUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAddBrokerageReductionUnit.Location = new System.Drawing.Point(735, 169);
+            this.lblAddBrokerageReductionUnit.Margin = new System.Windows.Forms.Padding(1);
+            this.lblAddBrokerageReductionUnit.Name = "lblAddBrokerageReductionUnit";
+            this.lblAddBrokerageReductionUnit.Size = new System.Drawing.Size(58, 22);
+            this.lblAddBrokerageReductionUnit.TabIndex = 35;
+            this.lblAddBrokerageReductionUnit.Text = "_lblBrokerageReductionUnit";
+            this.lblAddBrokerageReductionUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // ViewBrokerageEdit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.ClientSize = new System.Drawing.Size(834, 434);
+            this.ClientSize = new System.Drawing.Size(834, 458);
             this.ControlBox = false;
             this.Controls.Add(this.grpBoxOverview);
             this.Controls.Add(this.grpBoxAdd);
             this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(900, 550);
+            this.MaximumSize = new System.Drawing.Size(900, 597);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(800, 450);
+            this.MinimumSize = new System.Drawing.Size(800, 497);
             this.Name = "ViewBrokerageEdit";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -682,5 +734,8 @@ namespace SharePortfolioManager.BrokeragesForm.View
         private Label lblAddReductionUnit;
         private Label lblReduction;
         private TextBox txtBoxReduction;
+        private Label lblAddBrokerageReductionUnit;
+        private TextBox txtBoxBrokerageReduction;
+        private Label lblBrokerageReduction;
     }
 }

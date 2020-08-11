@@ -105,7 +105,7 @@
             this.txtBoxBank.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxBank.Name = "txtBoxBank";
             this.txtBoxBank.ReadOnly = true;
-            this.txtBoxBank.Size = new System.Drawing.Size(386, 22);
+            this.txtBoxBank.Size = new System.Drawing.Size(385, 22);
             this.txtBoxBank.TabIndex = 3;
             // 
             // txtBoxDocumentType
@@ -117,7 +117,7 @@
             this.txtBoxDocumentType.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxDocumentType.Name = "txtBoxDocumentType";
             this.txtBoxDocumentType.ReadOnly = true;
-            this.txtBoxDocumentType.Size = new System.Drawing.Size(386, 22);
+            this.txtBoxDocumentType.Size = new System.Drawing.Size(385, 22);
             this.txtBoxDocumentType.TabIndex = 4;
             // 
             // txtBoxWkn
@@ -129,15 +129,15 @@
             this.txtBoxWkn.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxWkn.Name = "txtBoxWkn";
             this.txtBoxWkn.ReadOnly = true;
-            this.txtBoxWkn.Size = new System.Drawing.Size(386, 22);
+            this.txtBoxWkn.Size = new System.Drawing.Size(385, 22);
             this.txtBoxWkn.TabIndex = 2;
             // 
             // picBoxBank
             // 
             this.picBoxBank.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.picBoxBank.Location = new System.Drawing.Point(559, 3);
+            this.picBoxBank.Location = new System.Drawing.Point(558, 3);
             this.picBoxBank.Name = "picBoxBank";
-            this.picBoxBank.Size = new System.Drawing.Size(21, 18);
+            this.picBoxBank.Size = new System.Drawing.Size(22, 18);
             this.picBoxBank.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picBoxBank.TabIndex = 5;
             this.picBoxBank.TabStop = false;
@@ -145,9 +145,9 @@
             // picBoxDocumentType
             // 
             this.picBoxDocumentType.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.picBoxDocumentType.Location = new System.Drawing.Point(559, 27);
+            this.picBoxDocumentType.Location = new System.Drawing.Point(558, 27);
             this.picBoxDocumentType.Name = "picBoxDocumentType";
-            this.picBoxDocumentType.Size = new System.Drawing.Size(21, 18);
+            this.picBoxDocumentType.Size = new System.Drawing.Size(22, 18);
             this.picBoxDocumentType.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picBoxDocumentType.TabIndex = 6;
             this.picBoxDocumentType.TabStop = false;
@@ -155,9 +155,9 @@
             // picBoxWkn
             // 
             this.picBoxWkn.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.picBoxWkn.Location = new System.Drawing.Point(559, 51);
+            this.picBoxWkn.Location = new System.Drawing.Point(558, 51);
             this.picBoxWkn.Name = "picBoxWkn";
-            this.picBoxWkn.Size = new System.Drawing.Size(21, 18);
+            this.picBoxWkn.Size = new System.Drawing.Size(22, 18);
             this.picBoxWkn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picBoxWkn.TabIndex = 7;
             this.picBoxWkn.TabStop = false;
@@ -247,7 +247,7 @@
             this.tblLayPnlParsing.ColumnCount = 3;
             this.tblLayPnlParsing.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30.26087F));
             this.tblLayPnlParsing.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 69.73913F));
-            this.tblLayPnlParsing.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.tblLayPnlParsing.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 27F));
             this.tblLayPnlParsing.Controls.Add(this.picBoxWkn, 2, 2);
             this.tblLayPnlParsing.Controls.Add(this.txtBoxWkn, 1, 2);
             this.tblLayPnlParsing.Controls.Add(this.lblWkn, 0, 2);

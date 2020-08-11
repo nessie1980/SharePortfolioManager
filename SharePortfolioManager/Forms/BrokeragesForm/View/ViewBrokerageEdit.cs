@@ -96,8 +96,9 @@ namespace SharePortfolioManager.BrokeragesForm.View
         string Provision { get; set; }
         string BrokerFee { get; set; }
         string TraderPlaceFee { get; set; }
+        string Brokerage { get; set; }
         string Reduction { get; set; }
-        string Brokerage{ get; set; }
+        string BrokerageReduction { get; set; }
         string Document { get; set; }
 
         DialogResult ShowDialog();
@@ -251,6 +252,16 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 txtBoxTraderPlaceFee.Text = value;
             }
         }
+        public string Brokerage
+        {
+            get => txtBoxBrokerage.Text;
+            set
+            {
+                if (txtBoxBrokerage.Text == value)
+                    return;
+                txtBoxBrokerage.Text = value;
+            }
+        }
 
         public string Reduction
         {
@@ -263,14 +274,14 @@ namespace SharePortfolioManager.BrokeragesForm.View
             }
         }
 
-        public string Brokerage
+        public string BrokerageReduction
         {
-            get => txtBoxBrokerage.Text;
+            get => txtBoxBrokerageReduction.Text;
             set
             {
-                if (txtBoxBrokerage.Text == value)
+                if (txtBoxBrokerageReduction.Text == value)
                     return;
-                txtBoxBrokerage.Text = value;
+                txtBoxBrokerageReduction.Text = value;
             }
         }
 
@@ -739,9 +750,9 @@ namespace SharePortfolioManager.BrokeragesForm.View
         /// This function resets the text box values
         /// and sets the date time picker to the current date.
         /// </summary>
-        private void ResetInputValues()
+        private void ResetValues()
         {
-            // Reset date time picker
+            // Reset and enable date time picker
             datePickerDate.Value = DateTime.Now;
             datePickerDate.Enabled = true;
             datePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
@@ -751,21 +762,24 @@ namespace SharePortfolioManager.BrokeragesForm.View
             chkBoxBuyPart.CheckState = CheckState.Unchecked;
             chkBoxSalePart.CheckState = CheckState.Unchecked;
 
-            // Reset text boxes
-            txtBoxProvision.Text = @"";
+            // Reset and enable text boxes
+            txtBoxProvision.Text = string.Empty;
             txtBoxProvision.Enabled = true;
-            txtBoxBrokerFee.Text = @"";
+            txtBoxBrokerFee.Text = string.Empty;
             txtBoxBrokerFee.Enabled = true;
-            txtBoxTraderPlaceFee.Text = @"";
+            txtBoxTraderPlaceFee.Text = string.Empty;
             txtBoxTraderPlaceFee.Enabled = true;
-            txtBoxReduction.Text = @"";
-            txtBoxReduction.Enabled = true;
-            txtBoxBrokerage.Text = @"-";
+            txtBoxBrokerage.Text = string.Empty;
             txtBoxBrokerage.Enabled = true;
-            txtBoxDocument.Text = @"";
+            txtBoxReduction.Text = string.Empty;
+            txtBoxReduction.Enabled = true;
+            txtBoxBrokerageReduction.Text = string.Empty;
+            txtBoxBrokerageReduction.Enabled = true;
+            txtBoxDocument.Text = string.Empty;
             txtBoxDocument.Enabled = true;
 
-            toolStripStatusLabelMessageBrokerageEdit.Text = @"";
+            // Reset status label message text
+            toolStripStatusLabelMessageBrokerageEdit.Text = string.Empty;
 
             // Enable button(s)
             btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Add", LanguageName);
@@ -1136,7 +1150,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
             try
             {
                 // Reset values
-                ResetInputValues();
+                ResetValues();
             }
             catch (Exception ex)
             {
@@ -1246,14 +1260,16 @@ namespace SharePortfolioManager.BrokeragesForm.View
                            @")"
                 };
 
+                #endregion Add page
+
                 #region Data source, data binding and data grid view
 
                 // Check if brokerage exists
                 if (ShareObjectFinalValue.AllBrokerageEntries.GetAllBrokerageTotalValues().Count <= 0) return;
 
                 // Reverse list so the latest is a top of the data grid view
-                var reversDataSourceOverview = ShareObjectFinalValue.AllBrokerageEntries.GetAllBrokerageTotalValues();
-                reversDataSourceOverview.Reverse();
+                var reversDataSourceOverview = ShareObjectFinalValue.AllBrokerageEntries.GetAllBrokerageTotalValues()
+                    .OrderByDescending(x => x.BrokerageValueYear).ToList();
 
                 var bindingSourceOverview = new BindingSource
                 {
@@ -1331,8 +1347,6 @@ namespace SharePortfolioManager.BrokeragesForm.View
 
                 #endregion Control add
 
-                #endregion Add page
-
                 // Check if brokerage exists
                 if (ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageReductionOfTheShareDictionary.Count <= 0) return;
 
@@ -1352,7 +1366,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                         // Set TabPage caption
                         Text = keyName + @" (" +
                                ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageReductionOfTheShareDictionary[keyName]
-                                   .BrokerageValueYearAsStrUnit
+                                   .BrokerageWithReductionValueYearAsStrUnit
                                + @")"
                     };
 
@@ -1363,8 +1377,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                     // Reverse list so the latest is a top of the data grid view
                     var reversDataSource =
                         ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageReductionOfTheShareDictionary[keyName]
-                            .BrokerageReductionListYear;
-                    reversDataSource.Reverse();
+                            .BrokerageReductionListYear.OrderByDescending(x => DateTime.Parse(x.Date)).ToList();
 
                     // Create Binding source for the brokerage data
                     var bindingSource = new BindingSource
@@ -1546,7 +1559,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                     ((DataGridView)sender).Columns[0].Visible = false;
 
                 // Reset the text box values
-                ResetInputValues();
+                ResetValues();
             }
             catch (Exception ex)
             {
@@ -1611,7 +1624,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                     view.Focus();
 
                     if (view.Name == @"Overview")
-                        ResetInputValues();
+                        ResetValues();
                 }
             }
         }
@@ -1769,18 +1782,15 @@ namespace SharePortfolioManager.BrokeragesForm.View
                     else
                         return;
 
-                    // Get list of brokerage of a year
-                    DateTime.TryParse(SelectedDate, out var dateTime);
-                    var brokerageListYear =  ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageReductionOfTheShareDictionary[dateTime.Year.ToString()]
-                        .BrokerageReductionListYear;
-
-                    var index = ((DataGridView) sender).SelectedRows[0].Index;
-
                     // Set selected Guid
-                    SelectedGuid = brokerageListYear[index].Guid;
+                    if (curItem[0].Cells[1].Value != null)
+                        SelectedGuid = curItem[0].Cells[0].Value.ToString();
+                    else
+                        return;
 
-                    // Get BrokerageObject of the selected DataGridView row
-                    var selectedBrokerageObject = brokerageListYear[index];
+                    // Get selected brokerage object by Guid
+                    var selectedBrokerageObject = ShareObjectFinalValue.AllBrokerageEntries.GetAllBrokerageOfTheShare()
+                        .Find(x => x.Guid == SelectedGuid);
 
                     // Set brokerage values
                     if (selectedBrokerageObject != null)
@@ -1792,92 +1802,128 @@ namespace SharePortfolioManager.BrokeragesForm.View
                         txtBoxProvision.Text = selectedBrokerageObject.ProvisionValueAsStr;
                         txtBoxBrokerFee.Text = selectedBrokerageObject.BrokerFeeValueAsStr;
                         txtBoxTraderPlaceFee.Text = selectedBrokerageObject.TraderPlaceFeeValueAsStr;
+                        txtBoxBrokerage.Text = selectedBrokerageObject.BrokerageValueAsStr;
                         txtBoxReduction.Text = selectedBrokerageObject.ReductionValueAsStr;
-                        // TODO
-                        //txtBoxBrokerage.Text = selectedBrokerageObject.BrokerageReductionValueAsStr;
+                        txtBoxBrokerageReduction.Text = selectedBrokerageObject.BrokerageReductionValueAsStr;
                         txtBoxDocument.Text = selectedBrokerageObject.DocumentAsStr;
+
+                        // Set brokerage values
+                        if (selectedBrokerageObject.PartOfABuy || selectedBrokerageObject.PartOfASale)
+                        {
+                            // Set flag if brokerage is part of a buy
+                            PartOfABuy = selectedBrokerageObject.PartOfABuy;
+
+                            // Set flag if brokerage is part of a sale
+                            PartOfASale = selectedBrokerageObject.PartOfASale;
+
+                            // Disable TextBox(es)
+                            datePickerDate.Enabled = false;
+                            datePickerTime.Enabled = false;
+                            txtBoxProvision.Enabled = false;
+                            txtBoxBrokerFee.Enabled = false;
+                            txtBoxTraderPlaceFee.Enabled = false;
+                            txtBoxReduction.Enabled = false;
+                            txtBoxDocument.Enabled = false;
+
+                            // Enable Button(s)
+                            btnDocumentBrowse.Enabled = false;
+                            btnAddSave.Enabled = false;
+                            btnDelete.Enabled = false;
+                        }
+                        else
+                        {
+                            // Set flag if brokerage is part of a buy
+                            PartOfABuy = selectedBrokerageObject.PartOfABuy;
+
+                            // Set flag if brokerage is part of a sale
+                            PartOfASale = selectedBrokerageObject.PartOfASale;
+
+                            // Enable TextBox(es)
+                            datePickerDate.Enabled = true;
+                            datePickerTime.Enabled = true;
+                            txtBoxProvision.Enabled = true;
+                            txtBoxBrokerFee.Enabled = true;
+                            txtBoxTraderPlaceFee.Enabled = true;
+                            txtBoxReduction.Enabled = true;
+                            txtBoxDocument.Enabled = true;
+
+                            // Enable Button(s)
+                            btnDocumentBrowse.Enabled = true;
+                            btnAddSave.Enabled = true;
+                            btnDelete.Enabled = true;
+                        }
+
+                        // Rename button
+                        btnAddSave.Text =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Save",
+                                LanguageName);
+                        btnAddSave.Image = Resources.button_pencil_24;
+
+                        // Rename group box
+                        grpBoxAdd.Text =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Edit_Caption",
+                                LanguageName);
+
+                        // Store DataGridView instance
+                        SelectedDataGridView = (DataGridView)sender;
+
+                        // Format the input value
+                        FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
                     }
                     else
                     {
-                        datePickerDate.Value = Convert.ToDateTime(SelectedDate);
-                        datePickerTime.Value = Convert.ToDateTime(SelectedDate);
-                        chkBoxBuyPart.CheckState = CheckState.Unchecked;
-                        chkBoxSalePart.CheckState = CheckState.Unchecked;
-                        txtBoxProvision.Text = string.Empty;
-                        txtBoxBrokerFee.Text = string.Empty;
-                        txtBoxTraderPlaceFee.Text = string.Empty;
-                        txtBoxReduction.Text = string.Empty;
-                        txtBoxBrokerage.Text = curItem[0].Cells[2].Value.ToString();
-                        txtBoxDocument.Text = string.Empty;
-                    }
-
-                    // Set brokerage values
-                    if (selectedBrokerageObject.PartOfABuy || selectedBrokerageObject.PartOfASale)
-                    {
-                        // Set flag if brokerage is part of a buy
-                        PartOfABuy = selectedBrokerageObject.PartOfABuy;
-
-                        // Set flag if brokerage is part of a sale
-                        PartOfASale = selectedBrokerageObject.PartOfASale;
-
-                        // Disable TextBox(es)
+                        // Reset and disable date time picker
+                        datePickerDate.Value = DateTime.Now;
                         datePickerDate.Enabled = false;
+                        datePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
                         datePickerTime.Enabled = false;
+
+                        // Reset check boxes
+                        chkBoxBuyPart.CheckState = CheckState.Unchecked;
+                        chkBoxBuyPart.Enabled = false;
+                        chkBoxSalePart.CheckState = CheckState.Unchecked;
+                        chkBoxSalePart.Enabled = false;
+
+                        // Reset and disable text boxes
+                        txtBoxProvision.Text = string.Empty;
                         txtBoxProvision.Enabled = false;
+                        txtBoxBrokerFee.Text = string.Empty;
                         txtBoxBrokerFee.Enabled = false;
+                        txtBoxTraderPlaceFee.Text = string.Empty;
                         txtBoxTraderPlaceFee.Enabled = false;
+                        txtBoxBrokerage.Text = string.Empty;
+                        txtBoxReduction.Text = string.Empty;
                         txtBoxReduction.Enabled = false;
+                        txtBoxBrokerageReduction.Text = string.Empty;
+                        txtBoxDocument.Text = string.Empty;
                         txtBoxDocument.Enabled = false;
 
-                        // Enable Button(s)
+                        // Reset status label message text
+                        toolStripStatusLabelMessageBrokerageEdit.Text = string.Empty;
+
+                        // Disable Button(s)
                         btnDocumentBrowse.Enabled = false;
                         btnAddSave.Enabled = false;
                         btnDelete.Enabled = false;
+
+                        Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/SelectionChangeFailed", LanguageName),
+                            Language, LanguageName,
+                            Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError,
+                            (int)FrmMain.EComponentLevels.Application);
                     }
-                    else
-                    {
-                        // Set flag if brokerage is part of a buy
-                        PartOfABuy = selectedBrokerageObject.PartOfABuy;
-
-                        // Set flag if brokerage is part of a sale
-                        PartOfASale = selectedBrokerageObject.PartOfASale;
-
-                        // Enable TextBox(es)
-                        datePickerDate.Enabled = true;
-                        datePickerTime.Enabled = true;
-                        txtBoxProvision.Enabled = true;
-                        txtBoxBrokerFee.Enabled = true;
-                        txtBoxTraderPlaceFee.Enabled = true;
-                        txtBoxReduction.Enabled = true;
-                        txtBoxDocument.Enabled = true;
-
-                        // Enable Button(s)
-                        btnDocumentBrowse.Enabled = true;
-                        btnAddSave.Enabled = true;
-                        btnDelete.Enabled = true;
-                    }
-
-                    // Rename button
-                    btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Save", LanguageName);
-                    btnAddSave.Image = Resources.button_pencil_24;
-
-                    // Rename group box
-                    grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Edit_Caption", LanguageName);
-
-                    // Store DataGridView instance
-                    SelectedDataGridView = (DataGridView)sender;
-
-                    // Format the input value
-                    FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
                 }
                 else
                 {
                     // Rename button
-                    btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Add", LanguageName);
+                    btnAddSave.Text =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Add",
+                            LanguageName);
                     btnAddSave.Image = Resources.button_add_24;
 
                     // Rename group box
-                    grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Add_Caption", LanguageName);
+                    grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Add_Caption",
+                        LanguageName);
 
                     // Disable button(s)
                     btnDelete.Enabled = false;
@@ -1885,6 +1931,10 @@ namespace SharePortfolioManager.BrokeragesForm.View
                     // Enable Button(s)
                     btnAddSave.Enabled = true;
                     btnDocumentBrowse.Enabled = true;
+
+                    // Enable date time picker
+                    datePickerDate.Enabled = true;
+                    datePickerTime.Enabled = true;
 
                     // Enabled TextBox(es)
                     datePickerDate.Enabled = true;
@@ -1900,15 +1950,13 @@ namespace SharePortfolioManager.BrokeragesForm.View
             }
             catch (Exception ex)
             {
+                tabCtrlBrokerage.SelectedIndex = 0;
+
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/SelectionChangeFailed", LanguageName),
                    Language, LanguageName,
                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
                    ex);
-
-                ResetInputValues();
-
-                OnShowBrokerage();
             }
         }
 
@@ -1990,7 +2038,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                                 // Set flag to save the share object.
                                 SaveFlag = true;
 
-                                ResetInputValues();
+                                ResetValues();
                                 OnShowBrokerage();
 
                                 Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,

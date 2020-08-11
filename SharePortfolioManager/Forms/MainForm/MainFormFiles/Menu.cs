@@ -105,7 +105,14 @@ namespace SharePortfolioManager
             }
             else
             {
-                // TODO Error logging
+                var dlgPortfolioDirectoryCreationFailed = new OwnMessageBox(
+                    Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
+                        (int)EOwnMessageBoxInfoType.Info],
+                    Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/PortfolioDirectoryCreationFailed", LanguageName),
+                    Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", LanguageName),
+                    Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", LanguageName));
+
+                dlgPortfolioDirectoryCreationFailed.ShowDialog();
             }
         }
 
@@ -202,11 +209,6 @@ namespace SharePortfolioManager
                         dgvPortfolioFinalValue.SelectedRows[0].Index)
                     {
                         dgvPortfolioFinalValue.Rows[dgvPortfolioFinalValue.SelectedRows[0].Index].Selected = true;
-                        // TODO
-                        //UpdateShareDetails();
-                        //UpdateDividendDetails();
-                        //UpdateBrokerageDetails();
-                        //UpdateProfitLossDetails();
                     }
                 }
 

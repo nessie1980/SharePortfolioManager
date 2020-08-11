@@ -35,7 +35,7 @@
             this.lblWebSite = new System.Windows.Forms.Label();
             this.txtBoxWebSite = new System.Windows.Forms.TextBox();
             this.lblVolume = new System.Windows.Forms.Label();
-            this.lblDepositUnit = new System.Windows.Forms.Label();
+            this.lblPurchaseUnit = new System.Windows.Forms.Label();
             this.lblVolumeUnit = new System.Windows.Forms.Label();
             this.lblPurchase = new System.Windows.Forms.Label();
             this.lblPurchaseValue = new System.Windows.Forms.Label();
@@ -189,15 +189,15 @@
             // 
             // lblDepositUnit
             // 
-            this.lblDepositUnit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblDepositUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDepositUnit.Location = new System.Drawing.Point(743, 97);
-            this.lblDepositUnit.Margin = new System.Windows.Forms.Padding(1);
-            this.lblDepositUnit.Name = "lblDepositUnit";
-            this.lblDepositUnit.Size = new System.Drawing.Size(75, 22);
-            this.lblDepositUnit.TabIndex = 21;
-            this.lblDepositUnit.Text = "_lblDepositUnit";
-            this.lblDepositUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblPurchaseUnit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblPurchaseUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPurchaseUnit.Location = new System.Drawing.Point(743, 97);
+            this.lblPurchaseUnit.Margin = new System.Windows.Forms.Padding(1);
+            this.lblPurchaseUnit.Name = "lblPurchaseUnit";
+            this.lblPurchaseUnit.Size = new System.Drawing.Size(75, 22);
+            this.lblPurchaseUnit.TabIndex = 21;
+            this.lblPurchaseUnit.Text = "_lblDepositUnit";
+            this.lblPurchaseUnit.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblVolumeUnit
             // 
@@ -459,7 +459,7 @@
             this.tblLayPnlEditShareInput.Controls.Add(this.chkBoxUpdate, 1, 6);
             this.tblLayPnlEditShareInput.Controls.Add(this.lblVolumeValue, 1, 5);
             this.tblLayPnlEditShareInput.Controls.Add(this.lblVolumeUnit, 3, 5);
-            this.tblLayPnlEditShareInput.Controls.Add(this.lblDepositUnit, 3, 4);
+            this.tblLayPnlEditShareInput.Controls.Add(this.lblPurchaseUnit, 3, 4);
             this.tblLayPnlEditShareInput.Controls.Add(this.lblPurchaseValue, 1, 4);
             this.tblLayPnlEditShareInput.Controls.Add(this.lblVolume, 0, 5);
             this.tblLayPnlEditShareInput.Controls.Add(this.lblPurchase, 0, 4);
@@ -929,7 +929,7 @@
         private System.Windows.Forms.Label lblWebSite;
         private System.Windows.Forms.TextBox txtBoxWebSite;
         private System.Windows.Forms.Label lblVolume;
-        private System.Windows.Forms.Label lblDepositUnit;
+        private System.Windows.Forms.Label lblPurchaseUnit;
         private System.Windows.Forms.Label lblVolumeUnit;
         private System.Windows.Forms.Label lblPurchase;
         private System.Windows.Forms.Label lblPurchaseValue;

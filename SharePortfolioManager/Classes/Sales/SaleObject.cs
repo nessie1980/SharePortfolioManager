@@ -142,7 +142,8 @@ namespace SharePortfolioManager.Classes.Sales
         public string VolumeAsStr => Volume > 0
             ? Helper.FormatDecimal(_volume, Helper.CurrencyFiveLength, false,
                 Helper.CurrencyTwoFixLength)
-            : @"0,0";
+            : Helper.FormatDecimal(0, Helper.CurrencyFiveLength, false,
+                    Helper.CurrencyTwoFixLength);
 
         [Browsable(false)] public List<SaleBuyDetails> SaleBuyDetails = new List<SaleBuyDetails>();
 
@@ -163,7 +164,8 @@ namespace SharePortfolioManager.Classes.Sales
         public string SalePriceAsStr => SalePrice > 0
             ? Helper.FormatDecimal(_salePrice, Helper.CurrencyFiveLength, false,
                 Helper.CurrencyTwoFixLength)
-            : @"0,0";
+            : Helper.FormatDecimal(0, Helper.CurrencyFiveLength, false,
+                    Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal TaxAtSource
@@ -185,7 +187,8 @@ namespace SharePortfolioManager.Classes.Sales
         public string TaxAtSourceAsStr => TaxAtSource > 0
             ? Helper.FormatDecimal(_taxAtSource, Helper.CurrencyTwoLength, true,
                 Helper.CurrencyTwoFixLength)
-            : @"0,0";
+            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true,
+                    Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal CapitalGainsTax
@@ -207,7 +210,8 @@ namespace SharePortfolioManager.Classes.Sales
         public string CapitalGainsTaxAsStr => CapitalGainsTax > 0
             ? Helper.FormatDecimal(_capitalGainsTax, Helper.CurrencyTwoLength, true,
                 Helper.CurrencyTwoFixLength)
-            : @"0,0";
+            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true,
+                    Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal SolidarityTax
@@ -229,8 +233,9 @@ namespace SharePortfolioManager.Classes.Sales
         public string SolidarityTaxAsStr => SolidarityTax > 0
             ? Helper.FormatDecimal(_solidarityTax, Helper.CurrencyTwoLength, true,
                 Helper.CurrencyTwoFixLength)
-            : @"0,0";
-
+            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true,
+                    Helper.CurrencyTwoFixLength);
+        
         [Browsable(false)]
         public decimal TaxSum
         {
@@ -274,7 +279,8 @@ namespace SharePortfolioManager.Classes.Sales
         public string ProvisionAsStr => Provision > 0
             ? Helper.FormatDecimal(Provision, Helper.CurrencyFiveLength, false,
                 Helper.CurrencyTwoFixLength)
-            : @"0,0";
+            : Helper.FormatDecimal(0, Helper.CurrencyFiveLength, false,
+                    Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal BrokerFee
@@ -292,7 +298,8 @@ namespace SharePortfolioManager.Classes.Sales
         public string BrokerFeeAsStr => BrokerFee > 0
             ? Helper.FormatDecimal(BrokerFee, Helper.CurrencyFiveLength, false,
                 Helper.CurrencyTwoFixLength)
-            : @"0,0";
+            : Helper.FormatDecimal(0, Helper.CurrencyFiveLength, false,
+                    Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal TraderPlaceFee
@@ -310,7 +317,8 @@ namespace SharePortfolioManager.Classes.Sales
         public string TraderPlaceFeeAsStr => TraderPlaceFee > 0
             ? Helper.FormatDecimal(TraderPlaceFee, Helper.CurrencyFiveLength, false,
                 Helper.CurrencyTwoFixLength)
-            : @"0,0";
+            : Helper.FormatDecimal(0, Helper.CurrencyFiveLength, false,
+                    Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal Reduction
@@ -328,7 +336,8 @@ namespace SharePortfolioManager.Classes.Sales
         public string ReductionAsStr => Reduction > 0
             ? Helper.FormatDecimal(Reduction, Helper.CurrencyFiveLength, false,
                 Helper.CurrencyTwoFixLength)
-            : @"0,0";
+            : Helper.FormatDecimal(0, Helper.CurrencyFiveLength, false,
+                    Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal Brokerage
@@ -348,7 +357,8 @@ namespace SharePortfolioManager.Classes.Sales
         public string BrokerageAsStr => Brokerage > 0
             ? Helper.FormatDecimal(Brokerage, Helper.CurrencyFiveLength, false,
                 Helper.CurrencyTwoFixLength)
-            : @"0,0";
+            : Helper.FormatDecimal(0, Helper.CurrencyFiveLength, false,
+                    Helper.CurrencyTwoFixLength);
 
         #endregion Brokerage values
 
@@ -361,7 +371,8 @@ namespace SharePortfolioManager.Classes.Sales
         public string BuyValueAsStr => BuyValue > 0
             ? Helper.FormatDecimal(BuyValue, Helper.CurrencyTwoLength, true,
                 Helper.CurrencyTwoFixLength)
-            : @"0,0";
+            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true,
+                    Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal BuyValueReduction { get; internal set; } = -1;
@@ -370,7 +381,8 @@ namespace SharePortfolioManager.Classes.Sales
         public string BuyValueReductionAsStr => BuyValueReduction > 0
             ? Helper.FormatDecimal(BuyValueReduction, Helper.CurrencyTwoLength, true,
                 Helper.CurrencyTwoFixLength)
-            : @"0,0";
+            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true,
+                    Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal BuyValueBrokerage { get; internal set; } = -1;
@@ -379,7 +391,8 @@ namespace SharePortfolioManager.Classes.Sales
         public string BuyValueBrokerageAsStr => BuyValueBrokerage > 0
             ? Helper.FormatDecimal(BuyValueBrokerage, Helper.CurrencyTwoLength, true,
                 Helper.CurrencyTwoFixLength)
-            : @"0,0";
+            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true,
+                    Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal BuyValueBrokerageReduction { get; internal set; } = -1;
@@ -388,7 +401,8 @@ namespace SharePortfolioManager.Classes.Sales
         public string BuyValueBrokerageReductionAsStr => BuyValueBrokerageReduction > 0
             ? Helper.FormatDecimal(BuyValueBrokerageReduction, Helper.CurrencyTwoLength, true,
                 Helper.CurrencyTwoFixLength)
-            : @"0,0";
+            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true,
+                    Helper.CurrencyTwoFixLength);
 
         #endregion Buy values
 
@@ -401,7 +415,8 @@ namespace SharePortfolioManager.Classes.Sales
         public string ProfitLossAsStr => ProfitLoss > 0
             ? Helper.FormatDecimal(ProfitLoss, Helper.CurrencyTwoLength,
                 true, Helper.CurrencyTwoFixLength)
-            : @"0,0";
+            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength,
+                    true, Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal ProfitLossBrokerage { get; internal set; }
@@ -410,7 +425,8 @@ namespace SharePortfolioManager.Classes.Sales
         public string ProfitLossBrokerageAsStr => ProfitLossBrokerage > 0
             ? Helper.FormatDecimal(ProfitLossBrokerage, Helper.CurrencyTwoLength,
                 true, Helper.CurrencyTwoFixLength)
-            : @"0,0";
+            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength,
+                    true, Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal ProfitLossReduction { get; internal set; }
@@ -419,7 +435,8 @@ namespace SharePortfolioManager.Classes.Sales
         public string ProfitLossReductionAsStr => ProfitLossReduction > 0
             ? Helper.FormatDecimal(ProfitLossReduction, Helper.CurrencyTwoLength,
                 true, Helper.CurrencyTwoFixLength)
-            : @"0,0";
+            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength,
+                    true, Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal ProfitLossBrokerageReduction { get; internal set; }
@@ -428,7 +445,8 @@ namespace SharePortfolioManager.Classes.Sales
         public string ProfitLossBrokerageReductionAsStr => ProfitLossBrokerageReduction > 0
             ? Helper.FormatDecimal(ProfitLossBrokerageReduction, Helper.CurrencyTwoLength,
                 true, Helper.CurrencyTwoFixLength)
-            : @"0,0";
+            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength,
+                    true, Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal Payout { get; internal set; }
@@ -437,7 +455,8 @@ namespace SharePortfolioManager.Classes.Sales
         public string PayoutAsStr => Payout > 0
             ? Helper.FormatDecimal(Payout, Helper.CurrencyTwoLength, true,
                 Helper.CurrencyTwoFixLength)
-            : @"0,0";
+            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true,
+                    Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal PayoutBrokerage { get; internal set; }
@@ -446,7 +465,8 @@ namespace SharePortfolioManager.Classes.Sales
         public string PayoutBrokerageAsStr => PayoutBrokerage > 0
             ? Helper.FormatDecimal(PayoutBrokerage, Helper.CurrencyTwoLength, true,
                 Helper.CurrencyTwoFixLength)
-            : @"0,0";
+            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true,
+                    Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal PayoutReduction { get; internal set; }
@@ -455,7 +475,8 @@ namespace SharePortfolioManager.Classes.Sales
         public string PayoutReductionAsStr => PayoutReduction > 0
             ? Helper.FormatDecimal(PayoutReduction, Helper.CurrencyTwoLength, true,
                 Helper.CurrencyTwoFixLength)
-            : @"0,0";
+            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true,
+                    Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal PayoutBrokerageReduction { get; internal set; }
@@ -464,7 +485,8 @@ namespace SharePortfolioManager.Classes.Sales
         public string PayoutBrokerageReductionAsStr => PayoutBrokerageReduction > 0
             ? Helper.FormatDecimal(PayoutBrokerageReduction, Helper.CurrencyTwoLength, true,
                 Helper.CurrencyTwoFixLength)
-            : @"0,0";
+            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true,
+                    Helper.CurrencyTwoFixLength);
 
         #endregion Profit / loss / payout values
 

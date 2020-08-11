@@ -161,8 +161,63 @@ namespace SharePortfolioManager
 
                     if (editShare.ShowDialog() != DialogResult.OK) return;
 
-                    // Save changed share data and update UI
-                    OnEditShare(SelectedDataGridViewShareIndex);
+                    // Set flag for edit / update flag
+                    EditFlagMarketValue = true;
+
+                    var tempShareObjectFinalValue = ShareObjectListFinalValue[SelectedDataGridViewShareIndex];
+
+                    // Save the share values to the XML
+                    if (ShareObjectFinalValue.SaveShareObject(ShareObjectListFinalValue[SelectedDataGridViewShareIndex],
+                        ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio, _portfolioFileName, 
+                        out var exception))
+                    {
+                        // Sort portfolio list in order of the share names
+                        ShareObjectListFinalValue.Sort(new ShareObjectListComparer());
+                        ShareObjectListMarketValue.Sort(new ShareObjectListComparer());
+
+                        // Select row of the new list index
+                        var searchObject = new ShareObjectSearch(tempShareObjectFinalValue.Wkn);
+                        SelectedDataGridViewShareIndex = ShareObjectListFinalValue.FindIndex(searchObject.Compare);
+
+                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                            Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/EditSaveSuccessful",
+                                LanguageName),
+                            Language, LanguageName,
+                            Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Application);
+
+                        // Reset / refresh DataGridView portfolio BindingSource
+                        DgvPortfolioBindingSourceMarketValue.ResetBindings(false);
+                        DgvPortfolioBindingSourceFinalValue.ResetBindings(false);
+
+                        if (SelectedDataGridViewShareIndex > 0)
+                        {
+                            if (MarketValueOverviewTabSelected)
+                                dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+                            else
+                                dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+                        }
+
+                        // Scroll to the selected row
+                        Helper.ScrollDgvToIndex(
+                            MarketValueOverviewTabSelected ? dgvPortfolioMarketValue : dgvPortfolioFinalValue,
+                            SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex, true);
+                    }
+                    else
+                    {
+                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
+                            Language, LanguageName,
+                            Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Application,
+                            exception);
+                    }
+
+                    // Check if any share set for updating so enable the refresh all button
+                    btnRefreshAll.Enabled =
+                        ShareObjectListFinalValue.Count(p => p.DoInternetUpdate && p.WebSiteConfigurationFound) >= 1;
+
+                    // Throw exception which is thrown in the SaveShareObject function
+                    if (exception != null)
+                        throw exception;
                 }
                 else
                 {
@@ -275,6 +330,8 @@ namespace SharePortfolioManager
             {
                 try
                 {
+                    var deleteFlag = true;
+
                     var ownDeleteMessageBox = new OwnMessageBox(
                         Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
                             (int) EOwnMessageBoxInfoType.Info],
@@ -286,23 +343,7 @@ namespace SharePortfolioManager
                     // Set delete flag
                     DeleteFlagMarketValue = true;
                     DeleteFlagFinalValue = true;
-
-                    #region Delete from XML file
-
-                    // Delete the share from the portfolio XML file
-                    var nodeDelete = Portfolio.SelectSingleNode($"//Share[@WKN='{wkn}']");
-                    nodeDelete?.ParentNode?.RemoveChild(nodeDelete);
-
-                    // Close reader for saving
-                    ReaderPortfolio.Close();
-                    // Save settings
-                    Portfolio.Save(_portfolioFileName);
-                    // Create a new reader
-                    ReaderPortfolio = XmlReader.Create(_portfolioFileName, ReaderSettingsPortfolio);
-                    Portfolio.Load(_portfolioFileName);
-
-                    #endregion Delete from XML file
-
+                    
                     #region Delete from share lists
 
                     // Find index of the share which should be deleted
@@ -321,18 +362,214 @@ namespace SharePortfolioManager
                     // Remove share from the share list
                     if (indexRemove > -1)
                     {
+                        #region Remove share and all objects from this share from the market list 
+
+                        // Delete sale objects in the market list
+                        for (var j = ShareObjectListMarketValue[indexRemove].AllSaleEntries.AllSalesOfTheShareDictionary
+                                .Count - 1;
+                            j >= 0;
+                            j--)
+                        {
+                            var saleObjectSalesYearOfTheShare = ShareObjectListMarketValue[indexRemove].AllSaleEntries
+                                .AllSalesOfTheShareDictionary.ElementAt(j);
+                         
+                            for (var i = saleObjectSalesYearOfTheShare.Value.SaleListYear.Count - 1; i >= 0; i--)
+                            {
+                                var saleObject = saleObjectSalesYearOfTheShare.Value.SaleListYear[i];
+
+                                if (!ShareObjectListMarketValue[indexRemove]
+                                    .RemoveSale(saleObject.Guid, saleObject.DateAsStr))
+                                {
+                                    deleteFlag = false;
+                                    break;
+                                }
+                            }
+                        }
+
+                        // Delete buy objects in the market list
+                        if (deleteFlag)
+                        {
+                            for (var j = ShareObjectListMarketValue[indexRemove].AllBuyEntries
+                                    .AllBuysOfTheShareDictionary.Count - 1;
+                                j >= 0;
+                                j--)
+                            {
+                                var buyObjectBuysYearOfTheShare = ShareObjectListMarketValue[indexRemove]
+                                    .AllBuyEntries.AllBuysOfTheShareDictionary.ElementAt(j);
+
+                                for (var i = buyObjectBuysYearOfTheShare.Value.BuyListYear.Count - 1; i >= 0; i--)
+                                {
+                                    var buyObject = buyObjectBuysYearOfTheShare.Value.BuyListYear[i];
+
+                                    if (!ShareObjectListMarketValue[indexRemove]
+                                        .RemoveBuy(buyObject.Guid, buyObject.DateAsStr))
+                                    {
+                                        deleteFlag = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
                         ShareObjectListMarketValue[indexRemove].Dispose();
                         ShareObjectListMarketValue.RemoveAt(indexRemove);
                         ShareObjectMarketValue = null;
+
+                        #endregion Remove share and all objects from this share from the market list 
+
+                        #region Remove share and all objects from this share from the final list 
+
+                        // Delete dividend objects in the final list
+                        if (deleteFlag)
+                        {
+                            for (var j = ShareObjectListFinalValue[indexRemove].AllDividendEntries
+                                    .AllDividendsOfTheShareDictionary.Count - 1;
+                                j >= 0;
+                                j--)
+                            {
+                                var dividendObjectDividendsYearOfTheShare = ShareObjectListFinalValue[indexRemove]
+                                    .AllDividendEntries
+                                    .AllDividendsOfTheShareDictionary.ElementAt(j);
+
+                                for (var i =
+                                        dividendObjectDividendsYearOfTheShare.Value.DividendListYear.Count - 1;
+                                    i >= 0;
+                                    i--)
+                                {
+                                    var dividendObject =
+                                        dividendObjectDividendsYearOfTheShare.Value.DividendListYear[i];
+
+                                    if (!ShareObjectListFinalValue[indexRemove]
+                                        .RemoveDividend(dividendObject.Guid, dividendObject.DateAsStr))
+                                    {
+                                        deleteFlag = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        // Delete sale objects in the final list
+                        if (deleteFlag)
+                        {
+                            for (var j = ShareObjectListFinalValue[indexRemove].AllSaleEntries
+                                    .AllSalesOfTheShareDictionary.Count - 1;
+                                j >= 0;
+                                j--)
+                            {
+                                var saleObjectSalesYearOfTheShare = ShareObjectListFinalValue[indexRemove]
+                                    .AllSaleEntries
+                                    .AllSalesOfTheShareDictionary.ElementAt(j);
+
+                                for (var i = saleObjectSalesYearOfTheShare.Value.SaleListYear.Count - 1; i >= 0; i--)
+                                {
+                                    var saleObject = saleObjectSalesYearOfTheShare.Value.SaleListYear[i];
+
+                                    if (!ShareObjectListFinalValue[indexRemove]
+                                        .RemoveSale(saleObject.Guid, saleObject.DateAsStr))
+                                    {
+                                        deleteFlag = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        // Delete buy objects in the final list
+                        if (deleteFlag)
+                        {
+                            for (var j = ShareObjectListFinalValue[indexRemove].AllBuyEntries
+                                    .AllBuysOfTheShareDictionary.Count - 1;
+                                j >= 0;
+                                j--)
+                            {
+                                var buyObjectBuysYearOfTheShare = ShareObjectListFinalValue[indexRemove]
+                                    .AllBuyEntries.AllBuysOfTheShareDictionary.ElementAt(j);
+
+                                for (var i = buyObjectBuysYearOfTheShare.Value.BuyListYear.Count - 1; i >= 0; i--)
+                                {
+                                    var buyObject = buyObjectBuysYearOfTheShare.Value.BuyListYear[i];
+
+                                    if (!ShareObjectListFinalValue[indexRemove]
+                                        .RemoveBuy(buyObject.Guid, buyObject.DateAsStr))
+                                    {
+                                        deleteFlag = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        // Delete brokerage objects in the final list
+                        if (deleteFlag)
+                        {
+                            for (var j = ShareObjectListFinalValue[indexRemove].AllBrokerageEntries
+                                    .AllBrokerageReductionOfTheShareDictionary.Count - 1;
+                                j >= 0;
+                                j--)
+                            {
+                                var brokerageObjectBrokeragesYearOfTheShare = ShareObjectListFinalValue[indexRemove]
+                                    .AllBrokerageEntries.AllBrokerageReductionOfTheShareDictionary.ElementAt(j);
+
+                                for (var i = brokerageObjectBrokeragesYearOfTheShare.Value
+                                        .BrokerageReductionListYear.Count - 1;
+                                    i >= 0;
+                                    i--)
+                                {
+                                    var brokerageObject = brokerageObjectBrokeragesYearOfTheShare.Value
+                                        .BrokerageReductionListYear[i];
+
+                                    if (!ShareObjectListFinalValue[indexRemove]
+                                        .RemoveBrokerage(brokerageObject.Guid, brokerageObject.DateAsStr))
+                                    {
+                                        deleteFlag = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
 
                         ShareObjectListFinalValue[indexRemove].Dispose();
                         ShareObjectListFinalValue.RemoveAt(indexRemove);
                         ShareObjectFinalValue = null;
 
-                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/DeleteSuccessful", LanguageName),
-                            Language, LanguageName,
-                            Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Application);
+                        #endregion Remove share and all objects from this share from the final list 
+
+                        #region Delete from XML file
+
+                        if (deleteFlag)
+                        {
+                            // Delete the share from the portfolio XML file
+                            var nodeDelete = Portfolio.SelectSingleNode($"//Share[@WKN='{wkn}']");
+                            nodeDelete?.ParentNode?.RemoveChild(nodeDelete);
+
+                            // Close reader for saving
+                            ReaderPortfolio.Close();
+                            // Save settings
+                            Portfolio.Save(_portfolioFileName);
+                            // Create a new reader
+                            ReaderPortfolio = XmlReader.Create(_portfolioFileName, ReaderSettingsPortfolio);
+                            Portfolio.Load(_portfolioFileName);
+                        }
+
+                        #endregion Delete from XML file
+
+                        // Check if the delete was successful
+                        if (deleteFlag)
+                        {
+                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/DeleteSuccessful",
+                                    LanguageName),
+                                Language, LanguageName,
+                                Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Application);
+                        }
+                        else
+                        {
+                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                Language.GetLanguageTextByXPath(@"/MainForm/Errors/DeleteFailed", LanguageName),
+                                Language, LanguageName,
+                                Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
+                        }
                     }
                     else
                     {
@@ -344,7 +581,7 @@ namespace SharePortfolioManager
 
                     #endregion Delete from share lists
 
-                    // Check if other shares exists
+                    // Check if no other shares exists
                     if (ShareObjectListFinalValue.Count == 0 || ShareObjectListMarketValue.Count == 0)
                     {
                         // Reset share object portfolio values
@@ -447,24 +684,7 @@ namespace SharePortfolioManager
             if (exception != null)
                 throw exception;
 
-            // Check if the DataBinding is already done and
-            // than set the new share to the DataGridView
-            if (DgvPortfolioBindingSourceFinalValue.DataSource == null && dgvPortfolioFinalValue.DataSource == null)
-            {
-                DgvPortfolioBindingSourceFinalValue.DataSource = ShareObjectListFinalValue;
-                dgvPortfolioFinalValue.DataSource = DgvPortfolioBindingSourceFinalValue;
-            }
-            else
-                DgvPortfolioBindingSourceFinalValue.ResetBindings(false);
-
-            if (DgvPortfolioBindingSourceMarketValue.DataSource == null &&
-                dgvPortfolioMarketValue.DataSource == null)
-            {
-                DgvPortfolioBindingSourceMarketValue.DataSource = ShareObjectListMarketValue;
-                dgvPortfolioMarketValue.DataSource = DgvPortfolioBindingSourceMarketValue;
-            }
-            else
-                DgvPortfolioBindingSourceMarketValue.ResetBindings(false);
+            AddSharesToDataGridViews();
         }
         #endregion Button
     }

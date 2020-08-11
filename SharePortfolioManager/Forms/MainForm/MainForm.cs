@@ -275,10 +275,17 @@ namespace SharePortfolioManager
 
         #region Parser
 
-        // Parser for the market values
-        public Parser.Parser ParserMarketValues { get; } = new Parser.Parser();
+        // Debugging of the parser for the market value
+        public bool ParserMarketValuesDebuggingEnable { internal set; get; }
 
-        public Parser.Parser ParserDailyValues { get; } = new Parser.Parser();
+        // Parser for the market values
+        public Parser.Parser ParserMarketValues { internal set; get; }
+
+        // Debugging of the parser for the daily value enabling
+        public bool ParserDailyValuesDebuggingEnable { internal set; get; }
+
+        // Parser for the daily values
+        public Parser.Parser ParserDailyValues { internal set; get; }
 
         #endregion Parser
 
@@ -290,6 +297,7 @@ namespace SharePortfolioManager
 
         public int ChartingAmount = 1;
 
+        public Dictionary<string, Color> ChartingColorDictionary = new Dictionary<string, Color>();
 
         #endregion Charting
 
@@ -307,7 +315,7 @@ namespace SharePortfolioManager
 
         #endregion Share objects
 
-        public List<string> RegexSearchFailedList { get; set; } = new List<string>();
+        public List<InvalidRegexConfigurations> RegexSearchFailedList { get; set; } = new List<InvalidRegexConfigurations>();
 
         #region Selected indices's
 
@@ -347,6 +355,10 @@ namespace SharePortfolioManager
 
             try
             {
+                // Set main form window to the Helper class.
+                // This class use this variable for centering message box windows in center of the main from
+                Helper.FrmMain = this;
+
                 #region Set controls names for the "enable / disable" list
 
                 EnableDisableControlNames.Add("menuStrip1");
@@ -365,18 +377,6 @@ namespace SharePortfolioManager
                 LoadSettings();
 
                 #endregion Load settings
-
-                #region Load language
-
-                LoadLanguage();
-
-                #endregion Load language
-
-                #region Create notify icon
-
-                CreateNotifyIcon();
-
-                #endregion Create notify icon
 
                 #region Logger
 
@@ -402,6 +402,18 @@ namespace SharePortfolioManager
 
                 #endregion Logger
 
+                #region Load language
+
+                LoadLanguage();
+
+                #endregion Load language
+
+                #region Create notify icon
+
+                CreateNotifyIcon();
+
+                #endregion Create notify icon
+
                 #region Parser
 
                 InitializeParser();
@@ -422,14 +434,12 @@ namespace SharePortfolioManager
 
                 #region Load website RegEx configuration from XML
 
-                // TODO show message if an error occured / check if an error is shown
                 WebSiteConfiguration.LoadWebSiteConfigurations(InitFlag);
 
                 #endregion Load website RegEx configuration from XML
 
                 #region Load document RegEx configuration from XML
 
-                // TODO show message if an error occured / check if an error is shown
                 DocumentParsingConfiguration.LoadDocumentParsingConfigurations(InitFlag);
 
                 #endregion Load document RegEx configuration from XML
@@ -871,10 +881,9 @@ namespace SharePortfolioManager
         /// <param name="e">EventArgs</param>
         private void TimerStatusMessageDelete_Tick(object sender, EventArgs e)
         {
-            Helper.EnableDisableControls(true, this, EnableDisableControlNames);
+            Console.WriteLine(@"TimerStatusMessageDelete_Tick");
 
-            // Reset index
-            SelectedDataGridViewShareIndex = 0;
+            Helper.EnableDisableControls(true, this, EnableDisableControlNames);
 
             if (MarketValueOverviewTabSelected)
             {
@@ -1025,9 +1034,6 @@ namespace SharePortfolioManager
             if (SelectedDataGridViewShareIndex >= ShareObject.ObjectCounter - 1 && UpdateAllFlag == false)
             {
                 Helper.EnableDisableControls(true, this, EnableDisableControlNames);
-
-                // Reset index
-                SelectedDataGridViewShareIndex = 0;
 
                 if (MarketValueOverviewTabSelected)
                 {

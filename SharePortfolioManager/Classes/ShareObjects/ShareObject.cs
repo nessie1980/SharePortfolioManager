@@ -980,7 +980,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         }
 
         #endregion Constructors
-
+        
         #region Destructor
 
         /// <summary>

@@ -54,6 +54,8 @@ namespace SharePortfolioManager.ChartForm
 
         public int ChartingAmount;
 
+        public Dictionary<string, Color>ChartingColorDictionary;
+
         public string Title;
 
         #endregion Properties
@@ -69,7 +71,8 @@ namespace SharePortfolioManager.ChartForm
         public FrmChart(bool marketValueOverviewTabSelected,
             ShareObjectFinalValue shareObjectFinalValue, ShareObjectMarketValue shareObjectMarketValue,
             RichTextBox rchTxtBoxStateMessage, Logger logger,
-            Language language, string languageName, ChartingInterval iChartingInterval, int iChartingAmount)
+            Language language, string languageName,
+            ChartingInterval iChartingInterval, int iChartingAmount, Dictionary<string, Color>chartingColorDictionary)
         {
             InitializeComponent();
 
@@ -86,6 +89,7 @@ namespace SharePortfolioManager.ChartForm
 
             ChartingInterval = iChartingInterval;
             ChartingAmount = iChartingAmount;
+            ChartingColorDictionary = chartingColorDictionary;
 
             Charting();
         }
@@ -102,8 +106,7 @@ namespace SharePortfolioManager.ChartForm
                     true,
                     SeriesChartType.Line,
                     2,
-                    // TODO use settings value
-                    Color.Black,
+                    ChartingColorDictionary[DailyValues.ClosingPriceName],
                     DailyValues.DateName,
                     DailyValues.ClosingPriceName
                 );
@@ -112,7 +115,6 @@ namespace SharePortfolioManager.ChartForm
 
                 var chartValues =
                     new ChartingDailyValues.ChartValues(
-                        // TODO Radiobox or Settings.xml
                         ChartingInterval.Month,
                         1,
                         @"dd.MM.yy",
@@ -129,9 +131,8 @@ namespace SharePortfolioManager.ChartForm
                     chartValues,
                     lblNoDataMessage,
                     true,
-                    // TODO use settings value
-                    Color.Blue,
-                    Color.Red
+                    ChartingColorDictionary[Helper.BuyInformationName],
+                    ChartingColorDictionary[Helper.SaleInformationName]
                 );
             }
             catch (Exception ex)

@@ -477,16 +477,32 @@ namespace SharePortfolioManager.Classes.Sales
         /// This function checks if the sale with the given Guid is the last sale of the entries
         /// </summary>
         /// <param name="strGuid">Given GUID</param>
-        /// <returns></returns>
+        /// <returns>Flag if the sale with the given Guid is the last one</returns>
         public bool IsLastSale(string strGuid)
         {
-            if (AllSalesOfTheShareDictionary.Count <= 0) return false;
+            if (GetAllSalesOfTheShare().Count <= 0) return false;
 
-            var lastYearEntries = AllSalesOfTheShareDictionary.Last().Value;
+            // Get current selected sale object
+            var saleObject = GetAllSalesOfTheShare().Find(x => x.Guid == strGuid);
 
-            if (lastYearEntries.SaleListYear.Count <= 0) return false;
+            if (saleObject == null)
+                return false;
 
-            return lastYearEntries.SaleListYear.Last().Guid == strGuid;
+            // Get date of the selected sale object
+            var selectedDate = DateTime.Parse(saleObject.Date);
+
+            // Check if the selected sale object is the last one
+            foreach (var saleObjectCompare in GetAllSalesOfTheShare())
+            {
+                var compareDate = DateTime.Parse(saleObjectCompare.Date);
+
+                // Check if the selected sale object is not the last one
+                if (DateTime.Compare(selectedDate, compareDate) < 0)
+                    return false;
+            }
+
+            // Selected object is the last one
+            return true;
         }
 
         /// <summary>

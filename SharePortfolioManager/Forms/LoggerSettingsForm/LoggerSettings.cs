@@ -193,7 +193,7 @@ namespace SharePortfolioManager.LoggerSettingsForm
                 var cbxSize = new Size(172, 20);
                 const int cbxDropDownHeight = 125;
                 const int iLocationX = 148;
-                const int iLocationYAdd = 30;
+                const int iLocationYAdd = 29;
 
                 // ComboBox for the start color
                 var cbxColorStart = new ComboBoxCustom
@@ -263,7 +263,7 @@ namespace SharePortfolioManager.LoggerSettingsForm
                 cbxColorError.SelectedIndex = cbxColorError.FindStringExact(Logger.LoggerColorList[3].Name);
                 cboBoxColorFatalError.SelectedIndex = cboBoxColorFatalError.FindStringExact(Logger.LoggerColorList[4].Name);
 
-                #endregion Color configuration  
+                #endregion Color configuration
             }
             catch (Exception ex)
             {
@@ -274,6 +274,7 @@ namespace SharePortfolioManager.LoggerSettingsForm
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
+
             }
         }
 
@@ -293,10 +294,16 @@ namespace SharePortfolioManager.LoggerSettingsForm
                 int.TryParse(cbxStoredLogFiles.SelectedItem.ToString(), out var iStoredLogFiles);
                 Logger.CleanUpLogFiles(iStoredLogFiles);
 
-                Helper.AddStatusMessage(toolStripStatusLabel1,
-                    Language.GetLanguageTextByXPath(@"/Logger/LoggerErrors/NotInitialized", LanguageName),
-                    Language, LanguageName,
-                    Color.Black, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+                if(Logger.LoggerState == Logger.ELoggerState.CleanUpLogFilesSuccessful)
+                    Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                        Language.GetLanguageTextByXPath(@"/Logger/LoggerStateMessages/CleanUpLogFilesSuccessful", LanguageName),
+                        Language, LanguageName,
+                        Color.Black, Logger, (int)FrmMain.EStateLevels.Info, (int)FrmMain.EComponentLevels.Application);
+                if (Logger.LoggerState == Logger.ELoggerState.CleanUpLogFilesFailed)
+                    Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                        Language.GetLanguageTextByXPath(@"/Logger/LoggerStateMessages/CleanUpLogFilesFailed", LanguageName),
+                        Language, LanguageName,
+                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
             }
             catch (LoggerException loggerException)
             {
@@ -347,16 +354,16 @@ namespace SharePortfolioManager.LoggerSettingsForm
                         break;
                 }
 
-                Helper.AddStatusMessage(toolStripStatusLabel1,
+                Helper.AddStatusMessage(toolStripStatusLabelMessage,
                     message, Language, LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.Error, (int) FrmMain.EComponentLevels.Application,
                     loggerException);
             }
             catch (Exception ex)
             {
-                Helper.AddStatusMessage(toolStripStatusLabel1,
+                Helper.AddStatusMessage(toolStripStatusLabelMessage,
                     Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/LogFileCleanUpFailed", LanguageName), Language, LanguageName,
-                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application,
+                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
                     ex);
             }
         }

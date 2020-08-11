@@ -205,7 +205,7 @@ namespace SharePortfolioManager.Classes.Buys
 #if DEBUG_BUY_YEARS
             Console.WriteLine(@"");
             Console.WriteLine(@"CalculateValues()");
-            Console.WriteLine(@"BuyYear: {0}", BuyYear);
+            Console.WriteLine(@"BuyYear: {0}", BuyYearAsStr);
             Console.WriteLine(@"BuyValueYear: {0}", BuyValueYear);
             Console.WriteLine(@"BuyValueReductionYear: {0}", BuyValueReductionYear);
             Console.WriteLine(@"BuyValueBrokerageYear: {0}", BuyValueBrokerageYear);

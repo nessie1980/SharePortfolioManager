@@ -57,7 +57,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     $@"{
                             Language.GetLanguageTextByXPath(
                                 @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Caption", LanguageName)
-                        } ({ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotalAsStrUnit})";
+                        } ({ShareObjectFinalValue.AllSaleEntries.SaleProfitLossBrokerageReductionTotalAsStrUnit})";
 
                 #region Reset tab control
 

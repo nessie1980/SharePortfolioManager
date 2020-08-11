@@ -186,11 +186,13 @@ namespace SharePortfolioManager
                 // Save current selected ShareObject via the selected WKN number
                 if (dgvPortfolioMarketValue.SelectedRows.Count != 1 ||
                     dgvPortfolioMarketValue.SelectedRows[0].Cells.Count <= 0 ||
-                    dgvPortfolioMarketValue.SelectedRows[0].Cells[0].Value == null ||
+                    dgvPortfolioMarketValue.SelectedRows[0]
+                        .Cells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex].Value == null ||
                     AddFlagMarketValue) return;
 
                 // Get selected WKN number
-                var selectedWknNumber = dgvPortfolioMarketValue.SelectedRows[0].Cells[0].Value.ToString();
+                var selectedWknNumber = dgvPortfolioMarketValue.SelectedRows[0]
+                    .Cells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex].Value.ToString();
 
                 // Search for the selected ShareObject in the market value list
                 foreach (var shareObjectMarketValue in ShareObjectListMarketValue)
@@ -244,10 +246,12 @@ namespace SharePortfolioManager
                 // Save current selected ShareObject via the selected WKN number
                 if (dgvPortfolioFinalValue.SelectedRows.Count != 1 ||
                     dgvPortfolioFinalValue.SelectedRows[0].Cells.Count <= 0 ||
-                    dgvPortfolioFinalValue.SelectedRows[0].Cells[0].Value == null || AddFlagFinalValue) return;
+                    dgvPortfolioFinalValue.SelectedRows[0].Cells[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                        .Value == null || AddFlagFinalValue) return;
 
                 // Get selected WKN number
-                var selectedWknNumber = dgvPortfolioFinalValue.SelectedRows[0].Cells[0].Value.ToString();
+                var selectedWknNumber = dgvPortfolioFinalValue.SelectedRows[0]
+                    .Cells[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex].Value.ToString();
 
                 // Search for the selected ShareObject in the final value list
                 foreach (var shareObjectFinalValue in ShareObjectListFinalValue)
@@ -443,11 +447,11 @@ namespace SharePortfolioManager
 
             try
             {
-                #region dgvPortfolioMarketValue
-
                 // Check if the share object list has items
                 TextAndImageColumn textImageCol;
                 DataGridViewTextBoxColumn textColumn;
+
+                #region dgvPortfolioMarketValue
 
                 if (ShareObjectListMarketValue != null && ShareObjectListMarketValue.Count > 0)
                 {
@@ -542,100 +546,102 @@ namespace SharePortfolioManager
                 #region dgvPortfolioFinalValue
 
                 // Check if the share object list has items
-                if (ShareObjectListFinalValue == null || ShareObjectListFinalValue.Count <= 0) return;
+                if (ShareObjectListFinalValue != null && ShareObjectListFinalValue.Count > 0)
+                {
+                    dgvPortfolioFinalValue.Columns.Clear();
 
-                dgvPortfolioFinalValue.Columns.Clear();
+                    dgvPortfolioFinalValue.AutoGenerateColumns = false;
 
-                dgvPortfolioFinalValue.AutoGenerateColumns = false;
+                    #region Add datagridview columns
 
-                #region Add datagridview columns
+                    // Wkn
+                    textImageCol = new TextAndImageColumn
+                    {
+                        DataPropertyName = "DgvWkn",
+                        Name = "Wkn",
+                        SortMode = DataGridViewColumnSortMode.NotSortable
+                    };
+                    dgvPortfolioFinalValue.Columns.Add(textImageCol);
+                    // Name
+                    textColumn = new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "DgvNameAsStr",
+                        Name = "Name",
+                        SortMode = DataGridViewColumnSortMode.NotSortable
+                    };
+                    dgvPortfolioFinalValue.Columns.Add(textColumn);
+                    // Volume
+                    textColumn = new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "DgvVolumeAsStr",
+                        Name = "Volume",
+                        SortMode = DataGridViewColumnSortMode.NotSortable
+                    };
+                    dgvPortfolioFinalValue.Columns.Add(textColumn);
+                    // BrokerageDividendWithTaxes
+                    textColumn = new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "DgvBrokerageDividendWithTaxesAsStrUnit",
+                        Name = "BrokerageDividendTotal",
+                        SortMode = DataGridViewColumnSortMode.NotSortable
+                    };
+                    dgvPortfolioFinalValue.Columns.Add(textColumn);
+                    // CurPrevPrice
+                    textColumn = new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "DgvCurPrevPriceAsStrUnit",
+                        Name = "CurPrevPrice",
+                        SortMode = DataGridViewColumnSortMode.NotSortable
+                    };
+                    dgvPortfolioFinalValue.Columns.Add(textColumn);
+                    // PrevDayPerformance
+                    textColumn = new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "DgvPrevDayDifferencePerformanceAsStrUnit",
+                        Name = "PrevDayPerformance",
+                        SortMode = DataGridViewColumnSortMode.NotSortable
+                    };
+                    dgvPortfolioFinalValue.Columns.Add(textColumn);
+                    // ProfitLossPerformanceFinalValue
+                    textImageCol = new TextAndImageColumn
+                    {
+                        DataPropertyName = "DgvProfitLossPerformanceValueAsStrUnit",
+                        Name = "ProfitLossPerformanceFinalValue",
+                        SortMode = DataGridViewColumnSortMode.NotSortable
+                    };
+                    dgvPortfolioFinalValue.Columns.Add(textImageCol);
+                    // PurchaseValueFinalValue
+                    textColumn = new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "DgvPurchaseValueFinalValueAsStrUnit",
+                        Name = "PurchaseValueFinalValue",
+                        SortMode = DataGridViewColumnSortMode.NotSortable
+                    };
+                    dgvPortfolioFinalValue.Columns.Add(textColumn);
+                    // Complete profitLossPerformanceFinalValue
+                    textImageCol = new TextAndImageColumn
+                    {
+                        DataPropertyName = "DgvCompleteProfitLossPerformanceValueAsStrUnit",
+                        Name = "CompleteProfitLossPerformanceFinalValue",
+                        SortMode = DataGridViewColumnSortMode.NotSortable
+                    };
+                    dgvPortfolioFinalValue.Columns.Add(textImageCol);
+                    // Complete purchaseValueFinalValue
+                    textColumn = new DataGridViewTextBoxColumn
+                    {
+                        DataPropertyName = "DgvCompletePurchaseValueMarketValueAsStrUnit",
+                        Name = "CompletePurchaseValueFinalValue",
+                        SortMode = DataGridViewColumnSortMode.NotSortable
+                    };
+                    dgvPortfolioFinalValue.Columns.Add(textColumn);
 
-                // Wkn
-                textImageCol = new TextAndImageColumn
-                {
-                    DataPropertyName = "DgvWkn",
-                    Name = "Wkn",
-                    SortMode = DataGridViewColumnSortMode.NotSortable
-                };
-                dgvPortfolioFinalValue.Columns.Add(textImageCol);
-                // Name
-                textColumn = new DataGridViewTextBoxColumn
-                {
-                    DataPropertyName = "DgvNameAsStr",
-                    Name = "Name",
-                    SortMode = DataGridViewColumnSortMode.NotSortable
-                };
-                dgvPortfolioFinalValue.Columns.Add(textColumn);
-                // Volume
-                textColumn = new DataGridViewTextBoxColumn
-                {
-                    DataPropertyName = "DgvVolumeAsStr",
-                    Name = "Volume",
-                    SortMode = DataGridViewColumnSortMode.NotSortable
-                };
-                dgvPortfolioFinalValue.Columns.Add(textColumn);
-                // BrokerageDividendWithTaxes
-                textColumn = new DataGridViewTextBoxColumn
-                {
-                    DataPropertyName = "DgvBrokerageDividendWithTaxesAsStrUnit",
-                    Name = "BrokerageDividendTotal",
-                    SortMode = DataGridViewColumnSortMode.NotSortable
-                };
-                dgvPortfolioFinalValue.Columns.Add(textColumn);
-                // CurPrevPrice
-                textColumn = new DataGridViewTextBoxColumn
-                {
-                    DataPropertyName = "DgvCurPrevPriceAsStrUnit",
-                    Name = "CurPrevPrice",
-                    SortMode = DataGridViewColumnSortMode.NotSortable
-                };
-                dgvPortfolioFinalValue.Columns.Add(textColumn);
-                // PrevDayPerformance
-                textColumn = new DataGridViewTextBoxColumn
-                {
-                    DataPropertyName = "DgvPrevDayDifferencePerformanceAsStrUnit",
-                    Name = "PrevDayPerformance",
-                    SortMode = DataGridViewColumnSortMode.NotSortable
-                };
-                dgvPortfolioFinalValue.Columns.Add(textColumn);
-                // ProfitLossPerformanceFinalValue
-                textImageCol = new TextAndImageColumn
-                {
-                    DataPropertyName = "DgvProfitLossPerformanceValueAsStrUnit",
-                    Name = "ProfitLossPerformanceFinalValue",
-                    SortMode = DataGridViewColumnSortMode.NotSortable
-                };
-                dgvPortfolioFinalValue.Columns.Add(textImageCol);
-                // PurchaseValueFinalValue
-                textColumn = new DataGridViewTextBoxColumn
-                {
-                    DataPropertyName = "DgvPurchaseValueFinalValueAsStrUnit",
-                    Name = "PurchaseValueFinalValue",
-                    SortMode = DataGridViewColumnSortMode.NotSortable
-                };
-                dgvPortfolioFinalValue.Columns.Add(textColumn);
-                // Complete profitLossPerformanceFinalValue
-                textImageCol = new TextAndImageColumn
-                {
-                    DataPropertyName = "DgvCompleteProfitLossPerformanceValueAsStrUnit",
-                    Name = "CompleteProfitLossPerformanceFinalValue",
-                    SortMode = DataGridViewColumnSortMode.NotSortable
-                };
-                dgvPortfolioFinalValue.Columns.Add(textImageCol);
-                // Complete purchaseValueFinalValue
-                textColumn = new DataGridViewTextBoxColumn
-                {
-                    DataPropertyName = "DgvCompletePurchaseValueMarketValueAsStrUnit",
-                    Name = "CompletePurchaseValueFinalValue",
-                    SortMode = DataGridViewColumnSortMode.NotSortable
-                };
-                dgvPortfolioFinalValue.Columns.Add(textColumn);
+                    #endregion Add datagridview columns
 
-                #endregion Add datagridview columns
+                    DgvPortfolioBindingSourceFinalValue.ResetBindings(false);
+                    DgvPortfolioBindingSourceFinalValue.DataSource = ShareObjectListFinalValue;
+                    dgvPortfolioFinalValue.DataSource = DgvPortfolioBindingSourceFinalValue;
 
-                DgvPortfolioBindingSourceFinalValue.ResetBindings(false);
-                DgvPortfolioBindingSourceFinalValue.DataSource = ShareObjectListFinalValue;
-                dgvPortfolioFinalValue.DataSource = DgvPortfolioBindingSourceFinalValue;
+                }
 
                 #endregion dgvPortfolioFinalValue
             }
@@ -792,7 +798,7 @@ namespace SharePortfolioManager
                             }",
                         ShareObjectListFinalValue[0].PortfolioProfitLossPerformanceAsStrUnit,
                         @"",
-                        ShareObjectListFinalValue[0].PortfolioCompleteProfitLossPerformanceValueAsStrUnit,
+                        ShareObjectListFinalValue[0].PortfolioCompleteProfitLossPerformanceAsStrUnit,
                         @""
                     };
 
@@ -845,59 +851,7 @@ namespace SharePortfolioManager
         /// </summary>
         private void OnDgvPortfolioMarketValue_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
-            Console.WriteLine(@"Rows: {0}", e.RowCount);
-            Console.WriteLine(@"Index: {0}", e.RowIndex);
-            Console.WriteLine(@"");
-
-            for (var index = e.RowIndex; index <= e.RowIndex + e.RowCount - 1; index++)
-            {
-                OnUpdateDataGridViewMarketValuesImages(index);
-            }
-        }
-
-        /// <summary>
-        /// This function updates the images of the given row index in the market values data grid view 
-        /// </summary>
-        /// <param name="index">Index of the row which should be updated.</param>
-        private void OnUpdateDataGridViewMarketValuesImages(int index)
-        {
-            var wkn = dgvPortfolioMarketValue.Rows[index].Cells[0].Value.ToString();
-            var shareObject = ShareObjectListMarketValue.Find(x => (x.Wkn == wkn));
-            ((TextAndImageCell)dgvPortfolioMarketValue.Rows[index].Cells[0]).Image = shareObject.DoInternetUpdate
-                ? Resources.state_update_16
-                : Resources.state_no_update_16;
-
-            if (shareObject.PerformanceValue > 0)
-            {
-                ((TextAndImageCell)dgvPortfolioMarketValue.Rows[index].Cells[5]).Image =
-                    Resources.positiv_development_24;
-            }
-            else if (shareObject.PerformanceValue == 0)
-            {
-                ((TextAndImageCell)dgvPortfolioMarketValue.Rows[index].Cells[5]).Image =
-                    Resources.neutral_development_24;
-            }
-            else
-            {
-                ((TextAndImageCell)dgvPortfolioMarketValue.Rows[index].Cells[5]).Image =
-                    Resources.negativ_development_24;
-            }
-
-            if (shareObject.CompletePerformanceValue > 0)
-            {
-                ((TextAndImageCell)dgvPortfolioMarketValue.Rows[index].Cells[7]).Image =
-                    Resources.positiv_development_24;
-            }
-            else if (shareObject.PerformanceValue == 0)
-            {
-                ((TextAndImageCell)dgvPortfolioMarketValue.Rows[index].Cells[7]).Image =
-                    Resources.neutral_development_24;
-            }
-            else
-            {
-                ((TextAndImageCell)dgvPortfolioMarketValue.Rows[index].Cells[7]).Image =
-                    Resources.negativ_development_24;
-            }
+            OnDgvPortfolioMarketValueImageUpdate(e.RowIndex);
         }
 
         /// <summary>
@@ -906,70 +860,142 @@ namespace SharePortfolioManager
         /// </summary>
         private void OnDgvPortfolioFinalValue_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
-            for (var index = e.RowIndex; index <= e.RowIndex + e.RowCount - 1; index++)
-            {
-                OnUpdateDataGridViewFinalValuesImages(index);
-            }
+            OnDgvPortfolioFinalValueImageUpdate(e.RowIndex);
         }
 
+        #endregion Add shares to data grid view portfolio and configure data grid view footer
+
+        #region Update images in the data grid views
+
         /// <summary>
-        /// This function updates the images of the given row index in the final values data grid view 
+        /// This function updates the images of the currently selected row of the market value data grid view
         /// </summary>
-        /// <param name="index">Index of the row which should be updated.</param>
-        private void OnUpdateDataGridViewFinalValuesImages(int index)
+        /// <param name="rowIndex">Index of the currently selected data grid view row</param>
+        private void OnDgvPortfolioMarketValueImageUpdate(int rowIndex)
         {
-            var wkn = dgvPortfolioFinalValue.Rows[index].Cells[0].Value.ToString();
-            var shareObject = ShareObjectListFinalValue.Find(x => (x.Wkn == wkn));
+            if (dgvPortfolioMarketValue.Rows[rowIndex]
+                .Cells.Count == (int)ColumnIndicesPortfolioMarketValue.ECompleteMarketValueColumnIndex)
             {
-                ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[0]).Image =
+                var wkn = dgvPortfolioMarketValue.Rows[rowIndex]
+                    .Cells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex].Value.ToString();
+                var shareObject = ShareObjectListMarketValue.Find(x => (x.Wkn == wkn));
+                ((TextAndImageCell) dgvPortfolioMarketValue.Rows[rowIndex]
+                        .Cells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]).Image =
                     shareObject.DoInternetUpdate
                         ? Resources.state_update_16
                         : Resources.state_no_update_16;
 
                 if (shareObject.PerformanceValue > 0)
                 {
-                    ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[6]).Image =
+                    ((TextAndImageCell) dgvPortfolioMarketValue.Rows[rowIndex]
+                            .Cells[(int) ColumnIndicesPortfolioMarketValue.EPerformanceColumnIndex]).Image =
                         Resources.positiv_development_24;
                 }
                 else if (shareObject.PerformanceValue == 0)
                 {
-                    ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[6]).Image =
+                    ((TextAndImageCell) dgvPortfolioMarketValue.Rows[rowIndex]
+                            .Cells[(int) ColumnIndicesPortfolioMarketValue.EPerformanceColumnIndex]).Image =
                         Resources.neutral_development_24;
                 }
                 else
                 {
-                    ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[6]).Image =
+                    ((TextAndImageCell) dgvPortfolioMarketValue.Rows[rowIndex]
+                            .Cells[(int) ColumnIndicesPortfolioMarketValue.EPerformanceColumnIndex]).Image =
                         Resources.negativ_development_24;
                 }
 
                 if (shareObject.CompletePerformanceValue > 0)
                 {
-                    ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[8]).Image =
+                    ((TextAndImageCell) dgvPortfolioMarketValue.Rows[rowIndex]
+                            .Cells[(int) ColumnIndicesPortfolioMarketValue.ECompletePerformanceColumnIndex]).Image =
                         Resources.positiv_development_24;
                 }
                 else if (shareObject.PerformanceValue == 0)
                 {
-                    ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[8]).Image =
+                    ((TextAndImageCell) dgvPortfolioMarketValue.Rows[rowIndex]
+                            .Cells[(int) ColumnIndicesPortfolioMarketValue.ECompletePerformanceColumnIndex]).Image =
                         Resources.neutral_development_24;
                 }
                 else
                 {
-                    ((TextAndImageCell) dgvPortfolioFinalValue.Rows[index].Cells[8]).Image =
+                    ((TextAndImageCell) dgvPortfolioMarketValue.Rows[rowIndex]
+                            .Cells[(int) ColumnIndicesPortfolioMarketValue.ECompletePerformanceColumnIndex]).Image =
                         Resources.negativ_development_24;
                 }
             }
         }
 
-        #endregion Add shares to data grid view portfolio and configure data grid view footer
+        /// <summary>
+        /// This function updates the images of the currently selected row of the market value data grid view
+        /// </summary>
+        /// <param name="rowIndex">Index of the currently selected data grid view row</param>
+        private void OnDgvPortfolioFinalValueImageUpdate(int rowIndex)
+        {
+            if (dgvPortfolioFinalValue.Rows[rowIndex]
+                .Cells.Count == (int) ColumnIndicesPortfolioFinalValue.ECompleteFinalValueColumnIndex)
+            {
 
-            #region DataBinding data grid view portfolio
+                var wkn = dgvPortfolioFinalValue.Rows[rowIndex]
+                    .Cells[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex].Value.ToString();
+                var shareObject = ShareObjectListFinalValue.Find(x => (x.Wkn == wkn));
+                {
+                    ((TextAndImageCell) dgvPortfolioFinalValue.Rows[rowIndex]
+                            .Cells[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]).Image =
+                        shareObject.DoInternetUpdate
+                            ? Resources.state_update_16
+                            : Resources.state_no_update_16;
 
-            /// <summary>
-            /// This function does data grid view market value configuration when the data binding is done.
-            /// </summary>
-            /// <param name="sender">Data grid view market value</param>
-            /// <param name="e">DataGridViewBindingCompleteEventArgs</param>
-            private void DgvPortfolioMarketValue_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+                    if (shareObject.PerformanceValue > 0)
+                    {
+                        ((TextAndImageCell) dgvPortfolioFinalValue.Rows[rowIndex]
+                                .Cells[(int) ColumnIndicesPortfolioFinalValue.EPerformanceColumnIndex]).Image =
+                            Resources.positiv_development_24;
+                    }
+                    else if (shareObject.PerformanceValue == 0)
+                    {
+                        ((TextAndImageCell) dgvPortfolioFinalValue.Rows[rowIndex]
+                                .Cells[(int) ColumnIndicesPortfolioFinalValue.EPerformanceColumnIndex]).Image =
+                            Resources.neutral_development_24;
+                    }
+                    else
+                    {
+                        ((TextAndImageCell) dgvPortfolioFinalValue.Rows[rowIndex]
+                                .Cells[(int) ColumnIndicesPortfolioFinalValue.EPerformanceColumnIndex]).Image =
+                            Resources.negativ_development_24;
+                    }
+
+                    if (shareObject.CompletePerformanceValue > 0)
+                    {
+                        ((TextAndImageCell) dgvPortfolioFinalValue.Rows[rowIndex]
+                                .Cells[(int) ColumnIndicesPortfolioFinalValue.ECompletePerformanceColumnIndex]).Image =
+                            Resources.positiv_development_24;
+                    }
+                    else if (shareObject.PerformanceValue == 0)
+                    {
+                        ((TextAndImageCell) dgvPortfolioFinalValue.Rows[rowIndex]
+                                .Cells[(int) ColumnIndicesPortfolioFinalValue.ECompletePerformanceColumnIndex]).Image =
+                            Resources.neutral_development_24;
+                    }
+                    else
+                    {
+                        ((TextAndImageCell) dgvPortfolioFinalValue.Rows[rowIndex]
+                                .Cells[(int) ColumnIndicesPortfolioFinalValue.ECompletePerformanceColumnIndex]).Image =
+                            Resources.negativ_development_24;
+                    }
+                }
+            }
+        }
+
+        #endregion Update images in the data grid views
+
+        #region DataBinding data grid view portfolio
+
+        /// <summary>
+        /// This function does data grid view market value configuration when the data binding is done.
+        /// </summary>
+        /// <param name="sender">Data grid view market value</param>
+        /// <param name="e">DataGridViewBindingCompleteEventArgs</param>
+        private void DgvPortfolioMarketValue_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             try
             {
@@ -1483,11 +1509,6 @@ namespace SharePortfolioManager
                             (int) ColumnIndicesPortfolioFooterFinalValue.EFinalValueColumnIndex].Value =
                         ShareObjectListFinalValue[0].PortfolioPurchaseValueAsStrUnit;
 
-                    // Set brokerage and dividend of all transactions
-                    dgvPortfolioFooterFinalValue.Rows[1].Cells[
-                            (int) ColumnIndicesPortfolioFooterFinalValue.EBrokerageDividendIndex].Value =
-                        ShareObjectListFinalValue[0].PortfolioCompleteBrokerageDividendsAsStrUnit;
-
                     // Set performance value of the current stock volume
                     dgvPortfolioFooterFinalValue.Rows[1].Cells[
                             (int) ColumnIndicesPortfolioFooterFinalValue.EPerformanceColumnIndex].Value =
@@ -1498,15 +1519,25 @@ namespace SharePortfolioManager
                             (int) ColumnIndicesPortfolioFooterFinalValue.EFinalValueColumnIndex].Value =
                         ShareObjectListFinalValue[0].PortfolioFinalValueAsStrUnit;
 
+                    // Set purchase value of all transactions
+                    dgvPortfolioFooterFinalValue.Rows[0].Cells[
+                            (int)ColumnIndicesPortfolioFooterFinalValue.ECompleteFinalValueColumnIndex].Value =
+                        ShareObjectListFinalValue[0].PortfolioCompletePurchaseValueAsStrUnit;
+
                     // Set performance value of all transactions
                     dgvPortfolioFooterFinalValue.Rows[1].Cells[
                             (int) ColumnIndicesPortfolioFooterFinalValue.ECompletePerformanceColumnIndex].Value =
-                        ShareObjectListMarketValue[0].PortfolioCompleteProfitLossPerformanceAsStrUnit;
+                        ShareObjectListFinalValue[0].PortfolioCompleteProfitLossPerformanceAsStrUnit;
 
                     // Set final value of all transactions
                     dgvPortfolioFooterFinalValue.Rows[2].Cells[
                             (int) ColumnIndicesPortfolioFooterFinalValue.ECompleteFinalValueColumnIndex].Value =
-                        ShareObjectListMarketValue[0].PortfolioCompleteMarketValueWithProfitLossAsStrUnit;
+                        ShareObjectListFinalValue[0].PortfolioCompleteFinalValueAsStrUnit;
+
+                    // Set brokerage and dividend of all transactions
+                    dgvPortfolioFooterFinalValue.Rows[1].Cells[
+                            (int)ColumnIndicesPortfolioFooterFinalValue.EBrokerageDividendIndex].Value =
+                        ShareObjectListFinalValue[0].PortfolioCompleteBrokerageDividendsAsStrUnit;
                 }
 
                 #endregion dgvPortfolioFinalValue
@@ -1668,7 +1699,7 @@ namespace SharePortfolioManager
                 FrmChart = new FrmChart(MarketValueOverviewTabSelected,
                     ShareObjectListFinalValue[rowIndex], ShareObjectListMarketValue[rowIndex],
                     rchTxtBoxStateMessage, Logger, Language, LanguageName,
-                    ChartingInterval.Year, 1);
+                    ChartingInterval.Year, 1, ChartingColorDictionary);
 
             // Set window title
             FrmChart.Text = ShareObjectListFinalValue[rowIndex].Name;
@@ -1742,7 +1773,7 @@ namespace SharePortfolioManager
                     // Create ShareDetails form
                     FrmShareDetailsForm = new FrmShareDetails(MarketValueOverviewTabSelected,
                         ShareObjectFinalValue, ShareObjectMarketValue,
-                        rchTxtBoxStateMessage, Logger,
+                        rchTxtBoxStateMessage, Logger, ChartingColorDictionary,
                         Language, LanguageName);
 
                     // Set location and size for the chart window

@@ -181,7 +181,7 @@
             this.txtBoxWebSite.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxWebSite.Name = "txtBoxWebSite";
             this.txtBoxWebSite.Size = new System.Drawing.Size(522, 22);
-            this.txtBoxWebSite.TabIndex = 5;
+            this.txtBoxWebSite.TabIndex = 7;
             this.txtBoxWebSite.TextChanged += new System.EventHandler(this.OnTxtBoxWebSite_TextChanged);
             // 
             // lblBuyValue
@@ -236,7 +236,7 @@
             this.txtBoxVolume.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxVolume.Name = "txtBoxVolume";
             this.txtBoxVolume.Size = new System.Drawing.Size(522, 22);
-            this.txtBoxVolume.TabIndex = 10;
+            this.txtBoxVolume.TabIndex = 12;
             this.txtBoxVolume.TextChanged += new System.EventHandler(this.OnTxtBoxVolume_TextChanged);
             this.txtBoxVolume.Leave += new System.EventHandler(this.OnTxtBoxVolume_Leave);
             // 
@@ -251,7 +251,7 @@
             this.btnSave.Margin = new System.Windows.Forms.Padding(1);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(178, 31);
-            this.btnSave.TabIndex = 18;
+            this.btnSave.TabIndex = 20;
             this.btnSave.Text = "_Add";
             this.btnSave.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSave.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -269,7 +269,7 @@
             this.btnCancel.Margin = new System.Windows.Forms.Padding(1);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(178, 31);
-            this.btnCancel.TabIndex = 19;
+            this.btnCancel.TabIndex = 21;
             this.btnCancel.Text = "_Cancel";
             this.btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnCancel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -315,7 +315,7 @@
             this.cboBoxCultureInfo.Margin = new System.Windows.Forms.Padding(1);
             this.cboBoxCultureInfo.Name = "cboBoxCultureInfo";
             this.cboBoxCultureInfo.Size = new System.Drawing.Size(522, 22);
-            this.cboBoxCultureInfo.TabIndex = 4;
+            this.cboBoxCultureInfo.TabIndex = 6;
             this.cboBoxCultureInfo.SelectedIndexChanged += new System.EventHandler(this.CboBoxCultureInfo_SelectedIndexChanged);
             // 
             // lblVolumeUnit
@@ -367,7 +367,7 @@
             this.txtBoxDocument.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxDocument.Name = "txtBoxDocument";
             this.txtBoxDocument.Size = new System.Drawing.Size(522, 22);
-            this.txtBoxDocument.TabIndex = 16;
+            this.txtBoxDocument.TabIndex = 18;
             this.txtBoxDocument.TextChanged += new System.EventHandler(this.OnTxtBoxDocument_TextChanged);
             this.txtBoxDocument.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragDrop);
             this.txtBoxDocument.DragEnter += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragEnter);
@@ -384,7 +384,7 @@
             this.btnDocumentBrowse.Margin = new System.Windows.Forms.Padding(1);
             this.btnDocumentBrowse.Name = "btnDocumentBrowse";
             this.btnDocumentBrowse.Size = new System.Drawing.Size(83, 22);
-            this.btnDocumentBrowse.TabIndex = 17;
+            this.btnDocumentBrowse.TabIndex = 19;
             this.btnDocumentBrowse.Text = "...";
             this.btnDocumentBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnDocumentBrowse.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -444,12 +444,12 @@
             this.tblLayPnlAddShareButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblLayPnlAddShareButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
             this.tblLayPnlAddShareButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
-            this.tblLayPnlAddShareButtons.Controls.Add(this.btnSave, 1, 0);
-            this.tblLayPnlAddShareButtons.Controls.Add(this.btnCancel, 2, 0);
+            this.tblLayPnlAddShareButtons.Controls.Add(this.btnCancel, 2, 1);
+            this.tblLayPnlAddShareButtons.Controls.Add(this.btnSave, 1, 1);
             this.tblLayPnlAddShareButtons.Dock = System.Windows.Forms.DockStyle.Top;
             this.tblLayPnlAddShareButtons.Location = new System.Drawing.Point(3, 498);
             this.tblLayPnlAddShareButtons.Name = "tblLayPnlAddShareButtons";
-            this.tblLayPnlAddShareButtons.RowCount = 1;
+            this.tblLayPnlAddShareButtons.RowCount = 2;
             this.tblLayPnlAddShareButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblLayPnlAddShareButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33F));
             this.tblLayPnlAddShareButtons.Size = new System.Drawing.Size(819, 33);
@@ -466,6 +466,9 @@
             this.tblLayPnlAddShareInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tblLayPnlAddShareInput.Controls.Add(this.lblStockMarketLaunchDate, 0, 2);
             this.tblLayPnlAddShareInput.Controls.Add(this.lblWkn, 0, 0);
+            this.tblLayPnlAddShareInput.Controls.Add(this.lblBrokerageUnit, 4, 16);
+            this.tblLayPnlAddShareInput.Controls.Add(this.txtBoxBrokerage, 1, 16);
+            this.tblLayPnlAddShareInput.Controls.Add(this.lblBrokerage, 0, 16);
             this.tblLayPnlAddShareInput.Controls.Add(this.txtBoxWkn, 1, 0);
             this.tblLayPnlAddShareInput.Controls.Add(this.lblName, 0, 1);
             this.tblLayPnlAddShareInput.Controls.Add(this.txtBoxName, 1, 1);
@@ -475,9 +478,6 @@
             this.tblLayPnlAddShareInput.Controls.Add(this.lblDocument, 0, 19);
             this.tblLayPnlAddShareInput.Controls.Add(this.btnDocumentBrowse, 4, 19);
             this.tblLayPnlAddShareInput.Controls.Add(this.lblBuyValueBrokerageReductionUnit, 4, 18);
-            this.tblLayPnlAddShareInput.Controls.Add(this.lblBrokerageUnit, 4, 17);
-            this.tblLayPnlAddShareInput.Controls.Add(this.lblReductionUnit, 4, 16);
-            this.tblLayPnlAddShareInput.Controls.Add(this.picBoxReductionParseState, 5, 16);
             this.tblLayPnlAddShareInput.Controls.Add(this.picBoxTraderPlaceFeeParseState, 5, 15);
             this.tblLayPnlAddShareInput.Controls.Add(this.lblTraderPlaceFeeValueUnit, 4, 15);
             this.tblLayPnlAddShareInput.Controls.Add(this.lblBrokerFeeValueUnit, 4, 14);
@@ -492,8 +492,6 @@
             this.tblLayPnlAddShareInput.Controls.Add(this.picBoxOrderNumberParseState, 5, 9);
             this.tblLayPnlAddShareInput.Controls.Add(this.picBoxTimeParseState, 5, 8);
             this.tblLayPnlAddShareInput.Controls.Add(this.txtBoxBuyValueBrokerageReduction, 1, 18);
-            this.tblLayPnlAddShareInput.Controls.Add(this.txtBoxBrokerage, 1, 17);
-            this.tblLayPnlAddShareInput.Controls.Add(this.txtBoxReduction, 1, 16);
             this.tblLayPnlAddShareInput.Controls.Add(this.txtBoxTraderPlaceFee, 1, 15);
             this.tblLayPnlAddShareInput.Controls.Add(this.txtBoxBrokerFee, 1, 14);
             this.tblLayPnlAddShareInput.Controls.Add(this.txtBoxProvision, 1, 13);
@@ -510,8 +508,6 @@
             this.tblLayPnlAddShareInput.Controls.Add(this.cbxDividendPayoutInterval, 1, 4);
             this.tblLayPnlAddShareInput.Controls.Add(this.cbxShareType, 1, 3);
             this.tblLayPnlAddShareInput.Controls.Add(this.lblBuyValueBrokerageReduction, 0, 18);
-            this.tblLayPnlAddShareInput.Controls.Add(this.lblBrokerage, 0, 17);
-            this.tblLayPnlAddShareInput.Controls.Add(this.lblReduction, 0, 16);
             this.tblLayPnlAddShareInput.Controls.Add(this.lblTraderPlaceFee, 0, 15);
             this.tblLayPnlAddShareInput.Controls.Add(this.lblBrokerFee, 0, 14);
             this.tblLayPnlAddShareInput.Controls.Add(this.lblProvision, 0, 13);
@@ -526,6 +522,10 @@
             this.tblLayPnlAddShareInput.Controls.Add(this.lblDividendPayoutInterval, 0, 4);
             this.tblLayPnlAddShareInput.Controls.Add(this.lblShareType, 0, 3);
             this.tblLayPnlAddShareInput.Controls.Add(this.dateTimePickerStockMarketLaunch, 1, 2);
+            this.tblLayPnlAddShareInput.Controls.Add(this.lblReduction, 0, 17);
+            this.tblLayPnlAddShareInput.Controls.Add(this.txtBoxReduction, 1, 17);
+            this.tblLayPnlAddShareInput.Controls.Add(this.lblReductionUnit, 4, 17);
+            this.tblLayPnlAddShareInput.Controls.Add(this.picBoxReductionParseState, 5, 17);
             this.tblLayPnlAddShareInput.Dock = System.Windows.Forms.DockStyle.Top;
             this.tblLayPnlAddShareInput.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tblLayPnlAddShareInput.Location = new System.Drawing.Point(3, 18);
@@ -605,7 +605,7 @@
             // 
             this.lblBrokerageUnit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBrokerageUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBrokerageUnit.Location = new System.Drawing.Point(735, 409);
+            this.lblBrokerageUnit.Location = new System.Drawing.Point(735, 385);
             this.lblBrokerageUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblBrokerageUnit.Name = "lblBrokerageUnit";
             this.lblBrokerageUnit.Size = new System.Drawing.Size(58, 22);
@@ -617,7 +617,7 @@
             // 
             this.lblReductionUnit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblReductionUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblReductionUnit.Location = new System.Drawing.Point(735, 385);
+            this.lblReductionUnit.Location = new System.Drawing.Point(735, 409);
             this.lblReductionUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblReductionUnit.Name = "lblReductionUnit";
             this.lblReductionUnit.Size = new System.Drawing.Size(58, 22);
@@ -628,7 +628,7 @@
             // picBoxReductionParseState
             // 
             this.picBoxReductionParseState.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.picBoxReductionParseState.Location = new System.Drawing.Point(797, 387);
+            this.picBoxReductionParseState.Location = new System.Drawing.Point(797, 411);
             this.picBoxReductionParseState.Name = "picBoxReductionParseState";
             this.picBoxReductionParseState.Size = new System.Drawing.Size(19, 18);
             this.picBoxReductionParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -773,7 +773,7 @@
             this.tblLayPnlAddShareInput.SetColumnSpan(this.txtBoxBrokerage, 3);
             this.txtBoxBrokerage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtBoxBrokerage.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxBrokerage.Location = new System.Drawing.Point(211, 409);
+            this.txtBoxBrokerage.Location = new System.Drawing.Point(211, 385);
             this.txtBoxBrokerage.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxBrokerage.Name = "txtBoxBrokerage";
             this.txtBoxBrokerage.ReadOnly = true;
@@ -789,11 +789,11 @@
             this.tblLayPnlAddShareInput.SetColumnSpan(this.txtBoxReduction, 3);
             this.txtBoxReduction.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtBoxReduction.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxReduction.Location = new System.Drawing.Point(211, 385);
+            this.txtBoxReduction.Location = new System.Drawing.Point(211, 409);
             this.txtBoxReduction.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxReduction.Name = "txtBoxReduction";
             this.txtBoxReduction.Size = new System.Drawing.Size(522, 22);
-            this.txtBoxReduction.TabIndex = 15;
+            this.txtBoxReduction.TabIndex = 17;
             this.txtBoxReduction.TextChanged += new System.EventHandler(this.OnTxtBoxReduction_TextChanged);
             this.txtBoxReduction.Leave += new System.EventHandler(this.OnTxtBoxReduction_Leave);
             // 
@@ -807,7 +807,7 @@
             this.txtBoxTraderPlaceFee.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxTraderPlaceFee.Name = "txtBoxTraderPlaceFee";
             this.txtBoxTraderPlaceFee.Size = new System.Drawing.Size(522, 22);
-            this.txtBoxTraderPlaceFee.TabIndex = 14;
+            this.txtBoxTraderPlaceFee.TabIndex = 16;
             this.txtBoxTraderPlaceFee.TextChanged += new System.EventHandler(this.OnTxtBoxTraderPlaceFee_TextChanged);
             this.txtBoxTraderPlaceFee.Leave += new System.EventHandler(this.OnTxtBoxTraderPlaceFee_Leave);
             // 
@@ -821,7 +821,7 @@
             this.txtBoxBrokerFee.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxBrokerFee.Name = "txtBoxBrokerFee";
             this.txtBoxBrokerFee.Size = new System.Drawing.Size(522, 22);
-            this.txtBoxBrokerFee.TabIndex = 13;
+            this.txtBoxBrokerFee.TabIndex = 15;
             this.txtBoxBrokerFee.TextChanged += new System.EventHandler(this.OnTxtBoxBrokerFee_TextChanged);
             this.txtBoxBrokerFee.Leave += new System.EventHandler(this.OnTxtBoxBrokerFee_Leave);
             // 
@@ -835,7 +835,7 @@
             this.txtBoxProvision.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxProvision.Name = "txtBoxProvision";
             this.txtBoxProvision.Size = new System.Drawing.Size(522, 22);
-            this.txtBoxProvision.TabIndex = 12;
+            this.txtBoxProvision.TabIndex = 14;
             this.txtBoxProvision.TextChanged += new System.EventHandler(this.OnTxtBoxProvision_TextChanged);
             this.txtBoxProvision.Leave += new System.EventHandler(this.OnTxtBoxProvision_Leave);
             // 
@@ -849,7 +849,7 @@
             this.txtBoxSharePrice.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxSharePrice.Name = "txtBoxSharePrice";
             this.txtBoxSharePrice.Size = new System.Drawing.Size(522, 22);
-            this.txtBoxSharePrice.TabIndex = 11;
+            this.txtBoxSharePrice.TabIndex = 13;
             this.txtBoxSharePrice.TextChanged += new System.EventHandler(this.OnTxtBoxSharePrice_TextChanged);
             this.txtBoxSharePrice.Leave += new System.EventHandler(this.OnTxtBoxSharePrice_Leave);
             // 
@@ -863,7 +863,7 @@
             this.txtBoxOrderNumber.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxOrderNumber.Name = "txtBoxOrderNumber";
             this.txtBoxOrderNumber.Size = new System.Drawing.Size(522, 22);
-            this.txtBoxOrderNumber.TabIndex = 9;
+            this.txtBoxOrderNumber.TabIndex = 11;
             this.txtBoxOrderNumber.TextChanged += new System.EventHandler(this.OntTxtBoxOrderNumber_TextChanged);
             // 
             // dateTimePickerDate
@@ -874,7 +874,7 @@
             this.dateTimePickerDate.Margin = new System.Windows.Forms.Padding(1);
             this.dateTimePickerDate.Name = "dateTimePickerDate";
             this.dateTimePickerDate.Size = new System.Drawing.Size(248, 22);
-            this.dateTimePickerDate.TabIndex = 7;
+            this.dateTimePickerDate.TabIndex = 9;
             this.dateTimePickerDate.TextChanged += new System.EventHandler(this.DatePickerTime_ValueChanged);
             this.dateTimePickerDate.ValueChanged += new System.EventHandler(this.DatePickerDate_ValueChanged);
             // 
@@ -897,7 +897,7 @@
             this.dateTimePickerTime.Name = "dateTimePickerTime";
             this.dateTimePickerTime.ShowUpDown = true;
             this.dateTimePickerTime.Size = new System.Drawing.Size(248, 22);
-            this.dateTimePickerTime.TabIndex = 8;
+            this.dateTimePickerTime.TabIndex = 10;
             // 
             // txtBoxDailyValuesWebSite
             // 
@@ -908,7 +908,7 @@
             this.txtBoxDailyValuesWebSite.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxDailyValuesWebSite.Name = "txtBoxDailyValuesWebSite";
             this.txtBoxDailyValuesWebSite.Size = new System.Drawing.Size(522, 22);
-            this.txtBoxDailyValuesWebSite.TabIndex = 6;
+            this.txtBoxDailyValuesWebSite.TabIndex = 8;
             this.txtBoxDailyValuesWebSite.TextChanged += new System.EventHandler(this.OnTxtBoxDailyValuesWebSite_TextChanged);
             this.txtBoxDailyValuesWebSite.Leave += new System.EventHandler(this.OnTxtBoxDailyValuesWebSite_Leave);
             // 
@@ -923,7 +923,7 @@
             this.cbxDividendPayoutInterval.Margin = new System.Windows.Forms.Padding(1);
             this.cbxDividendPayoutInterval.Name = "cbxDividendPayoutInterval";
             this.cbxDividendPayoutInterval.Size = new System.Drawing.Size(522, 22);
-            this.cbxDividendPayoutInterval.TabIndex = 3;
+            this.cbxDividendPayoutInterval.TabIndex = 5;
             this.cbxDividendPayoutInterval.SelectedIndexChanged += new System.EventHandler(this.CbxDividendPayoutInterval_SelectedIndexChanged);
             // 
             // cbxShareType
@@ -937,7 +937,7 @@
             this.cbxShareType.Margin = new System.Windows.Forms.Padding(1);
             this.cbxShareType.Name = "cbxShareType";
             this.cbxShareType.Size = new System.Drawing.Size(522, 22);
-            this.cbxShareType.TabIndex = 2;
+            this.cbxShareType.TabIndex = 4;
             this.cbxShareType.SelectedIndexChanged += new System.EventHandler(this.CbxShareType_SelectedIndexChanged);
             // 
             // lblBuyValueBrokerageReduction
@@ -960,7 +960,7 @@
             this.lblBrokerage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblBrokerage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblBrokerage.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBrokerage.Location = new System.Drawing.Point(1, 409);
+            this.lblBrokerage.Location = new System.Drawing.Point(1, 385);
             this.lblBrokerage.Margin = new System.Windows.Forms.Padding(1);
             this.lblBrokerage.Name = "lblBrokerage";
             this.lblBrokerage.Size = new System.Drawing.Size(208, 22);
@@ -974,7 +974,7 @@
             this.lblReduction.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblReduction.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblReduction.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblReduction.Location = new System.Drawing.Point(1, 385);
+            this.lblReduction.Location = new System.Drawing.Point(1, 409);
             this.lblReduction.Margin = new System.Windows.Forms.Padding(1);
             this.lblReduction.Name = "lblReduction";
             this.lblReduction.Size = new System.Drawing.Size(208, 22);
@@ -1115,7 +1115,7 @@
             this.dateTimePickerStockMarketLaunch.Margin = new System.Windows.Forms.Padding(1);
             this.dateTimePickerStockMarketLaunch.Name = "dateTimePickerStockMarketLaunch";
             this.dateTimePickerStockMarketLaunch.Size = new System.Drawing.Size(248, 22);
-            this.dateTimePickerStockMarketLaunch.TabIndex = 73;
+            this.dateTimePickerStockMarketLaunch.TabIndex = 3;
             this.dateTimePickerStockMarketLaunch.ValueChanged += new System.EventHandler(this.OnDateTimePickerStockMarketLaunch_ValueChanged);
             // 
             // ViewShareAdd

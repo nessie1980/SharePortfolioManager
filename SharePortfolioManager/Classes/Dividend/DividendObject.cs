@@ -200,7 +200,8 @@ namespace SharePortfolioManager.Classes.Dividend
             get => _exchangeRatio > 0
                 ? Helper.FormatDecimal(_exchangeRatio, Helper.CurrencyFiveLength, true,
                     Helper.CurrencyTwoFixLength)
-                : @"0,0";
+                :Helper.FormatDecimal(0, Helper.CurrencyFiveLength, true,
+                        Helper.CurrencyTwoFixLength);
             set
             {
                 if (_exchangeRatioAsStr == value)
@@ -243,7 +244,7 @@ namespace SharePortfolioManager.Classes.Dividend
         {
             get => _dividend > 0
                 ? Helper.FormatDecimal(_dividend, Helper.CurrencyFiveLength, true, Helper.CurrencyTwoFixLength)
-                : @"0,0";
+                : Helper.FormatDecimal(0, Helper.CurrencyFiveLength, true, Helper.CurrencyTwoFixLength);
             set
             {
                 if (_dividendAsStr == value)
@@ -277,7 +278,7 @@ namespace SharePortfolioManager.Classes.Dividend
         {
             get => _volume > 0
                 ? Helper.FormatDecimal(_volume, Helper.CurrencyFiveLength, true, Helper.CurrencyTwoFixLength)
-                : @"0,0";
+                : Helper.FormatDecimal(0, Helper.CurrencyFiveLength, true, Helper.CurrencyTwoFixLength);
             set
             {
                 if (_volumeAsStr == value)
@@ -311,7 +312,7 @@ namespace SharePortfolioManager.Classes.Dividend
         {
             get => _taxAtSource > 0
                 ? Helper.FormatDecimal(_taxAtSource, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength)
-                : @"0,0";
+                : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength);
             set
             {
                 if (_taxAtSourceAsStr == value)
@@ -345,7 +346,7 @@ namespace SharePortfolioManager.Classes.Dividend
         {
             get => _capitalGainsTax > 0
                 ? Helper.FormatDecimal(_capitalGainsTax, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength)
-                : @"0,0";
+                : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength);
             set
             {
                 if (_capitalGainsTaxAsStr == value)
@@ -379,7 +380,7 @@ namespace SharePortfolioManager.Classes.Dividend
         {
             get => _solidarityTax > 0
                 ? Helper.FormatDecimal(_solidarityTax, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength)
-                : @"0,0";
+                : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength);
             set
             {
                 if (_solidarityTaxAsStr == value)
@@ -415,7 +416,7 @@ namespace SharePortfolioManager.Classes.Dividend
         {
             get => _taxSum > 0
                 ? Helper.FormatDecimal(_taxSum, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength)
-                : @"0,0";
+                : Helper.FormatDecimal(0, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength);
             set
             {
                 if (_taxSumAsStr == value)
@@ -447,7 +448,7 @@ namespace SharePortfolioManager.Classes.Dividend
         [Browsable(false)]
         public string DividendPayoutAsStr => _dividendPayout > 0
             ? Helper.FormatDecimal(_dividendPayout, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength)
-            : @"0,0";
+            : Helper.FormatDecimal(0, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal DividendPayoutFc
@@ -466,7 +467,7 @@ namespace SharePortfolioManager.Classes.Dividend
         [Browsable(false)]
         public string DividendPayoutFcAsStr => _dividendPayoutFc > 0
             ? Helper.FormatDecimal(_dividendPayoutFc, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength)
-            : @"0,0";
+            : Helper.FormatDecimal(0, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal DividendPayoutWithTaxes
@@ -484,7 +485,7 @@ namespace SharePortfolioManager.Classes.Dividend
         [Browsable(false)]
         public string DividendPayoutWithTaxesAsStr => _dividendPayoutWithTaxes > 0
             ? Helper.FormatDecimal(_dividendPayoutWithTaxes, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength)
-            : @"0,0";
+            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal Yield
@@ -505,7 +506,7 @@ namespace SharePortfolioManager.Classes.Dividend
         {
             get => _yield > 0
                     ? Helper.FormatDecimal(_yield, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength)
-                    : @"0,0";
+                    : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength);
             set
             {
                 if (_yieldAsStr == value)
@@ -539,7 +540,7 @@ namespace SharePortfolioManager.Classes.Dividend
         {
             get => _priceAtPayday > 0
                 ? Helper.FormatDecimal(_priceAtPayday, Helper.CurrencyFiveLength, true, Helper.CurrencyTwoFixLength)
-                : @"0,0";
+                : Helper.FormatDecimal(0, Helper.CurrencyFiveLength, true, Helper.CurrencyTwoFixLength);
             set
             {
                 if (_priceAtPaydayAsStr == value)

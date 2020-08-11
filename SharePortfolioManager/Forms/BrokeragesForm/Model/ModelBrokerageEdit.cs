@@ -66,6 +66,8 @@ namespace SharePortfolioManager.BrokeragesForm.Model
         decimal ReductionDec { get; set; }
         string Brokerage { get; set; }
         decimal BrokerageDec { get; set; }
+        string BrokerageReduction { get; set; }
+        decimal BrokerageReductionDec { get; set; }
         string Document { get; set; }
     }
 
@@ -85,10 +87,12 @@ namespace SharePortfolioManager.BrokeragesForm.Model
         private decimal _brokerFeeDec;
         private string _traderPlaceFee;
         private decimal _traderPlaceFeeDec;
-        private string _reduction;
-        private decimal _reductionDec;
         private string _brokerage;
         private decimal _brokerageDec;
+        private string _reduction;
+        private decimal _reductionDec;
+        private string _brokerageReduction;
+        private decimal _brokerageReductionDec;
         private string _document;
 
         #endregion Fields
@@ -255,6 +259,30 @@ namespace SharePortfolioManager.BrokeragesForm.Model
                 UpdateView = true;
             }
         }
+        public string Brokerage
+        {
+            get => _brokerageDec >= 0 ? Helper.FormatDecimal(_brokerageDec, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength) : _brokerage;
+            set
+            {
+                if (Equals(_brokerage, value))
+                    return;
+                _brokerage = value;
+            }
+
+        }
+
+        public decimal BrokerageDec
+        {
+            get => _brokerageDec;
+            set
+            {
+                if (Equals(_brokerageDec, value))
+                    return;
+                _brokerageDec = value;
+
+                UpdateView = true;
+            }
+        }
 
         public string Reduction
         {
@@ -293,26 +321,26 @@ namespace SharePortfolioManager.BrokeragesForm.Model
             }
         }
 
-        public string Brokerage
+        public string BrokerageReduction
         {
-            get => _brokerageDec >= 0 ? Helper.FormatDecimal(_brokerageDec, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength) : _brokerage;
+            get => _brokerageReductionDec >= 0 ? Helper.FormatDecimal(_brokerageReductionDec, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength) : _brokerageReduction;
             set
             {
-                if (Equals(_brokerage, value))
+                if (Equals(_brokerageReduction, value))
                     return;
-                _brokerage = value;
+                _brokerageReduction = value;
             }
 
         }
 
-        public decimal BrokerageDec
+        public decimal BrokerageReductionDec
         {
-            get => _brokerageDec;
+            get => _brokerageReductionDec;
             set
             {
-                if (Equals(_brokerageDec, value))
+                if (Equals(_brokerageReductionDec, value))
                     return;
-                _brokerageDec = value;
+                _brokerageReductionDec = value;
 
                 UpdateView = true;
             }

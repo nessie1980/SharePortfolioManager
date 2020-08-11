@@ -376,7 +376,7 @@ namespace SharePortfolioManager.DividendForm.Presenter
                         _model.ErrorCode = DividendErrorCode.TaxAtSourceWrongFormat;
                         bErrorFlag = true;
                     }
-                    else if (decTaxAtSource <= 0)
+                    else if (decTaxAtSource < 0)
                     {
                         _model.ErrorCode = DividendErrorCode.TaxAtSourceWrongValue;
                         bErrorFlag = true;
@@ -391,7 +391,7 @@ namespace SharePortfolioManager.DividendForm.Presenter
                         _model.ErrorCode = DividendErrorCode.CapitalGainsTaxWrongFormat;
                         bErrorFlag = true;
                     }
-                    else if (decCapitalGainsTax <= 0)
+                    else if (decCapitalGainsTax < 0)
                     {
                         _model.ErrorCode = DividendErrorCode.CapitalGainsTaxWrongValue;
                         bErrorFlag = true;
@@ -406,7 +406,7 @@ namespace SharePortfolioManager.DividendForm.Presenter
                         _model.ErrorCode = DividendErrorCode.SolidarityTaxWrongFormat;
                         bErrorFlag = true;
                     }
-                    else if (decSolidarityTax <= 0)
+                    else if (decSolidarityTax < 0)
                     {
                         _model.ErrorCode = DividendErrorCode.SolidarityTaxWrongValue;
                         bErrorFlag = true;
@@ -430,7 +430,7 @@ namespace SharePortfolioManager.DividendForm.Presenter
                     bErrorFlag = true;
                 }
 
-                // Check if a given document exists
+                // Check if a given document exists or the given document is already used be a dividend entry
                 if (_model.Document == null)
                     _model.Document = @"";
                 else if (_model.Document != @"" && _model.Document != @"-" && !Directory.Exists(Path.GetDirectoryName(_model.Document)) && bErrorFlag == false)
@@ -441,6 +441,11 @@ namespace SharePortfolioManager.DividendForm.Presenter
                 else if (_model.Document != @"" && _model.Document != @"-" && !File.Exists(_model.Document) && bErrorFlag == false)
                 {
                     _model.ErrorCode = DividendErrorCode.DocumentFileDoesNotExists;
+                    bErrorFlag = true;
+                }
+                else if (_model.Document != @"" && _model.Document != @"-" && _model.ShareObjectFinalValue.AllDividendEntries.GetAllDividendsOfTheShare().Exists(x => x.DocumentAsStr == _model.Document))
+                {
+                    _model.ErrorCode = DividendErrorCode.DocumentFileAlreadyExists;
                     bErrorFlag = true;
                 }
 

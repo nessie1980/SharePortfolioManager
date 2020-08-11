@@ -58,8 +58,9 @@ namespace SharePortfolioManager.BrokeragesForm.Presenter
             _view.Provision = _model.Provision;
             _view.BrokerFee = _model.BrokerFee;
             _view.TraderPlaceFee = _model.TraderPlaceFee;
-            _view.Reduction = _model.Reduction;
             _view.Brokerage = _model.Brokerage;
+            _view.Reduction = _model.Reduction;
+            _view.BrokerageReduction = _model.BrokerageReduction;
             _view.Document = _model.Document;
         }
 
@@ -97,8 +98,9 @@ namespace SharePortfolioManager.BrokeragesForm.Presenter
             _model.Provision = _view.Provision;
             _model.BrokerFee = _view.BrokerFee;
             _model.TraderPlaceFee = _view.TraderPlaceFee;
-            _model.Reduction = _view.Reduction;
             _model.Brokerage = _view.Brokerage;
+            _model.Reduction = _view.Reduction;
+            _model.BrokerageReduction = _view.BrokerageReduction;
             _model.Document = _view.Document;
 
             CalculateBrokerageValue();
@@ -119,7 +121,10 @@ namespace SharePortfolioManager.BrokeragesForm.Presenter
                 var strGuid = Guid.NewGuid().ToString();
 
                 _model.ErrorCode = _model.ShareObjectFinalValue.AddBrokerage(strGuid, false, false, @"-",
-                    strDateTime, _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec, _model.Document) ? BrokerageErrorCode.AddSuccessful : BrokerageErrorCode.AddFailed;
+                    strDateTime, _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec,
+                    _model.ReductionDec, _model.Document)
+                    ? BrokerageErrorCode.AddSuccessful
+                    : BrokerageErrorCode.AddFailed;
             }
 
             UpdateViewWithModel();
@@ -135,7 +140,8 @@ namespace SharePortfolioManager.BrokeragesForm.Presenter
                 // Set date
                 var strDateTime = _model.Date + " " + _model.Time;
 
-                if (_model.ShareObjectFinalValue.RemoveBrokerage(_model.SelectedGuid, _model.SelectedDate) && _model.ShareObjectFinalValue.AddBrokerage(_model.SelectedGuid, _model.PartOfABuy, _model.PartOfASale, @"-",
+                if (_model.ShareObjectFinalValue.RemoveBrokerage(_model.SelectedGuid, _model.SelectedDate) && 
+                    _model.ShareObjectFinalValue.AddBrokerage(_model.SelectedGuid, _model.PartOfABuy, _model.PartOfASale, @"-",
                         strDateTime, _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec, _model.Document))
                 {
                     _model.ErrorCode = BrokerageErrorCode.EditSuccessful;
@@ -156,7 +162,9 @@ namespace SharePortfolioManager.BrokeragesForm.Presenter
         private void OnDeleteBrokerage(object sender, EventArgs e)
         {
             // Delete the brokerage of the selected date
-            _model.ErrorCode = _model.ShareObjectFinalValue.RemoveBrokerage(_model.SelectedGuid, _model.SelectedDate) ? BrokerageErrorCode.DeleteSuccessful : BrokerageErrorCode.DeleteFailed;
+            _model.ErrorCode = _model.ShareObjectFinalValue.RemoveBrokerage(_model.SelectedGuid, _model.SelectedDate)
+                ? BrokerageErrorCode.DeleteSuccessful
+                : BrokerageErrorCode.DeleteFailed;
 
             // Update error code
             _view.ErrorCode = _model.ErrorCode;
@@ -205,9 +213,11 @@ namespace SharePortfolioManager.BrokeragesForm.Presenter
         {
             try
             {
-                Helper.CalcBrokerageValues(_model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, out var decBrokerage);
+                Helper.CalcBrokerageValues(_model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec,
+                    out var decBrokerage, out var decBrokerageReduction);
                 
                 _model.BrokerageDec = decBrokerage;
+                _model.BrokerageReductionDec = decBrokerageReduction;
 
 #if DEBUG_BROKERAGE_EDIT_PRESENTER
                 Console.WriteLine(@"BrokerageDec: {0}", _model.BrokerageDec);

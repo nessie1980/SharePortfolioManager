@@ -114,17 +114,23 @@ namespace SharePortfolioManager
 
                     #region GroupBox General 
 
+                    // Set values
                     lblWknValue.Text = ShareObjectFinalValue.Wkn;
                     dateTimeStockMarketLaunchDate.Value = DateTime.Parse(ShareObjectFinalValue.StockMarketLaunchDate);
                     lblDateValue.Text = ShareObjectFinalValue.AllBuyEntries.AllBuysOfTheShareDictionary.Values.First().BuyListYear.First().Date;
                     txtBoxName.Text = ShareObjectFinalValue.Name;
                     chkBoxUpdate.CheckState = ShareObjectFinalValue.DoInternetUpdate ? CheckState.Checked : CheckState.Unchecked;
-                    lblPurchaseValue.Text = ShareObjectFinalValue.PurchaseValueAsStr;
-                    lblDepositUnit.Text = ShareObjectFinalValue.CurrencyUnit;
-                    lblVolumeValue.Text = ShareObjectFinalValue.VolumeAsStr;
-                    lblVolumeUnit.Text = ShareObject.PieceUnit;
                     txtBoxWebSite.Text = ShareObjectFinalValue.UpdateWebSiteUrl;
                     txtBoxDailyValuesWebSite.Text = ShareObjectFinalValue.DailyValuesUpdateWebSiteUrl;
+
+                    // Sete units
+                    lblPurchaseUnit.Text = ShareObjectFinalValue.CurrencyUnit;
+                    lblVolumeUnit.Text = ShareObject.PieceUnit;
+                    lblBuysUnit.Text = ShareObjectFinalValue.CurrencyUnit;
+                    lblSalesUnit.Text = ShareObjectFinalValue.CurrencyUnit;
+                    lblProfitLossUnit.Text = ShareObjectFinalValue.CurrencyUnit;
+                    lblDividendUnit.Text = ShareObjectFinalValue.CurrencyUnit;
+                    lblBrokerageUnit.Text = ShareObjectFinalValue.CurrencyUnit;
 
                     #region Get culture info
 
@@ -157,19 +163,10 @@ namespace SharePortfolioManager
                     #endregion Get culture info
 
                     #endregion GroupBox General
-                    
+
                     #region GroupBox EarningsExpenditure
 
-                    lblBuysValue.Text = ShareObjectFinalValue.BuyValueBrokerageReductionAsStr;
-                    lblBuysUnit.Text = ShareObjectFinalValue.CurrencyUnit;
-                    lblSalesValue.Text = ShareObjectFinalValue.SalePayoutBrokerageReductionAsStr;
-                    lblSalesUnit.Text = ShareObjectFinalValue.CurrencyUnit;
-                    lblProfitLossValue.Text = ShareObjectFinalValue.SaleProfitLossBrokerageReductionAsStr;
-                    lblProfitLossUnit.Text = ShareObjectFinalValue.CurrencyUnit;
-                    lblDividendValue.Text = ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesAsStr;
-                    lblDividendUnit.Text = ShareObjectFinalValue.CurrencyUnit;
-                    lblBrokerageValue.Text = ShareObjectFinalValue.BrokerageValueTotalAsStr;
-                    lblBrokerageUnit.Text = ShareObjectFinalValue.CurrencyUnit;
+                    SetShareValuesToTextBoxes();
 
                     #endregion GroupBox EarningsExpenditure
 
@@ -663,7 +660,7 @@ namespace SharePortfolioManager
         }
 
         /// <summary>
-        /// This function sets the new values to the corresponding text boxes
+        /// This function sets the values to the corresponding text boxes
         /// </summary>
         private void SetShareValuesToTextBoxes()
         {
@@ -674,7 +671,7 @@ namespace SharePortfolioManager
             lblSalesValue.Text = ShareObjectFinalValue.SalePayoutBrokerageReductionAsStr;
             lblProfitLossValue.Text = ShareObjectFinalValue.SaleProfitLossBrokerageReductionAsStr;
             lblDividendValue.Text = ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesAsStr;
-            lblBrokerageValue.Text = ShareObjectFinalValue.BrokerageValueTotalAsStr;
+            lblBrokerageValue.Text = ShareObjectFinalValue.CompleteBrokerageReductionValueAsStr;
         }
 
         #endregion Button

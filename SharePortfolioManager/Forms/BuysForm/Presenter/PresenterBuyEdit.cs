@@ -307,8 +307,9 @@ namespace SharePortfolioManager.BuysForm.Presenter
                 Helper.CalcBuyValues(_model.VolumeDec, _model.SharePriceDec,
                     _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec,
                     out var decBuyValue, out var decBuyValueReduction, out var decBuyValueBrokerage, out var decBuyValueBrokerageReduction,
-                    out var decBrokerage);
+                    out var decBrokerage, out var decBrokerageReduction);
 
+                _model.BrokerageReductionDec = decBrokerageReduction;
                 _model.BrokerageDec = decBrokerage;
                 _model.BuyValueDec = decBuyValue;
                 _model.BuyValueReductionDec = decBuyValueReduction;

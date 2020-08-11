@@ -142,9 +142,10 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                     _model.ProvisionDec, _model.BrokerFeeDec, _model.TraderPlaceFeeDec, _model.ReductionDec,
                     out var decBuyValue, out var decBuyValueReduction, out var decBuyValueBrokerage,
                     out var decBuyValueBrokerageReduction,
-                    out var decBrokerage);
+                    out var decBrokerage, out var decBrokerageReduction);
 
                 _model.BrokerageDec = decBrokerage;
+                _model.BrokerageReductionDec = decBrokerageReduction;
                 _model.BuyValueDec = decBuyValue;
                 _model.BuyValueReductionDec = decBuyValueReduction;
                 _model.BuyValueBrokerageDec = decBuyValueBrokerage;
@@ -338,6 +339,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
 
                     // Sort portfolio list in order of the share names
                     _model.ShareObjectListMarketValue.Sort(new ShareObjectListComparer());
+
                     // Sort portfolio list in order of the share names
                     _model.ShareObjectListFinalValue.Sort(new ShareObjectListComparer());
                 }
@@ -436,17 +438,116 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
             }
 
             // Check if the stock market launch date has been modified
-            var dummy = new DateTimePicker
+            var dummyDateTimePicker = new DateTimePicker
             {
                 MinDate = DateTime.MinValue
             };
 
-            if (_model.StockMarketLaunchDate == dummy.MinDate.ToShortDateString() && bErrorFlag == false)
+            if (_model.StockMarketLaunchDate == dummyDateTimePicker.MinDate.ToShortDateString() && bErrorFlag == false)
             {
                 _model.ErrorCode = ShareAddErrorCode.StockMarketLaunchDateNotModified;
                 bErrorFlag = true;
             }
 
+            // Check website input
+            if (_model.WebSite == @"" && bErrorFlag == false)
+            {
+                _model.ErrorCode = ShareAddErrorCode.WebSiteEmpty;
+                bErrorFlag = true;
+            }
+            // Check website format
+            else if (bErrorFlag == false && !Helper.UrlChecker(ref decodedUrlWebSite, 10000))
+            {
+                _model.ErrorCode = ShareAddErrorCode.WebSiteWrongFormat;
+                bErrorFlag = true;
+            }
+            // Check if the website is already used
+            else if (bErrorFlag == false)
+            {
+
+                // Check if a market value share with the given website already exists
+                foreach (var shareObjectMarketValue in _model.ShareObjectListMarketValue)
+                {
+                    if (shareObjectMarketValue.UpdateWebSiteUrl != _model.WebSite ||
+                        shareObjectMarketValue == _model.ShareObjectMarketValue) continue;
+
+                    _model.ErrorCode = ShareAddErrorCode.WebSiteExists;
+                    bErrorFlag = true;
+                    break;
+                }
+
+                if (bErrorFlag == false)
+                {
+                    // Check if a final value share with the given website already exists
+                    foreach (var shareObjectFinalValue in _model.ShareObjectListFinalValue)
+                    {
+                        if (shareObjectFinalValue.UpdateWebSiteUrl != _model.WebSite ||
+                            shareObjectFinalValue == _model.ShareObjectFinalValue) continue;
+
+                        _model.ErrorCode = ShareAddErrorCode.WebSiteExists;
+                        bErrorFlag = true;
+                        break;
+                    }
+                }
+            }
+
+            // Check daily values website input
+            var dummyDailyValues = new List<Parser.DailyValues>();
+            var dummyUrl = Helper.BuildDailyValuesUrl(dummyDailyValues, decodeUrlDailyValuesWebSite, _model.ShareType);
+            if (_model.DailyValuesWebSite == @"" && bErrorFlag == false)
+            {
+                _model.ErrorCode = ShareAddErrorCode.DailyValuesWebSiteEmpty;
+                bErrorFlag = true;
+            }
+            // Check daily values website format
+            else if (bErrorFlag == false && !Helper.UrlChecker(ref dummyUrl, 10000))
+            {
+                _model.ErrorCode = ShareAddErrorCode.DailyValuesWebSiteWrongFormat;
+                bErrorFlag = true;
+            }
+            // Check if the daily values website is already used
+            else if (bErrorFlag == false)
+            {
+
+                // Check if a market value share with the given daily values website already exists
+                foreach (var shareObjectMarketValue in _model.ShareObjectListMarketValue)
+                {
+                    if (shareObjectMarketValue.DailyValuesUpdateWebSiteUrl != _model.DailyValuesWebSite ||
+                        shareObjectMarketValue == _model.ShareObjectMarketValue) continue;
+
+                    _model.ErrorCode = ShareAddErrorCode.DailyValuesWebSiteExists;
+                    bErrorFlag = true;
+                    break;
+                }
+
+                if (bErrorFlag == false)
+                {
+                    // Check if a final value share with the given daily values website already exists
+                    foreach (var shareObjectFinalValue in _model.ShareObjectListFinalValue)
+                    {
+                        if (shareObjectFinalValue.DailyValuesUpdateWebSiteUrl != _model.DailyValuesWebSite ||
+                            shareObjectFinalValue == _model.ShareObjectFinalValue) continue;
+
+                        _model.ErrorCode = ShareAddErrorCode.DailyValuesWebSiteExists;
+                        bErrorFlag = true;
+                        break;
+                    }
+                }
+            }
+
+            // Check if a order number for the buy is given and the order number does not exits already if a new buy should be added
+            if (_model.OrderNumber == @"" && bErrorFlag == false)
+            {
+                _model.ErrorCode = ShareAddErrorCode.OrderNumberEmpty;
+                bErrorFlag = true;
+            }
+            else if (_model.ShareObjectFinalValue != null &&
+                     _model.ShareObjectFinalValue.AllBuyEntries.OrderNumberAlreadyExists(_model.OrderNumber) &&
+                     bErrorFlag == false)
+            {
+                _model.ErrorCode = ShareAddErrorCode.OrderNumberExists;
+                bErrorFlag = true;
+            }
 
             // Check if a correct volume for the add is given
             if (_model.Volume == @"" && bErrorFlag == false)
@@ -573,96 +674,11 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
             else
                 _model.BrokerageDec = decBrokerage;
 
-            // Check website input
-            if (_model.WebSite == @"" && bErrorFlag == false)
-            {
-                _model.ErrorCode = ShareAddErrorCode.WebSiteEmpty;
-                bErrorFlag = true;
-            }
-            // Check website format
-            else if (bErrorFlag == false && !Helper.UrlChecker(ref decodedUrlWebSite, 10000))
-            {
-                _model.ErrorCode = ShareAddErrorCode.WebSiteWrongFormat;
-                bErrorFlag = true;
-            }
-            // Check if the website is already used
-            else if (bErrorFlag == false)
-            {
-
-                // Check if a market value share with the given website already exists
-                foreach (var shareObjectMarketValue in _model.ShareObjectListMarketValue)
-                {
-                    if (shareObjectMarketValue.UpdateWebSiteUrl != _model.WebSite ||
-                        shareObjectMarketValue == _model.ShareObjectMarketValue) continue;
-
-                    _model.ErrorCode = ShareAddErrorCode.WebSiteExists;
-                    bErrorFlag = true;
-                    break;
-                }
-
-                if (bErrorFlag == false)
-                {
-                    // Check if a final value share with the given website already exists
-                    foreach (var shareObjectFinalValue in _model.ShareObjectListFinalValue)
-                    {
-                        if (shareObjectFinalValue.UpdateWebSiteUrl != _model.WebSite ||
-                            shareObjectFinalValue == _model.ShareObjectFinalValue) continue;
-
-                        _model.ErrorCode = ShareAddErrorCode.WebSiteExists;
-                        bErrorFlag = true;
-                        break;
-                    }
-                }
-            }
-
-            // Check daily values website input
-            if (_model.DailyValuesWebSite == @"" && bErrorFlag == false)
-            {
-                _model.ErrorCode = ShareAddErrorCode.DailyValuesWebSiteEmpty;
-                bErrorFlag = true;
-            }
-            // Check daily values website format
-            else if (bErrorFlag == false && !Helper.UrlChecker(ref decodeUrlDailyValuesWebSite, 10000))
-            {
-                _model.ErrorCode = ShareAddErrorCode.DailyValuesWebSiteWrongFormat;
-                bErrorFlag = true;
-            }
-            // Check if the daily values website is already used
-            else if (bErrorFlag == false)
-            {
-
-                // Check if a market value share with the given daily values website already exists
-                foreach (var shareObjectMarketValue in _model.ShareObjectListMarketValue)
-                {
-                    if (shareObjectMarketValue.DailyValuesUpdateWebSiteUrl != _model.DailyValuesWebSite ||
-                        shareObjectMarketValue == _model.ShareObjectMarketValue) continue;
-
-                    _model.ErrorCode = ShareAddErrorCode.DailyValuesWebSiteExists;
-                    bErrorFlag = true;
-                    break;
-                }
-
-                if (bErrorFlag == false)
-                {
-                    // Check if a final value share with the given daily values website already exists
-                    foreach (var shareObjectFinalValue in _model.ShareObjectListFinalValue)
-                    {
-                        if (shareObjectFinalValue.DailyValuesUpdateWebSiteUrl != _model.DailyValuesWebSite ||
-                            shareObjectFinalValue == _model.ShareObjectFinalValue) continue;
-
-                        _model.ErrorCode = ShareAddErrorCode.DailyValuesWebSiteExists;
-                        bErrorFlag = true;
-                        break;
-                    }
-                }
-            }
-
             // Check document input
-            else if (_model.Document != @"" && !Directory.Exists(Path.GetDirectoryName(_model.Document)))
+            if (_model.Document != @"" && !Directory.Exists(Path.GetDirectoryName(_model.Document)) && bErrorFlag == false)
             {
                 _model.ErrorCode = ShareAddErrorCode.DocumentDirectoryDoesNotExists;
             }
-
             // Check document input
             else if (_model.Document != @"" && !File.Exists(_model.Document))
             {

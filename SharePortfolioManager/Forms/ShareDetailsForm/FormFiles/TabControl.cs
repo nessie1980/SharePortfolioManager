@@ -317,7 +317,7 @@ namespace SharePortfolioManager.ShareDetailsForm
 
                     // Set dividend value
                     lblDetailsFinalValueTotalDividendValue.Text =
-                        ShareObjectFinalValue.DividendValueTotalAsStrUnit;
+                        ShareObjectFinalValue.CompleteDividendValueAsStrUnit;
 
                     // Set sale value
                     lblDetailsFinalValueTotalSaleValue.Text =
@@ -369,7 +369,7 @@ namespace SharePortfolioManager.ShareDetailsForm
 
                     // Set dividend value
                     lblDetailsFinalValueCurrentDividendValue.Text =
-                        ShareObjectFinalValue.DividendValueTotalAsStrUnit;
+                        ShareObjectFinalValue.CompleteDividendValueAsStrUnit;
 
                     // Set total share value
                     lblDetailsFinalValueCurrentProfitLossSaleValue.Text =

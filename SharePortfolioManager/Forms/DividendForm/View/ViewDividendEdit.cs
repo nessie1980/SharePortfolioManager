@@ -74,7 +74,8 @@ namespace SharePortfolioManager.DividendForm.View
         PriceWrongValue,
         DocumentBrowseFailed,
         DocumentDirectoryDoesNotExists,
-        DocumentFileDoesNotExists
+        DocumentFileDoesNotExists,
+        DocumentFileAlreadyExists
     }
 
     // Error codes for the document parsing
@@ -498,6 +499,10 @@ namespace SharePortfolioManager.DividendForm.View
                         // Set flag to save the share object.
                         SaveFlag = true;
 
+                        // Check if a direct document parsing is done
+                        if (ParsingFileName != null)
+                            Close();
+
                         // Refresh the buy list
                         OnShowDividends();
 
@@ -833,7 +838,22 @@ namespace SharePortfolioManager.DividendForm.View
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
+                        Enabled = true;
+                        txtBoxDocument.Focus();
+
                         break;
+                    }
+                case DividendErrorCode.DocumentFileAlreadyExists:
+                    {
+                        strMessage =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DocumentFileAlreadyExists", LanguageName);
+                        clrMessage = Color.Red;
+                        stateLevel = FrmMain.EStateLevels.Error;
+
+                        Enabled = true;
+                        txtBoxDocument.Focus();
+
+                            break;
                     }
             }
 
@@ -1089,7 +1109,7 @@ namespace SharePortfolioManager.DividendForm.View
         /// This function resets the text box values
         /// and sets the date time picker to the current date.
         /// </summary>
-        private void ResetInputValues()
+        private void ResetValues()
         {
             // Reset state pictures
             picBoxDateParseState.Image = Resources.empty_arrow;
@@ -1129,7 +1149,14 @@ namespace SharePortfolioManager.DividendForm.View
             txtBoxPayoutAfterTax.Text = string.Empty;
             txtBoxYield.Text = string.Empty;
             txtBoxSharePrice.Text = string.Empty;
-            txtBoxDocument.Text = string.Empty;
+            txtBoxSharePrice.Enabled = true;
+
+            // Do not reset document value if a parsing is running
+            if (!_parsingStartAllow)
+            {
+                txtBoxDocument.Text = string.Empty;
+                txtBoxDocument.Enabled = true;
+            }
 
             toolStripStatusLabelMessageDividendEdit.Text = string.Empty;
             toolStripStatusLabelMessageDividendDocumentParsing.Text = string.Empty;
@@ -1167,7 +1194,7 @@ namespace SharePortfolioManager.DividendForm.View
 
             FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
         }
-
+        
         #endregion Form
 
         #region CheckBoxes
@@ -1696,7 +1723,7 @@ namespace SharePortfolioManager.DividendForm.View
                 }
 
                 // Reset values
-                ResetInputValues();
+                ResetValues();
 
                 // Enable button(s)
                 btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Add", LanguageName);
@@ -1729,7 +1756,7 @@ namespace SharePortfolioManager.DividendForm.View
             try
             {
                 // Reset values
-                ResetInputValues();
+                ResetValues();
             }
             catch (Exception ex)
             {
@@ -1850,8 +1877,8 @@ namespace SharePortfolioManager.DividendForm.View
                 if (ShareObjectFinalValue.AllDividendEntries.GetAllDividendsTotalValues().Count <= 0) return;
 
                 // Reverse list so the latest is a top of the data grid view
-                var reversDataSourceOverview = ShareObjectFinalValue.AllDividendEntries.GetAllDividendsTotalValues();
-                reversDataSourceOverview.Reverse();
+                var reversDataSourceOverview = ShareObjectFinalValue.AllDividendEntries.GetAllDividendsTotalValues()
+                    .OrderByDescending(x => x.DgvDividendYear).ToList();
 
                 var bindingSourceOverview = new BindingSource
                 {
@@ -1961,8 +1988,7 @@ namespace SharePortfolioManager.DividendForm.View
                     // Reverse list so the latest is a top of the data grid view
                     var reversDataSource =
                         ShareObjectFinalValue.AllDividendEntries.AllDividendsOfTheShareDictionary[keyName]
-                            .DividendListYear;
-                    reversDataSource.Reverse();
+                            .DividendListYear.OrderByDescending(x => DateTime.Parse(x.Date)).ToList();
 
                     // Create Binding source for the dividend data
                     var bindingSource = new BindingSource
@@ -2154,7 +2180,7 @@ namespace SharePortfolioManager.DividendForm.View
                     ((DataGridView)sender).Columns[0].Visible = false;
 
                 // Reset the text box values
-                ResetInputValues();
+                ResetValues();
             }
             catch (Exception ex)
             {
@@ -2226,7 +2252,7 @@ namespace SharePortfolioManager.DividendForm.View
                     view.Focus();
 
                     if (view.Name == @"Overview")
-                        ResetInputValues();
+                        ResetValues();
                 }
             }
         }
@@ -2386,19 +2412,15 @@ namespace SharePortfolioManager.DividendForm.View
                     else
                         return;
 
-                    // Get list of dividends of a year
-                    DateTime.TryParse(SelectedDate, out var dateTime);
-                    var dividendListYear = ShareObjectFinalValue.AllDividendEntries
-                        .AllDividendsOfTheShareDictionary[dateTime.Year.ToString()]
-                        .DividendListYear;
-
-                    var index = ((DataGridView)sender).SelectedRows[0].Index;
-
                     // Set selected Guid
-                    SelectedGuid = dividendListYear[index].Guid;
+                    if (curItem[0].Cells[1].Value != null)
+                        SelectedGuid = curItem[0].Cells[0].Value.ToString();
+                    else
+                        return;
 
-                    // Get BrokerageObject of the selected DataGridView row
-                    var selectedDividendObject = dividendListYear[index];
+                    // Get selected dividend object by Guid
+                    var selectedDividendObject = ShareObjectFinalValue.AllDividendEntries.GetAllDividendsOfTheShare()
+                        .Find(x => x.Guid == SelectedGuid);
 
                     // Set dividend values
                     if (selectedDividendObject != null)
@@ -2437,36 +2459,79 @@ namespace SharePortfolioManager.DividendForm.View
                         txtBoxYield.Text = selectedDividendObject.YieldAsStr;
                         txtBoxSharePrice.Text = selectedDividendObject.PriceAtPaydayAsStr;
                         txtBoxDocument.Text = selectedDividendObject.DocumentAsStr;
+
+                        // Rename button
+                        btnAddSave.Text =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Save", LanguageName);
+                        btnAddSave.Image = Resources.button_pencil_24;
+
+                        // Rename group box
+                        grpBoxAddDividend.Text =
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Edit_Caption", LanguageName);
+
+                        // Store DataGridView instance
+                        SelectedDataGridView = (DataGridView)sender;
+
+                        // Format the input value
+                        FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+
+                        // Enabled delete button
+                        btnDelete.Enabled = true;
                     }
                     else
                     {
-                        dateTimePickerDate.Value = Convert.ToDateTime(curItem[0].Cells[0].Value.ToString());
-                        dateTimePickerTime.Value = Convert.ToDateTime(curItem[0].Cells[0].Value.ToString());
-                        txtBoxPayout.Text = curItem[0].Cells[1].Value.ToString();
-                        txtBoxDividendRate.Text = curItem[0].Cells[2].Value.ToString();
-                        txtBoxYield.Text = curItem[0].Cells[3].Value.ToString();
-                        txtBoxSharePrice.Text = curItem[0].Cells[4].Value.ToString();
-                        txtBoxVolume.Text = curItem[0].Cells[5].Value.ToString();
-                        txtBoxDocument.Text = curItem[0].Cells[6].Value.ToString();
+                        // Reset and disable date time picker
+                        dateTimePickerDate.Value = DateTime.Now;
+                        dateTimePickerDate.Enabled = false;
+                        dateTimePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+                        dateTimePickerTime.Enabled = false;
+
+                        // Reset and disable checkbox(es)
+                        chkBoxEnableFC.Checked = false;
+                        chkBoxEnableFC.Enabled = false;
+
+                        // Reset and disable text boxes
+                        txtBoxExchangeRatio.Text = string.Empty;
+                        txtBoxExchangeRatio.Enabled = false;
+                        txtBoxDividendRate.Text = string.Empty;
+                        txtBoxDividendRate.Enabled = false;
+                        txtBoxVolume.Text = string.Empty;
+                        txtBoxVolume.Enabled = false;
+                        txtBoxPayout.Text = string.Empty;
+                        txtBoxPayout.Enabled = false;
+                        txtBoxPayoutFC.Text = string.Empty;
+                        txtBoxPayoutFC.Enabled = false;
+                        txtBoxTaxAtSource.Text = string.Empty;
+                        txtBoxTaxAtSource.Enabled = false;
+                        txtBoxCapitalGainsTax.Text = string.Empty;
+                        txtBoxCapitalGainsTax.Enabled = false;
+                        txtBoxSolidarityTax.Text = string.Empty;
+                        txtBoxSolidarityTax.Enabled = false;
+                        txtBoxPayoutAfterTax.Text = string.Empty;
+                        txtBoxPayoutAfterTax.Enabled = false;
+                        txtBoxYield.Text = string.Empty;
+                        txtBoxYield.Enabled = false;
+                        txtBoxSharePrice.Text = string.Empty;
+                        txtBoxSharePrice.Enabled = false;
+                        txtBoxDocument.Text = string.Empty;
+                        txtBoxDocument.Enabled = false;
+
+                        // Reset status label message text
+                        toolStripStatusLabelMessageDividendEdit.Text = string.Empty;
+                        toolStripStatusLabelMessageDividendDocumentParsing.Text = string.Empty;
+                        toolStripProgressBarDividendDocumentParsing.Visible = false;
+
+                        // Disable Button(s)
+                        btnAddDocumentBrowse.Enabled = false;
+                        btnAddSave.Enabled = false;
+                        btnDelete.Enabled = false;
+
+                        Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/SelectionChangeFailed", LanguageName),
+                            Language, LanguageName,
+                            Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError,
+                            (int)FrmMain.EComponentLevels.Application);
                     }
-
-                    // Rename button
-                    btnAddSave.Text = 
-                        Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Save", LanguageName);
-                    btnAddSave.Image = Resources.button_pencil_24;
-
-                    // Rename group box
-                    grpBoxAddDividend.Text = 
-                        Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Edit_Caption", LanguageName);
-
-                    // Store DataGridView instance
-                    SelectedDataGridView = (DataGridView)sender;
-
-                    // Format the input value
-                    FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
-
-                    // Enabled delete button
-                    btnDelete.Enabled = true;
                 }
                 else
                 {
@@ -2482,16 +2547,45 @@ namespace SharePortfolioManager.DividendForm.View
                     // Disable button(s)
                     btnDelete.Enabled = false;
 
-                    // TODO correct
-                    // Enabled TextBox(es)
+                    // Enable Button(s)
+                    btnAddSave.Enabled = true;
+                    btnAddDocumentBrowse.Enabled = true;
+
+                    // Enable date time picker
+                    dateTimePickerDate.Value = DateTime.Now;
                     dateTimePickerDate.Enabled = true;
+                    dateTimePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
                     dateTimePickerTime.Enabled = true;
+
+                    // Reset and disable checkbox(es)
+                    chkBoxEnableFC.Checked = false;
+                    chkBoxEnableFC.Enabled = true;
+
+                    // Reset and disable text box(es)
+                    txtBoxExchangeRatio.Text = string.Empty;
+                    txtBoxExchangeRatio.Enabled = true;
+                    txtBoxDividendRate.Text = string.Empty;
                     txtBoxDividendRate.Enabled = true;
+                    txtBoxVolume.Text = string.Empty;
                     txtBoxVolume.Enabled = true;
+                    txtBoxPayout.Text = string.Empty;
+                    txtBoxPayout.Enabled = true;
+                    txtBoxPayoutFC.Text = string.Empty;
+                    txtBoxPayoutFC.Enabled = true;
+                    txtBoxTaxAtSource.Text = string.Empty;
                     txtBoxTaxAtSource.Enabled = true;
+                    txtBoxCapitalGainsTax.Text = string.Empty;
                     txtBoxCapitalGainsTax.Enabled = true;
+                    txtBoxSolidarityTax.Text = string.Empty;
                     txtBoxSolidarityTax.Enabled = true;
+                    txtBoxPayoutAfterTax.Text = string.Empty;
+                    txtBoxPayoutAfterTax.Enabled = true;
+                    txtBoxYield.Text = string.Empty;
+                    txtBoxYield.Enabled = true;
+                    txtBoxSharePrice.Text = string.Empty;
                     txtBoxSharePrice.Enabled = true;
+                    txtBoxDocument.Text = string.Empty;
+                    txtBoxDocument.Enabled = true;
 
                     // Reset stored DataGridView instance
                     SelectedDataGridView = null;
@@ -2499,6 +2593,8 @@ namespace SharePortfolioManager.DividendForm.View
             }
             catch (Exception ex)
             {
+                tabCtrlDividends.SelectedIndex = 0;
+
                 Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
@@ -2639,21 +2735,21 @@ namespace SharePortfolioManager.DividendForm.View
                 // Set values
                 if (!LoadGridSelectionFlag)
                 {
-                    txtBoxExchangeRatio.Text = @"";
-                    txtBoxVolume.Text = @"";
-                    txtBoxDividendRate.Text = @"";
-                    txtBoxPayout.Text = @"";
-                    txtBoxPayoutFC.Text = @"";
-                    txtBoxTaxAtSource.Text = @"";
-                    txtBoxCapitalGainsTax.Text = @"";
-                    txtBoxSolidarityTax.Text = @"";
-                    txtBoxTax.Text = @"";
-                    txtBoxPayoutAfterTax.Text = @"";
-                    txtBoxSharePrice.Text = @"";
-                    txtBoxDocument.Text = @"";
+                    txtBoxExchangeRatio.Text = string.Empty;
+                    txtBoxVolume.Text = string.Empty;
+                    txtBoxDividendRate.Text = string.Empty;
+                    txtBoxPayout.Text = string.Empty;
+                    txtBoxPayoutFC.Text = string.Empty;
+                    txtBoxTaxAtSource.Text = string.Empty;
+                    txtBoxCapitalGainsTax.Text = string.Empty;
+                    txtBoxSolidarityTax.Text = string.Empty;
+                    txtBoxTax.Text = string.Empty;
+                    txtBoxPayoutAfterTax.Text = string.Empty;
+                    txtBoxSharePrice.Text = string.Empty;
+                    txtBoxDocument.Text = string.Empty;
 
                     // Reset status message
-                    toolStripStatusLabelMessageDividendEdit.Text = @"";
+                    toolStripStatusLabelMessageDividendEdit.Text = string.Empty;
                 }
 
                 txtBoxExchangeRatio.Focus();
@@ -2668,21 +2764,21 @@ namespace SharePortfolioManager.DividendForm.View
                 // Set values
                 if (!LoadGridSelectionFlag)
                 {
-                    txtBoxExchangeRatio.Text = @"";
-                    txtBoxVolume.Text = @"";
-                    txtBoxDividendRate.Text = @"";
-                    txtBoxPayout.Text = @"";
-                    txtBoxPayoutFC.Text = @"";
-                    txtBoxTaxAtSource.Text = @"";
-                    txtBoxCapitalGainsTax.Text = @"";
-                    txtBoxSolidarityTax.Text = @"";
-                    txtBoxTax.Text = @"";
-                    txtBoxPayoutAfterTax.Text = @"";
-                    txtBoxSharePrice.Text = @"";
-                    txtBoxDocument.Text = @"";
+                    txtBoxExchangeRatio.Text = string.Empty;
+                    txtBoxVolume.Text = string.Empty;
+                    txtBoxDividendRate.Text = string.Empty;
+                    txtBoxPayout.Text = string.Empty;
+                    txtBoxPayoutFC.Text = string.Empty;
+                    txtBoxTaxAtSource.Text = string.Empty;
+                    txtBoxCapitalGainsTax.Text = string.Empty;
+                    txtBoxSolidarityTax.Text = string.Empty;
+                    txtBoxTax.Text = string.Empty;
+                    txtBoxPayoutAfterTax.Text = string.Empty;
+                    txtBoxSharePrice.Text = string.Empty;
+                    txtBoxDocument.Text = string.Empty;
 
                     // Reset status message
-                    toolStripStatusLabelMessageDividendEdit.Text = @"";
+                    toolStripStatusLabelMessageDividendEdit.Text = string.Empty;
                 }
 
                 txtBoxDividendRate.Focus();
@@ -2766,7 +2862,7 @@ namespace SharePortfolioManager.DividendForm.View
                     );
 
                     // Check if the Parser is in idle mode
-                    if (DocumentTypeParser != null && DocumentTypeParser.ParserInfoState.State == ParserState.Idle)
+                    if (DocumentTypeParser != null && DocumentTypeParser.ParserInfoState.State == DataTypes.ParserState.Idle)
                     {
                         DocumentTypeParser.OnParserUpdate += DocumentTypeParser_UpdateGUI;
 
@@ -2804,7 +2900,7 @@ namespace SharePortfolioManager.DividendForm.View
         /// </summary>
         /// <param name="sender">BackGroundWorker</param>
         /// <param name="e">ProgressChangedEventArgs</param>
-        private void DocumentTypeParser_UpdateGUI(object sender, OnParserUpdateEventArgs e)
+        private void DocumentTypeParser_UpdateGUI(object sender, DataTypes.OnParserUpdateEventArgs e)
         {
             try
             {
@@ -2819,7 +2915,7 @@ namespace SharePortfolioManager.DividendForm.View
                         //Console.WriteLine(@"Percentage: {0}", e.ParserInfoState.Percentage);
                         switch (e.ParserInfoState.LastErrorCode)
                         {
-                            case ParserErrorCodes.Finished:
+                            case DataTypes.ParserErrorCodes.Finished:
                                 {
                                     //if (e.ParserInfoState.SearchResult != null)
                                     //{
@@ -2834,71 +2930,71 @@ namespace SharePortfolioManager.DividendForm.View
                                     //}
                                     break;
                                 }
-                            case ParserErrorCodes.SearchFinished:
+                            case DataTypes.ParserErrorCodes.SearchFinished:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.SearchRunning:
+                            case DataTypes.ParserErrorCodes.SearchRunning:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.SearchStarted:
+                            case DataTypes.ParserErrorCodes.SearchStarted:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.ContentLoadFinished:
+                            case DataTypes.ParserErrorCodes.ContentLoadFinished:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.ContentLoadStarted:
+                            case DataTypes.ParserErrorCodes.ContentLoadStarted:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.Started:
+                            case DataTypes.ParserErrorCodes.Started:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.Starting:
+                            case DataTypes.ParserErrorCodes.Starting:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.NoError:
+                            case DataTypes.ParserErrorCodes.NoError:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.StartFailed:
+                            case DataTypes.ParserErrorCodes.StartFailed:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.BusyFailed:
+                            case DataTypes.ParserErrorCodes.BusyFailed:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.InvalidWebSiteGiven:
+                            case DataTypes.ParserErrorCodes.InvalidWebSiteGiven:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.NoRegexListGiven:
+                            case DataTypes.ParserErrorCodes.NoRegexListGiven:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.NoWebContentLoaded:
+                            case DataTypes.ParserErrorCodes.NoWebContentLoaded:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.ParsingFailed:
+                            case DataTypes.ParserErrorCodes.ParsingFailed:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.CancelThread:
+                            case DataTypes.ParserErrorCodes.CancelThread:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.WebExceptionOccured:
+                            case DataTypes.ParserErrorCodes.WebExceptionOccured:
                                 {
                                     break;
                                 }
-                            case ParserErrorCodes.ExceptionOccured:
+                            case DataTypes.ParserErrorCodes.ExceptionOccured:
                                 {
                                     break;
                                 }
@@ -2908,7 +3004,7 @@ namespace SharePortfolioManager.DividendForm.View
                             Thread.Sleep(100);
 
                         // Check if a error occurred or the process has been finished
-                        if (e.ParserInfoState.LastErrorCode < 0 || e.ParserInfoState.LastErrorCode == ParserErrorCodes.Finished)
+                        if (e.ParserInfoState.LastErrorCode < 0 || e.ParserInfoState.LastErrorCode == DataTypes.ParserErrorCodes.Finished)
                         {
                             if (e.ParserInfoState.LastErrorCode < 0)
                             {
@@ -3228,7 +3324,7 @@ namespace SharePortfolioManager.DividendForm.View
                         switch (resultEntry.Key)
                         {
                             case DocumentParsingConfiguration.DocumentTypeDividendExchangeRate:
-                                string strDocument = txtBoxDocument.Text;
+                                var strDocument = txtBoxDocument.Text;
                                 chkBoxEnableFC.CheckState = CheckState.Checked;                                
                                 picBoxExchangeRateBoxParseState.Image = Resources.search_ok_24;
                                 txtBoxExchangeRatio.Text = resultEntry.Value[0].Trim();
@@ -3361,6 +3457,21 @@ namespace SharePortfolioManager.DividendForm.View
                         toolStripStatusLabelMessageDividendDocumentParsing.Text =
                             Language.GetLanguageTextByXPath(@"/AddEditFormDividend/ParsingStateMessages/ParsingDocumentSuccessful",
                                 LanguageName);
+
+                        // Check if a daily value is available for the dividend payout day so use it for the yield calculation
+                        if (ShareObjectFinalValue.DailyValues
+                            .Exists(x => x.Date.ToShortDateString() == dateTimePickerDate.Text))
+                        {
+                            txtBoxSharePrice.Text = ShareObjectFinalValue.DailyValues
+                                .Find(x => x.Date.ToShortDateString() == dateTimePickerDate.Text).ClosingPrice
+                                .ToString(CultureInfo.CurrentCulture);
+
+                            picBoxSharePriceParserState.Image = Resources.search_ok_24;
+                        }
+                        else
+                        {
+                            picBoxSharePriceParserState.Image = Resources.search_info_24;
+                        }
                     }
                 }
             }
@@ -3368,37 +3479,6 @@ namespace SharePortfolioManager.DividendForm.View
             toolStripProgressBarDividendDocumentParsing.Visible = false;
             grpBoxAddDividend.Enabled = true;
             grpBoxDividends.Enabled = true;
-        }
-
-        private void ResetValues()
-        {
-            // Reset state pictures
-            // TODO
-            //picBoxDateParseState.Image = Resources.empty_arrow;
-            //picBoxTimeParseState.Image = Resources.empty_arrow;
-            //picBoxOrderNumberParseState.Image = Resources.empty_arrow;
-            //picBoxVolumeParseState.Image = Resources.empty_arrow;
-            //picBoxPriceParseState.Image = Resources.empty_arrow;
-            //picBoxProvisionParseState.Image = Resources.empty_arrow;
-            //picBoxBrokerFeeParseState.Image = Resources.empty_arrow;
-            //picBoxTraderPlaceFeeParseState.Image = Resources.empty_arrow;
-            //picBoxReductionParseState.Image = Resources.empty_arrow;
-
-            //// Reset textboxes
-            //dateTimePickerDate.Value = DateTime.Now;
-            //dateTimePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
-            //txtBoxOrderNumber.Text = string.Empty;
-            //txtBoxVolume.Text = string.Empty;
-            //txtBoxSharePrice.Text = string.Empty;
-            //txtBoxProvision.Text = string.Empty;
-            //txtBoxBrokerFee.Text = string.Empty;
-            //txtBoxTraderPlaceFee.Text = string.Empty;
-            //txtBoxReduction.Text = string.Empty;
-
-            // Reset status strip
-            toolStripStatusLabelMessageDividendEdit.Text = string.Empty;
-            toolStripStatusLabelMessageDividendDocumentParsing.Text = string.Empty;
-            toolStripProgressBarDividendDocumentParsing.Visible = false;
         }
 
         #endregion Parsing

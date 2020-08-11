@@ -56,10 +56,9 @@ namespace SharePortfolioManager.ShareDetailsForm
         public enum EDetailsPageNumber
         {
             Chart = 0,
-            FinalMarketValue = 1,
-            ProfitLoss = 2,
-            Dividend = 3,
-            Brokerage = 4
+            ProfitLoss = 1,
+            Dividend = 2,
+            Brokerage = 3
         }
 
         /// <summary>
@@ -121,6 +120,8 @@ namespace SharePortfolioManager.ShareDetailsForm
 
         public Logger Logger;
 
+        public Dictionary<string, Color> ChartingColorDictionary;
+
         public string LanguageName;
 
         public Language Language;
@@ -150,6 +151,7 @@ namespace SharePortfolioManager.ShareDetailsForm
         public FrmShareDetails( bool marketValueOverviewTabSelected,
             ShareObjectFinalValue shareObjectFinalValue, ShareObjectMarketValue shareObjectMarketValue,
             RichTextBox rchTxtBoxStateMessage, Logger logger,
+            Dictionary<string, Color>chartingColorDictionary,
             Language language, string languageName)
         {
             InitializeComponent();
@@ -174,6 +176,12 @@ namespace SharePortfolioManager.ShareDetailsForm
             ShareObjectMarketValue = shareObjectMarketValue;
 
             #endregion ShareObjets
+
+            #region Charting
+
+            ChartingColorDictionary = chartingColorDictionary;
+
+            #endregion Charting
 
             #region Logger
 
@@ -645,7 +653,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                 date = date.AddDays(-1);
 
             // Check if no update is necessary
-            if (!ShareObjectFinalValue.DoInternetUpdate &&
+            if (!ShareObjectFinalValue.DoInternetUpdate ||
                 dateTimePickerStartDate.Value >= date && 
                 ( ShareObjectFinalValue.DailyValues.Count > 0 || ShareObjectMarketValue.DailyValues.Count > 0) ) return;
 
@@ -720,140 +728,138 @@ namespace SharePortfolioManager.ShareDetailsForm
             try
             {
 
-            #region Graph values creation
+                #region Graph values creation
 
-            // Create charting values settings
-            var graphValuesList = new List<ChartingDailyValues.GraphValues>();
+                // Create charting values settings
+                var graphValuesList = new List<ChartingDailyValues.GraphValues>();
 
-            // Check if the ClosingPrice is selected
-            if (chkClosingPrice.CheckState == CheckState.Checked)
-            {
-                var graphValueClosingPrice = new ChartingDailyValues.GraphValues(
-                    true,
-                    SeriesChartType.Line,
-                    2,
-                    // TODO use settings value
-                    Color.Black,
-                    DailyValues.DateName,
-                    DailyValues.ClosingPriceName
-                );
-                graphValuesList.Add(graphValueClosingPrice);
-            }
-
-            // Check if the OpeningPrice is selected
-            if (chkOpeningPrice.CheckState == CheckState.Checked)
-            {
-                var graphValueOpeningPrice = new ChartingDailyValues.GraphValues(
-                    true,
-                    SeriesChartType.Line,
-                    2,
-                    // TODO use settings value
-                    Color.DarkGreen,
-                    DailyValues.DateName,
-                    DailyValues.OpeningPriceName
-                );
-                graphValuesList.Add(graphValueOpeningPrice);
-            }
-
-            // Check if the Top is selected
-            if (chkTop.CheckState == CheckState.Checked)
-            {
-                var graphValueTop = new ChartingDailyValues.GraphValues(
-                    true,
-                    SeriesChartType.Line,
-                    2,
-                    // TODO use settings value
-                    Color.DarkBlue,
-                    DailyValues.DateName,
-                    DailyValues.TopName
-                );
-                graphValuesList.Add(graphValueTop);
-            }
-
-            // Check if the Top is selected
-            if (chkBottom.CheckState == CheckState.Checked)
-            {
-                var graphValueBottom = new ChartingDailyValues.GraphValues(
-                    true,
-                    SeriesChartType.Line,
-                    2,
-                    // TODO use settings value
-                    Color.DarkRed,
-                    DailyValues.DateName,
-                    DailyValues.BottomName
-                );
-                graphValuesList.Add(graphValueBottom);
-            }
-
-            // Check if the Volume is selected
-            if (chkVolume.CheckState == CheckState.Checked)
-            {
-                var graphValueVolume = new ChartingDailyValues.GraphValues(
-                    true,
-                    SeriesChartType.Line,
-                    2,
-                    // TODO use settings value
-                    Color.Goldenrod,
-                    DailyValues.DateName,
-                    DailyValues.VolumeName
-                );
-                graphValuesList.Add(graphValueVolume);
-            }
-
-            #endregion Graph values creation
-
-            // Check which interval is chosen
-            ChartingInterval chartingInterval;
-            switch (cbxIntervalSelection.SelectedIndex)
-            {
-                case (int)ChartingInterval.Week:
+                // Check if the ClosingPrice is selected
+                if (chkClosingPrice.CheckState == CheckState.Checked)
                 {
-                    chartingInterval = ChartingInterval.Week;
-                } break;
-                case (int)ChartingInterval.Month:
+                    var graphValueClosingPrice = new ChartingDailyValues.GraphValues(
+                        true,
+                        SeriesChartType.Line,
+                        2,
+                        ChartingColorDictionary[DailyValues.ClosingPriceName],
+                        DailyValues.DateName,
+                        DailyValues.ClosingPriceName
+                    );
+                    graphValuesList.Add(graphValueClosingPrice);
+                }
+
+                // Check if the OpeningPrice is selected
+                if (chkOpeningPrice.CheckState == CheckState.Checked)
                 {
-                    chartingInterval = ChartingInterval.Month;
-                } break;
-                case (int)ChartingInterval.Quarter:
+                    var graphValueOpeningPrice = new ChartingDailyValues.GraphValues(
+                        true,
+                        SeriesChartType.Line,
+                        2,
+                        ChartingColorDictionary[DailyValues.OpeningPriceName],
+                        DailyValues.DateName,
+                        DailyValues.OpeningPriceName
+                    );
+                    graphValuesList.Add(graphValueOpeningPrice);
+                }
+
+                // Check if the Top is selected
+                if (chkTop.CheckState == CheckState.Checked)
                 {
+                    var graphValueTop = new ChartingDailyValues.GraphValues(
+                        true,
+                        SeriesChartType.Line,
+                        2,
+                        ChartingColorDictionary[DailyValues.TopName],
+                        DailyValues.DateName,
+                        DailyValues.TopName
+                    );
+                    graphValuesList.Add(graphValueTop);
+                }
+
+                // Check if the Bottom is selected
+                if (chkBottom.CheckState == CheckState.Checked)
+                {
+                    var graphValueBottom = new ChartingDailyValues.GraphValues(
+                        true,
+                        SeriesChartType.Line,
+                        2,
+                        ChartingColorDictionary[DailyValues.BottomName],
+                        DailyValues.DateName,
+                        DailyValues.BottomName
+                    );
+                    graphValuesList.Add(graphValueBottom);
+                }
+
+                // Check if the Volume is selected
+                if (chkVolume.CheckState == CheckState.Checked)
+                {
+                    var graphValueVolume = new ChartingDailyValues.GraphValues(
+                        true,
+                        SeriesChartType.Line,
+                        2,
+                        ChartingColorDictionary[DailyValues.VolumeName],
+                        DailyValues.DateName,
+                        DailyValues.VolumeName
+                    );
+                    graphValuesList.Add(graphValueVolume);
+                }
+
+                #endregion Graph values creation
+
+                // Check which interval is chosen
+                ChartingInterval chartingInterval;
+                switch (cbxIntervalSelection.SelectedIndex)
+                {
+                    case (int) ChartingInterval.Week:
+                    {
+                        chartingInterval = ChartingInterval.Week;
+                    }
+                        break;
+                    case (int) ChartingInterval.Month:
+                    {
+                        chartingInterval = ChartingInterval.Month;
+                    }
+                        break;
+                    case (int) ChartingInterval.Quarter:
+                    {
                         chartingInterval = ChartingInterval.Quarter;
-                } break;
-                case (int)ChartingInterval.Year:
-                {
-                    chartingInterval = ChartingInterval.Year;
-                } break;
-                default:
-                {
-                    chartingInterval = ChartingInterval.Week;
-                } break;
-            }
+                    }
+                        break;
+                    case (int) ChartingInterval.Year:
+                    {
+                        chartingInterval = ChartingInterval.Year;
+                    }
+                        break;
+                    default:
+                    {
+                        chartingInterval = ChartingInterval.Week;
+                    }
+                        break;
+                }
 
-            ChartValues =
-                new ChartingDailyValues.ChartValues(
-                    chartingInterval,
-                    (int)numDrpDwnAmount.Value,
-                    @"dd.MM.yy",
-                    DateTimeIntervalType.Days,
-                    graphValuesList);
+                ChartValues =
+                    new ChartingDailyValues.ChartValues(
+                        chartingInterval,
+                        (int) numDrpDwnAmount.Value,
+                        @"dd.MM.yy",
+                        DateTimeIntervalType.Days,
+                        graphValuesList);
 
-            // Draw chart with the given values
-            ChartingDailyValues.Charting(
-                out Title,
-                MarketValueOverviewTabSelected,
-                ShareObjectFinalValue, ShareObjectMarketValue,
-                Logger, LanguageName, Language,
-                dateTimePickerStartDate.Value,
-                chartDailyValues,
-                ChartValues,
-                null,
-                false,
-                // TODO use settings value
-                Color.Blue,
-                Color.Red
+                // Draw chart with the given values
+                ChartingDailyValues.Charting(
+                    out Title,
+                    MarketValueOverviewTabSelected,
+                    ShareObjectFinalValue, ShareObjectMarketValue,
+                    Logger, LanguageName, Language,
+                    dateTimePickerStartDate.Value,
+                    chartDailyValues,
+                    ChartValues,
+                    null,
+                    false,
+                    ChartingColorDictionary[Helper.BuyInformationName],
+                    ChartingColorDictionary[Helper.SaleInformationName]
                 );
 
-            Text = Title;
-
+                Text = Title;
             }
             catch (Exception ex)
             {
@@ -862,8 +868,8 @@ namespace SharePortfolioManager.ShareDetailsForm
                         @"/ShareDetailsForm/Errors/SelectionChangeFailed",
                         LanguageName),
                     Language, LanguageName,
-                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError,
-                    (int)FrmMain.EComponentLevels.Application,
+                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                    (int) FrmMain.EComponentLevels.Application,
                     ex);
             }
         }

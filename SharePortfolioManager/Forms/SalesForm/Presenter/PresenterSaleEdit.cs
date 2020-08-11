@@ -152,9 +152,6 @@ namespace SharePortfolioManager.SalesForm.Presenter
                                     {
                                         if (buy.Guid == saleDetail.BuyGuid && buy.VolumeSold > 0)
                                         {
-                                            Console.WriteLine(@"Removed Buy-Guid:    {0}", buy.Guid);
-                                            Console.WriteLine(@"Removed Buy-Volume:  {0}", saleDetail.DecVolume);
-
                                             // Remove sale volumes from calculation object
                                             _model.ShareObjectFinalValue.AllBuyEntries.RemoveSaleVolumeByGuid(
                                                 buy.Guid,
@@ -176,9 +173,6 @@ namespace SharePortfolioManager.SalesForm.Presenter
                                     {
                                         if (buy.Guid == saleDetail.BuyGuid)
                                         {
-                                            Console.WriteLine(@"Added Buy-Guid:      {0}", buy.Guid);
-                                            Console.WriteLine(@"Added Buy-Volume:    {0}", saleDetail.DecVolume);
-
                                             // Add sale volumes from calculation object
                                             _model.ShareObjectFinalValue.AllBuyEntries.AddSaleVolumeByGuid(
                                                 buy.Guid,
@@ -207,9 +201,6 @@ namespace SharePortfolioManager.SalesForm.Presenter
                                     {
                                         if (buy.Guid == saleDetail.BuyGuid && buy.VolumeSold > 0)
                                         {
-                                            Console.WriteLine(@"Removed Buy-Guid:    {0}", buy.Guid);
-                                            Console.WriteLine(@"Removed Buy-Volume:  {0}", saleDetail.DecVolume);
-
                                             // Remove sale volumes from calculation object
                                             _model.ShareObjectMarketValue.AllBuyEntries.RemoveSaleVolumeByGuid(
                                                 buy.Guid,
@@ -231,9 +222,6 @@ namespace SharePortfolioManager.SalesForm.Presenter
                                     {
                                         if (buy.Guid == saleDetail.BuyGuid)
                                         {
-                                            Console.WriteLine(@"Added Buy-Guid:      {0}", buy.Guid);
-                                            Console.WriteLine(@"Added Buy-Volume:    {0}", saleDetail.DecVolume);
-
                                             // Add sale volumes from calculation object
                                             _model.ShareObjectMarketValue.AllBuyEntries.AddSaleVolumeByGuid(
                                                 buy.Guid,
@@ -518,6 +506,9 @@ namespace SharePortfolioManager.SalesForm.Presenter
                 // Loop through the buys and check which buy should be used for this sale
                 foreach (var currentBuyObject in _model.ShareObjectFinalValue.AllBuyEntries.GetAllBuysOfTheShare())
                 {
+                    Console.WriteLine(@"currentBuyObject.VolumeSold: {0}", currentBuyObject.VolumeSold);
+                    Console.WriteLine(@"currentBuyObject.Volume: {0}", currentBuyObject.Volume);
+
                     // Check if this buy is already completely sold
                     if (currentBuyObject.VolumeSold == currentBuyObject.Volume) continue;
 
@@ -525,14 +516,21 @@ namespace SharePortfolioManager.SalesForm.Presenter
                     if (_model.UsedBuyDetails != null && _model.UsedBuyDetails.Count > 0)
                         alreadySoldVolume = _model.UsedBuyDetails.Sum(x => x.DecVolume);
 
+                    Console.WriteLine(@"alreadySoldVolume: {0}", alreadySoldVolume);
+                    Console.WriteLine(@"_model.VolumeDec: {0}", _model.VolumeDec);
+
                     // Calculate the volume which has to be sold 
                     var toBeSoldVolume = _model.VolumeDec - alreadySoldVolume;
+
+                    Console.WriteLine(@"toBeSoldVolume: {0}", toBeSoldVolume);
 
                     // Check if all sale are done
                     if (toBeSoldVolume <= 0) break;
 
                     // Salable volume
                     var salableVolume = currentBuyObject.Volume - currentBuyObject.VolumeSold;
+
+                    Console.WriteLine(@"salableVolume: {0}", salableVolume);
 
                     // Check if the remaining buy volume is greater than the volume which must be sold
                     if (toBeSoldVolume >= currentBuyObject.Volume - currentBuyObject.VolumeSold)
@@ -714,6 +712,119 @@ namespace SharePortfolioManager.SalesForm.Presenter
                 }
                 else if (bErrorFlag == false)
                     _model.SalePriceDec = decSalePrice;
+
+                // Tax at source
+                if (_model.TaxAtSource != "" && bErrorFlag == false)
+                {
+                    if (!decimal.TryParse(_model.TaxAtSource, out var decTaxAtSource))
+                    {
+                        _model.ErrorCode = SaleErrorCode.TaxAtSourceWrongFormat;
+                        bErrorFlag = true;
+                    }
+                    else if (decTaxAtSource < 0)
+                    {
+                        _model.ErrorCode = SaleErrorCode.TaxAtSourceWrongValue;
+                        bErrorFlag = true;
+                    }
+                }
+
+                // Capital gains tax
+                if (_model.CapitalGainsTax != @"" && bErrorFlag == false)
+                {
+                    if (!decimal.TryParse(_model.CapitalGainsTax, out var decCapitalGainsTax))
+                    {
+                        _model.ErrorCode = SaleErrorCode.CapitalGainsTaxWrongFormat;
+                        bErrorFlag = true;
+                    }
+                    else if (decCapitalGainsTax < 0)
+                    {
+                        _model.ErrorCode = SaleErrorCode.CapitalGainsTaxWrongValue;
+                        bErrorFlag = true;
+                    }
+                }
+
+                // Solidarity tax
+                if (_model.SolidarityTax != @"" && bErrorFlag == false)
+                {
+                    if (!decimal.TryParse(_model.SolidarityTax, out var decSolidarityTax))
+                    {
+                        _model.ErrorCode = SaleErrorCode.SolidarityTaxWrongFormat;
+                        bErrorFlag = true;
+                    }
+                    else if (decSolidarityTax < 0)
+                    {
+                        _model.ErrorCode = SaleErrorCode.SolidarityTaxWrongValue;
+                        bErrorFlag = true;
+                    }
+                }
+
+                // Provision input check
+                if (_model.Provision != "" && bErrorFlag == false)
+                {
+                    if (!decimal.TryParse(_model.Provision, out var decProvision))
+                    {
+                        _model.ErrorCode = SaleErrorCode.ProvisionWrongFormat;
+                        bErrorFlag = true;
+                    }
+                    else if (decProvision < 0)
+                    {
+                        _model.ErrorCode = SaleErrorCode.ProvisionWrongValue;
+                        bErrorFlag = true;
+                    }
+                    else
+                        _model.ProvisionDec = decProvision;
+                }
+
+                // Broker fee input check
+                if (_model.BrokerFee != "" && bErrorFlag == false)
+                {
+                    if (!decimal.TryParse(_model.BrokerFee, out var decBrokerFee))
+                    {
+                        _model.ErrorCode = SaleErrorCode.BrokerFeeWrongFormat;
+                        bErrorFlag = true;
+                    }
+                    else if (decBrokerFee < 0)
+                    {
+                        _model.ErrorCode = SaleErrorCode.BrokerFeeWrongValue;
+                        bErrorFlag = true;
+                    }
+                    else
+                        _model.BrokerFeeDec = decBrokerFee;
+                }
+
+                // Trader place fee input check
+                if (_model.TraderPlaceFee != "" && bErrorFlag == false)
+                {
+                    if (!decimal.TryParse(_model.TraderPlaceFee, out var decTraderPlaceFee))
+                    {
+                        _model.ErrorCode = SaleErrorCode.TraderPlaceFeeWrongFormat;
+                        bErrorFlag = true;
+                    }
+                    else if (decTraderPlaceFee < 0)
+                    {
+                        _model.ErrorCode = SaleErrorCode.TraderPlaceFeeWrongValue;
+                        bErrorFlag = true;
+                    }
+                    else
+                        _model.TraderPlaceFeeDec = decTraderPlaceFee;
+                }
+
+                // Reduction input check
+                if (_model.Reduction != "" && bErrorFlag == false)
+                {
+                    if (!decimal.TryParse(_model.Reduction, out var decReduction))
+                    {
+                        _model.ErrorCode = SaleErrorCode.ReductionWrongFormat;
+                        bErrorFlag = true;
+                    }
+                    else if (decReduction < 0)
+                    {
+                        _model.ErrorCode = SaleErrorCode.ReductionWrongValue;
+                        bErrorFlag = true;
+                    }
+                    else
+                        _model.ReductionDec = decReduction;
+                }
 
                 // Brokerage input check
                 if (_model.Brokerage == @"" && bErrorFlag == false)

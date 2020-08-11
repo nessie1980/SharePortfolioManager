@@ -14,6 +14,19 @@
 	<Charting>
 		<Interval>Month</Interval>
 		<Amount>2</Amount>
+		<Colors>
+			<DailyValues>
+				<Closingprice>Black</Closingprice>
+				<Openingprice>DarkGreen</Openingprice>
+				<Top>DarkBlue</Top>
+				<Bottom>DarkRed</Bottom>
+				<Volume>Goldenrod</Volume>
+			</DailyValues>
+			<Information>
+				<Buy>Blue</Buy>
+				<Sale>Red</Sale>
+			</Information>
+		</Colors>
 	</Charting>
 	<Logger>
 		<GUIEntries>20</GUIEntries>
@@ -31,4 +44,8 @@
 		</LogColors>
 	</Logger>
 	<ShowExceptionMessages>true</ShowExceptionMessages>
+	<Parser>
+		<MarketValuesDebuggingEnable>true</MarketValuesDebuggingEnable>
+		<DailyValuesDebuggingEnable>true</DailyValuesDebuggingEnable>
+	</Parser>
 </Settings>

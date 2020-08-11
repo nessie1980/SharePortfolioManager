@@ -534,9 +534,11 @@ XCOPY "$(ProjectDir)Config\Documents.xml" "$(TargetDir)\Settings\" /Y /D
 ECHO Copy DLLs
 ECHO.
 
-
-
 XCOPY "$(ProjectDir)DLLs\*.*" "$(TargetDir)" /Y /D
+
+REM Reset portfolio
+REM ECHO XCOPY "$(TargetDir)Portfolios\Thomas_Barth - Kopie.xml" "$(TargetDir)Portfolios\Thomas_Barth.xml" /Y
+REM XCOPY "$(TargetDir)Portfolios\Thomas_Barth - Kopie.xml" "$(TargetDir)Portfolios\Thomas_Barth.xml" /Y
 </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

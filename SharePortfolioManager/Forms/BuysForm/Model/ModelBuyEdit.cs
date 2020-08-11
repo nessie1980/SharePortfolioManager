@@ -70,6 +70,8 @@ namespace SharePortfolioManager.BuysForm.Model
         decimal ReductionDec { get; set; }
         string Brokerage { get; set; }
         decimal BrokerageDec { get; set; }
+        string BrokerageReduction { get; set; }
+        decimal BrokerageReductionDec { get; set; }
         string BuyValue { get; set; }
         decimal BuyValueDec { get; set; }
         string BuyValueReduction { get; set; }
@@ -108,6 +110,8 @@ namespace SharePortfolioManager.BuysForm.Model
         private decimal _reductionDec;
         private string _brokerage;
         private decimal _brokerageDec;
+        private string _brokerageReduction;
+        private decimal _brokerageReductionDec;
         private string _buyValue;
         private decimal _buyValueDec;
         private string _buyValueReduction;
@@ -437,6 +441,31 @@ namespace SharePortfolioManager.BuysForm.Model
                 if (Equals(_brokerageDec, value))
                     return;
                 _brokerageDec = value;
+            }
+        }
+
+        public string BrokerageReduction
+        {
+            get => _brokerageReductionDec >= 0 ? Helper.FormatDecimal(_brokerageReductionDec, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength) : _brokerageReduction;
+            set
+            {
+                if (Equals(_brokerageReduction, value))
+                    return;
+                _brokerageReduction = value;
+
+                if (!decimal.TryParse(_brokerageReduction, out _brokerageReductionDec))
+                    _brokerageReductionDec = 0;
+            }
+        }
+
+        public decimal BrokerageReductionDec
+        {
+            get => _brokerageReductionDec;
+            set
+            {
+                if (Equals(_brokerageReductionDec, value))
+                    return;
+                _brokerageReductionDec = value;
             }
         }
 

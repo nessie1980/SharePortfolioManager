@@ -581,6 +581,10 @@ namespace SharePortfolioManager.SalesForm.View
                     // Reset add flag
                     AddSale = false;
 
+                    // Check if a direct document parsing is done
+                    if (ParsingFileName != null)
+                        Close();
+
                     // Refresh the sale list
                     OnShowSales();
 
@@ -1270,6 +1274,8 @@ namespace SharePortfolioManager.SalesForm.View
 
                 #endregion Image configuration
 
+                OnShowSales();
+
                 // If a parsing file name is given the form directly starts with the document parsing
                 if (ParsingFileName != null)
                 {
@@ -1277,7 +1283,7 @@ namespace SharePortfolioManager.SalesForm.View
                     txtBoxDocument.Text = ParsingFileName;
                 }
 
-                OnShowSales();
+                txtBoxOrderNumber.Focus();
             }
             catch (Exception ex)
             {
@@ -1305,7 +1311,7 @@ namespace SharePortfolioManager.SalesForm.View
         /// This function resets the text box values
         /// and sets the date time picker to the current date
         /// </summary>
-        private void ResetInputValues()
+        private void ResetValues()
         {
             // Set reset flag
             ResetRunning = true;
@@ -1324,30 +1330,50 @@ namespace SharePortfolioManager.SalesForm.View
             picBoxTraderPlaceFeeParseState.Image = Resources.empty_arrow;
             picBoxReductionParseState.Image = Resources.empty_arrow;
 
-            // Reset date time picker
+            // Reset and enable date time picker
             dateTimePickerDate.Value = DateTime.Now;
+            dateTimePickerDate.Enabled = true;
             dateTimePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+            dateTimePickerTime.Enabled = true;
 
-            // Reset text boxes
+            // Reset textboxes
             txtBoxOrderNumber.Text = string.Empty;
+            txtBoxOrderNumber.Enabled = true;
             txtBoxVolume.Text = string.Empty;
+            txtBoxVolume.Enabled = true;
             txtBoxSalePrice.Text = string.Empty;
+            txtBoxSalePrice.Enabled = true;
             txtBoxSaleBuyValue.Text = string.Empty;
+            txtBoxSaleBuyValue.Enabled = true;
             txtBoxProfitLoss.Text = string.Empty;
-
+            txtBoxProfitLoss.Enabled = true;
             txtBoxTaxAtSource.Text = string.Empty;
+            txtBoxTaxAtSource.Enabled = true;
             txtBoxCapitalGainsTax.Text = string.Empty;
+            txtBoxCapitalGainsTax.Enabled = true;
             txtBoxSolidarityTax.Text = string.Empty;
-
+            txtBoxSolidarityTax.Enabled = true;
             txtBoxProvision.Text = string.Empty;
+            txtBoxProvision.Enabled = true;
             txtBoxBrokerFee.Text = string.Empty;
+            txtBoxBrokerFee.Enabled = true;
             txtBoxTraderPlaceFee.Text = string.Empty;
+            txtBoxTraderPlaceFee.Enabled = true;
             txtBoxReduction.Text = string.Empty;
+            txtBoxReduction.Enabled = true;
             txtBoxBrokerage.Text = string.Empty;
-
+            txtBoxBrokerage.Enabled = true;
             txtBoxPayout.Text = string.Empty;
-            txtBoxDocument.Text = string.Empty;
+            txtBoxPayout.Enabled = true;
 
+            // Do not reset document value if a parsing is running
+            if (!_parsingStartAllow)
+            {
+                txtBoxDocument.Text = string.Empty;
+                txtBoxDocument.Enabled = true;
+            }
+
+            // Reset status strip
             toolStripStatusLabelMessageSaleEdit.Text = string.Empty;
             toolStripStatusLabelMessageSaleDocumentParsing.Text = string.Empty;
             toolStripProgressBarSaleDocumentParsing.Visible = false;
@@ -1423,7 +1449,7 @@ namespace SharePortfolioManager.SalesForm.View
                 Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Add_Caption", LanguageName);
 
             // Deselect rows
-            DeselectRowsOfDataGridViews(null);
+            OnDeselectRowsOfDataGridViews(null);
 
             // Reset stored DataGridView instance
             SelectedDataGridView = null;
@@ -1432,7 +1458,7 @@ namespace SharePortfolioManager.SalesForm.View
             if (tabCtrlSales.TabPages.Count > 0)
                 tabCtrlSales.SelectTab(0);
 
-            txtBoxOrderNumber.Focus();
+            dateTimePickerDate.Focus();
 
             FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
 
@@ -2060,7 +2086,7 @@ namespace SharePortfolioManager.SalesForm.View
                 }
 
                 // Reset values
-                ResetInputValues();
+                ResetValues();
 
                 // Enable button(s)
                 btnAddSave.Text =
@@ -2100,7 +2126,7 @@ namespace SharePortfolioManager.SalesForm.View
                 UpdateSale = false;
 
                 // Reset values
-                ResetInputValues();
+                ResetValues();
             }
             catch (Exception ex)
             {
@@ -2233,11 +2259,15 @@ namespace SharePortfolioManager.SalesForm.View
                 #region Data source, data binding and data grid view
 
                 // Check if sales exists
-                if (ShareObjectFinalValue.AllSaleEntries.GetAllSalesTotalValues().Count <= 0) return;
+                if (ShareObjectFinalValue.AllSaleEntries.GetAllSalesTotalValues().Count <= 0)
+                {
+                    ResetValues();
+                    return;
+                }
 
                 // Reverse list so the latest is a top of the data grid view
-                var reversDataSourceOverview = ShareObjectFinalValue.AllSaleEntries.GetAllSalesTotalValues();
-                reversDataSourceOverview.Reverse();
+                var reversDataSourceOverview = ShareObjectFinalValue.AllSaleEntries.GetAllSalesTotalValues()
+                    .OrderByDescending(x => x.DgvSaleYear).ToList();
 
                 var bindingSourceOverview = new BindingSource
                 {
@@ -2348,8 +2378,7 @@ namespace SharePortfolioManager.SalesForm.View
                     // Reverse list so the latest is a top of the data grid view
                     var reversDataSource =
                         ShareObjectFinalValue.AllSaleEntries.AllSalesOfTheShareDictionary[keyName]
-                            .SaleListYear;
-                    reversDataSource.Reverse();
+                            .SaleListYear.OrderByDescending(x => DateTime.Parse(x.Date)).ToList();
 
                     // Create Binding source for the sale data
                     var bindingSource = new BindingSource
@@ -2548,7 +2577,7 @@ namespace SharePortfolioManager.SalesForm.View
                     ((DataGridView) sender).Columns[0].Visible = false;
 
                 // Reset the text box values
-                ResetInputValues();
+                ResetValues();
             }
             catch (Exception ex)
             {
@@ -2565,7 +2594,7 @@ namespace SharePortfolioManager.SalesForm.View
         /// This function deselects all selected rows of the
         /// DataGridViews in the TabPages
         /// </summary>
-        private void DeselectRowsOfDataGridViews(DataGridView dataGridView)
+        private void OnDeselectRowsOfDataGridViews(DataGridView dataGridView)
         {
             try
             {
@@ -2633,7 +2662,7 @@ namespace SharePortfolioManager.SalesForm.View
 
                     if (view.Name == @"Overview")
                     {
-                        ResetInputValues();
+                        ResetValues();
 
                         SaleChangeEventHandler?.Invoke(this, null);
 
@@ -2798,9 +2827,11 @@ namespace SharePortfolioManager.SalesForm.View
                 {
                     // Deselect row only of the other TabPages DataGridViews
                     if (tabCtrlSales.SelectedTab.Controls.Contains((DataGridView) sender))
-                        DeselectRowsOfDataGridViews((DataGridView) sender);
+                        OnDeselectRowsOfDataGridViews((DataGridView) sender);
                 }
 
+                // If it is "1" a selection change has been made
+                // else an deselection has been made ( switch to the overview tab )
                 if (((DataGridView) sender).SelectedRows.Count == 1)
                 {
                     // Get the currently selected item in the ListBox
@@ -2812,19 +2843,15 @@ namespace SharePortfolioManager.SalesForm.View
                     else
                         return;
 
-                    // Get list of sales of a year
-                    DateTime.TryParse(SelectedDate, out var dateTime);
-                    var saleListYear = ShareObjectFinalValue.AllSaleEntries
-                        .AllSalesOfTheShareDictionary[dateTime.Year.ToString()]
-                        .SaleListYear;
-
-                    var index = ((DataGridView) sender).SelectedRows[0].Index;
-
                     // Set selected Guid
-                    SelectedGuid = saleListYear[index].Guid;
+                    if (curItem[0].Cells[1].Value != null)
+                        SelectedGuid = curItem[0].Cells[0].Value.ToString();
+                    else
+                        return;
 
-                    // Get BrokerageObject of the selected DataGridView row
-                    var selectedSaleObject = saleListYear[index];
+                    // Get selected sale object by Guid
+                    var selectedSaleObject = ShareObjectFinalValue.AllSaleEntries.GetAllSalesOfTheShare()
+                        .Find(x => x.Guid == SelectedGuid);
 
                     if (!ShowSalesRunning)
                     {
@@ -2845,73 +2872,129 @@ namespace SharePortfolioManager.SalesForm.View
                             txtBoxProfitLoss.Text = selectedSaleObject.ProfitLossBrokerageReductionAsStr;
                             txtBoxPayout.Text = selectedSaleObject.PayoutBrokerageReductionAsStr;
                             txtBoxDocument.Text = selectedSaleObject.DocumentAsStr;
+
+                            if (ShareObjectFinalValue.AllSaleEntries.IsLastSale(SelectedGuid))
+                            {
+                                // Check if the delete button should be enabled or not
+                                btnDelete.Enabled = ShareObjectFinalValue.AllSaleEntries.GetAllSalesOfTheShare().Count > 0;
+                                btnAddSave.Enabled = ShareObjectFinalValue.AllSaleEntries.GetAllSalesOfTheShare().Count > 0;
+                                btnSalesDocumentBrowse.Enabled = ShareObjectFinalValue.AllSaleEntries.GetAllSalesOfTheShare().Count > 0;
+
+                                // Enable text box(es)
+                                dateTimePickerDate.Enabled = true;
+                                dateTimePickerTime.Enabled = true;
+                                txtBoxOrderNumber.Enabled = true;
+                                txtBoxVolume.Enabled = true;
+                                txtBoxSalePrice.Enabled = true;
+                                txtBoxTaxAtSource.Enabled = true;
+                                txtBoxCapitalGainsTax.Enabled = true;
+                                txtBoxSolidarityTax.Enabled = true;
+                                txtBoxProvision.Enabled = true;
+                                txtBoxBrokerFee.Enabled = true;
+                                txtBoxTraderPlaceFee.Enabled = true;
+                                txtBoxReduction.Enabled = true;
+                                txtBoxDocument.Enabled = true;
+                            }
+                            else
+                            {
+                                // Disable Button(s)
+                                btnDelete.Enabled = false;
+
+                                // Disable TextBox(es)
+                                dateTimePickerDate.Enabled = false;
+                                dateTimePickerTime.Enabled = false;
+                                txtBoxOrderNumber.Enabled = false;
+                                txtBoxVolume.Enabled = false;
+                                txtBoxSalePrice.Enabled = false;
+                                txtBoxTaxAtSource.Enabled = false;
+                                txtBoxCapitalGainsTax.Enabled = false;
+                                txtBoxSolidarityTax.Enabled = false;
+                                txtBoxProvision.Enabled = false;
+                                txtBoxBrokerFee.Enabled = false;
+                                txtBoxTraderPlaceFee.Enabled = false;
+                                txtBoxReduction.Enabled = false;
+                            }
+
+                            btnSalesBuyDetails.Enabled = true;
+
+                            // Rename button
+                            btnAddSave.Text =
+                                Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Buttons/Save",
+                                    LanguageName);
+                            btnAddSave.Image = Resources.button_pencil_24;
+
+                            // Rename group box
+                            grpBoxAdd.Text =
+                                Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Edit_Caption",
+                                    LanguageName);
+
+                            // Store DataGridView instance
+                            SelectedDataGridView = (DataGridView)sender;
+
+                            // Format the input value
+                            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
                         }
                         else
                         {
-                            // TODO
-                            dateTimePickerDate.Value = Convert.ToDateTime(curItem[0].Cells[0].Value.ToString());
-                            dateTimePickerTime.Value = Convert.ToDateTime(curItem[0].Cells[0].Value.ToString());
-                            txtBoxVolume.Text = curItem[0].Cells[1].Value.ToString();
-                            txtBoxProfitLoss.Text = curItem[0].Cells[3].Value.ToString();
-                            txtBoxPayout.Text = curItem[0].Cells[4].Value.ToString();
-                            txtBoxDocument.Text = curItem[0].Cells[5].Value.ToString();
+                            // Reset and disable date time picker
+                            dateTimePickerDate.Value = DateTime.Now;
+                            dateTimePickerDate.Enabled = false;
+                            dateTimePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+                            dateTimePickerTime.Enabled = false;
+
+                            // Reset and disable text boxes
+                            txtBoxOrderNumber.Text = string.Empty;
+                            txtBoxOrderNumber.Enabled = false;
+                            txtBoxVolume.Text = string.Empty;
+                            txtBoxVolume.Enabled = false;
+                            txtBoxSalePrice.Text = string.Empty;
+                            txtBoxSalePrice.Enabled = false;
+                            txtBoxSaleBuyValue.Text = string.Empty;
+                            txtBoxSaleBuyValue.Enabled = false;
+                            txtBoxProfitLoss.Text = string.Empty;
+                            txtBoxProfitLoss.Enabled = false;
+
+                            txtBoxTaxAtSource.Text = string.Empty;
+                            txtBoxTaxAtSource.Enabled = false;
+                            txtBoxCapitalGainsTax.Text = string.Empty;
+                            txtBoxCapitalGainsTax.Enabled = false;
+                            txtBoxSolidarityTax.Text = string.Empty;
+                            txtBoxSolidarityTax.Enabled = false;
+
+                            txtBoxProvision.Text = string.Empty;
+                            txtBoxProvision.Enabled = false;
+                            txtBoxBrokerFee.Text = string.Empty;
+                            txtBoxBrokerFee.Enabled = false;
+                            txtBoxTraderPlaceFee.Text = string.Empty;
+                            txtBoxTraderPlaceFee.Enabled = false;
+                            txtBoxReduction.Text = string.Empty;
+                            txtBoxReduction.Enabled = false;
+                            txtBoxBrokerage.Text = string.Empty;
+                            txtBoxBrokerage.Enabled = false;
+
+                            txtBoxPayout.Text = string.Empty;
+                            txtBoxPayout.Enabled = false;
+                            txtBoxDocument.Text = string.Empty;
+                            txtBoxDocument.Enabled = false;
+
+                            // Reset status label message text
+                            toolStripStatusLabelMessageSaleEdit.Text = string.Empty;
+                            toolStripStatusLabelMessageSaleDocumentParsing.Text = string.Empty;
+                            toolStripProgressBarSaleDocumentParsing.Visible = false;
+
+                            // Disable Button(s)
+                            btnSalesBuyDetails.Enabled = false;
+                            btnSalesDocumentBrowse.Enabled = false;
+                            btnAddSave.Enabled = false;
+                            btnDelete.Enabled = false;
+
+                            Helper.AddStatusMessage(toolStripStatusLabelMessageSaleEdit,
+                                Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/SelectionChangeFailed", LanguageName),
+                                Language, LanguageName,
+                                Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError,
+                                (int)FrmMain.EComponentLevels.Application);
                         }
                     }
-
-                    if (ShareObjectFinalValue.AllSaleEntries.IsLastSale(SelectedGuid))
-                    {
-                        btnAddSave.Enabled = ShareObjectFinalValue.AllSaleEntries.GetAllSalesOfTheShare().Count > 0;
-                        btnDelete.Enabled = ShareObjectFinalValue.AllSaleEntries.GetAllSalesOfTheShare().Count > 0;
-
-                        // Enable text box(es)
-                        dateTimePickerDate.Enabled = true;
-                        dateTimePickerTime.Enabled = true;
-                        txtBoxOrderNumber.Enabled = true;
-                        txtBoxVolume.Enabled = true;
-                        txtBoxSalePrice.Enabled = true;
-                        txtBoxTaxAtSource.Enabled = true;
-                        txtBoxCapitalGainsTax.Enabled = true;
-                        txtBoxSolidarityTax.Enabled = true;
-                        txtBoxProvision.Enabled = true;
-                        txtBoxBrokerFee.Enabled = true;
-                        txtBoxTraderPlaceFee.Enabled = true;
-                        txtBoxReduction.Enabled = true;
-                    }
-                    else
-                    {
-                        // Disable Button(s)
-                        btnDelete.Enabled = false;
-                        // Disable TextBox(es)
-                        dateTimePickerDate.Enabled = false;
-                        dateTimePickerTime.Enabled = false;
-                        txtBoxOrderNumber.Enabled = false;
-                        txtBoxVolume.Enabled = false;
-                        txtBoxSalePrice.Enabled = false;
-                        txtBoxTaxAtSource.Enabled = false;
-                        txtBoxCapitalGainsTax.Enabled = false;
-                        txtBoxSolidarityTax.Enabled = false;
-                        txtBoxProvision.Enabled = false;
-                        txtBoxBrokerFee.Enabled = false;
-                        txtBoxTraderPlaceFee.Enabled = false;
-                        txtBoxReduction.Enabled = false;
-                    }
-
-                    btnSalesBuyDetails.Enabled = true;
-
-                    // Rename button
-                    btnAddSave.Text =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Buttons/Save", LanguageName);
-                    btnAddSave.Image = Resources.button_pencil_24;
-
-                    // Rename group box
-                    grpBoxAdd.Text =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Edit_Caption", LanguageName);
-
-                    // Store DataGridView instance
-                    SelectedDataGridView = (DataGridView) sender;
-
-                    // Format the input value
-                    FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
                 }
                 else
                 {
@@ -2929,19 +3012,31 @@ namespace SharePortfolioManager.SalesForm.View
 
                     // Enable Button(s)
                     btnAddSave.Enabled = true;
+                    btnSalesDocumentBrowse.Enabled = true;
 
-                    // Enable text box(es)
+                    // Enable date time picker
                     dateTimePickerDate.Enabled = true;
                     dateTimePickerTime.Enabled = true;
+
+                    // Enable text box(es)
+                    txtBoxOrderNumber.Enabled = true;
                     txtBoxVolume.Enabled = true;
                     txtBoxSalePrice.Enabled = true;
+                    txtBoxSaleBuyValue.Enabled = true;
+                    txtBoxProfitLoss.Enabled = true;
+
                     txtBoxTaxAtSource.Enabled = true;
                     txtBoxCapitalGainsTax.Enabled = true;
                     txtBoxSolidarityTax.Enabled = true;
+
                     txtBoxProvision.Enabled = true;
                     txtBoxBrokerFee.Enabled = true;
                     txtBoxTraderPlaceFee.Enabled = true;
                     txtBoxReduction.Enabled = true;
+                    txtBoxBrokerage.Enabled = true;
+
+                    txtBoxPayout.Enabled = true;
+                    txtBoxDocument.Enabled = true;
 
                     // Reset stored DataGridView instance
                     SelectedDataGridView = null;
@@ -2960,6 +3055,8 @@ namespace SharePortfolioManager.SalesForm.View
             }
             catch (Exception ex)
             {
+                tabCtrlSales.SelectedIndex = 0;
+
                 Helper.AddStatusMessage(toolStripStatusLabelMessageSaleEdit,
                     Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/SelectionChangeFailed", LanguageName),
                     Language, LanguageName,
@@ -3153,7 +3250,7 @@ namespace SharePortfolioManager.SalesForm.View
                     );
 
                     // Check if the Parser is in idle mode
-                    if (DocumentTypeParser != null && DocumentTypeParser.ParserInfoState.State == ParserState.Idle)
+                    if (DocumentTypeParser != null && DocumentTypeParser.ParserInfoState.State == DataTypes.ParserState.Idle)
                     {
                         DocumentTypeParser.OnParserUpdate += DocumentTypeParser_UpdateGUI;
 
@@ -3191,7 +3288,7 @@ namespace SharePortfolioManager.SalesForm.View
         /// </summary>
         /// <param name="sender">BackGroundWorker</param>
         /// <param name="e">ProgressChangedEventArgs</param>
-        private void DocumentTypeParser_UpdateGUI(object sender, OnParserUpdateEventArgs e)
+        private void DocumentTypeParser_UpdateGUI(object sender, DataTypes.OnParserUpdateEventArgs e)
         {
             try
             {
@@ -3203,10 +3300,9 @@ namespace SharePortfolioManager.SalesForm.View
                 {
                     try
                     {
-                        //Console.WriteLine(@"Percentage: {0}", e.ParserInfoState.Percentage);
                         switch (e.ParserInfoState.LastErrorCode)
                         {
-                            case ParserErrorCodes.Finished:
+                            case DataTypes.ParserErrorCodes.Finished:
                             {
                                 //if (e.ParserInfoState.SearchResult != null)
                                 //{
@@ -3221,71 +3317,71 @@ namespace SharePortfolioManager.SalesForm.View
                                 //}
                                 break;
                             }
-                            case ParserErrorCodes.SearchFinished:
+                            case DataTypes.ParserErrorCodes.SearchFinished:
                             {
                                 break;
                             }
-                            case ParserErrorCodes.SearchRunning:
+                            case DataTypes.ParserErrorCodes.SearchRunning:
                             {
                                 break;
                             }
-                            case ParserErrorCodes.SearchStarted:
+                            case DataTypes.ParserErrorCodes.SearchStarted:
                             {
                                 break;
                             }
-                            case ParserErrorCodes.ContentLoadFinished:
+                            case DataTypes.ParserErrorCodes.ContentLoadFinished:
                             {
                                 break;
                             }
-                            case ParserErrorCodes.ContentLoadStarted:
+                            case DataTypes.ParserErrorCodes.ContentLoadStarted:
                             {
                                 break;
                             }
-                            case ParserErrorCodes.Started:
+                            case DataTypes.ParserErrorCodes.Started:
                             {
                                 break;
                             }
-                            case ParserErrorCodes.Starting:
+                            case DataTypes.ParserErrorCodes.Starting:
                             {
                                 break;
                             }
-                            case ParserErrorCodes.NoError:
+                            case DataTypes.ParserErrorCodes.NoError:
                             {
                                 break;
                             }
-                            case ParserErrorCodes.StartFailed:
+                            case DataTypes.ParserErrorCodes.StartFailed:
                             {
                                 break;
                             }
-                            case ParserErrorCodes.BusyFailed:
+                            case DataTypes.ParserErrorCodes.BusyFailed:
                             {
                                 break;
                             }
-                            case ParserErrorCodes.InvalidWebSiteGiven:
+                            case DataTypes.ParserErrorCodes.InvalidWebSiteGiven:
                             {
                                 break;
                             }
-                            case ParserErrorCodes.NoRegexListGiven:
+                            case DataTypes.ParserErrorCodes.NoRegexListGiven:
                             {
                                 break;
                             }
-                            case ParserErrorCodes.NoWebContentLoaded:
+                            case DataTypes.ParserErrorCodes.NoWebContentLoaded:
                             {
                                 break;
                             }
-                            case ParserErrorCodes.ParsingFailed:
+                            case DataTypes.ParserErrorCodes.ParsingFailed:
                             {
                                 break;
                             }
-                            case ParserErrorCodes.CancelThread:
+                            case DataTypes.ParserErrorCodes.CancelThread:
                             {
                                 break;
                             }
-                            case ParserErrorCodes.WebExceptionOccured:
+                            case DataTypes.ParserErrorCodes.WebExceptionOccured:
                             {
                                 break;
                             }
-                            case ParserErrorCodes.ExceptionOccured:
+                            case DataTypes.ParserErrorCodes.ExceptionOccured:
                             {
                                 break;
                             }
@@ -3296,7 +3392,7 @@ namespace SharePortfolioManager.SalesForm.View
 
                         // Check if a error occurred or the process has been finished
                         if (e.ParserInfoState.LastErrorCode < 0 ||
-                            e.ParserInfoState.LastErrorCode == ParserErrorCodes.Finished)
+                            e.ParserInfoState.LastErrorCode == DataTypes.ParserErrorCodes.Finished)
                         {
                             if (e.ParserInfoState.LastErrorCode < 0)
                             {
@@ -3839,44 +3935,8 @@ namespace SharePortfolioManager.SalesForm.View
             grpBoxSales.Enabled = true;
         }
 
-        private void ResetValues()
-        {
-            // Reset state pictures
-            picBoxDateParseState.Image = Resources.empty_arrow;
-            picBoxTimeParseState.Image = Resources.empty_arrow;
-            picBoxOrderNumberParserState.InitialImage = Resources.empty_arrow;
-            picBoxVolumeParseState.Image = Resources.empty_arrow;
-            picBoxPriceParseState.Image = Resources.empty_arrow;
-            picBoxTaxAtSourceParseState.Image = Resources.empty_arrow;
-            picBoxCapitalGainTaxParseState.Image = Resources.empty_arrow;
-            picBoxSolidarityTaxParseState.Image = Resources.empty_arrow;
-            picBoxProvisionParseState.Image = Resources.empty_arrow;
-            picBoxBrokerFeeParseState.Image = Resources.empty_arrow;
-            picBoxTraderPlaceFeeParseState.Image = Resources.empty_arrow;
-            picBoxReductionParseState.Image = Resources.empty_arrow;
-
-            // Reset textboxes
-            dateTimePickerDate.Value = DateTime.Now;
-            dateTimePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
-            txtBoxOrderNumber.Text = string.Empty;
-            txtBoxVolume.Text = string.Empty;
-            txtBoxSalePrice.Text = string.Empty;
-            txtBoxTaxAtSource.Text = string.Empty;
-            txtBoxCapitalGainsTax.Text = string.Empty;
-            txtBoxSolidarityTax.Text = string.Empty;
-            txtBoxProvision.Text = string.Empty;
-            txtBoxBrokerFee.Text = string.Empty;
-            txtBoxTraderPlaceFee.Text = string.Empty;
-            txtBoxReduction.Text = string.Empty;
-
-            toolStripStatusLabelMessageSaleEdit.Text = string.Empty;
-            toolStripStatusLabelMessageSaleDocumentParsing.Text = string.Empty;
-            toolStripProgressBarSaleDocumentParsing.Visible = false;
-        }
-
         #endregion Parsing
-
+        
         #endregion Methods
-
     }
 }

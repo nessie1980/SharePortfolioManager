@@ -36,6 +36,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -157,12 +158,20 @@ namespace SharePortfolioManager.Classes
         #region Variables
 
         public static string PdfConverterApplication =
-            Path.GetDirectoryName(Application.ExecutablePath) + "\\Tools\\pdftotext.exe";
+            Path.GetDirectoryName(Application.ExecutablePath) + @"\Tools\pdftotext.exe";
 
         public static string ParsingDocumentFileName =
-            Path.GetDirectoryName(Application.ExecutablePath) + "\\Tools\\Parsing.txt";
+            Path.GetDirectoryName(Application.ExecutablePath) + @"\Tools\Parsing.txt";
 
         public static bool ShowExceptionMessageFlag;
+
+        public static Form FrmMain;
+
+        // Name of the charting color XML tag for buy information
+        public const string BuyInformationName = "Buy";
+
+        // Name of the charting color XML tag for sale information
+        public const string SaleInformationName = "Sale";
 
         #endregion Variables
 
@@ -234,6 +243,7 @@ namespace SharePortfolioManager.Classes
         /// </summary>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.NoInlining)]
+        // ReSharper disable once UnusedMember.Global
         public static string GetMethodName()
         {
             var st = new StackTrace(new StackFrame(1));
@@ -249,7 +259,7 @@ namespace SharePortfolioManager.Classes
             // Check if not all necessary values for the show are given
             if (!ShowExceptionMessageFlag || ex == null) return;
 
-            var caption = $"An exception occurred";
+            const string caption = @"An exception occurred";
 
             var message = @"Source: " + Environment.NewLine + ex.Source
                           + Environment.NewLine + Environment.NewLine
@@ -279,6 +289,9 @@ namespace SharePortfolioManager.Classes
                                                + Environment.NewLine
                                                + ex.HelpLink;
             }
+
+            if (FrmMain != null)
+                MessageBoxHelper.PrepToCenterMessageBoxOnForm(FrmMain);
 
             MessageBox.Show(message, caption, MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
@@ -404,7 +417,7 @@ namespace SharePortfolioManager.Classes
                     // Reset color
                     //castControl.ForeColor = oldColor;
 
-                    result =  true;
+                    result = true;
                 }
 
                 // Check show given exception 
@@ -533,7 +546,7 @@ namespace SharePortfolioManager.Classes
                     }
 
                     // TabControl
-                    if (control.GetType() != typeof(TabControl)) continue;
+                    if (control.GetType() == typeof(TabControl))
                     {
                         var castControl = (TabControl) control;
 #if DEBUG_HELPER
@@ -549,7 +562,7 @@ namespace SharePortfolioManager.Classes
                     // Textbox
                     if (control.GetType() != typeof(TextBox)) continue;
                     {
-                        var castControl = (TextBox)control;
+                        var castControl = (TextBox) control;
 #if DEBUG_HELPER
                         Console.WriteLine(castControl.Name);
 #endif
@@ -1056,10 +1069,10 @@ namespace SharePortfolioManager.Classes
         public static void CalcBuyValues(decimal decVolume, decimal decSharePrice,
             decimal decProvision, decimal decBrokerFee, decimal decTraderPlaceFee, decimal decReduction,
             out decimal decBuyValue, out decimal decBuyValueReduction, out decimal decBuyValueBrokerage,
-            out decimal decBuyValueBrokerageReduction, out decimal decBrokerage)
+            out decimal decBuyValueBrokerageReduction, out decimal decBrokerage, out decimal decBrokerageReduction)
         {
             // Calculate brokerage
-            CalcBrokerageValues(decProvision, decBrokerFee, decTraderPlaceFee, out decBrokerage);
+            CalcBrokerageValues(decProvision, decBrokerFee, decTraderPlaceFee, decReduction, out decBrokerage, out decBrokerageReduction);
 
             // Calculate market value and deposit ( market value + brokerage )
             if (decVolume > 0 && decSharePrice > 0)
@@ -1082,11 +1095,12 @@ namespace SharePortfolioManager.Classes
 
         #region Calculate brokerage value
 
-        public static void CalcBrokerageValues(decimal decProvision, decimal decBrokerFee, decimal decTraderPlaceFee,
-            out decimal decBrokerage)
+        public static void CalcBrokerageValues(decimal decProvision, decimal decBrokerFee, decimal decTraderPlaceFee, decimal decReduction,
+            out decimal decBrokerage, out decimal decBrokerageReduction)
         {
             // Calculate brokerage
             decBrokerage = decProvision + decBrokerFee + decTraderPlaceFee;
+            decBrokerageReduction = decBrokerage - decReduction;
         }
 
         #endregion Calculate brokerage value
@@ -1100,7 +1114,6 @@ namespace SharePortfolioManager.Classes
                 return false;
             }
 
-            HttpWebResponse response;
             try
             {
                 var urlCheck = new Uri(url);
@@ -1109,7 +1122,19 @@ namespace SharePortfolioManager.Classes
                 request.UserAgent =
                     "Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9.0.13) Gecko/2009073022 Firefox/3.0.13";
 
-                response = (HttpWebResponse) request.GetResponse();
+                // Using is necessary here, because after various response the connection fails with timeout
+                HttpWebResponse response;
+                using (response = (HttpWebResponse) request.GetResponse())
+                {
+#if DEBUG_HELPER
+                    Console.WriteLine(@"Uri:" + response.ResponseUri);
+                    Console.WriteLine(@"Status:" + response.StatusDescription);
+                    Console.WriteLine(@"Response:" + response.StatusCode);
+#endif
+
+                    return (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Found) &&
+                           url == response.ResponseUri.ToString();
+                }
             }
             catch (Exception ex)
             {
@@ -1117,8 +1142,6 @@ namespace SharePortfolioManager.Classes
 
                 return false; //could not connect to the inter net (maybe) 
             }
-
-            return response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Found;
         }
 
         public static string RegexReplaceStartDateAndInterval(string strWebSite)
@@ -1142,15 +1165,6 @@ namespace SharePortfolioManager.Classes
         }
 
         #endregion URL checker
-
-        //#region Get combo box items
-
-        //public static List<string> GetComboBoxItems(string xPath, string languageName, Language language)
-        //{
-        //    return language.GetLanguageTextListByXPath(xPath, languageName);
-        //}
-
-        //#endregion Get combo box items
 
         #region Remove double whitespaces and line feeds ( \n \r )
 
@@ -1203,7 +1217,7 @@ namespace SharePortfolioManager.Classes
             }
             catch (OperationCanceledException ex)
             {
-                ShowExceptionMessage(ex); 
+                ShowExceptionMessage(ex);
 
                 throw;
             }
@@ -1404,6 +1418,7 @@ namespace SharePortfolioManager.Classes
 
         #endregion Methods
     }
+
     #region Text and image in a DataGridView cell
 
     // Taken from this website
@@ -1547,6 +1562,101 @@ namespace SharePortfolioManager.Classes
         {
             CurrencySymbol = currencySymbol;
             CultureInfo = cultureInfo;
+        }
+    }
+
+    /// <summary>
+    /// This class allows to center a message box to the center of the parent dialog
+    /// Code is taken from the following web site
+    /// http://www.jasoncarr.com/technology/centering-a-message-box-on-the-active-window-in-csharp
+    /// </summary>
+    internal static class MessageBoxHelper
+    {
+        internal static void PrepToCenterMessageBoxOnForm(Form form)
+        {
+            var helper = new MessageBoxCenterHelper();
+            helper.Prep(form);
+        }
+
+        private class MessageBoxCenterHelper
+        {
+            private int _messageHook;
+            private IntPtr _parentFormHandle;
+
+            public void Prep(IWin32Window form)
+            {
+                var callBackDelegate = new NativeMethods.CenterMessageCallBackDelegate(CenterMessageCallBack);
+                GCHandle.Alloc(callBackDelegate);
+
+                _parentFormHandle = form.Handle;
+                _messageHook = NativeMethods.SetWindowsHookEx(5, callBackDelegate,
+                        new IntPtr(NativeMethods.GetWindowLong(_parentFormHandle, -6)),
+                        NativeMethods.GetCurrentThreadId())
+                    .ToInt32();
+            }
+
+            private int CenterMessageCallBack(int message, int wParam, int lParam)
+            {
+                if (message != 5) return 0;
+
+                NativeMethods.GetWindowRect(_parentFormHandle, out var formRect);
+                NativeMethods.GetWindowRect(new IntPtr(wParam), out var messageBoxRect);
+
+                var xPos = (formRect.Left + (formRect.Right - formRect.Left) / 2) -
+                           ((messageBoxRect.Right - messageBoxRect.Left) / 2);
+                var yPos = (formRect.Top + (formRect.Bottom - formRect.Top) / 2) -
+                           ((messageBoxRect.Bottom - messageBoxRect.Top) / 2);
+
+                NativeMethods.SetWindowPos(wParam, 0, xPos, yPos, 0, 0, 0x1 | 0x4 | 0x10);
+                NativeMethods.UnhookWindowsHookEx(_messageHook);
+
+                return 0;
+            }
+        }
+
+        private static class NativeMethods
+        {
+            internal readonly struct Rect
+            {
+                public readonly int Left;
+                public readonly int Top;
+                public readonly int Right;
+                public readonly int Bottom;
+
+                // ReSharper disable once UnusedMember.Local
+                private Rect(int left, int top, int right, int bottom)
+                {
+                    Left = left;
+                    Top = top;
+                    Right = right;
+                    Bottom = bottom;
+                }
+            }
+
+            internal delegate int CenterMessageCallBackDelegate(int message, int wParam, int lParam);
+
+            [DllImport("user32.dll")]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            internal static extern bool UnhookWindowsHookEx(int hhk);
+
+            [DllImport("user32.dll", SetLastError = true)]
+            internal static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
+            [DllImport("kernel32.dll")]
+            internal static extern int GetCurrentThreadId();
+
+            [DllImport("user32.dll", SetLastError = true)]
+            internal static extern IntPtr SetWindowsHookEx(int hook, CenterMessageCallBackDelegate callback,
+                IntPtr hMod, int dwThreadId);
+
+            [DllImport("user32.dll")]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            internal static extern bool SetWindowPos(int hWnd, int hWndInsertAfter, int x, int y, int cx, int cy,
+                int uFlags);
+
+            [DllImport("user32.dll")]
+            [return: MarshalAs(UnmanagedType.Bool)]
+            internal static extern bool GetWindowRect(IntPtr hWnd, out Rect lpRect);
         }
     }
 }

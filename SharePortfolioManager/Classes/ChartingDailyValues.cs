@@ -52,7 +52,8 @@ namespace SharePortfolioManager.Classes
 
         private static Legend _legendChart;
 
-        private static Logger _logger;
+        // TODO: (thomas:2020-08-10) Currently not used and disabled
+        //private static Logger _logger;
 
         private static string _languageName;
 
@@ -89,7 +90,8 @@ namespace SharePortfolioManager.Classes
             _shareObjectMarketValue = shareObjectMarketValue;
             _shareObjectFinalValue = shareObjectFinalValue;
 
-            _logger = logger;
+            // TODO: (thomas:2020-08-10) Currently not used and disabled
+            //_logger = logger;
             _languageName = languageName;
             _language = language;
 
@@ -103,7 +105,10 @@ namespace SharePortfolioManager.Classes
             #endregion Set private values
 
             // Clear chart
-            _chartDailyValues.ChartAreas[0].AxisX.StripLines.Clear();
+            foreach (var chartArea in _chartDailyValues.ChartAreas)
+            {
+                chartArea.AxisX.StripLines.Clear();
+            }
             _chartDailyValues.ChartAreas.Clear();
             _chartDailyValues.Series.Clear();
 
@@ -184,6 +189,9 @@ namespace SharePortfolioManager.Classes
 
                 // Show no data message label
                 lblBoxNoDataMessage.Visible = true;
+
+                // Hide chart graph
+                chartDailyValues.Visible = false;
 
                 return;
             }

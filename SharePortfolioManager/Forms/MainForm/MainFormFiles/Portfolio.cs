@@ -807,45 +807,61 @@ namespace SharePortfolioManager
                                     }
                                 }
                                 
+                                // Get Id for the RegexSearchFailedList
+                                var id = RegexSearchFailedList.Count + 1;
                                 // Set website configuration and encoding to the share object.
                                 // The encoding is necessary for the Parser for encoding the download result.
                                 if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
                                     .SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList))
                                 {
-                                    if (!RegexSearchFailedList.Contains(
-                                            ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].Wkn) &&
-                                            ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].DoInternetUpdate
-                                        )
+                                    var newItem = new InvalidRegexConfigurations(id)
                                     {
-                                        RegexSearchFailedList.Add(
-                                            ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].Wkn);
+                                        Wkn = ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].Wkn,
+                                        ShareName = ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                            .Name
+                                    };
 
-                                        // Set update flag to false
-                                        ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].WebSiteConfigurationFound = false;
-                                    }
+                                    if (!RegexSearchFailedList.Contains(newItem) &&
+                                        ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].DoInternetUpdate
+                                    )
+                                        RegexSearchFailedList.Add(newItem);
+
+                                    // Set update flag to false
+                                    ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                        .WebSiteConfigurationFound = false;
+                                    ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                        .DoInternetUpdate = false;
                                 }
                                 else
                                     // Set update flag to false
-                                    ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].WebSiteConfigurationFound = true;
+                                    ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                        .WebSiteConfigurationFound = true;
 
                                 if (!ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
                                     .SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList))
                                 {
-                                    if (!RegexSearchFailedList.Contains(
-                                            ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].Wkn) &&
-                                            ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].DoInternetUpdate
-                                        )
+                                    var newItem = new InvalidRegexConfigurations(id)
                                     {
-                                        RegexSearchFailedList.Add(
-                                            ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].Wkn);
+                                        Wkn = ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].Wkn,
+                                        ShareName = ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                            .Name
+                                    };
 
-                                        // Set update flag to false
-                                        ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].WebSiteConfigurationFound = false;
-                                    }
+                                    if (!RegexSearchFailedList.Contains(newItem) &&
+                                        ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].DoInternetUpdate
+                                        )
+                                        RegexSearchFailedList.Add(newItem);
+
+                                    // Set update flag to false
+                                    ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
+                                        .WebSiteConfigurationFound = false;
+                                    ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
+                                        .DoInternetUpdate = false;
                                 }
                                 else
                                     // Set update flag to false
-                                    ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].WebSiteConfigurationFound = true;
+                                    ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
+                                        .WebSiteConfigurationFound = true;
                             }
                         }
                         else
@@ -905,89 +921,126 @@ namespace SharePortfolioManager
 
                 var tableOptions = new ConsoleTableOptions
                 {
-                    EnableCount = true,
+                    EnableCount = false,
                     NumberAlignment = Alignment.Right,
                     Columns = new List<string>() { @"ShareObjectListMarketValue", @"", @"ShareObjectListFinalValue", @"" }
                 };
 
-                var test = new ConsoleTable(tableOptions);
-                test.AddRow(@"Name:", ShareObjectListMarketValue.Last().Name, @"Name:", ShareObjectListFinalValue.Last().Name);
-                test.AddRow(@"PurchaseValue:", ShareObjectListMarketValue.Last().PurchaseValueAsStrUnit,
-                    @"PurchaseValue:", ShareObjectListFinalValue.Last().PurchaseValueAsStrUnit);
-                test.AddRow(@"MarketValue:", ShareObjectListMarketValue.Last().MarketValueAsStrUnit,
-                    @"FinalValue:", ShareObjectListFinalValue.Last().FinalValueAsStrUnit);
-                test.AddRow(@"PerformanceValue:", ShareObjectListMarketValue.Last().PerformanceValueAsStrUnit,
-                    @"PerformanceValue:", ShareObjectListFinalValue.Last().PerformanceValueAsStrUnit);
-                test.AddRow(@"CompletePerformanceValue:", ShareObjectListMarketValue.Last().CompletePerformanceValueAsStrUnit,
-                    @"CompletePerformanceValue:", ShareObjectListFinalValue.Last().CompletePerformanceValueAsStrUnit);
-                test.AddRow(@"ProfitLossValue:", ShareObjectListMarketValue.Last().ProfitLossValueAsStrUnit,
-                    @"ProfitLossValue:", ShareObjectListFinalValue.Last().ProfitLossValueAsStrUnit);
-                test.AddRow(@"CompleteProfitLossValue:", ShareObjectListMarketValue.Last().CompleteProfitLossValueAsStrUnit,
-                    @"CompleteProfitLossValue:", ShareObjectListFinalValue.Last().CompleteProfitLossValueAsStrUnit);
-                //test.AddRow(@"PurchaseValueMarketValueWithProfitLoss:", ShareObjectListMarketValue.Last().CompletePurchaseValueMarketValueWithProfitLossAsStrUnit, @"PurchaseValueMarketValueWithProfitLoss:", ShareObjectListFinalValue.Last().CompletePurchaseValueMarketValueWithProfitLossAsStrUnit);
-                test.AddRow(@"CompleteMarketValue:", ShareObjectListMarketValue.Last().CompleteMarketValueAsStrUnit,
-                    @"CompleteFinalValue:", ShareObjectListFinalValue.Last().CompleteFinalValueAsStrUnit);
-                test.AddRow(@"", @"", @"", @"");
-                test.AddRow(@"BuyValue:", ShareObjectListMarketValue.Last().BuyValue,
-                    @"BuyValue:", ShareObjectListFinalValue.Last().BuyValue);
-                test.AddRow(@"BuyValueReduction:", ShareObjectListMarketValue.Last().BuyValueReduction,
-                    @"BuyValueReduction:", ShareObjectListFinalValue.Last().BuyValueReduction);
-                test.AddRow(@"BuyValueBrokerage:", ShareObjectListMarketValue.Last().BuyValueBrokerage,
-                    @"BuyValueBrokerage:", ShareObjectListFinalValue.Last().BuyValueBrokerage);
-                test.AddRow(@"BuyValueBrokerageReduction:", ShareObjectListMarketValue.Last().BuyValueBrokerageReduction,
-                    @"BuyValueBrokerageReduction:", ShareObjectListFinalValue.Last().BuyValueBrokerageReduction);
-                test.AddRow(@"", @"", @"", @"");
-                test.AddRow(@"SaleVolume:", ShareObjectListMarketValue.Last().SaleVolumeAsStrUnit,
-                    @"SaleVolume:", ShareObjectListFinalValue.Last().SaleVolumeAsStrUnit);
-                test.AddRow(@"SalePurchaseValue:", ShareObjectListMarketValue.Last().SalePurchaseValueAsStrUnit,
-                    @"SalePurchaseValue:", ShareObjectListFinalValue.Last().SalePurchaseValueAsStrUnit);
-                test.AddRow(@"SalePurchaseValueBrokerage:", ShareObjectListMarketValue.Last().SalePurchaseValueBrokerageAsStrUnit,
-                    @"SalePurchaseValueBrokerage:", ShareObjectListFinalValue.Last().SalePurchaseValueBrokerageAsStrUnit);
-                test.AddRow(@"SalePurchaseValueReduction:", ShareObjectListMarketValue.Last().SalePurchaseValueReductionAsStrUnit,
-                    @"SalePurchaseValueReduction:", ShareObjectListFinalValue.Last().SalePurchaseValueReductionAsStrUnit);
-                test.AddRow(@"SalePurchaseValueBrokerageReduction:", ShareObjectListMarketValue.Last().SalePurchaseValueBrokerageReductionAsStrUnit,
-                    @"SalePurchaseValueBrokerageReduction:", ShareObjectListFinalValue.Last().SalePurchaseValueBrokerageReductionAsStrUnit);
-                test.AddRow(@"SalePayout:", ShareObjectListMarketValue.Last().SalePayoutAsStrUnit,
-                    @"SalePayout:", ShareObjectListFinalValue.Last().SalePayoutAsStrUnit);
-                test.AddRow(@"SalePayoutBrokerage:", ShareObjectListMarketValue.Last().SalePayoutBrokerageAsStrUnit,
-                    @"SalePayoutBrokerage:", ShareObjectListFinalValue.Last().SalePayoutBrokerageAsStrUnit);
-                test.AddRow(@"SalePayoutReduction:", ShareObjectListMarketValue.Last().SalePayoutReductionAsStrUnit,
-                    @"SalePayoutReduction:", ShareObjectListFinalValue.Last().SalePayoutReductionAsStrUnit);
-                test.AddRow(@"SalePayoutBrokerageReduction:", ShareObjectListMarketValue.Last().SalePayoutBrokerageReductionAsStrUnit,
-                    @"SalePayoutBrokerageReduction:", ShareObjectListFinalValue.Last().SalePayoutBrokerageReductionAsStrUnit);
-                test.AddRow(@"SaleProfitLoss:", ShareObjectListMarketValue.Last().SaleProfitLossAsStrUnit,
-                    @"SaleProfitLoss:", ShareObjectListFinalValue.Last().SaleProfitLossAsStrUnit);
-                test.AddRow(@"SaleProfitLossBrokerage:", ShareObjectListMarketValue.Last().SaleProfitLossBrokerageAsStrUnit,
-                    @"SaleProfitLossBrokerage:", ShareObjectListFinalValue.Last().SaleProfitLossBrokerageAsStrUnit);
-                test.AddRow(@"SaleProfitLossReduction:", ShareObjectListMarketValue.Last().SaleProfitLossReductionAsStrUnit,
-                    @"SaleProfitLossReduction:", ShareObjectListFinalValue.Last().SaleProfitLossReductionAsStrUnit);
-                test.AddRow(@"SaleProfitLossBrokerageReduction:", ShareObjectListMarketValue.Last().SaleProfitLossBrokerageReductionAsStrUnit,
-                    @"SaleProfitLossBrokerageReduction:", ShareObjectListFinalValue.Last().SaleProfitLossBrokerageReductionAsStrUnit);
-                test.AddRow(@"", @"", @"", @"");
-                test.AddRow(@"PortfolioMarketValue:", ShareObjectListMarketValue.Last().PortfolioMarketValueAsStrUnit,
-                    @"PortfolioFinalValue:", ShareObjectListFinalValue.Last().PortfolioFinalValueAsStrUnit);
-                test.AddRow(@"PortfolioPurchaseValue:", ShareObjectListMarketValue.Last().PortfolioPurchaseValueAsStrUnit,
-                    @"PortfolioPurchaseValue:", ShareObjectListFinalValue.Last().PortfolioPurchaseValueAsStrUnit);
-                test.AddRow(@"PortfolioSoldPurchaseValue:", ShareObjectListMarketValue.Last().PortfolioSoldPurchaseValue,
-                    @"PortfolioSoldPurchaseValue:", ShareObjectListFinalValue.Last().PortfolioSoldPurchaseValue);
-                test.AddRow(@"PortfolioMarketValueWithProfitLoss:", ShareObjectListMarketValue.Last().PortfolioMarketValueWithProfitLossAsStrUnit,
-                    @"PortfolioFinalValueWithProfitLoss:", ShareObjectListFinalValue.Last().PortfolioFinalValueWithProfitLossAsStrUnit);
-                test.AddRow(@"PortfolioProfitLossValue:", ShareObjectListMarketValue.Last().PortfolioProfitLossValueAsStrUnit,
-                    @"PortfolioProfitLossValue:", ShareObjectListFinalValue.Last().PortfolioProfitLossValueAsStrUnit);
-                test.AddRow(@"PortfolioPerformanceValue:", ShareObjectListMarketValue.Last().PortfolioPerformanceValueAsStrUnit,
-                    @"PortfolioPerformanceValue:", ShareObjectListFinalValue.Last().PortfolioPerformanceValueAsStrUnit);
-                test.AddRow(@"", @"", @"", @"");
-                test.AddRow(@"PortfolioCompletePurchaseValue:", ShareObjectListMarketValue.Last().PortfolioCompletePurchaseValueAsStrUnit,
-                    @"PortfolioCompletePurchaseValue:", ShareObjectListFinalValue.Last().PortfolioCompletePurchaseValueAsStrUnit);
-                test.AddRow(@"PortfolioCompleteMarketValue:", ShareObjectListMarketValue.Last().PortfolioCompleteMarketValueWithProfitLossAsStrUnit,
-                    @"PortfolioCompleteFinalValue:", ShareObjectListFinalValue.Last().PortfolioCompleteFinalValueAsStrUnit);
-                test.AddRow(@"PortfolioCompletePerformanceValue:", ShareObjectListMarketValue.Last().PortfolioCompletePerformanceValueAsStrUnit,
-                    @"PortfolioCompletePerformanceValue:", ShareObjectListFinalValue.Last().PortfolioCompletePerformanceValueAsStrUnit);
-                test.AddRow(@"PortfolioCompleteProfitLossValue:", ShareObjectListMarketValue.Last().PortfolioCompleteProfitLossValueAsStrUnit,
-                    @"PortfolioCompleteProfitLossValue:", ShareObjectListFinalValue.Last().PortfolioCompleteProfitLossValueAsStrUnit);
-                test.Write();
+                for (var i = 0; i < ShareObjectListFinalValue.Count; i++)
+                {
+                    Console.WriteLine(@"	Name: {0}{1}", ShareObjectListMarketValue[i].Name, Environment.NewLine);
 
-                Console.WriteLine(@"");
+                    var test = new ConsoleTable(tableOptions);
+                    test.AddRow(@"PurchaseValue:", ShareObjectListMarketValue[i].PurchaseValueAsStrUnit,
+                        @"PurchaseValue:", ShareObjectListFinalValue[i].PurchaseValueAsStrUnit);
+                    test.AddRow(@"MarketValue:", ShareObjectListMarketValue[i].MarketValueAsStrUnit,
+                        @"FinalValue:", ShareObjectListFinalValue[i].FinalValueAsStrUnit);
+                    test.AddRow(@"PerformanceValue:", ShareObjectListMarketValue[i].PerformanceValueAsStrUnit,
+                        @"PerformanceValue:", ShareObjectListFinalValue[i].PerformanceValueAsStrUnit);
+                    test.AddRow(@"CompletePerformanceValue:",
+                        ShareObjectListMarketValue[i].CompletePerformanceValueAsStrUnit,
+                        @"CompletePerformanceValue:",
+                        ShareObjectListFinalValue[i].CompletePerformanceValueAsStrUnit);
+                    test.AddRow(@"ProfitLossValue:", ShareObjectListMarketValue[i].ProfitLossValueAsStrUnit,
+                        @"ProfitLossValue:", ShareObjectListFinalValue[i].ProfitLossValueAsStrUnit);
+                    test.AddRow(@"CompleteProfitLossValue:",
+                        ShareObjectListMarketValue[i].CompleteProfitLossValueAsStrUnit,
+                        @"CompleteProfitLossValue:", ShareObjectListFinalValue[i].CompleteProfitLossValueAsStrUnit);
+                    //test.AddRow(@"PurchaseValueMarketValueWithProfitLoss:", ShareObjectListMarketValue[i].CompletePurchaseValueMarketValueWithProfitLossAsStrUnit, @"PurchaseValueMarketValueWithProfitLoss:", ShareObjectListFinalValue[i].CompletePurchaseValueMarketValueWithProfitLossAsStrUnit);
+                    test.AddRow(@"CompleteMarketValue:", ShareObjectListMarketValue[i].CompleteMarketValueAsStrUnit,
+                        @"CompleteFinalValue:", ShareObjectListFinalValue[i].CompleteFinalValueAsStrUnit);
+                    test.AddRow(@"", @"", @"", @"");
+                    test.AddRow(@"BuyValue:", ShareObjectListMarketValue[i].BuyValue,
+                        @"BuyValue:", ShareObjectListFinalValue[i].BuyValue);
+                    test.AddRow(@"BuyValueReduction:", ShareObjectListMarketValue[i].BuyValueReduction,
+                        @"BuyValueReduction:", ShareObjectListFinalValue[i].BuyValueReduction);
+                    test.AddRow(@"BuyValueBrokerage:", ShareObjectListMarketValue[i].BuyValueBrokerage,
+                        @"BuyValueBrokerage:", ShareObjectListFinalValue[i].BuyValueBrokerage);
+                    test.AddRow(@"BuyValueBrokerageReduction:",
+                        ShareObjectListMarketValue[i].BuyValueBrokerageReduction,
+                        @"BuyValueBrokerageReduction:", ShareObjectListFinalValue[i].BuyValueBrokerageReduction);
+                    test.AddRow(@"", @"", @"", @"");
+                    test.AddRow(@"SaleVolume:", ShareObjectListMarketValue[i].SaleVolumeAsStrUnit,
+                        @"SaleVolume:", ShareObjectListFinalValue[i].SaleVolumeAsStrUnit);
+                    test.AddRow(@"SalePurchaseValue:", ShareObjectListMarketValue[i].SalePurchaseValueAsStrUnit,
+                        @"SalePurchaseValue:", ShareObjectListFinalValue[i].SalePurchaseValueAsStrUnit);
+                    test.AddRow(@"SalePurchaseValueBrokerage:",
+                        ShareObjectListMarketValue[i].SalePurchaseValueBrokerageAsStrUnit,
+                        @"SalePurchaseValueBrokerage:",
+                        ShareObjectListFinalValue[i].SalePurchaseValueBrokerageAsStrUnit);
+                    test.AddRow(@"SalePurchaseValueReduction:",
+                        ShareObjectListMarketValue[i].SalePurchaseValueReductionAsStrUnit,
+                        @"SalePurchaseValueReduction:",
+                        ShareObjectListFinalValue[i].SalePurchaseValueReductionAsStrUnit);
+                    test.AddRow(@"SalePurchaseValueBrokerageReduction:",
+                        ShareObjectListMarketValue[i].SalePurchaseValueBrokerageReductionAsStrUnit,
+                        @"SalePurchaseValueBrokerageReduction:",
+                        ShareObjectListFinalValue[i].SalePurchaseValueBrokerageReductionAsStrUnit);
+                    test.AddRow(@"SalePayout:", ShareObjectListMarketValue[i].SalePayoutAsStrUnit,
+                        @"SalePayout:", ShareObjectListFinalValue[i].SalePayoutAsStrUnit);
+                    test.AddRow(@"SalePayoutBrokerage:", ShareObjectListMarketValue[i].SalePayoutBrokerageAsStrUnit,
+                        @"SalePayoutBrokerage:", ShareObjectListFinalValue[i].SalePayoutBrokerageAsStrUnit);
+                    test.AddRow(@"SalePayoutReduction:", ShareObjectListMarketValue[i].SalePayoutReductionAsStrUnit,
+                        @"SalePayoutReduction:", ShareObjectListFinalValue[i].SalePayoutReductionAsStrUnit);
+                    test.AddRow(@"SalePayoutBrokerageReduction:",
+                        ShareObjectListMarketValue[i].SalePayoutBrokerageReductionAsStrUnit,
+                        @"SalePayoutBrokerageReduction:",
+                        ShareObjectListFinalValue[i].SalePayoutBrokerageReductionAsStrUnit);
+                    test.AddRow(@"SaleProfitLoss:", ShareObjectListMarketValue[i].SaleProfitLossAsStrUnit,
+                        @"SaleProfitLoss:", ShareObjectListFinalValue[i].SaleProfitLossAsStrUnit);
+                    test.AddRow(@"SaleProfitLossBrokerage:",
+                        ShareObjectListMarketValue[i].SaleProfitLossBrokerageAsStrUnit,
+                        @"SaleProfitLossBrokerage:", ShareObjectListFinalValue[i].SaleProfitLossBrokerageAsStrUnit);
+                    test.AddRow(@"SaleProfitLossReduction:",
+                        ShareObjectListMarketValue[i].SaleProfitLossReductionAsStrUnit,
+                        @"SaleProfitLossReduction:", ShareObjectListFinalValue[i].SaleProfitLossReductionAsStrUnit);
+                    test.AddRow(@"SaleProfitLossBrokerageReduction:",
+                        ShareObjectListMarketValue[i].SaleProfitLossBrokerageReductionAsStrUnit,
+                        @"SaleProfitLossBrokerageReduction:",
+                        ShareObjectListFinalValue[i].SaleProfitLossBrokerageReductionAsStrUnit);
+                    test.AddRow(@"", @"", @"", @"");
+                    test.AddRow(@"PortfolioMarketValue:",
+                        ShareObjectListMarketValue[i].PortfolioMarketValueAsStrUnit,
+                        @"PortfolioFinalValue:", ShareObjectListFinalValue[i].PortfolioFinalValueAsStrUnit);
+                    test.AddRow(@"PortfolioPurchaseValue:",
+                        ShareObjectListMarketValue[i].PortfolioPurchaseValueAsStrUnit,
+                        @"PortfolioPurchaseValue:", ShareObjectListFinalValue[i].PortfolioPurchaseValueAsStrUnit);
+                    test.AddRow(@"PortfolioSoldPurchaseValue:",
+                        ShareObjectListMarketValue[i].PortfolioSoldPurchaseValue,
+                        @"PortfolioSoldPurchaseValue:", ShareObjectListFinalValue[i].PortfolioSoldPurchaseValue);
+                    test.AddRow(@"PortfolioMarketValueWithProfitLoss:",
+                        ShareObjectListMarketValue[i].PortfolioMarketValueWithProfitLossAsStrUnit,
+                        @"PortfolioFinalValueWithProfitLoss:",
+                        ShareObjectListFinalValue[i].PortfolioFinalValueWithProfitLossAsStrUnit);
+                    test.AddRow(@"PortfolioProfitLossValue:",
+                        ShareObjectListMarketValue[i].PortfolioProfitLossValueAsStrUnit,
+                        @"PortfolioProfitLossValue:",
+                        ShareObjectListFinalValue[i].PortfolioProfitLossValueAsStrUnit);
+                    test.AddRow(@"PortfolioPerformanceValue:",
+                        ShareObjectListMarketValue[i].PortfolioPerformanceValueAsStrUnit,
+                        @"PortfolioPerformanceValue:",
+                        ShareObjectListFinalValue[i].PortfolioPerformanceValueAsStrUnit);
+                    test.AddRow(@"", @"", @"", @"");
+                    test.AddRow(@"PortfolioCompletePurchaseValue:",
+                        ShareObjectListMarketValue[i].PortfolioCompletePurchaseValueAsStrUnit,
+                        @"PortfolioCompletePurchaseValue:",
+                        ShareObjectListFinalValue[i].PortfolioCompletePurchaseValueAsStrUnit);
+                    test.AddRow(@"PortfolioCompleteMarketValue:",
+                        ShareObjectListMarketValue[i].PortfolioCompleteMarketValueWithProfitLossAsStrUnit,
+                        @"PortfolioCompleteFinalValue:",
+                        ShareObjectListFinalValue[i].PortfolioCompleteFinalValueAsStrUnit);
+                    test.AddRow(@"PortfolioCompletePerformanceValue:",
+                        ShareObjectListMarketValue[i].PortfolioCompletePerformanceValueAsStrUnit,
+                        @"PortfolioCompletePerformanceValue:",
+                        ShareObjectListFinalValue[i].PortfolioCompletePerformanceValueAsStrUnit);
+                    test.AddRow(@"PortfolioCompleteProfitLossValue:",
+                        ShareObjectListMarketValue[i].PortfolioCompleteProfitLossValueAsStrUnit,
+                        @"PortfolioCompleteProfitLossValue:",
+                        ShareObjectListFinalValue[i].PortfolioCompleteProfitLossValueAsStrUnit);
+                    test.Write();
+
+                    Console.WriteLine(@"");
+                }
 #endif
             }
             catch (XmlException ex)
@@ -1037,121 +1090,23 @@ namespace SharePortfolioManager
 
         #endregion Load portfolio
 
-        #region Get brokerage of a share object by date
-
-        // TODO refactor to Guid
-        private decimal GetBrokerageOfShareObjectByGuidDate(string wkn, string guid, string dateTime, bool isSalePart, bool isBuyPart)
-        {
-            try
-            {
-                // Read the portfolio
-                var nodeElement = Portfolio.SelectSingleNode($"/{ShareObject.GeneralPortfolioAttrName}/{ShareObject.GeneralShareAttrName} [@{ShareObject.GeneralWknAttrName}=\"{wkn}\"]");
-                if (nodeElement == null) return 0;
-
-                foreach (XmlElement nodeList in nodeElement.ChildNodes[(int) PortfolioParts.Brokerages].ChildNodes)
-                {
-                    // Check if the node has the right count of attributes
-                    if (nodeList == null || nodeList.Attributes.Count != ShareObject.BrokerageAttrCount) return 0;
-
-                    // Read XML date
-                    var xmlGuid = nodeList.Attributes[ShareObject.BrokerageGuidAttrName].Value;
-                    var xmlDateTime = nodeList.Attributes[ShareObject.BrokerageDateAttrName].Value;
-                    var xmlSalePart = Convert.ToBoolean(nodeList.Attributes[ShareObject.BrokerageSalePartAttrName].Value);
-                    var xmlBuyPart = Convert.ToBoolean(nodeList.Attributes[ShareObject.BrokerageBuyPartAttrName].Value);
-
-                    if (xmlGuid == guid &&
-                        xmlDateTime == dateTime &&
-                        (xmlBuyPart == isBuyPart || xmlSalePart == isSalePart)
-                    )
-                    {
-                        var decProvision =
-                            Convert.ToDecimal(nodeList.Attributes[ShareObject.BrokerageProvisionAttrName].Value);
-                        var decBrokerFee =
-                            Convert.ToDecimal(nodeList.Attributes[ShareObject.BrokerageBrokerFeeAttrName].Value);
-                        var decTraderPlaceFee =
-                            Convert.ToDecimal(nodeList.Attributes[ShareObject.BrokerageTraderPlaceFeeAttrName].Value);
-                        var decReduction =
-                            Convert.ToDecimal(nodeList.Attributes[ShareObject.BrokerageReductionAttrName].Value);
-
-                        Helper.CalcBrokerageValues(decProvision, decBrokerFee, decTraderPlaceFee, out var decBrokerage);
-
-                        return decBrokerage;
-                    }
-                }
-
-                return 0;
-            }
-            catch
-            {
-                return -1;
-            }
-        }
-
-
-        // TODO refactor to Guid
-        private decimal GetBrokerageOfShareObjectBySaleBuyGuidDate(string wkn, string guid, string dateTime, bool isSalePart, bool isBuyPart)
-        {
-            try
-            {
-                // Read the portfolio
-                var nodeElement = Portfolio.SelectSingleNode($"/{ShareObject.GeneralPortfolioAttrName}/{ShareObject.GeneralShareAttrName}[@{ShareObject.GeneralWknAttrName}=\"{wkn}\"]");
-                if (nodeElement == null) return 0;
-
-                foreach (XmlElement nodeList in nodeElement.ChildNodes[(int)PortfolioParts.Brokerages].ChildNodes)
-                {
-                    // Check if the node has the right count of attributes
-                    if (nodeList == null || nodeList.Attributes.Count != ShareObject.BrokerageAttrCount) return 0;
-
-                    // Read XML date
-                    var xmlGuid = nodeList.Attributes[ShareObject.BrokerageGuidBuySaleAttrName].Value;
-                    var xmlDateTime = nodeList.Attributes[ShareObject.BrokerageDateAttrName].Value;
-                    var xmlSalePart = Convert.ToBoolean(nodeList.Attributes[ShareObject.BrokerageSalePartAttrName].Value);
-                    var xmlBuyPart = Convert.ToBoolean(nodeList.Attributes[ShareObject.BrokerageBuyPartAttrName].Value);
-
-                    if (xmlGuid == guid &&
-                        xmlDateTime == dateTime &&
-                        (xmlBuyPart == isBuyPart || xmlSalePart == isSalePart)
-                    )
-                    {
-                        var decProvision =
-                            Convert.ToDecimal(nodeList.Attributes[ShareObject.BrokerageProvisionAttrName].Value);
-                        var decBrokerFee =
-                            Convert.ToDecimal(nodeList.Attributes[ShareObject.BrokerageBrokerFeeAttrName].Value);
-                        var decTraderPlaceFee =
-                            Convert.ToDecimal(nodeList.Attributes[ShareObject.BrokerageTraderPlaceFeeAttrName].Value);
-                        var decReduction =
-                            Convert.ToDecimal(nodeList.Attributes[ShareObject.BrokerageReductionAttrName].Value);
-
-                        Helper.CalcBrokerageValues(decProvision, decBrokerFee, decTraderPlaceFee, out var decBrokerage);
-
-                        return decBrokerage;
-                    }
-                }
-
-                return 0;
-            }
-            catch
-            {
-                return -1;
-            }
-        }
-
-        #endregion Get brokerage of a share object by date
-
         #region Show invalid website configuration(s)
 
         /// <summary>
         /// This function shows the list of the mismatching website configurations of the shares
         /// </summary>
         /// <param name="regexSearchFailed">List with the mismatched website configurations</param>
-        public void ShowInvalidWebSiteConfigurations(List<string> regexSearchFailed)
+        public void ShowInvalidWebSiteConfigurations(List<InvalidRegexConfigurations> regexSearchFailed)
         {
             if (regexSearchFailed.Count != 0 && regexSearchFailed.Count == 1)
             {
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
                     Language.GetLanguageTextByXPath(@"/MainForm/Errors/WebSiteRegexNotFound1_1", LanguageName)
                     + @"'"
-                    + regexSearchFailed[0]
+                    + regexSearchFailed[0].ShareName
+                    + @" (WKN: "
+                    + regexSearchFailed[0].Wkn
+                    + @")"
                     + @"'"
                     + Language.GetLanguageTextByXPath(@"/MainForm/Errors/WebSiteRegexNotFound1_2", LanguageName),
                     Language, LanguageName,
@@ -1167,14 +1122,20 @@ namespace SharePortfolioManager
                     if (i < regexSearchFailed.Count - 1)
                     {
                         statusMessage += @"'";
-                        statusMessage += regexSearchFailed[i];
+                        statusMessage += regexSearchFailed[i].ShareName;
+                        statusMessage += @" (WKN: ";
+                        statusMessage += regexSearchFailed[i].Wkn;
+                        statusMessage += @")";
                         statusMessage += @"', ";
                     }
                     else
                     {
                         statusMessage += @"'";
-                        statusMessage += regexSearchFailed[i];
-                        statusMessage += @"' ";
+                        statusMessage += regexSearchFailed[i].ShareName;
+                        statusMessage += @" (WKN: ";
+                        statusMessage += regexSearchFailed[i].Wkn;
+                        statusMessage += @")";
+                        statusMessage += @"'";
                     }
                 }
                 statusMessage +=
@@ -1187,5 +1148,46 @@ namespace SharePortfolioManager
         }
 
         #endregion Show invalid website configuration(s)
+    }
+
+    /// <summary>
+    /// This class stores the invalid regex configurations for shares
+    /// </summary>
+    public class InvalidRegexConfigurations:IEquatable<InvalidRegexConfigurations>
+    {
+        public InvalidRegexConfigurations(int id)
+        {
+            Id = id;
+        }
+
+        public int Id
+        {
+            get;
+        }
+        public string Wkn
+        {
+            get;
+            set;
+        }
+
+        public string ShareName
+        {
+            get;
+            set;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is InvalidRegexConfigurations objAsPart && Equals(objAsPart);
+        }
+        public override int GetHashCode()
+        {
+            return Id;
+        }
+        public bool Equals(InvalidRegexConfigurations other)
+        {
+            if (other == null) return false;
+            return (Wkn.Equals(other.Wkn));
+        }
     }
 }
