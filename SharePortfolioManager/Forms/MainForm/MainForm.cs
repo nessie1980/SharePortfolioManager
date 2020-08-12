@@ -881,8 +881,6 @@ namespace SharePortfolioManager
         /// <param name="e">EventArgs</param>
         private void TimerStatusMessageDelete_Tick(object sender, EventArgs e)
         {
-            Console.WriteLine(@"TimerStatusMessageDelete_Tick");
-
             Helper.EnableDisableControls(true, this, EnableDisableControlNames);
 
             if (MarketValueOverviewTabSelected)

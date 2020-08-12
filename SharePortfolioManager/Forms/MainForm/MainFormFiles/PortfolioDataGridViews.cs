@@ -851,7 +851,11 @@ namespace SharePortfolioManager
         /// </summary>
         private void OnDgvPortfolioMarketValue_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
-            OnDgvPortfolioMarketValueImageUpdate(e.RowIndex);
+            // Only update if all shares have been loaded
+            if (dgvPortfolioMarketValue.RowCount != ShareObjectListMarketValue.Count)
+                return;
+
+            OnDgvPortfolioMarketValueImageUpdate();
         }
 
         /// <summary>
@@ -860,7 +864,11 @@ namespace SharePortfolioManager
         /// </summary>
         private void OnDgvPortfolioFinalValue_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
-            OnDgvPortfolioFinalValueImageUpdate(e.RowIndex);
+            // Only update if all shares have been loaded
+            if (dgvPortfolioFinalValue.RowCount != ShareObjectListFinalValue.Count)
+                return;
+
+            OnDgvPortfolioFinalValueImageUpdate();
         }
 
         #endregion Add shares to data grid view portfolio and configure data grid view footer
@@ -870,21 +878,37 @@ namespace SharePortfolioManager
         /// <summary>
         /// This function updates the images of the currently selected row of the market value data grid view
         /// </summary>
-        /// <param name="rowIndex">Index of the currently selected data grid view row</param>
-        private void OnDgvPortfolioMarketValueImageUpdate(int rowIndex)
+        /// <param name="givenRowIndex">Row index of the selected row. If no row index is given all rows will be updated.</param>
+        private void OnDgvPortfolioMarketValueImageUpdate(int givenRowIndex = -1)
         {
-            if ((dgvPortfolioMarketValue.Rows[rowIndex]
-                .Cells.Count - 1) == (int)ColumnIndicesPortfolioMarketValue.ECompleteMarketValueColumnIndex)
+            var startIndex = 0;
+
+            // Check if a row index is given so set this as start index
+            if (givenRowIndex > -1)
+                startIndex = givenRowIndex;
+
+            for (var rowIndex = startIndex; rowIndex < dgvPortfolioFinalValue.RowCount; rowIndex++)
             {
+                // Return if not all columns have been added
+                if ((dgvPortfolioMarketValue.Rows[rowIndex]
+                        .Cells.Count - 1) != (int) ColumnIndicesPortfolioMarketValue.ECompleteMarketValueColumnIndex)
+                    continue;
+
+                // Get WKN of the current row
                 var wkn = dgvPortfolioMarketValue.Rows[rowIndex]
                     .Cells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex].Value.ToString();
+
+                // Get share object of the current WKN
                 var shareObject = ShareObjectListMarketValue.Find(x => (x.Wkn == wkn));
+
+                // Set internet update image
                 ((TextAndImageCell) dgvPortfolioMarketValue.Rows[rowIndex]
                         .Cells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]).Image =
                     shareObject.DoInternetUpdate
                         ? Resources.state_update_16
                         : Resources.state_no_update_16;
 
+                // Current performance image
                 if (shareObject.PerformanceValue > 0)
                 {
                     ((TextAndImageCell) dgvPortfolioMarketValue.Rows[rowIndex]
@@ -904,13 +928,14 @@ namespace SharePortfolioManager
                         Resources.negativ_development_24;
                 }
 
+                // Complete performance image
                 if (shareObject.CompletePerformanceValue > 0)
                 {
                     ((TextAndImageCell) dgvPortfolioMarketValue.Rows[rowIndex]
                             .Cells[(int) ColumnIndicesPortfolioMarketValue.ECompletePerformanceColumnIndex]).Image =
                         Resources.positiv_development_24;
                 }
-                else if (shareObject.PerformanceValue == 0)
+                else if (shareObject.CompletePerformanceValue == 0)
                 {
                     ((TextAndImageCell) dgvPortfolioMarketValue.Rows[rowIndex]
                             .Cells[(int) ColumnIndicesPortfolioMarketValue.ECompletePerformanceColumnIndex]).Image =
@@ -922,67 +947,92 @@ namespace SharePortfolioManager
                             .Cells[(int) ColumnIndicesPortfolioMarketValue.ECompletePerformanceColumnIndex]).Image =
                         Resources.negativ_development_24;
                 }
+
+                // If an index is given stop update after the update of the given index
+                if (givenRowIndex > -1)
+                    break;
             }
         }
 
         /// <summary>
         /// This function updates the images of the currently selected row of the market value data grid view
+        /// <param name="givenRowIndex">Row index of the selected row. If no row index is given all rows will be updated.</param>
         /// </summary>
-        /// <param name="rowIndex">Index of the currently selected data grid view row</param>
-        private void OnDgvPortfolioFinalValueImageUpdate(int rowIndex)
+        private void OnDgvPortfolioFinalValueImageUpdate(int givenRowIndex = -1)
         {
-            if ((dgvPortfolioFinalValue.Rows[rowIndex]
-                .Cells.Count - 1) == (int) ColumnIndicesPortfolioFinalValue.ECompleteFinalValueColumnIndex)
-            {
+            var startIndex = 0;
 
+            // Check if a row index is given so set this as start index
+            if (givenRowIndex > -1)
+                startIndex = givenRowIndex;
+
+            for (var rowIndex = startIndex; rowIndex < dgvPortfolioFinalValue.RowCount; rowIndex++)
+            {
+                // Return if not all columns have been added
+                if ((dgvPortfolioFinalValue.Rows[rowIndex]
+                    .Cells.Count - 1) != (int) ColumnIndicesPortfolioFinalValue.ECompleteFinalValueColumnIndex)
+                    continue;
+
+                // Get WKN of the current row
                 var wkn = dgvPortfolioFinalValue.Rows[rowIndex]
                     .Cells[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex].Value.ToString();
+
+                // Get share object of the current WKN
                 var shareObject = ShareObjectListFinalValue.Find(x => (x.Wkn == wkn));
+
+                // Set internet update image
+                ((TextAndImageCell) dgvPortfolioFinalValue.Rows[rowIndex]
+                        .Cells[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]).Image =
+                    shareObject.DoInternetUpdate
+                        ? Resources.state_update_16
+                        : Resources.state_no_update_16;
+
+                // Current performance image
+                if (shareObject.PerformanceValue > 0)
                 {
                     ((TextAndImageCell) dgvPortfolioFinalValue.Rows[rowIndex]
-                            .Cells[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]).Image =
-                        shareObject.DoInternetUpdate
-                            ? Resources.state_update_16
-                            : Resources.state_no_update_16;
-
-                    if (shareObject.PerformanceValue > 0)
-                    {
-                        ((TextAndImageCell) dgvPortfolioFinalValue.Rows[rowIndex]
-                                .Cells[(int) ColumnIndicesPortfolioFinalValue.EPerformanceColumnIndex]).Image =
-                            Resources.positiv_development_24;
-                    }
-                    else if (shareObject.PerformanceValue == 0)
-                    {
-                        ((TextAndImageCell) dgvPortfolioFinalValue.Rows[rowIndex]
-                                .Cells[(int) ColumnIndicesPortfolioFinalValue.EPerformanceColumnIndex]).Image =
-                            Resources.neutral_development_24;
-                    }
-                    else
-                    {
-                        ((TextAndImageCell) dgvPortfolioFinalValue.Rows[rowIndex]
-                                .Cells[(int) ColumnIndicesPortfolioFinalValue.EPerformanceColumnIndex]).Image =
-                            Resources.negativ_development_24;
-                    }
-
-                    if (shareObject.CompletePerformanceValue > 0)
-                    {
-                        ((TextAndImageCell) dgvPortfolioFinalValue.Rows[rowIndex]
-                                .Cells[(int) ColumnIndicesPortfolioFinalValue.ECompletePerformanceColumnIndex]).Image =
-                            Resources.positiv_development_24;
-                    }
-                    else if (shareObject.PerformanceValue == 0)
-                    {
-                        ((TextAndImageCell) dgvPortfolioFinalValue.Rows[rowIndex]
-                                .Cells[(int) ColumnIndicesPortfolioFinalValue.ECompletePerformanceColumnIndex]).Image =
-                            Resources.neutral_development_24;
-                    }
-                    else
-                    {
-                        ((TextAndImageCell) dgvPortfolioFinalValue.Rows[rowIndex]
-                                .Cells[(int) ColumnIndicesPortfolioFinalValue.ECompletePerformanceColumnIndex]).Image =
-                            Resources.negativ_development_24;
-                    }
+                            .Cells[(int) ColumnIndicesPortfolioFinalValue.EPerformanceColumnIndex]).Image =
+                        Resources.positiv_development_24;
                 }
+                else if (shareObject.PerformanceValue == 0)
+                {
+                    ((TextAndImageCell) dgvPortfolioFinalValue.Rows[rowIndex]
+                            .Cells[(int) ColumnIndicesPortfolioFinalValue.EPerformanceColumnIndex]).Image =
+                        Resources.neutral_development_24;
+                }
+                else
+                {
+                    ((TextAndImageCell) dgvPortfolioFinalValue.Rows[rowIndex]
+                            .Cells[(int) ColumnIndicesPortfolioFinalValue.EPerformanceColumnIndex]).Image =
+                        Resources.negativ_development_24;
+                }
+
+                // Complete performance image
+                if (shareObject.CompletePerformanceValue > 0)
+                {
+                    ((TextAndImageCell) dgvPortfolioFinalValue.Rows[rowIndex]
+                            .Cells[(int) ColumnIndicesPortfolioFinalValue.ECompletePerformanceColumnIndex])
+                        .Image =
+                        Resources.positiv_development_24;
+                }
+                else if (shareObject.CompletePerformanceValue == 0)
+                {
+                    ((TextAndImageCell) dgvPortfolioFinalValue.Rows[rowIndex]
+                            .Cells[(int) ColumnIndicesPortfolioFinalValue.ECompletePerformanceColumnIndex])
+                        .Image =
+                        Resources.neutral_development_24;
+                }
+                else
+                {
+                    ((TextAndImageCell) dgvPortfolioFinalValue.Rows[rowIndex]
+                            .Cells[(int) ColumnIndicesPortfolioFinalValue.ECompletePerformanceColumnIndex])
+                        .Image =
+                        Resources.negativ_development_24;
+                }
+
+                // If an index is given stop update after the update of the given index
+                if (givenRowIndex > -1)
+                    break;
             }
         }
 
@@ -1408,6 +1458,9 @@ namespace SharePortfolioManager
 
                 // Refresh the footers
                 RefreshFooters();
+
+                // Update images in the data grid view
+                OnDgvPortfolioFinalValueImageUpdate();
             }
             catch (Exception ex)
             {
