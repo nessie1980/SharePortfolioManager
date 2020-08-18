@@ -190,6 +190,7 @@ namespace SharePortfolioManager.Classes.Sales
         /// <param name="cultureInfo">Culture info of the sale</param>
         /// <param name="strGuid">Guid of the sale</param>
         /// <param name="strDate">Date of the share sale</param>
+        /// <param name="strDepotNumber">Depot number where the sale has been done</param>
         /// <param name="strOrderNumber">Order number of the share sale</param>
         /// <param name="decVolume">Volume of the sale</param>
         /// <param name="decSalePrice">Sale price of the share</param>
@@ -200,7 +201,7 @@ namespace SharePortfolioManager.Classes.Sales
         /// <param name="brokerageObject">Brokerage of the sale</param>
         /// <param name="strDoc">Document of the sale</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddSaleObject(CultureInfo cultureInfo,  string strGuid, string strDate, string strOrderNumber, decimal decVolume, decimal decSalePrice, List<SaleBuyDetails> usedBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
+        public bool AddSaleObject(CultureInfo cultureInfo,  string strGuid, string strDate, string strDepotNumber, string strOrderNumber, decimal decVolume, decimal decSalePrice, List<SaleBuyDetails> usedBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
              decimal decSolidarityTax, BrokerageReductionObject brokerageObject, string strDoc = "")
         {
 #if DEBUG_SALE_YEARS
@@ -212,7 +213,7 @@ namespace SharePortfolioManager.Classes.Sales
                 SaleCultureInfo = cultureInfo;
 
                 // Create new SaleObject
-                var addObject = new SaleObject(cultureInfo, strGuid, strDate, strOrderNumber, decVolume, decSalePrice, usedBuyDetails, decTaxAtSource, decCapitalGainsTax, decSolidarityTax, brokerageObject, strDoc);
+                var addObject = new SaleObject(cultureInfo, strGuid, strDate, strDepotNumber, strOrderNumber, decVolume, decSalePrice, usedBuyDetails, decTaxAtSource, decCapitalGainsTax, decSolidarityTax, brokerageObject, strDoc);
 
                 var addProfitLossObject = new ProfitLossObject(cultureInfo, strGuid, strDate, addObject.Volume,
                     addObject.ProfitLoss, addObject.ProfitLossBrokerage, addObject.ProfitLossReduction, addObject.ProfitLossBrokerageReduction,

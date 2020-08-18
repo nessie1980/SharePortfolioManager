@@ -61,6 +61,7 @@ namespace SharePortfolioManager.ShareAddForm.Model
         string DailyValuesWebSite { get; set; }
         string Date { get; set; }
         string Time { get; set; }
+        string DepotNumber { get; set; }
         string OrderNumber { get; set; }
         string Volume { get; set; }
         decimal VolumeDec { get; set; }
@@ -107,6 +108,7 @@ namespace SharePortfolioManager.ShareAddForm.Model
         private string _dailyValuesWebSite;
         private string _date;
         private string _time;
+        private string _depotNumber;
         private string _orderNumber;
         private string _volume;
         private decimal _volumeDec;
@@ -263,6 +265,17 @@ namespace SharePortfolioManager.ShareAddForm.Model
                 if (Equals(_time, value))
                     return;
                 _time = value;
+            }
+        }
+
+        public string DepotNumber
+        {
+            get => _depotNumber;
+            set
+            {
+                if (Equals(_depotNumber, value))
+                    return;
+                _depotNumber = value;
             }
         }
 

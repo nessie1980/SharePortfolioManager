@@ -580,9 +580,10 @@
 					<ShareType text="Type:" />
 					<PayoutInterval text="Dividend payout interval:" />
 					<CultureInfo text="Country info:" />
-					<OrderNumber text="Order number:" />
 					<WebSite text="Website:" />
 					<DailyValuesWebSite text="Daily values website:" />
+					<DepotNumber text="Depot number:" />
+					<OrderNumber text="Order number:" />
 					<Date text="Date:" />
 					<Volume text="Volume:" />
 					<SharePrice text="Market price:" />
@@ -624,6 +625,7 @@
 				<NameEmpty text="Please enter a share name." />
 				<NameExists text="The share name already exists." />
 				<StockMarketLaunchDateNotModified text="Stock exchange quotation date not changed." />
+				<DepotNumberEmpty text="Please select a depot." />
 				<OrderNumberEmpty text="Please enter a order number." />
 				<OrderNumberExists text="The order number already exists." />
 				<VolumeEmpty text="Please enter a value for the purchased shares." />
@@ -750,6 +752,7 @@
 				<!-- Labels -->
 				<Labels>
 					<Date text="Date:" />
+					<DepotNumber text="Depot number:" />
 					<OrderNumber text="Order number:" />
 					<Volume text="Volume:" />
 					<VolumeSold text="Already sold volume:" />
@@ -821,6 +824,7 @@
 				<DeselectFailed text="Deselect of the selected rows failed!" />
 				<RenameColHeaderFailed text="Renaming of the column headers failed!" />
 				<SelectionChangeFailed text="The selection change failed!" />
+				<DepotNumberEmpty text="Please select a depot." />
 				<OrderNumberEmpty text="Please enter a order number." />
 				<OrderNumberExists text="The order number already exists." />
 				<VolumeEmpty text="Please insert a volume." />
@@ -875,8 +879,7 @@
 				<!-- Labels -->
 				<Labels>
 					<Date text="Date:" />
-<!--					<ForeignCurrencyActivation text="Activate foreign currency input:" /> -->
-<!--					<ForeignCurrencyFactor text="Calculation factor:" /> -->
+					<DepotNumber text="Depot number:" />
 					<OrderNumber text="Order number:" />
 					<Volume text="Sale volume:" />
 					<SalesPrice text="Sale price of one share:" />
@@ -953,6 +956,7 @@
 				<DeselectFailed text="Deselect of the selected rows failed!" />
 				<RenameColHeaderFailed text="Renaming of the column headers failed!" />
 				<SelectionChangeFailed text="The selection change failed!" />
+				<DepotNumberEmpty text="Please select a depot." />
 				<OrderNumberEmpty text="Please enter a order number." />
 				<OrderNumberExists text="The order number already exists." />
 				<VolumeEmpty text="Please insert a volume." />
@@ -1999,9 +2003,10 @@
 					<ShareType text="Typ:" />
 					<PayoutInterval text="Dividendenauszahlungs- Interval:" />
 					<CultureInfo text="Länder- Info:" />
-					<OrderNumber text="Ordernummer:" />
 					<WebSite text="Webseite:" />
 					<DailyValuesWebSite text="Tages-Werte Webseite:" />
+					<DepotNumber text="Depot number:" />
+					<OrderNumber text="Ordernummer:" />
 					<Date text="Datum:" />
 					<Volume text="Anteile:" />
 					<SharePrice text="Kurs:" />
@@ -2043,6 +2048,7 @@
 				<NameEmpty text="Bitte geben Sie einen Aktien- Namen ein." />
 				<NameExists text="Der eingegebene Aktien- Name existiert bereits." />
 				<StockMarketLaunchDateNotModified text="Börsennotierungs- Datum nicht angepasst." />
+				<DepotNumberEmpty text="Bitte wählen Sie eine Depot aus." />
 				<OrderNumberEmpty text="Bitte geben Sie eine Ordernummer ein." />
 				<OrderNumberExists text="Die eingegebene Ordernummer existiert bereits." />
 				<VolumeEmpty text="Bitte geben Sie einen Wert für die gekauften Anteile ein." />
@@ -2169,6 +2175,7 @@
 				<!-- Labels -->
 				<Labels>
 					<Date text="Datum:" />
+					<DepotNumber text="Depotnummer:" />
 					<OrderNumber text="Ordernummer:" />
 					<Volume text="Gekaufte Anteile:" />
 					<VolumeSold text="Bereits verkaufte Anteile:" />
@@ -2240,6 +2247,7 @@
 				<DeselectFailed text="Deselektieren der selektierten Zeile ist fehlgeschlagen!" />
 				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
 				<RenameColHeaderFailed text="Umbennenen der Spalten- Namen ist fehlgeschlagen!" />
+				<DepotNumberEmpty text="Bitte wählen Sie eine Depot aus." />
 				<OrderNumberEmpty text="Bitte geben Sie eine Ordernummer ein." />
 				<OrderNumberExists text="Die eingegebene Ordernummer existiert bereits." />
 				<VolumeEmpty text="Bitte geben Sie einen Anteile- Wert ein." />
@@ -2294,6 +2302,7 @@
 				<!-- Labels -->
 				<Labels>
 					<Date text="Datum:" />
+					<DepotNumber text="Depot number:" />
 					<OrderNumber text="Ordernummer:" />
 					<Volume text="Verkaufte Anteile:" />
 					<BuyValue text="Verkaufter Kaufwert:" />

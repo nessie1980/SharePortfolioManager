@@ -192,6 +192,11 @@ namespace SharePortfolioManager.Classes.ShareObjects
         internal const string BuyGuidAttrName = "Guid";
 
         /// <summary>
+        /// Stores the XML attribute name for the depot number of the buy
+        /// </summary>
+        internal const string BuyDepotNumberAttrName = "DepotNumber";
+
+        /// <summary>
         /// Stores the XML attribute name for the buy order number
         /// </summary>
         internal const string BuyOrderNumberAttrName = "OrderNumber";
@@ -229,7 +234,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <summary>
         /// Stores the attribute count for the buy
         /// </summary>
-        internal const short BuyAttrCount = 8;
+        internal const short BuyAttrCount = 9;
 
         #endregion Buy XML variables
 
@@ -251,7 +256,12 @@ namespace SharePortfolioManager.Classes.ShareObjects
         internal const string SaleDateAttrName = "Date";
 
         /// <summary>
-        /// Stores the XML attribute name for the sale date
+        /// Stores the XML attribute name for the sale depot number
+        /// </summary>
+        internal const string SaleDepotNumberAttrName = "DepotNumber";
+
+        /// <summary>
+        /// Stores the XML attribute name for the sale order number
         /// </summary>
         internal const string SaleOrderNumberAttrName = "OrderNumber";
 
@@ -338,7 +348,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <summary>
         /// Stores the attribute count for the sale
         /// </summary>
-        internal const short SaleAttrCount = 11;
+        internal const short SaleAttrCount = 12;
 
         /// <summary>
         /// Stores the used buys count for the sale
@@ -752,6 +762,23 @@ namespace SharePortfolioManager.Classes.ShareObjects
         [Browsable(false)]
         public string VolumeAsStrUnit => Helper.FormatDecimal(Volume, Helper.VolumeFiveLength, false, Helper.VolumeTwoFixLength, true, PieceUnit, CultureInfo);
 
+        /// <summary>
+        /// Salable volume of the share
+        /// </summary>
+        public decimal SalableVolume { get; internal set; }
+
+        /// <summary>
+        /// Salable volume of the share as string
+        /// </summary>
+        [Browsable(false)]
+        public string SalableVolumeAsStr => Helper.FormatDecimal(SalableVolume, Helper.VolumeFiveLength, false, Helper.VolumeTwoFixLength, false, @"", CultureInfo);
+
+        /// <summary>
+        /// Salable volume of the share as string with unit
+        /// </summary>
+        [Browsable(false)]
+        public string SalableVolumeAsStrUnit => Helper.FormatDecimal(SalableVolume, Helper.VolumeFiveLength, false, Helper.VolumeTwoFixLength, true, PieceUnit, CultureInfo);
+
         #endregion Volume properties
 
         #region Price properties
@@ -1064,9 +1091,30 @@ namespace SharePortfolioManager.Classes.ShareObjects
             return null;
         }
 
-        #endregion Sale methods
+        // TODO: (thomas:2020-08-14) Functionality must be implemented 
+        public decimal GetSalableVolumeOfDepot(string strDepotNumber)
+        {
+            SalableVolume = 0;
+            // Loop through the buys and check which buy should be used for this sale
+            foreach (var currentBuyObject in AllBuyEntries.GetAllBuysOfTheShare()
+                .FindAll(x => x.DepotNumber == strDepotNumber))
+            {
+                // Check if this buy is already completely sold
+                if (currentBuyObject.VolumeSold == currentBuyObject.Volume) continue;
 
-        #region Performance methods
+                // Salable volume
+                SalableVolume += currentBuyObject.Volume - currentBuyObject.VolumeSold;
+            }
+
+#if DEBUG_SHARE_OBJECT
+            Console.WriteLine(@"GetSalableVolumeOfDepot - SalableVolume: {0}", SalableVolume);
+#endif
+            return SalableVolume;
+        }
+
+#endregion Sale methods
+
+#region Performance methods
 
         /// <summary>
         /// Calculates the profit or loss to the previous day of the current stock volume
@@ -1111,7 +1159,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 ImagePrevDayPerformance = ImageListPrevDayPerformance[3];
         }
 
-        #endregion Performance methods
+#endregion Performance methods
 
         /// <summary>
         /// Search for the correct website RegEx and sets the RegEx list.
@@ -1191,7 +1239,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             }
         }
 
-        #endregion Methods
+#endregion Methods
     }
 
     /// <inheritdoc />
@@ -1215,14 +1263,14 @@ namespace SharePortfolioManager.Classes.ShareObjects
     /// </summary>
     public class ShareObjectSearch
     {
-        #region Variables
+#region Variables
 
         /// <summary>
         /// Stores the search string
         /// </summary>
         private readonly string _searchString;
 
-        #endregion Variables
+#endregion Variables
 
         /// <summary>
         /// Constructor with the given search string

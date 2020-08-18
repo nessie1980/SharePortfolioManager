@@ -1111,6 +1111,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         /// <param name="guid">Guid of the buy</param>
         /// <param name="wkn">WKN number of the share</param>
+        /// <param name="depotNumber">Depot number where the buy has been done</param>
         /// <param name="orderNumber">order number of the first buy</param>
         /// <param name="addDateTime">Date and time of the add</param>
         /// <param name="stockMarketLaunchDate">Date of the stock market launch</param>
@@ -1132,7 +1133,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="shareType">Type of the share</param>
         /// <param name="document">Document of the first buy</param>
         public ShareObjectMarketValue(
-            string guid, string wkn, string orderNumber, string addDateTime, string stockMarketLaunchDate, string name,
+            string guid, string wkn, string depotNumber, string orderNumber, string addDateTime, string stockMarketLaunchDate, string name,
             DateTime lastUpdateInternet, DateTime lastUpdateShare,
             decimal price, decimal volume, decimal volumeSold, decimal provision, decimal brokerFee, decimal traderPlaceFee, decimal reduction,
             string webSite, string dailyValuesWebSite, List<Image> imageListForDayBeforePerformance, RegExList regexList, CultureInfo cultureInfo,
@@ -1153,7 +1154,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                     provision, brokerFee, traderPlaceFee, reduction, document);
             }
 
-            AddBuy(guid, orderNumber, AddDateTime, volume, volumeSold, price,
+            AddBuy(guid, depotNumber, orderNumber, AddDateTime, volume, volumeSold, price,
                 tempBrokerageObject, document);
         }
 
@@ -1178,6 +1179,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// This function adds new buy to the dictionary
         /// </summary>
         /// <param name="strGuid">Guid of the buy</param>
+        /// <param name="strDepotNumber">Depot number where the buy has been done</param>
         /// <param name="strOrderNumber">Order number of the buy</param>
         /// <param name="strDateTime">Date and time of the buy</param>
         /// <param name="decVolume">Buy volume</param>
@@ -1186,7 +1188,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="brokerageObject">Brokerage object of the buy</param>
         /// <param name="strDoc">Document of the buy</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddBuy(string strGuid, string strOrderNumber, string strDateTime, decimal decVolume, decimal decVolumeSold, decimal decPrice,
+        public bool AddBuy(string strGuid, string strDepotNumber, string strOrderNumber, string strDateTime, decimal decVolume, decimal decVolumeSold, decimal decPrice,
             BrokerageReductionObject brokerageObject, string strDoc = "")
         {
             try
@@ -1195,6 +1197,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 Console.WriteLine(@"");
                 Console.WriteLine(@"AddBuy());
                 Console.WriteLine(@"strGuid: {0}", strGuid);
+                Console.WriteLine(@"strDepotNumber: {0}", strDepotNumber);
                 Console.WriteLine(@"strOrderNumber: {0}", strOrderNumber);
                 Console.WriteLine(@"strDateTime: {0}", strDateTime);
                 Console.WriteLine(@"decVolume: {0}", decVolume);
@@ -1203,7 +1206,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 Console.WriteLine(@"strDoc: {0}", strDoc);
 #endif
                 // Add buy without reductions and brokerage
-                if (!AllBuyEntries.AddBuy(strGuid, strOrderNumber, strDateTime, decVolume, decVolumeSold, decPrice,
+                if (!AllBuyEntries.AddBuy(strGuid, strDepotNumber, strOrderNumber, strDateTime, decVolume, decVolumeSold, decPrice,
                     brokerageObject, strDoc))
                     return false;
 
@@ -1324,6 +1327,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         /// <param name="strGuid">Guid of the share sale</param>
         /// <param name="strDate">Date of the share sale</param>
+        /// <param name="strDepotNumber">Depot number where the sale has been done</param>
         /// <param name="strOrderNumber">Order number of the share sale</param>
         /// <param name="decVolume">Volume of the sale</param>
         /// <param name="decSalePrice">Sale price of the share</param>
@@ -1333,7 +1337,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="decSolidarityTax">Solidarity tax of the sale</param>
         /// <param name="strDoc">Document of the sale</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddSale(string strGuid, string strDate, string strOrderNumber, decimal decVolume, decimal decSalePrice, List<SaleBuyDetails> usedBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
+        public bool AddSale(string strGuid, string strDate, string strDepotNumber, string strOrderNumber, decimal decVolume, decimal decSalePrice, List<SaleBuyDetails> usedBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
              decimal decSolidarityTax, string strDoc = "")
         {
 #if DEBUG_MARKET_SHARE_OBJECT
@@ -1342,7 +1346,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
 #endif
             try
             {
-                if (!AllSaleEntries.AddSale(strGuid, strDate, strOrderNumber, decVolume, decSalePrice, usedBuyDetails, decTaxAtSource, decCapitalGainsTax,
+                if (!AllSaleEntries.AddSale(strGuid, strDate, strDepotNumber, strOrderNumber, decVolume, decSalePrice, usedBuyDetails, decTaxAtSource, decCapitalGainsTax,
                                             decSolidarityTax, null, strDoc))
                     return false;
 
@@ -1735,10 +1739,12 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                         var newBuyElement = xmlPortfolio.CreateElement(BuyTagNamePre);
                                         newBuyElement.SetAttribute(BuyGuidAttrName,
                                             buyElementYear.Guid);
+                                        newBuyElement.SetAttribute(BuyDepotNumberAttrName,
+                                            buyElementYear.DepotNumberAsStr);
                                         newBuyElement.SetAttribute(BuyDateAttrName,
                                             buyElementYear.DateAsStr);
                                         newBuyElement.SetAttribute(BuyOrderNumberAttrName,
-                                            buyElementYear.OrderNumber);
+                                            buyElementYear.OrderNumberAsStr);
                                         newBuyElement.SetAttribute(BuyVolumeAttrName,
                                             buyElementYear.VolumeAsStr);
                                         newBuyElement.SetAttribute(BuyVolumeSoldAttrName,
@@ -1767,6 +1773,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                             xmlPortfolio.CreateElement(SaleTagNamePre);
                                         newSaleElement.SetAttribute(SaleDateAttrName,
                                             saleElementYear.DateAsStr);
+                                        newSaleElement.SetAttribute(SaleDepotNumberAttrName,
+                                            saleElementYear.DepotNumberAsStr);
                                         newSaleElement.SetAttribute(SaleOrderNumberAttrName,
                                             saleElementYear.OrderNumberAsStr);
                                         newSaleElement.SetAttribute(SaleSalePriceAttrName,
@@ -1811,7 +1819,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
                                                 // Add buy of the sale to the used buys
                                                 newUsedBuysElement.AppendChild(newUsedBuyElement);
-
                                             }
                                         }
 

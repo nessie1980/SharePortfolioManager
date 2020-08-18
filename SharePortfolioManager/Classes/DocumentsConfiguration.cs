@@ -131,6 +131,7 @@ namespace SharePortfolioManager.Classes
 
         public const string DocumentTypeBuy = "Buy";
         public const string DocumentTypeBuyWkn = "Wkn";
+        public const string DocumentTypeBuyDepotNumber = "DepotNumber";
         public const string DocumentTypeBuyOrderNumber = "OrderNumber";
         public const string DocumentTypeBuyName = "Name";
         public const string DocumentTypeBuyDate = "Date";
@@ -148,6 +149,7 @@ namespace SharePortfolioManager.Classes
 
         public const string DocumentTypeSale = "Sale";
         public const string DocumentTypeSaleWkn = "Wkn";
+        public const string DocumentTypeSaleDepotNumber = "DepotNumber";
         public const string DocumentTypeSaleOrderNumber = "OrderNumber";
         public const string DocumentTypeSaleDate = "Date";
         public const string DocumentTypeSaleTime = "Time";

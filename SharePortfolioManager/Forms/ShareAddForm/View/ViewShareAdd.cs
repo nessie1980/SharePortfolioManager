@@ -54,6 +54,7 @@ namespace SharePortfolioManager.ShareAddForm.View
         NameEmpty,
         NameExists,
         StockMarketLaunchDateNotModified,
+        DepotNumberEmpty,
         OrderNumberEmpty,
         OrderNumberExists,
         VolumeEmpty,
@@ -126,6 +127,7 @@ namespace SharePortfolioManager.ShareAddForm.View
         string StockMarketLaunchDate { get; set; }
         string Date { get; set; }
         string Time { get; set; }
+        string DepotNumber { get; set; }
         string OrderNumber { get; set; }
         string Volume { get; set; }
         string SharePrice { get; set; }
@@ -368,6 +370,17 @@ namespace SharePortfolioManager.ShareAddForm.View
             }
         }
 
+        public string DepotNumber
+        {
+            get => cbxDepotNumber.SelectedIndex > 0 ? cbxDepotNumber.SelectedItem.ToString() : @"-";
+            set
+            {
+                var index = cbxDepotNumber.FindString(value);
+                if (index > -1)
+                    cbxDepotNumber.SelectedIndex = index;
+            }
+        }
+
         public string OrderNumber
         {
             get => txtBoxOrderNumber.Text;
@@ -570,6 +583,15 @@ namespace SharePortfolioManager.ShareAddForm.View
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     dateTimePickerStockMarketLaunch.Focus();
+                    break;
+                }
+                case ShareAddErrorCode.DepotNumberEmpty:
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DepotNumberEmpty", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    cbxDepotNumber.Focus();
                     break;
                 }
                 case ShareAddErrorCode.OrderNumberEmpty:
@@ -931,6 +953,7 @@ namespace SharePortfolioManager.ShareAddForm.View
 
                 lblWebSite.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/WebSite", LanguageName);
                 lblDailyValuesWebSite.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/DailyValuesWebSite", LanguageName);
+                lblDepotNumber.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/DepotNumber", LanguageName);
                 lblOrderNumber.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/OrderNumber", LanguageName);
                 lblDate.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Date", LanguageName);
                 lblVolume.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Volume", LanguageName);
@@ -961,15 +984,15 @@ namespace SharePortfolioManager.ShareAddForm.View
 
                 #region Get culture info
 
-                var list = new List<string>();
+                var listCultures = new List<string>();
                 foreach (var ci in CultureInfo.GetCultures(CultureTypes.AllCultures))
                 {
-                    list.Add($"{ci.Name}");
+                    listCultures.Add($"{ci.Name}");
                 }
 
-                list.Sort();
+                listCultures.Sort();
 
-                foreach (var value in list)
+                foreach (var value in listCultures)
                 {
                     if (value != "")
                         cboBoxCultureInfo.Items.Add(value);
@@ -980,6 +1003,18 @@ namespace SharePortfolioManager.ShareAddForm.View
                 cboBoxCultureInfo.SelectedIndex = cboBoxCultureInfo.FindStringExact(cultureInfo.Name);
 
                 #endregion Get culture info
+
+                #region Get depot numbers and the corresponding banks
+
+                var listBankRegex = DocumentParsingConfiguration.BankRegexList;
+
+                cbxDepotNumber.Items.Add(@"-");
+                foreach (var bankRegex in listBankRegex)
+                {
+                    cbxDepotNumber.Items.Add(bankRegex.BankIdentifier + @" - " + bankRegex.BankName);
+                }
+
+                #endregion Get depot numbers and the corresponding banks
 
                 // Load button images
                 btnSave.Image = Resources.button_save_24;
@@ -1788,7 +1823,9 @@ namespace SharePortfolioManager.ShareAddForm.View
                 }
                 case (int)ParsingErrorCode.ParsingBankIdentifierFailed:
                 {
-                    toolStripStatusLabelMessageAddShareDocumentParsing.ForeColor = Color.Red;
+                    picBoxDepotNumberParseState.Image = Resources.search_failed_24;
+
+                        toolStripStatusLabelMessageAddShareDocumentParsing.ForeColor = Color.Red;
                     toolStripStatusLabelMessageAddShareDocumentParsing.Text =
                         Language.GetLanguageTextByXPath(@"/AddFormShare/ParsingErrors/ParsingBankIdentifierFailed",
                             LanguageName);
@@ -1848,6 +1885,12 @@ namespace SharePortfolioManager.ShareAddForm.View
                             txtBoxWkn.Text = resultEntry.Value[0].Trim();
                             break;
                         }
+                        case DocumentParsingConfiguration.DocumentTypeBuyDepotNumber:
+                        {
+                            picBoxDepotNumberParseState.Image = Resources.search_ok_24;
+
+                            cbxDepotNumber.SelectedIndex = cbxDepotNumber.FindString(DocumentParsingConfiguration.BankRegexList[_bankCounter - 2].BankIdentifier);
+                        } break;
                         case DocumentParsingConfiguration.DocumentTypeBuyOrderNumber:
                         {
                             picBoxOrderNumberParseState.Image = Resources.search_ok_24;

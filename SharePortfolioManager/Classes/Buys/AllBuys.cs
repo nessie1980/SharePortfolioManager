@@ -127,6 +127,7 @@ namespace SharePortfolioManager.Classes.Buys
         /// This function adds a buy to the list
         /// </summary>
         /// <param name="strGuid">Guid of the buy</param>
+        /// <param name="strDepotNumber">Depot number where the buy has been done</param>
         /// <param name="strOrderNumber">Order number of the buy</param>
         /// <param name="strDate">Date and time of the buy</param>
         /// <param name="decVolume">Volume of the buy</param>
@@ -135,7 +136,7 @@ namespace SharePortfolioManager.Classes.Buys
         /// <param name="brokerageObject">Brokerage of the buy</param>
         /// <param name="strDoc">Document of the buy</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddBuy(string strGuid, string strOrderNumber, string strDate, decimal decVolume, decimal decVolumeSold, decimal decSharePrice,
+        public bool AddBuy(string strGuid, string strDepotNumber, string strOrderNumber, string strDate, decimal decVolume, decimal decVolumeSold, decimal decSharePrice,
             BrokerageReductionObject brokerageObject, string strDoc = "")
         {
 #if DEBUG_ALL_BUYS
@@ -151,7 +152,7 @@ namespace SharePortfolioManager.Classes.Buys
                 // Search if a buy for the given year already exists if not add it
                 if (AllBuysOfTheShareDictionary.TryGetValue(year, out var searchObject))
                 {
-                    if (!searchObject.AddBuyObject(BuyCultureInfo, strGuid, strOrderNumber, strDate, decVolume, decVolumeSold, decSharePrice,
+                    if (!searchObject.AddBuyObject(BuyCultureInfo, strGuid, strDepotNumber, strOrderNumber, strDate, decVolume, decVolumeSold, decSharePrice,
                         brokerageObject, strDoc))
                         return false;
                 }
@@ -160,7 +161,7 @@ namespace SharePortfolioManager.Classes.Buys
                     // Add new year buy object for the buy with a new year
                     var addObject = new BuysYearOfTheShare();
                     // Add buy with the new year to the buy year list
-                    if (addObject.AddBuyObject(BuyCultureInfo, strGuid, strOrderNumber, strDate, decVolume, decVolumeSold, decSharePrice,
+                    if (addObject.AddBuyObject(BuyCultureInfo, strGuid, strDepotNumber, strOrderNumber, strDate, decVolume, decVolumeSold, decSharePrice,
                         brokerageObject, strDoc))
                     {
                         AllBuysOfTheShareDictionary.Add(year, addObject);

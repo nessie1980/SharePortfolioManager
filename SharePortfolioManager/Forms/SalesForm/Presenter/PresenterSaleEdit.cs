@@ -59,6 +59,7 @@ namespace SharePortfolioManager.SalesForm.Presenter
         {
             _view.ErrorCode = _model.ErrorCode;
             _view.Date = _model.Date;
+            _view.DepotNumber = _model.DepotNumber;
             _view.OrderNumber = _model.OrderNumber;
             _view.Time = _model.Time;
             _view.Volume = _model.Volume;
@@ -100,6 +101,7 @@ namespace SharePortfolioManager.SalesForm.Presenter
             _model.ShowSalesRunning = _view.ShowSalesRunning;
             _model.LoadSaleRunning = _view.LoadSaleRunning;
             _model.ResetRunning = _view.ResetRunning;
+            _model.DepotNumberChangeRunning = _view.DepotNumberChangeRunning;
             _model.AddSale = _view.AddSale;
             _model.UpdateSale = _view.UpdateSale;
             _model.SelectedGuid = _view.SelectedGuid;
@@ -112,6 +114,7 @@ namespace SharePortfolioManager.SalesForm.Presenter
 
             _model.Date = _view.Date;
             _model.Time = _view.Time;
+            _model.DepotNumber = _view.DepotNumber;
             _model.OrderNumber = _view.OrderNumber;
             _model.Volume = _view.Volume;
             _model.SalePrice = _view.SalePrice;
@@ -298,9 +301,9 @@ namespace SharePortfolioManager.SalesForm.Presenter
 
                 // When the sale volume has been changed the UseBuyDetails must be updated
                 if (bErrorFlag == false &&
-                    _model.ShareObjectFinalValue.AddSale(strGuidSale, strDateTime, _model.OrderNumber, _model.VolumeDec, _model.SalePriceDec, _model.UsedBuyDetails,
+                    _model.ShareObjectFinalValue.AddSale(strGuidSale, strDateTime, _model.DepotNumber, _model.OrderNumber, _model.VolumeDec, _model.SalePriceDec, _model.UsedBuyDetails,
                         _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, brokerage, _model.Document) &&
-                    _model.ShareObjectMarketValue.AddSale(strGuidSale, strDateTime, _model.OrderNumber, _model.VolumeDec, _model.SalePriceDec, _model.UsedBuyDetails,
+                    _model.ShareObjectMarketValue.AddSale(strGuidSale, strDateTime, _model.DepotNumber, _model.OrderNumber, _model.VolumeDec, _model.SalePriceDec, _model.UsedBuyDetails,
                         _model.TaxAtSourceDec, _model.CapitalGainsTaxDec, _model.SolidarityTaxDec, _model.Document))
                 {
                     _model.ErrorCode = SaleErrorCode.AddSuccessful;
@@ -351,12 +354,12 @@ namespace SharePortfolioManager.SalesForm.Presenter
                 if (bFlagBrokerageEdit)
                 {
                     if (_model.ShareObjectFinalValue.RemoveSale(_model.SelectedGuid, _model.SelectedDate) &&
-                        _model.ShareObjectFinalValue.AddSale(_model.SelectedGuid, strDateTime, _model.OrderNumber,
+                        _model.ShareObjectFinalValue.AddSale(_model.SelectedGuid, strDateTime, _model.DepotNumber, _model.OrderNumber,
                             _model.VolumeDec, _model.SalePriceDec,
                             _model.UsedBuyDetails, _model.TaxAtSourceDec, _model.CapitalGainsTaxDec,
                             _model.SolidarityTaxDec, brokerage, _model.Document) &&
                         _model.ShareObjectMarketValue.RemoveSale(_model.SelectedGuid, _model.SelectedDate) &&
-                        _model.ShareObjectMarketValue.AddSale(_model.SelectedGuid, strDateTime, _model.OrderNumber,
+                        _model.ShareObjectMarketValue.AddSale(_model.SelectedGuid, strDateTime, _model.DepotNumber, _model.OrderNumber,
                             _model.VolumeDec, _model.SalePriceDec,
                             _model.UsedBuyDetails, _model.TaxAtSourceDec, _model.CapitalGainsTaxDec,
                             _model.SolidarityTaxDec, _model.Document)
@@ -503,12 +506,12 @@ namespace SharePortfolioManager.SalesForm.Presenter
                     _model.UsedBuyDetails.Clear();
                 }
 
-                // Loop through the buys and check which buy should be used for this sale
-                foreach (var currentBuyObject in _model.ShareObjectFinalValue.AllBuyEntries.GetAllBuysOfTheShare())
-                {
-                    Console.WriteLine(@"currentBuyObject.VolumeSold: {0}", currentBuyObject.VolumeSold);
-                    Console.WriteLine(@"currentBuyObject.Volume: {0}", currentBuyObject.Volume);
+                // Recalculate the salable volume of the current selected depot number
+                _model.ShareObjectFinalValue.GetSalableVolumeOfDepot(_model.DepotNumber);
 
+                // Loop through the buys and check which buy should be used for this sale
+                foreach (var currentBuyObject in _model.ShareObjectFinalValue.AllBuyEntries.GetAllBuysOfTheShare().FindAll(x => x.DepotNumber == _model.DepotNumber))
+                {
                     // Check if this buy is already completely sold
                     if (currentBuyObject.VolumeSold == currentBuyObject.Volume) continue;
 
@@ -516,13 +519,8 @@ namespace SharePortfolioManager.SalesForm.Presenter
                     if (_model.UsedBuyDetails != null && _model.UsedBuyDetails.Count > 0)
                         alreadySoldVolume = _model.UsedBuyDetails.Sum(x => x.DecVolume);
 
-                    Console.WriteLine(@"alreadySoldVolume: {0}", alreadySoldVolume);
-                    Console.WriteLine(@"_model.VolumeDec: {0}", _model.VolumeDec);
-
                     // Calculate the volume which has to be sold 
                     var toBeSoldVolume = _model.VolumeDec - alreadySoldVolume;
-
-                    Console.WriteLine(@"toBeSoldVolume: {0}", toBeSoldVolume);
 
                     // Check if all sale are done
                     if (toBeSoldVolume <= 0) break;
@@ -530,8 +528,13 @@ namespace SharePortfolioManager.SalesForm.Presenter
                     // Salable volume
                     var salableVolume = currentBuyObject.Volume - currentBuyObject.VolumeSold;
 
+#if DEBUG_SALE_EDIT_PRESENTER
+                    Console.WriteLine(@"alreadySoldVolume: {0}", alreadySoldVolume);
+                    Console.WriteLine(@"_model.VolumeDec: {0}", _model.VolumeDec);
+                    Console.WriteLine(@"toBeSoldVolume: {0}", toBeSoldVolume);
                     Console.WriteLine(@"salableVolume: {0}", salableVolume);
-
+                    Console.WriteLine(@"");
+#endif
                     // Check if the remaining buy volume is greater than the volume which must be sold
                     if (toBeSoldVolume >= currentBuyObject.Volume - currentBuyObject.VolumeSold)
                     {
@@ -678,7 +681,7 @@ namespace SharePortfolioManager.SalesForm.Presenter
                 {
                     if (!bFlagEdit)
                     {
-                        if (decVolume > _model.ShareObjectFinalValue.Volume)
+                        if (decVolume > _model.ShareObjectFinalValue.SalableVolume)
                         {
                             _model.ErrorCode = SaleErrorCode.VolumeMaxValue;
                             bErrorFlag = true;
@@ -686,7 +689,7 @@ namespace SharePortfolioManager.SalesForm.Presenter
                     }
                     else
                     {
-                        if (decVolume > _model.ShareObjectFinalValue.AllSaleEntries.GetSaleObjectByGuidDate(_model.SelectedGuid, strDate).Volume + _model.ShareObjectFinalValue.Volume)
+                        if (decVolume > _model.ShareObjectFinalValue.SalableVolume)
                         {
                             _model.ErrorCode = SaleErrorCode.VolumeMaxValue;
                             bErrorFlag = true;

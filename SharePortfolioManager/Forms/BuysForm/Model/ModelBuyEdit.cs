@@ -53,6 +53,7 @@ namespace SharePortfolioManager.BuysForm.Model
 
         string Date { get; set; }
         string Time { get; set; }
+        string DepotNumber { get; set; }
         string OrderNumber { get; set; }
         string Volume { get; set; }
         decimal VolumeDec { get; set; }
@@ -93,6 +94,7 @@ namespace SharePortfolioManager.BuysForm.Model
 
         private string _date;
         private string _time;
+        private string _depotNumber;
         private string _orderNumber;
         private string _volume;
         private decimal _volumeDec;
@@ -167,6 +169,17 @@ namespace SharePortfolioManager.BuysForm.Model
                 if (Equals(_time, value))
                     return;
                 _time = value;
+            }
+        }
+
+        public string DepotNumber
+        {
+            get => _depotNumber;
+            set
+            {
+                if (Equals(_depotNumber, value))
+                    return;
+                _depotNumber = value;
             }
         }
 

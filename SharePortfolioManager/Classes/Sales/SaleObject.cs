@@ -25,6 +25,7 @@
 
 using SharePortfolioManager.Classes.Brokerage;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -118,6 +119,12 @@ namespace SharePortfolioManager.Classes.Sales
 
         [Browsable(false)]
         public string DateAsStr => DateTime.Parse(Date).Date.ToShortDateString();
+
+        [Browsable(false)]
+        public string DepotNumber { get; internal set; }
+
+        [Browsable(false)]
+        public string DepotNumberAsStr => DepotNumber;
 
         [Browsable(false)]
         public string OrderNumber { get; internal set; }
@@ -549,6 +556,7 @@ namespace SharePortfolioManager.Classes.Sales
         /// <param name="cultureInfo">Culture info of the share</param>
         /// <param name="strGuid">Guid of the share sale</param>
         /// <param name="strDate">Date of the share sale</param>
+        /// <param name="strDepotNumber">Depot number where the sale has been done</param>
         /// <param name="strOrderNumber">Order number of the share sale</param>
         /// <param name="decVolume">Volume of the sale</param>
         /// <param name="decSalePrice">Sale price of the share</param>
@@ -558,12 +566,13 @@ namespace SharePortfolioManager.Classes.Sales
         /// <param name="decSolidarityTax">Solidarity tax of the sale</param>
         /// <param name="brokerageObject">Brokerage of the sale</param>
         /// <param name="strDoc">Document of the sale</param>
-        public SaleObject(CultureInfo cultureInfo, string strGuid, string strDate, string strOrderNumber,
+        public SaleObject(CultureInfo cultureInfo, string strGuid, string strDate, string strDepotNumber, string strOrderNumber,
             decimal decVolume, decimal decSalePrice, IEnumerable<SaleBuyDetails> saleBuyDetails, decimal decTaxAtSource,
             decimal decCapitalGainsTax,
             decimal decSolidarityTax, BrokerageReductionObject brokerageObject, string strDoc = "")
         {
             Guid = strGuid;
+            DepotNumber = strDepotNumber;
             OrderNumber = strOrderNumber;
             SaleCultureInfo = cultureInfo;
             Date = strDate;
@@ -599,6 +608,7 @@ namespace SharePortfolioManager.Classes.Sales
             Console.WriteLine(@"");
             Console.WriteLine(@"New sale created");
             Console.WriteLine(@"Date: {0}", Date);
+            Console.WriteLine(@"DepotNumber: {0}", DepotNumber);
             Console.WriteLine(@"OrderNumber: {0}", OrderNumber);
             Console.WriteLine(@"Volume: {0}", Volume);
             Console.WriteLine(@"BuyPrice: {0}", BuyPrice);

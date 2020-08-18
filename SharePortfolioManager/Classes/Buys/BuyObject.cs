@@ -112,10 +112,28 @@ namespace SharePortfolioManager.Classes.Buys
         public string Guid { get; internal set; }
 
         /// <summary>
+        /// Depot number where the buy has been done
+        /// </summary>
+        [Browsable(false)]
+        public string DepotNumber { get; internal set; }
+
+        /// <summary>
+        /// Depot number where the buy has been done as string
+        /// </summary>
+        [Browsable(false)]
+        public string DepotNumberAsStr => DepotNumber;
+
+        /// <summary>
         /// Order number of the buy
         /// </summary>
         [Browsable(false)]
         public string OrderNumber { get; internal set; }
+
+        /// <summary>
+        /// Order number where the buy has been done as string
+        /// </summary>
+        [Browsable(false)]
+        public string OrderNumberAsStr => OrderNumber;
 
         /// <summary>
         /// Date of the buy
@@ -477,6 +495,7 @@ namespace SharePortfolioManager.Classes.Buys
         /// </summary>
         /// <param name="cultureInfo">Culture info of the share</param>
         /// <param name="strGuid">Guid of the share buy</param>
+        /// <param name="strDepotNumber">Depot number where the buy has been done</param>
         /// <param name="strOrderNumber">Order number of the share buy</param>
         /// <param name="strDate">Date of the share buy</param>
         /// <param name="decVolume">Volume of the bought shares</param>
@@ -484,10 +503,11 @@ namespace SharePortfolioManager.Classes.Buys
         /// <param name="decSharePrice">Price for one share</param>
         /// <param name="brokerageObject">Brokerage of the buy</param>
         /// <param name="strDoc">Document of the share buy</param>
-        public BuyObject(CultureInfo cultureInfo, string strGuid, string strOrderNumber, string strDate, decimal decVolume, decimal decVolumeSold, decimal decSharePrice,
+        public BuyObject(CultureInfo cultureInfo, string strGuid, string strDepotNumber, string strOrderNumber, string strDate, decimal decVolume, decimal decVolumeSold, decimal decSharePrice,
             BrokerageReductionObject brokerageObject, string strDoc = "")
         {
             Guid = strGuid;
+            DepotNumber = strDepotNumber;
             OrderNumber = strOrderNumber;
             BuyCultureInfo = cultureInfo;
             Date = strDate;
@@ -513,6 +533,7 @@ namespace SharePortfolioManager.Classes.Buys
             Console.WriteLine(@"");
             Console.WriteLine(@"New BuyObject created");
             Console.WriteLine(@"Guid: {0}", strGuid);
+            Console.WriteLine(@"DepotNumber: {0}", strDepotNumber);
             Console.WriteLine(@"OrderNumber: {0}", OrderNumber);
             Console.WriteLine(@"BuyCultureInfo: {0}", BuyCultureInfo);
             Console.WriteLine(@"Date: {0}", strDate);

@@ -51,6 +51,7 @@ namespace SharePortfolioManager.SalesForm.Model
         bool ShowSalesRunning { get; set; }
         bool LoadSaleRunning { get; set; }
         bool ResetRunning { get; set; }
+        bool DepotNumberChangeRunning { get; set; }
 
         ShareObjectMarketValue ShareObjectMarketValue { get; set; }
         ShareObjectFinalValue ShareObjectFinalValue { get; set; }
@@ -61,6 +62,7 @@ namespace SharePortfolioManager.SalesForm.Model
 
         string Date { get; set; }
         string Time { get; set; }
+        string DepotNumber { get; set; }
         string OrderNumber { get; set; }
         string Volume { get; set; }
         decimal VolumeDec { get; set; }
@@ -102,6 +104,7 @@ namespace SharePortfolioManager.SalesForm.Model
 
         private string _date;
         private string _time;
+        private string _depotNumber;
         private string _orderNumber;
         private string _volume;
         private decimal _volumeDec;
@@ -147,6 +150,8 @@ namespace SharePortfolioManager.SalesForm.Model
 
         public bool ResetRunning { get; set; }
 
+        public bool DepotNumberChangeRunning { get; set; }
+
         public bool AddSale { get; set; }
 
         public SaleErrorCode ErrorCode { get; set; }
@@ -188,6 +193,17 @@ namespace SharePortfolioManager.SalesForm.Model
                     return;
 
                 _time = value;
+            }
+        }
+
+        public string DepotNumber
+        {
+            get => _depotNumber;
+            set
+            {
+                if (Equals(_depotNumber, value))
+                    return;
+                _depotNumber = value;
             }
         }
 

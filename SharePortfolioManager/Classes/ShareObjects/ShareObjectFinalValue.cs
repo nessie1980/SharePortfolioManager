@@ -1314,6 +1314,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         /// <param name="guid">Guid of the buy</param>
         /// <param name="wkn">WKN number of the share</param>
+        /// <param name="bank">Bank name where the buy has been done</param>
         /// <param name="orderNumber">Order number of the buy</param>
         /// <param name="addDateTime">Date and time of the add</param>
         /// <param name="stockMarketLaunchDate">Date of the stock market launch</param>
@@ -1336,7 +1337,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="shareType">Type of the share</param>
         /// <param name="document">Document of the first buy</param>
         public ShareObjectFinalValue(
-            string guid, string wkn, string orderNumber, string addDateTime, string stockMarketLaunchDate, string name,
+            string guid, string wkn, string bank, string orderNumber, string addDateTime, string stockMarketLaunchDate, string name,
             DateTime lastUpdateInternet, DateTime lastUpdateShare,
             decimal price, decimal volume, decimal volumeSold, decimal provision, decimal brokerFee, decimal traderPlaceFee, decimal reduction,
             string webSite, string dailyValuesWebSite, List<Image> imageListForDayBeforePerformance, RegExList regexList, CultureInfo cultureInfo,
@@ -1357,7 +1358,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                     provision, brokerFee, traderPlaceFee, reduction, document);
             }
 
-            AddBuy(guid, orderNumber, AddDateTime, volume, volumeSold, price,
+            AddBuy(guid, bank, orderNumber, AddDateTime, volume, volumeSold, price,
                 tempBrokerageObject, document);
 
             DividendPayoutInterval = dividendPayoutInterval;
@@ -1553,6 +1554,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// This function adds the buy for the share to the dictionary
         /// </summary>
         /// <param name="strGuid">Guid of the buy</param>
+        /// <param name="strDepotNumber">Depot number where the buy has been done</param>
         /// <param name="strOrderNumber">Order number of the buy</param>
         /// <param name="strDateTime">Date and time of the buy</param>
         /// <param name="decVolume">Buy volume</param>
@@ -1561,7 +1563,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="brokerageObject">Brokerage object of the buy</param>
         /// <param name="strDoc">Document of the buy</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddBuy(string strGuid, string strOrderNumber,  string strDateTime, decimal decVolume, decimal decVolumeSold, decimal decPrice,
+        public bool AddBuy(string strGuid, string strDepotNumber, string strOrderNumber, string strDateTime, decimal decVolume, decimal decVolumeSold, decimal decPrice,
             BrokerageReductionObject brokerageObject, string strDoc = "")
         {
             try
@@ -1570,6 +1572,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 Console.WriteLine(@"");
                 Console.WriteLine(@"AddBuy() / FinalValue");
                 Console.WriteLine(@"strGuid: {0}", strGuid);
+                Console.WriteLine(@"strBank: {0}", strBank);
                 Console.WriteLine(@"strDateTime: {0}", strDateTime);
                 Console.WriteLine(@"decVolume: {0}", decVolume);
                 Console.WriteLine(@"decPrice: {0}", decPrice);
@@ -1593,7 +1596,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 Console.WriteLine(@"PortfolioCompletePurchaseValue: {0}", PortfolioCompletePurchaseValue);
 #endif
                 // Add buy with reductions and brokerage
-                if (!AllBuyEntries.AddBuy(strGuid, strOrderNumber, strDateTime, decVolume, decVolumeSold, decPrice,
+                if (!AllBuyEntries.AddBuy(strGuid, strDepotNumber, strOrderNumber, strDateTime, decVolume, decVolumeSold, decPrice,
                     brokerageObject, strDoc))
                     return false;
 
@@ -1719,6 +1722,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         /// <param name="strGuid">Guid of the share sale</param>
         /// <param name="strDate">Date of the share sale</param>
+        /// <param name="strDepotNumber">Depot number where the sale has been done</param>
         /// <param name="strOrderNumber">Order number of the share sale</param>
         /// <param name="decVolume">Volume of the sale</param>
         /// <param name="decSalePrice">Sale price of the share</param>
@@ -1729,7 +1733,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="brokerageObject">Brokerage object of the sale</param>
         /// <param name="strDoc">Document of the sale</param>
         /// <returns>Flag if the add was successful</returns>
-        public bool AddSale(string strGuid, string strDate, string strOrderNumber, decimal decVolume, decimal decSalePrice, List<SaleBuyDetails> usedBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
+        public bool AddSale(string strGuid, string strDate, string strDepotNumber, string strOrderNumber, decimal decVolume, decimal decSalePrice, List<SaleBuyDetails> usedBuyDetails, decimal decTaxAtSource, decimal decCapitalGainsTax,
              decimal decSolidarityTax, BrokerageReductionObject brokerageObject, string strDoc = "")
         {
             try
@@ -1746,7 +1750,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 Console.WriteLine(@"decBrokerage: {0}", brokerageObject?.BrokerageValue ?? 0);
                 Console.WriteLine(@"strDoc: {0}", strDoc);
 #endif
-                if (!AllSaleEntries.AddSale(strGuid, strDate, strOrderNumber, decVolume, decSalePrice, usedBuyDetails, decTaxAtSource, decCapitalGainsTax,
+                if (!AllSaleEntries.AddSale(strGuid, strDate, strDepotNumber, strOrderNumber, decVolume, decSalePrice, usedBuyDetails, decTaxAtSource, decCapitalGainsTax,
                                             decSolidarityTax, brokerageObject, strDoc))
                     return false;
                 
@@ -2302,8 +2306,10 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                             xmlPortfolio.CreateElement(BuyTagNamePre);
                                         newBuyElement.SetAttribute(BuyGuidAttrName,
                                             buyElementYear.Guid);
+                                        newBuyElement.SetAttribute(BuyDepotNumberAttrName,
+                                            buyElementYear.DepotNumberAsStr);
                                         newBuyElement.SetAttribute(BuyOrderNumberAttrName,
-                                            buyElementYear.OrderNumber);
+                                            buyElementYear.OrderNumberAsStr);
                                         newBuyElement.SetAttribute(BuyDateAttrName,
                                             buyElementYear.DateAsStr);
                                         newBuyElement.SetAttribute(BuyVolumeAttrName,
@@ -2337,6 +2343,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                             saleElementYear.Guid);
                                         newSaleElement.SetAttribute(SaleDateAttrName,
                                             saleElementYear.DateAsStr);
+                                        newSaleElement.SetAttribute(SaleDepotNumberAttrName,
+                                            saleElementYear.DepotNumberAsStr);
                                         newSaleElement.SetAttribute(SaleOrderNumberAttrName,
                                             saleElementYear.OrderNumberAsStr);
                                         newSaleElement.SetAttribute(SaleVolumeAttrName,

@@ -64,6 +64,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
             _view.DailyValuesWebSite = _model.DailyValuesWebSite;
             _view.Date = _model.Date;
             _view.Time = _model.Time;
+            _view.DepotNumber = _model.DepotNumber;
             _view.OrderNumber = _model.OrderNumber;
             _view.Volume = _model.Volume;
             _view.SharePrice = _model.SharePrice;
@@ -112,6 +113,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
             _model.DailyValuesWebSite = _view.DailyValuesWebSite;
             _model.Date = _view.Date;
             _model.Time = _view.Time;
+            _model.DepotNumber = _view.DepotNumber;
             _model.OrderNumber = _view.OrderNumber;
             _model.Volume = _view.Volume;
             _model.SharePrice = _view.SharePrice;
@@ -184,6 +186,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                     new ShareObjectMarketValue(
                         @"",
                         _model.Wkn,
+                        _model.DepotNumber,
                         _model.OrderNumber,
                         strDateTime,
                         _model.StockMarketLaunchDate,
@@ -213,6 +216,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                     new ShareObjectFinalValue(
                         @"",
                         _model.Wkn,
+                        _model.DepotNumber,
                         _model.OrderNumber,
                         strDateTime,
                         _model.StockMarketLaunchDate,
@@ -249,6 +253,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                     _model.ShareObjectListMarketValue.Add(new ShareObjectMarketValue(
                         guid,
                         _model.Wkn,
+                        _model.DepotNumber,
                         _model.OrderNumber,
                         strDateTime,
                         _model.StockMarketLaunchDate,
@@ -275,6 +280,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                     _model.ShareObjectListFinalValue.Add(new ShareObjectFinalValue(
                         guid,
                         _model.Wkn,
+                        _model.DepotNumber,
                         _model.OrderNumber,
                         strDateTime,
                         _model.StockMarketLaunchDate,
@@ -533,6 +539,13 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                         break;
                     }
                 }
+            }
+
+            // Check if a depot number for the buy is given
+            if ((_model.DepotNumber == @"" || _model.DepotNumber == @"-") && bErrorFlag == false)
+            {
+                _model.ErrorCode = ShareAddErrorCode.DepotNumberEmpty;
+                bErrorFlag = true;
             }
 
             // Check if a order number for the buy is given and the order number does not exits already if a new buy should be added

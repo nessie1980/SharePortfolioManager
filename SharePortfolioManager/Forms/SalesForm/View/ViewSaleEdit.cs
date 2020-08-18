@@ -55,6 +55,7 @@ namespace SharePortfolioManager.SalesForm.View
         DeleteFailed,
         DeleteFailedUnErasable,
         InputValuesInvalid,
+        DepotNumberEmpty,
         OrderNumberEmpty,
         OrderNumberExists,
         VolumeEmpty,
@@ -116,7 +117,6 @@ namespace SharePortfolioManager.SalesForm.View
 
         ShareObjectMarketValue ShareObjectMarketValue { get; }
         ShareObjectFinalValue ShareObjectFinalValue { get; }
-        //ShareObjectFinalValue ShareObjectCalculation { get; }
 
         Logger Logger { get; }
         Language Language { get; }
@@ -127,12 +127,13 @@ namespace SharePortfolioManager.SalesForm.View
         bool ShowSalesRunning { get; set; }
         bool LoadSaleRunning { get; set; }
         bool ResetRunning { get; set; }
-
+        bool DepotNumberChangeRunning { get; set; }
         string SelectedGuid { get; set; }
         string SelectedGuidLast { get; set; }
         string SelectedDate { get; set; }
         string Date { get; set; }
         string Time { get; set; }
+        string DepotNumber { get; set; }
         string OrderNumber { get; set; }
         string Volume { get; set; }
         string SalePrice { get; set; }
@@ -252,7 +253,8 @@ namespace SharePortfolioManager.SalesForm.View
         public bool ShowSalesRunningFlag { get; set; }
         public bool LoadSaleRunningFlag { get; set; }
         public bool ResetRunningFlag { get; set; }
-
+        public bool DepotNumberChangeRunningFlag { get; set; }
+        
         public bool SaveFlag { get; internal set; }
 
         #endregion Flags
@@ -330,6 +332,17 @@ namespace SharePortfolioManager.SalesForm.View
             }
         }
 
+        public bool DepotNumberChangeRunning
+        {
+            get => DepotNumberChangeRunningFlag;
+            set
+            {
+                DepotNumberChangeRunningFlag = value;
+
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DepotNumberChangeRunning"));
+            }
+        }
+
         public SaleErrorCode ErrorCode { get; set; }
 
         public ShareObjectMarketValue ShareObjectMarketValue { get; set; }
@@ -390,6 +403,17 @@ namespace SharePortfolioManager.SalesForm.View
                 if (dateTimePickerTime.Text == value)
                     return;
                 dateTimePickerTime.Text = value;
+            }
+        }
+
+        public string DepotNumber
+        {
+            get => cbxDepotNumber.SelectedIndex > 0 ? cbxDepotNumber.SelectedItem.ToString() : @"-";
+            set
+            {
+                var index = cbxDepotNumber.FindString(value);
+                if (index > -1)
+                    cbxDepotNumber.SelectedIndex = index;
             }
         }
 
@@ -565,9 +589,9 @@ namespace SharePortfolioManager.SalesForm.View
         public void AddEditDeleteFinish()
         {
             // Set messages
-            string strMessage = string.Empty;
-            Color clrMessage = Color.Black;
-            FrmMain.EStateLevels stateLevel = FrmMain.EStateLevels.Info;
+            var strMessage = string.Empty;
+            var clrMessage = Color.Black;
+            var stateLevel = FrmMain.EStateLevels.Info;
 
             switch (ErrorCode)
             {
@@ -767,16 +791,14 @@ namespace SharePortfolioManager.SalesForm.View
                     {
                         strMessage =
                             Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/VolumeMaxValue_1", LanguageName) +
-                            ShareObjectFinalValue.Volume +
+                            ShareObjectFinalValue.SalableVolumeAsStr +
                             Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/VolumeMaxValue_2", LanguageName);
                     }
                     else
                     {
                         strMessage =
                             Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/VolumeMaxValue_1", LanguageName) +
-                            (ShareObjectFinalValue.Volume + ShareObjectFinalValue.AllSaleEntries
-                                .GetSaleObjectByGuidDate(SelectedGuid,
-                                    dateTimePickerDate.Text + " " + dateTimePickerTime.Text).Volume) +
+                            ShareObjectFinalValue.SalableVolumeAsStr +
                             Language.GetLanguageTextByXPath(@"/AddEditFormSale/Errors/VolumeMaxValue_2", LanguageName);
                     }
 
@@ -784,6 +806,7 @@ namespace SharePortfolioManager.SalesForm.View
                     stateLevel = FrmMain.EStateLevels.Error;
 
                     Enabled = true;
+                    txtBoxVolume.Text = ShareObjectFinalValue.SalableVolumeAsStr;
                     txtBoxVolume.Focus();
 
                     break;
@@ -1138,7 +1161,6 @@ namespace SharePortfolioManager.SalesForm.View
 
             ShareObjectMarketValue = shareObjectMarketValue;
             ShareObjectFinalValue = shareObjectFinalValue;
-            //ShareObjectCalculation = (ShareObjectFinalValue)ShareObjectFinalValue.Clone();
 
             Logger = logger;
             Language = xmlLanguage;
@@ -1183,7 +1205,10 @@ namespace SharePortfolioManager.SalesForm.View
                 lblAddSaleDate.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Labels/Date",
                         LanguageName);
-                lblSalesOrderNumber.Text =
+                lblSaleDepotNumber.Text =
+                    Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Labels/DepotNumber",
+                        LanguageName);
+                lblSaleOrderNumber.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Labels/OrderNumber",
                         LanguageName);
                 lblVolume.Text =
@@ -1274,6 +1299,18 @@ namespace SharePortfolioManager.SalesForm.View
 
                 #endregion Image configuration
 
+                #region Get depot numbers and the corresponding banks
+
+                var listBankRegex = DocumentParsingConfiguration.BankRegexList;
+
+                cbxDepotNumber.Items.Add(@"-");
+                foreach (var bankRegex in listBankRegex)
+                {
+                    cbxDepotNumber.Items.Add(bankRegex.BankIdentifier + @" - " + bankRegex.BankName);
+                }
+
+                #endregion Get depot numbers and the corresponding banks
+
                 OnShowSales();
 
                 // If a parsing file name is given the form directly starts with the document parsing
@@ -1319,6 +1356,7 @@ namespace SharePortfolioManager.SalesForm.View
             // Reset state pictures
             picBoxDateParseState.Image = Resources.empty_arrow;
             picBoxTimeParseState.Image = Resources.empty_arrow;
+            picBoxDepotNumberParseState.Image = Resources.empty_arrow;
             picBoxOrderNumberParserState.Image = Resources.empty_arrow;
             picBoxVolumeParseState.Image = Resources.empty_arrow;
             picBoxPriceParseState.Image = Resources.empty_arrow;
@@ -1335,6 +1373,13 @@ namespace SharePortfolioManager.SalesForm.View
             dateTimePickerDate.Enabled = true;
             dateTimePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
             dateTimePickerTime.Enabled = true;
+
+            // Reset and enable combo box
+            if (!DepotNumberChangeRunning)
+            {
+                cbxDepotNumber.SelectedIndex = 0;
+                cbxDepotNumber.Enabled = true;
+            }
 
             // Reset textboxes
             txtBoxOrderNumber.Text = string.Empty;
@@ -1367,7 +1412,7 @@ namespace SharePortfolioManager.SalesForm.View
             txtBoxPayout.Enabled = true;
 
             // Do not reset document value if a parsing is running
-            if (!_parsingStartAllow)
+            if (!_parsingStartAllow && !DepotNumberChangeRunningFlag)
             {
                 txtBoxDocument.Text = string.Empty;
                 txtBoxDocument.Enabled = true;
@@ -1378,11 +1423,12 @@ namespace SharePortfolioManager.SalesForm.View
             toolStripStatusLabelMessageSaleDocumentParsing.Text = string.Empty;
             toolStripProgressBarSaleDocumentParsing.Visible = false;
 
-            // Check if any volume is present
-            if (ShareObjectFinalValue.Volume > 0)
+            // Check if there is any volume left for the current selected depot number
+            if(ShareObjectFinalValue.SalableVolume > 0)
             {
-                // Set current share value
-                txtBoxVolume.Text = ShareObjectFinalValue.VolumeAsStr;
+                // Set salable volume of the current selected depot number
+                txtBoxVolume.Text =
+                    ShareObjectFinalValue.SalableVolumeAsStr;
 
                 // Set current share price
                 txtBoxSalePrice.Text = ShareObjectFinalValue.CurPriceAsStr;
@@ -1430,8 +1476,8 @@ namespace SharePortfolioManager.SalesForm.View
                 txtBoxTraderPlaceFee.Enabled = false;
                 txtBoxReduction.Enabled = false;
 
-                txtBoxDocument.Enabled = false;
-                btnSalesDocumentBrowse.Enabled = false;
+                //txtBoxDocument.Enabled = false;
+                //btnSalesDocumentBrowse.Enabled = false;
 
                 btnAddSave.Enabled = false;
             }
@@ -1532,6 +1578,47 @@ namespace SharePortfolioManager.SalesForm.View
         }
 
         #endregion Date Time
+
+        #region Combo box
+
+        /// <summary>
+        /// This function updates the model if the combo box selection has changed
+        /// </summary>
+        /// <param name="sender">Combo box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnCbxDepotNumber_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DepotNumberChangeRunningFlag = true;
+
+            if (!LoadSaleRunning)
+                ResetValues();
+
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DepotNumber"));
+
+            DepotNumberChangeRunningFlag = false;
+        }
+
+        /// <summary>
+        /// This function updates the view with the formatted value
+        /// </summary>
+        /// <param name="sender">Combo box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnCbxDepotNumber_Leave(object sender, EventArgs e)
+        {
+            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// This function stores the combo box to the focused control
+        /// </summary>
+        /// <param name="sender">Combo box</param>
+        /// <param name="e">EventArgs</param>
+        private void OnCbxDepotNumber_Enter(object sender, EventArgs e)
+        {
+            _focusedControl = cbxDepotNumber;
+        }
+
+        #endregion Combo box
 
         #region TextBoxes
 
@@ -2859,6 +2946,10 @@ namespace SharePortfolioManager.SalesForm.View
                         {
                             dateTimePickerDate.Value = Convert.ToDateTime(selectedSaleObject.Date);
                             dateTimePickerTime.Value = Convert.ToDateTime(selectedSaleObject.Date);
+
+                            var index = cbxDepotNumber.FindString(selectedSaleObject.DepotNumber);
+                            cbxDepotNumber.SelectedIndex = index > -1 ? index : 0;
+
                             txtBoxOrderNumber.Text = selectedSaleObject.OrderNumberAsStr;
                             txtBoxVolume.Text = selectedSaleObject.VolumeAsStr;
                             txtBoxSalePrice.Text = selectedSaleObject.SalePriceAsStr;
@@ -2880,7 +2971,10 @@ namespace SharePortfolioManager.SalesForm.View
                                 btnAddSave.Enabled = ShareObjectFinalValue.AllSaleEntries.GetAllSalesOfTheShare().Count > 0;
                                 btnSalesDocumentBrowse.Enabled = ShareObjectFinalValue.AllSaleEntries.GetAllSalesOfTheShare().Count > 0;
 
-                                // Enable text box(es)
+                                // Disable CheckBox
+                                cbxDepotNumber.Enabled = false;
+
+                                // Enable TextBox(es)
                                 dateTimePickerDate.Enabled = true;
                                 dateTimePickerTime.Enabled = true;
                                 txtBoxOrderNumber.Enabled = true;
@@ -2900,6 +2994,9 @@ namespace SharePortfolioManager.SalesForm.View
                                 // Disable Button(s)
                                 btnDelete.Enabled = false;
 
+                                // Disable Check box
+                                cbxDepotNumber.Enabled = false;
+
                                 // Disable TextBox(es)
                                 dateTimePickerDate.Enabled = false;
                                 dateTimePickerTime.Enabled = false;
@@ -2916,6 +3013,7 @@ namespace SharePortfolioManager.SalesForm.View
                             }
 
                             btnSalesBuyDetails.Enabled = true;
+                            btnReset.Enabled = true;
 
                             // Rename button
                             btnAddSave.Text =
@@ -3722,6 +3820,12 @@ namespace SharePortfolioManager.SalesForm.View
                                 dateTimePickerTime.Text = resultEntry.Value[0].Trim();
                                 break;
                             }
+                            case DocumentParsingConfiguration.DocumentTypeSaleDepotNumber:
+                            {
+                                picBoxDepotNumberParseState.Image = Resources.search_ok_24;
+                                cbxDepotNumber.SelectedIndex = cbxDepotNumber.FindString(DocumentParsingConfiguration.BankRegexList[_bankCounter - 2].BankIdentifier);
+                                break;
+                            }
                             case DocumentParsingConfiguration.DocumentTypeSaleOrderNumber:
                             {
                                 picBoxOrderNumberParserState.Image = Resources.search_ok_24;
@@ -3810,6 +3914,17 @@ namespace SharePortfolioManager.SalesForm.View
                         dateTimePickerTime.Value =
                             new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
                         picBoxTimeParseState.Image = Resources.search_info_24;
+                    }
+
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration
+                            .DocumentTypeSaleDepotNumber) ||
+                        DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeSaleDepotNumber) &&
+                        DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeSaleDepotNumber].Count == 0
+                    )
+                    {
+                        picBoxDepotNumberParseState.Image = Resources.search_failed_24;
+                        cbxDepotNumber.SelectedIndex = 0;
+                        _parsingResult = false;
                     }
 
                     if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration
@@ -3936,7 +4051,7 @@ namespace SharePortfolioManager.SalesForm.View
         }
 
         #endregion Parsing
-        
+
         #endregion Methods
     }
 }

@@ -56,6 +56,7 @@ namespace SharePortfolioManager.BuysForm.Presenter
             _view.ErrorCode = _model.ErrorCode;
             _view.Date = _model.Date;
             _view.Time = _model.Time;
+            _view.DepotNumber = _model.DepotNumber;
             _view.OrderNumber = _model.OrderNumber;
             _view.Volume = _model.Volume;
             _view.VolumeSold = _model.VolumeSold;
@@ -99,6 +100,7 @@ namespace SharePortfolioManager.BuysForm.Presenter
 
             _model.Date = _view.Date;
             _model.Time = _view.Time;
+            _model.DepotNumber = _view.DepotNumber;
             _model.OrderNumber = _view.OrderNumber;
             _model.Volume = _view.Volume;
             _model.VolumeSold = _view.VolumeSold;
@@ -151,9 +153,9 @@ namespace SharePortfolioManager.BuysForm.Presenter
                 
                 // Add buy
                 if (bErrorFlag == false &&
-                    _model.ShareObjectFinalValue.AddBuy(strGuidBuy, _model.OrderNumber, strDateTime, _model.VolumeDec, _model.VolumeSoldDec, _model.SharePriceDec,
+                    _model.ShareObjectFinalValue.AddBuy(strGuidBuy, _model.DepotNumber, _model.OrderNumber, strDateTime, _model.VolumeDec, _model.VolumeSoldDec, _model.SharePriceDec,
                         brokerage, _model.Document) &&
-                    _model.ShareObjectMarketValue.AddBuy(strGuidBuy, _model.OrderNumber, strDateTime, _model.VolumeDec, _model.VolumeSoldDec, _model.SharePriceDec,
+                    _model.ShareObjectMarketValue.AddBuy(strGuidBuy, _model.DepotNumber, _model.OrderNumber, strDateTime, _model.VolumeDec, _model.VolumeSoldDec, _model.SharePriceDec,
                         brokerage,_model.Document)
                     )
                 {
@@ -205,10 +207,10 @@ namespace SharePortfolioManager.BuysForm.Presenter
                 if (bFlagBrokerageEdit)
                 {
                     if (_model.ShareObjectFinalValue.RemoveBuy(_model.SelectedGuid, _model.SelectedDate) &&
-                    _model.ShareObjectFinalValue.AddBuy(_model.SelectedGuid, _model.OrderNumber, strDateTime, _model.VolumeDec, _model.VolumeSoldDec, _model.SharePriceDec,
+                    _model.ShareObjectFinalValue.AddBuy(_model.SelectedGuid, _model.DepotNumber, _model.OrderNumber, strDateTime, _model.VolumeDec, _model.VolumeSoldDec, _model.SharePriceDec,
                         brokerage, _model.Document) &&
                     _model.ShareObjectMarketValue.RemoveBuy(_model.SelectedGuid, _model.SelectedDate) &&
-                    _model.ShareObjectMarketValue.AddBuy(_model.SelectedGuid, _model.OrderNumber, strDateTime, _model.VolumeDec, _model.VolumeSoldDec, _model.SharePriceDec,
+                    _model.ShareObjectMarketValue.AddBuy(_model.SelectedGuid, _model.DepotNumber, _model.OrderNumber, strDateTime, _model.VolumeDec, _model.VolumeSoldDec, _model.SharePriceDec,
                         brokerage, _model.Document)
                     )
                     {
@@ -351,8 +353,15 @@ namespace SharePortfolioManager.BuysForm.Presenter
 
                 _model.ErrorCode = bFlagEdit ? BuyErrorCode.EditSuccessful : BuyErrorCode.AddSuccessful;
 
+                // Check if a depot number for the buy is given
+                if (_model.DepotNumber == @"" || _model.DepotNumber == @"-")
+                {
+                    _model.ErrorCode = BuyErrorCode.DepotNumberEmpty;
+                    bErrorFlag = true;
+                }
+
                 // Check if a order number for the buy is given and the order number does not exits already if a new buy should be added
-                if (_model.OrderNumber == @"")
+                if (_model.OrderNumber == @"" && bErrorFlag == false)
                 {
                     _model.ErrorCode = BuyErrorCode.OrderNumberEmpty;
                     bErrorFlag = true;

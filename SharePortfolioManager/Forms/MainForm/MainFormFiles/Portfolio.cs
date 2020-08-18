@@ -370,72 +370,82 @@ namespace SharePortfolioManager
                                 {
                                     switch (i)
                                     {
-#region General
+                                        #region General
 
-                                        case (int)PortfolioParts.StockMarketLaunchDate:
-                                            ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].StockMarketLaunchDate =
+                                        case (int) PortfolioParts.StockMarketLaunchDate:
+                                            ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
+                                                    .StockMarketLaunchDate =
                                                 nodeElement.ChildNodes[i].InnerText;
-                                            ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].StockMarketLaunchDate = 
+                                            ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                                    .StockMarketLaunchDate =
                                                 nodeElement.ChildNodes[i].InnerText;
                                             break;
-                                        case (int)PortfolioParts.LastUpdateInternet:
-                                            ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].LastUpdateViaInternet =
+                                        case (int) PortfolioParts.LastUpdateInternet:
+                                            ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
+                                                    .LastUpdateViaInternet =
                                                 Convert.ToDateTime(nodeElement.ChildNodes[i].InnerText);
-                                            ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].LastUpdateViaInternet =
-                                                Convert.ToDateTime(nodeElement.ChildNodes[i].InnerText);
-                                            break;
-                                        case (int)PortfolioParts.LastUpdateShare:
-                                            ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].LastUpdateShare =
-                                                Convert.ToDateTime(nodeElement.ChildNodes[i].InnerText);
-                                            ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].LastUpdateShare =
+                                            ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                                    .LastUpdateViaInternet =
                                                 Convert.ToDateTime(nodeElement.ChildNodes[i].InnerText);
                                             break;
-                                        case (int)PortfolioParts.SharePrice:
+                                        case (int) PortfolioParts.LastUpdateShare:
+                                            ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
+                                                    .LastUpdateShare =
+                                                Convert.ToDateTime(nodeElement.ChildNodes[i].InnerText);
+                                            ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                                    .LastUpdateShare =
+                                                Convert.ToDateTime(nodeElement.ChildNodes[i].InnerText);
+                                            break;
+                                        case (int) PortfolioParts.SharePrice:
                                             ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].CurPrice =
                                                 Convert.ToDecimal(nodeElement.ChildNodes[i].InnerText);
                                             ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].CurPrice =
                                                 Convert.ToDecimal(nodeElement.ChildNodes[i].InnerText);
                                             break;
-                                        case (int)PortfolioParts.SharePriceBefore:
+                                        case (int) PortfolioParts.SharePriceBefore:
                                             ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].PrevPrice =
                                                 Convert.ToDecimal(nodeElement.ChildNodes[i].InnerText);
                                             ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].PrevPrice =
                                                 Convert.ToDecimal(nodeElement.ChildNodes[i].InnerText);
                                             break;
-                                        case (int)PortfolioParts.WebSite:
-                                            ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].UpdateWebSiteUrl =
+                                        case (int) PortfolioParts.WebSite:
+                                            ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
+                                                    .UpdateWebSiteUrl =
                                                 nodeElement.ChildNodes[i].InnerText;
-                                            ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].UpdateWebSiteUrl =
+                                            ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                                    .UpdateWebSiteUrl =
                                                 nodeElement.ChildNodes[i].InnerText;
                                             break;
-                                        case (int)PortfolioParts.Culture:
-                                            ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].CultureInfo =
+                                        case (int) PortfolioParts.Culture:
+                                            ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
+                                                    .CultureInfo =
                                                 new CultureInfo(nodeElement.ChildNodes[i].InnerXml);
                                             ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].CultureInfo =
                                                 new CultureInfo(nodeElement.ChildNodes[i].InnerXml);
                                             break;
-                                        case (int)PortfolioParts.ShareType:
+                                        case (int) PortfolioParts.ShareType:
                                             ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].ShareType =
                                                 Convert.ToInt16(nodeElement.ChildNodes[i].InnerText);
                                             ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].ShareType =
                                                 Convert.ToInt16(nodeElement.ChildNodes[i].InnerText);
                                             break;
 
-#endregion General
+                                        #endregion General
 
-#region DailyValues
+                                        #region DailyValues
 
-                                        case (int)PortfolioParts.DailyValues:
+                                        case (int) PortfolioParts.DailyValues:
                                             // Read daily values website
                                             if (nodeElement.ChildNodes[i].Attributes != null)
                                             {
                                                 ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
                                                         .DailyValuesUpdateWebSiteUrl =
-                                                        nodeElement.ChildNodes[i].Attributes[
-                                                            ShareObject.DailyValuesWebSiteAttrName].InnerText;
+                                                    nodeElement.ChildNodes[i].Attributes[
+                                                        ShareObject.DailyValuesWebSiteAttrName].InnerText;
                                             }
                                             else
                                                 bLoadPortfolio = false;
+
                                             foreach (XmlElement nodeList in nodeElement.ChildNodes[i].ChildNodes)
                                             {
                                                 // Check if the node has the right count of attributes
@@ -445,26 +455,39 @@ namespace SharePortfolioManager
                                                 {
 
                                                     // Try do cast date of the daily values
-                                                    if (DateTime.TryParse(nodeList.Attributes[ShareObject.DailyValuesDateTagName].Value, out var dateTime)) // Date
+                                                    if (DateTime.TryParse(
+                                                        nodeList.Attributes[ShareObject.DailyValuesDateTagName].Value,
+                                                        out var dateTime)) // Date
                                                     {
                                                         var dailyValues = new Parser.DailyValues
                                                         {
                                                             Date = dateTime,
                                                             OpeningPrice = Convert.ToDecimal(
-                                                            nodeList.Attributes[ShareObject.DailyValuesOpeningPriceTagName].Value),                     // Opening price
+                                                                nodeList.Attributes[
+                                                                        ShareObject.DailyValuesOpeningPriceTagName]
+                                                                    .Value), // Opening price
                                                             ClosingPrice = Convert.ToDecimal(
-                                                            nodeList.Attributes[ShareObject.DailyValuesClosingPriceTagName].Value),                     // Closing price
+                                                                nodeList.Attributes[
+                                                                        ShareObject.DailyValuesClosingPriceTagName]
+                                                                    .Value), // Closing price
                                                             Top = Convert.ToDecimal(
-                                                            nodeList.Attributes[ShareObject.DailyValuesTopTagName].Value),                              // Top
+                                                                nodeList.Attributes[ShareObject.DailyValuesTopTagName]
+                                                                    .Value), // Top
                                                             Bottom = Convert.ToDecimal(
-                                                            nodeList.Attributes[ShareObject.DailyValuesBottomTagName].Value),                           // Bottom
+                                                                nodeList.Attributes[
+                                                                        ShareObject.DailyValuesBottomTagName]
+                                                                    .Value), // Bottom
                                                             Volume = Convert.ToDecimal(
-                                                            nodeList.Attributes[ShareObject.DailyValuesVolumeTagName].Value)                            // Volume
+                                                                nodeList.Attributes[
+                                                                        ShareObject.DailyValuesVolumeTagName]
+                                                                    .Value) // Volume
                                                         };
 
                                                         // Add daily values item
-                                                        ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].DailyValues.Add(dailyValues);
-                                                        ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].DailyValues.Add(dailyValues);
+                                                        ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                                            .DailyValues.Add(dailyValues);
+                                                        ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
+                                                            .DailyValues.Add(dailyValues);
                                                     }
                                                     else
                                                         bLoadPortfolio = false;
@@ -472,13 +495,14 @@ namespace SharePortfolioManager
                                                 else
                                                     bLoadPortfolio = false;
                                             }
+
                                             break;
 
-#endregion DailyValues
+                                        #endregion DailyValues
 
-#region Brokerages
+                                        #region Brokerages
 
-                                        case (int)PortfolioParts.Brokerages:
+                                        case (int) PortfolioParts.Brokerages:
                                             foreach (XmlElement nodeList in nodeElement.ChildNodes[i].ChildNodes)
                                             {
                                                 // Check if the node has the right count of attributes
@@ -486,92 +510,133 @@ namespace SharePortfolioManager
                                                     nodeList.Attributes.Count ==
                                                     ShareObject.BrokerageAttrCount)
                                                 {
-                                                    if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].AddBrokerage(
-                                                        nodeList.Attributes[ShareObject.BrokerageGuidAttrName].Value,               // Guid
-                                                        Convert.ToBoolean(
-                                                            nodeList.Attributes[ShareObject.BrokerageBuyPartAttrName].Value         // Flag if part of a buy
-                                                        ),
-                                                        Convert.ToBoolean(
-                                                            nodeList.Attributes[ShareObject.BrokerageSalePartAttrName].Value        // Flag if part of a sale
-                                                        ),
-                                                        nodeList.Attributes[ShareObject.BrokerageGuidBuySaleAttrName].Value,        // Guid of the buy or sale
-                                                        nodeList.Attributes[ShareObject.BrokerageDateAttrName].Value,               // Date
-                                                        Convert.ToDecimal(
-                                                            nodeList.Attributes[ShareObject.BrokerageProvisionAttrName].Value       // Provision
-                                                        ),
-                                                        Convert.ToDecimal(
-                                                            nodeList.Attributes[ShareObject.BrokerageBrokerFeeAttrName].Value       // BrokerFee
-                                                        ),
-                                                        Convert.ToDecimal(
-                                                            nodeList.Attributes[ShareObject.BrokerageTraderPlaceFeeAttrName].Value  // TraderPlaceFee
-                                                        ),
-                                                        Convert.ToDecimal(
-                                                            nodeList.Attributes[ShareObject.BrokerageReductionAttrName].Value       // Reduction
-                                                        ),
-                                                        nodeList.Attributes[ShareObject.BrokerageDocumentAttrName].Value))          // Document
+                                                    if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                                        .AddBrokerage(
+                                                            nodeList.Attributes[ShareObject.BrokerageGuidAttrName]
+                                                                .Value, // Guid
+                                                            Convert.ToBoolean(
+                                                                nodeList.Attributes[
+                                                                        ShareObject.BrokerageBuyPartAttrName]
+                                                                    .Value // Flag if part of a buy
+                                                            ),
+                                                            Convert.ToBoolean(
+                                                                nodeList.Attributes[
+                                                                        ShareObject.BrokerageSalePartAttrName]
+                                                                    .Value // Flag if part of a sale
+                                                            ),
+                                                            nodeList.Attributes[
+                                                                    ShareObject.BrokerageGuidBuySaleAttrName]
+                                                                .Value, // Guid of the buy or sale
+                                                            nodeList.Attributes[ShareObject.BrokerageDateAttrName]
+                                                                .Value, // Date
+                                                            Convert.ToDecimal(
+                                                                nodeList.Attributes[
+                                                                        ShareObject.BrokerageProvisionAttrName]
+                                                                    .Value // Provision
+                                                            ),
+                                                            Convert.ToDecimal(
+                                                                nodeList.Attributes[
+                                                                        ShareObject.BrokerageBrokerFeeAttrName]
+                                                                    .Value // BrokerFee
+                                                            ),
+                                                            Convert.ToDecimal(
+                                                                nodeList.Attributes[
+                                                                        ShareObject.BrokerageTraderPlaceFeeAttrName]
+                                                                    .Value // TraderPlaceFee
+                                                            ),
+                                                            Convert.ToDecimal(
+                                                                nodeList.Attributes[
+                                                                        ShareObject.BrokerageReductionAttrName]
+                                                                    .Value // Reduction
+                                                            ),
+                                                            nodeList.Attributes[ShareObject.BrokerageDocumentAttrName]
+                                                                .Value)) // Document
                                                         bLoadPortfolio = false;
                                                 }
                                                 else
                                                     bLoadPortfolio = false;
                                             }
+
                                             break;
 
-#endregion Brokerages
+                                        #endregion Brokerages
 
-#region Buys
+                                        #region Buys
 
-                                        case (int)PortfolioParts.Buys:
+                                        case (int) PortfolioParts.Buys:
                                             foreach (XmlElement nodeList in nodeElement.ChildNodes[i].ChildNodes)
                                             {
-                                               // Check if the node has the right count of attributes
+                                                // Check if the node has the right count of attributes
                                                 if (nodeList != null &&
                                                     nodeList.Attributes.Count ==
                                                     ShareObject.BuyAttrCount)
                                                 {
                                                     // Get brokerage object
-                                                    var brokerage = ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].AllBrokerageEntries.GetBrokerageObjectByGuidDate(
-                                                        nodeList.Attributes[ShareObject.BuyBrokerageGuidAttrName].Value,
-                                                        nodeList.Attributes[ShareObject.BuyDateAttrName].Value
-                                                    );
+                                                    var brokerage =
+                                                        ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                                            .AllBrokerageEntries.GetBrokerageObjectByGuidDate(
+                                                                nodeList.Attributes[
+                                                                    ShareObject.BuyBrokerageGuidAttrName].Value,
+                                                                nodeList.Attributes[ShareObject.BuyDateAttrName].Value
+                                                            );
 
-                                                    if (!ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].AddBuy(
-                                                        nodeList.Attributes[ShareObject.BuyGuidAttrName].Value,                 // Guid
-                                                        nodeList.Attributes[ShareObject.BuyOrderNumberAttrName].Value,          // Order number
-                                                        nodeList.Attributes[ShareObject.BuyDateAttrName].Value,                 // Date
+                                                    if (!ShareObjectListMarketValue[
+                                                        ShareObjectListMarketValue.Count - 1].AddBuy(
+                                                        nodeList.Attributes[ShareObject.BuyGuidAttrName].Value, // Guid
+                                                        nodeList.Attributes[ShareObject.BuyDepotNumberAttrName]
+                                                            .Value, // Depot number
+                                                        nodeList.Attributes[ShareObject.BuyOrderNumberAttrName]
+                                                            .Value, // Order number
+                                                        nodeList.Attributes[ShareObject.BuyDateAttrName].Value, // Date
                                                         Convert.ToDecimal(
-                                                            nodeList.Attributes[ShareObject.BuyVolumeAttrName].Value),          // Volume
+                                                            nodeList.Attributes[ShareObject.BuyVolumeAttrName]
+                                                                .Value), // Volume
                                                         Convert.ToDecimal(
-                                                            nodeList.Attributes[ShareObject.BuyVolumeSoldAttrName].Value),      // Volume already sold
+                                                            nodeList.Attributes[ShareObject.BuyVolumeSoldAttrName]
+                                                                .Value), // Volume already sold
                                                         Convert.ToDecimal(
-                                                            nodeList.Attributes[ShareObject.BuyPriceAttrName].Value),           // Price
-                                                        brokerage,                                                              // Brokerage object
-                                                        nodeList.Attributes[ShareObject.BuyDocumentAttrName].Value))            // Document
+                                                            nodeList.Attributes[ShareObject.BuyPriceAttrName]
+                                                                .Value), // Price
+                                                        brokerage, // Brokerage object
+                                                        nodeList.Attributes[ShareObject.BuyDocumentAttrName]
+                                                            .Value)) // Document
                                                         bLoadPortfolio = false;
 
-                                                    if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].AddBuy(
-                                                        nodeList.Attributes[ShareObject.BuyGuidAttrName].Value,                 // Guid
-                                                        nodeList.Attributes[ShareObject.BuyOrderNumberAttrName].Value,          // Order number
-                                                        nodeList.Attributes[ShareObject.BuyDateAttrName].Value,                 // Date
-                                                        Convert.ToDecimal(
-                                                            nodeList.Attributes[ShareObject.BuyVolumeAttrName].Value),          // Volume
-                                                        Convert.ToDecimal(
-                                                            nodeList.Attributes[ShareObject.BuyVolumeSoldAttrName].Value),      // Volume already sold
-                                                        Convert.ToDecimal(
-                                                            nodeList.Attributes[ShareObject.BuyPriceAttrName].Value),           // Price
-                                                        brokerage,                                                              // Brokerage object
-                                                        nodeList.Attributes[ShareObject.BuyDocumentAttrName].Value))            // Document
+                                                    if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                                        .AddBuy(
+                                                            nodeList.Attributes[ShareObject.BuyGuidAttrName]
+                                                                .Value, // Guid
+                                                            nodeList.Attributes[ShareObject.BuyDepotNumberAttrName]
+                                                                .Value, // Depot number
+                                                            nodeList.Attributes[ShareObject.BuyOrderNumberAttrName]
+                                                                .Value, // Order number
+                                                            nodeList.Attributes[ShareObject.BuyDateAttrName]
+                                                                .Value, // Date
+                                                            Convert.ToDecimal(
+                                                                nodeList.Attributes[ShareObject.BuyVolumeAttrName]
+                                                                    .Value), // Volume
+                                                            Convert.ToDecimal(
+                                                                nodeList.Attributes[ShareObject.BuyVolumeSoldAttrName]
+                                                                    .Value), // Volume already sold
+                                                            Convert.ToDecimal(
+                                                                nodeList.Attributes[ShareObject.BuyPriceAttrName]
+                                                                    .Value), // Price
+                                                            brokerage, // Brokerage object
+                                                            nodeList.Attributes[ShareObject.BuyDocumentAttrName]
+                                                                .Value)) // Document
                                                         bLoadPortfolio = false;
                                                 }
                                                 else
                                                     bLoadPortfolio = false;
                                             }
+
                                             break;
 
-#endregion Buys
+                                        #endregion Buys
 
-#region Sales
+                                        #region Sales
 
-                                        case (int)PortfolioParts.Sales:
+                                        case (int) PortfolioParts.Sales:
                                             foreach (XmlElement nodeList in nodeElement.ChildNodes[i].ChildNodes)
                                             {
                                                 // Check if the node has the right count of attributes
@@ -636,7 +701,8 @@ namespace SharePortfolioManager
                                                                                 .Value), // Reduction of the used buy
                                                                         Convert.ToDecimal(
                                                                             buyAttributes.Attributes[
-                                                                                    ShareObject.SaleUsedBuyBrokerageAttrName]
+                                                                                    ShareObject
+                                                                                        .SaleUsedBuyBrokerageAttrName]
                                                                                 .Value), // Brokerage of the used buy
                                                                         buyAttributes
                                                                             .Attributes[ShareObject.SaleBuyGuidAttrName]
@@ -672,8 +738,12 @@ namespace SharePortfolioManager
                                                                 .Value, // Date
                                                             nodeList
                                                                 .Attributes[
-                                                                    ShareObject.SaleOrderNumberAttrName] // Order number
-                                                                .Value, // Date
+                                                                    ShareObject.SaleDepotNumberAttrName]
+                                                                .Value, // Depot number
+                                                            nodeList
+                                                                .Attributes[
+                                                                    ShareObject.SaleOrderNumberAttrName]
+                                                                .Value, // Order number
                                                             Convert.ToDecimal(
                                                                 nodeList.Attributes[ShareObject.SaleVolumeAttrName]
                                                                     .Value), // Volume
@@ -704,6 +774,8 @@ namespace SharePortfolioManager
                                                                 .Value, // Guid
                                                             nodeList.Attributes[ShareObject.SaleDateAttrName]
                                                                 .Value, // Date
+                                                            nodeList.Attributes[ShareObject.SaleDepotNumberAttrName]
+                                                                .Value, // Depot number
                                                             nodeList.Attributes[ShareObject.SaleOrderNumberAttrName]
                                                                 .Value, // Order number
                                                             Convert.ToDecimal(
@@ -735,13 +807,14 @@ namespace SharePortfolioManager
                                                 else
                                                     bLoadPortfolio = false;
                                             }
+
                                             break;
 
-#endregion Sales
+                                        #endregion Sales
 
-#region Dividends
+                                        #region Dividends
 
-                                        case (int)PortfolioParts.Dividends:
+                                        case (int) PortfolioParts.Dividends:
                                             // Read dividend payout interval
                                             if (nodeElement.ChildNodes[i].Attributes != null)
                                             {
@@ -776,39 +849,57 @@ namespace SharePortfolioManager
                                                     if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
                                                         .AddDividend(
                                                             Helper.GetCultureByName(
-                                                                nodeList.ChildNodes[0].Attributes[ShareObject.DividendNameAttrName].Value),                 //CultureInfo FC
-                                                            enableFc,                                                                                       // FC enabled
+                                                                nodeList.ChildNodes[0]
+                                                                    .Attributes[ShareObject.DividendNameAttrName]
+                                                                    .Value), //CultureInfo FC
+                                                            enableFc, // FC enabled
                                                             Convert.ToDecimal(
-                                                                nodeList.ChildNodes[0].Attributes[ShareObject.DividendExchangeRatioAttrName].Value),        // Exchange ratio
-                                                            nodeList.Attributes[ShareObject.DividendGuidAttrName].Value,                                    // Guid
-                                                            nodeList.Attributes[ShareObject.DividendDateAttrName].Value,                                    // Date
+                                                                nodeList.ChildNodes[0]
+                                                                    .Attributes[
+                                                                        ShareObject.DividendExchangeRatioAttrName]
+                                                                    .Value), // Exchange ratio
+                                                            nodeList.Attributes[ShareObject.DividendGuidAttrName]
+                                                                .Value, // Guid
+                                                            nodeList.Attributes[ShareObject.DividendDateAttrName]
+                                                                .Value, // Date
                                                             Convert.ToDecimal(
-                                                                nodeList.Attributes[ShareObject.DividendRateAttrName].Value),                               // Rate
+                                                                nodeList.Attributes[ShareObject.DividendRateAttrName]
+                                                                    .Value), // Rate
                                                             Convert.ToDecimal(
-                                                                nodeList.Attributes[ShareObject.DividendVolumeAttrName].Value),                             // Volume     
+                                                                nodeList.Attributes[ShareObject.DividendVolumeAttrName]
+                                                                    .Value), // Volume     
                                                             Convert.ToDecimal(
-                                                                nodeList.Attributes[ShareObject.DividendTaxAtSourceAttrName].Value),                        // Tax at source
+                                                                nodeList.Attributes[
+                                                                        ShareObject.DividendTaxAtSourceAttrName]
+                                                                    .Value), // Tax at source
                                                             Convert.ToDecimal(
-                                                                nodeList.Attributes[ShareObject.DividendCapitalGainsTaxAttrName].Value),                    // Capital gains tax
+                                                                nodeList.Attributes[
+                                                                        ShareObject.DividendCapitalGainsTaxAttrName]
+                                                                    .Value), // Capital gains tax
                                                             Convert.ToDecimal(
-                                                                nodeList.Attributes[ShareObject.DividendSolidarityTaxAttrName].Value),                      // Solidarity tax
+                                                                nodeList.Attributes[
+                                                                        ShareObject.DividendSolidarityTaxAttrName]
+                                                                    .Value), // Solidarity tax
                                                             Convert.ToDecimal(
-                                                                nodeList.Attributes[ShareObject.DividendPriceAttrName].Value),                              // Price
-                                                            nodeList.Attributes[ShareObject.DividendDocumentAttrName].Value))                               // Document
-                                                        bLoadPortfolio = false;                                                    
+                                                                nodeList.Attributes[ShareObject.DividendPriceAttrName]
+                                                                    .Value), // Price
+                                                            nodeList.Attributes[ShareObject.DividendDocumentAttrName]
+                                                                .Value)) // Document
+                                                        bLoadPortfolio = false;
                                                 }
                                                 else
                                                     bLoadPortfolio = false;
                                             }
+
                                             break;
 
-#endregion Dividends
+                                        #endregion Dividends
 
                                         default:
                                             break;
                                     }
                                 }
-                                
+
                                 // Get Id for the RegexSearchFailedList
                                 var id = RegexSearchFailedList.Count + 1;
                                 // Set website configuration and encoding to the share object.

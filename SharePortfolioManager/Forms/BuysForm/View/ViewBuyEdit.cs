@@ -54,6 +54,7 @@ namespace SharePortfolioManager.BuysForm.View
         DeleteFailed,
         DeleteFailedUnerasable,
         InputValuesInvalid,
+        DepotNumberEmpty,
         OrderNumberEmpty,
         OrderNumberExists,
         VolumeEmpty,
@@ -118,6 +119,7 @@ namespace SharePortfolioManager.BuysForm.View
         string SelectedDate { get; set; }
         string Date { get; set; }
         string Time { get; set; }
+        string DepotNumber { get; set; }
         string OrderNumber { get; set; }
         string Volume { get; set; }
         string VolumeSold { get; set; }
@@ -309,6 +311,17 @@ namespace SharePortfolioManager.BuysForm.View
             }
         }
 
+        public string DepotNumber
+        {
+            get => cbxDepotNumber.SelectedIndex > 0 ? cbxDepotNumber.SelectedItem.ToString() : @"-";
+            set
+            {
+                var index = cbxDepotNumber.FindString(value);
+                if (index > -1)
+                    cbxDepotNumber.SelectedIndex = index;
+            }
+        }
+
         public string OrderNumber
         {
             get => txtBoxOrderNumber.Text;
@@ -476,7 +489,7 @@ namespace SharePortfolioManager.BuysForm.View
                     stateLevel = FrmMain.EStateLevels.Error;
 
                     Enabled = true;
-                    txtBoxOrderNumber.Focus();
+                    cbxDepotNumber.Focus();
 
                     break;
                 }
@@ -513,7 +526,7 @@ namespace SharePortfolioManager.BuysForm.View
                     stateLevel = FrmMain.EStateLevels.Error;
 
                     Enabled = true;
-                    txtBoxOrderNumber.Focus();
+                    cbxDepotNumber.Focus();
 
                     break;
                 }
@@ -549,7 +562,7 @@ namespace SharePortfolioManager.BuysForm.View
                     stateLevel = FrmMain.EStateLevels.Error;
 
                     Enabled = true;
-                    txtBoxOrderNumber.Focus();
+                    cbxDepotNumber.Focus();
 
                     break;
                 }
@@ -561,7 +574,7 @@ namespace SharePortfolioManager.BuysForm.View
                     stateLevel = FrmMain.EStateLevels.Error;
 
                     Enabled = true;
-                    txtBoxOrderNumber.Focus();
+                    cbxDepotNumber.Focus();
 
                     break;
                 }
@@ -573,7 +586,19 @@ namespace SharePortfolioManager.BuysForm.View
                     stateLevel = FrmMain.EStateLevels.Error;
 
                     Enabled = true;
-                    txtBoxOrderNumber.Focus();
+                    cbxDepotNumber.Focus();
+
+                    break;
+                }
+                case BuyErrorCode.DepotNumberEmpty:
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DepotNumberEmpty", LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+
+                    Enabled = true;
+                    cbxDepotNumber.Focus();
 
                     break;
                 }
@@ -946,6 +971,8 @@ namespace SharePortfolioManager.BuysForm.View
                         LanguageName);
                 lblDate.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Labels/Date",
                     LanguageName);
+                lblDepotNumber.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Labels/DepotNumber",
+                    LanguageName);
                 lblOrderNumber.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Labels/OrderNumber",
                     LanguageName);
                 lblVolume.Text =
@@ -1020,6 +1047,18 @@ namespace SharePortfolioManager.BuysForm.View
 
                 #endregion Image configuration
 
+                #region Get depot numbers and the corresponding banks
+
+                var listBankRegex = DocumentParsingConfiguration.BankRegexList;
+
+                cbxDepotNumber.Items.Add(@"-");
+                foreach (var bankRegex in listBankRegex)
+                {
+                    cbxDepotNumber.Items.Add(bankRegex.BankIdentifier + @" - " + bankRegex.BankName);
+                }
+
+                #endregion Get depot numbers and the corresponding banks
+
                 // Load buys of the share
                 OnShowBuys();
 
@@ -1030,7 +1069,7 @@ namespace SharePortfolioManager.BuysForm.View
                     txtBoxDocument.Text = ParsingFileName;
                 }
 
-                txtBoxOrderNumber.Focus();
+                cbxDepotNumber.Focus();
             }
             catch (Exception ex)
             {
@@ -1063,6 +1102,7 @@ namespace SharePortfolioManager.BuysForm.View
             // Reset state pictures
             picBoxDateParseState.Image = Resources.empty_arrow;
             picBoxTimeParseState.Image = Resources.empty_arrow;
+            picBoxDepotNumberParseState.Image = Resources.empty_arrow;
             picBoxOrderNumberParseState.Image = Resources.empty_arrow;
             picBoxVolumeParseState.Image = Resources.empty_arrow;
             picBoxPriceParseState.Image = Resources.empty_arrow;
@@ -1076,6 +1116,10 @@ namespace SharePortfolioManager.BuysForm.View
             dateTimePickerDate.Enabled = true;
             dateTimePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
             dateTimePickerTime.Enabled = true;
+
+            // Reset and enable combo box
+            cbxDepotNumber.SelectedIndex = 0;
+            cbxDepotNumber.Enabled = true;
 
             // Reset and enable text boxes
             txtBoxOrderNumber.Text = string.Empty;
@@ -1128,7 +1172,7 @@ namespace SharePortfolioManager.BuysForm.View
             if (tabCtrlBuys.TabPages.Count > 0)
                 tabCtrlBuys.SelectTab(0);
 
-            txtBoxOrderNumber.Focus();
+            dateTimePickerDate.Focus();
 
             FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
         }
@@ -2328,6 +2372,7 @@ namespace SharePortfolioManager.BuysForm.View
                     {
                         dateTimePickerDate.Value = Convert.ToDateTime(selectedBuyObject.Date);
                         dateTimePickerTime.Value = Convert.ToDateTime(selectedBuyObject.Date);
+                        cbxDepotNumber.SelectedIndex = cbxDepotNumber.FindString(selectedBuyObject.DepotNumber);
                         txtBoxOrderNumber.Text = selectedBuyObject.OrderNumber;
                         txtBoxVolume.Text = selectedBuyObject.VolumeAsStr;
                         txtBoxVolumeSold.Text = selectedBuyObject.VolumeSoldAsStr;
@@ -2344,6 +2389,9 @@ namespace SharePortfolioManager.BuysForm.View
                         {
                             // Check if the delete button should be enabled or not
                             btnDelete.Enabled = ShareObjectFinalValue.AllBuyEntries.GetAllBuysOfTheShare().Count > 1;
+
+                            // Enable ComboBox
+                            cbxDepotNumber.Enabled = true;
 
                             // Enable TextBox(es)
                             dateTimePickerDate.Enabled = true;
@@ -2364,6 +2412,9 @@ namespace SharePortfolioManager.BuysForm.View
                         {
                             // Disable Button(s)
                             btnDelete.Enabled = false;
+
+                            // Enable ComboBox
+                            cbxDepotNumber.Enabled = false;
 
                             // Disable TextBox(es)
                             dateTimePickerDate.Enabled = false;
@@ -2405,6 +2456,10 @@ namespace SharePortfolioManager.BuysForm.View
                         dateTimePickerDate.Enabled = false;
                         dateTimePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
                         dateTimePickerTime.Enabled = false;
+
+                        // Set combo box to first index
+                        cbxDepotNumber.SelectedIndex = 0;
+                        cbxDepotNumber.Enabled = false;
 
                         // Reset and disable text boxes
                         txtBoxOrderNumber.Text = string.Empty;
@@ -2463,6 +2518,9 @@ namespace SharePortfolioManager.BuysForm.View
                     // Enable date time picker
                     dateTimePickerDate.Enabled = true;
                     dateTimePickerTime.Enabled = true;
+
+                    // Enabled ComboBox
+                    cbxDepotNumber.Enabled = true;
 
                     // Enabled TextBox(es)
                     txtBoxOrderNumber.Enabled = true;
@@ -3138,6 +3196,10 @@ namespace SharePortfolioManager.BuysForm.View
 
                         switch (resultEntry.Key)
                         {
+                            case DocumentParsingConfiguration.DocumentTypeBuyDepotNumber:
+                                picBoxDepotNumberParseState.Image = Resources.search_ok_24;
+                                cbxDepotNumber.SelectedIndex = cbxDepotNumber.FindString(DocumentParsingConfiguration.BankRegexList[_bankCounter - 2].BankIdentifier);
+                                break;
                             case DocumentParsingConfiguration.DocumentTypeBuyOrderNumber:
                                 picBoxOrderNumberParseState.Image = Resources.search_ok_24;
                                 txtBoxOrderNumber.Text = resultEntry.Value[0].Trim();
@@ -3182,6 +3244,16 @@ namespace SharePortfolioManager.BuysForm.View
                     #region Not found values
 
                     // Which values are not found
+                    if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyDepotNumber) ||
+                        DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyDepotNumber) &&
+                        DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeBuyDepotNumber].Count == 0
+                    )
+                    {
+                        picBoxDepotNumberParseState.Image = Resources.search_failed_24;
+                        cbxDepotNumber.SelectedIndex = 0;
+                        _parsingResult = false;
+                    }
+
                     if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyOrderNumber) ||
                         DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyOrderNumber) &&
                         DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeBuyOrderNumber].Count == 0
