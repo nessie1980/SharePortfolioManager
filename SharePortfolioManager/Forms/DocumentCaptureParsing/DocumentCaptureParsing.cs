@@ -319,6 +319,9 @@ namespace SharePortfolioManager.DocumentCaptureParsing
                         // Reset flags
                         _bankIdentifierFound = false;
                         _buyIdentifierFound = false;
+                        _saleIdentifierFound = false;
+                        _dividendIdentifierFound = false;
+                        _brokerageIdentifierFound = false;
 
                         // Start document parsing
                         DocumentTypeParser.StartParsing();
@@ -468,7 +471,10 @@ namespace SharePortfolioManager.DocumentCaptureParsing
                                 // Check if the bank identifier has been found
                                 if (e.ParserInfoState.SearchResult != null &&
                                     e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
-                                        .BankIdentifierTagName))
+                                        .BankIdentifierTagName)
+                                    &&
+                                    e.ParserInfoState.SearchResult[DocumentParsingConfiguration.BankIdentifierTagName][0] == DocumentParsingConfiguration.BankRegexList[_bankCounter].BankIdentifier
+                                    )
                                 {
                                     _bankIdentifierFound = true;
                                     picBoxBank.Image = Resources.search_ok_24;
@@ -478,24 +484,30 @@ namespace SharePortfolioManager.DocumentCaptureParsing
 
                                 //Check if the correct bank identifier and document identifier may have been found so search for the document values
                                 if (e.ParserInfoState.SearchResult != null &&
+                                    e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
+                                        .BankIdentifierTagName) &&
                                     (
                                         e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
-                                            .BankIdentifierTagName) &&
-                                        (
-                                            e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
-                                                .BuyIdentifierTagName) ||
-                                            e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
-                                                .SaleIdentifierTagName) ||
-                                            e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
-                                                .DividendIdentifierTagName) ||
-                                            e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
-                                                .BrokerageIdentifierTagName)))
-                                )
+                                            .BuyIdentifierTagName)
+                                        ||
+                                        e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
+                                            .SaleIdentifierTagName)
+                                        ||
+                                        e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
+                                            .DividendIdentifierTagName)
+                                        ||
+                                        e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
+                                            .BrokerageIdentifierTagName)
+                                        )
+                                    )
                                 {
                                     // Check if the buy identifier has been found
                                     if (e.ParserInfoState.SearchResult != null &&
                                         e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
-                                            .BuyIdentifierTagName))
+                                            .BuyIdentifierTagName)
+                                        &&
+                                        e.ParserInfoState.SearchResult[DocumentParsingConfiguration.BuyIdentifierTagName].Count > 0
+                                        )
                                     {
                                         _buyIdentifierFound = true;
                                         DocumentType = DocumentParsingConfiguration.DocumentTypes.BuyDocument;
@@ -506,7 +518,10 @@ namespace SharePortfolioManager.DocumentCaptureParsing
                                     // Check if the sale identifier has been found
                                     if (e.ParserInfoState.SearchResult != null &&
                                         e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
-                                            .SaleIdentifierTagName))
+                                            .SaleIdentifierTagName)
+                                        &&
+                                        e.ParserInfoState.SearchResult[DocumentParsingConfiguration.SaleIdentifierTagName].Count > 0
+                                        )
                                     {
                                         _saleIdentifierFound = true;
                                         DocumentType = DocumentParsingConfiguration.DocumentTypes.SaleDocument;
@@ -517,7 +532,10 @@ namespace SharePortfolioManager.DocumentCaptureParsing
                                     // Check if the dividend identifier has been found
                                     if (e.ParserInfoState.SearchResult != null &&
                                         e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
-                                            .DividendIdentifierTagName))
+                                            .DividendIdentifierTagName)
+                                        &&
+                                        e.ParserInfoState.SearchResult[DocumentParsingConfiguration.DividendIdentifierTagName].Count > 0
+                                        )
                                     {
                                         _dividendIdentifierFound = true;
                                         DocumentType = DocumentParsingConfiguration.DocumentTypes.DividendDocument;
@@ -528,7 +546,10 @@ namespace SharePortfolioManager.DocumentCaptureParsing
                                     // Check if the brokerage identifier has been found
                                     if (e.ParserInfoState.SearchResult != null &&
                                         e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
-                                            .BrokerageIdentifierTagName))
+                                            .BrokerageIdentifierTagName)
+                                        &&
+                                        e.ParserInfoState.SearchResult[DocumentParsingConfiguration.BrokerageIdentifierTagName].Count > 0
+                                        )
                                     {
                                         _brokerageIdentifierFound = true;
                                         DocumentType = DocumentParsingConfiguration.DocumentTypes.BrokerageDocument;

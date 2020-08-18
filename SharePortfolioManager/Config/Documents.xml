@@ -135,6 +135,7 @@
 			<Reduction Name="Reduction" FoundIndex="0" ResultEmpty="true" RegexOptions="None"></Reduction>
 		</Document>
 		<Document Type="Sale" TypeIdentifierValue="Wertpapier Abrechnung Verkauf" Encoding="UTF-8">
+			<Wkn Name="Wkn" FoundIndex="0" ResultEmpty="true" RegexOptions="None">  ((?:[A-Za-z0-9]{6,6}))  </Wkn>
 			<DepotNumber Name="DepotNumber" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Depotnummer\s+([0-9]{1,10})|Depotnummer:\s+([0-9]{1,10})</DepotNumber>
 			<Date Name="Date" FoundIndex="0" ResultEmpty="false" RegexOptions="None">Schlusstag/-Zeit([0-9:. ]{1,})Auftraggeber</Date>
 			<Time Name="Time" FoundIndex="0" ResultEmpty="false" RegexOptions="None">Schlusstag/-Zeit([0-9:. ]{1,})Auftraggeber</Time>
