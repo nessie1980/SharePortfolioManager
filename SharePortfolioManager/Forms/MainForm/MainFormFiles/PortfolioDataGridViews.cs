@@ -1557,6 +1557,11 @@ namespace SharePortfolioManager
                 if (dgvPortfolioFooterFinalValue.Rows.Count == 3 && ShareObjectListFinalValue.Count > 0 &&
                     ShareObjectListFinalValue[0] != null)
                 {
+                    // Set brokerage and dividend of all transactions
+                    dgvPortfolioFooterFinalValue.Rows[1].Cells[
+                            (int)ColumnIndicesPortfolioFooterFinalValue.EBrokerageDividendIndex].Value =
+                        ShareObjectListFinalValue[0].PortfolioCompleteBrokerageDividendsAsStrUnit;
+
                     // Set purchase value of the current stock volume
                     dgvPortfolioFooterFinalValue.Rows[0].Cells[
                             (int) ColumnIndicesPortfolioFooterFinalValue.EFinalValueColumnIndex].Value =
@@ -1586,11 +1591,6 @@ namespace SharePortfolioManager
                     dgvPortfolioFooterFinalValue.Rows[2].Cells[
                             (int) ColumnIndicesPortfolioFooterFinalValue.ECompleteFinalValueColumnIndex].Value =
                         ShareObjectListFinalValue[0].PortfolioCompleteFinalValueAsStrUnit;
-
-                    // Set brokerage and dividend of all transactions
-                    dgvPortfolioFooterFinalValue.Rows[1].Cells[
-                            (int)ColumnIndicesPortfolioFooterFinalValue.EBrokerageDividendIndex].Value =
-                        ShareObjectListFinalValue[0].PortfolioCompleteBrokerageDividendsAsStrUnit;
                 }
 
                 #endregion dgvPortfolioFinalValue
@@ -1827,6 +1827,7 @@ namespace SharePortfolioManager
                     FrmShareDetailsForm = new FrmShareDetails(MarketValueOverviewTabSelected,
                         ShareObjectFinalValue, ShareObjectMarketValue,
                         rchTxtBoxStateMessage, Logger, ChartingColorDictionary,
+                        ChartingIntervalValue, ChartingAmount,
                         Language, LanguageName);
 
                     // Set location and size for the chart window

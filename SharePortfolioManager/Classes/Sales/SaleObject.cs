@@ -25,7 +25,6 @@
 
 using SharePortfolioManager.Classes.Brokerage;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -419,81 +418,57 @@ namespace SharePortfolioManager.Classes.Sales
         public decimal ProfitLoss { get; internal set; }
 
         [Browsable(false)]
-        public string ProfitLossAsStr => ProfitLoss > 0
-            ? Helper.FormatDecimal(ProfitLoss, Helper.CurrencyTwoLength,
-                true, Helper.CurrencyTwoFixLength)
-            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength,
-                    true, Helper.CurrencyTwoFixLength);
+        public string ProfitLossAsStr => Helper.FormatDecimal(ProfitLoss, Helper.CurrencyTwoLength,
+                true, Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal ProfitLossBrokerage { get; internal set; }
 
         [Browsable(false)]
-        public string ProfitLossBrokerageAsStr => ProfitLossBrokerage > 0
-            ? Helper.FormatDecimal(ProfitLossBrokerage, Helper.CurrencyTwoLength,
-                true, Helper.CurrencyTwoFixLength)
-            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength,
-                    true, Helper.CurrencyTwoFixLength);
+        public string ProfitLossBrokerageAsStr => Helper.FormatDecimal(ProfitLossBrokerage, Helper.CurrencyTwoLength,
+                true, Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal ProfitLossReduction { get; internal set; }
 
         [Browsable(false)]
-        public string ProfitLossReductionAsStr => ProfitLossReduction > 0
-            ? Helper.FormatDecimal(ProfitLossReduction, Helper.CurrencyTwoLength,
-                true, Helper.CurrencyTwoFixLength)
-            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength,
-                    true, Helper.CurrencyTwoFixLength);
+        public string ProfitLossReductionAsStr => Helper.FormatDecimal(ProfitLossReduction, Helper.CurrencyTwoLength,
+                true, Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal ProfitLossBrokerageReduction { get; internal set; }
 
         [Browsable(false)]
-        public string ProfitLossBrokerageReductionAsStr => ProfitLossBrokerageReduction > 0
-            ? Helper.FormatDecimal(ProfitLossBrokerageReduction, Helper.CurrencyTwoLength,
-                true, Helper.CurrencyTwoFixLength)
-            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength,
-                    true, Helper.CurrencyTwoFixLength);
+        public string ProfitLossBrokerageReductionAsStr => Helper.FormatDecimal(ProfitLossBrokerageReduction, Helper.CurrencyTwoLength,
+                true, Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal Payout { get; internal set; }
 
         [Browsable(false)]
-        public string PayoutAsStr => Payout > 0
-            ? Helper.FormatDecimal(Payout, Helper.CurrencyTwoLength, true,
-                Helper.CurrencyTwoFixLength)
-            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true,
-                    Helper.CurrencyTwoFixLength);
+        public string PayoutAsStr => Helper.FormatDecimal(Payout, Helper.CurrencyTwoLength, true,
+                Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal PayoutBrokerage { get; internal set; }
 
         [Browsable(false)]
-        public string PayoutBrokerageAsStr => PayoutBrokerage > 0
-            ? Helper.FormatDecimal(PayoutBrokerage, Helper.CurrencyTwoLength, true,
-                Helper.CurrencyTwoFixLength)
-            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true,
-                    Helper.CurrencyTwoFixLength);
+        public string PayoutBrokerageAsStr => Helper.FormatDecimal(PayoutBrokerage, Helper.CurrencyTwoLength, true,
+            Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal PayoutReduction { get; internal set; }
 
         [Browsable(false)]
-        public string PayoutReductionAsStr => PayoutReduction > 0
-            ? Helper.FormatDecimal(PayoutReduction, Helper.CurrencyTwoLength, true,
-                Helper.CurrencyTwoFixLength)
-            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true,
-                    Helper.CurrencyTwoFixLength);
+        public string PayoutReductionAsStr => Helper.FormatDecimal(PayoutReduction, Helper.CurrencyTwoLength, true,
+                Helper.CurrencyTwoFixLength);
 
         [Browsable(false)]
         public decimal PayoutBrokerageReduction { get; internal set; }
 
         [Browsable(false)]
-        public string PayoutBrokerageReductionAsStr => PayoutBrokerageReduction > 0
-            ? Helper.FormatDecimal(PayoutBrokerageReduction, Helper.CurrencyTwoLength, true,
-                Helper.CurrencyTwoFixLength)
-            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true,
-                    Helper.CurrencyTwoFixLength);
+        public string PayoutBrokerageReductionAsStr => Helper.FormatDecimal(PayoutBrokerageReduction, Helper.CurrencyTwoLength, true,
+                Helper.CurrencyTwoFixLength);
 
         #endregion Profit / loss / payout values
 
@@ -528,18 +503,14 @@ namespace SharePortfolioManager.Classes.Sales
         [Browsable(true)]
         [DisplayName(@"ProfitLoss")]
         // ReSharper disable once UnusedMember.Global
-        public string DgvProfitLossAsStr => ProfitLossBrokerageReduction > 0
-            ? Helper.FormatDecimal(ProfitLossBrokerageReduction, Helper.CurrencyTwoLength, true,
-                Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo)
-            : @"-";
+        public string DgvProfitLossAsStr => Helper.FormatDecimal(ProfitLossBrokerageReduction, Helper.CurrencyTwoLength, true,
+                Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
 
         [Browsable(true)]
         [DisplayName(@"Payout")]
         // ReSharper disable once UnusedMember.Global
-        public string DgvPayoutAsStr => PayoutBrokerageReduction > 0
-            ? Helper.FormatDecimal(PayoutBrokerageReduction, Helper.CurrencyTwoLength, true,
-                Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo)
-            : @"-";
+        public string DgvPayoutAsStr => Helper.FormatDecimal(PayoutBrokerageReduction, Helper.CurrencyTwoLength, true,
+                Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
 
         [Browsable(true)]
         [DisplayName(@"Document")]

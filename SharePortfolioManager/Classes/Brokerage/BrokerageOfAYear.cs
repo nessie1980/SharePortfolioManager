@@ -52,7 +52,7 @@ namespace SharePortfolioManager.Classes.Brokerage
         public decimal ReductionValueYear { get; internal set; } = -1;
 
         [Browsable(false)]
-        public string ReductionValueYearWitAsStrUnit => Helper.FormatDecimal(ReductionValueYear,
+        public string ReductionValueYearAsStrUnit => Helper.FormatDecimal(ReductionValueYear,
             Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", BrokerageReductionCultureInfo);
 
         [Browsable(false)]
@@ -72,6 +72,12 @@ namespace SharePortfolioManager.Classes.Brokerage
 
         [Browsable(true)]
         public string DgvBrokerageYear => BrokerageYearAsStr;
+
+        [Browsable(true)]
+        public string DgvBrokerageValueYear => BrokerageValueYearAsStrUnit;
+
+        [Browsable(true)]
+        public string DgvReductionValueYear => ReductionValueYearAsStrUnit;
 
         [Browsable(true)]
         public string DgvBrokerageWithReductionValueYear => BrokerageWithReductionValueYearAsStrUnit;

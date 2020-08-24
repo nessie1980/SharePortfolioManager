@@ -443,7 +443,7 @@ namespace SharePortfolioManager.DividendForm.Presenter
                     _model.ErrorCode = DividendErrorCode.DocumentFileDoesNotExists;
                     bErrorFlag = true;
                 }
-                else if (_model.Document != @"" && _model.Document != @"-" && _model.ShareObjectFinalValue.AllDividendEntries.GetAllDividendsOfTheShare().Exists(x => x.DocumentAsStr == _model.Document))
+                else if (_model.Document != @"" && _model.Document != @"-" && _model.ShareObjectFinalValue.AllDividendEntries.GetAllDividendsOfTheShare().Exists(x => x.DocumentAsStr == _model.Document && x.Guid != _model.SelectedGuid))
                 {
                     _model.ErrorCode = DividendErrorCode.DocumentFileAlreadyExists;
                     bErrorFlag = true;

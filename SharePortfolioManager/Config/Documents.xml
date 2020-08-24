@@ -61,7 +61,7 @@
 		<BankIdentifier Name="BankIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Direkt-Depot Nr.:\s+([0-9]{1,10})</BankIdentifier>
 		<BuyIdentifier Name="BuyIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">(Kauf)</BuyIdentifier>
 		<SaleIdentifier Name="SaleIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">(Verkauf)</SaleIdentifier>
-		<DividendIdentifier Name="DividendIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">(Dividendengutschrift)</DividendIdentifier>
+		<DividendIdentifier Name="DividendIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">(Dividendengutschrift|Ertragsgutschrift)</DividendIdentifier>
 		<BrokerageIdentifier Name="BrokerageIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">(Ges. Kosten)</BrokerageIdentifier>
 		<Document Type="Buy" TypeIdentifierValue="Wertpapierabrechnung" Encoding="UTF-8">
 			<Wkn Name="Wkn" FoundIndex="0" ResultEmpty="true" RegexOptions="None">ISIN [(]WKN[)](?:[ ]{1,})(?:[A-Za-z0-9]{1,})(?:[ ]{1,})[(]([A-z0-9]{1,})[)]</Wkn>
@@ -71,7 +71,7 @@
 			<Date Name="Date" FoundIndex="1" ResultEmpty="true" RegexOptions="None">([0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,4})</Date>
 			<Time Name="Time" FoundIndex="0" ResultEmpty="true" RegexOptions="None">([0-9]{1,2}[:][0-9]{1,2}[:][0-9]{1,2})</Time>
 			<Volume Name="Volume" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Nominale(?:[ ]{1,})Stück([0-9,. ]{1,})</Volume>
-			<Price Name="Price" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Kurs(?:[ ]{1,})EUR([0-9,. ]{1,})</Price>
+			<Price Name="Price" FoundIndex="0" ResultEmpty="true" RegexOptions="None">EUR\s+([0-9,. ]{1,})</Price>
 			<Provision Name="Provision" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Provision(?:[ ]{1,})EUR([0-9,. ]{1,})</Provision>
 			<BrokerFee Name="BrokerFee" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Courtage(?:[ ]{1,})EUR([0-9,. ]{1,})</BrokerFee>
 			<TraderPlaceFee Name="TraderPlaceFee" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Handelsplatzgebühr(?:[ ]{1,})EUR([0-9,. ]{1,})</TraderPlaceFee>
@@ -98,8 +98,8 @@
 			<ExchangeRate Name="ExchangeRate" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Dev.-Kurs [(]([0-9,. ]{1,})[)]</ExchangeRate>
 			<Date Name="Date" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Zahltag\s+([0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,4})</Date>
 			<Time Name="Time" FoundIndex="0" ResultEmpty="true" RegexOptions="None">([0-9]{1,2}[:][0-9]{1,2}[:][0-9]{1,2})</Time>
-			<Volume Name="Volume" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Nominale (.*\s+.*\s+)Stück</Volume>
-			<DividendRate Name="DividendRate" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Dividendensatz(?:[ ]{1,})([0-9,. ]{1,})</DividendRate>
+			<Volume Name="Volume" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Nominale (?:[ ]{1,})([0-9,. ]{1,})Stück</Volume>
+			<DividendRate Name="DividendRate" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Ertragsausschüttung per Stück(?:[ ]{1,})([0-9,. ]{1,})|Dividendensatz(?:[ ]{1,})([0-9,. ]{1,})</DividendRate>
 			<TaxAtSource Name="TaxAtSource" FoundIndex="0" ResultEmpty="true" RegexOptions="None">% [(]EUR([0-9,. ]{1,})[)]</TaxAtSource>
 			<CapitalGainTax Name="CapitalGainTax" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Kapitalertragsteuer (?:[0-9]{0,}[,][0-9]{1,})%(?:[ ]{1,})EUR([0-9,. ]{1,})</CapitalGainTax>
 			<SolidarityTax Name="SolidarityTax" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Solidaritätszuschlag (?:[0-9]{0,}[,][0-9]{1,})%(?:[ ]{1,})EUR([0-9,. ]{1,})</SolidarityTax>

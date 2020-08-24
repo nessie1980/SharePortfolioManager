@@ -21,7 +21,7 @@
 //SOFTWARE.
 
 // Define for DEBUGGING
-#define DEBUG_BUY_OBJECT
+//#define DEBUG_BUY_OBJECT
 
 using SharePortfolioManager.Classes.Brokerage;
 using System;
@@ -443,7 +443,7 @@ namespace SharePortfolioManager.Classes.Buys
         public string DgvVolumeAsStr => Volume > 0
             ? Helper.FormatDecimal(Volume, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true,
                 ShareObject.PieceUnit, BuyCultureInfo)
-            : @"";
+            : @"-";
 
         /// <summary>
         /// Price of the buy for the DataGridView display
@@ -454,7 +454,7 @@ namespace SharePortfolioManager.Classes.Buys
         public string DgvSharePriceAsStr => Price > 0
             ? Helper.FormatDecimal(Price, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true,
                 @"", BuyCultureInfo)
-            : @"";
+            : @"-";
 
         /// <summary>
         /// Brokerage of the buy for the DataGridView display
@@ -463,9 +463,9 @@ namespace SharePortfolioManager.Classes.Buys
         [DisplayName(@"BrokerageReduction")]
         // ReSharper disable once UnusedMember.Global
         public string DgvBrokerageReductionAsStr => BrokerageReduction > 0
-            ? Helper.FormatDecimal(BrokerageReduction, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true,
+            ? Helper.FormatDecimal(BrokerageReduction, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
                 @"", BuyCultureInfo)
-            : @"";
+            : @"-";
 
         /// <summary>
         /// Buy value - reduction of the buy for the DataGridView display
@@ -474,7 +474,7 @@ namespace SharePortfolioManager.Classes.Buys
         [DisplayName(@"BuyValueBrokerageReduction")]
         // ReSharper disable once UnusedMember.Global
         public string DgvBuyValueBrokerageReductionAsStr => BuyValueBrokerageReduction > 0
-            ? Helper.FormatDecimal(BuyValueBrokerageReduction, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true,
+            ? Helper.FormatDecimal(BuyValueBrokerageReduction, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
                 @"", BuyCultureInfo)
             : @"";
 

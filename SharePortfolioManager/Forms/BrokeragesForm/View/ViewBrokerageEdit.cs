@@ -684,6 +684,9 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 lblBrokerage.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Labels/Brokerage",
                         LanguageName);
+                lblBrokerageReduction.Text =
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Labels/BrokerageMinusReduction",
+                        LanguageName);
                 lblDocument.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Labels/Document",
                         LanguageName);
@@ -708,6 +711,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 lblAddTraderPlaceFeeUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                 lblAddReductionUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                 lblAddBrokerageUnit.Text = ShareObjectFinalValue.CurrencyUnit;
+                lblAddBrokerageReductionUnit.Text = ShareObjectFinalValue.CurrencyUnit;
 
                 #endregion Unit configuration
 
@@ -1256,8 +1260,11 @@ namespace SharePortfolioManager.BrokeragesForm.View
                     Text = Language.GetLanguageTextByXPath(
                                @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/TabPgOverview/Overview",
                                LanguageName)
-                           + @" (" + ShareObjectFinalValue.AllBrokerageEntries.BrokerageWithReductionValueTotalAsStr +
-                           @")"
+                           + @" ("
+                           + ShareObjectFinalValue.AllBrokerageEntries.BrokerageValueTotalAsStr
+                           + @" / "
+                           + ShareObjectFinalValue.AllBrokerageEntries.ReductionValueTotalAsStr
+                           + @")"
                 };
 
                 #endregion Add page
@@ -1364,9 +1371,13 @@ namespace SharePortfolioManager.BrokeragesForm.View
                         Name = keyName,
 
                         // Set TabPage caption
-                        Text = keyName + @" (" +
-                               ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageReductionOfTheShareDictionary[keyName]
-                                   .BrokerageWithReductionValueYearAsStrUnit
+                        Text = keyName 
+                               + @" ("
+                               +  ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageReductionOfTheShareDictionary[keyName]
+                                   .BrokerageValueYearAsStrUnit
+                               + @" / "
+                               + ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageReductionOfTheShareDictionary[keyName]
+                                   .ReductionValueYearAsStrUnit
                                + @")"
                     };
 
@@ -1502,7 +1513,6 @@ namespace SharePortfolioManager.BrokeragesForm.View
                         } break;
                         case 1:
                         {
-                            // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                             if (((DataGridView) sender).Name == @"Overview")
                             {
                                 ((DataGridView) sender).Columns[i].HeaderText =
@@ -1520,17 +1530,38 @@ namespace SharePortfolioManager.BrokeragesForm.View
                         } break;
                         case 2:
                         {
-                            ((DataGridView) sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(
-                                    @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Brokerage",
-                                    LanguageName);
+                            if (((DataGridView)sender).Name == @"Overview")
+                            {
+                                ((DataGridView)sender).Columns[i].HeaderText =
+                                    Language.GetLanguageTextByXPath(
+                                        @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Reduction",
+                                        LanguageName);
+                            }
+                            else
+                            {
+                                ((DataGridView) sender).Columns[i].HeaderText =
+                                    Language.GetLanguageTextByXPath(
+                                        @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Brokerage",
+                                        LanguageName);
+                            }
                         } break;
                         case 3:
                         {
-                            ((DataGridView) sender).Columns[i].HeaderText =
-                                Language.GetLanguageTextByXPath(
-                                    @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Reduction",
-                                    LanguageName);
+                            if (((DataGridView) sender).Name == @"Overview")
+                            {
+                                ((DataGridView) sender).Columns[i].HeaderText =
+                                    Language.GetLanguageTextByXPath(
+                                        @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_BrokerageReduction",
+                                        LanguageName);
+                            }
+                            else
+                            {
+                                ((DataGridView) sender).Columns[i].HeaderText =
+                                    Language.GetLanguageTextByXPath(
+                                        @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Reduction",
+                                        LanguageName);
+
+                            }
                         } break;
                         case 4:
                         {

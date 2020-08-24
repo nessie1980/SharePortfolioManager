@@ -50,6 +50,20 @@ namespace SharePortfolioManager.Classes.ShareObjects
     [Serializable]
     public class ShareObject : IDisposable, ICloneable
     {
+        #region Share types
+
+        /// <summary>
+        /// Error codes of the ShareAdd
+        /// </summary>
+        public enum ShareTypes
+        {
+            Share = 0,
+            Fond = 1,
+            Etf = 2
+        }
+
+        #endregion Share types
+
         #region Variables
 
         #region General variables
@@ -706,7 +720,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Type of the share (Fond, ETF....)
         /// </summary>
         [Browsable(false)]
-        public int ShareType { get; set; }
+        public ShareTypes ShareType { get; set; }
 
         #region Daily values
 
@@ -984,7 +998,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             DateTime lastUpdateInternet, DateTime lastUpdateShare,
             decimal price, string webSite, string dailyValuesWebSite, List<Image> imageListForDayBeforePerformance,
             RegExList regexList, CultureInfo cultureInfo,
-            int shareType)
+            ShareTypes shareType)
         {
             Wkn = wkn;
             AddDateTime = addDateTime;
@@ -1253,7 +1267,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
             if (object1 == null) return 0;
             if (object2 == null) return 0;
 
-            return string.CompareOrdinal(object1.Name, object2.Name);
+//            return string.CompareOrdinal(object1.Name, object2.Name);
+            return string.Compare(object1.Name, object2.Name, StringComparison.CurrentCultureIgnoreCase);
         }
     }
 

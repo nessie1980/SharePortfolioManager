@@ -202,7 +202,7 @@ namespace SharePortfolioManager
                 // Select the payout interval for the dividend
                 cbxDividendPayoutInterval.SelectedIndex = ShareObjectFinalValue.DividendPayoutInterval;
                 // Select the type of the share
-                cbxShareType.SelectedIndex = ShareObjectFinalValue.ShareType;
+                cbxShareType.SelectedIndex = (int)ShareObjectFinalValue.ShareType;
 
                 #endregion GroupBox General
 
@@ -551,7 +551,7 @@ namespace SharePortfolioManager
                 ShareObjectMarketValue.UpdateWebSiteUrl = txtBoxWebSite.Text;
                 ShareObjectMarketValue.DailyValuesUpdateWebSiteUrl = txtBoxDailyValuesWebSite.Text;
                 ShareObjectMarketValue.CultureInfo = cultureInfo;
-                ShareObjectMarketValue.ShareType = cbxShareType.SelectedIndex;
+                ShareObjectMarketValue.ShareType = (ShareObject.ShareTypes)cbxShareType.SelectedIndex;
 
                 // Final value share
                 ShareObjectFinalValue.Name = txtBoxName.Text;
@@ -561,7 +561,7 @@ namespace SharePortfolioManager
                 ShareObjectFinalValue.DailyValuesUpdateWebSiteUrl = txtBoxDailyValuesWebSite.Text;
                 ShareObjectFinalValue.CultureInfo = cultureInfo;
                 ShareObjectFinalValue.DividendPayoutInterval = cbxDividendPayoutInterval.SelectedIndex;
-                ShareObjectFinalValue.ShareType = cbxShareType.SelectedIndex;
+                ShareObjectFinalValue.ShareType = (ShareObject.ShareTypes)cbxShareType.SelectedIndex;
             }
             catch (Exception ex)
             {
@@ -671,7 +671,7 @@ namespace SharePortfolioManager
             lblSalesValue.Text = ShareObjectFinalValue.SalePayoutBrokerageReductionAsStr;
             lblProfitLossValue.Text = ShareObjectFinalValue.SaleProfitLossBrokerageReductionAsStr;
             lblDividendValue.Text = ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesAsStr;
-            lblBrokerageValue.Text = ShareObjectFinalValue.CompleteBrokerageReductionValueAsStr;
+            lblBrokerageValue.Text = ShareObjectFinalValue.CompleteBrokerageValueAsStr;
         }
 
         #endregion Button

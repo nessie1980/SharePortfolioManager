@@ -1137,7 +1137,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             DateTime lastUpdateInternet, DateTime lastUpdateShare,
             decimal price, decimal volume, decimal volumeSold, decimal provision, decimal brokerFee, decimal traderPlaceFee, decimal reduction,
             string webSite, string dailyValuesWebSite, List<Image> imageListForDayBeforePerformance, RegExList regexList, CultureInfo cultureInfo,
-            int shareType, string document) 
+            ShareTypes shareType, string document) 
             : base(wkn, addDateTime, stockMarketLaunchDate, name, lastUpdateInternet, lastUpdateShare,
                     price, webSite, dailyValuesWebSite, imageListForDayBeforePerformance, regexList,
                     cultureInfo, shareType)
@@ -1671,7 +1671,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                     nodeElement.ChildNodes[i].InnerXml = shareObject.CultureInfoAsStr;
                                     break;
                                 case (int)FrmMain.PortfolioParts.ShareType:
-                                    nodeElement.ChildNodes[i].InnerXml = shareObject.ShareType.ToString();
+                                    nodeElement.ChildNodes[i].InnerXml = ((int)shareObject.ShareType).ToString();
                                     break;
 
                                 #endregion General
@@ -1921,7 +1921,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                         // Add child nodes (share type)
                         var newShareType = xmlPortfolio.CreateElement(GeneralShareTypeAttrName);
                         // Add child inner text
-                        var shareType = xmlPortfolio.CreateTextNode(shareObject.ShareType.ToString());
+                        var shareType = xmlPortfolio.CreateTextNode(((int)shareObject.ShareType).ToString());
                         newShareNode.AppendChild(newShareType);
                         newShareNode.LastChild.AppendChild(shareType);
 

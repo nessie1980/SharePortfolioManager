@@ -650,8 +650,7 @@ namespace SharePortfolioManager
             // 
             // grpBoxDocumentCapture
             // 
-            this.grpBoxDocumentCapture.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpBoxDocumentCapture.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.grpBoxDocumentCapture.Controls.Add(this.txtBoxDocumentCapture);
             this.grpBoxDocumentCapture.Enabled = false;
             this.grpBoxDocumentCapture.Location = new System.Drawing.Point(781, 553);

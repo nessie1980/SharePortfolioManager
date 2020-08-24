@@ -425,9 +425,9 @@ namespace SharePortfolioManager
                                             break;
                                         case (int) PortfolioParts.ShareType:
                                             ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].ShareType =
-                                                Convert.ToInt16(nodeElement.ChildNodes[i].InnerText);
+                                                (ShareObject.ShareTypes)Convert.ToInt16(nodeElement.ChildNodes[i].InnerText);
                                             ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].ShareType =
-                                                Convert.ToInt16(nodeElement.ChildNodes[i].InnerText);
+                                                (ShareObject.ShareTypes)Convert.ToInt16(nodeElement.ChildNodes[i].InnerText);
                                             break;
 
                                         #endregion General

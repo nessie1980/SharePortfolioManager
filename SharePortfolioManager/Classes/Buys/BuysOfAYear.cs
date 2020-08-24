@@ -116,7 +116,7 @@ namespace SharePortfolioManager.Classes.Buys
         public string DgvBuyVolumeYear => BuyVolumeYear > 0
             ? Helper.FormatDecimal(BuyVolumeYear, Helper.CurrencyFiveLength, false,
                 Helper.CurrencyTwoFixLength, true, ShareObject.PieceUnit, BuyCultureInfo)
-            : @"";
+            : @"-";
 
         /// <summary>
         /// Buy value plus brokerage and minus reduction of all buys of a year for the DataGridView display
@@ -124,9 +124,9 @@ namespace SharePortfolioManager.Classes.Buys
         [Browsable(true)]
         // ReSharper disable once UnusedMember.Global
         public string DgvBuyValueBrokerageReductionYear => BuyValueBrokerageReductionYear > 0
-            ? Helper.FormatDecimal(BuyValueBrokerageReductionYear, Helper.CurrencyFiveLength, false,
+            ? Helper.FormatDecimal(BuyValueBrokerageReductionYear, Helper.CurrencyTwoLength, true,
                 Helper.CurrencyTwoFixLength, true, @"", BuyCultureInfo)
-            : @"";
+            : @"-";
 
         #endregion Data grid view properties
 

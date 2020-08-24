@@ -1162,6 +1162,7 @@
 					<TraderPlaceFee text="Trader place fee:" />
 					<Reduction text="Reduction:" />
 					<Brokerage text="Brokerage:" />
+					<BrokerageMinusReduction text="Brokerage - Reduction:" />
 					<Document text="Document:" />
 				</Labels>
 
@@ -2584,6 +2585,7 @@
 					<TraderPlaceFee text="Handelsplatzgebühr:" />
 					<Reduction text="Rabatt:" />
 					<Brokerage text="Kosten:" />
+					<BrokerageMinusReduction text="Kosten - Rabatt:" />
 					<Document text="Dokument:" />
 				</Labels>
 

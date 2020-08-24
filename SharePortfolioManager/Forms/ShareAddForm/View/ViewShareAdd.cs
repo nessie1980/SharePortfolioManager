@@ -142,7 +142,7 @@ namespace SharePortfolioManager.ShareAddForm.View
         string DailyValuesWebSite { get; set; }
         CultureInfo CultureInfo { get; }
         int DividendPayoutInterval { get; set; }
-        int ShareType { get; set; }
+        ShareObject.ShareTypes ShareType { get; set; }
         string Document { get; set; }
 
         DialogResult ShowDialog();
@@ -295,14 +295,14 @@ namespace SharePortfolioManager.ShareAddForm.View
             }
         }
 
-        public int ShareType
+        public ShareObject.ShareTypes ShareType
         {
-            get => cbxShareType.SelectedIndex;
+            get => (ShareObject.ShareTypes)cbxShareType.SelectedIndex;
             set
             {
-                if (cbxShareType.SelectedIndex == value)
+                if ((ShareObject.ShareTypes) cbxShareType.SelectedIndex == value)
                     return;
-                cbxShareType.SelectedIndex = value;
+                cbxShareType.SelectedIndex = (int)value;
             }
         }
 
@@ -799,7 +799,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                         Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DailyValuesWebSiteEmpty", LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
-                    txtBoxWebSite.Focus();
+                    txtBoxDailyValuesWebSite.Focus();
                     break;
                 }
                 case ShareAddErrorCode.DailyValuesWebSiteWrongFormat:
@@ -808,7 +808,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                         Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DailyValuesWebSiteWrongFormat", LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
-                    txtBoxWebSite.Focus();
+                    txtBoxDailyValuesWebSite.Focus();
                     break;
                 }
                 case ShareAddErrorCode.DailyValuesWebSiteExists:
@@ -817,7 +817,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                         Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DailyValuesWebSiteExists", LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
-                    txtBoxWebSite.Focus();
+                    txtBoxDailyValuesWebSite.Focus();
                     break;
                 }
                 case ShareAddErrorCode.DocumentDirectoryDoesNotExists:

@@ -47,9 +47,10 @@ namespace SharePortfolioManager.Classes.Dividend
 
         [Browsable(false)]
         public string DividendValueYearAsStrUnit => DividendValueYear > 0
-            ? Helper.FormatDecimal(DividendValueYear, Helper.CurrencyTwoLength, false,
+            ? Helper.FormatDecimal(DividendValueYear, Helper.CurrencyTwoLength, true,
                 Helper.CurrencyTwoFixLength, true, @"", DividendCultureInfo)
-            : @"-";
+            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, false,
+                Helper.CurrencyTwoFixLength, true, @"", DividendCultureInfo);
 
         [Browsable(false)]
         public List<DividendObject> DividendListYear { get; } = new List<DividendObject>();

@@ -140,7 +140,8 @@ namespace SharePortfolioManager.Classes.Brokerage
         public string DgvBrokerageValueAsStr => BrokerageValue > 0
             ? Helper.FormatDecimal(BrokerageValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
                 @"", CultureInfo)
-            : @"-";
+            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
+                @"", CultureInfo);
 
         [Browsable(true)]
         [DisplayName(@"Reduction")]
@@ -148,7 +149,8 @@ namespace SharePortfolioManager.Classes.Brokerage
         public string DgvReductionValueAsStr => ReductionValue > 0
             ? Helper.FormatDecimal(ReductionValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
                 @"", CultureInfo)
-            : @"-";
+            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
+                @"", CultureInfo);
 
         [Browsable(true)]
         [DisplayName(@"Broker. - Red.")]
@@ -156,7 +158,8 @@ namespace SharePortfolioManager.Classes.Brokerage
         public string DgvBrokerageReductionValueAsStr => BrokerageReductionValue > 0
             ? Helper.FormatDecimal(BrokerageReductionValue, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
                 @"", CultureInfo)
-            : @"-";
+            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
+                @"", CultureInfo);
 
         [Browsable(true)]
         [DisplayName(@"Document")]

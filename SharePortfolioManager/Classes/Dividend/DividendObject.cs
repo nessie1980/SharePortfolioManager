@@ -588,18 +588,19 @@ namespace SharePortfolioManager.Classes.Dividend
                         ? Helper.FormatDecimal(_dividend / ExchangeRatio, Helper.CurrencyFiveLength, true, Helper.CurrencyTwoFixLength, true,
                             @"",
                             DividendCultureInfo)
-                        : @"-";
+                        : Helper.FormatDecimal(0, Helper.CurrencyFiveLength, true, Helper.CurrencyTwoFixLength, true,
+                            @"",
+                            DividendCultureInfo);
 
                 }
-                else
-                {
-                    return _dividend > 0
+
+                return _dividend > 0
                         ? Helper.FormatDecimal(_dividend, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
                             @"",
                             DividendCultureInfo)
-                        : @"-";
-
-                }
+                        : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
+                            @"",
+                            DividendCultureInfo);
             }
         }
 
@@ -609,32 +610,37 @@ namespace SharePortfolioManager.Classes.Dividend
         public string DgvVolume => _volume >= 0
             ? Helper.FormatDecimal(_volume, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true,
                 ShareObject.PieceUnit, DividendCultureInfo)
-            : @"-";
+            : Helper.FormatDecimal(0, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true,
+                ShareObject.PieceUnit, DividendCultureInfo);
 
         [Browsable(true)]
         [DisplayName(@"TaxSum")]
         // ReSharper disable once UnusedMember.Global
         public string DgvTaxSum => _taxSum >= 0
-            ? Helper.FormatDecimal(_taxSum, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true,
+            ? Helper.FormatDecimal(_taxSum, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
                 @"", DividendCultureInfo)
-            : @"-";
+            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
+                @"", DividendCultureInfo);
 
         [Browsable(true)]
         [DisplayName(@"PayoutWithTaxes")]
         // ReSharper disable once UnusedMember.Global
         public string DgvPayoutWithTaxes => _dividendPayoutWithTaxes > 0
-            ? Helper.FormatDecimal(_dividendPayoutWithTaxes, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength,
+            ? Helper.FormatDecimal(_dividendPayoutWithTaxes, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength,
                 true, @"", DividendCultureInfo)
-            : @"-";
+            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength,
+                true, @"", DividendCultureInfo);
 
         [Browsable(true)]
         [DisplayName(@"Yield")]
         // ReSharper disable once UnusedMember.Global
         public string DgvYield => _yield > 0
-            ? Helper.FormatDecimal(_yield, Helper.CurrencyTwoLength, false, Helper.CurrencyTwoFixLength,
+            ? Helper.FormatDecimal(_yield, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength,
                 true,
                 @"%", DividendCultureInfo)
-            : @"-";
+            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength,
+                true,
+                @"%", DividendCultureInfo);
 
         [Browsable(true)]
         [DisplayName(@"Document")]

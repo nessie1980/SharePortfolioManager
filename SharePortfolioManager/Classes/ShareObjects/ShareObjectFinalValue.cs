@@ -513,6 +513,20 @@ namespace SharePortfolioManager.Classes.ShareObjects
         #region Brokerage and dividends with taxes
 
         /// <summary>
+        /// Complete brokerage and dividend of all transactions as string with unit and line break (all shares) (final value)
+        /// </summary>
+        [Browsable(false)]
+        public string CompleteBrokerageDividendTotalAsStrUnit
+        {
+            get
+            {
+                var value = Helper.FormatDecimal(CompleteBrokerageValue, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
+                value += Environment.NewLine + Helper.FormatDecimal(CompleteDividendValue, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
+                return value;
+            }
+        }
+
+        /// <summary>
         /// Complete brokerage - reduction and dividend of all transactions as string with unit and line break (all shares) (final value)
         /// </summary>
         [Browsable(false)]
@@ -1147,7 +1161,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
             get
             {
-                var value = Helper.FormatDecimal(PortfolioCompleteBrokerageReduction, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
+                var value = Helper.FormatDecimal(PortfolioCompleteBrokerage, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
                 value += Environment.NewLine + Helper.FormatDecimal(PortfolioCompleteDividends, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
                 return value;
             }
@@ -1224,12 +1238,12 @@ namespace SharePortfolioManager.Classes.ShareObjects
         public string DgvVolumeAsStr => VolumeAsStr;
 
         /// <summary>
-        /// Brokerage - reduction and dividend of the share as string for the DataGridView display
+        /// Brokerage and dividend of the share as string for the DataGridView display
         /// </summary>
         [Browsable(true)]
-        [DisplayName(@"BrokerageReductionDividendTotal")]
+        [DisplayName(@"BrokerageDividendTotal")]
         // ReSharper disable once UnusedMember.Global
-        public string DgvBrokerageDividendWithTaxesAsStrUnit => CompleteBrokerageReductionDividendTotalAsStrUnit;
+        public string DgvBrokerageDividendWithTaxesAsStrUnit => CompleteBrokerageDividendTotalAsStrUnit;
 
         /// <summary>
         /// Previous day price of the share as string for the DataGridView display
@@ -1341,7 +1355,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             DateTime lastUpdateInternet, DateTime lastUpdateShare,
             decimal price, decimal volume, decimal volumeSold, decimal provision, decimal brokerFee, decimal traderPlaceFee, decimal reduction,
             string webSite, string dailyValuesWebSite, List<Image> imageListForDayBeforePerformance, RegExList regexList, CultureInfo cultureInfo,
-            int dividendPayoutInterval, int shareType, string document)
+            int dividendPayoutInterval, ShareTypes shareType, string document)
             : base(wkn, addDateTime, stockMarketLaunchDate, name, lastUpdateInternet, lastUpdateShare,
                     price, webSite, dailyValuesWebSite, imageListForDayBeforePerformance,
                     regexList, cultureInfo, shareType)
@@ -2220,7 +2234,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                     nodeElement.ChildNodes[i].InnerXml = shareObject.CultureInfoAsStr;
                                     break;
                                 case (int) FrmMain.PortfolioParts.ShareType:
-                                    nodeElement.ChildNodes[i].InnerXml = shareObject.ShareType.ToString();
+                                    nodeElement.ChildNodes[i].InnerXml = ((int)shareObject.ShareType).ToString();
                                     break;
 
                                 #endregion General
@@ -2570,7 +2584,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                         // Add child nodes (share type)
                         var newShareType = xmlPortfolio.CreateElement(GeneralShareTypeAttrName);
                         // Add child inner text
-                        var shareType = xmlPortfolio.CreateTextNode(shareObject.ShareType.ToString());
+                        var shareType = xmlPortfolio.CreateTextNode(((int)shareObject.ShareType).ToString());
                         newShareNode.AppendChild(newShareType);
                         newShareNode.LastChild.AppendChild(shareType);
 

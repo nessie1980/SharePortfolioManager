@@ -91,7 +91,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                                 LanguageName) +
                             @" " +
                             Language.GetLanguageTextListByXPath(@"/ComboBoxItemsShareType/*", LanguageName)[
-                                ShareObjectMarketValue.ShareType];
+                                (int)ShareObjectMarketValue.ShareType];
                     }
                     else
                     {
@@ -105,7 +105,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                                 LanguageName) +
                             @" " +
                             Language.GetLanguageTextListByXPath(@"/ComboBoxItemsShareType/*", LanguageName)[
-                                ShareObjectMarketValue.ShareType];
+                                (int)ShareObjectMarketValue.ShareType];
                     }
 
                     if (ShareObjectMarketValue.LastUpdateShare == DateTime.MinValue)
@@ -268,7 +268,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                                 LanguageName) +
                             @" " +
                             Language.GetLanguageTextListByXPath(@"/ComboBoxItemsShareType/*", LanguageName)[
-                                ShareObjectFinalValue.ShareType];
+                                (int)ShareObjectFinalValue.ShareType];
                     }
                     else
                     {
@@ -282,7 +282,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                                 LanguageName) +
                             @" " +
                             Language.GetLanguageTextListByXPath(@"/ComboBoxItemsShareType/*", LanguageName)[
-                                ShareObjectFinalValue.ShareType];
+                                (int)ShareObjectFinalValue.ShareType];
                     }
 
                     if (ShareObjectFinalValue.LastUpdateShare == DateTime.MinValue)

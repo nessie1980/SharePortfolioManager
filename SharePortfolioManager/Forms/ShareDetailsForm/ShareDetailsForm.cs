@@ -136,9 +136,9 @@ namespace SharePortfolioManager.ShareDetailsForm
 
         #region Charting
 
-        internal int ChartingIntervalValue = (int) ChartingInterval.Month;
+        internal ChartingInterval ChartingIntervalValue;
 
-        internal int ChartingAmount = 1;
+        internal int ChartingAmount;
 
         internal ChartingDailyValues.ChartValues ChartValues;
 
@@ -152,6 +152,7 @@ namespace SharePortfolioManager.ShareDetailsForm
             ShareObjectFinalValue shareObjectFinalValue, ShareObjectMarketValue shareObjectMarketValue,
             RichTextBox rchTxtBoxStateMessage, Logger logger,
             Dictionary<string, Color>chartingColorDictionary,
+            ChartingInterval chartingInterval, int chartingAmount,
             Language language, string languageName)
         {
             InitializeComponent();
@@ -180,6 +181,8 @@ namespace SharePortfolioManager.ShareDetailsForm
             #region Charting
 
             ChartingColorDictionary = chartingColorDictionary;
+            ChartingIntervalValue = chartingInterval;
+            ChartingAmount = chartingAmount;
 
             #endregion Charting
 
@@ -628,7 +631,7 @@ namespace SharePortfolioManager.ShareDetailsForm
             tabCtrlShareDetails.SelectedIndex = 0;
 
             // Select first interval
-            cbxIntervalSelection.SelectedIndex = ChartingIntervalValue;
+            cbxIntervalSelection.SelectedIndex = (int)ChartingIntervalValue;
             numDrpDwnAmount.Value = ChartingAmount;
 
             #endregion Settings
@@ -636,14 +639,14 @@ namespace SharePortfolioManager.ShareDetailsForm
 
         private void ShareDetailsForm_Shown(object sender, EventArgs e)
         {
-            var dateNow = DateTime.Now;
-            var date = new DateTime(dateNow.Year, dateNow.Month, dateNow.Day, 0, 0, 0);
+            var date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
 
             var bFlag = false;
 
             // Check if the current day is a weekend day
             while (date.DayOfWeek == DayOfWeek.Sunday ||
-                   date.DayOfWeek == DayOfWeek.Saturday)
+                   date.DayOfWeek == DayOfWeek.Saturday ||
+                   date.DayOfWeek == DayOfWeek.Monday)
             {
                 date = date.AddDays(-1);
                 bFlag = true;

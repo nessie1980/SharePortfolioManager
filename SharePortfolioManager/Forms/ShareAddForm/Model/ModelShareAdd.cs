@@ -54,7 +54,7 @@ namespace SharePortfolioManager.ShareAddForm.Model
         string Wkn { get; set; }
         string Name { get; set; }
         string StockMarketLaunchDate { get; set; }
-        int ShareType { get; set; }
+        ShareObject.ShareTypes ShareType { get; set; }
         int DividendPayoutInterval { get; set; }
         CultureInfo CultureInfo { get; set; }
         string WebSite { get; set; }
@@ -101,7 +101,7 @@ namespace SharePortfolioManager.ShareAddForm.Model
         private string _wkn;
         private string _name;
         private string _stockMarketLaunchDate;
-        private int _shareType;
+        private ShareObject.ShareTypes _shareType;
         private int _dividendPayoutInterval;
         private CultureInfo _cultureInfo;
         private string _webSite;
@@ -191,7 +191,7 @@ namespace SharePortfolioManager.ShareAddForm.Model
             }
         }
 
-        public int ShareType
+        public ShareObject.ShareTypes ShareType
         {
             get => _shareType;
             set

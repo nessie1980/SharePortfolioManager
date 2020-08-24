@@ -41,6 +41,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SharePortfolioManager.Classes.ShareObjects;
 using MenuItem = System.Windows.Forms.MenuItem;
 
 namespace SharePortfolioManager.Classes
@@ -1255,91 +1256,130 @@ namespace SharePortfolioManager.Classes
 
         #region Time function
 
-        public static string BuildDailyValuesUrl(List<Parser.DailyValues> dailyValues, string webSiteUrl, int shareType)
+        public static string BuildDailyValuesUrl(List<Parser.DailyValues> dailyValues, string webSiteUrl, ShareObject.ShareTypes shareType)
         {
             var strDailyValuesWebSite = "";
 
-            // Check if any daily values already exists
-            if (dailyValues.Count == 0)
+            try
             {
-                var date = DateTime.Now;
-
-                // Go five years back
-                date = date.AddYears(-5);
-
-                switch (shareType)
+                // Check if any daily values already exists
+                if (dailyValues.Count == 0)
                 {
-                    // Share type "Share"
-                    case 0:
-                        strDailyValuesWebSite = string.Format(webSiteUrl, date.ToString("dd.MM.yyyy"), "Y5");
-                        break;
-                    // Share type "Fond"
-                    case 1:
-                        strDailyValuesWebSite = string.Format(webSiteUrl, date.ToString("dd.MM.yyyy"), "5Y");
-                        break;
+                    var date = DateTime.Now;
+
+                    // Go five years back
+                    date = date.AddYears(-5);
+
+                    switch (shareType)
+                    {
+                        // Share type "Share"
+                        case ShareObject.ShareTypes.Share:
+                            strDailyValuesWebSite = string.Format(webSiteUrl, date.ToString("dd.MM.yyyy"), "Y5");
+                            break;
+                        // Share type "Fond"
+                        case ShareObject.ShareTypes.Fond:
+                            strDailyValuesWebSite = string.Format(webSiteUrl, date.ToString("dd.MM.yyyy"), "5Y");
+                            break;
+                        // Share type "ETF"
+                        case ShareObject.ShareTypes.Etf:
+                            strDailyValuesWebSite = string.Format(webSiteUrl, date.ToString("dd.MM.yyyy"), "5Y");
+                            break;
+                        default:
+                            throw new NotFiniteNumberException();
+                    }
+                }
+                else
+                {
+                    // Get date of last daily values entry
+                    var lastDate = dailyValues.Last().Date;
+
+                    // Check if the days are less or equal than 27 days
+                    var diffMonth = GetTotalMonthsFrom(DateTime.Now, lastDate);
+
+                    switch (shareType)
+                    {
+                        // Share type "Share"
+                        case ShareObject.ShareTypes.Share:
+                        {
+                            if (diffMonth < 1)
+                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                    DateTime.Now.AddMonths(-1).ToString("dd.MM.yyyy"), "M1");
+                            else if (diffMonth < 3)
+                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                    DateTime.Now.AddMonths(-3).ToString("dd.MM.yyyy"), "M3");
+                            else if (diffMonth < 6)
+                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                    DateTime.Now.AddMonths(-6).ToString("dd.MM.yyyy"), "M6");
+                            else if (diffMonth < 12)
+                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                    DateTime.Now.AddMonths(-12).ToString("dd.MM.yyyy"), "Y1");
+                            else if (diffMonth < 36)
+                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                    DateTime.Now.AddMonths(-36).ToString("dd.MM.yyyy"), "Y3");
+                            else
+                            {
+                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                    DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy"), "Y5");
+                            }
+                        } break;
+                        // Share type "Fond"
+                        case ShareObject.ShareTypes.Fond:
+                        {
+                            if (diffMonth < 1)
+                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                    DateTime.Now.AddMonths(-1).ToString("dd.MM.yyyy"), "1M");
+                            else if (diffMonth < 3)
+                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                    DateTime.Now.AddMonths(-3).ToString("dd.MM.yyyy"), "3M");
+                            else if (diffMonth < 6)
+                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                    DateTime.Now.AddMonths(-6).ToString("dd.MM.yyyy"), "6M");
+                            else if (diffMonth < 12)
+                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                    DateTime.Now.AddMonths(-12).ToString("dd.MM.yyyy"), "1Y");
+                            else if (diffMonth < 36)
+                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                    DateTime.Now.AddMonths(-36).ToString("dd.MM.yyyy"), "3Y");
+                            else
+                            {
+                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                    DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy"), "5Y");
+                            }
+                        } break;
+                        // Share type "ETF"
+                        case ShareObject.ShareTypes.Etf:
+                        {
+                            if (diffMonth < 1)
+                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                    DateTime.Now.AddMonths(-1).ToString("dd.MM.yyyy"), "1M");
+                            else if (diffMonth < 3)
+                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                    DateTime.Now.AddMonths(-3).ToString("dd.MM.yyyy"), "3M");
+                            else if (diffMonth < 6)
+                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                    DateTime.Now.AddMonths(-6).ToString("dd.MM.yyyy"), "6M");
+                            else if (diffMonth < 12)
+                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                    DateTime.Now.AddMonths(-12).ToString("dd.MM.yyyy"), "1Y");
+                            else if (diffMonth < 36)
+                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                    DateTime.Now.AddMonths(-36).ToString("dd.MM.yyyy"), "3Y");
+                            else
+                            {
+                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                    DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy"), "5Y");
+                            }
+
+                        } break;
+                        default:
+                            throw new NotImplementedException();
+                            break;
+                    }
                 }
             }
-            else
+            catch (Exception ex)
             {
-                // Get date of last daily values entry
-                var lastDate = dailyValues.Last().Date;
-
-                // Check if the days are less or equal than 27 days
-                var diffMonth = Helper.GetTotalMonthsFrom(DateTime.Now, lastDate);
-
-                switch (shareType)
-                {
-                    // Share type "Share"
-                    case 0:
-                    {
-                        if (diffMonth < 1)
-                            strDailyValuesWebSite = string.Format(webSiteUrl,
-                                DateTime.Now.AddMonths(-1).ToString("dd.MM.yyyy"), "M1");
-                        else if (diffMonth < 3)
-                            strDailyValuesWebSite = string.Format(webSiteUrl,
-                                DateTime.Now.AddMonths(-3).ToString("dd.MM.yyyy"), "M3");
-                        else if (diffMonth < 6)
-                            strDailyValuesWebSite = string.Format(webSiteUrl,
-                                DateTime.Now.AddMonths(-6).ToString("dd.MM.yyyy"), "M6");
-                        else if (diffMonth < 12)
-                            strDailyValuesWebSite = string.Format(webSiteUrl,
-                                DateTime.Now.AddMonths(-12).ToString("dd.MM.yyyy"), "Y1");
-                        else if (diffMonth < 36)
-                            strDailyValuesWebSite = string.Format(webSiteUrl,
-                                DateTime.Now.AddMonths(-36).ToString("dd.MM.yyyy"), "Y3");
-                        else
-                        {
-                            strDailyValuesWebSite = string.Format(webSiteUrl,
-                                DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy"), "Y5");
-                        }
-                    }
-                        break;
-                    // Share type "Fond"
-                    case 1:
-                    {
-                        if (diffMonth < 1)
-                            strDailyValuesWebSite = string.Format(webSiteUrl,
-                                DateTime.Now.AddMonths(-1).ToString("dd.MM.yyyy"), "1M");
-                        else if (diffMonth < 3)
-                            strDailyValuesWebSite = string.Format(webSiteUrl,
-                                DateTime.Now.AddMonths(-3).ToString("dd.MM.yyyy"), "3M");
-                        else if (diffMonth < 6)
-                            strDailyValuesWebSite = string.Format(webSiteUrl,
-                                DateTime.Now.AddMonths(-6).ToString("dd.MM.yyyy"), "6M");
-                        else if (diffMonth < 12)
-                            strDailyValuesWebSite = string.Format(webSiteUrl,
-                                DateTime.Now.AddMonths(-12).ToString("dd.MM.yyyy"), "1Y");
-                        else if (diffMonth < 36)
-                            strDailyValuesWebSite = string.Format(webSiteUrl,
-                                DateTime.Now.AddMonths(-36).ToString("dd.MM.yyyy"), "3Y");
-                        else
-                        {
-                            strDailyValuesWebSite = string.Format(webSiteUrl,
-                                DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy"), "5Y");
-                        }
-                    }
-                        break;
-                }
+                ShowExceptionMessage(ex);
             }
 
 #if DEBUG_HELPER
