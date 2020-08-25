@@ -62,6 +62,8 @@ namespace SharePortfolioManager
             ECompleteMarketValueColumnIndex
         }
 
+        private const int ColumnCountPortfolioFooterMarketValue = 5;
+
         #endregion Column enums for dgvPortfolioMarketValue and dgvPortfolioFooterMarketValue
 
         #region Column enums for dgvPortfolioFinalValue and dgvPortfolioFooterFinalValue
@@ -90,6 +92,8 @@ namespace SharePortfolioManager
             ECompletePerformanceColumnIndex,
             ECompleteFinalValueColumnIndex
         }
+
+        private const int ColumnCountPortfolioFooterFinalValue = 7;
 
         #endregion Column enums for dgvPortfolioFinalValue and dgvPortfolioFooterFinalValue
 
@@ -373,20 +377,20 @@ namespace SharePortfolioManager
 
                 VScrollBar vScrollbarPortfolio;
 
-                if (dgvPortfolioFooterMarketValue.ColumnCount >= 3)
+                if (dgvPortfolioFooterMarketValue.ColumnCount >= ColumnCountPortfolioFooterMarketValue)
                 {
                     vScrollbarPortfolio = dgvPortfolioMarketValue.Controls.OfType<VScrollBar>().First();
                     if (vScrollbarPortfolio.Visible)
                     {
                         var vScrollbarWidth = vScrollbarPortfolio.Width;
                         dgvPortfolioFooterMarketValue
-                                .Columns[(int) ColumnIndicesPortfolioFooterMarketValue.EMarketValueColumnIndex].Width =
+                                .Columns[(int) ColumnIndicesPortfolioFooterMarketValue.ECompleteMarketValueColumnIndex].Width =
                             MarketFinalValueColumnSize + vScrollbarWidth;
                     }
                     else
                     {
                         dgvPortfolioFooterMarketValue
-                                .Columns[(int) ColumnIndicesPortfolioFooterMarketValue.EMarketValueColumnIndex].Width =
+                                .Columns[(int) ColumnIndicesPortfolioFooterMarketValue.ECompleteMarketValueColumnIndex].Width =
                             MarketFinalValueColumnSize;
                     }
                 }
@@ -395,31 +399,22 @@ namespace SharePortfolioManager
 
                 #region dgvPortfolioFooterFinalValue
 
-                if (dgvPortfolioFooterFinalValue.ColumnCount < 5) return;
-
-                const int columnLabelTotalWidth = PriceColumnSize + PerformancePrevDayColumnSize;
+                if (dgvPortfolioFooterFinalValue.ColumnCount < ColumnCountPortfolioFooterFinalValue) return;
 
                 vScrollbarPortfolio = dgvPortfolioFinalValue.Controls.OfType<VScrollBar>().First();
                 if (vScrollbarPortfolio.Visible)
                 {
                     var vScrollbarWidth = vScrollbarPortfolio.Width;
                     dgvPortfolioFooterFinalValue
-                            .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.EFinalValueColumnIndex].Width =
+                            .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.ECompleteFinalValueColumnIndex].Width =
                         MarketFinalValueColumnSize + vScrollbarWidth;
                 }
                 else
                 {
                     dgvPortfolioFooterFinalValue
-                            .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.EFinalValueColumnIndex].Width =
+                            .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.ECompleteFinalValueColumnIndex].Width =
                         MarketFinalValueColumnSize;
                 }
-
-                dgvPortfolioFooterFinalValue
-                        .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.EBrokerageDividendIndex].Width =
-                    BrokerageDividendColumnSize;
-                dgvPortfolioFooterFinalValue
-                        .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.ELabelTotalColumnIndex].Width =
-                    columnLabelTotalWidth;
 
                 #endregion dgvPortfolioFooterFinalValue
             }
@@ -1119,6 +1114,11 @@ namespace SharePortfolioManager
 
                 #region Footer width configuration
 
+                var vScrollbarWidth = 0;
+                var vScrollBar = dgvPortfolioMarketValue.Controls.OfType<VScrollBar>().FirstOrDefault();
+                if (vScrollBar != null && vScrollBar.Visible)
+                    vScrollbarWidth = SystemInformation.VerticalScrollBarWidth;
+
                 dgvPortfolioFooterMarketValue
                     .Columns[(int) ColumnIndicesPortfolioFooterMarketValue.EPerformanceColumnIndex]
                     .Width = PerformanceColumnSize;
@@ -1130,7 +1130,7 @@ namespace SharePortfolioManager
                     CompletePerformanceColumnSize;
                 dgvPortfolioFooterMarketValue
                         .Columns[(int) ColumnIndicesPortfolioFooterMarketValue.ECompleteMarketValueColumnIndex].Width =
-                    CompleteMarketFinalValueColumnSize;
+                    CompleteMarketFinalValueColumnSize + vScrollbarWidth;
 
                 dgvPortfolioFooterMarketValue
                     .Columns[(int) ColumnIndicesPortfolioFooterMarketValue.ELabelTotalColumnIndex]
@@ -1278,6 +1278,7 @@ namespace SharePortfolioManager
 
                 #region Width configuration
 
+                // Check if the vertical scroll bar is visible so recalculate the width of the last column in the data grid view
                 dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex].Width =
                     WknColumnSize;
                 dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EVolumeColumnIndex].Width =
@@ -1294,6 +1295,7 @@ namespace SharePortfolioManager
                     MarketFinalValueColumnSize;
                 dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.ECompletePerformanceColumnIndex]
                     .Width = CompletePerformanceColumnSize;
+
                 dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.ECompleteFinalValueColumnIndex]
                     .Width = CompleteMarketFinalValueColumnSize;
 
@@ -1330,9 +1332,19 @@ namespace SharePortfolioManager
 
                 #region Footer configuration
 
+                var vScrollbarWidth = 0;
+                var vScrollBar = dgvPortfolioFinalValue.Controls.OfType<VScrollBar>().FirstOrDefault();
+                if (vScrollBar != null && vScrollBar.Visible)
+                    vScrollbarWidth = SystemInformation.VerticalScrollBarWidth;
+
+                const int columnLabelTotalWidth = PriceColumnSize + PerformancePrevDayColumnSize;
+
                 dgvPortfolioFooterFinalValue
                         .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.EBrokerageDividendIndex].Width =
                     BrokerageDividendColumnSize;
+                dgvPortfolioFooterFinalValue
+                        .Columns[(int)ColumnIndicesPortfolioFooterFinalValue.ELabelTotalColumnIndex].Width =
+                    columnLabelTotalWidth;
                 dgvPortfolioFooterFinalValue
                         .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.EPerformanceColumnIndex].Width =
                     PerformanceColumnSize;
@@ -1344,11 +1356,10 @@ namespace SharePortfolioManager
                     CompletePerformanceColumnSize;
                 dgvPortfolioFooterFinalValue
                         .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.ECompleteFinalValueColumnIndex].Width =
-                    CompleteMarketFinalValueColumnSize;
+                    CompleteMarketFinalValueColumnSize + vScrollbarWidth;
 
                 dgvPortfolioFooterFinalValue
-                        .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.ELabelBrokerageDividendIndex]
-                        .AutoSizeMode =
+                        .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.ELabelBrokerageDividendIndex].AutoSizeMode =
                     DataGridViewAutoSizeColumnMode.Fill;
                 dgvPortfolioFooterFinalValue
                     .Columns[(int) ColumnIndicesPortfolioFooterFinalValue.ELabelBrokerageDividendIndex].FillWeight = 10;
