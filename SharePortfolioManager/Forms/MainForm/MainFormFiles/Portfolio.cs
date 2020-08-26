@@ -336,7 +336,9 @@ namespace SharePortfolioManager
                             // Check if the node has the right tag count and the right attributes
                             if (!nodeElement.HasChildNodes ||
                                 nodeElement.ChildNodes.Count != ShareObject.ShareObjectTagCount ||
-                                nodeElement.Attributes?[ShareObject.GeneralWknAttrName] == null
+                                nodeElement.Attributes?[ShareObject.GeneralWknAttrName] == null ||
+                                nodeElement.Attributes?[ShareObject.GeneralNameAttrName] == null ||
+                                nodeElement.Attributes?[ShareObject.GeneralUpdateAttrName] == null
                                 )
                                 bLoadPortfolio = false;
                             else
@@ -353,16 +355,44 @@ namespace SharePortfolioManager
                                 ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].Name =
                                     nodeElement.Attributes[ShareObject.GeneralNameAttrName].InnerText;
 
-                                // Update flag of the share
-                                if (nodeElement.Attributes[ShareObject.GeneralUpdateAttrName].InnerText == @"True")
+                                // Update type of the share
+                                if (nodeElement.Attributes[ShareObject.GeneralUpdateAttrName].Name == ShareObject.GeneralUpdateAttrName)
                                 {
-                                    ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].DoInternetUpdate = true;
-                                    ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].DoInternetUpdate = true;
-                                }
-                                else
-                                {
-                                    ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].DoInternetUpdate = false;
-                                    ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].DoInternetUpdate = false;
+                                    if (nodeElement.Attributes[ShareObject.GeneralUpdateAttrName].InnerText ==
+                                        ShareObject.ShareUpdateTypes.Both.ToString())
+                                    {
+                                        ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
+                                            .InternetUpdateOption = ShareObject.ShareUpdateTypes.Both;
+                                        ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                                .InternetUpdateOption
+                                            = ShareObject.ShareUpdateTypes.Both;
+                                    }
+                                    else if (nodeElement.Attributes[ShareObject.GeneralUpdateAttrName].InnerText ==
+                                             ShareObject.ShareUpdateTypes.MarketPrice.ToString())
+                                    {
+                                        ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
+                                            .InternetUpdateOption = ShareObject.ShareUpdateTypes.MarketPrice;
+                                        ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                            .InternetUpdateOption = ShareObject.ShareUpdateTypes.MarketPrice;
+                                    }
+                                    else if (nodeElement.Attributes[ShareObject.GeneralUpdateAttrName].InnerText ==
+                                             ShareObject.ShareUpdateTypes.DailyValues.ToString())
+                                    {
+                                        ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
+                                            .InternetUpdateOption = ShareObject.ShareUpdateTypes.DailyValues;
+                                        ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                            .InternetUpdateOption = ShareObject.ShareUpdateTypes.DailyValues;
+                                    }
+                                    else if (nodeElement.Attributes[ShareObject.GeneralUpdateAttrName].InnerText ==
+                                             ShareObject.ShareUpdateTypes.None.ToString())
+                                    {
+                                        ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
+                                            .InternetUpdateOption = ShareObject.ShareUpdateTypes.None;
+                                        ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                            .InternetUpdateOption = ShareObject.ShareUpdateTypes.None;
+                                    }
+                                    else
+                                        bLoadPortfolio = false;
                                 }
 
                                 // Loop through the tags and set values to the ShareObject
@@ -915,7 +945,7 @@ namespace SharePortfolioManager
                                     };
 
                                     if (!RegexSearchFailedList.Contains(newItem) &&
-                                        ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].DoInternetUpdate
+                                        ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].InternetUpdateOption != ShareObject.ShareUpdateTypes.None
                                     )
                                         RegexSearchFailedList.Add(newItem);
 
@@ -923,7 +953,7 @@ namespace SharePortfolioManager
                                     ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
                                         .WebSiteConfigurationFound = false;
                                     ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
-                                        .DoInternetUpdate = false;
+                                        .InternetUpdateOption = ShareObject.ShareUpdateTypes.None;
                                 }
                                 else
                                     // Set update flag to false
@@ -941,7 +971,7 @@ namespace SharePortfolioManager
                                     };
 
                                     if (!RegexSearchFailedList.Contains(newItem) &&
-                                        ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].DoInternetUpdate
+                                        ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].InternetUpdateOption != ShareObject.ShareUpdateTypes.None
                                         )
                                         RegexSearchFailedList.Add(newItem);
 
@@ -949,7 +979,7 @@ namespace SharePortfolioManager
                                     ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
                                         .WebSiteConfigurationFound = false;
                                     ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
-                                        .DoInternetUpdate = false;
+                                        .InternetUpdateOption = ShareObject.ShareUpdateTypes.None;
                                 }
                                 else
                                     // Set update flag to false
@@ -1007,7 +1037,7 @@ namespace SharePortfolioManager
                 ShareObjectListFinalValue.Sort(new ShareObjectListComparer());
 
                 // Check if any share set for updating so enable the refresh all button
-                btnRefreshAll.Enabled = ShareObjectListFinalValue.Count(p => p.DoInternetUpdate && p.WebSiteConfigurationFound) >= 1;
+                btnRefreshAll.Enabled = ShareObjectListFinalValue.Count(p => p.InternetUpdateOption != ShareObject.ShareUpdateTypes.None && p.WebSiteConfigurationFound) >= 1;
 
 #if DEBUG
                 Console.WriteLine(@"");

@@ -2197,7 +2197,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
                         nodeElement.Attributes[GeneralWknAttrName].InnerText = shareObject.Wkn;
                         nodeElement.Attributes[GeneralNameAttrName].InnerText = shareObject.Name;
-                        nodeElement.Attributes[GeneralUpdateAttrName].InnerText = shareObject.DoInternetUpdateAsStr;
+                        nodeElement.Attributes[GeneralUpdateAttrName].InnerText = shareObject.InternetUpdateOptionAsStr;
 
                         for (var i = 0; i < nodeElement.ChildNodes.Count; i++)
                         {
@@ -2524,7 +2524,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
                         // Add attributes (Update)
                         var xmlAttributeUpdateFlag = xmlPortfolio.CreateAttribute(GeneralUpdateAttrName);
-                        xmlAttributeUpdateFlag.Value = shareObject.DoInternetUpdateAsStr;
+                        xmlAttributeUpdateFlag.Value = shareObject.InternetUpdateOptionAsStr;
                         newShareNode.Attributes.Append(xmlAttributeUpdateFlag);
 
                         // Add child nodes (last update Internet)

@@ -939,6 +939,21 @@ namespace SharePortfolioManager
                 {
                     do
                     {
+                        // Check if the current share should not be updated so check the next share
+                        if (ShareObjectListMarketValue[SelectedDataGridViewShareIndex] != null &&
+                            ShareObjectListMarketValue[SelectedDataGridViewShareIndex].InternetUpdateOption == ShareObject.ShareUpdateTypes.None &&
+                            SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1)
+                            // Increase index to get the next share
+                            SelectedDataGridViewShareIndex++;
+
+                    } while (ShareObjectListMarketValue[SelectedDataGridViewShareIndex] != null &&
+                             ShareObjectListMarketValue[SelectedDataGridViewShareIndex].InternetUpdateOption == ShareObject.ShareUpdateTypes.None &&
+                             SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1);
+
+                    // Check if the share should be update
+                    if (ShareObjectListMarketValue[SelectedDataGridViewShareIndex] != null &&
+                        ShareObjectListMarketValue[SelectedDataGridViewShareIndex].WebSiteConfigurationFound)
+                    {
                         // Select the new share update
                         dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
 
@@ -946,56 +961,57 @@ namespace SharePortfolioManager
                         Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex,
                             LastFirstDisplayedRowIndex);
 
-                        // Check if the current share should not be updated so check the next share
-                        if (ShareObjectMarketValue != null && !ShareObjectMarketValue.DoInternetUpdate &&
-                            SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1)
-                            // Increase index to get the next share
-                            SelectedDataGridViewShareIndex++;
+                        if (ShareObjectListMarketValue[SelectedDataGridViewShareIndex].InternetUpdateOption ==
+                            ShareObject.ShareUpdateTypes.Both ||
+                            ShareObjectListMarketValue[SelectedDataGridViewShareIndex].InternetUpdateOption ==
+                            ShareObject.ShareUpdateTypes.MarketPrice)
+                        {
+                            // Start the asynchronous operation of the Parser for the market values
+                            ParserMarketValues.ParsingValues = new ParsingValues(
+                                new Uri(ShareObjectListMarketValue[SelectedDataGridViewShareIndex].UpdateWebSiteUrl),
+                                ShareObjectListMarketValue[SelectedDataGridViewShareIndex].WebSiteEncodingType,
+                                ShareObjectListMarketValue[SelectedDataGridViewShareIndex].RegexList
+                            );
+                            ParserMarketValues.StartParsing();
+                        }
 
-                    } while (ShareObjectMarketValue != null &&
-                             !ShareObjectMarketValue.DoInternetUpdate &&
-                             SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1);
-
-                    // Check if the share should be update
-                    if (ShareObjectMarketValue != null && ShareObjectMarketValue.DoInternetUpdate &&
-                        ShareObjectMarketValue.WebSiteConfigurationFound)
-                    {
-                        // Start the asynchronous operation of the Parser for the market values
-                        ParserMarketValues.ParsingValues = new ParsingValues(
-                            new Uri(ShareObjectMarketValue.UpdateWebSiteUrl),
-                            ShareObjectMarketValue.WebSiteEncodingType,
-                            ShareObjectMarketValue.RegexList
-                        );
-                        ParserMarketValues.StartParsing();
-
-                        // Start the asynchronous operation of the Parser for the daily market values
-                        ParserDailyValues.ParsingValues = new ParsingValues(
-                            new Uri(Helper.BuildDailyValuesUrl(
-                                ShareObjectMarketValue.DailyValues,
-                                ShareObjectMarketValue.DailyValuesUpdateWebSiteUrl,
-                                ShareObjectMarketValue.ShareType
-                            )),
-                            ShareObjectMarketValue.WebSiteEncodingType
-                        );
-                        ParserDailyValues.StartParsing();
+                        if (ShareObjectListMarketValue[SelectedDataGridViewShareIndex].InternetUpdateOption ==
+                            ShareObject.ShareUpdateTypes.Both ||
+                            ShareObjectListMarketValue[SelectedDataGridViewShareIndex].InternetUpdateOption ==
+                            ShareObject.ShareUpdateTypes.DailyValues)
+                        {
+                            // Start the asynchronous operation of the Parser for the daily market values
+                            ParserDailyValues.ParsingValues = new ParsingValues(
+                                new Uri(Helper.BuildDailyValuesUrl(
+                                    ShareObjectListMarketValue[SelectedDataGridViewShareIndex].DailyValues,
+                                    ShareObjectListMarketValue[SelectedDataGridViewShareIndex]
+                                        .DailyValuesUpdateWebSiteUrl,
+                                    ShareObjectListMarketValue[SelectedDataGridViewShareIndex].ShareType
+                                )),
+                                ShareObjectListMarketValue[SelectedDataGridViewShareIndex].WebSiteEncodingType
+                            );
+                            ParserDailyValues.StartParsing();
+                        }
                     }
                 }
                 else
                 {
                     do
                     {
+
                         // Check if the current share should not be updated so check the next share
-                        if (!ShareObjectListFinalValue[SelectedDataGridViewShareIndex].DoInternetUpdate &&
+                        if (ShareObjectListFinalValue[SelectedDataGridViewShareIndex] != null &&
+                            ShareObjectListFinalValue[SelectedDataGridViewShareIndex].InternetUpdateOption == ShareObject.ShareUpdateTypes.None &&
                             SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1)
                             // Increase index to get the next share
                             SelectedDataGridViewShareIndex++;
 
-                    } while (!ShareObjectListFinalValue[SelectedDataGridViewShareIndex].DoInternetUpdate &&
+                    } while (ShareObjectListFinalValue[SelectedDataGridViewShareIndex] != null &&
+                             ShareObjectListFinalValue[SelectedDataGridViewShareIndex].InternetUpdateOption == ShareObject.ShareUpdateTypes.None &&
                              SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1);
 
                     // Select the new share update
-                    if (ShareObjectListFinalValue[SelectedDataGridViewShareIndex].DoInternetUpdate &&
-                        ShareObjectListFinalValue[SelectedDataGridViewShareIndex].WebSiteConfigurationFound
+                    if (ShareObjectListFinalValue[SelectedDataGridViewShareIndex].WebSiteConfigurationFound
                     )
                     {
                         dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
@@ -1004,24 +1020,37 @@ namespace SharePortfolioManager
                         Helper.ScrollDgvToIndex(dgvPortfolioFinalValue,
                             SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
 
-                        // Start the asynchronous operation of the Parser for the market values
-                        ParserMarketValues.ParsingValues = new ParsingValues(
-                            new Uri(ShareObjectFinalValue.UpdateWebSiteUrl),
-                            ShareObjectFinalValue.WebSiteEncodingType,
-                            ShareObjectFinalValue.RegexList
-                        );
-                        ParserMarketValues.StartParsing();
+                        if (ShareObjectListFinalValue[SelectedDataGridViewShareIndex].InternetUpdateOption ==
+                            ShareObject.ShareUpdateTypes.Both ||
+                            ShareObjectListFinalValue[SelectedDataGridViewShareIndex].InternetUpdateOption ==
+                            ShareObject.ShareUpdateTypes.MarketPrice)
+                        {
+                            // Start the asynchronous operation of the Parser for the market values
+                            ParserMarketValues.ParsingValues = new ParsingValues(
+                                new Uri(ShareObjectListFinalValue[SelectedDataGridViewShareIndex].UpdateWebSiteUrl),
+                                ShareObjectListFinalValue[SelectedDataGridViewShareIndex].WebSiteEncodingType,
+                                ShareObjectListFinalValue[SelectedDataGridViewShareIndex].RegexList
+                            );
+                            ParserMarketValues.StartParsing();
+                        }
 
-                        // Start the asynchronous operation of the Parser for the daily market values
-                        ParserDailyValues.ParsingValues = new ParsingValues(
-                            new Uri(Helper.BuildDailyValuesUrl(
-                                ShareObjectFinalValue.DailyValues,
-                                ShareObjectFinalValue.DailyValuesUpdateWebSiteUrl,
-                                ShareObjectFinalValue.ShareType
-                            )),
-                            ShareObjectFinalValue.WebSiteEncodingType
-                        );
-                        ParserDailyValues.StartParsing();
+                        if (ShareObjectListFinalValue[SelectedDataGridViewShareIndex].InternetUpdateOption ==
+                            ShareObject.ShareUpdateTypes.Both ||
+                            ShareObjectListFinalValue[SelectedDataGridViewShareIndex].InternetUpdateOption ==
+                            ShareObject.ShareUpdateTypes.DailyValues)
+                        {
+                            // Start the asynchronous operation of the Parser for the daily market values
+                            ParserDailyValues.ParsingValues = new ParsingValues(
+                                new Uri(Helper.BuildDailyValuesUrl(
+                                    ShareObjectListFinalValue[SelectedDataGridViewShareIndex].DailyValues,
+                                    ShareObjectListFinalValue[SelectedDataGridViewShareIndex]
+                                        .DailyValuesUpdateWebSiteUrl,
+                                    ShareObjectListFinalValue[SelectedDataGridViewShareIndex].ShareType
+                                )),
+                                ShareObjectListFinalValue[SelectedDataGridViewShareIndex].WebSiteEncodingType
+                            );
+                            ParserDailyValues.StartParsing();
+                        }
                     }
                     else
                         UpdateAllFlag = false;

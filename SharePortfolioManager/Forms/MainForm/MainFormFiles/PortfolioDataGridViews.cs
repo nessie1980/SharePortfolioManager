@@ -29,6 +29,7 @@ using SharePortfolioManager.Properties;
 using SharePortfolioManager.ShareDetailsForm;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -220,7 +221,7 @@ namespace SharePortfolioManager
 
                 // Check if the "Update" button should be disabled or enabled
                 if (!UpdateAllFlag)
-                    btnRefresh.Enabled = ShareObjectMarketValue.DoInternetUpdate &&
+                    btnRefresh.Enabled = ShareObjectMarketValue.InternetUpdateOption != ShareObject.ShareUpdateTypes.None &&
                                          ShareObjectMarketValue.WebSiteConfigurationFound;
             }
             catch (Exception ex)
@@ -279,7 +280,7 @@ namespace SharePortfolioManager
 
                 // Check if the "Update" button should be disabled or enabled
                 if (!UpdateAllFlag)
-                    btnRefresh.Enabled = ShareObjectFinalValue.DoInternetUpdate &&
+                    btnRefresh.Enabled = ShareObjectFinalValue.InternetUpdateOption != ShareObject.ShareUpdateTypes.None &&
                                          ShareObjectFinalValue.WebSiteConfigurationFound;
             }
             catch (Exception ex)
@@ -897,11 +898,40 @@ namespace SharePortfolioManager
                 var shareObject = ShareObjectListMarketValue.Find(x => (x.Wkn == wkn));
 
                 // Set internet update image
-                ((TextAndImageCell) dgvPortfolioMarketValue.Rows[rowIndex]
-                        .Cells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]).Image =
-                    shareObject.DoInternetUpdate
-                        ? Resources.state_update_16
-                        : Resources.state_no_update_16;
+                switch (shareObject.InternetUpdateOption)
+                {
+                    case ShareObject.ShareUpdateTypes.Both:
+                    {
+                        ((TextAndImageCell) dgvPortfolioMarketValue.Rows[rowIndex]
+                            .Cells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]).Image = Resources
+                            .state_update_16;
+                    } break;
+                    case ShareObject.ShareUpdateTypes.MarketPrice:
+                    {
+                        ((TextAndImageCell) dgvPortfolioMarketValue.Rows[rowIndex]
+                            .Cells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]).Image = Resources
+                            .state_update_16;
+                    } break;
+                    case ShareObject.ShareUpdateTypes.DailyValues:
+                    {
+                        ((TextAndImageCell) dgvPortfolioMarketValue.Rows[rowIndex]
+                            .Cells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]).Image = Resources
+                            .state_update_yellow_16;
+                    } break;
+                    case ShareObject.ShareUpdateTypes.None:
+                    {
+                        ((TextAndImageCell) dgvPortfolioMarketValue.Rows[rowIndex]
+                            .Cells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]).Image = Resources
+                            .state_no_update_16;
+
+                    } break;
+                    default:
+                    {
+                        ((TextAndImageCell)dgvPortfolioMarketValue.Rows[rowIndex]
+                            .Cells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]).Image = Resources
+                            .state_no_update_16;
+                    } break;
+                }
 
                 // Current performance image
                 if (shareObject.PerformanceValue > 0)
@@ -976,11 +1006,45 @@ namespace SharePortfolioManager
                 var shareObject = ShareObjectListFinalValue.Find(x => (x.Wkn == wkn));
 
                 // Set internet update image
-                ((TextAndImageCell) dgvPortfolioFinalValue.Rows[rowIndex]
-                        .Cells[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]).Image =
-                    shareObject.DoInternetUpdate
-                        ? Resources.state_update_16
-                        : Resources.state_no_update_16;
+                switch (shareObject.InternetUpdateOption)
+                {
+                    case ShareObject.ShareUpdateTypes.Both:
+                    {
+                        ((TextAndImageCell)dgvPortfolioFinalValue.Rows[rowIndex]
+                            .Cells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]).Image = Resources
+                            .state_update_16;
+                    }
+                        break;
+                    case ShareObject.ShareUpdateTypes.MarketPrice:
+                    {
+                        ((TextAndImageCell)dgvPortfolioFinalValue.Rows[rowIndex]
+                            .Cells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]).Image = Resources
+                            .state_update_blue_16;
+                    }
+                        break;
+                    case ShareObject.ShareUpdateTypes.DailyValues:
+                    {
+                        ((TextAndImageCell)dgvPortfolioFinalValue.Rows[rowIndex]
+                            .Cells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]).Image = Resources
+                            .state_update_yellow_16;
+                    }
+                        break;
+                    case ShareObject.ShareUpdateTypes.None:
+                    {
+                        ((TextAndImageCell)dgvPortfolioFinalValue.Rows[rowIndex]
+                            .Cells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]).Image = Resources
+                            .state_no_update_16;
+
+                    }
+                        break;
+                    default:
+                    {
+                        ((TextAndImageCell)dgvPortfolioFinalValue.Rows[rowIndex]
+                            .Cells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]).Image = Resources
+                            .state_no_update_16;
+                    }
+                        break;
+                }
 
                 // Current performance image
                 if (shareObject.PerformanceValue > 0)

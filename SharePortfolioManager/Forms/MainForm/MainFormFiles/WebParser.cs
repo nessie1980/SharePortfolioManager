@@ -100,33 +100,46 @@ namespace SharePortfolioManager
                                 LastFirstDisplayedRowIndex, true);
 
                             // Check if the current share should not be updated so check the next share
-                            if (!ShareObjectMarketValue.DoInternetUpdate ||
+                            if (ShareObjectMarketValue.InternetUpdateOption == ShareObject.ShareUpdateTypes.None ||
                                 !ShareObjectMarketValue.WebSiteConfigurationFound)
                                 SelectedDataGridViewShareIndex++;
 
-                        } while (!ShareObjectMarketValue.DoInternetUpdate ||
+                        } while (ShareObjectMarketValue.InternetUpdateOption == ShareObject.ShareUpdateTypes.None ||
                                  !ShareObjectMarketValue.WebSiteConfigurationFound &&
                                  SelectedDataGridViewShareIndex < ShareObject.ObjectCounter);
 
                         // Check if the share should be update
-                        if (ShareObjectMarketValue.DoInternetUpdate && ShareObjectMarketValue.WebSiteConfigurationFound)
+                        if (ShareObjectMarketValue.InternetUpdateOption != ShareObject.ShareUpdateTypes.None &&
+                            ShareObjectMarketValue.WebSiteConfigurationFound)
                         {
-                            // Start the asynchronous operation of the Parser for the market values
-                            ParserMarketValues.ParsingValues = new ParsingValues(
-                                new Uri(ShareObjectMarketValue.UpdateWebSiteUrl),
-                                ShareObjectMarketValue.WebSiteEncodingType,
-                                ShareObjectMarketValue.RegexList
-                            );
-                            ParserMarketValues.StartParsing();
+                            if (ShareObjectMarketValue.InternetUpdateOption ==
+                                ShareObject.ShareUpdateTypes.Both ||
+                                ShareObjectMarketValue.InternetUpdateOption ==
+                                ShareObject.ShareUpdateTypes.MarketPrice)
+                            {
+                                // Start the asynchronous operation of the Parser for the market values
+                                ParserMarketValues.ParsingValues = new ParsingValues(
+                                    new Uri(ShareObjectMarketValue.UpdateWebSiteUrl),
+                                    ShareObjectMarketValue.WebSiteEncodingType,
+                                    ShareObjectMarketValue.RegexList
+                                );
+                                ParserMarketValues.StartParsing();
+                            }
 
-                            // Start the asynchronous operation of the Parser for the daily market values
-                            ParserDailyValues.ParsingValues = new ParsingValues(
-                                new Uri(Helper.BuildDailyValuesUrl(ShareObjectMarketValue.DailyValues,
-                                    ShareObjectMarketValue.DailyValuesUpdateWebSiteUrl,
-                                    ShareObjectMarketValue.ShareType)),
-                                ShareObjectMarketValue.WebSiteEncodingType
-                            );
-                            ParserDailyValues.StartParsing();
+                            if (ShareObjectMarketValue.InternetUpdateOption ==
+                                ShareObject.ShareUpdateTypes.Both ||
+                                ShareObjectMarketValue.InternetUpdateOption ==
+                                ShareObject.ShareUpdateTypes.DailyValues)
+                            {
+                                // Start the asynchronous operation of the Parser for the daily market values
+                                ParserDailyValues.ParsingValues = new ParsingValues(
+                                    new Uri(Helper.BuildDailyValuesUrl(ShareObjectMarketValue.DailyValues,
+                                        ShareObjectMarketValue.DailyValuesUpdateWebSiteUrl,
+                                        ShareObjectMarketValue.ShareType)),
+                                    ShareObjectMarketValue.WebSiteEncodingType
+                                );
+                                ParserDailyValues.StartParsing();
+                            }
                         }
                         else
                         {
@@ -172,33 +185,46 @@ namespace SharePortfolioManager
                                 LastFirstDisplayedRowIndex, true);
 
                             // Check if the current share should not be updated so check the next share
-                            if (!ShareObjectFinalValue.DoInternetUpdate ||
+                            if (ShareObjectFinalValue.InternetUpdateOption == ShareObject.ShareUpdateTypes.None ||
                                 !ShareObjectFinalValue.WebSiteConfigurationFound)
                                 SelectedDataGridViewShareIndex++;
 
-                        } while (!ShareObjectFinalValue.DoInternetUpdate ||
+                        } while (ShareObjectFinalValue.InternetUpdateOption == ShareObject.ShareUpdateTypes.None  ||
                                  !ShareObjectFinalValue.WebSiteConfigurationFound &&
                                  SelectedDataGridViewShareIndex < ShareObject.ObjectCounter);
 
                         // Check if the share should be update
-                        if (ShareObjectFinalValue.DoInternetUpdate && ShareObjectFinalValue.WebSiteConfigurationFound)
+                        if (ShareObjectFinalValue.InternetUpdateOption != ShareObject.ShareUpdateTypes.None &&
+                            ShareObjectFinalValue.WebSiteConfigurationFound)
                         {
-                            // Start the asynchronous operation of the Parser for the market values
-                            ParserMarketValues.ParsingValues = new ParsingValues(
-                                new Uri(ShareObjectFinalValue.UpdateWebSiteUrl),
-                                ShareObjectFinalValue.WebSiteEncodingType,
-                                ShareObjectFinalValue.RegexList
-                            );
-                            ParserMarketValues.StartParsing();
+                            if (ShareObjectMarketValue.InternetUpdateOption ==
+                                ShareObject.ShareUpdateTypes.Both ||
+                                ShareObjectMarketValue.InternetUpdateOption ==
+                                ShareObject.ShareUpdateTypes.MarketPrice)
+                            {
+                                // Start the asynchronous operation of the Parser for the market values
+                                ParserMarketValues.ParsingValues = new ParsingValues(
+                                    new Uri(ShareObjectFinalValue.UpdateWebSiteUrl),
+                                    ShareObjectFinalValue.WebSiteEncodingType,
+                                    ShareObjectFinalValue.RegexList
+                                );
+                                ParserMarketValues.StartParsing();
+                            }
 
-                            // Start the asynchronous operation of the Parser for the daily market values
-                            ParserDailyValues.ParsingValues = new ParsingValues(
-                                new Uri(Helper.BuildDailyValuesUrl(ShareObjectFinalValue.DailyValues,
-                                    ShareObjectFinalValue.DailyValuesUpdateWebSiteUrl,
-                                    ShareObjectFinalValue.ShareType)),
-                                ShareObjectFinalValue.WebSiteEncodingType
-                            );
-                            ParserDailyValues.StartParsing();
+                            if (ShareObjectMarketValue.InternetUpdateOption ==
+                                ShareObject.ShareUpdateTypes.Both ||
+                                ShareObjectMarketValue.InternetUpdateOption ==
+                                ShareObject.ShareUpdateTypes.DailyValues)
+                            {
+                                // Start the asynchronous operation of the Parser for the daily market values
+                                ParserDailyValues.ParsingValues = new ParsingValues(
+                                    new Uri(Helper.BuildDailyValuesUrl(ShareObjectFinalValue.DailyValues,
+                                        ShareObjectFinalValue.DailyValuesUpdateWebSiteUrl,
+                                        ShareObjectFinalValue.ShareType)),
+                                    ShareObjectFinalValue.WebSiteEncodingType
+                                );
+                                ParserDailyValues.StartParsing();
+                            }
                         }
                         else
                         {
@@ -289,100 +315,153 @@ namespace SharePortfolioManager
                         // Check which share overview is selected
                         if (MarketValueOverviewTabSelected)
                         {
-                            // Start the asynchronous operation of the Parser for the market values
-                            ParserMarketValues.ParsingValues = new ParsingValues(
-                                new Uri(ShareObjectListMarketValue[
-                                        dgvPortfolioMarketValue
-                                            .SelectedCells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
-                                            .RowIndex]
-                                    .UpdateWebSiteUrl),
-                                ShareObjectListMarketValue[
-                                        dgvPortfolioMarketValue
-                                            .SelectedCells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
-                                            .RowIndex]
-                                    .WebSiteEncodingType,
+                            if (ShareObjectListMarketValue[
+                                    dgvPortfolioMarketValue
+                                        .SelectedCells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                        .RowIndex].InternetUpdateOption ==
+                                ShareObject.ShareUpdateTypes.Both ||
                                 ShareObjectListMarketValue[
                                     dgvPortfolioMarketValue
                                         .SelectedCells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
-                                        .RowIndex].RegexList
-                            );
-                            ParserMarketValues.StartParsing();
+                                        .RowIndex].InternetUpdateOption ==
+                                ShareObject.ShareUpdateTypes.MarketPrice)
+                            {
 
-                            // Start the asynchronous operation of the Parser for the daily market values
-                            ParserDailyValues.ParsingValues = new ParsingValues(
-                                new Uri(Helper.BuildDailyValuesUrl(
+                                // Start the asynchronous operation of the Parser for the market values
+                                ParserMarketValues.ParsingValues = new ParsingValues(
+                                    new Uri(ShareObjectListMarketValue[
+                                            dgvPortfolioMarketValue
+                                                .SelectedCells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                                .RowIndex]
+                                        .UpdateWebSiteUrl),
                                     ShareObjectListMarketValue[
                                             dgvPortfolioMarketValue
                                                 .SelectedCells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
                                                 .RowIndex]
-                                        .DailyValues,
+                                        .WebSiteEncodingType,
                                     ShareObjectListMarketValue[
-                                            dgvPortfolioMarketValue
-                                                .SelectedCells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
-                                                .RowIndex]
-                                        .DailyValuesUpdateWebSiteUrl,
-                                    ShareObjectListMarketValue[
-                                            dgvPortfolioMarketValue
-                                                .SelectedCells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
-                                                .RowIndex]
-                                        .ShareType
-                                )),
-                                ShareObjectListMarketValue[
                                         dgvPortfolioMarketValue
                                             .SelectedCells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
-                                            .RowIndex]
-                                    .WebSiteEncodingType
-                            );
-                            ParserDailyValues.StartParsing();
+                                            .RowIndex].RegexList
+                                );
+                                ParserMarketValues.StartParsing();
+                            }
+
+                            if (ShareObjectListMarketValue[
+                                    dgvPortfolioMarketValue
+                                        .SelectedCells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                        .RowIndex].InternetUpdateOption ==
+                                ShareObject.ShareUpdateTypes.Both ||
+                                ShareObjectListMarketValue[
+                                    dgvPortfolioMarketValue
+                                        .SelectedCells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                        .RowIndex].InternetUpdateOption ==
+                                ShareObject.ShareUpdateTypes.DailyValues)
+                            {
+                                // Start the asynchronous operation of the Parser for the daily market values
+                                ParserDailyValues.ParsingValues = new ParsingValues(
+                                    new Uri(Helper.BuildDailyValuesUrl(
+                                        ShareObjectListMarketValue[
+                                                dgvPortfolioMarketValue
+                                                    .SelectedCells[
+                                                        (int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                                    .RowIndex]
+                                            .DailyValues,
+                                        ShareObjectListMarketValue[
+                                                dgvPortfolioMarketValue
+                                                    .SelectedCells[
+                                                        (int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                                    .RowIndex]
+                                            .DailyValuesUpdateWebSiteUrl,
+                                        ShareObjectListMarketValue[
+                                                dgvPortfolioMarketValue
+                                                    .SelectedCells[
+                                                        (int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                                    .RowIndex]
+                                            .ShareType
+                                    )),
+                                    ShareObjectListMarketValue[
+                                            dgvPortfolioMarketValue
+                                                .SelectedCells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                                .RowIndex]
+                                        .WebSiteEncodingType
+                                );
+                                ParserDailyValues.StartParsing();
+                            }
                         }
                         else
                         {
-                            // Start the asynchronous operation of the Parser for the market values
-                            ParserMarketValues.ParsingValues = new ParsingValues(
-                                new Uri(ShareObjectListFinalValue[
-                                        dgvPortfolioFinalValue
-                                            .SelectedCells[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
-                                            .RowIndex]
-                                    .UpdateWebSiteUrl),
+                            if (ShareObjectListFinalValue[dgvPortfolioFinalValue
+                                    .SelectedCells[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                    .RowIndex].InternetUpdateOption ==
+                                ShareObject.ShareUpdateTypes.Both ||
                                 ShareObjectListFinalValue[
-                                        dgvPortfolioFinalValue
-                                            .SelectedCells[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
-                                            .RowIndex]
-                                    .WebSiteEncodingType,
-                                ShareObjectListFinalValue[
-                                        dgvPortfolioFinalValue
-                                            .SelectedCells[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
-                                            .RowIndex]
-                                    .RegexList
-                            );
-                            ParserMarketValues.StartParsing();
+                                    dgvPortfolioFinalValue
+                                        .SelectedCells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                        .RowIndex].InternetUpdateOption ==
+                                ShareObject.ShareUpdateTypes.MarketPrice)
+                            {
+                                // Start the asynchronous operation of the Parser for the market values
+                                ParserMarketValues.ParsingValues = new ParsingValues(
+                                    new Uri(ShareObjectListFinalValue[
+                                            dgvPortfolioFinalValue
+                                                .SelectedCells[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                                .RowIndex]
+                                        .UpdateWebSiteUrl),
+                                    ShareObjectListFinalValue[
+                                            dgvPortfolioFinalValue
+                                                .SelectedCells[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                                .RowIndex]
+                                        .WebSiteEncodingType,
+                                    ShareObjectListFinalValue[
+                                            dgvPortfolioFinalValue
+                                                .SelectedCells[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                                .RowIndex]
+                                        .RegexList
+                                );
+                                ParserMarketValues.StartParsing();
+                            }
 
-                            // Start the asynchronous operation of the Parser for the daily market values
-                            ParserDailyValues.ParsingValues = new ParsingValues(
-                                new Uri(Helper.BuildDailyValuesUrl(
-                                    ShareObjectListFinalValue[
-                                            dgvPortfolioFinalValue
-                                                .SelectedCells[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
-                                                .RowIndex]
-                                        .DailyValues,
-                                    ShareObjectListFinalValue[
-                                            dgvPortfolioFinalValue
-                                                .SelectedCells[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
-                                                .RowIndex]
-                                        .DailyValuesUpdateWebSiteUrl,
-                                    ShareObjectListFinalValue[
-                                            dgvPortfolioFinalValue
-                                                .SelectedCells[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
-                                                .RowIndex]
-                                        .ShareType
-                                )),
+                            if (ShareObjectListFinalValue[dgvPortfolioFinalValue
+                                    .SelectedCells[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                    .RowIndex].InternetUpdateOption ==
+                                ShareObject.ShareUpdateTypes.Both ||
                                 ShareObjectListFinalValue[
-                                        dgvPortfolioFinalValue
-                                            .SelectedCells[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
-                                            .RowIndex]
-                                    .WebSiteEncodingType
-                            );
-                            ParserDailyValues.StartParsing();
+                                    dgvPortfolioFinalValue
+                                        .SelectedCells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                        .RowIndex].InternetUpdateOption ==
+                                ShareObject.ShareUpdateTypes.DailyValues)
+                            {
+                                // Start the asynchronous operation of the Parser for the daily market values
+                                ParserDailyValues.ParsingValues = new ParsingValues(
+                                    new Uri(Helper.BuildDailyValuesUrl(
+                                        ShareObjectListFinalValue[
+                                                dgvPortfolioFinalValue
+                                                    .SelectedCells[
+                                                        (int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                                    .RowIndex]
+                                            .DailyValues,
+                                        ShareObjectListFinalValue[
+                                                dgvPortfolioFinalValue
+                                                    .SelectedCells[
+                                                        (int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                                    .RowIndex]
+                                            .DailyValuesUpdateWebSiteUrl,
+                                        ShareObjectListFinalValue[
+                                                dgvPortfolioFinalValue
+                                                    .SelectedCells[
+                                                        (int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                                    .RowIndex]
+                                            .ShareType
+                                    )),
+                                    ShareObjectListFinalValue[
+                                            dgvPortfolioFinalValue
+                                                .SelectedCells[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                                .RowIndex]
+                                        .WebSiteEncodingType
+                                );
+                                ParserDailyValues.StartParsing();
+                            }
                         }
                     }
                     else

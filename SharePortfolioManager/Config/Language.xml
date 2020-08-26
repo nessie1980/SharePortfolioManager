@@ -693,6 +693,14 @@
 					<PayoutInterval text="Dividend payout interval:" />
 					<ShareType text="Type:" />
 				</Labels>
+
+				<!-- Radio buttons -->
+				<Radio>
+					<Both text="Both" />
+					<MarketPrice text="MarketPrice" />
+					<DailyValues text="DailyValues" />
+					<None text="None" />
+				</Radio>
 			</GrpBoxGeneral>
 
 			<!-- Group box with the earings and expenditure infos of the share -->
@@ -2117,6 +2125,14 @@
 					<PayoutInterval text="Dividendenauszahlungs- Interval:" />
 					<ShareType text="Typ:" />
 				</Labels>
+				
+				<!-- Radio buttons -->
+				<Radio>
+					<Both text="Beide" />
+					<MarketPrice text="Market- Preis" />
+					<DailyValues text="Tages- Werte" />
+					<None text="Keine" />
+				</Radio>				
 			</GrpBoxGeneral>
 			
 			<!-- Group box with the earings and expenditure infos of the share -->

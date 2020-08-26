@@ -452,6 +452,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BuildTools\AssemblyInfoUpdater.exe" />
+    <None Include="Resources\Pic_16\state_update_yellow_16.png" />
+    <None Include="Resources\Pic_16\state_update_orange_16.png" />
+    <None Include="Resources\Pic_16\state_update_blue_16.png" />
     <None Include="Resources\Pic_16\state_update_16.png" />
     <None Include="Resources\Pic_16\state_no_update_16.png" />
     <None Include="Resources\Pic_24\show_window_24.png" />

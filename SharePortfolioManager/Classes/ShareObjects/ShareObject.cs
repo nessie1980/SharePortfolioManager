@@ -53,16 +53,31 @@ namespace SharePortfolioManager.Classes.ShareObjects
         #region Share types
 
         /// <summary>
-        /// Error codes of the ShareAdd
+        /// Types for the various shares
         /// </summary>
         public enum ShareTypes
         {
-            Share = 0,
-            Fond = 1,
-            Etf = 2
+            Share,
+            Fond,
+            Etf
         }
 
         #endregion Share types
+
+        #region Share update types
+
+        /// <summary>
+        /// Types for the various update options of a share
+        /// </summary>
+        public enum ShareUpdateTypes
+        {
+            None,
+            MarketPrice,
+            DailyValues,
+            Both 
+        }
+
+        #endregion Share update types
 
         #region Variables
 
@@ -82,11 +97,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Stores a list of images for the previous day performance visualization
         /// </summary>
         private List<Image> _imageListPrevDayPerformance;
-
-        /// <summary>
-        /// Stores the website url of the share for the internet update
-        /// </summary>
-        private string _updateWebSiteUrl;
 
         /// <summary>
         /// Stores the culture info of the share
@@ -629,13 +639,13 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Flag if the share should be updated via internet
         /// </summary>
         [Browsable(false)]
-        public bool DoInternetUpdate { get; set; } = true;
+        public ShareUpdateTypes InternetUpdateOption { get; set; } = ShareUpdateTypes.Both;
 
         /// <summary>
         /// Flag if the share should be updated via internet as string
         /// </summary>
         [Browsable(false)]
-        public string DoInternetUpdateAsStr => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(DoInternetUpdate.ToString());
+        public string InternetUpdateOptionAsStr => InternetUpdateOption.ToString();
 
         /// <summary>
         /// Flag if a website configuration for the share website has been found or not
@@ -659,17 +669,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Website url for the share update value parsing
         /// </summary>
         [Browsable(false)]
-        public string UpdateWebSiteUrl
-        {
-            get => _updateWebSiteUrl;
-            set
-            {
-                // Check if "http://" is in front of the website 
-                if (DoInternetUpdate && value.Substring(0, 7) != "http://" && value.Substring(0, 8) != "https://")
-                    value = "http://" + value;
-                _updateWebSiteUrl = value;
-            }
-        }
+        public string UpdateWebSiteUrl { get; set; }
 
         /// <summary>
         /// Encoding type for the website
@@ -1105,7 +1105,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
             return null;
         }
 
-        // TODO: (thomas:2020-08-14) Functionality must be implemented 
         public decimal GetSalableVolumeOfDepot(string strDepotNumber)
         {
             SalableVolume = 0;

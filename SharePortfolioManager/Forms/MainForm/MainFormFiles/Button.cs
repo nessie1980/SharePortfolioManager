@@ -213,7 +213,7 @@ namespace SharePortfolioManager
 
                     // Check if any share set for updating so enable the refresh all button
                     btnRefreshAll.Enabled =
-                        ShareObjectListFinalValue.Count(p => p.DoInternetUpdate && p.WebSiteConfigurationFound) >= 1;
+                        ShareObjectListFinalValue.Count(p => p.InternetUpdateOption != ShareObject.ShareUpdateTypes.None && p.WebSiteConfigurationFound) >= 1;
 
                     // Throw exception which is thrown in the SaveShareObject function
                     if (exception != null)
@@ -295,7 +295,7 @@ namespace SharePortfolioManager
 
             // Check if any share set for updating so enable the refresh all button
             btnRefreshAll.Enabled =
-                ShareObjectListFinalValue.Count(p => p.DoInternetUpdate && p.WebSiteConfigurationFound) >= 1;
+                ShareObjectListFinalValue.Count(p => p.InternetUpdateOption != ShareObject.ShareUpdateTypes.None && p.WebSiteConfigurationFound) >= 1;
 
             // Throw exception which is thrown in the SaveShareObject function
             if (exception != null)
@@ -607,7 +607,7 @@ namespace SharePortfolioManager
 
                     // Check if any share set for updating so enable the refresh all button
                     btnRefreshAll.Enabled =
-                        ShareObjectListFinalValue.Count(p => p.DoInternetUpdate && p.WebSiteConfigurationFound) >= 1;
+                        ShareObjectListFinalValue.Count(p => p.InternetUpdateOption != ShareObject.ShareUpdateTypes.None && p.WebSiteConfigurationFound) >= 1;
                 }
                 catch (Exception ex)
                 {
@@ -678,7 +678,7 @@ namespace SharePortfolioManager
 
             // Check if any share set for updating so enable the refresh all button
             btnRefreshAll.Enabled =
-                ShareObjectListFinalValue.Count(p => p.DoInternetUpdate && p.WebSiteConfigurationFound) >= 1;
+                ShareObjectListFinalValue.Count(p => p.InternetUpdateOption != ShareObject.ShareUpdateTypes.None && p.WebSiteConfigurationFound) >= 1;
 
             // Throw exception which is thrown in the SaveShareObject function
             if (exception != null)

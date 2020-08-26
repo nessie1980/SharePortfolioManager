@@ -656,7 +656,8 @@ namespace SharePortfolioManager.ShareDetailsForm
                 date = date.AddDays(-1);
 
             // Check if no update is necessary
-            if (!ShareObjectFinalValue.DoInternetUpdate ||
+            if (ShareObjectFinalValue.InternetUpdateOption == ShareObject.ShareUpdateTypes.MarketPrice &&
+                 ShareObjectFinalValue.InternetUpdateOption == ShareObject.ShareUpdateTypes.None ||
                 dateTimePickerStartDate.Value >= date && 
                 ( ShareObjectFinalValue.DailyValues.Count > 0 || ShareObjectMarketValue.DailyValues.Count > 0) ) return;
 

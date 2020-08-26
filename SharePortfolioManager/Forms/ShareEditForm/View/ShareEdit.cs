@@ -119,11 +119,35 @@ namespace SharePortfolioManager
                     dateTimeStockMarketLaunchDate.Value = DateTime.Parse(ShareObjectFinalValue.StockMarketLaunchDate);
                     lblDateValue.Text = ShareObjectFinalValue.AllBuyEntries.AllBuysOfTheShareDictionary.Values.First().BuyListYear.First().Date;
                     txtBoxName.Text = ShareObjectFinalValue.Name;
-                    chkBoxUpdate.CheckState = ShareObjectFinalValue.DoInternetUpdate ? CheckState.Checked : CheckState.Unchecked;
+
+                    switch (ShareObjectFinalValue.InternetUpdateOption)
+                    {
+                        case ShareObject.ShareUpdateTypes.Both:
+                        {
+                            rdbBoth.Checked = true;
+                        } break;
+                        case ShareObject.ShareUpdateTypes.MarketPrice:
+                        {
+                            rdbMarketPrice.Checked = true;
+                        } break;
+                        case ShareObject.ShareUpdateTypes.DailyValues:
+                        {
+                            rdbDailyValues.Checked = true;
+                        } break;
+                        case ShareObject.ShareUpdateTypes.None:
+                        {
+                            rdbNone.Checked = true;
+                        } break;
+                        default:
+                        {
+                            rdbNone.Checked = true;
+                        } break;
+                    }
+
                     txtBoxWebSite.Text = ShareObjectFinalValue.UpdateWebSiteUrl;
                     txtBoxDailyValuesWebSite.Text = ShareObjectFinalValue.DailyValuesUpdateWebSiteUrl;
 
-                    // Sete units
+                    // Set units
                     lblPurchaseUnit.Text = ShareObjectFinalValue.CurrencyUnit;
                     lblVolumeUnit.Text = ShareObject.PieceUnit;
                     lblBuysUnit.Text = ShareObjectFinalValue.CurrencyUnit;
@@ -186,6 +210,12 @@ namespace SharePortfolioManager
                 lblDate.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Date", LanguageName);
                 lblName.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Name", LanguageName);
                 lblShareUpdate.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Update", LanguageName);
+
+                rdbBoth.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Radio/Both", LanguageName);
+                rdbMarketPrice.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Radio/MarketPrice", LanguageName);
+                rdbDailyValues.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Radio/DailyValues", LanguageName);
+                rdbNone.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Radio/None", LanguageName);
+
                 lblPurchase.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Purchase", LanguageName);
                 lblVolume.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Volume", LanguageName);
                 lblWebSite.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/WebSite", LanguageName);
@@ -401,7 +431,7 @@ namespace SharePortfolioManager
                 }
 
                 // Update website
-                if (txtBoxWebSite.Text == @"" && chkBoxUpdate.CheckState == CheckState.Checked && errorFlag == false)
+                if (txtBoxWebSite.Text == @"" && (rdbBoth.Checked || rdbMarketPrice.Checked) && errorFlag == false)
                 {
                     txtBoxWebSite.Focus();
 
@@ -412,7 +442,7 @@ namespace SharePortfolioManager
                     
                     errorFlag = true;
                 }
-                else if (chkBoxUpdate.CheckState == CheckState.Checked && !Helper.UrlChecker(ref decodedUrlWebSite, 10000))
+                else if ((rdbBoth.Checked || rdbMarketPrice.Checked) && !Helper.UrlChecker(ref decodedUrlWebSite, 10000))
                 {
                     txtBoxWebSite.Focus();
                     
@@ -468,7 +498,7 @@ namespace SharePortfolioManager
                 }
                 
                 // Daily values update website
-                if (txtBoxDailyValuesWebSite.Text == @"" && errorFlag == false)
+                if (txtBoxDailyValuesWebSite.Text == @"" && (rdbBoth.Checked || rdbDailyValues.Checked) && errorFlag == false)
                 {
                     txtBoxDailyValuesWebSite.Focus();
 
@@ -479,7 +509,7 @@ namespace SharePortfolioManager
                     
                     errorFlag = true;
                 }
-                else if (!Helper.UrlChecker(ref decodeUrlDailyValuesWebSite, 10000))
+                else if ((rdbBoth.Checked || rdbDailyValues.Checked) && !Helper.UrlChecker(ref decodeUrlDailyValuesWebSite, 10000))
                 {
                     txtBoxDailyValuesWebSite.Focus();
                     
@@ -547,7 +577,19 @@ namespace SharePortfolioManager
                 // Market value share
                 ShareObjectMarketValue.Name = txtBoxName.Text;
                 ShareObjectMarketValue.StockMarketLaunchDate = dateTimeStockMarketLaunchDate.Value.ToShortDateString();
-                ShareObjectMarketValue.DoInternetUpdate = chkBoxUpdate.Checked;
+
+                if (rdbBoth.Checked)
+                    ShareObjectMarketValue.InternetUpdateOption = ShareObject.ShareUpdateTypes.Both;
+
+                if (rdbMarketPrice.Checked)
+                    ShareObjectMarketValue.InternetUpdateOption = ShareObject.ShareUpdateTypes.MarketPrice;
+                
+                if (rdbDailyValues.Checked)
+                    ShareObjectMarketValue.InternetUpdateOption = ShareObject.ShareUpdateTypes.DailyValues;
+
+                if (rdbNone.Checked)
+                    ShareObjectMarketValue.InternetUpdateOption = ShareObject.ShareUpdateTypes.None;
+
                 ShareObjectMarketValue.UpdateWebSiteUrl = txtBoxWebSite.Text;
                 ShareObjectMarketValue.DailyValuesUpdateWebSiteUrl = txtBoxDailyValuesWebSite.Text;
                 ShareObjectMarketValue.CultureInfo = cultureInfo;
@@ -556,7 +598,19 @@ namespace SharePortfolioManager
                 // Final value share
                 ShareObjectFinalValue.Name = txtBoxName.Text;
                 ShareObjectFinalValue.StockMarketLaunchDate = dateTimeStockMarketLaunchDate.Value.ToShortDateString();
-                ShareObjectFinalValue.DoInternetUpdate = chkBoxUpdate.Checked;
+
+                if (rdbBoth.Checked)
+                    ShareObjectFinalValue.InternetUpdateOption = ShareObject.ShareUpdateTypes.Both;
+
+                if (rdbMarketPrice.Checked)
+                    ShareObjectFinalValue.InternetUpdateOption = ShareObject.ShareUpdateTypes.MarketPrice;
+
+                if (rdbDailyValues.Checked)
+                    ShareObjectFinalValue.InternetUpdateOption = ShareObject.ShareUpdateTypes.DailyValues;
+
+                if (rdbNone.Checked)
+                    ShareObjectFinalValue.InternetUpdateOption = ShareObject.ShareUpdateTypes.None;
+
                 ShareObjectFinalValue.UpdateWebSiteUrl = txtBoxWebSite.Text;
                 ShareObjectFinalValue.DailyValuesUpdateWebSiteUrl = txtBoxDailyValuesWebSite.Text;
                 ShareObjectFinalValue.CultureInfo = cultureInfo;
