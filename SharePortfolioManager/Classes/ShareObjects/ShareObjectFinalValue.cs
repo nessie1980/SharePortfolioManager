@@ -2806,12 +2806,18 @@ namespace SharePortfolioManager.Classes.ShareObjects
         public static void PortfolioValuesReset()
         {
             _portfolioPurchaseValue = 0;
-            _portfolioSoldPurchaseValue = 0;
+            _portfolioCompletePurchaseValue = 0;
             _portfolioFinalValue = 0;
+            _portfolioFinalValueWithProfitLoss = 0;
+            _portfolioCompleteFinalValue = 0;
+            _portfolioSoldPurchaseValue = 0;
             _portfolioCompleteBrokerage = 0;
+            _portfolioCompleteBrokerageReduction = 0;
             _portfolioCompleteDividends = 0;
             _portfolioPerformanceValue = 0;
+            _portfolioCompletePerformanceValue = 0;
             _portfolioProfitLossValue = 0;
+            _portfolioCompleteProfitLossValue = 0;
         }
 
         #endregion Portfolio methods

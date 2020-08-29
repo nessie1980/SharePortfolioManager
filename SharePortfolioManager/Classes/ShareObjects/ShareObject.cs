@@ -1192,7 +1192,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
 #endregion Sale methods
 
-#region Performance methods
+        #region Performance methods
 
         /// <summary>
         /// Calculates the profit or loss to the previous day of the current stock volume
@@ -1246,7 +1246,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 ImagePrevDayPerformance = ImageListPrevDayPerformance[5];
         }
 
-#endregion Performance methods
+        #endregion Performance methods
 
         /// <summary>
         /// Search for the correct website RegEx and sets the RegEx list.
@@ -1326,7 +1326,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             }
         }
 
-#endregion Methods
+        #endregion Methods
     }
 
     /// <inheritdoc />

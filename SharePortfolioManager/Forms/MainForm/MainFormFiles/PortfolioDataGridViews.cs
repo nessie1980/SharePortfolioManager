@@ -212,7 +212,7 @@ namespace SharePortfolioManager
             {
                 // Save current selected ShareObject via the selected WKN number
                 if (dgvPortfolioMarketValue.SelectedRows.Count != 1 ||
-                    dgvPortfolioMarketValue.SelectedRows[0].Cells.Count <= 0 ||
+                    dgvPortfolioMarketValue.SelectedRows[0].Cells.Count <= (int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex ||
                     dgvPortfolioMarketValue.SelectedRows[0]
                         .Cells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex].Value == null ||
                     AddFlagMarketValue) return;
