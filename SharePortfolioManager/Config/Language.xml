@@ -96,6 +96,7 @@
 			<!-- Groupbox portfolio -->
 			<GrpBoxPortfolio>
 				<Caption text="Portfolio overview" />
+				<Entries text="Entries" />
 
 				<!-- TabControl with share overviews -->
 				<TabCtrlShareOverviews>
@@ -1529,6 +1530,7 @@
 			<!-- Groupbox portfolio -->
 			<GrpBoxPortfolio>
 				<Caption text="Portfolio- Übersicht" />
+				<Entries text="Einträge" />
 
 				<!-- TabControl with share overviews -->
 				<TabCtrlShareOverviews>

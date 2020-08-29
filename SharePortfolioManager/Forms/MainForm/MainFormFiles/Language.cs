@@ -260,8 +260,13 @@ namespace SharePortfolioManager
 
                 #region GrpBox overviews
 
+                // Set group box caption
                 grpBoxSharePortfolio.Text =
-                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Caption", LanguageName);
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Caption", LanguageName) +
+                    @" ( " +
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Entries", LanguageName) +
+                    @": " +
+                    ShareObjectListFinalValue.Count + @" )";
 
                 #region TabControl overviews
 
@@ -272,7 +277,8 @@ namespace SharePortfolioManager
 
                 tabCtrlShareOverviews.TabPages[1].Text =
                     Language.GetLanguageTextByXPath(
-                        @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/Caption", LanguageName);
+                        @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/Caption",
+                        LanguageName);
 
                 #region DataGirdView for the market value / complete depot
 

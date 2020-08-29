@@ -445,12 +445,6 @@ namespace SharePortfolioManager
 
                 #endregion Load document RegEx configuration from XML
 
-                #region Set language values to the control
-
-                SetLanguage();
-
-                #endregion Set language values to the control
-
                 //#region Read shares from XML / Load portfolio
 
                 //var stop = new Stopwatch();
@@ -586,6 +580,12 @@ namespace SharePortfolioManager
                 //Console.WriteLine(@"LoadPortfolio: {0}ms", stop.ElapsedMilliseconds);
 
                 //#endregion Select first item
+
+                #region Set language values to the control
+
+                SetLanguage();
+
+                #endregion Set language values to the control
             }
             catch (LoggerException loggerException)
             {

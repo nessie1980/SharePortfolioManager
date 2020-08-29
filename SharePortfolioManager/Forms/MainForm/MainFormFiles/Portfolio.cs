@@ -1026,6 +1026,14 @@ namespace SharePortfolioManager
                         // Show the invalid website configurations
                         ShowInvalidWebSiteConfigurations(RegexSearchFailedList);
                     }
+
+                    // Set group box caption
+                    grpBoxSharePortfolio.Text =
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Caption", LanguageName) +
+                        @" ( " +
+                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Entries", LanguageName) +
+                        @": " +
+                        ShareObjectListFinalValue.Count + @" )";
                 }
                 else
                     // Set empty portfolio list state
