@@ -799,6 +799,24 @@ namespace SharePortfolioManager.Classes.ShareObjects
         public string PerformanceValueAsStrUnit => Helper.FormatDecimal(PerformanceValue, Helper.PercentageTwoLength, true, Helper.PercentageNoneFixLength, true, PercentageUnit, CultureInfo);
 
         /// <summary>
+        /// Image which indicates the performance of the share of all transactions 
+        /// </summary>
+        [Browsable(false)]
+        public Image ImageCompletePerformance
+        {
+            get
+            {
+                if (ImageListCompleteProfitLossPerformance == null || ImageListCompleteProfitLossPerformance.Count <= 0 && ImageListCompleteProfitLossPerformance.Count > 6) return null;
+
+                if (CompletePerformanceValue < -25) return ImageListCompleteProfitLossPerformance[1];
+                if (CompletePerformanceValue < 0) return ImageListCompleteProfitLossPerformance[2];
+                if (CompletePerformanceValue == 0) return ImageListCompleteProfitLossPerformance[3];
+                if (CompletePerformanceValue < 25) return ImageListCompleteProfitLossPerformance[4];
+                return ImageListCompleteProfitLossPerformance[5];
+            }
+        }
+
+        /// <summary>
         /// Performance value of all transactions (final value)
         /// </summary>
         [Browsable(false)]
@@ -1030,6 +1048,25 @@ namespace SharePortfolioManager.Classes.ShareObjects
         }
 
         /// <summary>
+        /// Image which indicates the performance of the portfolio of all transactions 
+        /// </summary>
+        [Browsable(false)]
+        public Image ImagePortfolioPerformanceValue
+        {
+            get
+            {
+                if (ImageListCompleteProfitLossPerformance == null || ImageListCompleteProfitLossPerformance.Count <= 0 && ImageListCompleteProfitLossPerformance.Count > 6) return null;
+
+                if (PortfolioCompletePerformanceValue < -25) return ImageListCompleteProfitLossPerformance[1];
+                if (PortfolioCompletePerformanceValue < 0) return ImageListCompleteProfitLossPerformance[2];
+                if (PortfolioCompletePerformanceValue == 0) return ImageListCompleteProfitLossPerformance[3];
+                if (PortfolioCompletePerformanceValue < 25) return ImageListCompleteProfitLossPerformance[4];
+
+                return ImageListCompleteProfitLossPerformance[5];
+            }
+        }
+
+        /// <summary>
         /// Stores the performance value of the current stock volume with brokerage of the portfolio (all shares) (final value)
         /// </summary>
         [Browsable(false)]
@@ -1214,6 +1251,14 @@ namespace SharePortfolioManager.Classes.ShareObjects
         #region Data grid view properties
 
         /// <summary>
+        /// Image for the share update DataGridView display
+        /// </summary>
+        [Browsable(true)]
+        [DisplayName(@"UpdateImage")]
+        // ReSharper disable once UnusedMember.Global
+        public Image DgvUpdateImage => UpdateImage;
+        
+        /// <summary>
         /// WKN of the share as string for the DataGridView display
         /// </summary>
         [Browsable(true)]
@@ -1254,6 +1299,14 @@ namespace SharePortfolioManager.Classes.ShareObjects
         public string DgvCurPrevPriceAsStrUnit => CurPrevPriceAsStrUnit;
 
         /// <summary>
+        /// Image which indicates the performance of the share to the previous day for the DataGridView display
+        /// </summary>
+        [Browsable(true)]
+        [DisplayName(@"PrevDayPerformanceImage")]
+        // ReSharper disable once UnusedMember.Global
+        public Image DgvImagePrevDayPerformance => ImagePrevDayPerformance;
+
+        /// <summary>
         /// Difference between the current and the previous day of the share and the performance in percent
         /// of the share as string for the DataGridView display
         /// </summary>
@@ -1261,14 +1314,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
         [DisplayName(@"PrevDayPerformance")]
         // ReSharper disable once UnusedMember.Global
         public string DgvPrevDayDifferencePerformanceAsStrUnit => CurPrevDayPriceDifferencePerformanceAsStrUnit;
-
-        /// <summary>
-        /// Image which indicates the performance of the share to the previous day for the DataGridView display
-        /// </summary>
-        [Browsable(true)]
-        [DisplayName(@"")]
-        // ReSharper disable once UnusedMember.Global
-        public Image DgvImagePrevDayPerformance => ImagePrevDayPerformance;
 
         /// <summary>
         /// Profit or loss and performance value of the market value of the share volume as sting with unit
@@ -1289,6 +1334,14 @@ namespace SharePortfolioManager.Classes.ShareObjects
         public string DgvPurchaseValueFinalValueAsStrUnit => PurchaseValueFinalValueAsStrUnit;
 
         /// <summary>
+        /// Image which indicates the performance of the share of all transactions for the DataGridView display
+        /// </summary>
+        [Browsable(true)]
+        [DisplayName(@"CompleteProfitLossPerformanceFinalValueImage")]
+        // ReSharper disable once UnusedMember.Global
+        public Image DgvCompleteProfitLossPerformanceValueImage => ImageCompletePerformance;
+
+        /// <summary>
         /// Profit or loss and performance value of all transactions as string with unit
         /// for the DataGridView display
         /// </summary>
@@ -1306,6 +1359,15 @@ namespace SharePortfolioManager.Classes.ShareObjects
         // ReSharper disable once UnusedMember.Global
         public string DgvCompletePurchaseValueMarketValueAsStrUnit => CompletePurchaseValueFinalValueWithProfitLossAsStrUnit;
 
+
+        /// <summary>
+        /// Image which indicates the performance of the portfolio of all transactions for the DataGridView display
+        /// </summary>
+        [Browsable(true)]
+        [DisplayName(@"CompletePortfolioPerformanceFinalValueImage")]
+        // ReSharper disable once UnusedMember.Global
+        public Image DgvCompletePortfolioPerformanceValueImage => ImagePortfolioPerformanceValue;
+
         #endregion Data grid properties
 
         #endregion Properties
@@ -1318,7 +1380,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <summary>
         /// Standard constructor
         /// </summary>
-        public ShareObjectFinalValue(List<Image> imageList, string percentageUnit, string pieceUnit) : base(imageList, percentageUnit, pieceUnit)
+        public ShareObjectFinalValue(List<Image> imageListPrevDayPerformance, List<Image> imageListCompletePerformance, string percentageUnit, string pieceUnit) : base(imageListPrevDayPerformance, imageListCompletePerformance , percentageUnit, pieceUnit)
         {
         }
 
@@ -1344,7 +1406,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="reduction">Reduction of the share</param>
         /// <param name="webSite">Website address of the share</param>
         /// <param name="dailyValuesWebSite">>Website address for the daily values of the share</param>
-        /// <param name="imageListForDayBeforePerformance">Images for the performance indication</param>
+        /// <param name="imageListForDayBeforePerformance">Images for the prev day performance indication</param>
+        /// <param name="imageListForCompletePerformance">Images for the complete performance indication</param>
         /// <param name="regexList">RegEx list for the share</param>
         /// <param name="cultureInfo">Culture of the share</param>
         /// <param name="dividendPayoutInterval">Interval of the dividend payout</param>
@@ -1354,10 +1417,10 @@ namespace SharePortfolioManager.Classes.ShareObjects
             string guid, string wkn, string bank, string orderNumber, string addDateTime, string stockMarketLaunchDate, string name,
             DateTime lastUpdateInternet, DateTime lastUpdateShare,
             decimal price, decimal volume, decimal volumeSold, decimal provision, decimal brokerFee, decimal traderPlaceFee, decimal reduction,
-            string webSite, string dailyValuesWebSite, List<Image> imageListForDayBeforePerformance, RegExList regexList, CultureInfo cultureInfo,
+            string webSite, string dailyValuesWebSite, List<Image> imageListForDayBeforePerformance, List<Image> imageListForCompletePerformance, RegExList regexList, CultureInfo cultureInfo,
             int dividendPayoutInterval, ShareTypes shareType, string document)
             : base(wkn, addDateTime, stockMarketLaunchDate, name, lastUpdateInternet, lastUpdateShare,
-                    price, webSite, dailyValuesWebSite, imageListForDayBeforePerformance,
+                    price, webSite, dailyValuesWebSite, imageListForDayBeforePerformance, imageListForCompletePerformance,
                     regexList, cultureInfo, shareType)
         {
             BrokerageReductionObject tempBrokerageObject = null;
@@ -2705,12 +2768,13 @@ namespace SharePortfolioManager.Classes.ShareObjects
             else
                 PortfolioCompletePerformanceValue = 0;
 
-#if DEBUG_FINAL_SHARE_OBJECT
+#if true // DEBUG_FINAL_SHARE_OBJECT
             Console.WriteLine(@"");
             Console.WriteLine(@"CalculatePerformancePortfolio() / FinalValue");
             Console.WriteLine(@"PortfolioFinalValue: {0}", PortfolioFinalValue);
             Console.WriteLine(@"PortfolioSalePurchaseValue: {0}", PortfolioPurchaseValue);
             Console.WriteLine(@"PortfolioPerformanceValue: {0}", PortfolioPerformanceValue);
+            Console.WriteLine(@"PortfolioCompletePerformanceValue: {0}", PortfolioCompletePerformanceValue);
 #endif
         }
 

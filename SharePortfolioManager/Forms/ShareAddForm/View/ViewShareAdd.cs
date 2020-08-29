@@ -117,9 +117,8 @@ namespace SharePortfolioManager.ShareAddForm.View
         List<ShareObjectMarketValue> ShareObjectListMarketValue { get; set; }
         ShareObjectFinalValue ShareObjectFinalValue { get; set; }
         List<ShareObjectFinalValue> ShareObjectListFinalValue { get; set; }
-
-        List<Image> ImageList { get; }
-
+        List<Image> ImageListPrevDayPerformance { get; }
+        List<Image> ImageListCompletePerformance { get; }
         List<WebSiteRegex> WebSiteRegexList { get; }
 
         string Wkn { get; set; }
@@ -256,7 +255,9 @@ namespace SharePortfolioManager.ShareAddForm.View
             set => ParentWindow.ShareObjectListFinalValue = value;
         }
 
-        public List<Image> ImageList => ParentWindow.ImageList;
+        public List<Image> ImageListPrevDayPerformance => ParentWindow.ImageListPrevDayPerformance;
+
+        public List<Image> ImageListCompletePerformance => ParentWindow.ImageListCompletePerformance;
 
         public List<WebSiteRegex> WebSiteRegexList { get; set; }
 

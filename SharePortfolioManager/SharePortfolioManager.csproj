@@ -452,6 +452,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BuildTools\AssemblyInfoUpdater.exe" />
+    <None Include="Resources\Pic_24\positiv_strong_development_24.png" />
+    <None Include="Resources\Pic_24\positiv_normal_development_24.png" />
+    <None Include="Resources\Pic_24\negativ_strong_development_24.png" />
+    <None Include="Resources\Pic_24\negativ_normal_development_24.png" />
     <None Include="Resources\Pic_16\state_update_yellow_16.png" />
     <None Include="Resources\Pic_16\state_update_orange_16.png" />
     <None Include="Resources\Pic_16\state_update_blue_16.png" />
@@ -473,9 +477,7 @@
     <None Include="Resources\Pic_24\search_info_24.png" />
     <None Include="Resources\Pic_24\search_failed_24.png" />
     <None Include="Resources\Pic_24\search_failed_2_24.png" />
-    <None Include="Resources\Pic_24\positiv_development_24.png" />
     <None Include="Resources\Pic_24\neutral_development_24.png" />
-    <None Include="Resources\Pic_24\negativ_development_24.png" />
     <None Include="Resources\Pic_24\menu_settings_24.png" />
     <None Include="Resources\Pic_24\menu_folder_open_24.png" />
     <None Include="Resources\Pic_24\menu_folder_add_24.png" />

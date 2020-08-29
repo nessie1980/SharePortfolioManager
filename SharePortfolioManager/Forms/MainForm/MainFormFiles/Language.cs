@@ -277,13 +277,13 @@ namespace SharePortfolioManager
                 #region DataGirdView for the market value / complete depot
 
                 if (dgvPortfolioMarketValue.Columns.Count ==
-                    (int) ColumnIndicesPortfolioMarketValue.ECompleteMarketValueColumnIndex + 1)
+                    (int) ColumnIndicesPortfolioMarketValue.EPortfolioMarketValueColumnCount)
                 {
                     OnSetDgvPortfolioMarketValueColumnHeaderCaptions();
                 }
 
                 if (dgvPortfolioFinalValue.Columns.Count ==
-                    (int) ColumnIndicesPortfolioFinalValue.ECompleteFinalValueColumnIndex + 1)
+                    (int) ColumnIndicesPortfolioFinalValue.EPortfolioFinalValueColumnCount)
                 {
                     OnSetDgvPortfolioFinalValueColumnHeaderTexts();
                 }

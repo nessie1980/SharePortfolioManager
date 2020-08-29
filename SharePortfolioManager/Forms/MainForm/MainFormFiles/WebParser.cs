@@ -611,9 +611,7 @@ namespace SharePortfolioManager
 
                                 // Update row with the new ShareObject values
                                 dgvPortfolioFinalValue.Refresh();
-                                OnDgvPortfolioFinalValueImageUpdate(SelectedDataGridViewShareIndex);
                                 dgvPortfolioMarketValue.Refresh();
-                                OnDgvPortfolioMarketValueImageUpdate(SelectedDataGridViewShareIndex);
 
                                 // Refresh the footer
                                 RefreshFooters();

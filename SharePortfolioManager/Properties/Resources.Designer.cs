@@ -373,9 +373,19 @@ namespace SharePortfolioManager.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap negativ_development_24 {
+        internal static System.Drawing.Bitmap negativ_normal_development_24 {
             get {
-                object obj = ResourceManager.GetObject("negativ_development_24", resourceCulture);
+                object obj = ResourceManager.GetObject("negativ_normal_development_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap negativ_strong_development_24 {
+            get {
+                object obj = ResourceManager.GetObject("negativ_strong_development_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -403,9 +413,9 @@ namespace SharePortfolioManager.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap positiv_development_16 {
+        internal static System.Drawing.Bitmap positiv_normal_development_24 {
             get {
-                object obj = ResourceManager.GetObject("positiv_development_16", resourceCulture);
+                object obj = ResourceManager.GetObject("positiv_normal_development_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -413,9 +423,9 @@ namespace SharePortfolioManager.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap positiv_development_24 {
+        internal static System.Drawing.Bitmap positiv_strong_development_24 {
             get {
-                object obj = ResourceManager.GetObject("positiv_development_24", resourceCulture);
+                object obj = ResourceManager.GetObject("positiv_strong_development_24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

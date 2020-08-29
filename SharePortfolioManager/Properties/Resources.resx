@@ -205,20 +205,11 @@
   <data name="negativ_development_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Pic_16\negativ_development_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="negativ_development_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Pic_24\negativ_development_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="neutral_development_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Pic_16\neutral_development_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="neutral_development_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Pic_24\neutral_development_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="positiv_development_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Pic_16\positiv_development_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="positiv_development_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Pic_24\positiv_development_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="search_failed_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Pic_24\search_failed_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -252,5 +243,17 @@
   </data>
   <data name="state_update_yellow_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Pic_16\state_update_yellow_16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="negativ_normal_development_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\negativ_normal_development_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="negativ_strong_development_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\negativ_strong_development_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="positiv_normal_development_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\positiv_normal_development_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="positiv_strong_development_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pic_24\positiv_strong_development_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

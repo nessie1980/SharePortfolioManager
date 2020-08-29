@@ -47,7 +47,8 @@ namespace SharePortfolioManager.ShareAddForm.Model
         ShareObjectMarketValue ShareObjectMarketValue { get; set; }
         ShareObjectFinalValue ShareObjectFinalValue { get; set; }
 
-        List<Image> ImageList { get; set; }
+        List<Image> ImageListPrevDayPerformance { get; set; }
+        List<Image> ImageListCompletePerformance { get; set; }
 
         List<WebSiteRegex> WebSiteRegexList { get; set; }
 
@@ -154,7 +155,9 @@ namespace SharePortfolioManager.ShareAddForm.Model
 
         public List<ShareObjectFinalValue> ShareObjectListFinalValue { get; set; }
 
-        public List<Image> ImageList { get; set; }
+        public List<Image> ImageListPrevDayPerformance { get; set; }
+
+        public List<Image> ImageListCompletePerformance { get; set; }
 
         public List<WebSiteRegex> WebSiteRegexList { get; set; }
 

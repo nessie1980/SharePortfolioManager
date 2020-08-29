@@ -37,6 +37,7 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
+using SharePortfolioManager.Properties;
 
 namespace SharePortfolioManager.Classes.ShareObjects
 {
@@ -97,6 +98,11 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Stores a list of images for the previous day performance visualization
         /// </summary>
         private List<Image> _imageListPrevDayPerformance;
+
+        /// <summary>
+        /// Stores a list of images for the performance visualization of a share of all transactions
+        /// </summary>
+        private List<Image> _imageListCompleteProfitLossPerformance;
 
         /// <summary>
         /// Stores the culture info of the share
@@ -612,6 +618,40 @@ namespace SharePortfolioManager.Classes.ShareObjects
         public static int ObjectCounter => _iObjectCounter / 2;
 
         /// <summary>
+        /// Image for the update of the share
+        /// </summary>
+        [Browsable(false)]
+        public Image UpdateImage
+        {
+            get
+            {
+                switch (InternetUpdateOption)
+                {
+                    case ShareUpdateTypes.Both:
+                    {
+                        return Resources.state_update_16;
+                    }
+                    case ShareUpdateTypes.MarketPrice:
+                    {
+                        return Resources.state_update_blue_16;
+                    }
+                    case ShareUpdateTypes.DailyValues:
+                    {
+                        return Resources.state_update_yellow_16;
+                    }
+                    case ShareUpdateTypes.None:
+                    {
+                        return Resources.state_no_update_16;
+                    }
+                    default:
+                    {
+                        return Resources.state_no_update_16;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// WKN of the share
         /// </summary>
         [Browsable(false)]
@@ -929,6 +969,28 @@ namespace SharePortfolioManager.Classes.ShareObjects
             }
         }
 
+        /// <summary>
+        /// List with the possible images for the performance to a share of all transactions
+        /// </summary>
+        [Browsable(false)]
+        public List<Image> ImageListCompleteProfitLossPerformance
+        {
+            get => _imageListCompleteProfitLossPerformance;
+            set
+            {
+                if (_imageListCompleteProfitLossPerformance == null)
+                {
+                    _imageListCompleteProfitLossPerformance = new List<Image>();
+                }
+                else
+                {
+                    _imageListCompleteProfitLossPerformance.Clear();
+                }
+
+                _imageListCompleteProfitLossPerformance = value;
+            }
+        }
+
         #endregion Current to previous day performance properties
 
         #region Buy value properties
@@ -966,9 +1028,10 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <summary>
         /// Standard constructor
         /// </summary>
-        public ShareObject(List<Image> imageList, string percentageUnit, string pieceUnit)
+        public ShareObject(List<Image> imageListPrevDayPerformance, List<Image> imageListCompletePerformance, string percentageUnit, string pieceUnit)
         {
-            _imageListPrevDayPerformance = imageList;
+            _imageListPrevDayPerformance = imageListPrevDayPerformance;
+            _imageListCompleteProfitLossPerformance = imageListCompletePerformance;
             ImagePrevDayPerformance = _imageListPrevDayPerformance[0];
 
             PercentageUnit = percentageUnit;
@@ -989,14 +1052,15 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="price">Current price of the share</param>
         /// <param name="webSite">Website address of the share</param>
         /// <param name="dailyValuesWebSite">WebSite for the daily values update</param>
-        /// <param name="imageListForDayBeforePerformance">Images for the performance indication</param>
+        /// <param name="imageListForDayBeforePerformance">Images for the prev day performance indication</param>
+        /// <param name="imageListForCompletePerformance">Images for the complete performance indication</param>
         /// <param name="regexList">RegEx list for the share</param>
         /// <param name="cultureInfo">Culture of the share</param>
         /// <param name="shareType">Type of the share</param>
         public ShareObject(
             string wkn, string addDateTime, string stockMarketLaunchDate, string name,
             DateTime lastUpdateInternet, DateTime lastUpdateShare,
-            decimal price, string webSite, string dailyValuesWebSite, List<Image> imageListForDayBeforePerformance,
+            decimal price, string webSite, string dailyValuesWebSite, List<Image> imageListForDayBeforePerformance, List<Image> imageListForCompletePerformance,
             RegExList regexList, CultureInfo cultureInfo,
             ShareTypes shareType)
         {
@@ -1011,6 +1075,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             UpdateWebSiteUrl = webSite;
             DailyValuesUpdateWebSiteUrl = dailyValuesWebSite;
             ImageListPrevDayPerformance = imageListForDayBeforePerformance;
+            ImageListCompleteProfitLossPerformance = imageListForCompletePerformance;
             ImagePrevDayPerformance = ImageListPrevDayPerformance[0];
             RegexList = regexList;
             // ReSharper disable once VirtualMemberCallInConstructor
@@ -1157,19 +1222,28 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 CurPrevDayPriceDifference = CurPrice - PrevPrice;
             }
 
-            if (ImageListPrevDayPerformance == null || ImageListPrevDayPerformance.Count <= 0) return;
+            if (ImageListPrevDayPerformance == null || ImageListPrevDayPerformance.Count <= 0 && ImageListPrevDayPerformance.Count > 6) return;
 
-            if (CurPrevDayPricePerformance < 0)
+            if (CurPrevDayPricePerformance < (decimal)-2.5)
             {
                 ImagePrevDayPerformance = ImageListPrevDayPerformance[1];
             }
-            else if (CurPrevDayPricePerformance == 0)
+            else if (CurPrevDayPricePerformance < 0)
             {
                 ImagePrevDayPerformance = ImageListPrevDayPerformance[2];
+            }
+            else if (CurPrevDayPricePerformance == 0)
+            {
+                ImagePrevDayPerformance = ImageListPrevDayPerformance[3];
+
+            }
+            else if (CurPrevDayPricePerformance < (decimal)2.5)
+            {
+                ImagePrevDayPerformance = ImageListPrevDayPerformance[4];
 
             }
             else
-                ImagePrevDayPerformance = ImageListPrevDayPerformance[3];
+                ImagePrevDayPerformance = ImageListPrevDayPerformance[5];
         }
 
 #endregion Performance methods

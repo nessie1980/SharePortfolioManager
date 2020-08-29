@@ -99,7 +99,8 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
             _model.ShareObjectFinalValue = _view.ShareObjectFinalValue;
             _model.ShareObjectListFinalValue = _view.ShareObjectListFinalValue;
 
-            _model.ImageList = _view.ImageList;
+            _model.ImageListPrevDayPerformance = _view.ImageListPrevDayPerformance;
+            _model.ImageListCompletePerformance = _view.ImageListCompletePerformance;
             _model.WebSiteRegexList = _view.WebSiteRegexList;
             _model.ErrorCode = _view.ErrorCode;
 
@@ -202,7 +203,8 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                         _model.ReductionDec,
                         _model.WebSite,
                         _model.DailyValuesWebSite,
-                        _model.ImageList,
+                        _model.ImageListPrevDayPerformance,
+                        _model.ImageListCompletePerformance,
                         null,
                         _model.CultureInfo,
                         0,
@@ -232,7 +234,8 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                         _model.ReductionDec,
                         _model.WebSite,
                         _model.DailyValuesWebSite,
-                        _model.ImageList,
+                        _model.ImageListPrevDayPerformance,
+                        _model.ImageListCompletePerformance,
                         null,
                         _model.CultureInfo,
                         0,
@@ -269,7 +272,8 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                         _model.ReductionDec,
                         _model.WebSite,
                         _model.DailyValuesWebSite,
-                        _model.ImageList,
+                        _model.ImageListPrevDayPerformance,
+                        _model.ImageListCompletePerformance,
                         null,
                         _model.CultureInfo,
                         _model.ShareType,
@@ -296,7 +300,8 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                         _model.ReductionDec,
                         _model.WebSite,
                         _model.DailyValuesWebSite,
-                        _model.ImageList,
+                        _model.ImageListPrevDayPerformance,
+                        _model.ImageListCompletePerformance,
                         null,
                         _model.CultureInfo,
                         _model.DividendPayoutInterval,

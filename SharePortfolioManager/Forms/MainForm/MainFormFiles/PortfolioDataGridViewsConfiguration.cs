@@ -116,12 +116,14 @@ namespace SharePortfolioManager
                 var dgvLabelMarketValue = new DataGridViewTextBoxColumn();
                 var dgvPerformanceMarketValue = new DataGridViewTextBoxColumn();
                 var dgvMarketValue = new DataGridViewTextBoxColumn();
+                var dgvCompletePerformanceImageMarketValue = new DataGridViewImageColumn();
                 var dgvCompletePerformanceMarketValue = new DataGridViewTextBoxColumn();
                 var dgvCompleteMarketValue = new DataGridViewTextBoxColumn();
 
                 dgvPortfolioFooterMarketValue.Columns.Add(dgvLabelMarketValue);
                 dgvPortfolioFooterMarketValue.Columns.Add(dgvPerformanceMarketValue);
                 dgvPortfolioFooterMarketValue.Columns.Add(dgvMarketValue);
+                dgvPortfolioFooterMarketValue.Columns.Add(dgvCompletePerformanceImageMarketValue);
                 dgvPortfolioFooterMarketValue.Columns.Add(dgvCompletePerformanceMarketValue);
                 dgvPortfolioFooterMarketValue.Columns.Add(dgvCompleteMarketValue);
 
@@ -146,6 +148,7 @@ namespace SharePortfolioManager
                 var dgvLabelFinalValue = new DataGridViewTextBoxColumn();
                 var dgvPerformanceFinalValue = new DataGridViewTextBoxColumn();
                 var dgvFinalValue = new DataGridViewTextBoxColumn();
+                var dgvCompletePerformanceImageFinalValue = new DataGridViewImageColumn();
                 var dgvCompletePerformanceFinalValue = new DataGridViewTextBoxColumn();
                 var dgvCompleteFinalValue = new DataGridViewTextBoxColumn();
 
@@ -154,6 +157,7 @@ namespace SharePortfolioManager
                 dgvPortfolioFooterFinalValue.Columns.Add(dgvLabelFinalValue);
                 dgvPortfolioFooterFinalValue.Columns.Add(dgvPerformanceFinalValue);
                 dgvPortfolioFooterFinalValue.Columns.Add(dgvFinalValue);
+                dgvPortfolioFooterFinalValue.Columns.Add(dgvCompletePerformanceImageFinalValue);
                 dgvPortfolioFooterFinalValue.Columns.Add(dgvCompletePerformanceFinalValue);
                 dgvPortfolioFooterFinalValue.Columns.Add(dgvCompleteFinalValue);
 

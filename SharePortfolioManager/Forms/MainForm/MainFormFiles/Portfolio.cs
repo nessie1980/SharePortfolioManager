@@ -321,14 +321,16 @@ namespace SharePortfolioManager
                         {
                             // Add a new share to the market list
                             ShareObjectListMarketValue.Add(new ShareObjectMarketValue(
-                                ImageList,
+                                ImageListPrevDayPerformance,
+                                ImageListCompletePerformance,
                                 Language.GetLanguageTextByXPath(@"/PercentageUnit", LanguageName),
                                 Language.GetLanguageTextByXPath(@"/PieceUnit", LanguageName)
                             ));
 
                             // Add a new share to the final list
                             ShareObjectListFinalValue.Add(new ShareObjectFinalValue(
-                                ImageList,
+                                ImageListPrevDayPerformance,
+                                ImageListCompletePerformance,
                                 Language.GetLanguageTextByXPath(@"/PercentageUnit", LanguageName),
                                 Language.GetLanguageTextByXPath(@"/PieceUnit", LanguageName)
                             ));
