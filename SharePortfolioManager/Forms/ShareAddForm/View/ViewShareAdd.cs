@@ -80,6 +80,7 @@ namespace SharePortfolioManager.ShareAddForm.View
         DailyValuesWebSiteEmpty,
         DailyValuesWebSiteWrongFormat,
         DailyValuesWebSiteExists,
+        DocumentBrowseFailed,
         DocumentDirectoryDoesNotExists,
         DocumentFileDoesNotExists,
         WebSiteRegexNotFound
@@ -110,6 +111,7 @@ namespace SharePortfolioManager.ShareAddForm.View
     {
         event EventHandler ShareAddEventHandler;
         event EventHandler FormatInputValuesEventHandler;
+        event EventHandler DocumentBrowseEventHandler;
 
         ShareAddErrorCode ErrorCode { get; set; }
 
@@ -120,6 +122,10 @@ namespace SharePortfolioManager.ShareAddForm.View
         List<Image> ImageListPrevDayPerformance { get; }
         List<Image> ImageListCompletePerformance { get; }
         List<WebSiteRegex> WebSiteRegexList { get; }
+
+        Logger Logger { get; }
+        Language Language { get; }
+        string LanguageName { get; }
 
         string Wkn { get; set; }
         string ShareName { get; set; }
@@ -146,6 +152,8 @@ namespace SharePortfolioManager.ShareAddForm.View
 
         DialogResult ShowDialog();
         void AddFinish();
+
+        void DocumentBrowseFinish();
     }
 
     internal partial class ViewShareAdd : Form, IViewShareAdd
@@ -203,11 +211,11 @@ namespace SharePortfolioManager.ShareAddForm.View
 
         public FrmMain ParentWindow { get; set; }
 
-        public Logger Logger { get; set; }
+        public Logger Logger { get; internal set; }
 
-        public Language Language { get; set; }
+        public Language Language { get; internal set; }
 
-        public string LanguageName { get; set; }
+        public string LanguageName { get; internal set; }
 
         public string ParsingFileName { get; set; }
 
@@ -322,7 +330,7 @@ namespace SharePortfolioManager.ShareAddForm.View
         {
             get
             {
-                var cultureName = cboBoxCultureInfo.SelectedItem.ToString();
+                var cultureName = cbxBoxCultureInfo.SelectedItem.ToString();
                 return Helper.GetCultureByName(cultureName);
             }
         }
@@ -865,6 +873,50 @@ namespace SharePortfolioManager.ShareAddForm.View
                (int)FrmMain.EComponentLevels.Application);
         }
 
+        public void DocumentBrowseFinish()
+        {
+            // Set messages
+            var strMessage = string.Empty;
+            var clrMessage = Color.Black;
+            const FrmMain.EStateLevels stateLevel = FrmMain.EStateLevels.Info;
+
+            switch (ErrorCode)
+            {
+                case ShareAddErrorCode.DocumentBrowseFailed:
+                {
+                    txtBoxDocument.Text = @"-";
+
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ChoseDocumentFailed",
+                            LanguageName);
+                } break;
+                default:
+                {
+                    if (_parsingBackgroundWorker.IsBusy)
+                    {
+                        _parsingBackgroundWorker.CancelAsync();
+                    }
+                    else
+                    {
+                        ResetValues();
+                        _parsingBackgroundWorker.RunWorkerAsync();
+                    }
+
+                    //webBrowser1.Navigate(temp.DocumentAsStr);
+                    Helper.WebBrowserPdf.Reload(webBrowser1, txtBoxDocument.Text);
+                } break;
+            }
+
+            Helper.AddStatusMessage(toolStripStatusLabelMessageaAddShare,
+                strMessage,
+                Language,
+                LanguageName,
+                clrMessage,
+                Logger,
+                (int)stateLevel,
+                (int)FrmMain.EComponentLevels.Application);
+        }
+
         #endregion IViewMember
 
         #region Event Members
@@ -872,6 +924,7 @@ namespace SharePortfolioManager.ShareAddForm.View
         public event PropertyChangedEventHandler PropertyChanged;
         public event EventHandler FormatInputValuesEventHandler;
         public event EventHandler ShareAddEventHandler;
+        public event EventHandler DocumentBrowseEventHandler;
 
         #endregion Event Members
 
@@ -937,6 +990,9 @@ namespace SharePortfolioManager.ShareAddForm.View
 
                 Text = Language.GetLanguageTextByXPath(@"/AddFormShare/Caption", LanguageName);
                 grpBoxGeneral.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Caption", LanguageName);
+                grpBoxDocumentPreview.Text =
+                    Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxDocumentPreview/Caption", LanguageName);
+
                 lblWkn.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/WKN", LanguageName);
                 lblName.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Name", LanguageName);
                 lblStockMarketLaunchDate.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/StockMarketLaunchDate", LanguageName);
@@ -996,12 +1052,12 @@ namespace SharePortfolioManager.ShareAddForm.View
                 foreach (var value in listCultures)
                 {
                     if (value != "")
-                        cboBoxCultureInfo.Items.Add(value);
+                        cbxBoxCultureInfo.Items.Add(value);
                 }
 
                 var cultureInfo = CultureInfo.CurrentCulture;
 
-                cboBoxCultureInfo.SelectedIndex = cboBoxCultureInfo.FindStringExact(cultureInfo.Name);
+                cbxBoxCultureInfo.SelectedIndex = cbxBoxCultureInfo.FindStringExact(cultureInfo.Name);
 
                 #endregion Get culture info
 
@@ -1072,33 +1128,10 @@ namespace SharePortfolioManager.ShareAddForm.View
         /// <param name="e">EventArgs</param>
         private void OnBtnShareDocumentBrowse_Click(object sender, EventArgs e)
         {
-            try
-            {
-                toolStripStatusLabelMessageAddShareDocumentParsing.Text = string.Empty;
-                toolStripStatusLabelMessageaAddShare.Text = string.Empty;
+            toolStripStatusLabelMessageAddShareDocumentParsing.Text = string.Empty;
+            toolStripStatusLabelMessageaAddShare.Text = string.Empty;
 
-                _parsingStartAllow = true;
-
-                var strCurrentFile = txtBoxDocument.Text;
-
-                const string strFilter = "pdf (*.pdf)|*.pdf|txt (*.txt)|.txt|doc (*.doc)|.doc|docx (*.docx)|.docx";
-                if (Helper.SetDocument(
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/OpenFileDialog/Title", LanguageName), strFilter,
-                        ref strCurrentFile) == DialogResult.OK)
-                {
-                    txtBoxDocument.Text = string.Empty;
-                    txtBoxDocument.Text = strCurrentFile;
-                }
-            }
-            catch (Exception ex)
-            {
-                Helper.AddStatusMessage(toolStripStatusLabelMessageaAddShare,
-                    Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ChoseDocumentFailed", LanguageName),
-                    Language, LanguageName,
-                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
-                    (int) FrmMain.EComponentLevels.Application,
-                    ex);
-            }
+            DocumentBrowseEventHandler?.Invoke(this, new EventArgs());
         }
 
         /// <summary>
@@ -1328,6 +1361,9 @@ namespace SharePortfolioManager.ShareAddForm.View
                 }
 
                 _parsingStartAllow = false;
+
+                //webBrowser1.Navigate(temp.DocumentAsStr);
+                Helper.WebBrowserPdf.Reload(webBrowser1, txtBoxDocument.Text);
             }
             catch (Exception ex)
             {
@@ -1341,6 +1377,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 grpBoxGeneral.Enabled = true;
 
                 DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                _parsingStartAllow = false;
                 _parsingThreadFinished = true;
                 _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
             }
@@ -1390,31 +1427,33 @@ namespace SharePortfolioManager.ShareAddForm.View
                 DocumentTypeParser = null;
                 DictionaryParsingResult = null;
 
-                Helper.RunProcess(Helper.PdfConverterApplication,
+                Console.WriteLine(@"File: {0}", txtBoxDocument.Text);
+
+                Helper.RunProcess(Helper.PdfToTextApplication,
                     $"-simple \"{txtBoxDocument.Text}\" {Helper.ParsingDocumentFileName}");
 
-                // This text is added only once to the file.
-                if (File.Exists(Helper.ParsingDocumentFileName))
-                {
-                    ParsingText = File.ReadAllText(Helper.ParsingDocumentFileName, Encoding.Default);
+                ParsingText = File.ReadAllText(Helper.ParsingDocumentFileName, Encoding.Default);
 
-                    DocumentTypeParsing();
-                }
+                // Start document parsing
+                DocumentTypeParsing();
 
                 while (!_parsingThreadFinished)
                 {
                     Thread.Sleep(100);
                 }
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException)
             {
-                Helper.ShowExceptionMessage(ex);
-
+                // Show exception is not allowed here (THREAD)
+                // Only do progress report progress
+                _parsingThreadFinished = true;
                 _parsingBackgroundWorker.ReportProgress((int) ParsingErrorCode.ParsingDocumentFailed);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Helper.ShowExceptionMessage(ex);
+                // Show exception is not allowed here (THREAD)
+                // Only do progress report progress
+                _parsingThreadFinished = true;
                 _parsingBackgroundWorker.ReportProgress((int) ParsingErrorCode.ParsingDocumentFailed);
             }
         }
@@ -1461,10 +1500,10 @@ namespace SharePortfolioManager.ShareAddForm.View
                     _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingParsingDocumentError);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Helper.ShowExceptionMessage(ex);
-
+                // Show exception is not allowed here (THREAD)
+                // Only do progress report progress
                 _parsingThreadFinished = true;
                 _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingFailed);
             }
@@ -1490,100 +1529,101 @@ namespace SharePortfolioManager.ShareAddForm.View
                         switch (e.ParserInfoState.LastErrorCode)
                         {
                             case DataTypes.ParserErrorCodes.Finished:
-                                {
-                                    //if (e.ParserInfoState.SearchResult != null)
-                                    //{
-                                    //    foreach (var result in e.ParserInfoState.SearchResult)
-                                    //    {
-                                    //        Console.Write(@"{0}:", result.Key);
-                                    //        if (result.Value != null && result.Value.Count > 0)
-                                    //            Console.WriteLine(@"{0}", result.Value[0]);
-                                    //        else
-                                    //            Console.WriteLine(@"-");
-                                    //    }
-                                    //}
-                                    break;
-                                }
+                            {
+                                //if (e.ParserInfoState.SearchResult != null)
+                                //{
+                                //    foreach (var result in e.ParserInfoState.SearchResult)
+                                //    {
+                                //        Console.Write(@"{0}:", result.Key);
+                                //        if (result.Value != null && result.Value.Count > 0)
+                                //            Console.WriteLine(@"{0}", result.Value[0]);
+                                //        else
+                                //            Console.WriteLine(@"-");
+                                //    }
+                                //}
+                                break;
+                            }
                             case DataTypes.ParserErrorCodes.SearchFinished:
-                                {
-                                    break;
-                                }
+                            {
+                                break;
+                            }
                             case DataTypes.ParserErrorCodes.SearchRunning:
-                                {
-                                    break;
-                                }
+                            {
+                                break;
+                            }
                             case DataTypes.ParserErrorCodes.SearchStarted:
-                                {
-                                    break;
-                                }
+                            {
+                                break;
+                            }
                             case DataTypes.ParserErrorCodes.ContentLoadFinished:
-                                {
-                                    break;
-                                }
+                            {
+                                break;
+                            }
                             case DataTypes.ParserErrorCodes.ContentLoadStarted:
-                                {
-                                    break;
-                                }
+                            {
+                                break;
+                            }
                             case DataTypes.ParserErrorCodes.Started:
-                                {
-                                    break;
-                                }
+                            {
+                                break;
+                            }
                             case DataTypes.ParserErrorCodes.Starting:
-                                {
-                                    break;
-                                }
+                            {
+                                break;
+                            }
                             case DataTypes.ParserErrorCodes.NoError:
-                                {
-                                    break;
-                                }
+                            {
+                                break;
+                            }
                             case DataTypes.ParserErrorCodes.StartFailed:
-                                {
-                                    break;
-                                }
+                            {
+                                break;
+                            }
                             case DataTypes.ParserErrorCodes.BusyFailed:
-                                {
-                                    break;
-                                }
+                            {
+                                break;
+                            }
                             case DataTypes.ParserErrorCodes.InvalidWebSiteGiven:
-                                {
-                                    break;
-                                }
+                            {
+                                break;
+                            }
                             case DataTypes.ParserErrorCodes.NoRegexListGiven:
-                                {
-                                    break;
-                                }
+                            {
+                                break;
+                            }
                             case DataTypes.ParserErrorCodes.NoWebContentLoaded:
-                                {
-                                    break;
-                                }
+                            {
+                                break;
+                            }
                             case DataTypes.ParserErrorCodes.ParsingFailed:
-                                {
-                                    break;
-                                }
+                            {
+                                break;
+                            }
                             case DataTypes.ParserErrorCodes.CancelThread:
-                                {
-                                    break;
-                                }
+                            {
+                                break;
+                            }
                             case DataTypes.ParserErrorCodes.WebExceptionOccured:
-                                {
-                                    break;
-                                }
+                            {
+                                break;
+                            }
                             case DataTypes.ParserErrorCodes.ExceptionOccured:
-                                {
-                                    break;
-                                }
+                            {
+                                break;
+                            }
                         }
 
                         if (DocumentTypeParser.ParserErrorCode > 0)
                             Thread.Sleep(100);
 
                         // Check if a error occurred or the process has been finished
-                        if (e.ParserInfoState.LastErrorCode < 0 || e.ParserInfoState.LastErrorCode == DataTypes.ParserErrorCodes.Finished)
+                        if (e.ParserInfoState.LastErrorCode < 0 ||
+                            e.ParserInfoState.LastErrorCode == DataTypes.ParserErrorCodes.Finished)
                         {
                             if (e.ParserInfoState.LastErrorCode < 0)
                             {
                                 // Set fail message
-                                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingFailed);
+                                _parsingBackgroundWorker.ReportProgress((int) ParsingErrorCode.ParsingFailed);
                             }
                             else
                             {
@@ -1593,8 +1633,8 @@ namespace SharePortfolioManager.ShareAddForm.View
                                         e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
                                             .BankIdentifierTagName) ||
                                         e.ParserInfoState.SearchResult.ContainsKey(DocumentParsingConfiguration
-                                            .BuyIdentifierTagName) 
-                                        )
+                                            .BuyIdentifierTagName)
+                                    )
                                 )
                                 {
                                     // Check if the bank identifier has been found and is the right one
@@ -1604,8 +1644,9 @@ namespace SharePortfolioManager.ShareAddForm.View
                                         &&
                                         DocumentParsingConfiguration
                                             .BankRegexList[_bankCounter].BankIdentifier ==
-                                        e.ParserInfoState.SearchResult[DocumentParsingConfiguration.BankIdentifierTagName][0]
-                                        )
+                                        e.ParserInfoState.SearchResult[
+                                            DocumentParsingConfiguration.BankIdentifierTagName][0]
+                                    )
                                         _bankIdentifierFound = true;
                                     // Check if the buy identifier has been found
                                     if (e.ParserInfoState.SearchResult != null &&
@@ -1636,12 +1677,12 @@ namespace SharePortfolioManager.ShareAddForm.View
                                                     DocumentParsingConfiguration
                                                         .BankRegexList[_bankCounter]
                                                         .DictionaryDocumentRegex[
-                                                            DocumentParsingConfiguration.DocumentTypeBuy].
-                                                        DocumentRegexList
+                                                            DocumentParsingConfiguration.DocumentTypeBuy]
+                                                        .DocumentRegexList
                                                 );
                                                 DocumentTypeParser.StartParsing();
                                             }
-                                            break;
+                                                break;
                                             case DocumentParsingConfiguration.DocumentTypes.SaleDocument:
                                             {
                                                 var parsingValues = DocumentTypeParser.ParsingValues;
@@ -1651,12 +1692,12 @@ namespace SharePortfolioManager.ShareAddForm.View
                                                     DocumentParsingConfiguration
                                                         .BankRegexList[_bankCounter]
                                                         .DictionaryDocumentRegex[
-                                                            DocumentParsingConfiguration.DocumentTypeSale].
-                                                        DocumentRegexList
+                                                            DocumentParsingConfiguration.DocumentTypeSale]
+                                                        .DocumentRegexList
                                                 );
                                                 DocumentTypeParser.StartParsing();
                                             }
-                                            break;
+                                                break;
                                             case DocumentParsingConfiguration.DocumentTypes.DividendDocument:
                                             {
                                                 var parsingValues = DocumentTypeParser.ParsingValues;
@@ -1666,12 +1707,12 @@ namespace SharePortfolioManager.ShareAddForm.View
                                                     DocumentParsingConfiguration
                                                         .BankRegexList[_bankCounter]
                                                         .DictionaryDocumentRegex[
-                                                            DocumentParsingConfiguration.DocumentTypeDividend].
-                                                        DocumentRegexList
+                                                            DocumentParsingConfiguration.DocumentTypeDividend]
+                                                        .DocumentRegexList
                                                 );
                                                 DocumentTypeParser.StartParsing();
                                             }
-                                            break;
+                                                break;
                                             case DocumentParsingConfiguration.DocumentTypes.BrokerageDocument:
                                             {
                                                 var parsingValues = DocumentTypeParser.ParsingValues;
@@ -1681,17 +1722,17 @@ namespace SharePortfolioManager.ShareAddForm.View
                                                     DocumentParsingConfiguration
                                                         .BankRegexList[_bankCounter]
                                                         .DictionaryDocumentRegex[
-                                                            DocumentParsingConfiguration.DocumentTypeBrokerage].
-                                                        DocumentRegexList
+                                                            DocumentParsingConfiguration.DocumentTypeBrokerage]
+                                                        .DocumentRegexList
                                                 );
-                                                    DocumentTypeParser.StartParsing();
+                                                DocumentTypeParser.StartParsing();
                                             }
-                                            break;
+                                                break;
                                             default:
                                             {
                                                 _documentTypNotImplemented = true;
                                             }
-                                            break;
+                                                break;
                                         }
                                     }
                                 }
@@ -1722,9 +1763,9 @@ namespace SharePortfolioManager.ShareAddForm.View
                                         _parsingThreadFinished = true;
                                     }
                                     else if (_buyIdentifierFound == false)
-                                    { 
+                                    {
                                         _parsingBackgroundWorker.ReportProgress(
-                                            (int)ParsingErrorCode.ParsingDocumentTypeIdentifierFailed);
+                                            (int) ParsingErrorCode.ParsingDocumentTypeIdentifierFailed);
 
                                         DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
                                         _parsingThreadFinished = true;
@@ -1756,23 +1797,25 @@ namespace SharePortfolioManager.ShareAddForm.View
                             }
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        Helper.ShowExceptionMessage(ex);
+                        // Show exception is not allowed here (THREAD)
+                        // Only do progress report progress
+                        _parsingThreadFinished = true;
+                        _parsingBackgroundWorker.ReportProgress((int) ParsingErrorCode.ParsingDocumentFailed);
 
                         DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
-                        _parsingThreadFinished = true;
-                        _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Helper.ShowExceptionMessage(ex);
-
-                DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                // Show exception is not allowed here (THREAD)
+                // Only do progress report progress
                 _parsingThreadFinished = true;
                 _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
+
+                DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
             }
         }
 
@@ -1824,7 +1867,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 }
                 case (int)ParsingErrorCode.ParsingBankIdentifierFailed:
                 {
-                    picBoxDepotNumberParseState.Image = Resources.search_failed_24;
+                    //picBoxDepotNumberParseState.Image = Resources.search_failed_24;
 
                         toolStripStatusLabelMessageAddShareDocumentParsing.ForeColor = Color.Red;
                     toolStripStatusLabelMessageAddShareDocumentParsing.Text =
@@ -1870,6 +1913,10 @@ namespace SharePortfolioManager.ShareAddForm.View
 
         private void OnDocumentParsingRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            // Delete old parsing text file
+            if (File.Exists(Helper.ParsingDocumentFileName))
+                File.Delete(Helper.ParsingDocumentFileName);
+
             if (DictionaryParsingResult != null)
             {
                 #region Check which values are found
@@ -2088,6 +2135,7 @@ namespace SharePortfolioManager.ShareAddForm.View
         private void ResetValues()
         {
             // Reset state pictures
+            picBoxDepotNumberParseState.Image = Resources.empty_arrow;
             picBoxOrderNumberParseState.Image = Resources.empty_arrow;
             picBoxWknParseState.Image = Resources.empty_arrow;
             picBoxNameParseState.Image = Resources.empty_arrow;
@@ -2103,10 +2151,16 @@ namespace SharePortfolioManager.ShareAddForm.View
             // Reset textboxes
             txtBoxWkn.Text = string.Empty;
             txtBoxName.Text = string.Empty;
-            txtBoxOrderNumber.Text = string.Empty;
-            txtBoxWebSite.Text = string.Empty;
+            dateTimePickerStockMarketLaunch.MinDate = DateTime.MinValue;
+            dateTimePickerStockMarketLaunch.Value = dateTimePickerStockMarketLaunch.MinDate;
+            cbxShareType.SelectedIndex = 0;
+            cbxDividendPayoutInterval.SelectedIndex = 0;
             dateTimePickerDate.Value = DateTime.Now;
             dateTimePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+            txtBoxWebSite.Text = string.Empty;
+            txtBoxDailyValuesWebSite.Text = string.Empty;
+            cbxDepotNumber.SelectedIndex = 0;
+            txtBoxOrderNumber.Text = string.Empty;
             txtBoxVolume.Text = string.Empty;
             txtBoxSharePrice.Text = string.Empty;
             txtBoxProvision.Text = string.Empty;

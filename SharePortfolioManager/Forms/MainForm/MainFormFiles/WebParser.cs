@@ -651,7 +651,6 @@ namespace SharePortfolioManager
                                     )
                                 )
                                 {
-
                                     if (SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1)
                                         timerStartNextShareUpdate.Enabled = true;
 
@@ -918,8 +917,8 @@ namespace SharePortfolioManager
                             dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
 
                             // Scroll to the selected row
-                            Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex,
-                                LastFirstDisplayedRowIndex, true);
+                            //Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex,
+                            //    LastFirstDisplayedRowIndex, true);
                         }
 
                         if (
@@ -1057,7 +1056,27 @@ namespace SharePortfolioManager
                                         timerStartNextShareUpdate.Enabled = true;
 
                                     if (SelectedDataGridViewShareIndex == ShareObject.ObjectCounter - 1)
+                                    {
+                                        // This is done for the data grid view scrolling
+                                        // Clear current selection
+                                        dgvPortfolioMarketValue.ClearSelection();
+
+                                        if (ShareObject.ObjectCounter > 1)
+                                        {
+                                            SelectedDataGridViewShareIndex--;
+
+                                            // Scroll to the selected row
+                                            Helper.ScrollDgvToIndex(dgvPortfolioFinalValue,
+                                                SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
+
+                                            SelectedDataGridViewShareIndex++;
+                                        }
+
+                                        // Select the new share update
+                                        dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+
                                         timerStatusMessageClear.Enabled = true;
+                                    }
                                 }
                             }
                             else

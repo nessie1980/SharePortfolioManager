@@ -33,7 +33,6 @@ using SharePortfolioManager.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -156,7 +155,7 @@ namespace SharePortfolioManager.BuysForm.View
         /// Stores the last focused date time picker or text box
         /// </summary>
         private Control _focusedControl;
-
+        
         #endregion Fields
 
         #region Parsing Fields
@@ -231,6 +230,11 @@ namespace SharePortfolioManager.BuysForm.View
         #endregion Flags
 
         public DataGridView SelectedDataGridView { get; internal set; }
+
+        /// <summary>
+        /// Flag if the show of the buy is running ( true ) or finished ( false )
+        /// </summary>
+        public bool ShowBuysFlag;
 
         #region Parsing
 
@@ -879,8 +883,24 @@ namespace SharePortfolioManager.BuysForm.View
                     strMessage =
                         Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ChoseDocumentFailed",
                             LanguageName);
-                    break;
-                }
+                } break;
+                default:
+                {
+                    if (_parsingBackgroundWorker.IsBusy)
+                    {
+                        _parsingBackgroundWorker.CancelAsync();
+                    }
+                    else
+                    {
+                        _parsingStartAllow = true;
+
+                        ResetValues();
+                        _parsingBackgroundWorker.RunWorkerAsync();
+                    }
+
+                    //webBrowser1.Navigate(temp.DocumentAsStr);
+                    Helper.WebBrowserPdf.Reload(webBrowser1, txtBoxDocument.Text);
+                } break;
             }
 
             Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
@@ -966,6 +986,8 @@ namespace SharePortfolioManager.BuysForm.View
                 Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Caption", LanguageName);
                 grpBoxAdd.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Add_Caption", LanguageName);
+                grpBoxDocumentPreview.Text =
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxDocumentPreview/Caption", LanguageName);
                 grpBoxBuys.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxBuy/Caption",
                         LanguageName);
@@ -1089,6 +1111,9 @@ namespace SharePortfolioManager.BuysForm.View
         /// <param name="e">FormClosingEventArgs</param>
         private void ShareBuysEdit_FormClosing(object sender, FormClosingEventArgs e)
         {
+            // Cleanup web browser
+            Helper.WebBrowserPdf.CleanUp(webBrowser1);
+
             // Check if a buy change must be saved
             DialogResult = SaveFlag ? DialogResult.OK : DialogResult.Cancel;
         }
@@ -1137,6 +1162,7 @@ namespace SharePortfolioManager.BuysForm.View
             txtBoxTraderPlaceFee.Enabled = true;
             txtBoxReduction.Text = string.Empty;
             txtBoxReduction.Enabled = true;
+
             // Do not reset document value if a parsing is running
             if (!_parsingStartAllow)
             {
@@ -1171,6 +1197,12 @@ namespace SharePortfolioManager.BuysForm.View
             // Select overview tab
             if (tabCtrlBuys.TabPages.Count > 0)
                 tabCtrlBuys.SelectTab(0);
+
+            //Reset selected GUI
+            SelectedGuid = string.Empty;
+
+            //webBrowser1.Navigate(temp.DocumentAsStr);
+            Helper.WebBrowserPdf.Reload(webBrowser1, txtBoxDocument.Text);
 
             dateTimePickerDate.Focus();
 
@@ -1563,7 +1595,15 @@ namespace SharePortfolioManager.BuysForm.View
             {
                 if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
 
-                _parsingStartAllow = true;
+                if (ShowBuysFlag) return;
+
+                // Check if the parsing should be allowed
+                if (ShareObjectFinalValue.AllBuyEntries.IsLastBuy(SelectedGuid) &&
+                    !ShareObjectFinalValue.AllBuyEntries.IsPartOfASale(SelectedGuid) || SelectedGuid == string.Empty
+                )
+                    _parsingStartAllow = true;
+                else
+                    _parsingStartAllow = false;
 
                 var files = (string[]) e.Data.GetData(DataFormats.FileDrop);
                 if (files.Length <= 0 || files.Length > 1) return;
@@ -1573,7 +1613,7 @@ namespace SharePortfolioManager.BuysForm.View
                 // Check if the document is a PDF
                 var extenstion = Path.GetExtension(txtBoxDocument.Text);
 
-                if (string.Compare(extenstion, ".PDF", StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(extenstion, ".PDF", StringComparison.OrdinalIgnoreCase) == 0 && _parsingStartAllow)
                 {
                     if (_parsingBackgroundWorker.IsBusy)
                     {
@@ -1587,6 +1627,8 @@ namespace SharePortfolioManager.BuysForm.View
                 }
 
                 _parsingStartAllow = false;
+
+                Helper.WebBrowserPdf.Reload(webBrowser1, txtBoxDocument.Text);
             }
             catch (Exception ex)
             {
@@ -1600,6 +1642,7 @@ namespace SharePortfolioManager.BuysForm.View
                 grpBoxBuys.Enabled = true;
 
                 DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                _parsingStartAllow = false;
                 _parsingThreadFinished = true;
                 _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
             }
@@ -1768,8 +1811,6 @@ namespace SharePortfolioManager.BuysForm.View
             toolStripStatusLabelMessageBuyEdit.Text = string.Empty;
             toolStripStatusLabelMessageBuyDocumentParsing.Text = string.Empty;
 
-            _parsingStartAllow = true;
-
             DocumentBrowseEventHandler?.Invoke(this, new EventArgs());
         }
 
@@ -1806,6 +1847,9 @@ namespace SharePortfolioManager.BuysForm.View
         {
             try
             {
+                // Set flag that the show buy is running
+                ShowBuysFlag = true;
+
                 // Reset tab control
                 foreach (TabPage tabPage in tabCtrlBuys.TabPages)
                 {
@@ -1996,6 +2040,9 @@ namespace SharePortfolioManager.BuysForm.View
                 }
 
                 tabCtrlBuys.TabPages[0].Select();
+
+                // Set flag that the show buy is finished
+                ShowBuysFlag = false;
             }
             catch (Exception ex)
             {
@@ -2179,6 +2226,7 @@ namespace SharePortfolioManager.BuysForm.View
                     {
                         if (view.Rows[0].Cells.Count > 0)
                             view.Rows[0].Selected = true;
+
                     }
 
                     view.Focus();
@@ -2539,6 +2587,77 @@ namespace SharePortfolioManager.BuysForm.View
                     // Reset stored DataGridView instance
                     SelectedDataGridView = null;
                 }
+
+                // Check if the file still exists or no document is set
+                if (File.Exists(txtBoxDocument.Text) || txtBoxDocument.Text == @"")
+                {
+                    Helper.WebBrowserPdf.Reload(webBrowser1, txtBoxDocument.Text);
+                }
+                else
+                {
+                    if (ShowBuysFlag) return;
+
+                    var strCaption =
+                        Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
+                            (int) EOwnMessageBoxInfoType.Error];
+                    var strMessage =
+                        Language.GetLanguageTextByXPath(
+                            @"/MessageBoxForm/Content/DocumentDoesNotExistDelete",
+                            LanguageName);
+                    var strOk =
+                        Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Yes",
+                            LanguageName);
+                    var strCancel =
+                        Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/No",
+                            LanguageName);
+
+                    var messageBox = new OwnMessageBox(strCaption, strMessage, strOk,
+                        strCancel);
+                    
+                    // Check if the user pressed cancel
+                    if (messageBox.ShowDialog() == DialogResult.Cancel) return;
+
+                    // Get the current selected row
+                    var curItem = ((DataGridView) sender).SelectedRows;
+                    // Get Guid of the selected buy item
+                    var strGuid = curItem[0].Cells[0].Value.ToString();
+
+                    // Check if a document is set
+                    if (curItem[0].Cells[((DataGridView) sender).ColumnCount - 1].Value == null) return;
+
+                    // Get doc from the buy with the Guid
+                    foreach (var temp in ShareObjectFinalValue.AllBuyEntries.GetAllBuysOfTheShare())
+                    {
+                        // Check if the buy Guid is the same as the Guid of the clicked buy item
+                        if (temp.Guid != strGuid) continue;
+
+                        // Remove move document from the buy objects
+                        if (ShareObjectFinalValue.SetBuyDocument(strGuid, temp.Date, string.Empty) &&
+                            ShareObjectMarketValue.SetBuyDocument(strGuid, temp.Date, string.Empty))
+                        {
+                            // Set flag to save the share object.
+                            SaveFlag = true;
+
+                            OnShowBuys();
+
+                            Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
+                                Language.GetLanguageTextByXPath(
+                                    @"/AddEditFormBuy/StateMessages/EditSuccess", LanguageName),
+                                Language, LanguageName,
+                                Color.Black, Logger, (int) FrmMain.EStateLevels.Info,
+                                (int) FrmMain.EComponentLevels.Application);
+                        }
+                        else
+                        {
+                            Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
+                                Language.GetLanguageTextByXPath(
+                                    @"/AddEditFormBuy/Errors/EditFailed", LanguageName),
+                                Language, LanguageName,
+                                Color.Red, Logger, (int) FrmMain.EStateLevels.Error,
+                                (int) FrmMain.EComponentLevels.Application);
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -2600,8 +2719,10 @@ namespace SharePortfolioManager.BuysForm.View
                     {
                         // Check if the file still exists
                         if (File.Exists(temp.DocumentAsStr))
-                            // Open the file
-                            Process.Start(temp.DocumentAsStr);
+                        {
+                            //webBrowser1.Navigate(temp.DocumentAsStr);
+                            Helper.WebBrowserPdf.Reload(webBrowser1, temp.DocumentAsStr);
+                        }
                         else
                         {
                             var strCaption =
@@ -2691,31 +2812,33 @@ namespace SharePortfolioManager.BuysForm.View
                 DocumentTypeParser = null;
                 DictionaryParsingResult = null;
 
-                Helper.RunProcess($"{Helper.PdfConverterApplication}", $"-simple \"{txtBoxDocument.Text}\" {Helper.ParsingDocumentFileName}");
+                Helper.RunProcess($"{Helper.PdfToTextApplication}",
+                    $"-simple \"{txtBoxDocument.Text}\" {Helper.ParsingDocumentFileName}");
 
-                // This text is added only once to the file.
-                if (File.Exists(Helper.ParsingDocumentFileName))
-                {
-                    ParsingText = File.ReadAllText(Helper.ParsingDocumentFileName, Encoding.Default);
+                ParsingText = File.ReadAllText(Helper.ParsingDocumentFileName, Encoding.Default);
 
-                    DocumentTypeParsing();
-                }
+                // Start document parsing
+                DocumentTypeParsing();
 
                 while (!_parsingThreadFinished)
                 {
                     Thread.Sleep(100);
                 }
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException)
             {
-                Helper.ShowExceptionMessage(ex);
-
+                // Show exception is not allowed here (THREAD)
+                // Only do progress report progress
+                _parsingThreadFinished = true;
+                _parsingStartAllow = false;
                 _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Helper.ShowExceptionMessage(ex);
-
+                // Show exception is not allowed here (THREAD)
+                // Only do progress report progress
+                _parsingThreadFinished = true;
+                _parsingStartAllow = false;
                 _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
             }
         }
@@ -2762,11 +2885,12 @@ namespace SharePortfolioManager.BuysForm.View
                     _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingParsingDocumentError);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Helper.ShowExceptionMessage(ex);
-
+                // Show exception is not allowed here (THREAD)
+                // Only do progress report progress
                 _parsingThreadFinished = true;
+                _parsingStartAllow = false;
                 _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingFailed);
             }
         }
@@ -3052,23 +3176,27 @@ namespace SharePortfolioManager.BuysForm.View
                             }
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        Helper.ShowExceptionMessage(ex);
+                        // Show exception is not allowed here (THREAD)
+                        // Only do progress report progress
+                        _parsingThreadFinished = true;
+                        _parsingStartAllow = false;
+                        _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
 
                         DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
-                        _parsingThreadFinished = true;
-                        _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Helper.ShowExceptionMessage(ex);
+                // Show exception is not allowed here (THREAD)
+                // Only do progress report progress
+                _parsingThreadFinished = true;
+                _parsingStartAllow = false;
+                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
 
                 DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
-                _parsingThreadFinished = true;
-                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
             }
         }
 
@@ -3174,6 +3302,10 @@ namespace SharePortfolioManager.BuysForm.View
 
         private void OnDocumentParsingRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            // Delete old parsing text file
+            if (File.Exists(Helper.ParsingDocumentFileName))
+                File.Delete(Helper.ParsingDocumentFileName);
+
             if (DictionaryParsingResult != null)
             {
                 // Check if the WKN has been found and if the WKN is the right one
@@ -3374,5 +3506,6 @@ namespace SharePortfolioManager.BuysForm.View
         #endregion Parsing
 
         #endregion Methods
+
     }
 }

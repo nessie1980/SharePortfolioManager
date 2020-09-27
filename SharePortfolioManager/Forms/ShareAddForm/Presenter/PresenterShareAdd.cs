@@ -48,6 +48,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
             view.PropertyChanged += OnViewChange;
             view.ShareAddEventHandler += OnShareAdd;
             view.FormatInputValuesEventHandler += OnViewFormatInputValues;
+            view.DocumentBrowseEventHandler += OnDocumentBrowse;
         }
 
         private void UpdateViewWithModel()
@@ -98,6 +99,10 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
             _model.ShareObjectListMarketValue = _view.ShareObjectListMarketValue;
             _model.ShareObjectFinalValue = _view.ShareObjectFinalValue;
             _model.ShareObjectListFinalValue = _view.ShareObjectListFinalValue;
+
+            _model.Logger = _view.Logger;
+            _model.Language = _view.Language;
+            _model.LanguageName = _view.LanguageName;
 
             _model.ImageListPrevDayPerformance = _view.ImageListPrevDayPerformance;
             _model.ImageListCompletePerformance = _view.ImageListCompletePerformance;
@@ -367,6 +372,37 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
             UpdateViewWithModel();
 
             _view.AddFinish();
+        }
+
+        /// <summary>
+        /// This function opens the document browse dialog and set the chosen document
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnDocumentBrowse(object sender, EventArgs e)
+        {
+            try
+            {
+                var strCurrentFile = _model.Document;
+
+                const string strFilter = "pdf (*.pdf)|*.pdf|txt (*.txt)|.txt|doc (*.doc)|.doc|docx (*.docx)|.docx";
+                if (Helper.SetDocument(
+                    _model.Language.GetLanguageTextByXPath(@"/AddFormShare/OpenFileDialog/Title",
+                        _model.LanguageName), strFilter, ref strCurrentFile) == DialogResult.OK)
+                {
+                    _model.Document = strCurrentFile;
+
+                    UpdateViewWithModel();
+                }
+
+                _view.DocumentBrowseFinish();
+            }
+            catch (Exception ex)
+            {
+                Helper.ShowExceptionMessage(ex);
+
+                _model.ErrorCode = ShareAddErrorCode.DocumentBrowseFailed;
+            }
         }
 
         /// <summary>

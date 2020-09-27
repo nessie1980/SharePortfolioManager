@@ -360,7 +360,7 @@
 				<ParsingIdentifierValuesFound text="Document identifier values found. Parsing buy values started..." />			
 			</ParsingErrors>
 		</DocumentCaptureParsing>
-
+		
 		<!-- ShareDetailsForm -->
 		<ShareDetailsForm>
 			<!-- GroupBox details -->
@@ -599,6 +599,11 @@
 				</Labels>
 			</GrpBoxGeneral>
 			
+			<!-- GroupBox document preview --> 
+			<GrpBoxDocumentPreview>
+				<Caption text="Document preview" />
+			</GrpBoxDocumentPreview>
+
 			<!-- Open file dialog -->
 			<OpenFileDialog>
 				<Title text="Choose document" />
@@ -791,6 +796,11 @@
 				</Buttons>
 			</GrpBoxAddEdit>
 			
+			<!-- GroupBox document preview --> 
+			<GrpBoxDocumentPreview>
+				<Caption text="Document preview" />
+			</GrpBoxDocumentPreview>
+
 			<!-- GroupBox buy overview -->
 			<GrpBoxBuy>
 				<Caption text="Buy overview" />
@@ -922,6 +932,11 @@
 				</Buttons>
 			</GrpBoxAddEdit>
 			
+			<!-- GroupBox document preview --> 
+			<GrpBoxDocumentPreview>
+				<Caption text="Document preview" />
+			</GrpBoxDocumentPreview>
+
 			<!-- GroupBox sale overview -->
 			<GrpBoxSale>
 				<Caption text="Sale overview" />
@@ -1068,6 +1083,11 @@
 				</Buttons>
 			</GrpBoxAddEdit>
 			
+			<!-- GroupBox document preview --> 
+			<GrpBoxDocumentPreview>
+				<Caption text="Document preview" />
+			</GrpBoxDocumentPreview>
+
 			<!-- GroupBox dividend overview -->
 			<GrpBoxDividend>
 				<Caption text="Dividend overview" />
@@ -2032,6 +2052,11 @@
 				</Labels>
 			</GrpBoxGeneral>
 			
+			<!-- GroupBox document preview --> 
+			<GrpBoxDocumentPreview>
+				<Caption text="Dokumenten- Vorschau" />
+			</GrpBoxDocumentPreview>
+			
 			<!-- Open file dialog -->
 			<OpenFileDialog>
 				<Title text="Dokument auswählen" />
@@ -2224,6 +2249,11 @@
 				</Buttons>
 			</GrpBoxAddEdit>
 			
+			<!-- GroupBox document preview --> 
+			<GrpBoxDocumentPreview>
+				<Caption text="Dokumenten- Vorschau" />
+			</GrpBoxDocumentPreview>
+			
 			<!-- GroupBox buy overview -->
 			<GrpBoxBuy>
 				<Caption text="Kauf- Übersicht" />
@@ -2354,7 +2384,12 @@
 					<Cancel text="Schließen" />
 				</Buttons>
 			</GrpBoxAddEdit>
-			
+
+			<!-- GroupBox document preview --> 
+			<GrpBoxDocumentPreview>
+				<Caption text="Dokumenten- Vorschau" />
+			</GrpBoxDocumentPreview>
+
 			<!-- GroupBox sale overview -->
 			<GrpBoxSale>
 				<Caption text="Verkaufs- Übersicht" />
@@ -2500,6 +2535,11 @@
 				</Buttons>
 			</GrpBoxAddEdit>
 			
+			<!-- GroupBox document preview --> 
+			<GrpBoxDocumentPreview>
+				<Caption text="Dokumenten- Vorschau" />
+			</GrpBoxDocumentPreview>
+
 			<!-- GroupBox dividend overview -->
 			<GrpBoxDividend>
 				<Caption text="Dividenden- Übersicht" />

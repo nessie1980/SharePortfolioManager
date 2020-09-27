@@ -32,7 +32,6 @@ using SharePortfolioManager.Properties;
 using SharePortfolioManager.ShareDetailsForm;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml;
@@ -693,8 +692,8 @@ namespace SharePortfolioManager
 
             #region Read shares from XML / Load portfolio
 
-            var stop = new Stopwatch();
-            stop.Start();
+            // TODO: (thomas:2020-08-30) Should be made in task because it may take
+            // much time an makes the application no more responsible
 
             // Only load portfolio if a portfolio file is set in the Settings.xml
             if (_portfolioFileName != "")
@@ -821,9 +820,6 @@ namespace SharePortfolioManager
             }
 
             tabCtrlShareOverviews.Select();
-
-            stop.Stop();
-            Console.WriteLine(@"LoadPortfolio: {0}ms", stop.ElapsedMilliseconds);
 
             #endregion Select first item
         }

@@ -158,11 +158,15 @@ namespace SharePortfolioManager.Classes
 
         #region Variables
 
-        public static string PdfConverterApplication =
+        #region Convert PDF to text
+        
+        public static string PdfToTextApplication =
             Path.GetDirectoryName(Application.ExecutablePath) + @"\Tools\pdftotext.exe";
 
         public static string ParsingDocumentFileName =
             Path.GetDirectoryName(Application.ExecutablePath) + @"\Tools\Parsing.txt";
+
+        #endregion Convert PDF to text
 
         public static bool ShowExceptionMessageFlag;
 
@@ -719,16 +723,16 @@ namespace SharePortfolioManager.Classes
                         if (i > iNoFixedPrecision)
                         {
                             if (i == 1)
-                                strFormatString = strFormatString + "0.#";
+                                strFormatString += "0.#";
                             else
-                                strFormatString = strFormatString + "#";
+                                strFormatString += "#";
                         }
                         else
                         {
                             if (i == 1)
-                                strFormatString = strFormatString + "0.0";
+                                strFormatString += "0.0";
                             else
-                                strFormatString = strFormatString + "0";
+                                strFormatString += "0";
                         }
                     }
                 }
@@ -797,9 +801,9 @@ namespace SharePortfolioManager.Classes
                     for (var i = 1; i <= iPrecision; i++)
                     {
                         if (i == 1)
-                            strFormatString = strFormatString + "0.0";
+                            strFormatString += "0.0";
                         else
-                            strFormatString = strFormatString + "0";
+                            strFormatString += "0";
                     }
                 }
                 else
@@ -809,23 +813,23 @@ namespace SharePortfolioManager.Classes
                         if (i > iNoFixedPrecision)
                         {
                             if (i == 1)
-                                strFormatString = strFormatString + "0.#";
+                                strFormatString += "0.#";
                             else
-                                strFormatString = strFormatString + "#";
+                                strFormatString += "#";
                         }
                         else
                         {
                             if (i == 1)
-                                strFormatString = strFormatString + "0.0";
+                                strFormatString += "0.0";
                             else
-                                strFormatString = strFormatString + "0";
+                                strFormatString += "0";
                         }
                     }
                 }
             }
             else
             {
-                strFormatString = strFormatString + "0";
+                strFormatString += "0";
             }
 
             // Format with the given culture info
@@ -1406,6 +1410,57 @@ namespace SharePortfolioManager.Classes
         #endregion Time function
 
         #endregion Methods
+
+        #region Webbrowser for the PDF show
+
+        /// <summary>
+        /// This class allows to show a PDF in a WebBrowser
+        /// </summary>
+        public static class WebBrowserPdf
+        {
+            /// <summary>
+            /// This function clears the WebBrowser and loads
+            /// then the given PDF file to the WebBrowser
+            /// </summary>
+            /// <param name="sender">WebBrowser where the PDF should be shown</param>
+            /// <param name="fileName">Filename of the given PDF file which should be shown</param>
+            public static void Reload(WebBrowser sender, string fileName)
+            {
+                sender.Visible = false;
+                sender.Navigate(new Uri("about:blank"));
+
+                while (sender.ReadyState != WebBrowserReadyState.Complete)
+                {
+                    Application.DoEvents();
+                    System.Threading.Thread.Sleep(10);
+                }
+
+                sender.Navigate(fileName);
+
+                sender.Visible = true;
+            }
+
+            /// <summary>
+            /// This function cleans up the WebBrowser
+            /// </summary>
+            /// <param name="sender">WebBrowser object</param>
+            public static void CleanUp(WebBrowser sender)
+            {
+                sender.Visible = false;
+                sender.Navigate(new Uri("about:blank"));
+
+                while (sender.ReadyState != WebBrowserReadyState.Complete)
+                {
+                    Application.DoEvents();
+                    System.Threading.Thread.Sleep(10);
+                }
+
+                sender.Dispose();
+                System.Threading.Thread.Sleep(100);
+            }
+        }
+
+        #endregion Webbrowser for the PDF show
     }
 
     internal static class DataGridViewHelper
@@ -1535,6 +1590,11 @@ namespace SharePortfolioManager.Classes
         {
             internal readonly struct Rect
             {
+                public static Rect CreateInstance(int left, int top, int right, int bottom)
+                {
+                    return new Rect(left, top, right, bottom);
+                }
+
                 public readonly int Left;
                 public readonly int Top;
                 public readonly int Right;

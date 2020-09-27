@@ -82,6 +82,9 @@
             this.picBoxBrokerFeeParseState = new System.Windows.Forms.PictureBox();
             this.picBoxTraderPlaceFeeParseState = new System.Windows.Forms.PictureBox();
             this.picBoxReductionParseState = new System.Windows.Forms.PictureBox();
+            this.lblDepotNumber = new System.Windows.Forms.Label();
+            this.picBoxDepotNumberParseState = new System.Windows.Forms.PictureBox();
+            this.cbxDepotNumber = new System.Windows.Forms.ComboBox();
             this.statusStripMessages = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelMessageBuyEdit = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBarBuyDocumentParsing = new System.Windows.Forms.ToolStripProgressBar();
@@ -90,9 +93,9 @@
             this.tblLayPnlOverviewTabControl = new System.Windows.Forms.TableLayoutPanel();
             this.tabCtrlBuys = new System.Windows.Forms.TabControl();
             this.lblBuyValueBrokerageReductionLabel = new System.Windows.Forms.Label();
-            this.lblDepotNumber = new System.Windows.Forms.Label();
-            this.picBoxDepotNumberParseState = new System.Windows.Forms.PictureBox();
-            this.cbxDepotNumber = new System.Windows.Forms.ComboBox();
+            this.grpBoxDocumentPreview = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.grpBoxAdd.SuspendLayout();
             this.tblLayPnlBuyButtons.SuspendLayout();
             this.tblLayPnlBuyInput.SuspendLayout();
@@ -105,22 +108,22 @@
             ((System.ComponentModel.ISupportInitialize)(this.picBoxBrokerFeeParseState)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxTraderPlaceFeeParseState)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxReductionParseState)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxDepotNumberParseState)).BeginInit();
             this.statusStripMessages.SuspendLayout();
             this.grpBoxBuys.SuspendLayout();
             this.tblLayPnlOverviewTabControl.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picBoxDepotNumberParseState)).BeginInit();
+            this.grpBoxDocumentPreview.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpBoxAdd
             // 
-            this.grpBoxAdd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.grpBoxAdd.Controls.Add(this.tblLayPnlBuyButtons);
             this.grpBoxAdd.Controls.Add(this.tblLayPnlBuyInput);
             this.grpBoxAdd.Controls.Add(this.statusStripMessages);
             this.grpBoxAdd.Location = new System.Drawing.Point(5, 5);
             this.grpBoxAdd.Name = "grpBoxAdd";
-            this.grpBoxAdd.Size = new System.Drawing.Size(825, 416);
+            this.grpBoxAdd.Size = new System.Drawing.Size(760, 416);
             this.grpBoxAdd.TabIndex = 15;
             this.grpBoxAdd.TabStop = false;
             this.grpBoxAdd.Text = "_grpBoxAdd";
@@ -143,7 +146,7 @@
             this.tblLayPnlBuyButtons.RowCount = 1;
             this.tblLayPnlBuyButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblLayPnlBuyButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33F));
-            this.tblLayPnlBuyButtons.Size = new System.Drawing.Size(819, 33);
+            this.tblLayPnlBuyButtons.Size = new System.Drawing.Size(754, 33);
             this.tblLayPnlBuyButtons.TabIndex = 16;
             // 
             // btnReset
@@ -152,7 +155,7 @@
             this.btnReset.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnReset.Image = global::SharePortfolioManager.Properties.Resources.button_reset_24;
             this.btnReset.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnReset.Location = new System.Drawing.Point(460, 1);
+            this.btnReset.Location = new System.Drawing.Point(395, 1);
             this.btnReset.Margin = new System.Windows.Forms.Padding(1);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(178, 31);
@@ -170,7 +173,7 @@
             this.btnDelete.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDelete.Image = global::SharePortfolioManager.Properties.Resources.button_recycle_bin_24;
             this.btnDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDelete.Location = new System.Drawing.Point(280, 1);
+            this.btnDelete.Location = new System.Drawing.Point(215, 1);
             this.btnDelete.Margin = new System.Windows.Forms.Padding(1);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(178, 31);
@@ -187,7 +190,7 @@
             this.btnAddSave.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAddSave.Image = global::SharePortfolioManager.Properties.Resources.button_add_24;
             this.btnAddSave.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAddSave.Location = new System.Drawing.Point(100, 1);
+            this.btnAddSave.Location = new System.Drawing.Point(35, 1);
             this.btnAddSave.Margin = new System.Windows.Forms.Padding(1);
             this.btnAddSave.Name = "btnAddSave";
             this.btnAddSave.Size = new System.Drawing.Size(178, 31);
@@ -204,7 +207,7 @@
             this.btnCancel.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCancel.Image = global::SharePortfolioManager.Properties.Resources.button_back_24;
             this.btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnCancel.Location = new System.Drawing.Point(640, 1);
+            this.btnCancel.Location = new System.Drawing.Point(575, 1);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(1);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(178, 31);
@@ -223,7 +226,7 @@
             this.tblLayPnlBuyInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tblLayPnlBuyInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tblLayPnlBuyInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tblLayPnlBuyInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tblLayPnlBuyInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.tblLayPnlBuyInput.Controls.Add(this.lblBrokerageUnit, 4, 10);
             this.tblLayPnlBuyInput.Controls.Add(this.lblBrokerage, 0, 10);
             this.tblLayPnlBuyInput.Controls.Add(this.txtBoxBrokerage, 1, 10);
@@ -274,7 +277,6 @@
             this.tblLayPnlBuyInput.Controls.Add(this.lblDepotNumber, 0, 1);
             this.tblLayPnlBuyInput.Controls.Add(this.picBoxDepotNumberParseState, 5, 1);
             this.tblLayPnlBuyInput.Controls.Add(this.cbxDepotNumber, 1, 1);
-            this.tblLayPnlBuyInput.Dock = System.Windows.Forms.DockStyle.Top;
             this.tblLayPnlBuyInput.Location = new System.Drawing.Point(3, 18);
             this.tblLayPnlBuyInput.Margin = new System.Windows.Forms.Padding(1);
             this.tblLayPnlBuyInput.Name = "tblLayPnlBuyInput";
@@ -293,13 +295,13 @@
             this.tblLayPnlBuyInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tblLayPnlBuyInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tblLayPnlBuyInput.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tblLayPnlBuyInput.Size = new System.Drawing.Size(819, 336);
+            this.tblLayPnlBuyInput.Size = new System.Drawing.Size(754, 336);
             this.tblLayPnlBuyInput.TabIndex = 15;
             // 
             // lblBrokerageUnit
             // 
             this.lblBrokerageUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBrokerageUnit.Location = new System.Drawing.Point(735, 241);
+            this.lblBrokerageUnit.Location = new System.Drawing.Point(669, 241);
             this.lblBrokerageUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblBrokerageUnit.Name = "lblBrokerageUnit";
             this.lblBrokerageUnit.Size = new System.Drawing.Size(58, 22);
@@ -332,7 +334,7 @@
             this.txtBoxBrokerage.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxBrokerage.Name = "txtBoxBrokerage";
             this.txtBoxBrokerage.ReadOnly = true;
-            this.txtBoxBrokerage.Size = new System.Drawing.Size(482, 22);
+            this.txtBoxBrokerage.Size = new System.Drawing.Size(416, 22);
             this.txtBoxBrokerage.TabIndex = 17;
             this.txtBoxBrokerage.TabStop = false;
             this.txtBoxBrokerage.Text = "-";
@@ -365,7 +367,7 @@
             this.dateTimePickerDate.Margin = new System.Windows.Forms.Padding(1);
             this.dateTimePickerDate.MinDate = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
             this.dateTimePickerDate.Name = "dateTimePickerDate";
-            this.dateTimePickerDate.Size = new System.Drawing.Size(228, 22);
+            this.dateTimePickerDate.Size = new System.Drawing.Size(195, 22);
             this.dateTimePickerDate.TabIndex = 0;
             this.dateTimePickerDate.ValueChanged += new System.EventHandler(this.OnDatePickerDate_ValueChanged);
             this.dateTimePickerDate.Enter += new System.EventHandler(this.OnDatePickerDate_Enter);
@@ -395,7 +397,7 @@
             this.txtBoxDocument.Location = new System.Drawing.Point(251, 313);
             this.txtBoxDocument.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxDocument.Name = "txtBoxDocument";
-            this.txtBoxDocument.Size = new System.Drawing.Size(482, 22);
+            this.txtBoxDocument.Size = new System.Drawing.Size(416, 22);
             this.txtBoxDocument.TabIndex = 9;
             this.txtBoxDocument.TextChanged += new System.EventHandler(this.OnTxtBoxDocument_TextChanged);
             this.txtBoxDocument.DragDrop += new System.Windows.Forms.DragEventHandler(this.OnTxtBoxDocument_DragDrop);
@@ -410,10 +412,10 @@
             this.btnDocumentBrowse.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDocumentBrowse.Image = global::SharePortfolioManager.Properties.Resources.menu_folder_open_16;
             this.btnDocumentBrowse.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnDocumentBrowse.Location = new System.Drawing.Point(735, 313);
+            this.btnDocumentBrowse.Location = new System.Drawing.Point(669, 313);
             this.btnDocumentBrowse.Margin = new System.Windows.Forms.Padding(1);
             this.btnDocumentBrowse.Name = "btnDocumentBrowse";
-            this.btnDocumentBrowse.Size = new System.Drawing.Size(83, 22);
+            this.btnDocumentBrowse.Size = new System.Drawing.Size(84, 22);
             this.btnDocumentBrowse.TabIndex = 10;
             this.btnDocumentBrowse.Text = "...";
             this.btnDocumentBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -558,7 +560,7 @@
             this.txtBoxBuyValueBrokerageReduction.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxBuyValueBrokerageReduction.Name = "txtBoxBuyValueBrokerageReduction";
             this.txtBoxBuyValueBrokerageReduction.ReadOnly = true;
-            this.txtBoxBuyValueBrokerageReduction.Size = new System.Drawing.Size(482, 22);
+            this.txtBoxBuyValueBrokerageReduction.Size = new System.Drawing.Size(416, 22);
             this.txtBoxBuyValueBrokerageReduction.TabIndex = 18;
             this.txtBoxBuyValueBrokerageReduction.TabStop = false;
             this.txtBoxBuyValueBrokerageReduction.Text = "-";
@@ -572,7 +574,7 @@
             this.txtBoxTraderPlaceFee.Location = new System.Drawing.Point(251, 217);
             this.txtBoxTraderPlaceFee.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxTraderPlaceFee.Name = "txtBoxTraderPlaceFee";
-            this.txtBoxTraderPlaceFee.Size = new System.Drawing.Size(482, 22);
+            this.txtBoxTraderPlaceFee.Size = new System.Drawing.Size(416, 22);
             this.txtBoxTraderPlaceFee.TabIndex = 7;
             this.txtBoxTraderPlaceFee.TextChanged += new System.EventHandler(this.OnTxtBoxTraderPlaceFee_TextChanged);
             this.txtBoxTraderPlaceFee.Enter += new System.EventHandler(this.OnTxtBoxTraderPlaceFee_Enter);
@@ -587,7 +589,7 @@
             this.txtBoxBrokerFee.Location = new System.Drawing.Point(251, 193);
             this.txtBoxBrokerFee.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxBrokerFee.Name = "txtBoxBrokerFee";
-            this.txtBoxBrokerFee.Size = new System.Drawing.Size(482, 22);
+            this.txtBoxBrokerFee.Size = new System.Drawing.Size(416, 22);
             this.txtBoxBrokerFee.TabIndex = 6;
             this.txtBoxBrokerFee.TextChanged += new System.EventHandler(this.OnTxtBoxBrokerFee_TextChanged);
             this.txtBoxBrokerFee.Enter += new System.EventHandler(this.OnTxtBoxBrokerFee_Enter);
@@ -602,7 +604,7 @@
             this.txtBoxProvision.Location = new System.Drawing.Point(251, 169);
             this.txtBoxProvision.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxProvision.Name = "txtBoxProvision";
-            this.txtBoxProvision.Size = new System.Drawing.Size(482, 22);
+            this.txtBoxProvision.Size = new System.Drawing.Size(416, 22);
             this.txtBoxProvision.TabIndex = 5;
             this.txtBoxProvision.TextChanged += new System.EventHandler(this.OnTxtBoxProvision_TextChanged);
             this.txtBoxProvision.Enter += new System.EventHandler(this.OnTxtBoxProvision_Enter);
@@ -619,7 +621,7 @@
             this.txtBoxBuyValue.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxBuyValue.Name = "txtBoxBuyValue";
             this.txtBoxBuyValue.ReadOnly = true;
-            this.txtBoxBuyValue.Size = new System.Drawing.Size(482, 22);
+            this.txtBoxBuyValue.Size = new System.Drawing.Size(416, 22);
             this.txtBoxBuyValue.TabIndex = 16;
             this.txtBoxBuyValue.TabStop = false;
             this.txtBoxBuyValue.Text = "-";
@@ -633,7 +635,7 @@
             this.txtBoxSharePrice.Location = new System.Drawing.Point(251, 121);
             this.txtBoxSharePrice.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxSharePrice.Name = "txtBoxSharePrice";
-            this.txtBoxSharePrice.Size = new System.Drawing.Size(482, 22);
+            this.txtBoxSharePrice.Size = new System.Drawing.Size(416, 22);
             this.txtBoxSharePrice.TabIndex = 4;
             this.txtBoxSharePrice.TextChanged += new System.EventHandler(this.OnTxtBoxPrice_TextChanged);
             this.txtBoxSharePrice.Enter += new System.EventHandler(this.OnTxtBoxPrice_Enter);
@@ -649,7 +651,7 @@
             this.txtBoxVolumeSold.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxVolumeSold.Name = "txtBoxVolumeSold";
             this.txtBoxVolumeSold.ReadOnly = true;
-            this.txtBoxVolumeSold.Size = new System.Drawing.Size(482, 22);
+            this.txtBoxVolumeSold.Size = new System.Drawing.Size(416, 22);
             this.txtBoxVolumeSold.TabIndex = 15;
             this.txtBoxVolumeSold.TabStop = false;
             this.txtBoxVolumeSold.Text = "-";
@@ -665,7 +667,7 @@
             this.txtBoxVolume.Location = new System.Drawing.Point(251, 73);
             this.txtBoxVolume.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxVolume.Name = "txtBoxVolume";
-            this.txtBoxVolume.Size = new System.Drawing.Size(482, 22);
+            this.txtBoxVolume.Size = new System.Drawing.Size(416, 22);
             this.txtBoxVolume.TabIndex = 3;
             this.txtBoxVolume.TextChanged += new System.EventHandler(this.OnTxtBoxAddVolume_TextChanged);
             this.txtBoxVolume.Enter += new System.EventHandler(this.OnTxtBoxVolume_Enter);
@@ -681,7 +683,7 @@
             this.txtBoxOrderNumber.Location = new System.Drawing.Point(251, 49);
             this.txtBoxOrderNumber.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxOrderNumber.Name = "txtBoxOrderNumber";
-            this.txtBoxOrderNumber.Size = new System.Drawing.Size(482, 22);
+            this.txtBoxOrderNumber.Size = new System.Drawing.Size(416, 22);
             this.txtBoxOrderNumber.TabIndex = 2;
             this.txtBoxOrderNumber.TextChanged += new System.EventHandler(this.OnTxtBoxOrderNumber_TextChanged);
             this.txtBoxOrderNumber.Enter += new System.EventHandler(this.OnTxtBoxOrderNumber_Enter);
@@ -689,7 +691,7 @@
             // lblDepositUnit
             // 
             this.lblDepositUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDepositUnit.Location = new System.Drawing.Point(735, 289);
+            this.lblDepositUnit.Location = new System.Drawing.Point(669, 289);
             this.lblDepositUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblDepositUnit.Name = "lblDepositUnit";
             this.lblDepositUnit.Size = new System.Drawing.Size(58, 22);
@@ -700,7 +702,7 @@
             // lblTraderPlaceFeeUnit
             // 
             this.lblTraderPlaceFeeUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTraderPlaceFeeUnit.Location = new System.Drawing.Point(735, 217);
+            this.lblTraderPlaceFeeUnit.Location = new System.Drawing.Point(669, 217);
             this.lblTraderPlaceFeeUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblTraderPlaceFeeUnit.Name = "lblTraderPlaceFeeUnit";
             this.lblTraderPlaceFeeUnit.Size = new System.Drawing.Size(58, 22);
@@ -711,7 +713,7 @@
             // lblBrokerFeeUnit
             // 
             this.lblBrokerFeeUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBrokerFeeUnit.Location = new System.Drawing.Point(735, 193);
+            this.lblBrokerFeeUnit.Location = new System.Drawing.Point(669, 193);
             this.lblBrokerFeeUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblBrokerFeeUnit.Name = "lblBrokerFeeUnit";
             this.lblBrokerFeeUnit.Size = new System.Drawing.Size(58, 22);
@@ -722,7 +724,7 @@
             // lblProvisionUnit
             // 
             this.lblProvisionUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblProvisionUnit.Location = new System.Drawing.Point(735, 169);
+            this.lblProvisionUnit.Location = new System.Drawing.Point(669, 169);
             this.lblProvisionUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblProvisionUnit.Name = "lblProvisionUnit";
             this.lblProvisionUnit.Size = new System.Drawing.Size(58, 22);
@@ -733,7 +735,7 @@
             // lblBuyValueUnit
             // 
             this.lblBuyValueUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBuyValueUnit.Location = new System.Drawing.Point(735, 145);
+            this.lblBuyValueUnit.Location = new System.Drawing.Point(669, 145);
             this.lblBuyValueUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblBuyValueUnit.Name = "lblBuyValueUnit";
             this.lblBuyValueUnit.Size = new System.Drawing.Size(58, 22);
@@ -744,7 +746,7 @@
             // lblPriceUnit
             // 
             this.lblPriceUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPriceUnit.Location = new System.Drawing.Point(735, 121);
+            this.lblPriceUnit.Location = new System.Drawing.Point(669, 121);
             this.lblPriceUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblPriceUnit.Name = "lblPriceUnit";
             this.lblPriceUnit.Size = new System.Drawing.Size(58, 22);
@@ -755,7 +757,7 @@
             // lblVolumeSoldUnit
             // 
             this.lblVolumeSoldUnit.AutoSize = true;
-            this.lblVolumeSoldUnit.Location = new System.Drawing.Point(735, 97);
+            this.lblVolumeSoldUnit.Location = new System.Drawing.Point(669, 97);
             this.lblVolumeSoldUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblVolumeSoldUnit.Name = "lblVolumeSoldUnit";
             this.lblVolumeSoldUnit.Size = new System.Drawing.Size(56, 22);
@@ -766,7 +768,7 @@
             // lblVolumeUnit
             // 
             this.lblVolumeUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVolumeUnit.Location = new System.Drawing.Point(735, 73);
+            this.lblVolumeUnit.Location = new System.Drawing.Point(669, 73);
             this.lblVolumeUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblVolumeUnit.Name = "lblVolumeUnit";
             this.lblVolumeUnit.Size = new System.Drawing.Size(58, 22);
@@ -797,7 +799,7 @@
             this.txtBoxReduction.Location = new System.Drawing.Point(251, 265);
             this.txtBoxReduction.Margin = new System.Windows.Forms.Padding(1);
             this.txtBoxReduction.Name = "txtBoxReduction";
-            this.txtBoxReduction.Size = new System.Drawing.Size(482, 22);
+            this.txtBoxReduction.Size = new System.Drawing.Size(416, 22);
             this.txtBoxReduction.TabIndex = 8;
             this.txtBoxReduction.TextChanged += new System.EventHandler(this.OnTxtBoxReduction_TextChanged);
             this.txtBoxReduction.Enter += new System.EventHandler(this.OnTxtBoxReduction_Enter);
@@ -806,7 +808,7 @@
             // lblReductionUnit
             // 
             this.lblReductionUnit.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblReductionUnit.Location = new System.Drawing.Point(735, 265);
+            this.lblReductionUnit.Location = new System.Drawing.Point(669, 265);
             this.lblReductionUnit.Margin = new System.Windows.Forms.Padding(1);
             this.lblReductionUnit.Name = "lblReductionUnit";
             this.lblReductionUnit.Size = new System.Drawing.Size(58, 22);
@@ -816,7 +818,7 @@
             // 
             // picBoxDateParseState
             // 
-            this.picBoxDateParseState.Location = new System.Drawing.Point(483, 3);
+            this.picBoxDateParseState.Location = new System.Drawing.Point(450, 3);
             this.picBoxDateParseState.Name = "picBoxDateParseState";
             this.picBoxDateParseState.Size = new System.Drawing.Size(18, 18);
             this.picBoxDateParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -825,7 +827,7 @@
             // 
             // picBoxTimeParseState
             // 
-            this.picBoxTimeParseState.Location = new System.Drawing.Point(797, 3);
+            this.picBoxTimeParseState.Location = new System.Drawing.Point(731, 3);
             this.picBoxTimeParseState.Name = "picBoxTimeParseState";
             this.picBoxTimeParseState.Size = new System.Drawing.Size(18, 18);
             this.picBoxTimeParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -836,11 +838,11 @@
             // 
             this.dateTimePickerTime.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dateTimePickerTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dateTimePickerTime.Location = new System.Drawing.Point(505, 1);
+            this.dateTimePickerTime.Location = new System.Drawing.Point(472, 1);
             this.dateTimePickerTime.Margin = new System.Windows.Forms.Padding(1);
             this.dateTimePickerTime.Name = "dateTimePickerTime";
             this.dateTimePickerTime.ShowUpDown = true;
-            this.dateTimePickerTime.Size = new System.Drawing.Size(228, 22);
+            this.dateTimePickerTime.Size = new System.Drawing.Size(195, 22);
             this.dateTimePickerTime.TabIndex = 1;
             this.dateTimePickerTime.ValueChanged += new System.EventHandler(this.OnDatePickerTime_ValueChanged);
             this.dateTimePickerTime.Enter += new System.EventHandler(this.OnDatePickerTime_Enter);
@@ -848,7 +850,7 @@
             // 
             // picBoxOrderNumberParseState
             // 
-            this.picBoxOrderNumberParseState.Location = new System.Drawing.Point(797, 51);
+            this.picBoxOrderNumberParseState.Location = new System.Drawing.Point(731, 51);
             this.picBoxOrderNumberParseState.Name = "picBoxOrderNumberParseState";
             this.picBoxOrderNumberParseState.Size = new System.Drawing.Size(18, 18);
             this.picBoxOrderNumberParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -857,7 +859,7 @@
             // 
             // picBoxVolumeParseState
             // 
-            this.picBoxVolumeParseState.Location = new System.Drawing.Point(797, 75);
+            this.picBoxVolumeParseState.Location = new System.Drawing.Point(731, 75);
             this.picBoxVolumeParseState.Name = "picBoxVolumeParseState";
             this.picBoxVolumeParseState.Size = new System.Drawing.Size(18, 18);
             this.picBoxVolumeParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -866,7 +868,7 @@
             // 
             // picBoxPriceParseState
             // 
-            this.picBoxPriceParseState.Location = new System.Drawing.Point(797, 123);
+            this.picBoxPriceParseState.Location = new System.Drawing.Point(731, 123);
             this.picBoxPriceParseState.Name = "picBoxPriceParseState";
             this.picBoxPriceParseState.Size = new System.Drawing.Size(18, 18);
             this.picBoxPriceParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -875,7 +877,7 @@
             // 
             // picBoxProvisionParseState
             // 
-            this.picBoxProvisionParseState.Location = new System.Drawing.Point(797, 171);
+            this.picBoxProvisionParseState.Location = new System.Drawing.Point(731, 171);
             this.picBoxProvisionParseState.Name = "picBoxProvisionParseState";
             this.picBoxProvisionParseState.Size = new System.Drawing.Size(18, 18);
             this.picBoxProvisionParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -884,7 +886,7 @@
             // 
             // picBoxBrokerFeeParseState
             // 
-            this.picBoxBrokerFeeParseState.Location = new System.Drawing.Point(797, 195);
+            this.picBoxBrokerFeeParseState.Location = new System.Drawing.Point(731, 195);
             this.picBoxBrokerFeeParseState.Name = "picBoxBrokerFeeParseState";
             this.picBoxBrokerFeeParseState.Size = new System.Drawing.Size(18, 18);
             this.picBoxBrokerFeeParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -893,7 +895,7 @@
             // 
             // picBoxTraderPlaceFeeParseState
             // 
-            this.picBoxTraderPlaceFeeParseState.Location = new System.Drawing.Point(797, 219);
+            this.picBoxTraderPlaceFeeParseState.Location = new System.Drawing.Point(731, 219);
             this.picBoxTraderPlaceFeeParseState.Name = "picBoxTraderPlaceFeeParseState";
             this.picBoxTraderPlaceFeeParseState.Size = new System.Drawing.Size(18, 18);
             this.picBoxTraderPlaceFeeParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -902,12 +904,48 @@
             // 
             // picBoxReductionParseState
             // 
-            this.picBoxReductionParseState.Location = new System.Drawing.Point(797, 267);
+            this.picBoxReductionParseState.Location = new System.Drawing.Point(731, 267);
             this.picBoxReductionParseState.Name = "picBoxReductionParseState";
             this.picBoxReductionParseState.Size = new System.Drawing.Size(18, 18);
             this.picBoxReductionParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picBoxReductionParseState.TabIndex = 49;
             this.picBoxReductionParseState.TabStop = false;
+            // 
+            // lblDepotNumber
+            // 
+            this.lblDepotNumber.AutoSize = true;
+            this.lblDepotNumber.BackColor = System.Drawing.Color.LightGray;
+            this.lblDepotNumber.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblDepotNumber.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDepotNumber.Location = new System.Drawing.Point(1, 25);
+            this.lblDepotNumber.Margin = new System.Windows.Forms.Padding(1);
+            this.lblDepotNumber.Name = "lblDepotNumber";
+            this.lblDepotNumber.Size = new System.Drawing.Size(248, 22);
+            this.lblDepotNumber.TabIndex = 53;
+            this.lblDepotNumber.Text = "_lblDepotNumber";
+            this.lblDepotNumber.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // picBoxDepotNumberParseState
+            // 
+            this.picBoxDepotNumberParseState.Location = new System.Drawing.Point(731, 27);
+            this.picBoxDepotNumberParseState.Name = "picBoxDepotNumberParseState";
+            this.picBoxDepotNumberParseState.Size = new System.Drawing.Size(19, 18);
+            this.picBoxDepotNumberParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picBoxDepotNumberParseState.TabIndex = 54;
+            this.picBoxDepotNumberParseState.TabStop = false;
+            // 
+            // cbxDepotNumber
+            // 
+            this.cbxDepotNumber.BackColor = System.Drawing.Color.LightGray;
+            this.tblLayPnlBuyInput.SetColumnSpan(this.cbxDepotNumber, 3);
+            this.cbxDepotNumber.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbxDepotNumber.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxDepotNumber.FormattingEnabled = true;
+            this.cbxDepotNumber.Location = new System.Drawing.Point(251, 25);
+            this.cbxDepotNumber.Margin = new System.Windows.Forms.Padding(1);
+            this.cbxDepotNumber.Name = "cbxDepotNumber";
+            this.cbxDepotNumber.Size = new System.Drawing.Size(416, 22);
+            this.cbxDepotNumber.TabIndex = 55;
             // 
             // statusStripMessages
             // 
@@ -918,7 +956,7 @@
             this.toolStripStatusLabelMessageBuyDocumentParsing});
             this.statusStripMessages.Location = new System.Drawing.Point(3, 391);
             this.statusStripMessages.Name = "statusStripMessages";
-            this.statusStripMessages.Size = new System.Drawing.Size(819, 22);
+            this.statusStripMessages.Size = new System.Drawing.Size(754, 22);
             this.statusStripMessages.TabIndex = 14;
             this.statusStripMessages.Text = "statusStripMessages";
             // 
@@ -945,14 +983,11 @@
             // 
             // grpBoxBuys
             // 
-            this.grpBoxBuys.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.grpBoxBuys.Controls.Add(this.tblLayPnlOverviewTabControl);
             this.grpBoxBuys.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grpBoxBuys.Location = new System.Drawing.Point(5, 427);
             this.grpBoxBuys.Name = "grpBoxBuys";
-            this.grpBoxBuys.Size = new System.Drawing.Size(825, 153);
+            this.grpBoxBuys.Size = new System.Drawing.Size(760, 170);
             this.grpBoxBuys.TabIndex = 16;
             this.grpBoxBuys.TabStop = false;
             this.grpBoxBuys.Text = "_grpBoxBuys";
@@ -968,7 +1003,7 @@
             this.tblLayPnlOverviewTabControl.Name = "tblLayPnlOverviewTabControl";
             this.tblLayPnlOverviewTabControl.RowCount = 1;
             this.tblLayPnlOverviewTabControl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblLayPnlOverviewTabControl.Size = new System.Drawing.Size(819, 132);
+            this.tblLayPnlOverviewTabControl.Size = new System.Drawing.Size(754, 149);
             this.tblLayPnlOverviewTabControl.TabIndex = 0;
             // 
             // tabCtrlBuys
@@ -979,7 +1014,7 @@
             this.tabCtrlBuys.Location = new System.Drawing.Point(3, 3);
             this.tabCtrlBuys.Name = "tabCtrlBuys";
             this.tabCtrlBuys.SelectedIndex = 0;
-            this.tabCtrlBuys.Size = new System.Drawing.Size(813, 126);
+            this.tabCtrlBuys.Size = new System.Drawing.Size(748, 143);
             this.tabCtrlBuys.TabIndex = 0;
             this.tabCtrlBuys.TabStop = false;
             this.tabCtrlBuys.SelectedIndexChanged += new System.EventHandler(this.OnTabCtrlBuys_SelectedIndexChanged);
@@ -998,41 +1033,39 @@
             this.lblBuyValueBrokerageReductionLabel.Text = "_addFinalValue";
             this.lblBuyValueBrokerageReductionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // lblDepotNumber
+            // grpBoxDocumentPreview
             // 
-            this.lblDepotNumber.AutoSize = true;
-            this.lblDepotNumber.BackColor = System.Drawing.Color.LightGray;
-            this.lblDepotNumber.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDepotNumber.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblDepotNumber.Location = new System.Drawing.Point(1, 25);
-            this.lblDepotNumber.Margin = new System.Windows.Forms.Padding(1);
-            this.lblDepotNumber.Name = "lblDepotNumber";
-            this.lblDepotNumber.Size = new System.Drawing.Size(248, 22);
-            this.lblDepotNumber.TabIndex = 53;
-            this.lblDepotNumber.Text = "_lblDepotNumber";
-            this.lblDepotNumber.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.grpBoxDocumentPreview.Controls.Add(this.tableLayoutPanel1);
+            this.grpBoxDocumentPreview.Location = new System.Drawing.Point(769, 5);
+            this.grpBoxDocumentPreview.Name = "grpBoxDocumentPreview";
+            this.grpBoxDocumentPreview.Size = new System.Drawing.Size(510, 592);
+            this.grpBoxDocumentPreview.TabIndex = 17;
+            this.grpBoxDocumentPreview.TabStop = false;
+            this.grpBoxDocumentPreview.Text = "_grpBoxDocumentPreview";
             // 
-            // picBoxDepotNumberParseState
+            // tableLayoutPanel1
             // 
-            this.picBoxDepotNumberParseState.Location = new System.Drawing.Point(797, 27);
-            this.picBoxDepotNumberParseState.Name = "picBoxDepotNumberParseState";
-            this.picBoxDepotNumberParseState.Size = new System.Drawing.Size(19, 18);
-            this.picBoxDepotNumberParseState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picBoxDepotNumberParseState.TabIndex = 54;
-            this.picBoxDepotNumberParseState.TabStop = false;
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.webBrowser1, 0, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 18);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(1);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(504, 571);
+            this.tableLayoutPanel1.TabIndex = 6;
             // 
-            // cbxDepotNumber
+            // webBrowser1
             // 
-            this.cbxDepotNumber.BackColor = System.Drawing.Color.LightGray;
-            this.tblLayPnlBuyInput.SetColumnSpan(this.cbxDepotNumber, 3);
-            this.cbxDepotNumber.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbxDepotNumber.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxDepotNumber.FormattingEnabled = true;
-            this.cbxDepotNumber.Location = new System.Drawing.Point(251, 25);
-            this.cbxDepotNumber.Margin = new System.Windows.Forms.Padding(1);
-            this.cbxDepotNumber.Name = "cbxDepotNumber";
-            this.cbxDepotNumber.Size = new System.Drawing.Size(482, 22);
-            this.cbxDepotNumber.TabIndex = 55;
+            this.webBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.webBrowser1.Location = new System.Drawing.Point(3, 3);
+            this.webBrowser1.MinimumSize = new System.Drawing.Size(23, 22);
+            this.webBrowser1.Name = "webBrowser1";
+            this.webBrowser1.Size = new System.Drawing.Size(498, 565);
+            this.webBrowser1.TabIndex = 1;
             // 
             // ViewBuyEdit
             // 
@@ -1041,15 +1074,17 @@
             this.AutoScroll = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.ClientSize = new System.Drawing.Size(834, 582);
+            this.ClientSize = new System.Drawing.Size(1284, 601);
             this.ControlBox = false;
+            this.Controls.Add(this.grpBoxDocumentPreview);
             this.Controls.Add(this.grpBoxBuys);
             this.Controls.Add(this.grpBoxAdd);
             this.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(900, 650);
+            this.MaximumSize = new System.Drawing.Size(1300, 640);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(800, 550);
+            this.MinimumSize = new System.Drawing.Size(1300, 640);
             this.Name = "ViewBuyEdit";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -1071,11 +1106,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.picBoxBrokerFeeParseState)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxTraderPlaceFeeParseState)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxReductionParseState)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxDepotNumberParseState)).EndInit();
             this.statusStripMessages.ResumeLayout(false);
             this.statusStripMessages.PerformLayout();
             this.grpBoxBuys.ResumeLayout(false);
             this.tblLayPnlOverviewTabControl.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picBoxDepotNumberParseState)).EndInit();
+            this.grpBoxDocumentPreview.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1147,5 +1184,8 @@
         private System.Windows.Forms.Label lblDepotNumber;
         private System.Windows.Forms.PictureBox picBoxDepotNumberParseState;
         private System.Windows.Forms.ComboBox cbxDepotNumber;
+        private System.Windows.Forms.GroupBox grpBoxDocumentPreview;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.WebBrowser webBrowser1;
     }
 }

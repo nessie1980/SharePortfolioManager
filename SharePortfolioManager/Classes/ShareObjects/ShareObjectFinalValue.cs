@@ -2768,7 +2768,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             else
                 PortfolioCompletePerformanceValue = 0;
 
-#if true // DEBUG_FINAL_SHARE_OBJECT
+#if DEBUG_FINAL_SHARE_OBJECT
             Console.WriteLine(@"");
             Console.WriteLine(@"CalculatePerformancePortfolio() / FinalValue");
             Console.WriteLine(@"PortfolioFinalValue: {0}", PortfolioFinalValue);

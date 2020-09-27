@@ -30,6 +30,8 @@ using SharePortfolioManager.ShareAddForm.View;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using LanguageHandler;
+using Logging;
 
 namespace SharePortfolioManager.ShareAddForm.Model
 {
@@ -51,6 +53,10 @@ namespace SharePortfolioManager.ShareAddForm.Model
         List<Image> ImageListCompletePerformance { get; set; }
 
         List<WebSiteRegex> WebSiteRegexList { get; set; }
+
+        Logger Logger { get; set; }
+        Language Language { get; set; }
+        string LanguageName { get; set; }
 
         string Wkn { get; set; }
         string Name { get; set; }
@@ -160,6 +166,12 @@ namespace SharePortfolioManager.ShareAddForm.Model
         public List<Image> ImageListCompletePerformance { get; set; }
 
         public List<WebSiteRegex> WebSiteRegexList { get; set; }
+
+        public Logger Logger { get; set; }
+
+        public Language Language { get; set; }
+
+        public string LanguageName { get; set; }
 
         public string Wkn
         {

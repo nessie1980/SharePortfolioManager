@@ -928,7 +928,6 @@ namespace SharePortfolioManager
         /// <param name="e">DataGridViewBindingCompleteEventArgs</param>
         private void DgvPortfolioMarketValue_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
-            Console.WriteLine(@"DgvPortfolioMarketValue_DataBindingComplete / Type: {0}", e.ListChangedType.ToString());
             try
             {
                 // Set column headers and width
@@ -1163,7 +1162,6 @@ namespace SharePortfolioManager
         /// <param name="e">DataGridViewBindingCompleteEventArgs</param>
         private void DgvPortfolioFinalValue_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
-            Console.WriteLine(@"DgvPortfolioFinalValue_DataBindingComplete / Type: {0}", e.ListChangedType.ToString());
             try
             {
                 // Set column headers and width
@@ -1175,8 +1173,6 @@ namespace SharePortfolioManager
                     dgvPortfolioFooterFinalValue.Columns.Count !=
                     (int)ColumnIndicesPortfolioFooterFinalValue.EPortfolioFooterFinalValueColumnCount
                     ) return;
-
-                Console.WriteLine(@"DgvPortfolioFinalValue_DataBindingComplete do...");
 
                 // Set final value data grid view column header names and texts
                 OnSetDgvPortfolioFinalValueColumnHeaderNames();

@@ -33,7 +33,6 @@ using SharePortfolioManager.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -233,6 +232,11 @@ namespace SharePortfolioManager.DividendForm.View
         #endregion Flags
 
         public DataGridView SelectedDataGridView { get; internal set; }
+
+        /// <summary>
+        /// Flag if the show of the dividends is running ( true ) or finished ( false )
+        /// </summary>
+        public bool ShowDividendsFlag;
 
         #region Parsing
 
@@ -882,8 +886,25 @@ namespace SharePortfolioManager.DividendForm.View
 
                         strMessage =
                             Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/ChoseDocumentFailed", LanguageName);
-                        break;
+                    } break;
+                default:
+                {
+                    if (_parsingBackgroundWorker.IsBusy)
+                    {
+                        _parsingBackgroundWorker.CancelAsync();
                     }
+                    else
+                    {
+                        _parsingStartAllow = true;
+
+                        ResetValues();
+                        _parsingBackgroundWorker.RunWorkerAsync();
+                    }
+
+                    //webBrowser1.Navigate(temp.DocumentAsStr);
+                    Helper.WebBrowserPdf.Reload(webBrowser1, txtBoxDocument.Text);
+                }
+                    break;
             }
 
             Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
@@ -968,6 +989,8 @@ namespace SharePortfolioManager.DividendForm.View
                 Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Caption", LanguageName);
                 grpBoxAddDividend.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", LanguageName);
+                grpBoxDocumentPreview.Text =
+                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxDocumentPreview/Caption", LanguageName);
                 grpBoxDividends.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxDividend/Caption",
                         LanguageName);
@@ -1594,6 +1617,8 @@ namespace SharePortfolioManager.DividendForm.View
             {
                 if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
 
+                if (ShowDividendsFlag) return;
+
                 _parsingStartAllow = true;
 
                 var files = (string[])e.Data.GetData(DataFormats.FileDrop);
@@ -1604,7 +1629,7 @@ namespace SharePortfolioManager.DividendForm.View
                 // Check if the document is a PDF
                 var extenstion = Path.GetExtension(txtBoxDocument.Text);
 
-                if (string.Compare(extenstion, ".PDF", StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(extenstion, ".PDF", StringComparison.OrdinalIgnoreCase) == 0 && _parsingStartAllow)
                 {
                     if (_parsingBackgroundWorker.IsBusy)
                     {
@@ -1618,6 +1643,8 @@ namespace SharePortfolioManager.DividendForm.View
                 }
 
                 _parsingStartAllow = false;
+
+                Helper.WebBrowserPdf.Reload(webBrowser1, txtBoxDocument.Text);
             }
             catch (Exception ex)
             {
@@ -1633,6 +1660,7 @@ namespace SharePortfolioManager.DividendForm.View
                 grpBoxDividends.Enabled = true;
 
                 DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                _parsingStartAllow = false;
                 _parsingThreadFinished = true;
                 _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
             }
@@ -1790,8 +1818,6 @@ namespace SharePortfolioManager.DividendForm.View
             toolStripStatusLabelMessageDividendEdit.Text = string.Empty;
             toolStripStatusLabelMessageDividendDocumentParsing.Text = string.Empty;
 
-            _parsingStartAllow = true;
-
             DocumentBrowseEventHandler?.Invoke(this, new EventArgs());
         }
 
@@ -1823,6 +1849,9 @@ namespace SharePortfolioManager.DividendForm.View
         {
             try
             {
+                // Set flag that the show buy is running
+                ShowDividendsFlag = true;
+
                 // Reset tab control
                 foreach (TabPage tabPage in tabCtrlDividends.TabPages)
                 {
@@ -2021,8 +2050,6 @@ namespace SharePortfolioManager.DividendForm.View
                     dataGridViewDividendsOfAYear.MouseEnter += OnDataGridViewDividendsOfAYear_MouseEnter;
                     // Set row select event
                     dataGridViewDividendsOfAYear.SelectionChanged += DataGridViewDividendsOfAYear_SelectionChanged;
-                    // Set cell decimal click event
-                    dataGridViewDividendsOfAYear.CellContentDoubleClick += DataGridViewDividendsOfAYear_CellContentClick;
 
                     #endregion Events
 
@@ -2073,6 +2100,9 @@ namespace SharePortfolioManager.DividendForm.View
                 tabCtrlDividends.TabPages[0].Select();
 
                 Thread.CurrentThread.CurrentCulture = CultureInfo.CurrentUICulture;
+
+                // Set flag that the show buy is finished
+                ShowDividendsFlag = false;
             }
             catch (Exception ex)
             {
@@ -2590,6 +2620,75 @@ namespace SharePortfolioManager.DividendForm.View
                     // Reset stored DataGridView instance
                     SelectedDataGridView = null;
                 }
+
+                // Check if the file still exists
+                if (File.Exists(txtBoxDocument.Text) || txtBoxDocument.Text == @"")
+                {
+                    Helper.WebBrowserPdf.Reload(webBrowser1, txtBoxDocument.Text);
+                }
+                else
+                {
+                    if (ShowDividendsFlag) return;
+
+                    var strCaption =
+                        Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
+                            (int) EOwnMessageBoxInfoType.Error];
+                    var strMessage =
+                        Language.GetLanguageTextByXPath(
+                            @"/MessageBoxForm/Content/DocumentDoesNotExistDelete",
+                            LanguageName);
+                    var strOk =
+                        Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Yes",
+                            LanguageName);
+                    var strCancel =
+                        Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/No",
+                            LanguageName);
+
+                    var messageBox = new OwnMessageBox(strCaption, strMessage, strOk,
+                        strCancel);
+                    if (messageBox.ShowDialog() != DialogResult.OK) return;
+
+                    // Get the current selected row
+                    var curItem = ((DataGridView) sender).SelectedRows;
+                    // Get Guid of the selected buy item
+                    var strGuid = curItem[0].Cells[0].Value.ToString();
+
+                    // Check if a document is set
+                    if (curItem[0].Cells[((DataGridView) sender).ColumnCount - 1].Value == null) return;
+
+                    // Get doc from the buy with the Guid
+                    foreach (var temp in ShareObjectFinalValue.AllDividendEntries.GetAllDividendsOfTheShare())
+                    {
+                        // Check if the buy Guid is the same as the Guid of the clicked buy item
+                        if (temp.Guid != strGuid) continue;
+
+                        // Remove move document from the buy objects
+                        if (ShareObjectFinalValue.SetBuyDocument(strGuid, temp.Date, string.Empty) &&
+                            ShareObjectMarketValue.SetBuyDocument(strGuid, temp.Date, string.Empty))
+                        {
+                            // Set flag to save the share object.
+                            SaveFlag = true;
+
+                            OnShowDividends();
+
+                            Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
+                                Language.GetLanguageTextByXPath(
+                                    @"/AddEditFormDividend/StateMessages/EditSuccess", LanguageName),
+                                Language, LanguageName,
+                                Color.Black, Logger, (int) FrmMain.EStateLevels.Info,
+                                (int) FrmMain.EComponentLevels.Application);
+                        }
+                        else
+                        {
+                            Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
+                                Language.GetLanguageTextByXPath(
+                                    @"/AddEditFormDividend/Errors/EditFailed", LanguageName),
+                                Language, LanguageName,
+                                Color.Red, Logger, (int) FrmMain.EStateLevels.Error,
+                                (int) FrmMain.EComponentLevels.Application);
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -2612,105 +2711,6 @@ namespace SharePortfolioManager.DividendForm.View
         private static void OnDataGridViewDividendsOfAYear_MouseEnter(object sender, EventArgs args)
         {
             ((DataGridView)sender).Focus();
-        }
-
-        /// <summary>
-        /// This function opens the dividend document if a document is present
-        /// </summary>
-        /// <param name="sender">DataGridView</param>
-        /// <param name="e">DataGridViewCellEventArgs</param>
-        private void DataGridViewDividendsOfAYear_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            try
-            {
-                // Get column count of the given DataGridView
-                var iColumnCount = ((DataGridView)sender).ColumnCount;
-
-                // Check if the last column (document column) has been clicked
-                if (e.ColumnIndex != iColumnCount - 1) return;
-
-                // Check if a row is selected
-                if (((DataGridView) sender).SelectedRows.Count != 1) return;
-
-                // Get the current selected row
-                var curItem = ((DataGridView)sender).SelectedRows;
-                // Get Guid of the selected dividend item
-                var strGuid = curItem[0].Cells[0].Value.ToString();
-
-                // Check if a document is set
-                if (curItem[0].Cells[iColumnCount - 1].Value == null) return;
-
-                // Get doc from the dividend with the strDateTime
-                foreach (var temp in ShareObjectFinalValue.AllDividendEntries.GetAllDividendsOfTheShare())
-                {
-                    // Check if the dividend date and time is the same as the date and time of the clicked buy item
-                    if (temp.Guid != strGuid) continue;
-
-                    // Check if the file still exists
-                    if (File.Exists(temp.DocumentAsStr))
-                        // Open the file
-                        Process.Start(temp.DocumentAsStr);
-                    else
-                    {
-                        var strCaption =
-                            Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
-                                (int) EOwnMessageBoxInfoType.Error];
-                        var strMessage =
-                            Language.GetLanguageTextByXPath(
-                                @"/MessageBoxForm/Content/DocumentDoesNotExistDelete",
-                                LanguageName);
-                        var strOk =
-                            Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Yes",
-                                LanguageName);
-                        var strCancel =
-                            Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/No",
-                                LanguageName);
-
-                        var messageBox = new OwnMessageBox(strCaption, strMessage, strOk,
-                            strCancel);
-                        if (messageBox.ShowDialog() == DialogResult.OK)
-                        {
-                            // Remove dividend object and add it with no document
-                            if (ShareObjectFinalValue.RemoveDividend(temp.Guid, temp.Date) &&
-                                ShareObjectFinalValue.AddDividend(temp.CultureInfoFc, temp.EnableFc, temp.ExchangeRatio, temp.Guid, temp.Date, temp.Dividend, temp.Volume,
-                                    temp.TaxAtSource, temp.CapitalGainsTax, temp.SolidarityTax, temp.PriceAtPayday))
-                            {
-                                // Set flag to save the share object.
-                                SaveFlag = true;
-
-                                OnShowDividends();
-
-                                Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
-                                    Language.GetLanguageTextByXPath(
-                                        @"/AddEditFormDividend/StateMessages/EditSuccess", LanguageName),
-                                    Language, LanguageName,
-                                    Color.Black, Logger, (int)FrmMain.EStateLevels.Info,
-                                    (int)FrmMain.EComponentLevels.Application);
-                            }
-                            else
-                            {
-                                Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
-                                    Language.GetLanguageTextByXPath(
-                                        @"/AddEditFormDividend/Errors/EditFailed", LanguageName),
-                                    Language, LanguageName,
-                                    Color.Red, Logger, (int)FrmMain.EStateLevels.Error,
-                                    (int)FrmMain.EComponentLevels.Application);
-                            }
-                        }
-                    }
-
-                    break;
-                }
-            }
-            catch (Exception ex)
-            {
-                Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DocumentShowFailed", LanguageName),
-                    Language, LanguageName,
-                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError,
-                    (int)FrmMain.EComponentLevels.Application,
-                    ex);
-            }
         }
 
         #endregion Dividends of a year
@@ -2746,7 +2746,6 @@ namespace SharePortfolioManager.DividendForm.View
                     txtBoxTax.Text = string.Empty;
                     txtBoxPayoutAfterTax.Text = string.Empty;
                     txtBoxSharePrice.Text = string.Empty;
-                    txtBoxDocument.Text = string.Empty;
 
                     // Reset status message
                     toolStripStatusLabelMessageDividendEdit.Text = string.Empty;
@@ -2775,7 +2774,6 @@ namespace SharePortfolioManager.DividendForm.View
                     txtBoxTax.Text = string.Empty;
                     txtBoxPayoutAfterTax.Text = string.Empty;
                     txtBoxSharePrice.Text = string.Empty;
-                    txtBoxDocument.Text = string.Empty;
 
                     // Reset status message
                     toolStripStatusLabelMessageDividendEdit.Text = string.Empty;
@@ -2815,31 +2813,33 @@ namespace SharePortfolioManager.DividendForm.View
                 DocumentTypeParser = null;
                 DictionaryParsingResult = null;
 
-                Helper.RunProcess($"{Helper.PdfConverterApplication}", $"-simple \"{txtBoxDocument.Text}\" {Helper.ParsingDocumentFileName}");
+                Helper.RunProcess($"{Helper.PdfToTextApplication}",
+                    $"-simple \"{txtBoxDocument.Text}\" {Helper.ParsingDocumentFileName}");
 
-                // This text is added only once to the file.
-                if (File.Exists(Helper.ParsingDocumentFileName))
-                {
-                    ParsingText = File.ReadAllText(Helper.ParsingDocumentFileName, Encoding.Default);
+                ParsingText = File.ReadAllText(Helper.ParsingDocumentFileName, Encoding.Default);
 
-                    DocumentTypeParsing();
-                }
+                // Start document parsing
+                DocumentTypeParsing();
 
                 while (!_parsingThreadFinished)
                 {
                     Thread.Sleep(100);
                 }
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException)
             {
-                Helper.ShowExceptionMessage(ex);
-
+                // Show exception is not allowed here (THREAD)
+                // Only do progress report progress
+                _parsingThreadFinished = true;
+                _parsingStartAllow = false;
                 _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Helper.ShowExceptionMessage(ex);
-
+                // Show exception is not allowed here (THREAD)
+                // Only do progress report progress
+                _parsingThreadFinished = true;
+                _parsingStartAllow = false;
                 _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
             }
         }
@@ -2886,11 +2886,12 @@ namespace SharePortfolioManager.DividendForm.View
                     _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingParsingDocumentError);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Helper.ShowExceptionMessage(ex);
-
+                // Show exception is not allowed here (THREAD)
+                // Only do progress report progress
                 _parsingThreadFinished = true;
+                _parsingStartAllow = false;
                 _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingFailed);
             }
         }
@@ -3176,23 +3177,27 @@ namespace SharePortfolioManager.DividendForm.View
                             }
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        Helper.ShowExceptionMessage(ex);
+                        // Show exception is not allowed here (THREAD)
+                        // Only do progress report progress
+                        _parsingThreadFinished = true;
+                        _parsingStartAllow = false;
+                        _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
 
                         DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
-                        _parsingThreadFinished = true;
-                        _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Helper.ShowExceptionMessage(ex);
+                // Show exception is not allowed here (THREAD)
+                // Only do progress report progress
+                _parsingThreadFinished = true;
+                _parsingStartAllow = false;
+                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
 
                 DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
-                _parsingThreadFinished = true;
-                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
             }
         }
 
@@ -3301,6 +3306,10 @@ namespace SharePortfolioManager.DividendForm.View
 
         private void OnDocumentParsingRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            // Delete old parsing text file
+            if (File.Exists(Helper.ParsingDocumentFileName))
+                File.Delete(Helper.ParsingDocumentFileName);
+
             if (DictionaryParsingResult != null)
             {
                 // Check if the WKN has been found and if the WKN is the right one

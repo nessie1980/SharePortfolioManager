@@ -295,7 +295,6 @@ namespace SharePortfolioManager.BuysForm.Presenter
 
                 _model.ErrorCode = BuyErrorCode.DocumentBrowseFailed;
             }
-
         }
 
         /// <summary>

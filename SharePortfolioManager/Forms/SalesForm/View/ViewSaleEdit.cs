@@ -1199,6 +1199,8 @@ namespace SharePortfolioManager.SalesForm.View
                 Text = Language.GetLanguageTextByXPath(@"/AddEditFormSale/Caption", LanguageName);
                 grpBoxAdd.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Add_Caption", LanguageName);
+                grpBoxDocumentPreview.Text =
+                    Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxDocumentPreview/Caption", LanguageName);
                 grpBoxSales.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxSale/Caption",
                         LanguageName);
@@ -1989,7 +1991,15 @@ namespace SharePortfolioManager.SalesForm.View
             {
                 if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
 
-                _parsingStartAllow = true;
+                if (ShowSalesRunning) return;
+
+                // Check if the parsing should be allowed
+                if (ShareObjectFinalValue.AllSaleEntries.IsLastSale(SelectedGuid) ||
+                    SelectedGuid == string.Empty
+                )
+                    _parsingStartAllow = true;
+                else
+                    _parsingStartAllow = false;
 
                 var files = (string[]) e.Data.GetData(DataFormats.FileDrop);
                 if (files.Length <= 0 || files.Length > 1) return;
@@ -2013,15 +2023,15 @@ namespace SharePortfolioManager.SalesForm.View
                 }
 
                 _parsingStartAllow = false;
+
+                Helper.WebBrowserPdf.Reload(webBrowser1, txtBoxDocument.Text);
             }
             catch (Exception ex)
             {
-                Helper.AddStatusMessage(toolStripStatusLabelMessageSaleDocumentParsing,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormSale/ParsingErrors/ParsingFailed", LanguageName),
-                    Language, LanguageName,
-                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError,
-                    (int)FrmMain.EComponentLevels.Application,
-                    ex);
+                Helper.ShowExceptionMessage(ex);
+
+                toolStripStatusLabelMessageSaleDocumentParsing.ForeColor = Color.Red;
+                toolStripStatusLabelMessageSaleDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormSale/ParsingErrors/ParsingFailed", LanguageName);
 
                 toolStripProgressBarSaleDocumentParsing.Visible = false;
                 grpBoxAdd.Enabled = true;
@@ -2248,8 +2258,6 @@ namespace SharePortfolioManager.SalesForm.View
         {
             toolStripStatusLabelMessageSaleEdit.Text = string.Empty;
             toolStripStatusLabelMessageSaleDocumentParsing.Text = string.Empty;
-
-            _parsingStartAllow = true;
 
             DocumentBrowseEventHandler?.Invoke(this, new EventArgs());
         }
@@ -3148,6 +3156,77 @@ namespace SharePortfolioManager.SalesForm.View
                         SelectedGuidLast = SelectedGuid;
                 }
 
+                // Check if the file still exists or no document is set
+                if (File.Exists(txtBoxDocument.Text) || txtBoxDocument.Text == @"")
+                {
+                    Helper.WebBrowserPdf.Reload(webBrowser1, txtBoxDocument.Text);
+                }
+                else
+                {
+                    if (ShowSalesRunning) return;
+
+                    var strCaption =
+                        Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
+                            (int)EOwnMessageBoxInfoType.Error];
+                    var strMessage =
+                        Language.GetLanguageTextByXPath(
+                            @"/MessageBoxForm/Content/DocumentDoesNotExistDelete",
+                            LanguageName);
+                    var strOk =
+                        Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Yes",
+                            LanguageName);
+                    var strCancel =
+                        Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/No",
+                            LanguageName);
+
+                    var messageBox = new OwnMessageBox(strCaption, strMessage, strOk,
+                        strCancel);
+
+                    // Check if the user pressed cancel
+                    if (messageBox.ShowDialog() == DialogResult.Cancel) return;
+
+                    // Get the current selected row
+                    var curItem = ((DataGridView)sender).SelectedRows;
+                    // Get Guid of the selected buy item
+                    var strGuid = curItem[0].Cells[0].Value.ToString();
+
+                    // Check if a document is set
+                    if (curItem[0].Cells[((DataGridView)sender).ColumnCount - 1].Value == null) return;
+
+                    // Get doc from the sale with the Guid
+                    foreach (var temp in ShareObjectFinalValue.AllSaleEntries.GetAllSalesOfTheShare())
+                    {
+                        // Check if the sale Guid is the same as the Guid of the clicked buy item
+                        if (temp.Guid != strGuid) continue;
+
+                        // Remove move document from the buy objects
+                        if (ShareObjectFinalValue.SetBuyDocument(strGuid, temp.Date, string.Empty) &&
+                            ShareObjectMarketValue.SetBuyDocument(strGuid, temp.Date, string.Empty))
+                        {
+                            // Set flag to save the share object.
+                            SaveFlag = true;
+
+                            OnShowSales();
+
+                            Helper.AddStatusMessage(toolStripStatusLabelMessageSaleEdit,
+                                Language.GetLanguageTextByXPath(
+                                    @"/AddEditFormSale/StateMessages/EditSuccess", LanguageName),
+                                Language, LanguageName,
+                                Color.Black, Logger, (int)FrmMain.EStateLevels.Info,
+                                (int)FrmMain.EComponentLevels.Application);
+                        }
+                        else
+                        {
+                            Helper.AddStatusMessage(toolStripStatusLabelMessageSaleEdit,
+                                Language.GetLanguageTextByXPath(
+                                    @"/AddEditFormSale/Errors/EditFailed", LanguageName),
+                                Language, LanguageName,
+                                Color.Red, Logger, (int)FrmMain.EStateLevels.Error,
+                                (int)FrmMain.EComponentLevels.Application);
+                        }
+                    }
+                }
+                
                 // Reset load running flag
                 LoadSaleRunning = false;
             }
@@ -3299,32 +3378,33 @@ namespace SharePortfolioManager.SalesForm.View
                 DocumentTypeParser = null;
                 DictionaryParsingResult = null;
 
-                Helper.RunProcess($"{Helper.PdfConverterApplication}",
+                Console.WriteLine(@"File: {0}", txtBoxDocument.Text);
+
+                Helper.RunProcess($"{Helper.PdfToTextApplication}",
                     $"-simple \"{txtBoxDocument.Text}\" {Helper.ParsingDocumentFileName}");
 
-                // This text is added only once to the file.
-                if (File.Exists(Helper.ParsingDocumentFileName))
-                {
-                    ParsingText = File.ReadAllText(Helper.ParsingDocumentFileName, Encoding.Default);
+                ParsingText = File.ReadAllText(Helper.ParsingDocumentFileName, Encoding.Default);
 
-                    DocumentTypeParsing();
-                }
+                // Start document parsing
+                DocumentTypeParsing();
 
                 while (!_parsingThreadFinished)
                 {
                     Thread.Sleep(100);
                 }
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException)
             {
-                Helper.ShowExceptionMessage(ex);
-
+                // Show exception is not allowed here (THREAD)
+                // Only do progress report progress
+                _parsingThreadFinished = true;
                 _parsingBackgroundWorker.ReportProgress((int) ParsingErrorCode.ParsingDocumentFailed);
             }
             catch (Exception ex)
             {
-                Helper.ShowExceptionMessage(ex);
-
+                // Show exception is not allowed here (THREAD)
+                // Only do progress report progress
+                _parsingThreadFinished = true;
                 _parsingBackgroundWorker.ReportProgress((int) ParsingErrorCode.ParsingDocumentFailed);
             }
         }
@@ -3372,10 +3452,10 @@ namespace SharePortfolioManager.SalesForm.View
                     _parsingBackgroundWorker.ReportProgress((int) ParsingErrorCode.ParsingParsingDocumentError);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Helper.ShowExceptionMessage(ex);
-
+                // Show exception is not allowed here (THREAD)
+                // Only do progress report progress
                 _parsingThreadFinished = true;
                 _parsingBackgroundWorker.ReportProgress((int) ParsingErrorCode.ParsingFailed);
             }
@@ -3663,23 +3743,25 @@ namespace SharePortfolioManager.SalesForm.View
                             }
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        Helper.ShowExceptionMessage(ex);
-
-                        DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                        // Show exception is not allowed here (THREAD)
+                        // Only do progress report progress
                         _parsingThreadFinished = true;
                         _parsingBackgroundWorker.ReportProgress((int) ParsingErrorCode.ParsingDocumentFailed);
+
+                        DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Helper.ShowExceptionMessage(ex);
-
-                DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                // Show exception is not allowed here (THREAD)
+                // Only do progress report progress
                 _parsingThreadFinished = true;
                 _parsingBackgroundWorker.ReportProgress((int) ParsingErrorCode.ParsingDocumentFailed);
+
+                DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
             }
         }
 
@@ -3786,6 +3868,10 @@ namespace SharePortfolioManager.SalesForm.View
 
         private void OnDocumentParsingRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            // Delete old parsing text file
+            if (File.Exists(Helper.ParsingDocumentFileName))
+                File.Delete(Helper.ParsingDocumentFileName);
+
             if (DictionaryParsingResult != null)
             {
                 // Check if the WKN has been found and if the WKN is the right one
@@ -4037,12 +4123,6 @@ namespace SharePortfolioManager.SalesForm.View
                                 LanguageName);
                     }
                 }
-            }
-            else
-            {
-                toolStripStatusLabelMessageSaleDocumentParsing.ForeColor = Color.Red;
-                toolStripStatusLabelMessageSaleDocumentParsing.Text =
-                    Language.GetLanguageTextByXPath(@"/AddEditFormSale/ParsingErrors/ParsingFailed", LanguageName);
             }
 
             toolStripProgressBarSaleDocumentParsing.Visible = false;

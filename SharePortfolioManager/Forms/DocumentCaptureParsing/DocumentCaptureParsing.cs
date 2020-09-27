@@ -265,7 +265,7 @@ namespace SharePortfolioManager.DocumentCaptureParsing
                 DocumentTypeParser = null;
                 DictionaryParsingResult = null;
 
-                Helper.RunProcess($"{Helper.PdfConverterApplication}", $"-simple \"{ParsingFileName}\" {Helper.ParsingDocumentFileName}");
+                Helper.RunProcess($"{Helper.PdfToTextApplication}", $"-simple \"{ParsingFileName}\" {Helper.ParsingDocumentFileName}");
 
                 // This text is added only once to the file.
                 if (File.Exists(Helper.ParsingDocumentFileName))
