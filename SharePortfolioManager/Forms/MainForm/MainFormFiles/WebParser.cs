@@ -655,7 +655,11 @@ namespace SharePortfolioManager
                                         timerStartNextShareUpdate.Enabled = true;
 
                                     if (SelectedDataGridViewShareIndex == ShareObject.ObjectCounter - 1)
+                                    {
+                                        Sound.PlayUpdateFinishedSound();
+    
                                         timerStatusMessageClear.Enabled = true;
+                                    }
                                 }
                             }
                             else
@@ -684,7 +688,11 @@ namespace SharePortfolioManager
                                         ParserDailyValues.ParserErrorCode <= DataTypes.ParserErrorCodes.NoError
                                     )
                                 )
+                                {
+                                    Sound.PlayUpdateFinishedSound();
+
                                     timerStatusMessageClear.Enabled = true;
+                                }
                             }
 
                             break;
@@ -1057,6 +1065,8 @@ namespace SharePortfolioManager
 
                                     if (SelectedDataGridViewShareIndex == ShareObject.ObjectCounter - 1)
                                     {
+                                        Sound.PlayUpdateFinishedSound();
+
                                         // This is done for the data grid view scrolling
                                         // Clear current selection
                                         dgvPortfolioMarketValue.ClearSelection();
@@ -1105,7 +1115,11 @@ namespace SharePortfolioManager
                                         ParserMarketValues.ParserErrorCode <= DataTypes.ParserErrorCodes.NoError
                                     )
                                 )
+                                {
+                                    Sound.PlayUpdateFinishedSound();
+
                                     timerStatusMessageClear.Enabled = true;
+                                }
                             }
 
                             break;

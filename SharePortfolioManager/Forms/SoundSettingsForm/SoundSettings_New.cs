@@ -32,9 +32,9 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace SharePortfolioManager.LoggerSettingsForm
+namespace SharePortfolioManager.SoundSettingsForm
 {
-    public partial class FrmLoggerSettings : Form
+    public partial class FrmSoundSettings : Form
     {
         #region Properties
 
@@ -56,7 +56,7 @@ namespace SharePortfolioManager.LoggerSettingsForm
         /// <summary>
         /// Constructor
         /// </summary>
-        public FrmLoggerSettings(FrmMain parentWindow, Logger logger, Language xmlLanguage, String strLanguage)
+        public FrmSoundSettings(FrmMain parentWindow, Logger logger, Language xmlLanguage, String strLanguage)
         {
             InitializeComponent();
 
@@ -73,7 +73,7 @@ namespace SharePortfolioManager.LoggerSettingsForm
         /// </summary>
         /// <param name="sender">Form</param>
         /// <param name="e">FormClosingEventArgs</param>
-        private void FrmLoggerSettings_FormClosing(object sender, FormClosingEventArgs e)
+        private void FrmSoundSettings_FormClosing(object sender, FormClosingEventArgs e)
         {
             // Check if the form should be closed
             if (StopFomClosingFlag)
@@ -91,48 +91,48 @@ namespace SharePortfolioManager.LoggerSettingsForm
         /// </summary>
         /// <param name="sender">Form</param>
         /// <param name="e">EventArgs</param>
-        private void FrmLoggerSettings_Load(object sender, EventArgs e)
+        private void FrmSoundSettings_Load(object sender, EventArgs e)
         {
             try
             {
                 #region Language configuration
 
-                Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Caption", LanguageName);
+                Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/Caption", LanguageName);
 
-                grpBoxGUIEntries.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogGUIEntriesSize/Caption", LanguageName);
-                lblGUIEntriesSize.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogGUIEntriesSize/Labels/GUIEntriesSize", LanguageName);
+                grpBoxGUIEntries.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxLogGUIEntriesSize/Caption", LanguageName);
+                lblGUIEntriesSize.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxLogGUIEntriesSize/Labels/GUIEntriesSize", LanguageName);
 
-                grpBoxEnableFileLogging.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxFileLogging/Caption", LanguageName);
-                chkBoxEnableFileLogging.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxFileLogging/States/EnableFileLogging", LanguageName);
+                grpBoxEnableFileLogging.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxFileLogging/Caption", LanguageName);
+                chkBoxEnableFileLogging.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxFileLogging/States/EnableFileLogging", LanguageName);
 
-                grpBoxStoredLogFiles.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxStoredFiles/Caption", LanguageName);
-                lblStoredLogFiles.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxStoredFiles/Labels/StoredLogFiles", LanguageName);
-                btnLogFileCleanUp.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Buttons/CleanUp", LanguageName);
+                grpBoxStoredLogFiles.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxStoredFiles/Caption", LanguageName);
+                lblStoredLogFiles.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxStoredFiles/Labels/StoredLogFiles", LanguageName);
+                btnLogFileCleanUp.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/Buttons/CleanUp", LanguageName);
 
-                grpBoxCleanUpAtStartUp.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxCleanUpAtStartUp/Caption", LanguageName);
-                chkBoxEnableCleanUpAtStartUp.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxCleanUpAtStartUp/States/EnableCleanUpAtStartUp", LanguageName);
+                grpBoxCleanUpAtStartUp.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxCleanUpAtStartUp/Caption", LanguageName);
+                chkBoxEnableCleanUpAtStartUp.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxCleanUpAtStartUp/States/EnableCleanUpAtStartUp", LanguageName);
 
-                grpBoxComponents.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogComponents/Caption", LanguageName);
+                grpBoxComponents.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxLogComponents/Caption", LanguageName);
                 chkBoxApplication.Text = Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Application", LanguageName);
                 chkBoxParser.Text = Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Parser", LanguageName);
                 chkBoxLanguageHander.Text = Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/LanguageHandler", LanguageName);
 
-                grpBoxLogLevel.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogLevels/Caption", LanguageName);
+                grpBoxLogLevel.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxLogLevels/Caption", LanguageName);
                 chkBoxStart.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Start", LanguageName);
                 chkBoxInfo.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Info", LanguageName);
                 chkBoxWarning.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Warning", LanguageName);
                 chkBoxError.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Error", LanguageName);
                 chkBoxFatalError.Text = Language.GetLanguageTextByXPath(@"/Logger/States/FatalError", LanguageName);
 
-                grpBoxLogColors.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogLevelColors/Caption", LanguageName);
+                grpBoxLogColors.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxLogLevelColors/Caption", LanguageName);
                 lblColorStart.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Start", LanguageName);
                 lblColorInfo.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Info", LanguageName);
                 lblColorWarning.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Warning", LanguageName);
                 lblColorError.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Error", LanguageName);
                 lblColorFatalError.Text = Language.GetLanguageTextByXPath(@"/Logger/States/FatalError", LanguageName);
 
-                btnSave.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Buttons/Save", LanguageName);
-                btnCancel.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Buttons/Cancel", LanguageName);
+                btnSave.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/Buttons/Save", LanguageName);
+                btnCancel.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/Buttons/Cancel", LanguageName);
 
                 #endregion Language configuration
 
@@ -268,7 +268,7 @@ namespace SharePortfolioManager.LoggerSettingsForm
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                    Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/LoggerSettingsShowFailed",
+                    Language.GetLanguageTextByXPath(@"/SoundSettingsForm/Errors/LoggerSettingsShowFailed",
                         LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
@@ -362,7 +362,7 @@ namespace SharePortfolioManager.LoggerSettingsForm
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                    Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/LogFileCleanUpFailed", LanguageName), Language, LanguageName,
+                    Language.GetLanguageTextByXPath(@"/SoundSettingsForm/Errors/LogFileCleanUpFailed", LanguageName), Language, LanguageName,
                     Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
                     ex);
             }
@@ -510,8 +510,7 @@ namespace SharePortfolioManager.LoggerSettingsForm
                         (int)EOwnMessageBoxInfoType.Info],
                         Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/LoggerSettingsReboot", LanguageName),
                         Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", LanguageName),
-                        Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", LanguageName),
-                        EOwnMessageBoxInfoType.Info);
+                        Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", LanguageName));
                     ombReboot.ShowDialog();
                 }
                 catch (Exception ex)
@@ -519,7 +518,7 @@ namespace SharePortfolioManager.LoggerSettingsForm
                     StopFomClosingFlag = true;
 
                     Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/SaveSettingsFailed", LanguageName),
+                        Language.GetLanguageTextByXPath(@"/SoundSettingsForm/Errors/SaveSettingsFailed", LanguageName),
                         Language, LanguageName,
                         Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                         (int) FrmMain.EComponentLevels.Application,
@@ -531,7 +530,7 @@ namespace SharePortfolioManager.LoggerSettingsForm
                 StopFomClosingFlag = true;
 
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                   Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/SaveSettingsFailed", LanguageName),
+                   Language.GetLanguageTextByXPath(@"/SoundSettingsForm/Errors/SaveSettingsFailed", LanguageName),
                    Language, LanguageName,
                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);               
             }

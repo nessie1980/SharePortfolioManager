@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmChart));
             this.chartDailyValues = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.lblNoDataMessage = new System.Windows.Forms.Label();
             this.toolStripChart = new System.Windows.Forms.ToolStrip();
@@ -92,11 +93,11 @@
             this.Controls.Add(this.lblNoDataMessage);
             this.Controls.Add(this.chartDailyValues);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(700, 350);
             this.Name = "FrmChart";
-            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Chart";
             this.TopMost = true;

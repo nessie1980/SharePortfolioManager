@@ -614,7 +614,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                                 LanguageName);
 
                         var messageBox = new OwnMessageBox(strCaption, strMessage, strOk,
-                            strCancel);
+                            strCancel, EOwnMessageBoxInfoType.Info);
                         if (messageBox.ShowDialog() == DialogResult.OK)
                         {
                         }

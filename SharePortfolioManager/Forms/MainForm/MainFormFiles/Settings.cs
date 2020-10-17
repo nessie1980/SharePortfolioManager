@@ -28,6 +28,7 @@ using SharePortfolioManager.ShareDetailsForm;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
@@ -226,6 +227,48 @@ namespace SharePortfolioManager
                 timerStatusMessageClear.Interval = StatusMessageClearTimerValue;
 
                 #endregion State clear timer
+
+                #region Sounds
+
+                var nodeUpdateFinishSoundEnable = Settings.SelectSingleNode("/Settings/Sounds/UpdateFinishedEnabled");
+                if (nodeUpdateFinishSoundEnable != null)
+                {
+                    if (bool.TryParse(nodeUpdateFinishSoundEnable.InnerText, out var bOutResult))
+                        Sound.UpdateFinishedEnable = bOutResult;
+                    else
+                        loadSettings = false;
+                }
+                else
+                    loadSettings = false;
+
+                var nodeUpdateFinishSound = Settings.SelectSingleNode("/Settings/Sounds/UpdateFinished");
+                if (nodeUpdateFinishSound != null)
+                {
+                    Sound.UpdateFinishedFileName = Path.GetDirectoryName(Application.ExecutablePath) + @"\Sounds\" + nodeUpdateFinishSound.InnerText;
+                }
+                else
+                    loadSettings = false;
+
+                var nodeErrorSoundEnable = Settings.SelectSingleNode("/Settings/Sounds/ErrorEnabled");
+                if (nodeErrorSoundEnable != null)
+                {
+                    if (bool.TryParse(nodeErrorSoundEnable.InnerText, out var bOutResult))
+                        Sound.ErrorEnable = bOutResult;
+                    else
+                        loadSettings = false;
+                }
+                else
+                    loadSettings = false;
+
+                var nodeErrorSound = Settings.SelectSingleNode("/Settings/Sounds/Error");
+                if (nodeErrorSound != null)
+                {
+                    Sound.ErrorFileName = Path.GetDirectoryName(Application.ExecutablePath) + @"\Sounds\" + nodeErrorSound.InnerText;
+                }
+                else
+                    loadSettings = false;
+
+                #endregion Sounds
 
                 #region Charting values
 

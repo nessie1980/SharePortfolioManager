@@ -86,6 +86,7 @@
 					<Header text="Settings" />
 					<Language text="Language" />
 					<Logger text="Logger" />
+					<Sounds text="Sounds" />
 				</Settings>
 				<Help>
 					<Header text="Help" />
@@ -1387,6 +1388,74 @@
 				<LogFileCleanUpFailed text="Log file cleanup failed!" />
 			</Errors>
 		</LoggerSettingsForm>
+
+		<!-- Sound settings -->
+		<SoundsSettingsForm>
+			<Caption text="Sounds" />
+
+			<!-- GroupBox update finish sound -->
+			<GrpBoxUpdateFinishedSound>
+				<Caption text="Sound for the share update finish" />
+				
+				<!-- Labels -->
+				<Labels>
+					<UpdateFinishSound text="Update finish sound:" />
+				</Labels>
+
+				<!-- Buttons -->
+				<Buttons>
+					<Browse text="Browse..." />
+				</Buttons>
+
+				<!-- Open file dialog title -->
+				<OpenFileDialog>
+					<Title text="Chose update finished sound file" />
+				</OpenFileDialog>
+
+				<!-- Checkboxes -->
+				<CheckBoxes>
+					<EnableUpdateFinishSound text="Enable" />
+				</CheckBoxes>
+			</GrpBoxUpdateFinishedSound>
+
+			<!-- GroupBox update finish sound -->
+			<GrpBoxErrorSound>
+				<Caption text="Sound for the error" />
+				
+				<!-- Labels -->
+				<Labels>
+					<ErrorSound text="Error sound:" />
+				</Labels>
+
+				<!-- Buttons -->
+				<Buttons>
+					<Browse text="Browse..." />
+				</Buttons>
+
+				<!-- Open file dialog title -->
+				<OpenFileDialog>
+					<Title text="Chose error sound file" />
+				</OpenFileDialog>
+
+				<!-- Checkboxes -->
+				<CheckBoxes>
+					<EnableErrorSound text="Enable" />
+				</CheckBoxes>
+			</GrpBoxErrorSound>
+
+			<!-- Buttons -->
+			<Buttons>
+				<Save text="  Save" />
+				<Cancel text="  Cancel" />
+			</Buttons>
+			
+			<!-- Errors -->
+			<Errors>
+				<SoundSettingsShowFailed text="An exception occurred. Showing the dialog failed!" />
+				<SaveSettingsFailed text="An exception occurred. Save of the settings failed!" />
+				<SaveSettingsSuccessful text="Save of the settings successful." />
+			</Errors>
+		</SoundsSettingsForm>
 		
 		<!-- Message box -->
 		<MessageBoxForm>
@@ -1540,6 +1609,7 @@
 					<Header text="Einstellungen" />
 					<Language text="Sprache" />
 					<Logger text="Logger" />
+					<Sounds text="Sounds" />
 				</Settings>
 				<Help>
 					<Header text="Hilfe" />
@@ -2838,6 +2908,74 @@
 				<LogFileCleanUpFailed text="Säubern der Log- Dateien fehlgeschlagen!" />
 			</Errors>
 		</LoggerSettingsForm>
+
+		<!-- Sound settings -->
+		<SoundsSettingsForm>
+			<Caption text="Sounds" />
+
+			<!-- GroupBox update finish sound -->
+			<GrpBoxUpdateFinishedSound>
+				<Caption text="Sound für das Ende einer Aktien- Aktualisierung" />
+				
+				<!-- Labels -->
+				<Labels>
+					<UpdateFinishSound text="Aktualisierungs- Sound:" />
+				</Labels>
+
+				<!-- Buttons -->
+				<Buttons>
+					<Browse text="Browse..." />
+				</Buttons>
+
+				<!-- Open file dialog title -->
+				<OpenFileDialog>
+					<Title text="Aktualisierungs- Ende Sound- Datei auswählen" />
+				</OpenFileDialog>
+
+				<!-- Checkboxes -->
+				<Checkboxes>
+					<EnableUpdateFinishSound text="Aktiv" />
+				</Checkboxes>
+			</GrpBoxUpdateFinishedSound>
+
+			<!-- GroupBox update finish sound -->
+			<GrpBoxErrorSound>
+				<Caption text="Sound für das Anzeigen einers Fehlers" />
+				
+				<!-- Labels -->
+				<Labels>
+					<ErrorSound text="Fehler- Sound:" />
+				</Labels>
+
+				<!-- Buttons -->
+				<Buttons>
+					<Browse text="Browse..." />
+				</Buttons>
+
+				<!-- Open file dialog title -->
+				<OpenFileDialog>
+					<Title text="Fehler- Sound- Datei auswählen" />
+				</OpenFileDialog>
+
+				<!-- Checkboxes -->
+				<CheckBoxes>
+					<EnableErrorSound text="Aktiv" />
+				</CheckBoxes>
+			</GrpBoxErrorSound>
+
+			<!-- Buttons -->
+			<Buttons>
+				<Save text="  Speichern" />
+				<Cancel text="  Abbrechen" />
+			</Buttons>
+			
+			<!-- Errors -->
+			<Errors>
+				<SoundSettingsShowFailed text="Es trat ein Fehler auf. Anzeigen des Dialogs fehlgeschlagen!" />
+				<SaveSettingsFailed text="Es trat ein Fehler auf. Speichern der Einstellungen fehlgeschlagen!" />
+				<SaveSettingsSuccessful text="Speichern der Einstellung erfolgreich." />
+			</Errors>
+		</SoundsSettingsForm>
 		
 		<!-- Message box -->
 		<MessageBoxForm>

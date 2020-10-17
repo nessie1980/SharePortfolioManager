@@ -337,7 +337,8 @@ namespace SharePortfolioManager
                             (int) EOwnMessageBoxInfoType.Info],
                         Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/ShareDelete", LanguageName),
                         Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Yes", LanguageName),
-                        Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/No", LanguageName));
+                        Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/No", LanguageName),
+                        EOwnMessageBoxInfoType.Info);
                     if (ownDeleteMessageBox.ShowDialog() != DialogResult.OK) return;
 
                     // Set delete flag

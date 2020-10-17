@@ -506,9 +506,11 @@ namespace SharePortfolioManager.DividendForm.View
                         // Check if a direct document parsing is done
                         if (ParsingFileName != null)
                             Close();
-
-                        // Refresh the buy list
-                        OnShowDividends();
+                        else
+                        {
+                            // Refresh the buy list
+                            OnShowDividends();
+                        }
 
                         break;
                     }
@@ -538,6 +540,9 @@ namespace SharePortfolioManager.DividendForm.View
                         grpBoxAddDividend.Text =
                             Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption",
                                 LanguageName);
+
+                        // Reset dialog icon to add
+                        Icon = Resources.add;
 
                         strMessage =
                             Language.GetLanguageTextByXPath(@"/AddEditFormDividend/StateMessages/EditSuccess", LanguageName);
@@ -577,6 +582,12 @@ namespace SharePortfolioManager.DividendForm.View
 
                         // Rename group box
                         grpBoxAddDividend.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", LanguageName);
+
+                        // Reset dialog icon to add
+                        Icon = Resources.add;
+
+                        // Reset dialog icon to add
+                        Icon = Resources.add;
 
                         // Refresh the buy list
                         OnShowDividends();
@@ -1197,6 +1208,9 @@ namespace SharePortfolioManager.DividendForm.View
             grpBoxAddDividend.Text =
                 Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", LanguageName);
 
+            // Reset dialog icon to add
+            Icon = Resources.add;
+
             // Deselect rows
             OnDeselectRowsOfDataGridViews(null);
 
@@ -1214,6 +1228,9 @@ namespace SharePortfolioManager.DividendForm.View
                 tabCtrlDividends.SelectTab(0);
 
             txtBoxDividendRate.Focus();
+
+            // Reset document web browser
+            Helper.WebBrowserPdf.Reload(webBrowser1, txtBoxDocument.Text);
 
             FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
         }
@@ -1735,7 +1752,7 @@ namespace SharePortfolioManager.DividendForm.View
                 var strOk = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", LanguageName);
                 var strCancel = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", LanguageName);
 
-                var messageBox = new OwnMessageBox(strCaption, strMessage, strOk, strCancel);
+                var messageBox = new OwnMessageBox(strCaption, strMessage, strOk, strCancel, EOwnMessageBoxInfoType.Info);
 
                 var dlgResult = messageBox.ShowDialog();
 
@@ -1759,6 +1776,9 @@ namespace SharePortfolioManager.DividendForm.View
 
                 // Rename group box
                 grpBoxAddDividend.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", LanguageName);
+
+                // Reset dialog icon to add
+                Icon = Resources.add;
 
                 // Refresh the dividend list
                 OnShowDividends();
@@ -2499,6 +2519,9 @@ namespace SharePortfolioManager.DividendForm.View
                         grpBoxAddDividend.Text =
                             Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Edit_Caption", LanguageName);
 
+                        // Reset dialog icon to add
+                        Icon = Resources.edit;
+
                         // Store DataGridView instance
                         SelectedDataGridView = (DataGridView)sender;
 
@@ -2574,6 +2597,9 @@ namespace SharePortfolioManager.DividendForm.View
                     grpBoxAddDividend.Text = 
                         Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", LanguageName);
 
+                    // Reset dialog icon to add
+                    Icon = Resources.add;
+
                     // Disable button(s)
                     btnDelete.Enabled = false;
 
@@ -2645,7 +2671,7 @@ namespace SharePortfolioManager.DividendForm.View
                             LanguageName);
 
                     var messageBox = new OwnMessageBox(strCaption, strMessage, strOk,
-                        strCancel);
+                        strCancel, EOwnMessageBoxInfoType.Error);
                     if (messageBox.ShowDialog() != DialogResult.OK) return;
 
                     // Get the current selected row

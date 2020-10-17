@@ -43,6 +43,7 @@ namespace SharePortfolioManager
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.languageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loggerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.soundsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.grpBoxSharePortfolio = new System.Windows.Forms.GroupBox();
@@ -162,7 +163,8 @@ namespace SharePortfolioManager
             // 
             this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.languageToolStripMenuItem,
-            this.loggerToolStripMenuItem});
+            this.loggerToolStripMenuItem,
+            this.soundsToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(82, 20);
             this.settingsToolStripMenuItem.Text = "&Settings_";
@@ -170,7 +172,7 @@ namespace SharePortfolioManager
             // languageToolStripMenuItem
             // 
             this.languageToolStripMenuItem.Name = "languageToolStripMenuItem";
-            this.languageToolStripMenuItem.Size = new System.Drawing.Size(145, 30);
+            this.languageToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
             this.languageToolStripMenuItem.Text = "_Language";
             // 
             // loggerToolStripMenuItem
@@ -178,9 +180,17 @@ namespace SharePortfolioManager
             this.loggerToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.menu_eventlog_24;
             this.loggerToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.loggerToolStripMenuItem.Name = "loggerToolStripMenuItem";
-            this.loggerToolStripMenuItem.Size = new System.Drawing.Size(145, 30);
+            this.loggerToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
             this.loggerToolStripMenuItem.Text = "_Logger";
             this.loggerToolStripMenuItem.Click += new System.EventHandler(this.OnLoggerToolStripMenuItem_Click);
+            // 
+            // soundsToolStripMenuItem
+            // 
+            this.soundsToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.menu_sound_24;
+            this.soundsToolStripMenuItem.Name = "soundsToolStripMenuItem";
+            this.soundsToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
+            this.soundsToolStripMenuItem.Text = "_Sound";
+            this.soundsToolStripMenuItem.Click += new System.EventHandler(this.OnSoundToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -404,7 +414,7 @@ namespace SharePortfolioManager
             this.tabPgMarketValue.Location = new System.Drawing.Point(4, 26);
             this.tabPgMarketValue.Name = "tabPgMarketValue";
             this.tabPgMarketValue.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPgMarketValue.Size = new System.Drawing.Size(1205, 434);
+            this.tabPgMarketValue.Size = new System.Drawing.Size(1354, 434);
             this.tabPgMarketValue.TabIndex = 1;
             this.tabPgMarketValue.Text = "_tabPageMarketValues";
             this.tabPgMarketValue.UseVisualStyleBackColor = true;
@@ -759,6 +769,7 @@ namespace SharePortfolioManager
         private Timer timerMouseCellDownDoubleClick;
         private GroupBox grpBoxDocumentCapture;
         private TextBox txtBoxDocumentCapture;
+        private ToolStripMenuItem soundsToolStripMenuItem;
     }
 }
 

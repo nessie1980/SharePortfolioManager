@@ -31,6 +31,7 @@ namespace SharePortfolioManager.SalesForm.View
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ViewSaleEdit));
             this.grpBoxSales = new System.Windows.Forms.GroupBox();
             this.tblLayPnlOverviewTabControl = new System.Windows.Forms.TableLayoutPanel();
             this.tabCtrlSales = new System.Windows.Forms.TabControl();
@@ -288,7 +289,7 @@ namespace SharePortfolioManager.SalesForm.View
             this.tblLayPnlSaleInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tblLayPnlSaleInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tblLayPnlSaleInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tblLayPnlSaleInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tblLayPnlSaleInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.tblLayPnlSaleInput.Controls.Add(this.picBoxTimeParseState, 5, 0);
             this.tblLayPnlSaleInput.Controls.Add(this.txtBoxOrderNumber, 1, 2);
             this.tblLayPnlSaleInput.Controls.Add(this.lblAddSaleDate, 0, 0);
@@ -1264,17 +1265,16 @@ namespace SharePortfolioManager.SalesForm.View
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.ClientSize = new System.Drawing.Size(1284, 694);
-            this.ControlBox = false;
             this.Controls.Add(this.grpBoxDocumentPreview);
             this.Controls.Add(this.grpBoxSales);
             this.Controls.Add(this.grpBoxAdd);
             this.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(1300, 800);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(1300, 710);
             this.Name = "ViewSaleEdit";
-            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "_shareSalesEdit";
             this.TopMost = true;

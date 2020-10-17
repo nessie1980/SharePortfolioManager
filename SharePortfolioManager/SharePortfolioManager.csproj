@@ -197,6 +197,7 @@
     <Compile Include="Classes\ShareObjects\ShareObjectFinalValue.cs" />
     <Compile Include="Classes\ShareObjects\ShareObjectMarketValue.cs" />
     <Compile Include="Classes\Helper.cs" />
+    <Compile Include="Classes\Sound.cs" />
     <Compile Include="Forms\AboutForm\About.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -337,6 +338,12 @@
     <Compile Include="Forms\SalesForm\UsedBuyDetailsList\UserBuyDetailsList.Designer.cs">
       <DependentUpon>UserBuyDetailsList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SoundSettingsForm\SoundSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SoundSettingsForm\SoundSettings.Designer.cs">
+      <DependentUpon>SoundSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Classes\ParserRegex\WebSiteRegex.cs" />
@@ -398,6 +405,9 @@
       <DependentUpon>UserBuyDetailsList.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SoundSettingsForm\SoundSettings.resx">
+      <DependentUpon>SoundSettings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
@@ -452,6 +462,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BuildTools\AssemblyInfoUpdater.exe" />
+    <None Include="Resources\Icon\input.ico" />
+    <None Include="Resources\Icon\warning.ico" />
+    <None Include="Resources\Icon\info.ico" />
+    <None Include="Resources\Icon\error.ico" />
+    <None Include="Resources\Icon\details.ico" />
+    <None Include="Resources\Icon\chart.ico" />
+    <None Include="Resources\Icon\sound.ico" />
+    <None Include="Resources\Icon\eventlog.ico" />
+    <None Include="Resources\Icon\edit.ico" />
+    <None Include="Resources\Icon\add.ico" />
+    <None Include="Resources\Icon\about.ico" />
+    <None Include="Resources\Pic_24\menu_sound_24.png" />
     <None Include="Resources\Pic_24\positiv_strong_development_24.png" />
     <None Include="Resources\Pic_24\positiv_normal_development_24.png" />
     <None Include="Resources\Pic_24\negativ_strong_development_24.png" />
@@ -535,15 +557,25 @@ XCOPY "$(ProjectDir)Config\Settings.xml" "$(TargetDir)\Settings\" /Y /D
 XCOPY "$(ProjectDir)Config\WebSites.xml" "$(TargetDir)\Settings\" /Y /D
 XCOPY "$(ProjectDir)Config\Language.xml" "$(TargetDir)\Settings\" /Y /D
 XCOPY "$(ProjectDir)Config\Documents.xml" "$(TargetDir)\Settings\" /Y /D
+ECHO.
 
 ECHO Copy DLLs
 ECHO.
-
+ECHO XCOPY "$(ProjectDir)DLLs\*.*" "$(TargetDir)" /Y /D
 XCOPY "$(ProjectDir)DLLs\*.*" "$(TargetDir)" /Y /D
+ECHO.
+
+ECHO Copy sounds
+ECHO.
+ECHO XCOPY "$(ProjectDir)Sounds\*.*" "$(TargetDir)Sounds\" /Y /D
+XCOPY "$(ProjectDir)Sounds\*.*" "$(TargetDir)Sounds\" /Y /D
+ECHO.
 
 REM Reset portfolio
+ECHO.
 ECHO XCOPY "$(TargetDir)Portfolios\ShareList - Kopie.xml" "$(TargetDir)Portfolios\ShareList.xml" /Y
 XCOPY "$(TargetDir)Portfolios\ShareList - Kopie.xml" "$(TargetDir)Portfolios\ShareList.xml" /Y
+ECHO.
 </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -347,6 +347,9 @@ namespace SharePortfolioManager.BrokeragesForm.View
                             Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Add_Caption",
                                 LanguageName);
 
+                        // Reset dialog icon to add
+                        Icon = Resources.add;
+
                         strMessage =
                             Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/StateMessages/EditSuccess", LanguageName);
                         // Set flag to save the share object.
@@ -386,6 +389,9 @@ namespace SharePortfolioManager.BrokeragesForm.View
 
                         // Rename group box
                         grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Add_Caption", LanguageName);
+
+                        // Reset dialog icon to add
+                        Icon = Resources.add;
 
                         // Refresh the brokerage list
                         OnShowBrokerage();
@@ -796,6 +802,9 @@ namespace SharePortfolioManager.BrokeragesForm.View
             grpBoxAdd.Text =
                 Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Add_Caption", LanguageName);
 
+            // Reset dialog icon to add
+            Icon = Resources.add;
+
             // Deselect rows
             OnDeselectRowsOfDataGridViews(null);
 
@@ -1126,7 +1135,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 var strOk = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", LanguageName);
                 var strCancel = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", LanguageName);
 
-                var messageBox = new OwnMessageBox(strCaption, strMessage, strOk, strCancel);
+                var messageBox = new OwnMessageBox(strCaption, strMessage, strOk, strCancel, EOwnMessageBoxInfoType.Info);
 
                 var dlgResult = messageBox.ShowDialog();
 
@@ -1895,6 +1904,9 @@ namespace SharePortfolioManager.BrokeragesForm.View
                             Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Edit_Caption",
                                 LanguageName);
 
+                        // Reset dialog icon to add
+                        Icon = Resources.edit;
+
                         // Store DataGridView instance
                         SelectedDataGridView = (DataGridView)sender;
 
@@ -1955,6 +1967,9 @@ namespace SharePortfolioManager.BrokeragesForm.View
                     // Rename group box
                     grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Add_Caption",
                         LanguageName);
+
+                    // Reset dialog icon to add
+                    Icon = Resources.add;
 
                     // Disable button(s)
                     btnDelete.Enabled = false;
@@ -2055,7 +2070,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                                 LanguageName);
 
                         var messageBox = new OwnMessageBox(strCaption, strMessage, strOk,
-                            strCancel);
+                            strCancel, EOwnMessageBoxInfoType.Error);
                         if (messageBox.ShowDialog() == DialogResult.OK)
                         {
                             // Generate Guid

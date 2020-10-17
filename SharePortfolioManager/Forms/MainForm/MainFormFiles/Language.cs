@@ -250,6 +250,8 @@ namespace SharePortfolioManager
                     LanguageName);
                 loggerToolStripMenuItem.Text = Language.GetLanguageTextByXPath(@"/MainForm/Menu/Settings/Logger",
                     LanguageName);
+                soundsToolStripMenuItem.Text = Language.GetLanguageTextByXPath(@"/MainForm/Menu/Settings/Sounds",
+                    LanguageName);
 
                 helpToolStripMenuItem.Text =
                     Language.GetLanguageTextByXPath(@"/MainForm/Menu/Help/Header", LanguageName);

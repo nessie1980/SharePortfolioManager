@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ViewDividendEdit));
             this.btnAddSave = new System.Windows.Forms.Button();
             this.grpBoxAddDividend = new System.Windows.Forms.GroupBox();
             this.tblLayPnlDividendButtons = new System.Windows.Forms.TableLayoutPanel();
@@ -1026,7 +1027,7 @@
             this.grpBoxDividends.Controls.Add(this.lblAddTax);
             this.grpBoxDividends.Location = new System.Drawing.Point(5, 427);
             this.grpBoxDividends.Name = "grpBoxDividends";
-            this.grpBoxDividends.Size = new System.Drawing.Size(760, 147);
+            this.grpBoxDividends.Size = new System.Drawing.Size(760, 124);
             this.grpBoxDividends.TabIndex = 3;
             this.grpBoxDividends.TabStop = false;
             this.grpBoxDividends.Text = "_grpBoxDividends";
@@ -1043,8 +1044,8 @@
             this.tblLayPnlOverviewTabControl.Name = "tblLayPnlOverviewTabControl";
             this.tblLayPnlOverviewTabControl.RowCount = 1;
             this.tblLayPnlOverviewTabControl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblLayPnlOverviewTabControl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 151F));
-            this.tblLayPnlOverviewTabControl.Size = new System.Drawing.Size(754, 126);
+            this.tblLayPnlOverviewTabControl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 128F));
+            this.tblLayPnlOverviewTabControl.Size = new System.Drawing.Size(754, 103);
             this.tblLayPnlOverviewTabControl.TabIndex = 48;
             // 
             // tabCtrlDividends
@@ -1054,7 +1055,7 @@
             this.tabCtrlDividends.Location = new System.Drawing.Point(3, 3);
             this.tabCtrlDividends.Name = "tabCtrlDividends";
             this.tabCtrlDividends.SelectedIndex = 0;
-            this.tabCtrlDividends.Size = new System.Drawing.Size(748, 120);
+            this.tabCtrlDividends.Size = new System.Drawing.Size(748, 97);
             this.tabCtrlDividends.TabIndex = 0;
             this.tabCtrlDividends.SelectedIndexChanged += new System.EventHandler(this.OnTabCtrlDividends_SelectedIndexChanged);
             this.tabCtrlDividends.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnTabCtrlDividends_KeyDown);
@@ -1147,17 +1148,16 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.ClientSize = new System.Drawing.Size(1284, 601);
-            this.ControlBox = false;
             this.Controls.Add(this.grpBoxDocumentPreview);
             this.Controls.Add(this.grpBoxDividends);
             this.Controls.Add(this.grpBoxAddDividend);
             this.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(1300, 640);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(1300, 640);
             this.Name = "ViewDividendEdit";
-            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "_shareDividendEdit";
             this.TopMost = true;

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmShareEdit));
             this.lblWkn = new System.Windows.Forms.Label();
             this.txtBoxName = new System.Windows.Forms.TextBox();
             this.lblWknValue = new System.Windows.Forms.Label();
@@ -66,6 +67,10 @@
             this.lblShareUpdate = new System.Windows.Forms.Label();
             this.dateTimeStockMarketLaunchDate = new System.Windows.Forms.DateTimePicker();
             this.lblStockMarketLaunchDate = new System.Windows.Forms.Label();
+            this.rdbMarketPrice = new System.Windows.Forms.RadioButton();
+            this.rdbBoth = new System.Windows.Forms.RadioButton();
+            this.rdbDailyValues = new System.Windows.Forms.RadioButton();
+            this.rdbNone = new System.Windows.Forms.RadioButton();
             this.grpBoxEarningsExpenditure = new System.Windows.Forms.GroupBox();
             this.tblLayPnlEditShareEarningsExpenditure = new System.Windows.Forms.TableLayoutPanel();
             this.lblBrokerageValue = new System.Windows.Forms.Label();
@@ -81,10 +86,6 @@
             this.lblProfitLoss = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.editShareStatusLabelMessage = new System.Windows.Forms.ToolStripStatusLabel();
-            this.rdbMarketPrice = new System.Windows.Forms.RadioButton();
-            this.rdbDailyValues = new System.Windows.Forms.RadioButton();
-            this.rdbBoth = new System.Windows.Forms.RadioButton();
-            this.rdbNone = new System.Windows.Forms.RadioButton();
             this.grpBoxGeneral.SuspendLayout();
             this.tblLayPnlEditShareButtons.SuspendLayout();
             this.tblLayPnlEditShareInput.SuspendLayout();
@@ -443,7 +444,7 @@
             this.tblLayPnlEditShareInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.tblLayPnlEditShareInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.tblLayPnlEditShareInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tblLayPnlEditShareInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 77F));
+            this.tblLayPnlEditShareInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 79F));
             this.tblLayPnlEditShareInput.Controls.Add(this.lblWkn, 0, 0);
             this.tblLayPnlEditShareInput.Controls.Add(this.lblWknValue, 1, 0);
             this.tblLayPnlEditShareInput.Controls.Add(this.lblDate, 0, 1);
@@ -667,6 +668,70 @@
             this.lblStockMarketLaunchDate.Text = "_lblStockMarketLaunchDate";
             this.lblStockMarketLaunchDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // rdbMarketPrice
+            // 
+            this.rdbMarketPrice.AutoSize = true;
+            this.rdbMarketPrice.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rdbMarketPrice.Image = global::SharePortfolioManager.Properties.Resources.state_update_blue_16;
+            this.rdbMarketPrice.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.rdbMarketPrice.Location = new System.Drawing.Point(349, 145);
+            this.rdbMarketPrice.Margin = new System.Windows.Forms.Padding(1);
+            this.rdbMarketPrice.Name = "rdbMarketPrice";
+            this.rdbMarketPrice.Size = new System.Drawing.Size(145, 22);
+            this.rdbMarketPrice.TabIndex = 48;
+            this.rdbMarketPrice.TabStop = true;
+            this.rdbMarketPrice.Text = "Market price";
+            this.rdbMarketPrice.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.rdbMarketPrice.UseVisualStyleBackColor = true;
+            // 
+            // rdbBoth
+            // 
+            this.rdbBoth.AutoSize = true;
+            this.rdbBoth.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rdbBoth.Image = global::SharePortfolioManager.Properties.Resources.state_update_16;
+            this.rdbBoth.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.rdbBoth.Location = new System.Drawing.Point(251, 145);
+            this.rdbBoth.Margin = new System.Windows.Forms.Padding(1);
+            this.rdbBoth.Name = "rdbBoth";
+            this.rdbBoth.Size = new System.Drawing.Size(96, 22);
+            this.rdbBoth.TabIndex = 50;
+            this.rdbBoth.TabStop = true;
+            this.rdbBoth.Text = "Both";
+            this.rdbBoth.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.rdbBoth.UseVisualStyleBackColor = true;
+            // 
+            // rdbDailyValues
+            // 
+            this.rdbDailyValues.AutoSize = true;
+            this.rdbDailyValues.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rdbDailyValues.Image = global::SharePortfolioManager.Properties.Resources.state_update_yellow_16;
+            this.rdbDailyValues.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.rdbDailyValues.Location = new System.Drawing.Point(496, 145);
+            this.rdbDailyValues.Margin = new System.Windows.Forms.Padding(1);
+            this.rdbDailyValues.Name = "rdbDailyValues";
+            this.rdbDailyValues.Size = new System.Drawing.Size(145, 22);
+            this.rdbDailyValues.TabIndex = 49;
+            this.rdbDailyValues.TabStop = true;
+            this.rdbDailyValues.Text = "Daily values";
+            this.rdbDailyValues.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.rdbDailyValues.UseVisualStyleBackColor = true;
+            // 
+            // rdbNone
+            // 
+            this.rdbNone.AutoSize = true;
+            this.rdbNone.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rdbNone.Image = global::SharePortfolioManager.Properties.Resources.state_no_update_16;
+            this.rdbNone.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.rdbNone.Location = new System.Drawing.Point(643, 145);
+            this.rdbNone.Margin = new System.Windows.Forms.Padding(1);
+            this.rdbNone.Name = "rdbNone";
+            this.rdbNone.Size = new System.Drawing.Size(96, 22);
+            this.rdbNone.TabIndex = 51;
+            this.rdbNone.TabStop = true;
+            this.rdbNone.Text = "None";
+            this.rdbNone.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.rdbNone.UseVisualStyleBackColor = true;
+            // 
             // grpBoxEarningsExpenditure
             // 
             this.grpBoxEarningsExpenditure.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -885,87 +950,22 @@
             this.editShareStatusLabelMessage.Name = "editShareStatusLabelMessage";
             this.editShareStatusLabelMessage.Size = new System.Drawing.Size(0, 17);
             // 
-            // rdbMarketPrice
-            // 
-            this.rdbMarketPrice.AutoSize = true;
-            this.rdbMarketPrice.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rdbMarketPrice.Image = global::SharePortfolioManager.Properties.Resources.state_update_blue_16;
-            this.rdbMarketPrice.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.rdbMarketPrice.Location = new System.Drawing.Point(349, 145);
-            this.rdbMarketPrice.Margin = new System.Windows.Forms.Padding(1);
-            this.rdbMarketPrice.Name = "rdbMarketPrice";
-            this.rdbMarketPrice.Size = new System.Drawing.Size(145, 22);
-            this.rdbMarketPrice.TabIndex = 48;
-            this.rdbMarketPrice.TabStop = true;
-            this.rdbMarketPrice.Text = "Market price";
-            this.rdbMarketPrice.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.rdbMarketPrice.UseVisualStyleBackColor = true;
-            // 
-            // rdbDailyValues
-            // 
-            this.rdbDailyValues.AutoSize = true;
-            this.rdbDailyValues.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rdbDailyValues.Image = global::SharePortfolioManager.Properties.Resources.state_update_yellow_16;
-            this.rdbDailyValues.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.rdbDailyValues.Location = new System.Drawing.Point(496, 145);
-            this.rdbDailyValues.Margin = new System.Windows.Forms.Padding(1);
-            this.rdbDailyValues.Name = "rdbDailyValues";
-            this.rdbDailyValues.Size = new System.Drawing.Size(145, 22);
-            this.rdbDailyValues.TabIndex = 49;
-            this.rdbDailyValues.TabStop = true;
-            this.rdbDailyValues.Text = "Daily values";
-            this.rdbDailyValues.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.rdbDailyValues.UseVisualStyleBackColor = true;
-            // 
-            // rdbBoth
-            // 
-            this.rdbBoth.AutoSize = true;
-            this.rdbBoth.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rdbBoth.Image = global::SharePortfolioManager.Properties.Resources.state_update_16;
-            this.rdbBoth.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.rdbBoth.Location = new System.Drawing.Point(251, 145);
-            this.rdbBoth.Margin = new System.Windows.Forms.Padding(1);
-            this.rdbBoth.Name = "rdbBoth";
-            this.rdbBoth.Size = new System.Drawing.Size(96, 22);
-            this.rdbBoth.TabIndex = 50;
-            this.rdbBoth.TabStop = true;
-            this.rdbBoth.Text = "Both";
-            this.rdbBoth.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.rdbBoth.UseVisualStyleBackColor = true;
-            // 
-            // rdbNone
-            // 
-            this.rdbNone.AutoSize = true;
-            this.rdbNone.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rdbNone.Image = global::SharePortfolioManager.Properties.Resources.state_no_update_16;
-            this.rdbNone.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.rdbNone.Location = new System.Drawing.Point(643, 145);
-            this.rdbNone.Margin = new System.Windows.Forms.Padding(1);
-            this.rdbNone.Name = "rdbNone";
-            this.rdbNone.Size = new System.Drawing.Size(96, 22);
-            this.rdbNone.TabIndex = 51;
-            this.rdbNone.TabStop = true;
-            this.rdbNone.Text = "None";
-            this.rdbNone.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.rdbNone.UseVisualStyleBackColor = true;
-            // 
             // FrmShareEdit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.ClientSize = new System.Drawing.Size(834, 533);
-            this.ControlBox = false;
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.grpBoxEarningsExpenditure);
             this.Controls.Add(this.grpBoxGeneral);
             this.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(900, 572);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(800, 572);
             this.Name = "FrmShareEdit";
-            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "_shareEdit";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmShareEdit_FormClosing);

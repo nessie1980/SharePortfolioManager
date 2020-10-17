@@ -608,9 +608,11 @@ namespace SharePortfolioManager.SalesForm.View
                     // Check if a direct document parsing is done
                     if (ParsingFileName != null)
                         Close();
-
-                    // Refresh the sale list
-                    OnShowSales();
+                    else
+                    {
+                        // Refresh the sale list
+                        OnShowSales();
+                    }
 
                     break;
                 }
@@ -641,6 +643,9 @@ namespace SharePortfolioManager.SalesForm.View
                     grpBoxAdd.Text =
                         Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Add_Caption",
                             LanguageName);
+
+                    // Reset dialog icon to add
+                    Icon = Resources.add;
 
                     strMessage =
                         Language.GetLanguageTextByXPath(@"/AddEditFormSale/StateMessages/EditSuccess", LanguageName);
@@ -694,6 +699,9 @@ namespace SharePortfolioManager.SalesForm.View
                     // Rename group box
                     grpBoxAdd.Text =
                         Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Add_Caption", LanguageName);
+
+                    // Reset dialog icon to add
+                    Icon = Resources.add;
 
                     // Refresh the sale list
                     OnShowSales();
@@ -1496,6 +1504,9 @@ namespace SharePortfolioManager.SalesForm.View
             grpBoxAdd.Text =
                 Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Add_Caption", LanguageName);
 
+            // Reset dialog icon to add
+            Icon = Resources.add;
+
             // Deselect rows
             OnDeselectRowsOfDataGridViews(null);
 
@@ -1505,6 +1516,9 @@ namespace SharePortfolioManager.SalesForm.View
             // Select overview tab
             if (tabCtrlSales.TabPages.Count > 0)
                 tabCtrlSales.SelectTab(0);
+
+            // Reset document web browser
+            Helper.WebBrowserPdf.Reload(webBrowser1, txtBoxDocument.Text);
 
             dateTimePickerDate.Focus();
 
@@ -2167,7 +2181,7 @@ namespace SharePortfolioManager.SalesForm.View
                 var strCancel = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel",
                     LanguageName);
 
-                var messageBox = new OwnMessageBox(strCaption, strMessage, strOk, strCancel);
+                var messageBox = new OwnMessageBox(strCaption, strMessage, strOk, strCancel, EOwnMessageBoxInfoType.Info);
 
                 var dlgResult = messageBox.ShowDialog();
 
@@ -2193,6 +2207,9 @@ namespace SharePortfolioManager.SalesForm.View
                 // Rename group box
                 grpBoxAdd.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Add_Caption", LanguageName);
+
+                // Reset dialog icon to add
+                Icon = Resources.add;
 
                 // Refresh the dividend list
                 OnShowSales();
@@ -3034,6 +3051,9 @@ namespace SharePortfolioManager.SalesForm.View
                                 Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Edit_Caption",
                                     LanguageName);
 
+                            // Reset dialog icon to edit
+                            Icon = Resources.edit;
+
                             // Store DataGridView instance
                             SelectedDataGridView = (DataGridView)sender;
 
@@ -3113,6 +3133,9 @@ namespace SharePortfolioManager.SalesForm.View
                     grpBoxAdd.Text =
                         Language.GetLanguageTextByXPath(@"/AddEditFormSale/GrpBoxAddEdit/Add_Caption", LanguageName);
 
+                    // Reset dialog icon to add
+                    Icon = Resources.add;
+
                     // Disable button(s)
                     btnDelete.Enabled = false;
 
@@ -3180,7 +3203,7 @@ namespace SharePortfolioManager.SalesForm.View
                             LanguageName);
 
                     var messageBox = new OwnMessageBox(strCaption, strMessage, strOk,
-                        strCancel);
+                        strCancel, EOwnMessageBoxInfoType.Error);
 
                     // Check if the user pressed cancel
                     if (messageBox.ShowDialog() == DialogResult.Cancel) return;
@@ -3306,7 +3329,7 @@ namespace SharePortfolioManager.SalesForm.View
                                 LanguageName);
 
                         var messageBox = new OwnMessageBox(strCaption, strMessage, strOk,
-                            strCancel);
+                            strCancel, EOwnMessageBoxInfoType.Error);
                         if (messageBox.ShowDialog() == DialogResult.OK)
                         {
                             // Remove sale object and add it with no document

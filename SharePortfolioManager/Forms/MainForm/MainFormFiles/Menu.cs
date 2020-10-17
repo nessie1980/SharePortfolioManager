@@ -32,6 +32,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml;
+using SharePortfolioManager.SoundSettingsForm;
 
 namespace SharePortfolioManager
 {
@@ -55,6 +56,7 @@ namespace SharePortfolioManager
                 Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/InputPortfolioName", LanguageName),
                 Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", LanguageName),
                 Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", LanguageName),
+                EOwnMessageBoxInfoType.InputFileName,
                 true);
             var dlgResult = dlgPortfolioFileName.ShowDialog();
 
@@ -70,7 +72,8 @@ namespace SharePortfolioManager
                         (int) EOwnMessageBoxInfoType.Info],
                     Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/PortfolioNameExists", LanguageName),
                     Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", LanguageName),
-                    Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", LanguageName));
+                    Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", LanguageName),
+                    EOwnMessageBoxInfoType.Info);
 
                 var dlgResultFileExists = dlgPortfolioFileExists.ShowDialog();
 
@@ -110,7 +113,8 @@ namespace SharePortfolioManager
                         (int)EOwnMessageBoxInfoType.Info],
                     Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/PortfolioDirectoryCreationFailed", LanguageName),
                     Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", LanguageName),
-                    Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", LanguageName));
+                    Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", LanguageName),
+                    EOwnMessageBoxInfoType.Info);
 
                 dlgPortfolioDirectoryCreationFailed.ShowDialog();
             }
@@ -268,6 +272,42 @@ namespace SharePortfolioManager
                     Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/SaveSettingsFailed", LanguageName),
                     Language, LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
+                    ex);
+            }
+        }
+
+        /// <summary>
+        /// This function opens the sound settings dialog
+        /// </summary>
+        /// <param name="sender">MenuStrip sound</param>
+        /// <param name="e">EventArgs</param>
+        private void OnSoundToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var soundSettings = new FrmSoundSettings(this, Logger, Language, LanguageName);
+
+                if (soundSettings.ShowDialog() != DialogResult.OK) return;
+
+                // Close reader for saving
+                ReaderSettings.Close();
+                // Save settings
+                Settings.Save(SettingsFileName);
+                // Create a new reader to test if the saved values could be loaded
+                ReaderSettings = XmlReader.Create(SettingsFileName, ReaderSettingsSettings);
+                Settings.Load(ReaderSettings);
+
+                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(@"/SoundsSettingsForm/Errors/SaveSettingsSuccessful", LanguageName),
+                    Language, LanguageName,
+                    Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
+            }
+            catch (Exception ex)
+            {
+                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                    Language.GetLanguageTextByXPath(@"/SoundsSettingsForm/Errors/SaveSettingsFailed", LanguageName),
+                    Language, LanguageName,
+                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application,
                     ex);
             }
         }

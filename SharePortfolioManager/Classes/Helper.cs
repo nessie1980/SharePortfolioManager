@@ -324,6 +324,11 @@ namespace SharePortfolioManager.Classes
                 var result = false;
                 var stateMessageError = "";
 
+                if(stateLevel == (int) SharePortfolioManager.FrmMain.EStateLevels.Error ||
+                   stateLevel == (int) SharePortfolioManager.FrmMain.EStateLevels.FatalError
+                   )
+                    Sound.PlayErrorSound();
+
                 // Check if the given logger is initialized
                 if (logger != null && logger.InitState == Logger.EInitState.Initialized)
                 {
@@ -1426,6 +1431,8 @@ namespace SharePortfolioManager.Classes
             /// <param name="fileName">Filename of the given PDF file which should be shown</param>
             public static void Reload(WebBrowser sender, string fileName)
             {
+                if (sender == null) return;
+
                 sender.Visible = false;
                 sender.Navigate(new Uri("about:blank"));
 
@@ -1446,6 +1453,8 @@ namespace SharePortfolioManager.Classes
             /// <param name="sender">WebBrowser object</param>
             public static void CleanUp(WebBrowser sender)
             {
+                if (sender == null) return;
+
                 sender.Visible = false;
                 sender.Navigate(new Uri("about:blank"));
 

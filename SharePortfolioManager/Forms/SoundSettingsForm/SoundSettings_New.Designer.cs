@@ -1,9 +1,9 @@
 ﻿
 using SharePortfolioManager.Properties;
 
-namespace SharePortfolioManager.LoggerSettingsForm
+namespace SharePortfolioManager.SoundSettingsForm
 {
-    partial class FrmLoggerSettings
+    partial class FrmSoundSettings
     {
         /// <summary>
         /// Required designer variable.
@@ -31,7 +31,6 @@ namespace SharePortfolioManager.LoggerSettingsForm
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmLoggerSettings));
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.toolStripStatusLabelMessage = new System.Windows.Forms.ToolStripStatusLabel();
@@ -439,7 +438,7 @@ namespace SharePortfolioManager.LoggerSettingsForm
             this.statusStrip1.TabIndex = 9;
             this.statusStrip1.Text = "statusStrip";
             // 
-            // FrmLoggerSettings
+            // FrmSoundSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -456,16 +455,16 @@ namespace SharePortfolioManager.LoggerSettingsForm
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnCancel);
             this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(750, 395);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(750, 395);
-            this.Name = "FrmLoggerSettings";
+            this.Name = "FrmSoundSettings";
+            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "LoggerSettings";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmLoggerSettings_FormClosing);
-            this.Load += new System.EventHandler(this.FrmLoggerSettings_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmSoundSettings_FormClosing);
+            this.Load += new System.EventHandler(this.FrmSoundSettings_Load);
             this.grpBoxLogLevel.ResumeLayout(false);
             this.grpBoxLogColors.ResumeLayout(false);
             this.grpBoxComponents.ResumeLayout(false);

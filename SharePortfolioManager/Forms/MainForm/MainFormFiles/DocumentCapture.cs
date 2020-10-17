@@ -82,7 +82,7 @@ namespace SharePortfolioManager
                         LanguageName);
 
                     // Show message
-                    var msg = new OwnMessageBox(strCaption, strMessage, strOk, strCancel);
+                    var msg = new OwnMessageBox(strCaption, strMessage, strOk, strCancel, EOwnMessageBoxInfoType.Info);
                     msg.ShowDialog();
                 }
             }

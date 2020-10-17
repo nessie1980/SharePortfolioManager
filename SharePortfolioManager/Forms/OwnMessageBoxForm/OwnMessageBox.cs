@@ -26,6 +26,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using SharePortfolioManager.Properties;
 
 namespace SharePortfolioManager.OwnMessageBoxForm
 {
@@ -52,6 +53,8 @@ namespace SharePortfolioManager.OwnMessageBoxForm
 
         private readonly string _cancelButtonText;
 
+        private readonly EOwnMessageBoxInfoType _boxType;
+
         private readonly bool _flagInputBox;
 
         private TextBox _txtBoxInputString;
@@ -66,7 +69,7 @@ namespace SharePortfolioManager.OwnMessageBoxForm
 
         #region Methods
 
-        public OwnMessageBox(string strCaption, string strMessage, string strOk, string strCancel,
+        public OwnMessageBox(string strCaption, string strMessage, string strOk, string strCancel, EOwnMessageBoxInfoType eType,
             bool bInputBox = false)
         {
             InitializeComponent();
@@ -75,6 +78,7 @@ namespace SharePortfolioManager.OwnMessageBoxForm
             _message = strMessage;
             _okButtonText = strOk;
             _cancelButtonText = strCancel;
+            _boxType = eType;
             _flagInputBox = bInputBox;
         }
 
@@ -106,6 +110,25 @@ namespace SharePortfolioManager.OwnMessageBoxForm
             Text = _caption;
             btnOk.Text = _okButtonText;
             btnCancel.Text = _cancelButtonText;
+
+            switch (_boxType)
+            {
+                case EOwnMessageBoxInfoType.Info:
+                    Icon = Resources.info;
+                    break;
+                case EOwnMessageBoxInfoType.Warning:
+                    Icon = Resources.warning;
+                    break;
+                case EOwnMessageBoxInfoType.Error:
+                    Icon = Resources.error;
+                    break;
+                case EOwnMessageBoxInfoType.InputFileName:
+                    Icon = Resources.input;
+                    break;
+                default:
+                    Icon = Resources.info;
+                    break;
+            }
 
             if (_flagInputBox)
             {
