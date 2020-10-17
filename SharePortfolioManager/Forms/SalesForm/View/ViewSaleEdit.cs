@@ -608,9 +608,11 @@ namespace SharePortfolioManager.SalesForm.View
                     // Check if a direct document parsing is done
                     if (ParsingFileName != null)
                         Close();
-
-                    // Refresh the sale list
-                    OnShowSales();
+                    else
+                    {
+                        // Refresh the sale list
+                        OnShowSales();
+                    }
 
                     break;
                 }
@@ -1505,6 +1507,9 @@ namespace SharePortfolioManager.SalesForm.View
             // Select overview tab
             if (tabCtrlSales.TabPages.Count > 0)
                 tabCtrlSales.SelectTab(0);
+
+            // Reset document web browser
+            Helper.WebBrowserPdf.Reload(webBrowser1, txtBoxDocument.Text);
 
             dateTimePickerDate.Focus();
 

@@ -1426,6 +1426,8 @@ namespace SharePortfolioManager.Classes
             /// <param name="fileName">Filename of the given PDF file which should be shown</param>
             public static void Reload(WebBrowser sender, string fileName)
             {
+                if (sender == null) return;
+
                 sender.Visible = false;
                 sender.Navigate(new Uri("about:blank"));
 
@@ -1446,6 +1448,8 @@ namespace SharePortfolioManager.Classes
             /// <param name="sender">WebBrowser object</param>
             public static void CleanUp(WebBrowser sender)
             {
+                if (sender == null) return;
+
                 sender.Visible = false;
                 sender.Navigate(new Uri("about:blank"));
 

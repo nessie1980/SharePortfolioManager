@@ -2172,6 +2172,9 @@ namespace SharePortfolioManager.ShareAddForm.View
             toolStripStatusLabelMessageaAddShare.Text = string.Empty;
             toolStripStatusLabelMessageAddShareDocumentParsing.Text = string.Empty;
             toolStripProgressBarAddShareDocumentParsing.Visible = false;
+
+            // Reset document web browser
+            Helper.WebBrowserPdf.Reload(webBrowser1, txtBoxDocument.Text);
         }
 
         #endregion Parsing

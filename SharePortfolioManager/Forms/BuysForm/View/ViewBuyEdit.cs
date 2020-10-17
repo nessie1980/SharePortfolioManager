@@ -479,9 +479,11 @@ namespace SharePortfolioManager.BuysForm.View
                     // Check if a direct document parsing is done
                     if (ParsingFileName != null)
                         Close();
-
-                    // Refresh the buy list
-                    OnShowBuys();
+                    else
+                    {
+                        // Refresh the buy list
+                        OnShowBuys();
+                    }
 
                     break;
                 }
@@ -898,7 +900,7 @@ namespace SharePortfolioManager.BuysForm.View
                         _parsingBackgroundWorker.RunWorkerAsync();
                     }
 
-                    //webBrowser1.Navigate(temp.DocumentAsStr);
+                    // Reset document web browser
                     Helper.WebBrowserPdf.Reload(webBrowser1, txtBoxDocument.Text);
                 } break;
             }
@@ -1201,7 +1203,7 @@ namespace SharePortfolioManager.BuysForm.View
             //Reset selected GUI
             SelectedGuid = string.Empty;
 
-            //webBrowser1.Navigate(temp.DocumentAsStr);
+            // Reset document web browser
             Helper.WebBrowserPdf.Reload(webBrowser1, txtBoxDocument.Text);
 
             dateTimePickerDate.Focus();
@@ -2018,8 +2020,6 @@ namespace SharePortfolioManager.BuysForm.View
                     dataGridViewBuysOfAYear.MouseEnter += OnDataGridViewBuysOfAYear_MouseEnter;
                     // Set row select event
                     dataGridViewBuysOfAYear.SelectionChanged += OnDataGridViewBuysOfAYear_SelectionChanged;
-                    // Set cell decimal click event
-                    dataGridViewBuysOfAYear.CellContentDoubleClick += OnDataGridViewBuysOfAYear_CellContentClick;
 
                     #endregion Events
 
@@ -2680,109 +2680,6 @@ namespace SharePortfolioManager.BuysForm.View
         private static void OnDataGridViewBuysOfAYear_MouseEnter(object sender, EventArgs args)
         {
             ((DataGridView) sender).Focus();
-        }
-
-        /// <summary>
-        /// This function opens the buy document if a document is present
-        /// </summary>
-        /// <param name="sender">DataGridView</param>
-        /// <param name="e">DataGridViewCellEventArgs</param>
-        private void OnDataGridViewBuysOfAYear_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            try
-            {
-                // Get column count of the given DataGridView
-                var iColumnCount = ((DataGridView) sender).ColumnCount;
-
-                // Check if the last column (document column) has been clicked
-                if (e.ColumnIndex != iColumnCount - 1) return;
-
-                // Check if a row is selected
-                if (((DataGridView) sender).SelectedRows.Count != 1) return;
-
-                // Get the current selected row
-                var curItem = ((DataGridView) sender).SelectedRows;
-                // Get Guid of the selected buy item
-                var strGuid = curItem[0].Cells[0].Value.ToString();
-
-                // Check if a document is set
-                if (curItem[0].Cells[iColumnCount - 1].Value == null) return;
-
-                // Get doc from the buy with the Guid
-                foreach (var temp in ShareObjectFinalValue.AllBuyEntries.GetAllBuysOfTheShare())
-                {
-                    // Check if the buy Guid is the same as the Guid of the clicked buy item
-                    if (temp.Guid != strGuid) continue;
-
-                    // Check if a file is set for this buy
-                    if (temp.DocumentAsStr != "")
-                    {
-                        // Check if the file still exists
-                        if (File.Exists(temp.DocumentAsStr))
-                        {
-                            //webBrowser1.Navigate(temp.DocumentAsStr);
-                            Helper.WebBrowserPdf.Reload(webBrowser1, temp.DocumentAsStr);
-                        }
-                        else
-                        {
-                            var strCaption =
-                                Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
-                                    (int) EOwnMessageBoxInfoType.Error];
-                            var strMessage =
-                                Language.GetLanguageTextByXPath(
-                                    @"/MessageBoxForm/Content/DocumentDoesNotExistDelete",
-                                    LanguageName);
-                            var strOk =
-                                Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Yes",
-                                    LanguageName);
-                            var strCancel =
-                                Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/No",
-                                    LanguageName);
-
-                            var messageBox = new OwnMessageBox(strCaption, strMessage, strOk,
-                                strCancel);
-                            if (messageBox.ShowDialog() == DialogResult.OK)
-                            {
-                                // Remove move document from the buy objects
-                                if (ShareObjectFinalValue.SetBuyDocument(strGuid, temp.Date, string.Empty) &&
-                                    ShareObjectMarketValue.SetBuyDocument(strGuid, temp.Date, string.Empty))
-                                {
-                                    // Set flag to save the share object.
-                                    SaveFlag = true;
-
-                                    OnShowBuys();
-
-                                    Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                                        Language.GetLanguageTextByXPath(
-                                            @"/AddEditFormBuy/StateMessages/EditSuccess", LanguageName),
-                                        Language, LanguageName,
-                                        Color.Black, Logger, (int) FrmMain.EStateLevels.Info,
-                                        (int) FrmMain.EComponentLevels.Application);
-                                }
-                                else
-                                {
-                                    Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                                        Language.GetLanguageTextByXPath(
-                                            @"/AddEditFormBuy/Errors/EditFailed", LanguageName),
-                                        Language, LanguageName,
-                                        Color.Red, Logger, (int) FrmMain.EStateLevels.Error,
-                                        (int) FrmMain.EComponentLevels.Application);
-                                }
-                            }
-                        }
-                    }
-                    break;
-                }
-            }
-            catch (Exception ex)
-            {
-                Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DocumentShowFailed", LanguageName),
-                    Language, LanguageName,
-                    Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
-                    (int) FrmMain.EComponentLevels.Application,
-                    ex);
-            }
         }
 
         #endregion Buys of a year

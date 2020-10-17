@@ -506,9 +506,11 @@ namespace SharePortfolioManager.DividendForm.View
                         // Check if a direct document parsing is done
                         if (ParsingFileName != null)
                             Close();
-
-                        // Refresh the buy list
-                        OnShowDividends();
+                        else
+                        {
+                            // Refresh the buy list
+                            OnShowDividends();
+                        }
 
                         break;
                     }
@@ -1214,6 +1216,9 @@ namespace SharePortfolioManager.DividendForm.View
                 tabCtrlDividends.SelectTab(0);
 
             txtBoxDividendRate.Focus();
+
+            // Reset document web browser
+            Helper.WebBrowserPdf.Reload(webBrowser1, txtBoxDocument.Text);
 
             FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
         }
