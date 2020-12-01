@@ -23,7 +23,6 @@
 // Define for DEBUGGING
 //#define DEBUG_SHARE_OBJECT
 
-using Parser;
 using SharePortfolioManager.Classes.Buys;
 using SharePortfolioManager.Classes.ParserRegex;
 using SharePortfolioManager.Classes.Sales;
@@ -721,7 +720,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Reg expression list for the website parsing of the share update values
         /// </summary>
         [Browsable(false)]
-        public RegExList RegexList { get; set; }
+        public Parser.RegExList RegexList { get; set; }
 
         /// <summary>
         /// Culture info for the share
@@ -774,7 +773,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// List of the daily values of the share ( Date / ClosingPrice / OpeningPrice / Top / Bottom / Volume )
         /// </summary>
         [Browsable(false)]
-        public List<Parser.DailyValues> DailyValues { get; } = new List<Parser.DailyValues>();
+        public DailyValuesList DailyValuesList { get; } = new DailyValuesList();
 
         #endregion Daily values
 
@@ -1061,7 +1060,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             string wkn, string addDateTime, string stockMarketLaunchDate, string name,
             DateTime lastUpdateInternet, DateTime lastUpdateShare,
             decimal price, string webSite, string dailyValuesWebSite, List<Image> imageListForDayBeforePerformance, List<Image> imageListForCompletePerformance,
-            RegExList regexList, CultureInfo cultureInfo,
+            Parser.RegExList regexList, CultureInfo cultureInfo,
             ShareTypes shareType)
         {
             Wkn = wkn;
@@ -1112,15 +1111,13 @@ namespace SharePortfolioManager.Classes.ShareObjects
             try
             {
                 // Create a list which only contains the new daily values which does not exists already exists in the existing list
-                var addList = newDailyValues.Except(DailyValues);
+                var addList = newDailyValues.Except(DailyValuesList.Entries);
 
                 // Add new daily values to the list
                 foreach (var item in addList)
                 {
-                    DailyValues.Add(item);
+                    DailyValuesList.AddItem(item);
                 }
-
-                DailyValues.Sort();
 
                 return true;
             }

@@ -46,6 +46,9 @@ namespace SharePortfolioManager
     /// </summary>
     public partial class FrmMain
     {
+        /// <summary>
+        /// This enums represent the various share portfolio parts
+        /// </summary>
         public enum PortfolioParts
         {
             StockMarketLaunchDate,
@@ -517,9 +520,9 @@ namespace SharePortfolioManager
 
                                                         // Add daily values item
                                                         ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
-                                                            .DailyValues.Add(dailyValues);
+                                                            .DailyValuesList.AddItem(dailyValues);
                                                         ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
-                                                            .DailyValues.Add(dailyValues);
+                                                            .DailyValuesList.AddItem(dailyValues);
                                                     }
                                                     else
                                                         bLoadPortfolio = false;

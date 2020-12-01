@@ -23,7 +23,6 @@
 // Define for DEBUGGING
 //#define DEBUG_FINAL_SHARE_OBJECT
 
-using Parser;
 using SharePortfolioManager.Classes.Brokerage;
 using SharePortfolioManager.Classes.Dividend;
 using SharePortfolioManager.Classes.Sales;
@@ -1417,7 +1416,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             string guid, string wkn, string bank, string orderNumber, string addDateTime, string stockMarketLaunchDate, string name,
             DateTime lastUpdateInternet, DateTime lastUpdateShare,
             decimal price, decimal volume, decimal volumeSold, decimal provision, decimal brokerFee, decimal traderPlaceFee, decimal reduction,
-            string webSite, string dailyValuesWebSite, List<Image> imageListForDayBeforePerformance, List<Image> imageListForCompletePerformance, RegExList regexList, CultureInfo cultureInfo,
+            string webSite, string dailyValuesWebSite, List<Image> imageListForDayBeforePerformance, List<Image> imageListForCompletePerformance, Parser.RegExList regexList, CultureInfo cultureInfo,
             int dividendPayoutInterval, ShareTypes shareType, string document)
             : base(wkn, addDateTime, stockMarketLaunchDate, name, lastUpdateInternet, lastUpdateShare,
                     price, webSite, dailyValuesWebSite, imageListForDayBeforePerformance, imageListForCompletePerformance,
@@ -2311,7 +2310,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                     nodeElement.ChildNodes[i].Attributes[DailyValuesWebSiteAttrName].InnerText =
                                         shareObject.DailyValuesUpdateWebSiteUrl;
 
-                                    foreach (var dailyValue in shareObject.DailyValues)
+                                    foreach (var dailyValue in shareObject.DailyValuesList.Entries)
                                     {
                                         var newDailyValuesElement =
                                             xmlPortfolio.CreateElement(DailyValuesTagNamePre);

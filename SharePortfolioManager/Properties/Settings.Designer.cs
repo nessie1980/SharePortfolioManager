@@ -8,6 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System;
+
 namespace SharePortfolioManager.Properties {
     
     
@@ -21,6 +23,11 @@ namespace SharePortfolioManager.Properties {
             get {
                 return defaultInstance;
             }
+        }
+
+        internal static object SelectSingleNode(string v)
+        {
+            throw new NotImplementedException();
         }
     }
 }

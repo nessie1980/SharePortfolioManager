@@ -21,32 +21,160 @@
 //SOFTWARE.
 
 // Define for DEBUGGING
-//#define DEBUG_DAILY_VALUES
+//#define DEBUG_LIST_DAILY_VALUES
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SharePortfolioManager.Classes
 {
-    public class DailyValues : IComparable<DailyValues>
+    // Interval for charting values
+    public enum ChartingInterval
     {
-        public DateTime Date { get; set; }
-        public const string DateName = "Date";
-        public decimal ClosingPrice { get; set; }
-        public const string ClosingPriceName = "Closingprice";
-        public decimal OpeningPrice { get; set; }
-        public const string OpeningPriceName  = "Openingprice";
-        public decimal Top { get; set; }
-        public const string TopName = "Top";
-        public decimal Bottom { get; set; }
-        public const string BottomName = "Bottom";
-        public decimal Volume { get; set; }
-        public const string VolumeName = "Volume";
+        Week = 0,
+        Month = 1,
+        Quarter = 2,
+        Year = 3
+    }
 
-        // Default comparer for DailiyValues type.
-        public int CompareTo(DailyValues dailyValue)
+    public class DailyValuesList
+    {
+        #region Properties
+
+        public ChartingInterval Interval { get; internal set; }
+
+        public int WeekAmount { get; internal set; }
+
+        public int MonthAmount { get; internal set; }
+
+        public int QuarterAmount { get; internal set; }
+
+        public int YearAmount { get; internal set; }
+
+        public List<Parser.DailyValues> Entries { get; internal set; } = new List<Parser.DailyValues>();
+
+        #endregion Properties
+
+        #region Methodes
+
+        public void AddItem(Parser.DailyValues item)
         {
-            // A null value means that this object is greater.
-            return dailyValue == null ? 1 : Date.CompareTo(dailyValue.Date);
+            Entries.Add(item);
+
+            Entries.Sort();
+
+            UpdateAmounts(Entries.First().Date, Entries.Last().Date);
         }
+        
+        #region Helper functions
+
+        public void UpdateAmounts(DateTime startDateTime, DateTime endDateTime)
+        {
+            GetWeekAmount(startDateTime, endDateTime);
+            GetMonthAmount(startDateTime, endDateTime);
+            GetQuarterAmount(startDateTime, endDateTime);
+            GetYearAmount(startDateTime, endDateTime);
+        }
+        public List<Parser.DailyValues> GetDailyValuesOfInterval(DateTime givenDateTime, int iAmount)
+        {
+            DateTime startDate;
+            var dailyValues = new List<Parser.DailyValues>();
+
+            dailyValues.AddRange(Entries);
+
+            // Calculate the start date for the given interval and amount
+            switch (Interval)
+            {
+                case ChartingInterval.Week:
+                    {
+                        startDate = givenDateTime.AddDays(-7 * iAmount);
+                    }
+                    break;
+                case ChartingInterval.Month:
+                    {
+                        startDate = givenDateTime.AddMonths(-iAmount);
+                    }
+                    break;
+                case ChartingInterval.Quarter:
+                    {
+                        startDate = givenDateTime.AddMonths(-3 * iAmount);
+                    }
+                    break;
+                case ChartingInterval.Year:
+                    {
+                        startDate = givenDateTime.AddYears(-iAmount);
+                    }
+                    break;
+                default:
+                    {
+                        startDate = givenDateTime.AddDays(-7 * iAmount);
+                    }
+                    break;
+            }
+
+            // Get daily values for the timespan
+            var dailyValuesResult = dailyValues.Where(x => x.Date >= startDate).Where(x => x.Date <= givenDateTime).ToList();
+
+            return dailyValuesResult;
+        }
+
+        public int GetWeekAmount(DateTime startDate, DateTime endDate)
+        {
+            WeekAmount = (startDate < endDate ? (endDate - startDate).Days : (startDate - endDate).Days) / 7;
+
+#if DEBUG_LIST_DAILY_VALUES
+            Console.WriteLine(@"Weeks: {0}", WeekAmount);
+#endif
+            return WeekAmount;
+        }
+
+        public int GetMonthAmount(DateTime startDate, DateTime endDate)
+        {
+            int month1;
+            int month2;
+
+            if (startDate < endDate)
+            {
+                month1 = (endDate.Month - startDate.Month);     // Years
+                month2 = (endDate.Year - startDate.Year) * 12;  // Months
+            }
+            else
+            {
+                month1 = (startDate.Month - endDate.Month);     // Years
+                month2 = (startDate.Year - endDate.Year) * 12;  // Months
+            }
+
+            MonthAmount = month1 + month2;
+
+#if DEBUG_LIST_DAILY_VALUES
+            Console.WriteLine(@"Month: {0}", MonthAmount);
+#endif
+            return MonthAmount;
+        }
+
+        public int GetQuarterAmount(DateTime startDate, DateTime endDate)
+        {
+            QuarterAmount = GetMonthAmount(startDate, endDate) / 4;
+
+#if DEBUG_LIST_DAILY_VALUES
+            Console.WriteLine(@"Quarter: {0}", QuarterAmount);
+#endif
+            return QuarterAmount;
+        }
+
+        public int GetYearAmount(DateTime startDate, DateTime endDate)
+        {
+            YearAmount = GetMonthAmount(startDate, endDate) / 12;
+
+#if DEBUG_LIST_DAILY_VALUES
+            Console.WriteLine(@"Year: {0}", YearAmount);
+#endif
+            return YearAmount;
+        }
+
+        #endregion Helper functions
+
+        #endregion Methodes
     }
 }

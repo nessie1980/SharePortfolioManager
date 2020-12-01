@@ -1122,7 +1122,7 @@ namespace SharePortfolioManager
                             // Start the asynchronous operation of the Parser for the daily market values
                             ParserDailyValues.ParsingValues = new ParsingValues(
                                 new Uri(Helper.BuildDailyValuesUrl(
-                                    ShareObjectListMarketValue[SelectedDataGridViewShareIndex].DailyValues,
+                                    ShareObjectListMarketValue[SelectedDataGridViewShareIndex].DailyValuesList.Entries,
                                     ShareObjectListMarketValue[SelectedDataGridViewShareIndex]
                                         .DailyValuesUpdateWebSiteUrl,
                                     ShareObjectListMarketValue[SelectedDataGridViewShareIndex].ShareType
@@ -1181,7 +1181,7 @@ namespace SharePortfolioManager
                             // Start the asynchronous operation of the Parser for the daily market values
                             ParserDailyValues.ParsingValues = new ParsingValues(
                                 new Uri(Helper.BuildDailyValuesUrl(
-                                    ShareObjectListFinalValue[SelectedDataGridViewShareIndex].DailyValues,
+                                    ShareObjectListFinalValue[SelectedDataGridViewShareIndex].DailyValuesList.Entries,
                                     ShareObjectListFinalValue[SelectedDataGridViewShareIndex]
                                         .DailyValuesUpdateWebSiteUrl,
                                     ShareObjectListFinalValue[SelectedDataGridViewShareIndex].ShareType

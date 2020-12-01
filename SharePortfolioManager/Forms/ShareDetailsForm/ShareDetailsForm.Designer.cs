@@ -40,7 +40,6 @@
             this.btnOk = new System.Windows.Forms.Button();
             this.btnOpenWebSite = new System.Windows.Forms.Button();
             this.tlpShareDetailsChart = new System.Windows.Forms.TableLayoutPanel();
-            this.chartDailyValues = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.lblDailyValuesSelection = new System.Windows.Forms.Label();
             this.tlpShareDetailsStartDate = new System.Windows.Forms.TableLayoutPanel();
             this.lblStartDate = new System.Windows.Forms.Label();
@@ -56,6 +55,9 @@
             this.chkTop = new System.Windows.Forms.CheckBox();
             this.chkBottom = new System.Windows.Forms.CheckBox();
             this.chkVolume = new System.Windows.Forms.CheckBox();
+            this.pnlDataVisualization = new System.Windows.Forms.Panel();
+            this.lblNoDataMessage = new System.Windows.Forms.Label();
+            this.chartDailyValues = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tabPgDetailsFinalValue = new System.Windows.Forms.TabPage();
             this.tlpCompleteValuesCurrentCalculationTable = new System.Windows.Forms.TableLayoutPanel();
             this.tlpCompleteValuesCurrentCalculation = new System.Windows.Forms.TableLayoutPanel();
@@ -227,11 +229,12 @@
             this.statusStripChart.SuspendLayout();
             this.tlpShareDetailsButtons.SuspendLayout();
             this.tlpShareDetailsChart.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chartDailyValues)).BeginInit();
             this.tlpShareDetailsStartDate.SuspendLayout();
             this.tlpShareDetailsInterval.SuspendLayout();
             this.tlpShareDetailsAmount.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numDrpDwnAmount)).BeginInit();
+            this.pnlDataVisualization.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chartDailyValues)).BeginInit();
             this.tabPgDetailsFinalValue.SuspendLayout();
             this.tlpCompleteValuesCurrentCalculationTable.SuspendLayout();
             this.tlpCompleteValuesCurrentCalculation.SuspendLayout();
@@ -392,7 +395,6 @@
             this.tlpShareDetailsChart.ColumnCount = 2;
             this.tlpShareDetailsChart.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpShareDetailsChart.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 210F));
-            this.tlpShareDetailsChart.Controls.Add(this.chartDailyValues, 0, 0);
             this.tlpShareDetailsChart.Controls.Add(this.lblDailyValuesSelection, 1, 0);
             this.tlpShareDetailsChart.Controls.Add(this.tlpShareDetailsStartDate, 1, 6);
             this.tlpShareDetailsChart.Controls.Add(this.tlpShareDetailsInterval, 1, 7);
@@ -402,6 +404,7 @@
             this.tlpShareDetailsChart.Controls.Add(this.chkTop, 1, 3);
             this.tlpShareDetailsChart.Controls.Add(this.chkBottom, 1, 4);
             this.tlpShareDetailsChart.Controls.Add(this.chkVolume, 1, 5);
+            this.tlpShareDetailsChart.Controls.Add(this.pnlDataVisualization, 0, 0);
             this.tlpShareDetailsChart.Location = new System.Drawing.Point(3, 3);
             this.tlpShareDetailsChart.Name = "tlpShareDetailsChart";
             this.tlpShareDetailsChart.RowCount = 10;
@@ -416,21 +419,16 @@
             this.tlpShareDetailsChart.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
             this.tlpShareDetailsChart.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpShareDetailsChart.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpShareDetailsChart.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpShareDetailsChart.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpShareDetailsChart.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpShareDetailsChart.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpShareDetailsChart.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpShareDetailsChart.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpShareDetailsChart.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpShareDetailsChart.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpShareDetailsChart.Size = new System.Drawing.Size(1551, 379);
             this.tlpShareDetailsChart.TabIndex = 1;
-            // 
-            // chartDailyValues
-            // 
-            this.chartDailyValues.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
-            chartArea1.Name = "ChartArea1";
-            this.chartDailyValues.ChartAreas.Add(chartArea1);
-            this.chartDailyValues.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chartDailyValues.Location = new System.Drawing.Point(3, 3);
-            this.chartDailyValues.Name = "chartDailyValues";
-            this.tlpShareDetailsChart.SetRowSpan(this.chartDailyValues, 10);
-            this.chartDailyValues.Size = new System.Drawing.Size(1335, 373);
-            this.chartDailyValues.TabIndex = 0;
-            this.chartDailyValues.Text = "Daily values";
             // 
             // lblDailyValuesSelection
             // 
@@ -634,6 +632,44 @@
             this.chkVolume.Text = "Volume_";
             this.chkVolume.UseVisualStyleBackColor = true;
             this.chkVolume.CheckedChanged += new System.EventHandler(this.OnChkVolume_CheckedChanged);
+            // 
+            // pnlDataVisualization
+            // 
+            this.pnlDataVisualization.Controls.Add(this.lblNoDataMessage);
+            this.pnlDataVisualization.Controls.Add(this.chartDailyValues);
+            this.pnlDataVisualization.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlDataVisualization.Location = new System.Drawing.Point(3, 3);
+            this.pnlDataVisualization.Name = "pnlDataVisualization";
+            this.tlpShareDetailsChart.SetRowSpan(this.pnlDataVisualization, 10);
+            this.pnlDataVisualization.Size = new System.Drawing.Size(1335, 373);
+            this.pnlDataVisualization.TabIndex = 22;
+            // 
+            // lblNoDataMessage
+            // 
+            this.lblNoDataMessage.BackColor = System.Drawing.Color.White;
+            this.lblNoDataMessage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblNoDataMessage.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNoDataMessage.ForeColor = System.Drawing.Color.Red;
+            this.lblNoDataMessage.Location = new System.Drawing.Point(0, 0);
+            this.lblNoDataMessage.Name = "lblNoDataMessage";
+            this.lblNoDataMessage.Size = new System.Drawing.Size(1335, 373);
+            this.lblNoDataMessage.TabIndex = 1;
+            this.lblNoDataMessage.Text = "_lblNoDataMessage";
+            this.lblNoDataMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblNoDataMessage.Visible = false;
+            // 
+            // chartDailyValues
+            // 
+            this.chartDailyValues.BorderlineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
+            chartArea1.Name = "ChartArea1";
+            this.chartDailyValues.ChartAreas.Add(chartArea1);
+            this.chartDailyValues.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chartDailyValues.Location = new System.Drawing.Point(0, 0);
+            this.chartDailyValues.Margin = new System.Windows.Forms.Padding(0);
+            this.chartDailyValues.Name = "chartDailyValues";
+            this.chartDailyValues.Size = new System.Drawing.Size(1335, 373);
+            this.chartDailyValues.TabIndex = 0;
+            this.chartDailyValues.Text = "Daily values";
             // 
             // tabPgDetailsFinalValue
             // 
@@ -2978,7 +3014,6 @@
             this.tlpShareDetailsButtons.ResumeLayout(false);
             this.tlpShareDetailsChart.ResumeLayout(false);
             this.tlpShareDetailsChart.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chartDailyValues)).EndInit();
             this.tlpShareDetailsStartDate.ResumeLayout(false);
             this.tlpShareDetailsStartDate.PerformLayout();
             this.tlpShareDetailsInterval.ResumeLayout(false);
@@ -2986,6 +3021,8 @@
             this.tlpShareDetailsAmount.ResumeLayout(false);
             this.tlpShareDetailsAmount.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numDrpDwnAmount)).EndInit();
+            this.pnlDataVisualization.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.chartDailyValues)).EndInit();
             this.tabPgDetailsFinalValue.ResumeLayout(false);
             this.tabPgDetailsFinalValue.PerformLayout();
             this.tlpCompleteValuesCurrentCalculationTable.ResumeLayout(false);
@@ -3206,5 +3243,7 @@
         private System.Windows.Forms.Label label88;
         private System.Windows.Forms.Label lblDetailsMarketValueDiffSumPrev;
         private System.Windows.Forms.Label lblDetailsMarketValueDiffSumPrevValue;
+        private System.Windows.Forms.Panel pnlDataVisualization;
+        private System.Windows.Forms.Label lblNoDataMessage;
     }
 }

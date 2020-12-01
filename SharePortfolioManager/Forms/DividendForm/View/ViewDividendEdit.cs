@@ -3494,10 +3494,10 @@ namespace SharePortfolioManager.DividendForm.View
                                 LanguageName);
 
                         // Check if a daily value is available for the dividend payout day so use it for the yield calculation
-                        if (ShareObjectFinalValue.DailyValues
+                        if (ShareObjectFinalValue.DailyValuesList.Entries
                             .Exists(x => x.Date.ToShortDateString() == dateTimePickerDate.Text))
                         {
-                            txtBoxSharePrice.Text = ShareObjectFinalValue.DailyValues
+                            txtBoxSharePrice.Text = ShareObjectFinalValue.DailyValuesList.Entries
                                 .Find(x => x.Date.ToShortDateString() == dateTimePickerDate.Text).ClosingPrice
                                 .ToString(CultureInfo.CurrentCulture);
 

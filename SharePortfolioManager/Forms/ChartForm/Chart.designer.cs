@@ -46,7 +46,7 @@
             this.chartDailyValues.Dock = System.Windows.Forms.DockStyle.Top;
             this.chartDailyValues.Location = new System.Drawing.Point(0, 0);
             this.chartDailyValues.Name = "chartDailyValues";
-            this.chartDailyValues.Size = new System.Drawing.Size(700, 322);
+            this.chartDailyValues.Size = new System.Drawing.Size(700, 325);
             this.chartDailyValues.TabIndex = 1;
             this.chartDailyValues.Text = "Daily values";
             this.chartDailyValues.CustomizeLegend += new System.EventHandler<System.Windows.Forms.DataVisualization.Charting.CustomizeLegendEventArgs>(this.OnChartDailyValues_CustomizeLegend);
@@ -54,11 +54,13 @@
             // 
             // lblNoDataMessage
             // 
+            this.lblNoDataMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblNoDataMessage.BackColor = System.Drawing.Color.White;
-            this.lblNoDataMessage.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblNoDataMessage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNoDataMessage.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNoDataMessage.ForeColor = System.Drawing.Color.Red;
-            this.lblNoDataMessage.Location = new System.Drawing.Point(0, 322);
+            this.lblNoDataMessage.Location = new System.Drawing.Point(0, 0);
             this.lblNoDataMessage.Name = "lblNoDataMessage";
             this.lblNoDataMessage.Size = new System.Drawing.Size(700, 325);
             this.lblNoDataMessage.TabIndex = 2;
@@ -101,6 +103,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Chart";
             this.TopMost = true;
+            this.Shown += new System.EventHandler(this.FrmChart_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.chartDailyValues)).EndInit();
             this.toolStripChart.ResumeLayout(false);
             this.toolStripChart.PerformLayout();

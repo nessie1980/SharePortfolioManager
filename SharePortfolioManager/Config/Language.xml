@@ -1300,6 +1300,11 @@
 				<Maximum text="Max:" />
 			</ToolTip>
 
+			<!-- Message -->
+			<Messages>
+				<UpdatePossible text="Share should be updated! Data may not be up to date." />
+			</Messages>
+
 			<!-- Errors -->
 			<Errors>
 				<NoGraphDataGiven text="No values passed for drawing a graph!" />
@@ -2820,6 +2825,11 @@
 				<Maximum text="Max:" />
 			</ToolTip>
 			
+			<!-- Message -->
+			<Messages>
+				<UpdatePossible text="Aktie sollte aktualisiert werden! Daten sind evtl. nicht auf dem aktuellen Stand." />
+			</Messages>
+	
 			<!-- Errors -->
 			<Errors>
 				<NoGraphDataGiven text="Keine Werte für das Zeichnen eines Graphen übergeben!" />

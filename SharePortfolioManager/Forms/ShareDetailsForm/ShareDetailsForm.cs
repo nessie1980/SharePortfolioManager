@@ -37,15 +37,6 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 namespace SharePortfolioManager.ShareDetailsForm
 {
-    // Interval for charting values
-    public enum ChartingInterval
-    {
-        Week = 0,
-        Month = 1,
-        Quarter = 2,
-        Year = 3
-    }
-
     public partial class FrmShareDetails : Form
     {
         #region Variables
@@ -596,12 +587,12 @@ namespace SharePortfolioManager.ShareDetailsForm
             if (MarketValueOverviewTabSelected)
             {
                 Text = ShareObjectMarketValue.Name;
-                iAmount = ShareObjectMarketValue.DailyValues.Count;
+                iAmount = ShareObjectMarketValue.DailyValuesList.Entries.Count;
             }
             else
             {
                 Text = ShareObjectFinalValue.Name;
-                iAmount = ShareObjectFinalValue.DailyValues.Count;
+                iAmount = ShareObjectFinalValue.DailyValuesList.Entries.Count;
             }
 
             // Set form and date time picker min / max values set
@@ -632,9 +623,12 @@ namespace SharePortfolioManager.ShareDetailsForm
 
             // Select first interval
             cbxIntervalSelection.SelectedIndex = (int)ChartingIntervalValue;
-            numDrpDwnAmount.Value = ChartingAmount;
+            if (chartingAmount <= numDrpDwnAmount.Maximum)
+                numDrpDwnAmount.Value = ChartingAmount;
 
             #endregion Settings
+
+            chartDailyValues.MouseWheel += OnChartDailyValues_MouseWheel;
         }
 
         private void ShareDetailsForm_Shown(object sender, EventArgs e)
@@ -659,7 +653,7 @@ namespace SharePortfolioManager.ShareDetailsForm
             if (ShareObjectFinalValue.InternetUpdateOption == ShareObject.ShareUpdateTypes.MarketPrice &&
                  ShareObjectFinalValue.InternetUpdateOption == ShareObject.ShareUpdateTypes.None ||
                 dateTimePickerStartDate.Value >= date && 
-                ( ShareObjectFinalValue.DailyValues.Count > 0 || ShareObjectMarketValue.DailyValues.Count > 0) ) return;
+                ( ShareObjectFinalValue.DailyValuesList.Entries.Count > 0 || ShareObjectMarketValue.DailyValuesList.Entries.Count > 0) ) return;
 
             toolStripStatusLabelUpdate.ForeColor = Color.Red;
             toolStripStatusLabelUpdate.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Messages/UpdatePossible", LanguageName);
@@ -744,9 +738,9 @@ namespace SharePortfolioManager.ShareDetailsForm
                         true,
                         SeriesChartType.Line,
                         2,
-                        ChartingColorDictionary[DailyValues.ClosingPriceName],
-                        DailyValues.DateName,
-                        DailyValues.ClosingPriceName
+                        ChartingColorDictionary[Parser.DailyValues.ClosingPriceName],
+                        Parser.DailyValues.DateName,
+                        Parser.DailyValues.ClosingPriceName
                     );
                     graphValuesList.Add(graphValueClosingPrice);
                 }
@@ -758,9 +752,9 @@ namespace SharePortfolioManager.ShareDetailsForm
                         true,
                         SeriesChartType.Line,
                         2,
-                        ChartingColorDictionary[DailyValues.OpeningPriceName],
-                        DailyValues.DateName,
-                        DailyValues.OpeningPriceName
+                        ChartingColorDictionary[Parser.DailyValues.OpeningPriceName],
+                        Parser.DailyValues.DateName,
+                        Parser.DailyValues.OpeningPriceName
                     );
                     graphValuesList.Add(graphValueOpeningPrice);
                 }
@@ -772,9 +766,9 @@ namespace SharePortfolioManager.ShareDetailsForm
                         true,
                         SeriesChartType.Line,
                         2,
-                        ChartingColorDictionary[DailyValues.TopName],
-                        DailyValues.DateName,
-                        DailyValues.TopName
+                        ChartingColorDictionary[Parser.DailyValues.TopName],
+                        Parser.DailyValues.DateName,
+                        Parser.DailyValues.TopName
                     );
                     graphValuesList.Add(graphValueTop);
                 }
@@ -786,9 +780,9 @@ namespace SharePortfolioManager.ShareDetailsForm
                         true,
                         SeriesChartType.Line,
                         2,
-                        ChartingColorDictionary[DailyValues.BottomName],
-                        DailyValues.DateName,
-                        DailyValues.BottomName
+                        ChartingColorDictionary[Parser.DailyValues.BottomName],
+                        Parser.DailyValues.DateName,
+                        Parser.DailyValues.BottomName
                     );
                     graphValuesList.Add(graphValueBottom);
                 }
@@ -800,9 +794,9 @@ namespace SharePortfolioManager.ShareDetailsForm
                         true,
                         SeriesChartType.Line,
                         2,
-                        ChartingColorDictionary[DailyValues.VolumeName],
-                        DailyValues.DateName,
-                        DailyValues.VolumeName
+                        ChartingColorDictionary[Parser.DailyValues.VolumeName],
+                        Parser.DailyValues.DateName,
+                        Parser.DailyValues.VolumeName
                     );
                     graphValuesList.Add(graphValueVolume);
                 }
@@ -857,7 +851,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     dateTimePickerStartDate.Value,
                     chartDailyValues,
                     ChartValues,
-                    null,
+                    lblNoDataMessage,
                     false,
                     ChartingColorDictionary[Helper.BuyInformationName],
                     ChartingColorDictionary[Helper.SaleInformationName]
@@ -882,18 +876,18 @@ namespace SharePortfolioManager.ShareDetailsForm
         {
             if (MarketValueOverviewTabSelected)
             {
-                if (ShareObjectMarketValue.DailyValues == null || ShareObjectMarketValue.DailyValues.Count <= 0) return;
+                if (ShareObjectMarketValue.DailyValuesList.Entries == null || ShareObjectMarketValue.DailyValuesList.Entries.Count <= 0) return;
 
-                dateTimePickerStartDate.MinDate = ShareObjectMarketValue.DailyValues.First().Date;
-                dateTimePickerStartDate.MaxDate = ShareObjectMarketValue.DailyValues.Last().Date;
+                dateTimePickerStartDate.MinDate = ShareObjectMarketValue.DailyValuesList.Entries.First().Date;
+                dateTimePickerStartDate.MaxDate = ShareObjectMarketValue.DailyValuesList.Entries.Last().Date;
                 dateTimePickerStartDate.Value = dateTimePickerStartDate.MaxDate;
             }
             else
             {
-                if (ShareObjectFinalValue.DailyValues == null || ShareObjectFinalValue.DailyValues.Count <= 0) return;
+                if (ShareObjectFinalValue.DailyValuesList.Entries == null || ShareObjectFinalValue.DailyValuesList.Entries.Count <= 0) return;
 
-                dateTimePickerStartDate.MinDate = ShareObjectFinalValue.DailyValues.First().Date;
-                dateTimePickerStartDate.MaxDate = ShareObjectFinalValue.DailyValues.Last().Date;
+                dateTimePickerStartDate.MinDate = ShareObjectFinalValue.DailyValuesList.Entries.First().Date;
+                dateTimePickerStartDate.MaxDate = ShareObjectFinalValue.DailyValuesList.Entries.Last().Date;
                 dateTimePickerStartDate.Value = dateTimePickerStartDate.MaxDate;
             }
         }
@@ -929,11 +923,51 @@ namespace SharePortfolioManager.ShareDetailsForm
 
         private void OnDateTimePickerStartDate_ValueChanged(object sender, EventArgs e)
         {
+            // Recalculate the various amounts for the new start date
+            if (MarketValueOverviewTabSelected)
+            {
+                ShareObjectMarketValue.DailyValuesList.UpdateAmounts(dateTimePickerStartDate.Value, ShareObjectMarketValue.DailyValuesList.Entries.First().Date);
+            }
+            else
+            {
+                ShareObjectFinalValue.DailyValuesList.UpdateAmounts(dateTimePickerStartDate.Value, ShareObjectFinalValue.DailyValuesList.Entries.First().Date);
+            }
+
             Charting();
         }
 
         private void OnCbxIntervalSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
+            ChartingIntervalValue = (ChartingInterval)cbxIntervalSelection.SelectedIndex;
+            ChartingAmount = 1;
+
+            if(numDrpDwnAmount.Maximum > 0)
+                numDrpDwnAmount.Value = 1;
+
+            switch (ChartingIntervalValue)
+            {
+                case ChartingInterval.Week:
+                {
+                    numDrpDwnAmount.Maximum = MarketValueOverviewTabSelected ? ShareObjectMarketValue.DailyValuesList.WeekAmount : ShareObjectFinalValue.DailyValuesList.WeekAmount;
+                } break;
+                case ChartingInterval.Month:
+                {
+                    numDrpDwnAmount.Maximum = MarketValueOverviewTabSelected ? ShareObjectMarketValue.DailyValuesList.MonthAmount : ShareObjectFinalValue.DailyValuesList.MonthAmount;
+                } break;
+                case ChartingInterval.Quarter:
+                {
+                    numDrpDwnAmount.Maximum = MarketValueOverviewTabSelected ? ShareObjectMarketValue.DailyValuesList.QuarterAmount : ShareObjectFinalValue.DailyValuesList.QuarterAmount;
+                } break;
+                case ChartingInterval.Year:
+                {
+                    numDrpDwnAmount.Maximum = MarketValueOverviewTabSelected ? ShareObjectMarketValue.DailyValuesList.YearAmount : ShareObjectFinalValue.DailyValuesList.YearAmount;
+                } break;
+                default:
+                {
+                    numDrpDwnAmount.Maximum = MarketValueOverviewTabSelected ? ShareObjectMarketValue.DailyValuesList.WeekAmount : ShareObjectFinalValue.DailyValuesList.WeekAmount;
+                } break;
+            }
+
             Charting();
         }
 
@@ -944,5 +978,71 @@ namespace SharePortfolioManager.ShareDetailsForm
 
         #endregion Selection change
 
+        private void OnChartDailyValues_MouseWheel(object sender, MouseEventArgs e)
+        {
+            // Calculate the scroll interval
+            var iDelta = e.Delta / SystemInformation.MouseWheelScrollDelta;
+
+            switch (ChartingIntervalValue)
+            {
+                case ChartingInterval.Week:
+                {
+                    var iWeekAmount = MarketValueOverviewTabSelected
+                        ? ShareObjectMarketValue.DailyValuesList.WeekAmount
+                        : ShareObjectFinalValue.DailyValuesList.WeekAmount;
+
+                    // Check if the new amount is lower than 1
+                    if (ChartingAmount + iDelta < 1 || (ChartingAmount + iDelta) > iWeekAmount)
+                        return;
+                } break;
+                case ChartingInterval.Month:
+                {
+                    var iMonthAmount = MarketValueOverviewTabSelected
+                        ? ShareObjectMarketValue.DailyValuesList.MonthAmount
+                        : ShareObjectFinalValue.DailyValuesList.MonthAmount;
+
+                    // Check if the new amount is lower than 1
+                    if (ChartingAmount + iDelta < 1 || (ChartingAmount + iDelta) > iMonthAmount)
+                        return;
+
+                } break;
+                case ChartingInterval.Quarter:
+                {
+                    var iQuarterAmount = MarketValueOverviewTabSelected
+                        ? ShareObjectMarketValue.DailyValuesList.QuarterAmount
+                        : ShareObjectFinalValue.DailyValuesList.QuarterAmount;
+
+                    // Check if the new amount is lower than 1
+                    if (ChartingAmount + iDelta < 1 || (ChartingAmount + iDelta) > iQuarterAmount)
+                        return;
+                } break;
+                case ChartingInterval.Year:
+                {
+                    var iYearAmount = MarketValueOverviewTabSelected
+                        ? ShareObjectMarketValue.DailyValuesList.YearAmount
+                        : ShareObjectFinalValue.DailyValuesList.YearAmount;
+
+                    // Check if the new amount is lower than 1
+                    if (ChartingAmount + iDelta < 1 || (ChartingAmount + iDelta) > iYearAmount)
+                        return;
+                } break;
+                default:
+                {
+                    var iWeekAmount = MarketValueOverviewTabSelected
+                        ? ShareObjectMarketValue.DailyValuesList.WeekAmount
+                        : ShareObjectFinalValue.DailyValuesList.WeekAmount;
+
+                    // Check if the new amount is lower than 1
+                    if (ChartingAmount + iDelta < 1 || (ChartingAmount + iDelta) > iWeekAmount)
+                        return;
+                } break;
+            }
+
+            // Calculate new chart interval
+            ChartingAmount += iDelta;
+
+            // Set new amount to numeric up / down control
+            numDrpDwnAmount.Value = ChartingAmount;
+        }
     }
 }

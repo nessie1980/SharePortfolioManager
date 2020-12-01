@@ -26,7 +26,6 @@
 using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Classes.ShareObjects;
-using SharePortfolioManager.ShareDetailsForm;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -65,6 +64,10 @@ namespace SharePortfolioManager.Classes
 
         #endregion Variables
 
+        #region Properties
+
+        #endregion Properties
+
         #region Charting
 
         public static void Charting(
@@ -83,6 +86,7 @@ namespace SharePortfolioManager.Classes
         {
             #region Set private values
 
+            // First reset title then add new title
             text = marketValueOverviewTabSelected ? shareObjectMarketValue.Name : shareObjectFinalValue.Name;
 
             _marketValueOverviewTabSelected = marketValueOverviewTabSelected;
@@ -130,39 +134,21 @@ namespace SharePortfolioManager.Classes
                 return;
             }
 
-            if (_marketValueOverviewTabSelected)
+            if (_marketValueOverviewTabSelected && _shareObjectMarketValue.DailyValuesList.Entries.Count == 0 ||
+                !_marketValueOverviewTabSelected && _shareObjectFinalValue.DailyValuesList.Entries.Count == 0
+            )
             {
-                if (_shareObjectMarketValue.DailyValues.Count == 0)
-                {
-                    // Check if a no "no data message label" has been given
-                    if (lblBoxNoDataMessage == null) return;
+                // Check if a no "no data message label" has been given
+                if (lblBoxNoDataMessage == null) return;
 
-                    // Set text to the no data message label
-                    lblBoxNoDataMessage.Text = Helper.BuildNewLineTextFromStringList(
-                        _language.GetLanguageTextListByXPath(@"/Chart/Errors/NoData/Lines/*", _languageName));
+                // Set text to the no data message label
+                lblBoxNoDataMessage.Text = Helper.BuildNewLineTextFromStringList(
+                    _language.GetLanguageTextListByXPath(@"/Chart/Errors/NoData/Lines/*", _languageName));
 
-                    // Show no data message label
-                    lblBoxNoDataMessage.Visible = true;
+                // Show no data message label
+                lblBoxNoDataMessage.Visible = true;
 
-                    return;
-                }
-            }
-            else
-            {
-                if (_shareObjectFinalValue.DailyValues.Count == 0)
-                {
-                    // Check if a no "no data message label" has been given
-                    if (lblBoxNoDataMessage == null) return;
-
-                    // Set text to the no data message label
-                    lblBoxNoDataMessage.Text = Helper.BuildNewLineTextFromStringList(
-                        _language.GetLanguageTextListByXPath(@"/Chart/Errors/NoData/Lines/*", _languageName));
-
-                    // Show no data message label
-                    lblBoxNoDataMessage.Visible = true;
-
-                    return;
-                }
+                return;
             }
 
             _chartDailyValues.DataSource = null;
@@ -174,8 +160,14 @@ namespace SharePortfolioManager.Classes
             decimal decMinValueY2 = 0;
             decimal decMaxValueY2= 0;
 
+            // Set interval to the daily values list
+            shareObjectMarketValue.DailyValuesList.Interval = chartValues.Interval;
+            shareObjectFinalValue.DailyValuesList.Interval = chartValues.Interval;
+
             // Check if an Interval is selected and the amount is greater than 0
-            var dailyValuesList = GetDailyValuesOfInterval(startDate, _chartValues.Amount);
+            var dailyValuesList = marketValueOverviewTabSelected
+                ? shareObjectMarketValue.DailyValuesList.GetDailyValuesOfInterval(startDate, _chartValues.Amount)
+                : shareObjectFinalValue.DailyValuesList.GetDailyValuesOfInterval(startDate, _chartValues.Amount);
 
             // Check if daily values are found for the given timespan
             if (dailyValuesList.Count <= 0)
@@ -229,7 +221,6 @@ namespace SharePortfolioManager.Classes
                     dailyValuesList.FindIndex(x =>
                         x.Date == DateTime.Parse(DateTime.Parse(dateLastSalePrice).ToShortDateString())) +
                     1.009;
-                Console.WriteLine($@"iIndexSale: {iIndexSale}");
             }
 
             #endregion Sale information
@@ -262,7 +253,6 @@ namespace SharePortfolioManager.Classes
                     dailyValuesList.FindIndex(x =>
                         x.Date == DateTime.Parse(DateTime.Parse(dateLastBuyPrice).ToShortDateString())) +
                     1.009;
-                Console.WriteLine($@"iIndexBuy: {iIndexBuy}");
             }
 
             #endregion Buy information
@@ -307,7 +297,9 @@ namespace SharePortfolioManager.Classes
             _chartDailyValues.ChartAreas[0].AxisY.ScaleBreakStyle.StartFromZero = StartFromZero.No;
             _chartDailyValues.ChartAreas[0].AxisX.LabelStyle.Format = _chartValues.DateTimeFormat;
             _chartDailyValues.ChartAreas[0].AxisX.IntervalType = _chartValues.IntervalType;
+            _chartDailyValues.ChartAreas[0].AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount;
             _chartDailyValues.ChartAreas[0].AxisX.IntervalOffset = 0;
+            
 
             #region Legend
 
@@ -332,7 +324,7 @@ namespace SharePortfolioManager.Classes
 
                 switch (graphValues.YValueMemberName)
                 {
-                    case DailyValues.ClosingPriceName:
+                    case Parser.DailyValues.ClosingPriceName:
                     {
                         #region ToolTip
 
@@ -351,20 +343,20 @@ namespace SharePortfolioManager.Classes
 
                         #region Series
 
-                        _chartDailyValues.Series.Add(DailyValues.ClosingPriceName);
-                        _chartDailyValues.Series[DailyValues.ClosingPriceName].ChartType = graphValues.Type;
-                        _chartDailyValues.Series[DailyValues.ClosingPriceName].BorderWidth = graphValues.BorderWidth;
-                        _chartDailyValues.Series[DailyValues.ClosingPriceName].Color = graphValues.Color;
-                        _chartDailyValues.Series[DailyValues.ClosingPriceName].XValueMember = DailyValues.DateName;
-                        _chartDailyValues.Series[DailyValues.ClosingPriceName].XValueType = ChartValueType.DateTime;
-                        _chartDailyValues.Series[DailyValues.ClosingPriceName].IsXValueIndexed = true;
-                        _chartDailyValues.Series[DailyValues.ClosingPriceName].YValueMembers = DailyValues.ClosingPriceName;
-                        _chartDailyValues.Series[DailyValues.ClosingPriceName].YValueType = ChartValueType.Double;
-                        _chartDailyValues.Series[DailyValues.ClosingPriceName].YAxisType = AxisType.Primary;
-                        _chartDailyValues.Series[DailyValues.ClosingPriceName].IsVisibleInLegend = false;
-                        _chartDailyValues.Series[DailyValues.ClosingPriceName].MarkerStyle = MarkerStyle.Square;
-                        _chartDailyValues.Series[DailyValues.ClosingPriceName].MarkerSize = 6;
-                        _chartDailyValues.Series[DailyValues.ClosingPriceName].ToolTip = _language.GetLanguageTextByXPath(@"/Chart/Legend/ClosingPrice", _languageName) + "\n" + toolTipFormat;
+                        _chartDailyValues.Series.Add(Parser.DailyValues.ClosingPriceName);
+                        _chartDailyValues.Series[Parser.DailyValues.ClosingPriceName].ChartType = graphValues.Type;
+                        _chartDailyValues.Series[Parser.DailyValues.ClosingPriceName].BorderWidth = graphValues.BorderWidth;
+                        _chartDailyValues.Series[Parser.DailyValues.ClosingPriceName].Color = graphValues.Color;
+                        _chartDailyValues.Series[Parser.DailyValues.ClosingPriceName].XValueMember = Parser.DailyValues.DateName;
+                        _chartDailyValues.Series[Parser.DailyValues.ClosingPriceName].XValueType = ChartValueType.DateTime;
+                        _chartDailyValues.Series[Parser.DailyValues.ClosingPriceName].IsXValueIndexed = true;
+                        _chartDailyValues.Series[Parser.DailyValues.ClosingPriceName].YValueMembers = Parser.DailyValues.ClosingPriceName;
+                        _chartDailyValues.Series[Parser.DailyValues.ClosingPriceName].YValueType = ChartValueType.Double;
+                        _chartDailyValues.Series[Parser.DailyValues.ClosingPriceName].YAxisType = AxisType.Primary;
+                        _chartDailyValues.Series[Parser.DailyValues.ClosingPriceName].IsVisibleInLegend = false;
+                        _chartDailyValues.Series[Parser.DailyValues.ClosingPriceName].MarkerStyle = MarkerStyle.Square;
+                        _chartDailyValues.Series[Parser.DailyValues.ClosingPriceName].MarkerSize = 6;
+                        _chartDailyValues.Series[Parser.DailyValues.ClosingPriceName].ToolTip = _language.GetLanguageTextByXPath(@"/Chart/Legend/ClosingPrice", _languageName) + "\n" + toolTipFormat;
 
                         #endregion Series
                             
@@ -373,14 +365,14 @@ namespace SharePortfolioManager.Classes
                         // Legend item creation
                         var legendChartItem1 = new LegendItem
                         {
-                            SeriesName = DailyValues.ClosingPriceName,
+                            SeriesName = Parser.DailyValues.ClosingPriceName,
                             Color = graphValues.Color,
-                            Name = DailyValues.ClosingPriceName + "_Item"
+                            Name = Parser.DailyValues.ClosingPriceName + "_Item"
                         };
 
                         // Legend first cell creation
                         var firstCellChart = new LegendCell(LegendCellType.SeriesSymbol,
-                            DailyValues.ClosingPriceName + "_FirstCell", ContentAlignment.MiddleRight);
+                            Parser.DailyValues.ClosingPriceName + "_FirstCell", ContentAlignment.MiddleRight);
 
                         // Legend second cell creation
                         var secondCellChart = new LegendCell(LegendCellType.Text,
@@ -403,7 +395,7 @@ namespace SharePortfolioManager.Classes
                         #endregion Legend chart
 
                         } break;
-                    case DailyValues.OpeningPriceName:
+                    case Parser.DailyValues.OpeningPriceName:
                     {
                         #region ToolTip
 
@@ -422,20 +414,20 @@ namespace SharePortfolioManager.Classes
 
                         #region Series
 
-                        _chartDailyValues.Series.Add(DailyValues.OpeningPriceName);
-                        _chartDailyValues.Series[DailyValues.OpeningPriceName].ChartType = graphValues.Type;
-                        _chartDailyValues.Series[DailyValues.OpeningPriceName].BorderWidth = graphValues.BorderWidth;
-                        _chartDailyValues.Series[DailyValues.OpeningPriceName].Color = graphValues.Color;
-                        _chartDailyValues.Series[DailyValues.OpeningPriceName].XValueMember = DailyValues.DateName;
-                        _chartDailyValues.Series[DailyValues.OpeningPriceName].XValueType = ChartValueType.DateTime;
-                        _chartDailyValues.Series[DailyValues.OpeningPriceName].IsXValueIndexed = true;
-                        _chartDailyValues.Series[DailyValues.OpeningPriceName].YValueMembers = DailyValues.OpeningPriceName;
-                        _chartDailyValues.Series[DailyValues.OpeningPriceName].YValueType = ChartValueType.Double;
-                        _chartDailyValues.Series[DailyValues.OpeningPriceName].YAxisType = AxisType.Primary;
-                        _chartDailyValues.Series[DailyValues.OpeningPriceName].IsVisibleInLegend = false;
-                        _chartDailyValues.Series[DailyValues.OpeningPriceName].MarkerStyle = MarkerStyle.Square;
-                        _chartDailyValues.Series[DailyValues.OpeningPriceName].MarkerSize = 6;
-                        _chartDailyValues.Series[DailyValues.OpeningPriceName].ToolTip = _language.GetLanguageTextByXPath(@"/Chart/Legend/OpeningPrice", _languageName) + "\n" + toolTipFormat;
+                        _chartDailyValues.Series.Add(Parser.DailyValues.OpeningPriceName);
+                        _chartDailyValues.Series[Parser.DailyValues.OpeningPriceName].ChartType = graphValues.Type;
+                        _chartDailyValues.Series[Parser.DailyValues.OpeningPriceName].BorderWidth = graphValues.BorderWidth;
+                        _chartDailyValues.Series[Parser.DailyValues.OpeningPriceName].Color = graphValues.Color;
+                        _chartDailyValues.Series[Parser.DailyValues.OpeningPriceName].XValueMember = Parser.DailyValues.DateName;
+                        _chartDailyValues.Series[Parser.DailyValues.OpeningPriceName].XValueType = ChartValueType.DateTime;
+                        _chartDailyValues.Series[Parser.DailyValues.OpeningPriceName].IsXValueIndexed = true;
+                        _chartDailyValues.Series[Parser.DailyValues.OpeningPriceName].YValueMembers = Parser.DailyValues.OpeningPriceName;
+                        _chartDailyValues.Series[Parser.DailyValues.OpeningPriceName].YValueType = ChartValueType.Double;
+                        _chartDailyValues.Series[Parser.DailyValues.OpeningPriceName].YAxisType = AxisType.Primary;
+                        _chartDailyValues.Series[Parser.DailyValues.OpeningPriceName].IsVisibleInLegend = false;
+                        _chartDailyValues.Series[Parser.DailyValues.OpeningPriceName].MarkerStyle = MarkerStyle.Square;
+                        _chartDailyValues.Series[Parser.DailyValues.OpeningPriceName].MarkerSize = 6;
+                        _chartDailyValues.Series[Parser.DailyValues.OpeningPriceName].ToolTip = _language.GetLanguageTextByXPath(@"/Chart/Legend/OpeningPrice", _languageName) + "\n" + toolTipFormat;
 
                         #endregion Series
 
@@ -444,14 +436,14 @@ namespace SharePortfolioManager.Classes
                         // Legend item creation
                         var legendItem = new LegendItem
                         {
-                            SeriesName = DailyValues.OpeningPriceName,
+                            SeriesName = Parser.DailyValues.OpeningPriceName,
                             Color = graphValues.Color,
-                            Name = DailyValues.OpeningPriceName + "_Item"
+                            Name = Parser.DailyValues.OpeningPriceName + "_Item"
                         };
 
                         // Legend first cell creation
                         var firstCell = new LegendCell(LegendCellType.SeriesSymbol,
-                            DailyValues.OpeningPriceName + "_FirstCell", ContentAlignment.MiddleRight);
+                            Parser.DailyValues.OpeningPriceName + "_FirstCell", ContentAlignment.MiddleRight);
 
                         // Legend second cell creation
                         var secondCell = new LegendCell(LegendCellType.Text,
@@ -474,7 +466,7 @@ namespace SharePortfolioManager.Classes
                         
                         #endregion Legend
                     } break;
-                    case DailyValues.TopName:
+                    case Parser.DailyValues.TopName:
                     {
                         #region ToolTip
 
@@ -493,20 +485,20 @@ namespace SharePortfolioManager.Classes
 
                         #region Series
 
-                        _chartDailyValues.Series.Add(DailyValues.TopName);
-                        _chartDailyValues.Series[DailyValues.TopName].ChartType = graphValues.Type;
-                        _chartDailyValues.Series[DailyValues.TopName].BorderWidth = graphValues.BorderWidth;
-                        _chartDailyValues.Series[DailyValues.TopName].Color = graphValues.Color;
-                        _chartDailyValues.Series[DailyValues.TopName].XValueMember = DailyValues.DateName;
-                        _chartDailyValues.Series[DailyValues.TopName].XValueType = ChartValueType.DateTime;
-                        _chartDailyValues.Series[DailyValues.TopName].IsXValueIndexed = true;
-                        _chartDailyValues.Series[DailyValues.TopName].YValueMembers = DailyValues.TopName;
-                        _chartDailyValues.Series[DailyValues.TopName].YValueType = ChartValueType.Double;
-                        _chartDailyValues.Series[DailyValues.TopName].YAxisType = AxisType.Primary;
-                        _chartDailyValues.Series[DailyValues.TopName].IsVisibleInLegend = false;
-                        _chartDailyValues.Series[DailyValues.TopName].MarkerStyle = MarkerStyle.Square;
-                        _chartDailyValues.Series[DailyValues.TopName].MarkerSize = 6;
-                        _chartDailyValues.Series[DailyValues.TopName].ToolTip = _language.GetLanguageTextByXPath(@"/Chart/Legend/Top", _languageName) + "\n" + toolTipFormat;
+                        _chartDailyValues.Series.Add(Parser.DailyValues.TopName);
+                        _chartDailyValues.Series[Parser.DailyValues.TopName].ChartType = graphValues.Type;
+                        _chartDailyValues.Series[Parser.DailyValues.TopName].BorderWidth = graphValues.BorderWidth;
+                        _chartDailyValues.Series[Parser.DailyValues.TopName].Color = graphValues.Color;
+                        _chartDailyValues.Series[Parser.DailyValues.TopName].XValueMember = Parser.DailyValues.DateName;
+                        _chartDailyValues.Series[Parser.DailyValues.TopName].XValueType = ChartValueType.DateTime;
+                        _chartDailyValues.Series[Parser.DailyValues.TopName].IsXValueIndexed = true;
+                        _chartDailyValues.Series[Parser.DailyValues.TopName].YValueMembers = Parser.DailyValues.TopName;
+                        _chartDailyValues.Series[Parser.DailyValues.TopName].YValueType = ChartValueType.Double;
+                        _chartDailyValues.Series[Parser.DailyValues.TopName].YAxisType = AxisType.Primary;
+                        _chartDailyValues.Series[Parser.DailyValues.TopName].IsVisibleInLegend = false;
+                        _chartDailyValues.Series[Parser.DailyValues.TopName].MarkerStyle = MarkerStyle.Square;
+                        _chartDailyValues.Series[Parser.DailyValues.TopName].MarkerSize = 6;
+                        _chartDailyValues.Series[Parser.DailyValues.TopName].ToolTip = _language.GetLanguageTextByXPath(@"/Chart/Legend/Top", _languageName) + "\n" + toolTipFormat;
 
                         #endregion Series
 
@@ -515,14 +507,14 @@ namespace SharePortfolioManager.Classes
                         // Legend item creation
                         var legendItem = new LegendItem
                         {
-                            SeriesName = DailyValues.TopName,
+                            SeriesName = Parser.DailyValues.TopName,
                             Color = graphValues.Color,
-                            Name = DailyValues.TopName + "_Item"
+                            Name = Parser.DailyValues.TopName + "_Item"
                         };
 
                         // Legend first cell creation
                         var firstCell = new LegendCell(LegendCellType.SeriesSymbol,
-                            DailyValues.TopName + "_FirstCell", ContentAlignment.MiddleRight);
+                            Parser.DailyValues.TopName + "_FirstCell", ContentAlignment.MiddleRight);
 
                         // Legend second cell creation
                         var secondCell = new LegendCell(LegendCellType.Text,
@@ -545,7 +537,7 @@ namespace SharePortfolioManager.Classes
 
                         #endregion Legend
                     } break;
-                    case DailyValues.BottomName:
+                    case Parser.DailyValues.BottomName:
                     {
                         #region ToolTip
 
@@ -564,20 +556,20 @@ namespace SharePortfolioManager.Classes
 
                         #region Series
 
-                        _chartDailyValues.Series.Add(DailyValues.BottomName);
-                        _chartDailyValues.Series[DailyValues.BottomName].ChartType = graphValues.Type;
-                        _chartDailyValues.Series[DailyValues.BottomName].BorderWidth = graphValues.BorderWidth;
-                        _chartDailyValues.Series[DailyValues.BottomName].Color = graphValues.Color;
-                        _chartDailyValues.Series[DailyValues.BottomName].XValueMember = DailyValues.DateName;
-                        _chartDailyValues.Series[DailyValues.BottomName].XValueType = ChartValueType.DateTime;
-                        _chartDailyValues.Series[DailyValues.BottomName].IsXValueIndexed = true;
-                        _chartDailyValues.Series[DailyValues.BottomName].YValueMembers = DailyValues.BottomName;
-                        _chartDailyValues.Series[DailyValues.BottomName].YValueType = ChartValueType.Double;
-                        _chartDailyValues.Series[DailyValues.BottomName].YAxisType = AxisType.Primary;
-                        _chartDailyValues.Series[DailyValues.BottomName].IsVisibleInLegend = false;
-                        _chartDailyValues.Series[DailyValues.BottomName].MarkerStyle = MarkerStyle.Square;
-                        _chartDailyValues.Series[DailyValues.BottomName].MarkerSize = 6;
-                        _chartDailyValues.Series[DailyValues.BottomName].ToolTip = _language.GetLanguageTextByXPath(@"/Chart/Legend/Bottom", _languageName) + "\n" + toolTipFormat;
+                        _chartDailyValues.Series.Add(Parser.DailyValues.BottomName);
+                        _chartDailyValues.Series[Parser.DailyValues.BottomName].ChartType = graphValues.Type;
+                        _chartDailyValues.Series[Parser.DailyValues.BottomName].BorderWidth = graphValues.BorderWidth;
+                        _chartDailyValues.Series[Parser.DailyValues.BottomName].Color = graphValues.Color;
+                        _chartDailyValues.Series[Parser.DailyValues.BottomName].XValueMember = Parser.DailyValues.DateName;
+                        _chartDailyValues.Series[Parser.DailyValues.BottomName].XValueType = ChartValueType.DateTime;
+                        _chartDailyValues.Series[Parser.DailyValues.BottomName].IsXValueIndexed = true;
+                        _chartDailyValues.Series[Parser.DailyValues.BottomName].YValueMembers = Parser.DailyValues.BottomName;
+                        _chartDailyValues.Series[Parser.DailyValues.BottomName].YValueType = ChartValueType.Double;
+                        _chartDailyValues.Series[Parser.DailyValues.BottomName].YAxisType = AxisType.Primary;
+                        _chartDailyValues.Series[Parser.DailyValues.BottomName].IsVisibleInLegend = false;
+                        _chartDailyValues.Series[Parser.DailyValues.BottomName].MarkerStyle = MarkerStyle.Square;
+                        _chartDailyValues.Series[Parser.DailyValues.BottomName].MarkerSize = 6;
+                        _chartDailyValues.Series[Parser.DailyValues.BottomName].ToolTip = _language.GetLanguageTextByXPath(@"/Chart/Legend/Bottom", _languageName) + "\n" + toolTipFormat;
 
                         #endregion Series
 
@@ -586,14 +578,14 @@ namespace SharePortfolioManager.Classes
                         // Legend item creation
                         var legendItem = new LegendItem
                         {
-                            SeriesName = DailyValues.BottomName,
+                            SeriesName = Parser.DailyValues.BottomName,
                             Color = graphValues.Color,
-                            Name = DailyValues.BottomName + "_Item"
+                            Name = Parser.DailyValues.BottomName + "_Item"
                         };
 
                         // Legend first cell creation
                         var firstCell = new LegendCell(LegendCellType.SeriesSymbol,
-                            DailyValues.BottomName + "_FirstCell", ContentAlignment.MiddleRight);
+                            Parser.DailyValues.BottomName + "_FirstCell", ContentAlignment.MiddleRight);
 
                         // Legend second cell creation
                         var secondCell = new LegendCell(LegendCellType.Text,
@@ -616,7 +608,7 @@ namespace SharePortfolioManager.Classes
 
                         #endregion Legend
                     } break;
-                    case DailyValues.VolumeName:
+                    case Parser.DailyValues.VolumeName:
                     {
                         #region ToolTip
 
@@ -643,20 +635,20 @@ namespace SharePortfolioManager.Classes
 
                             #region Series
 
-                            _chartDailyValues.Series.Add(DailyValues.VolumeName);
-                            _chartDailyValues.Series[DailyValues.VolumeName].ChartType = graphValues.Type;
-                            _chartDailyValues.Series[DailyValues.VolumeName].BorderWidth = graphValues.BorderWidth;
-                            _chartDailyValues.Series[DailyValues.VolumeName].Color = graphValues.Color;
-                            _chartDailyValues.Series[DailyValues.VolumeName].XValueMember = DailyValues.DateName;
-                            _chartDailyValues.Series[DailyValues.VolumeName].XValueType = ChartValueType.DateTime;
-                            _chartDailyValues.Series[DailyValues.VolumeName].IsXValueIndexed = true;
-                            _chartDailyValues.Series[DailyValues.VolumeName].YValueMembers = DailyValues.VolumeName;
-                            _chartDailyValues.Series[DailyValues.VolumeName].YValueType = ChartValueType.Double;
-                            _chartDailyValues.Series[DailyValues.VolumeName].YAxisType = AxisType.Secondary;
-                            _chartDailyValues.Series[DailyValues.VolumeName].IsVisibleInLegend = false;
-                            _chartDailyValues.Series[DailyValues.VolumeName].MarkerStyle = MarkerStyle.Square;
-                            _chartDailyValues.Series[DailyValues.VolumeName].MarkerSize = 6;
-                            _chartDailyValues.Series[DailyValues.VolumeName].ToolTip = _language.GetLanguageTextByXPath(@"/Chart/Legend/Volume", _languageName) + "\n" + toolTipFormat;
+                            _chartDailyValues.Series.Add(Parser.DailyValues.VolumeName);
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].ChartType = graphValues.Type;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].BorderWidth = graphValues.BorderWidth;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].Color = graphValues.Color;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].XValueMember = Parser.DailyValues.DateName;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].XValueType = ChartValueType.DateTime;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].IsXValueIndexed = true;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].YValueMembers = Parser.DailyValues.VolumeName;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].YValueType = ChartValueType.Double;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].YAxisType = AxisType.Secondary;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].IsVisibleInLegend = false;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].MarkerStyle = MarkerStyle.Square;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].MarkerSize = 6;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].ToolTip = _language.GetLanguageTextByXPath(@"/Chart/Legend/Volume", _languageName) + "\n" + toolTipFormat;
 
                                 #endregion Series
 
@@ -665,14 +657,14 @@ namespace SharePortfolioManager.Classes
                             // Legend item creation
                             var legendItem = new LegendItem
                             {
-                                SeriesName = DailyValues.VolumeName,
+                                SeriesName = Parser.DailyValues.VolumeName,
                                 Color = graphValues.Color,
-                                Name = DailyValues.VolumeName + "_Item"
+                                Name = Parser.DailyValues.VolumeName + "_Item"
                             };
 
                             // Legend first cell creation
                             var firstCell = new LegendCell(LegendCellType.SeriesSymbol,
-                                DailyValues.VolumeName + "_FirstCell", ContentAlignment.MiddleRight);
+                                Parser.DailyValues.VolumeName + "_FirstCell", ContentAlignment.MiddleRight);
 
                             // Legend second cell creation
                             var secondCell = new LegendCell(LegendCellType.Text,
@@ -709,20 +701,20 @@ namespace SharePortfolioManager.Classes
 
                             #region Series
 
-                            _chartDailyValues.Series.Add(DailyValues.VolumeName);
-                            _chartDailyValues.Series[DailyValues.VolumeName].ChartType = graphValues.Type;
-                            _chartDailyValues.Series[DailyValues.VolumeName].BorderWidth = graphValues.BorderWidth;
-                            _chartDailyValues.Series[DailyValues.VolumeName].Color = graphValues.Color;
-                            _chartDailyValues.Series[DailyValues.VolumeName].XValueMember = DailyValues.DateName;
-                            _chartDailyValues.Series[DailyValues.VolumeName].XValueType = ChartValueType.DateTime;
-                            _chartDailyValues.Series[DailyValues.VolumeName].IsXValueIndexed = true;
-                            _chartDailyValues.Series[DailyValues.VolumeName].YValueMembers = DailyValues.VolumeName;
-                            _chartDailyValues.Series[DailyValues.VolumeName].YValueType = ChartValueType.Double;
-                            _chartDailyValues.Series[DailyValues.VolumeName].YAxisType = AxisType.Primary;
-                            _chartDailyValues.Series[DailyValues.VolumeName].IsVisibleInLegend = false;
-                            _chartDailyValues.Series[DailyValues.VolumeName].MarkerStyle = MarkerStyle.Square;
-                            _chartDailyValues.Series[DailyValues.VolumeName].MarkerSize = 6;
-                            _chartDailyValues.Series[DailyValues.VolumeName].ToolTip = _language.GetLanguageTextByXPath(@"/Chart/Legend/Volume", _languageName) + "\n" + toolTipFormat;
+                            _chartDailyValues.Series.Add(Parser.DailyValues.VolumeName);
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].ChartType = graphValues.Type;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].BorderWidth = graphValues.BorderWidth;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].Color = graphValues.Color;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].XValueMember = Parser.DailyValues.DateName;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].XValueType = ChartValueType.DateTime;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].IsXValueIndexed = true;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].YValueMembers = Parser.DailyValues.VolumeName;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].YValueType = ChartValueType.Double;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].YAxisType = AxisType.Primary;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].IsVisibleInLegend = false;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].MarkerStyle = MarkerStyle.Square;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].MarkerSize = 6;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].ToolTip = _language.GetLanguageTextByXPath(@"/Chart/Legend/Volume", _languageName) + "\n" + toolTipFormat;
 
                             #endregion Series
 
@@ -731,14 +723,14 @@ namespace SharePortfolioManager.Classes
                             // Legend item creation
                             var legendItem = new LegendItem
                             {
-                                SeriesName = DailyValues.VolumeName,
+                                SeriesName = Parser.DailyValues.VolumeName,
                                 Color = graphValues.Color,
-                                Name = DailyValues.VolumeName + "_Item"
+                                Name = Parser.DailyValues.VolumeName + "_Item"
                             };
 
                             // Legend first cell creation
                             var firstCell = new LegendCell(LegendCellType.SeriesSymbol,
-                                DailyValues.VolumeName + "_FirstCell", ContentAlignment.MiddleRight);
+                                Parser.DailyValues.VolumeName + "_FirstCell", ContentAlignment.MiddleRight);
 
                             // Legend second cell creation
                             var secondCell = new LegendCell(LegendCellType.Text,
@@ -919,6 +911,9 @@ namespace SharePortfolioManager.Classes
 
             if (showTitle)
             {
+                // Remove titles
+                _chartDailyValues.Titles.Clear();
+
                 // Legend second cell creation
                 var differenceDevelopment = lastPrice - firstPrice;
                 var percentageDevelopment = (lastPrice * 100 / firstPrice - 100).ToString(@"F");
@@ -957,46 +952,6 @@ namespace SharePortfolioManager.Classes
 
         #region Helper functions
 
-        private static List<Parser.DailyValues> GetDailyValuesOfInterval(DateTime givenDateTime, int iAmount)
-        {
-            DateTime startDate;
-            var dailyValues = new List<Parser.DailyValues>();
-
-            dailyValues.AddRange(_marketValueOverviewTabSelected
-                ? _shareObjectMarketValue.DailyValues
-                : _shareObjectFinalValue.DailyValues);
-
-            // Calculate the start date for the given interval and amount
-            switch (_chartValues.Interval)
-            {
-                case ChartingInterval.Week:
-                {
-                    startDate = givenDateTime.AddDays(-7 * iAmount);
-                } break;
-                case ChartingInterval.Month:
-                {
-                    startDate = givenDateTime.AddMonths(-iAmount);
-                } break;
-                case ChartingInterval.Quarter:
-                {
-                    startDate = givenDateTime.AddMonths(-3 * iAmount);
-                } break;
-                case ChartingInterval.Year:
-                {
-                    startDate = givenDateTime.AddYears(-iAmount);
-                } break;
-                default:
-                {
-                    startDate = givenDateTime.AddDays(-7 * iAmount);
-                } break;
-            }
-
-            // Get daily values for the timespan
-            var dailyValuesResult = dailyValues.Where(x => x.Date >= startDate).Where(x => x.Date <= givenDateTime).ToList();
-
-            return dailyValuesResult;
-        }
-
         private static void GetMinMax(
             IReadOnlyCollection<Parser.DailyValues> dailyValuesList,
             bool bUseAxisY2,
@@ -1022,27 +977,27 @@ namespace SharePortfolioManager.Classes
 
                 switch (graphValues.YValueMemberName)
                 {
-                    case DailyValues.ClosingPriceName:
+                    case Parser.DailyValues.ClosingPriceName:
                     {
                         decMin = dailyValuesList.Min(x => x.ClosingPrice);
                         decMax = dailyValuesList.Max(x => x.ClosingPrice);
                     } break;
-                    case DailyValues.OpeningPriceName:
+                    case Parser.DailyValues.OpeningPriceName:
                     {
                         decMin = dailyValuesList.Min(x => x.OpeningPrice);
                         decMax = dailyValuesList.Max(x => x.OpeningPrice);
                     } break;
-                    case DailyValues.TopName:
+                    case Parser.DailyValues.TopName:
                     {
                         decMin = dailyValuesList.Min(x => x.Top);
                         decMax = dailyValuesList.Max(x => x.Top);
                     } break;
-                    case DailyValues.BottomName:
+                    case Parser.DailyValues.BottomName:
                     {
                         decMin = dailyValuesList.Min(x => x.Bottom);
                         decMax = dailyValuesList.Max(x => x.Bottom);
                     } break;
-                    case DailyValues.VolumeName:
+                    case Parser.DailyValues.VolumeName:
                     {
                         decMin = dailyValuesList.Min(x => x.Volume);
                         decMax = dailyValuesList.Max(x => x.Volume);
@@ -1057,7 +1012,7 @@ namespace SharePortfolioManager.Classes
                 // Check if two Y axis should be used
                 if (bUseAxisY2)
                 {
-                    if (graphValues.YValueMemberName == DailyValues.VolumeName)
+                    if (graphValues.YValueMemberName == Parser.DailyValues.VolumeName)
                     {
                         // Set Min / Max value
                         if (decMin < decMinValueY2)
@@ -1153,7 +1108,7 @@ namespace SharePortfolioManager.Classes
                 GraphValuesList = graphValues;
 
                 // Check if more than one graph should be shown and if one of the graphs is the volume graph
-                if (GraphValuesList.Count(x => x.Show) > 1 && GraphValuesList.Any(x => x.YValueMemberName == DailyValues.VolumeName))
+                if (GraphValuesList.Count(x => x.Show) > 1 && GraphValuesList.Any(x => x.YValueMemberName == Parser.DailyValues.VolumeName))
                     UseAxisY2 = true;
             }
         }

@@ -26,13 +26,13 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.ShareObjects;
-using SharePortfolioManager.ShareDetailsForm;
 
 namespace SharePortfolioManager.ChartForm
 {
@@ -91,7 +91,37 @@ namespace SharePortfolioManager.ChartForm
             ChartingAmount = iChartingAmount;
             ChartingColorDictionary = chartingColorDictionary;
 
+            chartDailyValues.MouseWheel += OnChartDailyValues_MouseWheel;
+        }
+
+        private void FrmChart_Shown(object sender, EventArgs e)
+        {
             Charting();
+
+            var date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+
+            var bFlag = false;
+
+            // Check if the current day is a weekend day
+            while (date.DayOfWeek == DayOfWeek.Sunday ||
+                   date.DayOfWeek == DayOfWeek.Saturday ||
+                   date.DayOfWeek == DayOfWeek.Monday)
+            {
+                date = date.AddDays(-1);
+                bFlag = true;
+            }
+
+            if (!bFlag)
+                date = date.AddDays(-1);
+
+            // Check if no update is necessary
+            if (ShareObjectFinalValue.InternetUpdateOption == ShareObject.ShareUpdateTypes.MarketPrice &&
+                ShareObjectFinalValue.InternetUpdateOption == ShareObject.ShareUpdateTypes.None ||
+                (ShareObjectFinalValue.DailyValuesList.Entries.Count > 0 || ShareObjectMarketValue.DailyValuesList.Entries.Count > 0) &&
+                ShareObjectFinalValue.DailyValuesList.Entries.Last().Date >= date) return;
+
+            toolStripLabelMessage.ForeColor = Color.Red;
+            toolStripLabelMessage.Text = Language.GetLanguageTextByXPath(@"/Chart/Messages/UpdatePossible", LanguageName);
         }
 
         #region Charting
@@ -106,19 +136,26 @@ namespace SharePortfolioManager.ChartForm
                     true,
                     SeriesChartType.Line,
                     2,
-                    ChartingColorDictionary[DailyValues.ClosingPriceName],
-                    DailyValues.DateName,
-                    DailyValues.ClosingPriceName
+                    ChartingColorDictionary[Parser.DailyValues.ClosingPriceName],
+                    Parser.DailyValues.DateName,
+                    Parser.DailyValues.ClosingPriceName
                 );
 
                 graphValuesList.Add(graphValueClosingPrice);
 
+                var intervalType = DateTimeIntervalType.Days;
+
+                if (ChartingAmount > 24)
+                    intervalType = DateTimeIntervalType.Months;
+                if (ChartingAmount > 48)
+                    intervalType = DateTimeIntervalType.Years;
+
                 var chartValues =
                     new ChartingDailyValues.ChartValues(
                         ChartingInterval.Month,
-                        1,
+                        ChartingAmount,
                         @"dd.MM.yy",
-                        DateTimeIntervalType.Days,
+                        intervalType,
                         graphValuesList);
 
                 ChartingDailyValues.Charting(
@@ -172,13 +209,37 @@ namespace SharePortfolioManager.ChartForm
             }
         }
 
+        private void OnChartDailyValues_MouseWheel(object sender, MouseEventArgs e)
+        {
+            // Calculate the scroll interval
+            var iDelta = e.Delta / SystemInformation.MouseWheelScrollDelta;
+
+            var iMonthAmount = MarketValueOverviewTabSelected
+                ? ShareObjectMarketValue.DailyValuesList.MonthAmount
+                : ShareObjectFinalValue.DailyValuesList.MonthAmount;
+
+            // Check if the new amount is lower than 1
+            if (ChartingAmount + iDelta < 2 || (ChartingAmount + iDelta) > iMonthAmount)
+                return;
+            
+            // Calculate new chart interval
+            ChartingAmount += iDelta;
+             
+            // Redraw chart
+            Charting();
+        }
+
         private void OnChartDailyValues_MouseLeave(object sender, EventArgs e)
         {
+            chartDailyValues.MouseWheel -= OnChartDailyValues_MouseWheel;
+
             Close();
         }
 
         private void OnLblNoDataMessage_MouseLeave(object sender, EventArgs e)
         {
+            chartDailyValues.MouseWheel -= OnChartDailyValues_MouseWheel;
+
             Close();
         }
     }

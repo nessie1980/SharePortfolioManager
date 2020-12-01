@@ -133,7 +133,7 @@ namespace SharePortfolioManager
                             {
                                 // Start the asynchronous operation of the Parser for the daily market values
                                 ParserDailyValues.ParsingValues = new ParsingValues(
-                                    new Uri(Helper.BuildDailyValuesUrl(ShareObjectMarketValue.DailyValues,
+                                    new Uri(Helper.BuildDailyValuesUrl(ShareObjectMarketValue.DailyValuesList.Entries,
                                         ShareObjectMarketValue.DailyValuesUpdateWebSiteUrl,
                                         ShareObjectMarketValue.ShareType)),
                                     ShareObjectMarketValue.WebSiteEncodingType
@@ -218,7 +218,7 @@ namespace SharePortfolioManager
                             {
                                 // Start the asynchronous operation of the Parser for the daily market values
                                 ParserDailyValues.ParsingValues = new ParsingValues(
-                                    new Uri(Helper.BuildDailyValuesUrl(ShareObjectFinalValue.DailyValues,
+                                    new Uri(Helper.BuildDailyValuesUrl(ShareObjectFinalValue.DailyValuesList.Entries,
                                         ShareObjectFinalValue.DailyValuesUpdateWebSiteUrl,
                                         ShareObjectFinalValue.ShareType)),
                                     ShareObjectFinalValue.WebSiteEncodingType
@@ -366,7 +366,7 @@ namespace SharePortfolioManager
                                                     .SelectedCells[
                                                         (int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
                                                     .RowIndex]
-                                            .DailyValues,
+                                            .DailyValuesList.Entries,
                                         ShareObjectListMarketValue[
                                                 dgvPortfolioMarketValue
                                                     .SelectedCells[
@@ -440,7 +440,7 @@ namespace SharePortfolioManager
                                                     .SelectedCells[
                                                         (int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
                                                     .RowIndex]
-                                            .DailyValues,
+                                            .DailyValuesList.Entries,
                                         ShareObjectListFinalValue[
                                                 dgvPortfolioFinalValue
                                                     .SelectedCells[
