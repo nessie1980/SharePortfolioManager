@@ -238,8 +238,9 @@ namespace SharePortfolioManager
         /// </summary>
         public enum EStatePortfolioLoad
         {
-            FileDoesNotExit = -3,
-            PortfolioListEmpty = -2,
+            FileDoesNotExit = -4,
+            PortfolioListEmpty = -3,
+            PortfolioXmlError = -2,
             LoadFailed = -1,
             LoadSuccessful = 0,
 
@@ -444,141 +445,11 @@ namespace SharePortfolioManager
 
                 #endregion Load document RegEx configuration from XML
 
-                //#region Read shares from XML / Load portfolio
+                #region Read shares from XML / Load portfolio
 
-                //var stop = new Stopwatch();
-                //stop.Start();
+                InitializeBackgroundWorkerLoadPortfolio();
 
-                //// Only load portfolio if a portfolio file is set in the Settings.xml
-                //if (_portfolioFileName != "")
-                //{
-                //    // Load portfolio
-                //    LoadPortfolio();
-
-                //    // Check portfolio load state
-                //    switch (PortfolioLoadState)
-                //    {
-                //        case EStatePortfolioLoad.LoadSuccessful:
-                //        {
-                //            AddSharesToDataGridViews();
-                //            AddShareFooters();
-
-                //            // Enable controls
-                //            EnableDisableControlNames.Clear();
-                //            EnableDisableControlNames.Add("menuStrip1");
-                //            EnableDisableControlNames.Add("grpBoxSharePortfolio");
-                //            EnableDisableControlNames.Add("grpBoxShareDetails");
-                //            EnableDisableControlNames.Add("grpBoxStatusMessage");
-                //            EnableDisableControlNames.Add("grpBoxUpdateState");
-                //            EnableDisableControlNames.Add("grpBoxDocumentCapture");
-                //            Helper.EnableDisableControls(true, this, EnableDisableControlNames);
-                //        }
-                //            break;
-                //        case EStatePortfolioLoad.PortfolioListEmpty:
-                //        {
-                //            // Enable controls
-                //            EnableDisableControlNames.Clear();
-                //            EnableDisableControlNames.Add("menuStrip1");
-                //            EnableDisableControlNames.Add("grpBoxSharePortfolio");
-                //            EnableDisableControlNames.Add("grpBoxShareDetails");
-                //            EnableDisableControlNames.Add("grpBoxStatusMessage");
-                //            EnableDisableControlNames.Add("grpBoxUpdateState");
-                //            EnableDisableControlNames.Add("grpBoxDocumentCapture");
-                //            Helper.EnableDisableControls(true, this, EnableDisableControlNames);
-
-                //            // Disable controls
-                //            EnableDisableControlNames.Clear();
-                //            EnableDisableControlNames.Add("btnRefreshAll");
-                //            EnableDisableControlNames.Add("btnRefresh");
-                //            EnableDisableControlNames.Add("btnEdit");
-                //            EnableDisableControlNames.Add("btnDelete");
-                //            Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
-
-                //            Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                //                Language.GetLanguageTextByXPath(@"/MainForm/Errors/PortfolioConfigurationListEmpty",
-                //                    LanguageName),
-                //                Language, LanguageName,
-                //                Color.OrangeRed, Logger, (int) EStateLevels.Warning,
-                //                (int) EComponentLevels.Application);
-                //        }
-                //            break;
-                //        case EStatePortfolioLoad.LoadFailed:
-                //        {
-                //            // Enable controls
-                //            EnableDisableControlNames.Clear();
-                //            EnableDisableControlNames.Add("menuStrip1");
-                //            Helper.EnableDisableControls(true, this, EnableDisableControlNames);
-
-                //            // Disable controls
-                //            saveAsToolStripMenuItem.Enabled = false;
-
-                //            _portfolioFileName = @"";
-                //        }
-                //            break;
-                //        case EStatePortfolioLoad.FileDoesNotExit:
-                //        {
-                //            // Enable controls
-                //            EnableDisableControlNames.Clear();
-                //            EnableDisableControlNames.Add("menuStrip1");
-                //            Helper.EnableDisableControls(true, this, EnableDisableControlNames);
-
-                //            // Disable controls
-                //            saveAsToolStripMenuItem.Enabled = false;
-
-                //            Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                //                Language.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists_1", LanguageName)
-                //                + _portfolioFileName
-                //                + Language.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists_2",
-                //                    LanguageName),
-                //                Language, LanguageName,
-                //                Color.DarkRed, Logger, (int) EStateLevels.FatalError,
-                //                (int) EComponentLevels.Application);
-
-                //            _portfolioFileName = @"";
-                //        }
-                //            break;
-                //        default:
-                //            throw new ArgumentOutOfRangeException();
-                //    }
-
-                //    // Set portfolio filename to the application caption
-                //    Text = Language.GetLanguageTextByXPath(@"/Application/Name", LanguageName)
-                //           + @" " + Helper.GetApplicationVersion();
-                //    if (_portfolioFileName != @"")
-                //        Text += @" - (" + _portfolioFileName + @")";
-                //}
-                //else
-                //{
-                //    Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                //        Language.GetLanguageTextByXPath(@"/MainForm/Errors/PortfolioNotSet", LanguageName),
-                //        Language, LanguageName,
-                //        Color.OrangeRed, Logger, (int) EStateLevels.Warning, (int) EComponentLevels.Application);
-
-                //    // Disable menu strip menu point "Save as..."
-                //    saveAsToolStripMenuItem.Enabled = false;
-
-                //    EnableDisableControlNames.Clear();
-                //    EnableDisableControlNames.Add("menuStrip1");
-
-                //    // Disable all controls
-                //    Helper.EnableDisableControls(true, this, EnableDisableControlNames);
-                //}
-
-                //#endregion Read shares from XML / Load portfolio
-
-                //#region Select first item
-
-                //if (dgvPortfolioFinalValue.Rows.Count > 0)
-                //{
-                //    dgvPortfolioFinalValue.Rows[0].Selected = true;
-                //}
-
-                //tabCtrlShareOverviews.Select();
-
-                //stop.Stop();
-                //Console.WriteLine(@"LoadPortfolio: {0}ms", stop.ElapsedMilliseconds);
-
-                //#endregion Select first item
+                #endregion Read shares from XML / Load portfolio
 
                 #region Set language values to the control
 
@@ -692,106 +563,18 @@ namespace SharePortfolioManager
 
             #region Read shares from XML / Load portfolio
 
-            // TODO: (thomas:2020-08-30) Should be made in task because it may take
-            // much time an makes the application no more responsible
-
             // Only load portfolio if a portfolio file is set in the Settings.xml
             if (_portfolioFileName != "")
             {
-                // Load portfolio
-                LoadPortfolio();
-
-                // Check portfolio load state
-                switch (PortfolioLoadState)
+                // Load portfolio via background worker
+                if (!BgwLoadPortfolio.IsBusy)
                 {
-                    case EStatePortfolioLoad.LoadSuccessful:
-                        {
-                            AddSharesToDataGridViews();
-                            AddShareFooters();
+                    // Show loading portfolio controls
+                    tblLayPnlLoadingPortfolio.Visible = true;
 
-                            // Enable controls
-                            EnableDisableControlNames.Clear();
-                            EnableDisableControlNames.Add("menuStrip1");
-                            EnableDisableControlNames.Add("grpBoxSharePortfolio");
-                            EnableDisableControlNames.Add("grpBoxShareDetails");
-                            EnableDisableControlNames.Add("grpBoxStatusMessage");
-                            EnableDisableControlNames.Add("grpBoxUpdateState");
-                            EnableDisableControlNames.Add("grpBoxDocumentCapture");
-                            Helper.EnableDisableControls(true, this, EnableDisableControlNames);
-                        }
-                        break;
-                    case EStatePortfolioLoad.PortfolioListEmpty:
-                        {
-                            // Enable controls
-                            EnableDisableControlNames.Clear();
-                            EnableDisableControlNames.Add("menuStrip1");
-                            EnableDisableControlNames.Add("grpBoxSharePortfolio");
-                            EnableDisableControlNames.Add("grpBoxShareDetails");
-                            EnableDisableControlNames.Add("grpBoxStatusMessage");
-                            EnableDisableControlNames.Add("grpBoxUpdateState");
-                            EnableDisableControlNames.Add("grpBoxDocumentCapture");
-                            Helper.EnableDisableControls(true, this, EnableDisableControlNames);
-
-                            // Disable controls
-                            EnableDisableControlNames.Clear();
-                            EnableDisableControlNames.Add("btnRefreshAll");
-                            EnableDisableControlNames.Add("btnRefresh");
-                            EnableDisableControlNames.Add("btnEdit");
-                            EnableDisableControlNames.Add("btnDelete");
-                            Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
-
-                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(@"/MainForm/Errors/PortfolioConfigurationListEmpty",
-                                    LanguageName),
-                                Language, LanguageName,
-                                Color.OrangeRed, Logger, (int)EStateLevels.Warning,
-                                (int)EComponentLevels.Application);
-                        }
-                        break;
-                    case EStatePortfolioLoad.LoadFailed:
-                        {
-                            // Enable controls
-                            EnableDisableControlNames.Clear();
-                            EnableDisableControlNames.Add("menuStrip1");
-                            Helper.EnableDisableControls(true, this, EnableDisableControlNames);
-
-                            // Disable controls
-                            saveAsToolStripMenuItem.Enabled = false;
-
-                            _portfolioFileName = @"";
-                        }
-                        break;
-                    case EStatePortfolioLoad.FileDoesNotExit:
-                        {
-                            // Enable controls
-                            EnableDisableControlNames.Clear();
-                            EnableDisableControlNames.Add("menuStrip1");
-                            Helper.EnableDisableControls(true, this, EnableDisableControlNames);
-
-                            // Disable controls
-                            saveAsToolStripMenuItem.Enabled = false;
-
-                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists_1", LanguageName)
-                                + _portfolioFileName
-                                + Language.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists_2",
-                                    LanguageName),
-                                Language, LanguageName,
-                                Color.DarkRed, Logger, (int)EStateLevels.FatalError,
-                                (int)EComponentLevels.Application);
-
-                            _portfolioFileName = @"";
-                        }
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
+                    // Start portfolio load
+                    BgwLoadPortfolio.RunWorkerAsync();
                 }
-
-                // Set portfolio filename to the application caption
-                Text = Language.GetLanguageTextByXPath(@"/Application/Name", LanguageName)
-                       + @" " + Helper.GetApplicationVersion();
-                if (_portfolioFileName != @"")
-                    Text += @" - (" + _portfolioFileName + @")";
             }
             else
             {

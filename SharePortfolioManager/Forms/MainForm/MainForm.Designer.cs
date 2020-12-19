@@ -54,6 +54,9 @@ namespace SharePortfolioManager
             this.btnRefresh = new System.Windows.Forms.Button();
             this.tabCtrlShareOverviews = new System.Windows.Forms.TabControl();
             this.tabPgFinalValue = new System.Windows.Forms.TabPage();
+            this.tblLayPnlLoadingPortfolio = new System.Windows.Forms.TableLayoutPanel();
+            this.pgbLoadingPortfolio = new System.Windows.Forms.ProgressBar();
+            this.lblLoadingPortfolio = new System.Windows.Forms.Label();
             this.dgvPortfolioFinalValue = new System.Windows.Forms.DataGridView();
             this.dgvPortfolioFooterFinalValue = new System.Windows.Forms.DataGridView();
             this.tabPgMarketValue = new System.Windows.Forms.TabPage();
@@ -81,6 +84,7 @@ namespace SharePortfolioManager
             this.tblLayPnlShareOverviews.SuspendLayout();
             this.tabCtrlShareOverviews.SuspendLayout();
             this.tabPgFinalValue.SuspendLayout();
+            this.tblLayPnlLoadingPortfolio.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPortfolioFinalValue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPortfolioFooterFinalValue)).BeginInit();
             this.tabPgMarketValue.SuspendLayout();
@@ -124,7 +128,7 @@ namespace SharePortfolioManager
             this.newToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.menu_file_add2_24;
             this.newToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(131, 30);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
             this.newToolStripMenuItem.Text = "New_";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.OnNewToolStripMenuItem_Click);
             // 
@@ -133,7 +137,7 @@ namespace SharePortfolioManager
             this.openToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.menu_folder_open_24;
             this.openToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(131, 30);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
             this.openToolStripMenuItem.Text = "Open_";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.OnOpenToolStripMenuItem_Click);
             // 
@@ -142,20 +146,20 @@ namespace SharePortfolioManager
             this.saveAsToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.button_save_as_24;
             this.saveAsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(131, 30);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
             this.saveAsToolStripMenuItem.Text = "SaveAs_";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(128, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(185, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.button_exit_24;
             this.exitToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(131, 30);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
             this.exitToolStripMenuItem.Text = "&Quit_";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.OnExitToolStripMenuItem_Click);
             // 
@@ -172,7 +176,7 @@ namespace SharePortfolioManager
             // languageToolStripMenuItem
             // 
             this.languageToolStripMenuItem.Name = "languageToolStripMenuItem";
-            this.languageToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
+            this.languageToolStripMenuItem.Size = new System.Drawing.Size(145, 30);
             this.languageToolStripMenuItem.Text = "_Language";
             // 
             // loggerToolStripMenuItem
@@ -180,7 +184,7 @@ namespace SharePortfolioManager
             this.loggerToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.menu_eventlog_24;
             this.loggerToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.loggerToolStripMenuItem.Name = "loggerToolStripMenuItem";
-            this.loggerToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
+            this.loggerToolStripMenuItem.Size = new System.Drawing.Size(145, 30);
             this.loggerToolStripMenuItem.Text = "_Logger";
             this.loggerToolStripMenuItem.Click += new System.EventHandler(this.OnLoggerToolStripMenuItem_Click);
             // 
@@ -188,7 +192,7 @@ namespace SharePortfolioManager
             // 
             this.soundsToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.menu_sound_24;
             this.soundsToolStripMenuItem.Name = "soundsToolStripMenuItem";
-            this.soundsToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
+            this.soundsToolStripMenuItem.Size = new System.Drawing.Size(145, 30);
             this.soundsToolStripMenuItem.Text = "_Sound";
             this.soundsToolStripMenuItem.Click += new System.EventHandler(this.OnSoundToolStripMenuItem_Click);
             // 
@@ -341,8 +345,9 @@ namespace SharePortfolioManager
             // 
             // tabPgFinalValue
             // 
-            this.tabPgFinalValue.Controls.Add(this.dgvPortfolioFinalValue);
             this.tabPgFinalValue.Controls.Add(this.dgvPortfolioFooterFinalValue);
+            this.tabPgFinalValue.Controls.Add(this.tblLayPnlLoadingPortfolio);
+            this.tabPgFinalValue.Controls.Add(this.dgvPortfolioFinalValue);
             this.tabPgFinalValue.Location = new System.Drawing.Point(4, 26);
             this.tabPgFinalValue.Name = "tabPgFinalValue";
             this.tabPgFinalValue.Padding = new System.Windows.Forms.Padding(3);
@@ -350,6 +355,48 @@ namespace SharePortfolioManager
             this.tabPgFinalValue.TabIndex = 0;
             this.tabPgFinalValue.Text = "_tabPageCompleteDepotValues";
             this.tabPgFinalValue.UseVisualStyleBackColor = true;
+            // 
+            // tblLayPnlLoadingPortfolio
+            // 
+            this.tblLayPnlLoadingPortfolio.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.tblLayPnlLoadingPortfolio.ColumnCount = 3;
+            this.tblLayPnlLoadingPortfolio.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tblLayPnlLoadingPortfolio.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 500F));
+            this.tblLayPnlLoadingPortfolio.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tblLayPnlLoadingPortfolio.Controls.Add(this.pgbLoadingPortfolio, 1, 2);
+            this.tblLayPnlLoadingPortfolio.Controls.Add(this.lblLoadingPortfolio, 1, 1);
+            this.tblLayPnlLoadingPortfolio.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tblLayPnlLoadingPortfolio.Location = new System.Drawing.Point(3, 3);
+            this.tblLayPnlLoadingPortfolio.Name = "tblLayPnlLoadingPortfolio";
+            this.tblLayPnlLoadingPortfolio.RowCount = 4;
+            this.tblLayPnlLoadingPortfolio.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tblLayPnlLoadingPortfolio.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
+            this.tblLayPnlLoadingPortfolio.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tblLayPnlLoadingPortfolio.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tblLayPnlLoadingPortfolio.Size = new System.Drawing.Size(1348, 428);
+            this.tblLayPnlLoadingPortfolio.TabIndex = 11;
+            // 
+            // pgbLoadingPortfolio
+            // 
+            this.pgbLoadingPortfolio.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pgbLoadingPortfolio.Location = new System.Drawing.Point(427, 215);
+            this.pgbLoadingPortfolio.Name = "pgbLoadingPortfolio";
+            this.pgbLoadingPortfolio.Size = new System.Drawing.Size(494, 24);
+            this.pgbLoadingPortfolio.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.pgbLoadingPortfolio.TabIndex = 0;
+            // 
+            // lblLoadingPortfolio
+            // 
+            this.lblLoadingPortfolio.AutoSize = true;
+            this.lblLoadingPortfolio.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblLoadingPortfolio.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLoadingPortfolio.Location = new System.Drawing.Point(427, 188);
+            this.lblLoadingPortfolio.Margin = new System.Windows.Forms.Padding(3);
+            this.lblLoadingPortfolio.Name = "lblLoadingPortfolio";
+            this.lblLoadingPortfolio.Size = new System.Drawing.Size(494, 21);
+            this.lblLoadingPortfolio.TabIndex = 1;
+            this.lblLoadingPortfolio.Text = "_loadingPortfolio";
+            this.lblLoadingPortfolio.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // dgvPortfolioFinalValue
             // 
@@ -362,7 +409,6 @@ namespace SharePortfolioManager
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvPortfolioFinalValue.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvPortfolioFinalValue.Location = new System.Drawing.Point(0, 0);
-            this.dgvPortfolioFinalValue.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dgvPortfolioFinalValue.MultiSelect = false;
             this.dgvPortfolioFinalValue.Name = "dgvPortfolioFinalValue";
             this.dgvPortfolioFinalValue.ReadOnly = true;
@@ -430,13 +476,12 @@ namespace SharePortfolioManager
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvPortfolioMarketValue.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvPortfolioMarketValue.Location = new System.Drawing.Point(0, 0);
-            this.dgvPortfolioMarketValue.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dgvPortfolioMarketValue.MultiSelect = false;
             this.dgvPortfolioMarketValue.Name = "dgvPortfolioMarketValue";
             this.dgvPortfolioMarketValue.ReadOnly = true;
             this.dgvPortfolioMarketValue.RowHeadersVisible = false;
             this.dgvPortfolioMarketValue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPortfolioMarketValue.Size = new System.Drawing.Size(1204, 359);
+            this.dgvPortfolioMarketValue.Size = new System.Drawing.Size(1353, 359);
             this.dgvPortfolioMarketValue.TabIndex = 11;
             this.dgvPortfolioMarketValue.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DgvPortfolioMarketValue_CellFormatting);
             this.dgvPortfolioMarketValue.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.OnDgvPortfolioMarketValue_CellMouseDown);
@@ -467,7 +512,7 @@ namespace SharePortfolioManager
             this.dgvPortfolioFooterMarketValue.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dgvPortfolioFooterMarketValue.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dgvPortfolioFooterMarketValue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPortfolioFooterMarketValue.Size = new System.Drawing.Size(1204, 75);
+            this.dgvPortfolioFooterMarketValue.Size = new System.Drawing.Size(1353, 75);
             this.dgvPortfolioFooterMarketValue.TabIndex = 12;
             this.dgvPortfolioFooterMarketValue.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DgvPortfolioFooterMarketValue_CellFormatting);
             this.dgvPortfolioFooterMarketValue.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.DgvPortfolioFooterMarketValue_CellPainting);
@@ -709,6 +754,8 @@ namespace SharePortfolioManager
             this.tblLayPnlShareOverviews.PerformLayout();
             this.tabCtrlShareOverviews.ResumeLayout(false);
             this.tabPgFinalValue.ResumeLayout(false);
+            this.tblLayPnlLoadingPortfolio.ResumeLayout(false);
+            this.tblLayPnlLoadingPortfolio.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPortfolioFinalValue)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPortfolioFooterFinalValue)).EndInit();
             this.tabPgMarketValue.ResumeLayout(false);
@@ -738,7 +785,6 @@ namespace SharePortfolioManager
         private Button btnEdit;
         private Button btnAdd;
         private Button btnRefreshAll;
-        private DataGridView dgvPortfolioFinalValue;
         private ToolStripMenuItem settingsToolStripMenuItem;
         private ToolStripMenuItem languageToolStripMenuItem;
         private GroupBox grpBoxStatusMessage;
@@ -770,6 +816,10 @@ namespace SharePortfolioManager
         private GroupBox grpBoxDocumentCapture;
         private TextBox txtBoxDocumentCapture;
         private ToolStripMenuItem soundsToolStripMenuItem;
+        private DataGridView dgvPortfolioFinalValue;
+        private TableLayoutPanel tblLayPnlLoadingPortfolio;
+        private ProgressBar pgbLoadingPortfolio;
+        private Label lblLoadingPortfolio;
     }
 }
 

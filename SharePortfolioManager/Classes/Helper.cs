@@ -463,8 +463,54 @@ namespace SharePortfolioManager.Classes
         {
             try
             {
+                // Menu strip
+                if (givenControl.GetType() == typeof(MenuStrip))
+                {
+                    foreach (var control in ((MenuStrip) givenControl).Items)
+                    {
+                        // MenuStrip item
+                        if (control.GetType() == typeof(ToolStripMenuItem))
+                        {
+                            var castControl = (ToolStripMenuItem) control;
+#if DEBUG_HELPER
+                            Console.WriteLine(castControl.Name);
+#endif
+
+                            if (listControlNames.Contains(castControl.Name))
+                                castControl.Enabled = flag;
+
+                            // Loop through the dropdown items
+                            foreach (var controlDropDropDownItem in castControl.DropDown.Items)
+                            {
+                                if (controlDropDropDownItem.GetType() == typeof(ToolStripMenuItem))
+                                {
+                                    var castControlDropDropDownItem = (ToolStripMenuItem) controlDropDropDownItem;
+                                    if (listControlNames.Contains(castControlDropDropDownItem.Name))
+                                        castControlDropDropDownItem.Enabled = flag;
+
+                                }
+                            }
+                        }
+                    }
+                }
+
                 foreach (var control in givenControl.Controls)
                 {
+                    // MenuStrip
+                    if (control.GetType() == typeof(MenuStrip))
+                    {
+                        var castControl = (MenuStrip)control;
+#if DEBUG_HELPER
+                        Console.WriteLine(castControl.Name);
+#endif
+
+                        if (listControlNames.Contains(castControl.Name))
+                            castControl.Enabled = flag;
+
+                        if (castControl.Controls.Count > 0)
+                            EnableDisableControls(flag, castControl, listControlNames);
+                    }
+
                     // GroupBox
                     if (control.GetType() == typeof(GroupBox))
                     {
@@ -484,36 +530,6 @@ namespace SharePortfolioManager.Classes
                     if (control.GetType() == typeof(Button))
                     {
                         var castControl = (Button) control;
-#if DEBUG_HELPER
-                        Console.WriteLine(castControl.Name);
-#endif
-
-                        if (listControlNames.Contains(castControl.Name))
-                            castControl.Enabled = flag;
-
-                        if (castControl.Controls.Count > 0)
-                            EnableDisableControls(flag, castControl, listControlNames);
-                    }
-
-                    // MenuStrip
-                    if (control.GetType() == typeof(MenuStrip))
-                    {
-                        var castControl = (MenuStrip) control;
-#if DEBUG_HELPER
-                        Console.WriteLine(castControl.Name);
-#endif
-
-                        if (listControlNames.Contains(castControl.Name))
-                            castControl.Enabled = flag;
-
-                        if (castControl.Controls.Count > 0)
-                            EnableDisableControls(flag, castControl, listControlNames);
-                    }
-
-                    // MenuStrip item
-                    if (control.GetType() == typeof(MenuItem))
-                    {
-                        var castControl = (MenuStrip) control;
 #if DEBUG_HELPER
                         Console.WriteLine(castControl.Name);
 #endif

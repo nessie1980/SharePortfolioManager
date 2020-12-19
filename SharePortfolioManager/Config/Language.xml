@@ -94,6 +94,11 @@
 				</Help>
 			</Menu>
 
+			<!-- Loading portfolio message -->
+			<LoadingPortfolio>
+				<Message text="Loading portfolio" />
+			</LoadingPortfolio>
+			
 			<!-- Groupbox portfolio -->
 			<GrpBoxPortfolio>
 				<Caption text="Portfolio overview" />
@@ -1621,6 +1626,11 @@
 					<About text="Über" />
 				</Help>
 			</Menu>
+
+			<!-- Loading portfolio message -->
+			<LoadingPortfolio>
+				<Message text="Loading portfolio" />
+			</LoadingPortfolio>
 
 			<!-- Groupbox portfolio -->
 			<GrpBoxPortfolio>

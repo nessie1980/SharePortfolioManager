@@ -22,12 +22,14 @@
 
 // Define for DEBUGGING
 //#define DEBUG_MAIN_FORM_PORTFOLIO
+//#define DEBUG_SHARE_PORTFOLIO
 
 using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.Sales;
 using SharePortfolioManager.Classes.ShareObjects;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -66,7 +68,453 @@ namespace SharePortfolioManager
             Dividends
         };
 
-#region Change portfolio
+        /// <summary>
+        /// Flag which indicates if the change or load at the application start is running
+        /// </summary>
+        private bool ChangingPortfolio;
+
+        #region BackgroundWorker
+
+        public readonly BackgroundWorker BgwLoadPortfolio = new BackgroundWorker();
+
+        public readonly int MaxProgress = 100;
+
+        public double ReportProgress = 0.0;
+
+        public double ReportProgressStep = 100.0;
+
+        // Set up the BackgroundWorker object by 
+        // attaching event handlers. 
+        private void InitializeBackgroundWorkerLoadPortfolio()
+        {
+            BgwLoadPortfolio.WorkerReportsProgress = true;
+            BgwLoadPortfolio.WorkerSupportsCancellation = true;
+
+            BgwLoadPortfolio.DoWork += OnLoadPortfolio_DoWork;
+            BgwLoadPortfolio.RunWorkerCompleted += OnLoadPortfolio_RunWorkerCompleted;
+            BgwLoadPortfolio.ProgressChanged += OnLoadPortfolio_ProgressChanged;
+        }
+
+        // TODO
+        // This event handler is where the actual,
+        // potentially time-consuming work is done.
+        private void OnLoadPortfolio_DoWork(object sender,
+            DoWorkEventArgs e)
+        {
+            // Get the BackgroundWorker that raised this event.
+            var worker = sender as BackgroundWorker;
+
+            // Reset report progress values
+            ReportProgress = 0.0;
+            ReportProgressStep = 100.0;
+
+            // Assign the result of the computation
+            // to the Result property of the DoWorkEventArgs
+            // object. This is will be available to the 
+            // RunWorkerCompleted event handler.
+            LoadPortfolio(worker, e);
+        }
+
+        // This event handler deals with the results of the
+        // background operation.
+        private void OnLoadPortfolio_RunWorkerCompleted(
+            object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Cancelled)
+            {
+                // TODO Error handling
+                // Next, handle the case where the user canceled 
+                // the operation.
+                // Note that due to a race condition in 
+                // the DoWork event handler, the Cancelled
+                // flag may not have been set, even though
+                // CancelAsync was called.
+
+                //resultLabel.Text = "Canceled";
+                if (e.Error != null) Console.WriteLine(@"LoadPortfolio error {0}", e.Error.Message);
+            }
+            else
+            {
+                switch (PortfolioLoadState)
+                {
+                    case EStatePortfolioLoad.FileDoesNotExit:
+                    {
+                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists_1", LanguageName)
+                            + _portfolioFileName
+                            + Language.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists_2",
+                                LanguageName),
+                            Language, LanguageName,
+                            Color.DarkRed, Logger, (int) EStateLevels.FatalError,
+                            (int) EComponentLevels.Application);
+
+                        // Enable controls
+                        EnableDisableControlNames.Clear();
+                        EnableDisableControlNames.Add("menuStrip1");
+                        Helper.EnableDisableControls(true, this, EnableDisableControlNames);
+
+                        // Disable controls
+                        EnableDisableControlNames.Clear();
+                        EnableDisableControlNames.Add("saveAsToolStripMenuItem");
+                        Helper.EnableDisableControls(false, menuStrip1, EnableDisableControlNames);
+
+                        // Disable controls
+                        EnableDisableControlNames.Add("grpBoxSharePortfolio");
+                        EnableDisableControlNames.Add("grpBoxShareDetails");
+                        EnableDisableControlNames.Add("grpBoxStatusMessage");
+                        EnableDisableControlNames.Add("grpBoxUpdateState");
+                        EnableDisableControlNames.Add("grpBoxDocumentCapture");
+
+                        EnableDisableControlNames.Add("btnRefreshAll");
+                        EnableDisableControlNames.Add("btnRefresh");
+                        EnableDisableControlNames.Add("btnAdd");
+                        EnableDisableControlNames.Add("btnEdit");
+                        EnableDisableControlNames.Add("btnDelete");
+                        Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
+
+                        _portfolioFileName = @"";
+
+                        pgbLoadingPortfolio.Value = pgbLoadingPortfolio.Minimum;
+                    } break;
+                    case EStatePortfolioLoad.PortfolioXmlError:
+                    {
+                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_1", LanguageName)
+                            + _portfolioFileName
+                            + Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_2", LanguageName)
+                            + " " + Language.GetLanguageTextByXPath(@"/MainForm/Errors/XMLSyntaxFailure_1",
+                                LanguageName)
+                            + _portfolioFileName
+                            + Language.GetLanguageTextByXPath(@"/MainForm/Errors/XMLSyntaxFailure_2", LanguageName),
+                            Language, LanguageName,
+                            Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application,
+                            e.Error);
+
+                        // Enable controls
+                        EnableDisableControlNames.Clear();
+                        EnableDisableControlNames.Add("menuStrip1");
+                        Helper.EnableDisableControls(true, this, EnableDisableControlNames);
+
+                        // Disable controls
+                        EnableDisableControlNames.Clear();
+                        EnableDisableControlNames.Add("saveAsToolStripMenuItem");
+                        Helper.EnableDisableControls(false, menuStrip1, EnableDisableControlNames);
+
+                        // Disable controls
+                        EnableDisableControlNames.Clear();
+                        EnableDisableControlNames.Add("grpBoxSharePortfolio");
+                        EnableDisableControlNames.Add("grpBoxShareDetails");
+                        EnableDisableControlNames.Add("grpBoxStatusMessage");
+                        EnableDisableControlNames.Add("grpBoxUpdateState");
+                        EnableDisableControlNames.Add("grpBoxDocumentCapture");
+
+                        EnableDisableControlNames.Add("btnRefreshAll");
+                        EnableDisableControlNames.Add("btnRefresh");
+                        EnableDisableControlNames.Add("btnAdd");
+                        EnableDisableControlNames.Add("btnEdit");
+                        EnableDisableControlNames.Add("btnDelete");
+                        Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
+
+                        _portfolioFileName = @"";
+
+                        pgbLoadingPortfolio.Value = pgbLoadingPortfolio.Minimum;
+                    }break;
+                    case EStatePortfolioLoad.LoadFailed:
+                    {
+                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_1", LanguageName)
+                            + _portfolioFileName
+                            + Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_2", LanguageName),
+                            Language, LanguageName,
+                            Color.DarkRed, Logger, (int) EStateLevels.FatalError,
+                            (int) EComponentLevels.Application,
+                            e.Error);
+
+                        // Enable controls
+                        EnableDisableControlNames.Clear();
+                        EnableDisableControlNames.Add("menuStrip1");
+                        Helper.EnableDisableControls(true, this, EnableDisableControlNames);
+
+                        // Disable controls
+                        EnableDisableControlNames.Clear();
+                        EnableDisableControlNames.Add("saveAsToolStripMenuItem");
+                        Helper.EnableDisableControls(false, menuStrip1, EnableDisableControlNames);
+
+                        // Disable controls
+                        EnableDisableControlNames.Clear();
+                        EnableDisableControlNames.Add("grpBoxSharePortfolio");
+                        EnableDisableControlNames.Add("grpBoxShareDetails");
+                        EnableDisableControlNames.Add("grpBoxStatusMessage");
+                        EnableDisableControlNames.Add("grpBoxUpdateState");
+                        EnableDisableControlNames.Add("grpBoxDocumentCapture");
+                        Helper.EnableDisableControls(false, this, EnableDisableControlNames);
+
+                        // Disable controls
+                        EnableDisableControlNames.Clear();
+                        EnableDisableControlNames.Add("btnRefreshAll");
+                        EnableDisableControlNames.Add("btnRefresh");
+                        EnableDisableControlNames.Add("btnAdd");
+                        EnableDisableControlNames.Add("btnEdit");
+                        EnableDisableControlNames.Add("btnDelete");
+                        Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
+
+                        _portfolioFileName = @"";
+
+                        pgbLoadingPortfolio.Value = pgbLoadingPortfolio.Minimum;
+                    } break;
+                    case EStatePortfolioLoad.PortfolioListEmpty:
+                    {
+                        if (ChangingPortfolio)
+                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/ChangingPortfolioSuccessful",
+                                    LanguageName),
+                                Language, LanguageName,
+                                Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
+
+                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                        Language.GetLanguageTextByXPath(@"/MainForm/Errors/PortfolioConfigurationListEmpty",
+                            LanguageName),
+                        Language, LanguageName,
+                        Color.OrangeRed, Logger, (int)EStateLevels.Warning,
+                        (int)EComponentLevels.Application);
+
+                        // Enable controls
+                        EnableDisableControlNames.Clear();
+                        EnableDisableControlNames.Add("menuStrip1");
+
+                        EnableDisableControlNames.Add("grpBoxSharePortfolio");
+                        EnableDisableControlNames.Add("grpBoxShareDetails");
+                        EnableDisableControlNames.Add("grpBoxStatusMessage");
+                        EnableDisableControlNames.Add("grpBoxUpdateState");
+                        EnableDisableControlNames.Add("grpBoxDocumentCapture");
+                        
+                        EnableDisableControlNames.Add("btnAdd");
+                        Helper.EnableDisableControls(true, this, EnableDisableControlNames);
+
+                        EnableDisableControlNames.Clear();
+                        EnableDisableControlNames.Add("saveAsToolStripMenuItem");
+                        Helper.EnableDisableControls(true, menuStrip1, EnableDisableControlNames);
+
+                        // Disable controls
+                        EnableDisableControlNames.Clear();
+                        EnableDisableControlNames.Add("btnRefreshAll");
+                        EnableDisableControlNames.Add("btnRefresh");
+                        EnableDisableControlNames.Add("btnEdit");
+                        EnableDisableControlNames.Add("btnDelete");
+                        Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
+
+                        pgbLoadingPortfolio.Value = pgbLoadingPortfolio.Minimum;
+                    } break;
+                    case EStatePortfolioLoad.LoadSuccessful:
+                    {
+                        // Show the invalid website configurations
+                        ShowInvalidWebSiteConfigurations(RegexSearchFailedList);
+
+                        // Add data to data grid views
+                        AddSharesToDataGridViews();
+                        AddShareFooters();
+
+                        // Enable controls
+                        EnableDisableControlNames.Clear();
+                        EnableDisableControlNames.Add("menuStrip1");
+                        EnableDisableControlNames.Add("grpBoxSharePortfolio");
+                        EnableDisableControlNames.Add("grpBoxShareDetails");
+                        EnableDisableControlNames.Add("grpBoxStatusMessage");
+                        EnableDisableControlNames.Add("grpBoxUpdateState");
+                        EnableDisableControlNames.Add("grpBoxDocumentCapture");
+                        Helper.EnableDisableControls(true, this, EnableDisableControlNames);
+
+                        EnableDisableControlNames.Clear();
+                        EnableDisableControlNames.Add("btnRefreshAll");
+                        EnableDisableControlNames.Add("btnRefresh");
+                        EnableDisableControlNames.Add("btnAdd");
+                        EnableDisableControlNames.Add("btnEdit");
+                        EnableDisableControlNames.Add("btnDelete");
+                        Helper.EnableDisableControls(true, tblLayPnlShareOverviews, EnableDisableControlNames);
+
+                        // Check if any share set for updating so enable the refresh all button
+                        btnRefreshAll.Enabled = ShareObjectListFinalValue.Count(p =>
+                            p.InternetUpdateOption != ShareObject.ShareUpdateTypes.None &&
+                            p.WebSiteConfigurationFound) >= 1;
+
+                        // Check if any share set for updating so enable the refresh all button
+                        btnRefresh.Enabled = ShareObjectListFinalValue.Count(p =>
+                            p.InternetUpdateOption != ShareObject.ShareUpdateTypes.None &&
+                            p.WebSiteConfigurationFound) >= 1;
+
+                        pgbLoadingPortfolio.Value = pgbLoadingPortfolio.Maximum;
+
+                        if (ChangingPortfolio)
+                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/ChangingPortfolioSuccessful", LanguageName),
+                                Language, LanguageName,
+                                Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
+                    } break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                // Reset flag
+                ChangingPortfolio = false;
+
+                // Set portfolio filename to the application caption
+                Text = Language.GetLanguageTextByXPath(@"/Application/Name", LanguageName)
+                       + @" " + Helper.GetApplicationVersion();
+                if (_portfolioFileName != @"")
+                    Text += @" - (" + _portfolioFileName + @")";
+
+                // Set group box caption
+                grpBoxSharePortfolio.Text =
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Caption", LanguageName) +
+                    @" ( " +
+                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Entries", LanguageName) +
+                    @": " +
+                    ShareObjectListFinalValue.Count + @" )";
+
+#if DEBUG_SHARE_PORTFOLIO
+                Console.WriteLine(@"");
+
+                var tableOptions = new ConsoleTableOptions
+                {
+                    EnableCount = false,
+                    NumberAlignment = Alignment.Right,
+                    Columns = new List<string>() { @"ShareObjectListMarketValue", @"", @"ShareObjectListFinalValue", @"" }
+                };
+
+                for (var i = 0; i < ShareObjectListFinalValue.Count; i++)
+                {
+                    Console.WriteLine(@"	Name: {0}{1}", ShareObjectListMarketValue[i].Name, Environment.NewLine);
+
+                    var test = new ConsoleTable(tableOptions);
+                    test.AddRow(@"PurchaseValue:", ShareObjectListMarketValue[i].PurchaseValueAsStrUnit,
+                        @"PurchaseValue:", ShareObjectListFinalValue[i].PurchaseValueAsStrUnit);
+                    test.AddRow(@"MarketValue:", ShareObjectListMarketValue[i].MarketValueAsStrUnit,
+                        @"FinalValue:", ShareObjectListFinalValue[i].FinalValueAsStrUnit);
+                    test.AddRow(@"PerformanceValue:", ShareObjectListMarketValue[i].PerformanceValueAsStrUnit,
+                        @"PerformanceValue:", ShareObjectListFinalValue[i].PerformanceValueAsStrUnit);
+                    test.AddRow(@"CompletePerformanceValue:",
+                        ShareObjectListMarketValue[i].CompletePerformanceValueAsStrUnit,
+                        @"CompletePerformanceValue:",
+                        ShareObjectListFinalValue[i].CompletePerformanceValueAsStrUnit);
+                    test.AddRow(@"ProfitLossValue:", ShareObjectListMarketValue[i].ProfitLossValueAsStrUnit,
+                        @"ProfitLossValue:", ShareObjectListFinalValue[i].ProfitLossValueAsStrUnit);
+                    test.AddRow(@"CompleteProfitLossValue:",
+                        ShareObjectListMarketValue[i].CompleteProfitLossValueAsStrUnit,
+                        @"CompleteProfitLossValue:", ShareObjectListFinalValue[i].CompleteProfitLossValueAsStrUnit);
+                    //test.AddRow(@"PurchaseValueMarketValueWithProfitLoss:", ShareObjectListMarketValue[i].CompletePurchaseValueMarketValueWithProfitLossAsStrUnit, @"PurchaseValueMarketValueWithProfitLoss:", ShareObjectListFinalValue[i].CompletePurchaseValueMarketValueWithProfitLossAsStrUnit);
+                    test.AddRow(@"CompleteMarketValue:", ShareObjectListMarketValue[i].CompleteMarketValueAsStrUnit,
+                        @"CompleteFinalValue:", ShareObjectListFinalValue[i].CompleteFinalValueAsStrUnit);
+                    test.AddRow(@"", @"", @"", @"");
+                    test.AddRow(@"BuyValue:", ShareObjectListMarketValue[i].BuyValue,
+                        @"BuyValue:", ShareObjectListFinalValue[i].BuyValue);
+                    test.AddRow(@"BuyValueReduction:", ShareObjectListMarketValue[i].BuyValueReduction,
+                        @"BuyValueReduction:", ShareObjectListFinalValue[i].BuyValueReduction);
+                    test.AddRow(@"BuyValueBrokerage:", ShareObjectListMarketValue[i].BuyValueBrokerage,
+                        @"BuyValueBrokerage:", ShareObjectListFinalValue[i].BuyValueBrokerage);
+                    test.AddRow(@"BuyValueBrokerageReduction:",
+                        ShareObjectListMarketValue[i].BuyValueBrokerageReduction,
+                        @"BuyValueBrokerageReduction:", ShareObjectListFinalValue[i].BuyValueBrokerageReduction);
+                    test.AddRow(@"", @"", @"", @"");
+                    test.AddRow(@"SaleVolume:", ShareObjectListMarketValue[i].SaleVolumeAsStrUnit,
+                        @"SaleVolume:", ShareObjectListFinalValue[i].SaleVolumeAsStrUnit);
+                    test.AddRow(@"SalePurchaseValue:", ShareObjectListMarketValue[i].SalePurchaseValueAsStrUnit,
+                        @"SalePurchaseValue:", ShareObjectListFinalValue[i].SalePurchaseValueAsStrUnit);
+                    test.AddRow(@"SalePurchaseValueBrokerage:",
+                        ShareObjectListMarketValue[i].SalePurchaseValueBrokerageAsStrUnit,
+                        @"SalePurchaseValueBrokerage:",
+                        ShareObjectListFinalValue[i].SalePurchaseValueBrokerageAsStrUnit);
+                    test.AddRow(@"SalePurchaseValueReduction:",
+                        ShareObjectListMarketValue[i].SalePurchaseValueReductionAsStrUnit,
+                        @"SalePurchaseValueReduction:",
+                        ShareObjectListFinalValue[i].SalePurchaseValueReductionAsStrUnit);
+                    test.AddRow(@"SalePurchaseValueBrokerageReduction:",
+                        ShareObjectListMarketValue[i].SalePurchaseValueBrokerageReductionAsStrUnit,
+                        @"SalePurchaseValueBrokerageReduction:",
+                        ShareObjectListFinalValue[i].SalePurchaseValueBrokerageReductionAsStrUnit);
+                    test.AddRow(@"SalePayout:", ShareObjectListMarketValue[i].SalePayoutAsStrUnit,
+                        @"SalePayout:", ShareObjectListFinalValue[i].SalePayoutAsStrUnit);
+                    test.AddRow(@"SalePayoutBrokerage:", ShareObjectListMarketValue[i].SalePayoutBrokerageAsStrUnit,
+                        @"SalePayoutBrokerage:", ShareObjectListFinalValue[i].SalePayoutBrokerageAsStrUnit);
+                    test.AddRow(@"SalePayoutReduction:", ShareObjectListMarketValue[i].SalePayoutReductionAsStrUnit,
+                        @"SalePayoutReduction:", ShareObjectListFinalValue[i].SalePayoutReductionAsStrUnit);
+                    test.AddRow(@"SalePayoutBrokerageReduction:",
+                        ShareObjectListMarketValue[i].SalePayoutBrokerageReductionAsStrUnit,
+                        @"SalePayoutBrokerageReduction:",
+                        ShareObjectListFinalValue[i].SalePayoutBrokerageReductionAsStrUnit);
+                    test.AddRow(@"SaleProfitLoss:", ShareObjectListMarketValue[i].SaleProfitLossAsStrUnit,
+                        @"SaleProfitLoss:", ShareObjectListFinalValue[i].SaleProfitLossAsStrUnit);
+                    test.AddRow(@"SaleProfitLossBrokerage:",
+                        ShareObjectListMarketValue[i].SaleProfitLossBrokerageAsStrUnit,
+                        @"SaleProfitLossBrokerage:", ShareObjectListFinalValue[i].SaleProfitLossBrokerageAsStrUnit);
+                    test.AddRow(@"SaleProfitLossReduction:",
+                        ShareObjectListMarketValue[i].SaleProfitLossReductionAsStrUnit,
+                        @"SaleProfitLossReduction:", ShareObjectListFinalValue[i].SaleProfitLossReductionAsStrUnit);
+                    test.AddRow(@"SaleProfitLossBrokerageReduction:",
+                        ShareObjectListMarketValue[i].SaleProfitLossBrokerageReductionAsStrUnit,
+                        @"SaleProfitLossBrokerageReduction:",
+                        ShareObjectListFinalValue[i].SaleProfitLossBrokerageReductionAsStrUnit);
+                    test.AddRow(@"", @"", @"", @"");
+                    test.AddRow(@"PortfolioMarketValue:",
+                        ShareObjectListMarketValue[i].PortfolioMarketValueAsStrUnit,
+                        @"PortfolioFinalValue:", ShareObjectListFinalValue[i].PortfolioFinalValueAsStrUnit);
+                    test.AddRow(@"PortfolioPurchaseValue:",
+                        ShareObjectListMarketValue[i].PortfolioPurchaseValueAsStrUnit,
+                        @"PortfolioPurchaseValue:", ShareObjectListFinalValue[i].PortfolioPurchaseValueAsStrUnit);
+                    test.AddRow(@"PortfolioSoldPurchaseValue:",
+                        ShareObjectListMarketValue[i].PortfolioSoldPurchaseValue,
+                        @"PortfolioSoldPurchaseValue:", ShareObjectListFinalValue[i].PortfolioSoldPurchaseValue);
+                    test.AddRow(@"PortfolioMarketValueWithProfitLoss:",
+                        ShareObjectListMarketValue[i].PortfolioMarketValueWithProfitLossAsStrUnit,
+                        @"PortfolioFinalValueWithProfitLoss:",
+                        ShareObjectListFinalValue[i].PortfolioFinalValueWithProfitLossAsStrUnit);
+                    test.AddRow(@"PortfolioProfitLossValue:",
+                        ShareObjectListMarketValue[i].PortfolioProfitLossValueAsStrUnit,
+                        @"PortfolioProfitLossValue:",
+                        ShareObjectListFinalValue[i].PortfolioProfitLossValueAsStrUnit);
+                    test.AddRow(@"PortfolioPerformanceValue:",
+                        ShareObjectListMarketValue[i].PortfolioPerformanceValueAsStrUnit,
+                        @"PortfolioPerformanceValue:",
+                        ShareObjectListFinalValue[i].PortfolioPerformanceValueAsStrUnit);
+                    test.AddRow(@"", @"", @"", @"");
+                    test.AddRow(@"PortfolioCompletePurchaseValue:",
+                        ShareObjectListMarketValue[i].PortfolioCompletePurchaseValueAsStrUnit,
+                        @"PortfolioCompletePurchaseValue:",
+                        ShareObjectListFinalValue[i].PortfolioCompletePurchaseValueAsStrUnit);
+                    test.AddRow(@"PortfolioCompleteMarketValue:",
+                        ShareObjectListMarketValue[i].PortfolioCompleteMarketValueWithProfitLossAsStrUnit,
+                        @"PortfolioCompleteFinalValue:",
+                        ShareObjectListFinalValue[i].PortfolioCompleteFinalValueAsStrUnit);
+                    test.AddRow(@"PortfolioCompletePerformanceValue:",
+                        ShareObjectListMarketValue[i].PortfolioCompletePerformanceValueAsStrUnit,
+                        @"PortfolioCompletePerformanceValue:",
+                        ShareObjectListFinalValue[i].PortfolioCompletePerformanceValueAsStrUnit);
+                    test.AddRow(@"PortfolioCompleteProfitLossValue:",
+                        ShareObjectListMarketValue[i].PortfolioCompleteProfitLossValueAsStrUnit,
+                        @"PortfolioCompleteProfitLossValue:",
+                        ShareObjectListFinalValue[i].PortfolioCompleteProfitLossValueAsStrUnit);
+                    test.Write();
+
+                    Console.WriteLine(@"");
+                }
+#endif
+                // Hide loading portfolio controls
+                tblLayPnlLoadingPortfolio.Visible = false;
+            }
+        }
+
+        // This event handler updates the progress bar.
+        private void OnLoadPortfolio_ProgressChanged(object sender,
+            ProgressChangedEventArgs e)
+        {
+            pgbLoadingPortfolio.Value = e.ProgressPercentage;
+            lblLoadingPortfolio.Text =
+                Language.GetLanguageTextByXPath(@"/MainForm/LoadingPortfolio/Message", LanguageName)
+                + @" " + e.ProgressPercentage + @" " + ShareObject.PercentageUnit;
+        }
+
+        #endregion BackgroundWorker
+
+        #region Change portfolio
 
         /// <summary>
         /// This function does all the GUI changes
@@ -80,7 +528,9 @@ namespace SharePortfolioManager
                 // Set InitFlag to "true" for loading other portfolio
                 InitFlag = true;
 
-#region Reset MarketValue values
+                ChangingPortfolio = true;
+
+ #region Reset MarketValue values
 
                 // Reset market value share object
                 ShareObjectMarketValue = null;
@@ -112,117 +562,17 @@ namespace SharePortfolioManager
                 dgvPortfolioFooterFinalValue.Refresh();
                 dgvPortfolioFooterFinalValue.ColumnHeadersVisible = false;
 
-#endregion Reset FinalValue values
+                #endregion Reset FinalValue values
 
-                // Load new portfolio
-                LoadPortfolio();
-
-                // Check portfolio load state
-                switch (PortfolioLoadState)
+                // Load portfolio via background worker
+                if (!BgwLoadPortfolio.IsBusy)
                 {
-                    case EStatePortfolioLoad.LoadSuccessful:
-                        {
-                            AddSharesToDataGridViews();
-                            AddShareFooters();
+                    // Show loading portfolio controls
+                    tblLayPnlLoadingPortfolio.Visible = true;
 
-                            // Enable controls
-                            EnableDisableControlNames.Clear();
-                            EnableDisableControlNames.Add("menuStrip1");
-                            EnableDisableControlNames.Add("grpBoxSharePortfolio");
-                            EnableDisableControlNames.Add("grpBoxShareDetails");
-                            EnableDisableControlNames.Add("grpBoxStatusMessage");
-                            EnableDisableControlNames.Add("grpBoxUpdateState");
-                            EnableDisableControlNames.Add("grpBoxDocumentCapture");
-                            Helper.EnableDisableControls(true, this, EnableDisableControlNames);
-
-                            EnableDisableControlNames.Clear();
-                            EnableDisableControlNames.Add("btnRefreshAll");
-                            EnableDisableControlNames.Add("btnRefresh");
-                            EnableDisableControlNames.Add("btnEdit");
-                            EnableDisableControlNames.Add("btnDelete");
-                            Helper.EnableDisableControls(true, tblLayPnlShareOverviews, EnableDisableControlNames);
-
-                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/ChangingPortfolioSuccessful", LanguageName),
-                                Language, LanguageName,
-                                Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
-                        }
-                        break;
-                    case EStatePortfolioLoad.PortfolioListEmpty:
-                        {
-                            // Enable controls
-                            EnableDisableControlNames.Clear();
-                            EnableDisableControlNames.Add("menuStrip1");
-                            EnableDisableControlNames.Add("grpBoxSharePortfolio");
-                            EnableDisableControlNames.Add("grpBoxShareDetails");
-                            EnableDisableControlNames.Add("grpBoxStatusMessage");
-                            EnableDisableControlNames.Add("grpBoxUpdateState");
-                            EnableDisableControlNames.Add("grpBoxDocumentCapture");
-                            Helper.EnableDisableControls(true, this, EnableDisableControlNames);
-
-                            // Disable controls
-                            EnableDisableControlNames.Clear();
-                            EnableDisableControlNames.Add("btnRefreshAll");
-                            EnableDisableControlNames.Add("btnRefresh");
-                            EnableDisableControlNames.Add("btnEdit");
-                            EnableDisableControlNames.Add("btnDelete");
-                            Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
-
-                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/ChangingPortfolioSuccessful", LanguageName),
-                                Language, LanguageName,
-                                Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
-
-                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/PortfolioConfigurationListEmpty",
-                                LanguageName),
-                            Language, LanguageName,
-                            Color.OrangeRed, Logger, (int)EStateLevels.Warning,
-                            (int)EComponentLevels.Application);
-                        }
-                        break;
-                    case EStatePortfolioLoad.LoadFailed:
-                        {
-                            // Enable controls
-                            EnableDisableControlNames.Clear();
-                            EnableDisableControlNames.Add("menuStrip1");
-                            Helper.EnableDisableControls(true, this, EnableDisableControlNames);
-
-                            // Disable controls
-                            saveAsToolStripMenuItem.Enabled = false;
-
-                            _portfolioFileName = @"";
-                        }
-                        break;
-                    case EStatePortfolioLoad.FileDoesNotExit:
-                        {
-                            // Enable controls
-                            EnableDisableControlNames.Clear();
-                            EnableDisableControlNames.Add("menuStrip1");
-                            Helper.EnableDisableControls(true, this, EnableDisableControlNames);
-
-                            // Disable controls
-                            saveAsToolStripMenuItem.Enabled = false;
-
-                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists_1", LanguageName)
-                            + _portfolioFileName
-                            + Language.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists_2", LanguageName),
-                            Language, LanguageName,
-                            Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
-
-                            _portfolioFileName = @"";
-                        }
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
+                    // Start portfolio load
+                    BgwLoadPortfolio.RunWorkerAsync();
                 }
-
-                // Set portfolio filename to the application caption
-                Text = Language.GetLanguageTextByXPath(@"/Application/Name", LanguageName)
-                       + @" " + Helper.GetApplicationVersion();
-                if (_portfolioFileName != @"")
-                    Text += @" - (" + _portfolioFileName + @")";
             }
             catch (Exception ex)
             {
@@ -260,7 +610,7 @@ namespace SharePortfolioManager
         /// <summary>
         /// This function loads the portfolio from the portfolio file
         /// </summary>
-        private void LoadPortfolio()
+        private void LoadPortfolio(BackgroundWorker worker, DoWorkEventArgs e)
         {
             if (!InitFlag) return;
 
@@ -308,6 +658,9 @@ namespace SharePortfolioManager
                 var nodeListShares = Portfolio.SelectNodes($"/{ShareObject.GeneralPortfolioAttrName}/{ShareObject.GeneralShareAttrName}");
                 if (nodeListShares != null && nodeListShares.Count > 0)
                 {
+                    // Calculate the report progress value
+                    ReportProgressStep = MaxProgress / (double)nodeListShares.Count;
+                    
                     // Set portfolio content flag
                     PortfolioEmptyFlag = false;
 
@@ -995,6 +1348,12 @@ namespace SharePortfolioManager
                         else
                             bLoadPortfolio = false;
 
+                        // Increase report progress value
+                        ReportProgress += ReportProgressStep;
+
+                        // Update GUI
+                        BgwLoadPortfolio.ReportProgress((int)ReportProgress);
+
                         // Check if the read of the share was successful so read next share
                         if (bLoadPortfolio) continue;
 
@@ -1009,14 +1368,6 @@ namespace SharePortfolioManager
                         InitFlag = false;
                         PortfolioLoadState = EStatePortfolioLoad.LoadFailed;
 
-                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_1", LanguageName)
-                            + _portfolioFileName
-                            + Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_2", LanguageName)
-                            + " " + Language.GetLanguageTextByXPath(@"/MainForm/Errors/PortfolioConfigurationListLoadFailed", LanguageName),
-                            Language, LanguageName,
-                            Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Application);
-
                         // Stop loading more portfolio configurations
                         break;
                     }
@@ -1025,18 +1376,7 @@ namespace SharePortfolioManager
                     if (InitFlag)
                     {
                         PortfolioLoadState = EStatePortfolioLoad.LoadSuccessful;
-
-                        // Show the invalid website configurations
-                        ShowInvalidWebSiteConfigurations(RegexSearchFailedList);
                     }
-
-                    // Set group box caption
-                    grpBoxSharePortfolio.Text =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Caption", LanguageName) +
-                        @" ( " +
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Entries", LanguageName) +
-                        @": " +
-                        ShareObjectListFinalValue.Count + @" )";
                 }
                 else
                     // Set empty portfolio list state
@@ -1048,159 +1388,21 @@ namespace SharePortfolioManager
                 // Sort portfolio list in order of the share names
                 ShareObjectListMarketValue.Sort(new ShareObjectListComparer());
                 ShareObjectListFinalValue.Sort(new ShareObjectListComparer());
-
-                // Check if any share set for updating so enable the refresh all button
-                btnRefreshAll.Enabled = ShareObjectListFinalValue.Count(p => p.InternetUpdateOption != ShareObject.ShareUpdateTypes.None && p.WebSiteConfigurationFound) >= 1;
-
-#if DEBUG
-                Console.WriteLine(@"");
-
-                var tableOptions = new ConsoleTableOptions
-                {
-                    EnableCount = false,
-                    NumberAlignment = Alignment.Right,
-                    Columns = new List<string>() { @"ShareObjectListMarketValue", @"", @"ShareObjectListFinalValue", @"" }
-                };
-
-                for (var i = 0; i < ShareObjectListFinalValue.Count; i++)
-                {
-                    Console.WriteLine(@"	Name: {0}{1}", ShareObjectListMarketValue[i].Name, Environment.NewLine);
-
-                    var test = new ConsoleTable(tableOptions);
-                    test.AddRow(@"PurchaseValue:", ShareObjectListMarketValue[i].PurchaseValueAsStrUnit,
-                        @"PurchaseValue:", ShareObjectListFinalValue[i].PurchaseValueAsStrUnit);
-                    test.AddRow(@"MarketValue:", ShareObjectListMarketValue[i].MarketValueAsStrUnit,
-                        @"FinalValue:", ShareObjectListFinalValue[i].FinalValueAsStrUnit);
-                    test.AddRow(@"PerformanceValue:", ShareObjectListMarketValue[i].PerformanceValueAsStrUnit,
-                        @"PerformanceValue:", ShareObjectListFinalValue[i].PerformanceValueAsStrUnit);
-                    test.AddRow(@"CompletePerformanceValue:",
-                        ShareObjectListMarketValue[i].CompletePerformanceValueAsStrUnit,
-                        @"CompletePerformanceValue:",
-                        ShareObjectListFinalValue[i].CompletePerformanceValueAsStrUnit);
-                    test.AddRow(@"ProfitLossValue:", ShareObjectListMarketValue[i].ProfitLossValueAsStrUnit,
-                        @"ProfitLossValue:", ShareObjectListFinalValue[i].ProfitLossValueAsStrUnit);
-                    test.AddRow(@"CompleteProfitLossValue:",
-                        ShareObjectListMarketValue[i].CompleteProfitLossValueAsStrUnit,
-                        @"CompleteProfitLossValue:", ShareObjectListFinalValue[i].CompleteProfitLossValueAsStrUnit);
-                    //test.AddRow(@"PurchaseValueMarketValueWithProfitLoss:", ShareObjectListMarketValue[i].CompletePurchaseValueMarketValueWithProfitLossAsStrUnit, @"PurchaseValueMarketValueWithProfitLoss:", ShareObjectListFinalValue[i].CompletePurchaseValueMarketValueWithProfitLossAsStrUnit);
-                    test.AddRow(@"CompleteMarketValue:", ShareObjectListMarketValue[i].CompleteMarketValueAsStrUnit,
-                        @"CompleteFinalValue:", ShareObjectListFinalValue[i].CompleteFinalValueAsStrUnit);
-                    test.AddRow(@"", @"", @"", @"");
-                    test.AddRow(@"BuyValue:", ShareObjectListMarketValue[i].BuyValue,
-                        @"BuyValue:", ShareObjectListFinalValue[i].BuyValue);
-                    test.AddRow(@"BuyValueReduction:", ShareObjectListMarketValue[i].BuyValueReduction,
-                        @"BuyValueReduction:", ShareObjectListFinalValue[i].BuyValueReduction);
-                    test.AddRow(@"BuyValueBrokerage:", ShareObjectListMarketValue[i].BuyValueBrokerage,
-                        @"BuyValueBrokerage:", ShareObjectListFinalValue[i].BuyValueBrokerage);
-                    test.AddRow(@"BuyValueBrokerageReduction:",
-                        ShareObjectListMarketValue[i].BuyValueBrokerageReduction,
-                        @"BuyValueBrokerageReduction:", ShareObjectListFinalValue[i].BuyValueBrokerageReduction);
-                    test.AddRow(@"", @"", @"", @"");
-                    test.AddRow(@"SaleVolume:", ShareObjectListMarketValue[i].SaleVolumeAsStrUnit,
-                        @"SaleVolume:", ShareObjectListFinalValue[i].SaleVolumeAsStrUnit);
-                    test.AddRow(@"SalePurchaseValue:", ShareObjectListMarketValue[i].SalePurchaseValueAsStrUnit,
-                        @"SalePurchaseValue:", ShareObjectListFinalValue[i].SalePurchaseValueAsStrUnit);
-                    test.AddRow(@"SalePurchaseValueBrokerage:",
-                        ShareObjectListMarketValue[i].SalePurchaseValueBrokerageAsStrUnit,
-                        @"SalePurchaseValueBrokerage:",
-                        ShareObjectListFinalValue[i].SalePurchaseValueBrokerageAsStrUnit);
-                    test.AddRow(@"SalePurchaseValueReduction:",
-                        ShareObjectListMarketValue[i].SalePurchaseValueReductionAsStrUnit,
-                        @"SalePurchaseValueReduction:",
-                        ShareObjectListFinalValue[i].SalePurchaseValueReductionAsStrUnit);
-                    test.AddRow(@"SalePurchaseValueBrokerageReduction:",
-                        ShareObjectListMarketValue[i].SalePurchaseValueBrokerageReductionAsStrUnit,
-                        @"SalePurchaseValueBrokerageReduction:",
-                        ShareObjectListFinalValue[i].SalePurchaseValueBrokerageReductionAsStrUnit);
-                    test.AddRow(@"SalePayout:", ShareObjectListMarketValue[i].SalePayoutAsStrUnit,
-                        @"SalePayout:", ShareObjectListFinalValue[i].SalePayoutAsStrUnit);
-                    test.AddRow(@"SalePayoutBrokerage:", ShareObjectListMarketValue[i].SalePayoutBrokerageAsStrUnit,
-                        @"SalePayoutBrokerage:", ShareObjectListFinalValue[i].SalePayoutBrokerageAsStrUnit);
-                    test.AddRow(@"SalePayoutReduction:", ShareObjectListMarketValue[i].SalePayoutReductionAsStrUnit,
-                        @"SalePayoutReduction:", ShareObjectListFinalValue[i].SalePayoutReductionAsStrUnit);
-                    test.AddRow(@"SalePayoutBrokerageReduction:",
-                        ShareObjectListMarketValue[i].SalePayoutBrokerageReductionAsStrUnit,
-                        @"SalePayoutBrokerageReduction:",
-                        ShareObjectListFinalValue[i].SalePayoutBrokerageReductionAsStrUnit);
-                    test.AddRow(@"SaleProfitLoss:", ShareObjectListMarketValue[i].SaleProfitLossAsStrUnit,
-                        @"SaleProfitLoss:", ShareObjectListFinalValue[i].SaleProfitLossAsStrUnit);
-                    test.AddRow(@"SaleProfitLossBrokerage:",
-                        ShareObjectListMarketValue[i].SaleProfitLossBrokerageAsStrUnit,
-                        @"SaleProfitLossBrokerage:", ShareObjectListFinalValue[i].SaleProfitLossBrokerageAsStrUnit);
-                    test.AddRow(@"SaleProfitLossReduction:",
-                        ShareObjectListMarketValue[i].SaleProfitLossReductionAsStrUnit,
-                        @"SaleProfitLossReduction:", ShareObjectListFinalValue[i].SaleProfitLossReductionAsStrUnit);
-                    test.AddRow(@"SaleProfitLossBrokerageReduction:",
-                        ShareObjectListMarketValue[i].SaleProfitLossBrokerageReductionAsStrUnit,
-                        @"SaleProfitLossBrokerageReduction:",
-                        ShareObjectListFinalValue[i].SaleProfitLossBrokerageReductionAsStrUnit);
-                    test.AddRow(@"", @"", @"", @"");
-                    test.AddRow(@"PortfolioMarketValue:",
-                        ShareObjectListMarketValue[i].PortfolioMarketValueAsStrUnit,
-                        @"PortfolioFinalValue:", ShareObjectListFinalValue[i].PortfolioFinalValueAsStrUnit);
-                    test.AddRow(@"PortfolioPurchaseValue:",
-                        ShareObjectListMarketValue[i].PortfolioPurchaseValueAsStrUnit,
-                        @"PortfolioPurchaseValue:", ShareObjectListFinalValue[i].PortfolioPurchaseValueAsStrUnit);
-                    test.AddRow(@"PortfolioSoldPurchaseValue:",
-                        ShareObjectListMarketValue[i].PortfolioSoldPurchaseValue,
-                        @"PortfolioSoldPurchaseValue:", ShareObjectListFinalValue[i].PortfolioSoldPurchaseValue);
-                    test.AddRow(@"PortfolioMarketValueWithProfitLoss:",
-                        ShareObjectListMarketValue[i].PortfolioMarketValueWithProfitLossAsStrUnit,
-                        @"PortfolioFinalValueWithProfitLoss:",
-                        ShareObjectListFinalValue[i].PortfolioFinalValueWithProfitLossAsStrUnit);
-                    test.AddRow(@"PortfolioProfitLossValue:",
-                        ShareObjectListMarketValue[i].PortfolioProfitLossValueAsStrUnit,
-                        @"PortfolioProfitLossValue:",
-                        ShareObjectListFinalValue[i].PortfolioProfitLossValueAsStrUnit);
-                    test.AddRow(@"PortfolioPerformanceValue:",
-                        ShareObjectListMarketValue[i].PortfolioPerformanceValueAsStrUnit,
-                        @"PortfolioPerformanceValue:",
-                        ShareObjectListFinalValue[i].PortfolioPerformanceValueAsStrUnit);
-                    test.AddRow(@"", @"", @"", @"");
-                    test.AddRow(@"PortfolioCompletePurchaseValue:",
-                        ShareObjectListMarketValue[i].PortfolioCompletePurchaseValueAsStrUnit,
-                        @"PortfolioCompletePurchaseValue:",
-                        ShareObjectListFinalValue[i].PortfolioCompletePurchaseValueAsStrUnit);
-                    test.AddRow(@"PortfolioCompleteMarketValue:",
-                        ShareObjectListMarketValue[i].PortfolioCompleteMarketValueWithProfitLossAsStrUnit,
-                        @"PortfolioCompleteFinalValue:",
-                        ShareObjectListFinalValue[i].PortfolioCompleteFinalValueAsStrUnit);
-                    test.AddRow(@"PortfolioCompletePerformanceValue:",
-                        ShareObjectListMarketValue[i].PortfolioCompletePerformanceValueAsStrUnit,
-                        @"PortfolioCompletePerformanceValue:",
-                        ShareObjectListFinalValue[i].PortfolioCompletePerformanceValueAsStrUnit);
-                    test.AddRow(@"PortfolioCompleteProfitLossValue:",
-                        ShareObjectListMarketValue[i].PortfolioCompleteProfitLossValueAsStrUnit,
-                        @"PortfolioCompleteProfitLossValue:",
-                        ShareObjectListFinalValue[i].PortfolioCompleteProfitLossValueAsStrUnit);
-                    test.Write();
-
-                    Console.WriteLine(@"");
-                }
-#endif
             }
             catch (XmlException ex)
             {
                 // Set initialization flag
                 InitFlag = false;
-                PortfolioLoadState = EStatePortfolioLoad.LoadFailed;
-
-                Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_1", LanguageName)
-                    + _portfolioFileName
-                    + Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_2", LanguageName)
-                    + " " + Language.GetLanguageTextByXPath(@"/MainForm/Errors/XMLSyntaxFailure_1", LanguageName)
-                    + _portfolioFileName
-                    + Language.GetLanguageTextByXPath(@"/MainForm/Errors/XMLSyntaxFailure_2", LanguageName),
-                    Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application,
-                    ex);
+                PortfolioLoadState = EStatePortfolioLoad.PortfolioXmlError;
 
                 ShareObjectListMarketValue.Clear();
                 ShareObjectListFinalValue.Clear();
 
                 // Close portfolio reader
                 ReaderPortfolio?.Close();
+
+                // Send exception to the background worker complete function
+                throw new XmlException(ex.Message);
             }
             catch (Exception ex)
             {
@@ -1211,16 +1413,11 @@ namespace SharePortfolioManager
                 InitFlag = false;
                 PortfolioLoadState = EStatePortfolioLoad.LoadFailed;
 
-                Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_1", LanguageName)
-                    + _portfolioFileName
-                    + Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_2", LanguageName),
-                    Language, LanguageName,
-                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application,
-                    ex);
-
                 ShareObjectListMarketValue.Clear();
                 ShareObjectListFinalValue.Clear();
+
+                // Send exception to the background worker complete function
+                throw new Exception(ex.Message);
             }
         }
 
