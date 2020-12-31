@@ -28,6 +28,7 @@ using SharePortfolioManager.OwnMessageBoxForm;
 using System;
 using System.IO;
 using System.Windows.Forms;
+using SharePortfolioManager.Classes.Configurations;
 using SharePortfolioManager.DocumentCaptureParsing;
 
 namespace SharePortfolioManager
@@ -65,21 +66,22 @@ namespace SharePortfolioManager
 
                 if (string.Compare(extenstion, ".PDF", StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    var frmDocumentCapture = new FrmDocumentCaptureParsing(this, txtBoxDocumentCapture.Text, Logger, Language, LanguageName);
+                    var frmDocumentCapture = new FrmDocumentCaptureParsing(this, txtBoxDocumentCapture.Text, Logger,
+                        LanguageConfiguration.Language, SettingsConfiguration.LanguageName);
                     frmDocumentCapture.ShowDialog();
 
                     txtBoxDocumentCapture.Text = @"";
                 }
                 else
                 {
-                    var strCaption = Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
+                    var strCaption = LanguageConfiguration.Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", SettingsConfiguration.LanguageName)[
                         (int)EOwnMessageBoxInfoType.Info];
-                    var strMessage = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/DocumentCaptureOnlyPdf",
-                        LanguageName);
-                    var strOk = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok",
-                        LanguageName);
-                    var strCancel = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel",
-                        LanguageName);
+                    var strMessage = LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/DocumentCaptureOnlyPdf",
+                        SettingsConfiguration.LanguageName);
+                    var strOk = LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok",
+                        SettingsConfiguration.LanguageName);
+                    var strCancel = LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel",
+                        SettingsConfiguration.LanguageName);
 
                     // Show message
                     var msg = new OwnMessageBox(strCaption, strMessage, strOk, strCancel, EOwnMessageBoxInfoType.Info);

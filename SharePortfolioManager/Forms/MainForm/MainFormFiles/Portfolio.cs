@@ -36,7 +36,9 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
-#if DEBUG
+using SharePortfolioManager.Classes.Configurations;
+
+#if DEBUG_SHARE_PORTFOLIO
 using ConsoleTables;
 #endif
 
@@ -48,6 +50,24 @@ namespace SharePortfolioManager
     /// </summary>
     public partial class FrmMain
     {
+        /// <summary>
+        /// States for the portfolio load
+        /// </summary>
+        public enum EStatePortfolioLoad
+        {
+            LoadSuccessful = 0,
+            FileDoesNotExit = -1,
+            PortfolioListEmpty = -2,
+            PortfolioXmlError = -3,
+            ConfigurationAttributeError = -4,
+            LoadFailed = -5
+        }
+
+        /// <summary>
+        /// State of the portfolio load
+        /// </summary>
+        public EStatePortfolioLoad PortfolioLoadState;
+
         /// <summary>
         /// This enums represent the various share portfolio parts
         /// </summary>
@@ -71,7 +91,36 @@ namespace SharePortfolioManager
         /// <summary>
         /// Flag which indicates if the change or load at the application start is running
         /// </summary>
-        private bool ChangingPortfolio;
+        private bool _changingPortfolio;
+
+        private XmlReaderSettings _readerSettingsPortfolio;
+        private XmlDocument _portfolio;
+        private XmlReader _readerPortfolio;
+
+        #region Portfolio settings
+
+        // ReSharper disable once ConvertToAutoProperty
+        public XmlReaderSettings ReaderSettingsPortfolio
+        {
+            get => _readerSettingsPortfolio;
+            set => _readerSettingsPortfolio = value;
+        }
+
+        // ReSharper disable once ConvertToAutoProperty
+        public XmlDocument Portfolio
+        {
+            get => _portfolio;
+            set => _portfolio = value;
+        }
+
+        // ReSharper disable once ConvertToAutoProperty
+        public XmlReader ReaderPortfolio
+        {
+            get => _readerPortfolio;
+            set => _readerPortfolio = value;
+        }
+
+        #endregion Portfolio settings
 
         #region BackgroundWorker
 
@@ -79,7 +128,7 @@ namespace SharePortfolioManager
 
         public readonly int MaxProgress = 100;
 
-        public double ReportProgress = 0.0;
+        public double ReportProgress;
 
         public double ReportProgressStep = 100.0;
 
@@ -95,7 +144,6 @@ namespace SharePortfolioManager
             BgwLoadPortfolio.ProgressChanged += OnLoadPortfolio_ProgressChanged;
         }
 
-        // TODO
         // This event handler is where the actual,
         // potentially time-consuming work is done.
         private void OnLoadPortfolio_DoWork(object sender,
@@ -130,7 +178,6 @@ namespace SharePortfolioManager
                 // flag may not have been set, even though
                 // CancelAsync was called.
 
-                //resultLabel.Text = "Canceled";
                 if (e.Error != null) Console.WriteLine(@"LoadPortfolio error {0}", e.Error.Message);
             }
             else
@@ -140,11 +187,12 @@ namespace SharePortfolioManager
                     case EStatePortfolioLoad.FileDoesNotExit:
                     {
                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists_1", LanguageName)
-                            + _portfolioFileName
-                            + Language.GetLanguageTextByXPath(@"/MainForm/Errors/FileDoesNotExists_2",
-                                LanguageName),
-                            Language, LanguageName,
+                            LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/PortfolioErrors/FileDoesNotExists_1",
+                                SettingsConfiguration.LanguageName)
+                            + SettingsConfiguration.PortfolioName
+                            + LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/PortfolioErrors/FileDoesNotExists_2",
+                                SettingsConfiguration.LanguageName),
+                            LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                             Color.DarkRed, Logger, (int) EStateLevels.FatalError,
                             (int) EComponentLevels.Application);
 
@@ -172,22 +220,26 @@ namespace SharePortfolioManager
                         EnableDisableControlNames.Add("btnDelete");
                         Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
 
-                        _portfolioFileName = @"";
+                        SettingsConfiguration.PortfolioName = @"";
 
                         pgbLoadingPortfolio.Value = pgbLoadingPortfolio.Minimum;
-                    } break;
+                    }
+                        break;
                     case EStatePortfolioLoad.PortfolioXmlError:
                     {
                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_1", LanguageName)
-                            + _portfolioFileName
-                            + Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_2", LanguageName)
-                            + " " + Language.GetLanguageTextByXPath(@"/MainForm/Errors/XMLSyntaxFailure_1",
-                                LanguageName)
-                            + _portfolioFileName
-                            + Language.GetLanguageTextByXPath(@"/MainForm/Errors/XMLSyntaxFailure_2", LanguageName),
-                            Language, LanguageName,
-                            Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application,
+                            LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/PortfolioErrors/CouldNotLoadFile_1",
+                                SettingsConfiguration.LanguageName)
+                            + SettingsConfiguration.PortfolioName
+                            + LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/PortfolioErrors/CouldNotLoadFile_2",
+                                SettingsConfiguration.LanguageName)
+                            + " " + LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/PortfolioErrors/XMLSyntaxFailure_1",
+                                SettingsConfiguration.LanguageName)
+                            + SettingsConfiguration.PortfolioName
+                            + LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/PortfolioErrors/XMLSyntaxFailure_2",
+                                SettingsConfiguration.LanguageName),
+                            LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                            Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                             e.Error);
 
                         // Enable controls
@@ -215,17 +267,21 @@ namespace SharePortfolioManager
                         EnableDisableControlNames.Add("btnDelete");
                         Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
 
-                        _portfolioFileName = @"";
+                        SettingsConfiguration.PortfolioName = @"";
 
                         pgbLoadingPortfolio.Value = pgbLoadingPortfolio.Minimum;
-                    }break;
-                    case EStatePortfolioLoad.LoadFailed:
+                    }
+                        break;
+                    case EStatePortfolioLoad.ConfigurationAttributeError:
                     {
                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_1", LanguageName)
-                            + _portfolioFileName
-                            + Language.GetLanguageTextByXPath(@"/MainForm/Errors/CouldNotLoadFile_2", LanguageName),
-                            Language, LanguageName,
+                            LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/PortfolioErrors/ConfigurationAttributeError_1",
+                                SettingsConfiguration.LanguageName)
+                            + SettingsConfiguration.PortfolioName
+                            + LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                @"/MainForm/PortfolioErrors/ConfigurationAttributeError_2",
+                                SettingsConfiguration.LanguageName),
+                            LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                             Color.DarkRed, Logger, (int) EStateLevels.FatalError,
                             (int) EComponentLevels.Application,
                             e.Error);
@@ -258,25 +314,73 @@ namespace SharePortfolioManager
                         EnableDisableControlNames.Add("btnDelete");
                         Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
 
-                        _portfolioFileName = @"";
+                        SettingsConfiguration.PortfolioName = @"";
 
                         pgbLoadingPortfolio.Value = pgbLoadingPortfolio.Minimum;
-                    } break;
+                    }
+                        break;
+                    case EStatePortfolioLoad.LoadFailed:
+                    {
+                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                            LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/PortfolioErrors/CouldNotLoadFile_1",
+                                SettingsConfiguration.LanguageName)
+                            + SettingsConfiguration.PortfolioName
+                            + LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/PortfolioErrors/CouldNotLoadFile_2",
+                                SettingsConfiguration.LanguageName),
+                            LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                            Color.DarkRed, Logger, (int) EStateLevels.FatalError,
+                            (int) EComponentLevels.Application,
+                            e.Error);
+
+                        // Enable controls
+                        EnableDisableControlNames.Clear();
+                        EnableDisableControlNames.Add("menuStrip1");
+                        Helper.EnableDisableControls(true, this, EnableDisableControlNames);
+
+                        // Disable controls
+                        EnableDisableControlNames.Clear();
+                        EnableDisableControlNames.Add("saveAsToolStripMenuItem");
+                        Helper.EnableDisableControls(false, menuStrip1, EnableDisableControlNames);
+
+                        // Disable controls
+                        EnableDisableControlNames.Clear();
+                        EnableDisableControlNames.Add("grpBoxSharePortfolio");
+                        EnableDisableControlNames.Add("grpBoxShareDetails");
+                        EnableDisableControlNames.Add("grpBoxStatusMessage");
+                        EnableDisableControlNames.Add("grpBoxUpdateState");
+                        EnableDisableControlNames.Add("grpBoxDocumentCapture");
+                        Helper.EnableDisableControls(false, this, EnableDisableControlNames);
+
+                        // Disable controls
+                        EnableDisableControlNames.Clear();
+                        EnableDisableControlNames.Add("btnRefreshAll");
+                        EnableDisableControlNames.Add("btnRefresh");
+                        EnableDisableControlNames.Add("btnAdd");
+                        EnableDisableControlNames.Add("btnEdit");
+                        EnableDisableControlNames.Add("btnDelete");
+                        Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
+
+                        SettingsConfiguration.PortfolioName = @"";
+
+                        pgbLoadingPortfolio.Value = pgbLoadingPortfolio.Minimum;
+                    }
+                        break;
                     case EStatePortfolioLoad.PortfolioListEmpty:
                     {
-                        if (ChangingPortfolio)
+                        if (_changingPortfolio)
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/ChangingPortfolioSuccessful",
-                                    LanguageName),
-                                Language, LanguageName,
-                                Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/ChangingPortfolioSuccessful",
+                                    SettingsConfiguration.LanguageName),
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                                Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Application);
 
                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        Language.GetLanguageTextByXPath(@"/MainForm/Errors/PortfolioConfigurationListEmpty",
-                            LanguageName),
-                        Language, LanguageName,
-                        Color.OrangeRed, Logger, (int)EStateLevels.Warning,
-                        (int)EComponentLevels.Application);
+                            LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                @"/MainForm/PortfolioErrors/ConfigurationListEmpty",
+                                SettingsConfiguration.LanguageName),
+                            LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                            Color.OrangeRed, Logger, (int) EStateLevels.Warning,
+                            (int) EComponentLevels.Application);
 
                         // Enable controls
                         EnableDisableControlNames.Clear();
@@ -287,7 +391,7 @@ namespace SharePortfolioManager
                         EnableDisableControlNames.Add("grpBoxStatusMessage");
                         EnableDisableControlNames.Add("grpBoxUpdateState");
                         EnableDisableControlNames.Add("grpBoxDocumentCapture");
-                        
+
                         EnableDisableControlNames.Add("btnAdd");
                         Helper.EnableDisableControls(true, this, EnableDisableControlNames);
 
@@ -304,7 +408,8 @@ namespace SharePortfolioManager
                         Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
 
                         pgbLoadingPortfolio.Value = pgbLoadingPortfolio.Minimum;
-                    } break;
+                    }
+                        break;
                     case EStatePortfolioLoad.LoadSuccessful:
                     {
                         // Show the invalid website configurations
@@ -317,6 +422,10 @@ namespace SharePortfolioManager
                         // Enable controls
                         EnableDisableControlNames.Clear();
                         EnableDisableControlNames.Add("menuStrip1");
+                        EnableDisableControlNames.Add("newToolStripMenuItem");
+                        EnableDisableControlNames.Add("openToolStripMenuItem");
+                        EnableDisableControlNames.Add("saveAsToolStripMenuItem");
+                        EnableDisableControlNames.Add("settingsToolStripMenuItem");
                         EnableDisableControlNames.Add("grpBoxSharePortfolio");
                         EnableDisableControlNames.Add("grpBoxShareDetails");
                         EnableDisableControlNames.Add("grpBoxStatusMessage");
@@ -344,30 +453,42 @@ namespace SharePortfolioManager
 
                         pgbLoadingPortfolio.Value = pgbLoadingPortfolio.Maximum;
 
-                        if (ChangingPortfolio)
+                        if (_changingPortfolio)
+                        {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/ChangingPortfolioSuccessful", LanguageName),
-                                Language, LanguageName,
-                                Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
-                    } break;
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/ChangingPortfolioSuccessful",
+                                    SettingsConfiguration.LanguageName),
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                                Color.Green, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Application);
+                        }
+                        else
+                        {
+                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/LoadingPortfolioSuccessful",
+                                    SettingsConfiguration.LanguageName),
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                                Color.Green, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Application);
+                        }
+                    }
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
 
                 // Reset flag
-                ChangingPortfolio = false;
+                _changingPortfolio = false;
 
                 // Set portfolio filename to the application caption
-                Text = Language.GetLanguageTextByXPath(@"/Application/Name", LanguageName)
+                Text = LanguageConfiguration.Language.GetLanguageTextByXPath(@"/Application/Name", SettingsConfiguration.LanguageName)
                        + @" " + Helper.GetApplicationVersion();
-                if (_portfolioFileName != @"")
-                    Text += @" - (" + _portfolioFileName + @")";
+                if (SettingsConfiguration.PortfolioName != @"")
+                    Text += @" - (" + SettingsConfiguration.PortfolioName + @")";
 
                 // Set group box caption
                 grpBoxSharePortfolio.Text =
-                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Caption", LanguageName) +
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Caption", SettingsConfiguration.LanguageName) +
                     @" ( " +
-                    Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Entries", LanguageName) +
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Entries", SettingsConfiguration.LanguageName) +
                     @": " +
                     ShareObjectListFinalValue.Count + @" )";
 
@@ -508,7 +629,7 @@ namespace SharePortfolioManager
         {
             pgbLoadingPortfolio.Value = e.ProgressPercentage;
             lblLoadingPortfolio.Text =
-                Language.GetLanguageTextByXPath(@"/MainForm/LoadingPortfolio/Message", LanguageName)
+                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/LoadingPortfolio/Message", SettingsConfiguration.LanguageName)
                 + @" " + e.ProgressPercentage + @" " + ShareObject.PercentageUnit;
         }
 
@@ -528,7 +649,7 @@ namespace SharePortfolioManager
                 // Set InitFlag to "true" for loading other portfolio
                 InitFlag = true;
 
-                ChangingPortfolio = true;
+                _changingPortfolio = true;
 
  #region Reset MarketValue values
 
@@ -596,8 +717,8 @@ namespace SharePortfolioManager
                 Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
 
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/ChangingPortfolioFailed", LanguageName),
-                    Language, LanguageName,
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/PortfolioErrors/ChangingPortfolioFailed", SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }
@@ -605,7 +726,7 @@ namespace SharePortfolioManager
 
 #endregion Change portfolio
 
-#region Load portfolio
+        #region Load portfolio
 
         /// <summary>
         /// This function loads the portfolio from the portfolio file
@@ -624,16 +745,10 @@ namespace SharePortfolioManager
                 ShareObjectMarketValue.PortfolioValuesReset();
                 PortfolioEmptyFlag = true;
 
-                // Set portfolio to the Settings.XML file
-                var nodePortfolioName = Settings.SelectSingleNode("/Settings/Portfolio");
-
                 // Check if the portfolio file exists
-                if (!File.Exists(_portfolioFileName))
+                if (!File.Exists(SettingsConfiguration.PortfolioName))
                 {
-                    // Set portfolio name value to the XML
-                    if (nodePortfolioName != null)
-                        nodePortfolioName.InnerXml = _portfolioFileName;
-
+                    SettingsConfiguration.PortfolioName = @"";
                     // Set portfolio file does not exist state
                     PortfolioLoadState = EStatePortfolioLoad.FileDoesNotExit;
 
@@ -646,7 +761,7 @@ namespace SharePortfolioManager
                 //ReaderSettings.ValidationType = ValidationType.DTD;
                 //ReaderSettings.ValidationEventHandler += eventHandler;
 
-                ReaderPortfolio = XmlReader.Create(_portfolioFileName, ReaderSettingsPortfolio);
+                ReaderPortfolio = XmlReader.Create(SettingsConfiguration.PortfolioName, ReaderSettingsPortfolio);
 
                 // Pass the validating reader to the XML document.
                 // Validation fails due to an undefined attribute, but the 
@@ -679,16 +794,16 @@ namespace SharePortfolioManager
                             ShareObjectListMarketValue.Add(new ShareObjectMarketValue(
                                 ImageListPrevDayPerformance,
                                 ImageListCompletePerformance,
-                                Language.GetLanguageTextByXPath(@"/PercentageUnit", LanguageName),
-                                Language.GetLanguageTextByXPath(@"/PieceUnit", LanguageName)
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/PercentageUnit", SettingsConfiguration.LanguageName),
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/PieceUnit", SettingsConfiguration.LanguageName)
                             ));
 
                             // Add a new share to the final list
                             ShareObjectListFinalValue.Add(new ShareObjectFinalValue(
                                 ImageListPrevDayPerformance,
                                 ImageListCompletePerformance,
-                                Language.GetLanguageTextByXPath(@"/PercentageUnit", LanguageName),
-                                Language.GetLanguageTextByXPath(@"/PieceUnit", LanguageName)
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/PercentageUnit", SettingsConfiguration.LanguageName),
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/PieceUnit", SettingsConfiguration.LanguageName)
                             ));
 
                             // Check if the node has the right tag count and the right attributes
@@ -1366,7 +1481,7 @@ namespace SharePortfolioManager
 
                         // Set initialization flag
                         InitFlag = false;
-                        PortfolioLoadState = EStatePortfolioLoad.LoadFailed;
+                        PortfolioLoadState = EStatePortfolioLoad.ConfigurationAttributeError;
 
                         // Stop loading more portfolio configurations
                         break;
@@ -1382,9 +1497,6 @@ namespace SharePortfolioManager
                     // Set empty portfolio list state
                     PortfolioLoadState = EStatePortfolioLoad.PortfolioListEmpty;
  
-                // Set calculated log components value to the XML
-                nodePortfolioName.InnerXml = _portfolioFileName;
-
                 // Sort portfolio list in order of the share names
                 ShareObjectListMarketValue.Sort(new ShareObjectListComparer());
                 ShareObjectListFinalValue.Sort(new ShareObjectListComparer());
@@ -1421,9 +1533,9 @@ namespace SharePortfolioManager
             }
         }
 
-#endregion Load portfolio
+        #endregion Load portfolio
 
-#region Show invalid website configuration(s)
+        #region Show invalid website configuration(s)
 
         /// <summary>
         /// This function shows the list of the mismatching website configurations of the shares
@@ -1434,22 +1546,22 @@ namespace SharePortfolioManager
             if (regexSearchFailed.Count != 0 && regexSearchFailed.Count == 1)
             {
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/WebSiteRegexNotFound1_1", LanguageName)
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/PortfolioErrors/WebSiteRegexNotFound1_1", SettingsConfiguration.LanguageName)
                     + @"'"
                     + regexSearchFailed[0].ShareName
                     + @" (WKN: "
                     + regexSearchFailed[0].Wkn
                     + @")"
                     + @"'"
-                    + Language.GetLanguageTextByXPath(@"/MainForm/Errors/WebSiteRegexNotFound1_2", LanguageName),
-                    Language, LanguageName,
+                    + LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/PortfolioErrors/WebSiteRegexNotFound1_2", SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Application);
             }
             else if (regexSearchFailed.Count != 0 && regexSearchFailed.Count > 1)
             {
                 // Build the status message string
                 var statusMessage =
-                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/WebSiteRegexNotFound2_1", LanguageName);
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/PortfolioErrors/WebSiteRegexNotFound2_1", SettingsConfiguration.LanguageName);
                 for (var i = 0; i < regexSearchFailed.Count; i++)
                 {
                     if (i < regexSearchFailed.Count - 1)
@@ -1472,15 +1584,15 @@ namespace SharePortfolioManager
                     }
                 }
                 statusMessage +=
-                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/WebSiteRegexNotFound2_2", LanguageName);
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/PortfolioErrors/WebSiteRegexNotFound2_2", SettingsConfiguration.LanguageName);
 
                 Helper.AddStatusMessage(rchTxtBoxStateMessage, statusMessage,
-                    Language, LanguageName,
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Application);
             }
         }
 
-#endregion Show invalid website configuration(s)
+        #endregion Show invalid website configuration(s)
     }
 
     /// <summary>

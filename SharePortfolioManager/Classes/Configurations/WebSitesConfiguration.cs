@@ -25,24 +25,26 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Xml;
 using Parser;
 using SharePortfolioManager.Classes.ParserRegex;
 
-namespace SharePortfolioManager.Classes
+namespace SharePortfolioManager.Classes.Configurations
 {
     public static class WebSiteConfiguration
     {
         #region Error codes
 
         // Error codes of the WebSiteConfiguration class
-        public enum WebSiteErrorCode
+        public enum EWebSiteErrorCode
         {
             ConfigurationLoadSuccessful = 0,
-            ConfigurationEmpty = -1,
-            ConfigurationAttributeError = -2,
-            ConfigurationSyntaxError = -3,
-            ConfigurationLoadFailed = -4
+            FileDoesNotExit = -1,
+            ConfigurationEmpty = -2,
+            ConfigurationXmlError = -3,
+            ConfigurationAttributeError = -4,
+            ConfigurationLoadFailed = -5
         };
 
         #endregion Error codes
@@ -57,7 +59,7 @@ namespace SharePortfolioManager.Classes
         /// <summary>
         /// Error code of the web site configuration load
         /// </summary>
-        public static WebSiteErrorCode ErrorCode { internal set; get; }
+        public static EWebSiteErrorCode ErrorCode { internal set; get; }
 
         /// <summary>
         /// Last exception of the web site configuration load
@@ -67,7 +69,7 @@ namespace SharePortfolioManager.Classes
         /// <summary>
         /// XML file with the web site configuration
         /// </summary>
-        private const string FileName = @"Settings\WebSites.XML";
+        public const string FileName = @"Settings\WebSites.xml";
 
         public static XmlReaderSettings ReaderSettings { get; set; }
 
@@ -86,7 +88,7 @@ namespace SharePortfolioManager.Classes
 
         private const string EncodingAttrName = "Encoding";
 
-        private const short WebSiteTagCount = 4;
+        private const short WebSiteTagCount = 5;
 
         private const string NameAttrName = "Name";
 
@@ -106,15 +108,22 @@ namespace SharePortfolioManager.Classes
         /// This function loads the website configurations from the WebSites.XML
         /// This configuration is used by the Parser for parsing the given websites
         /// </summary>
-        public static void LoadWebSiteConfigurations(bool initFlag)
+        public static bool LoadWebSiteConfigurations(bool initFlag)
         {
             InitFlag = initFlag;
 
-            if (!InitFlag) return;
+            if (!InitFlag) return false;
 
-            // Load websites file
             try
             {
+                // Check if the website configuration file exists
+                if (!File.Exists(FileName))
+                {
+                    ErrorCode = EWebSiteErrorCode.FileDoesNotExit;
+
+                    return false;
+                }
+
                 //// Create the validating reader and specify DTD validation.
                 //ReaderSettings = new XmlReaderSettings();
                 //ReaderSettings.DtdProcessing = DtdProcessing.Parse;
@@ -139,7 +148,7 @@ namespace SharePortfolioManager.Classes
                     InitFlag = false;
 
                     // Set error code
-                    ErrorCode = WebSiteErrorCode.ConfigurationEmpty;
+                    ErrorCode = EWebSiteErrorCode.ConfigurationEmpty;
                 }
                 else
                 {
@@ -219,47 +228,50 @@ namespace SharePortfolioManager.Classes
                         InitFlag = false;
 
                         // Set error code
-                        ErrorCode = WebSiteErrorCode.ConfigurationAttributeError;
+                        ErrorCode = EWebSiteErrorCode.ConfigurationAttributeError;
 
                         // Stop loading more website configurations
                         break;
                     }
 
-                    // Set error code
-                    ErrorCode = WebSiteErrorCode.ConfigurationLoadSuccessful;
+                    if (loadSettings)
+                    {
+                        // Set error code
+                        ErrorCode = EWebSiteErrorCode.ConfigurationLoadSuccessful;
+                    }
                 }
+
+                return InitFlag;
             }
             catch (XmlException ex)
             {
                 // Set last exception 
                 LastException = ex;
 
-                Helper.ShowExceptionMessage(ex);
-
                 // Close website reader
                 XmlReader?.Close();
 
+                // Set error code
+                ErrorCode = EWebSiteErrorCode.ConfigurationXmlError;
+
                 // Set initialization flag
                 InitFlag = false;
-
-                // Set error code
-                ErrorCode = WebSiteErrorCode.ConfigurationSyntaxError;
+                return InitFlag;
             }
             catch (Exception ex)
             {
                 // Set last exception 
                 LastException = ex;
 
-                Helper.ShowExceptionMessage(ex);
-
                 // Close website reader
                 XmlReader?.Close();
 
+                // Set error code
+                ErrorCode = EWebSiteErrorCode.ConfigurationLoadFailed;
+
                 // Set initialization flag
                 InitFlag = false;
-
-                // Set error code
-                ErrorCode = WebSiteErrorCode.ConfigurationLoadFailed;
+                return InitFlag;
             }
         }
 

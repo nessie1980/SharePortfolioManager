@@ -38,6 +38,7 @@ using SharePortfolioManager.BuysForm.Model;
 using SharePortfolioManager.BuysForm.Presenter;
 using SharePortfolioManager.BuysForm.View;
 using SharePortfolioManager.Classes;
+using SharePortfolioManager.Classes.Configurations;
 using SharePortfolioManager.Classes.ShareObjects;
 using SharePortfolioManager.DividendForm.Model;
 using SharePortfolioManager.DividendForm.Presenter;
@@ -209,15 +210,15 @@ namespace SharePortfolioManager.DocumentCaptureParsing
 
             #region Language
 
-            Text = Language.GetLanguageTextByXPath(@"/DocumentCaptureParsing/Caption", LanguageName);
+            Text = Language.GetLanguageTextByXPath(@"/DocumentCaptureParsing/Caption", SettingsConfiguration.LanguageName);
 
-            grpBoxParsing.Text = Language.GetLanguageTextByXPath(@"/DocumentCaptureParsing/GrpBoxDocumentCapture/Caption", LanguageName);
+            grpBoxParsing.Text = Language.GetLanguageTextByXPath(@"/DocumentCaptureParsing/GrpBoxDocumentCapture/Caption", SettingsConfiguration.LanguageName);
 
-            lblBankName.Text = Language.GetLanguageTextByXPath(@"/DocumentCaptureParsing/GrpBoxDocumentCapture/Labels/BankName", LanguageName);
-            lblDocumentType.Text = Language.GetLanguageTextByXPath(@"/DocumentCaptureParsing/GrpBoxDocumentCapture/Labels/DocumentType", LanguageName);
-            lblWkn.Text = Language.GetLanguageTextByXPath(@"/DocumentCaptureParsing/GrpBoxDocumentCapture/Labels/Wkn", LanguageName);
+            lblBankName.Text = Language.GetLanguageTextByXPath(@"/DocumentCaptureParsing/GrpBoxDocumentCapture/Labels/BankName", SettingsConfiguration.LanguageName);
+            lblDocumentType.Text = Language.GetLanguageTextByXPath(@"/DocumentCaptureParsing/GrpBoxDocumentCapture/Labels/DocumentType", SettingsConfiguration.LanguageName);
+            lblWkn.Text = Language.GetLanguageTextByXPath(@"/DocumentCaptureParsing/GrpBoxDocumentCapture/Labels/Wkn", SettingsConfiguration.LanguageName);
 
-            btnClose.Text = Language.GetLanguageTextByXPath(@"/DocumentCaptureParsing/GrpBoxDocumentCapture/Button/Close", LanguageName);
+            btnClose.Text = Language.GetLanguageTextByXPath(@"/DocumentCaptureParsing/GrpBoxDocumentCapture/Button/Close", SettingsConfiguration.LanguageName);
 
             #endregion Language
 
@@ -512,7 +513,7 @@ namespace SharePortfolioManager.DocumentCaptureParsing
                                         _buyIdentifierFound = true;
                                         DocumentType = DocumentParsingConfiguration.DocumentTypes.BuyDocument;
                                         picBoxDocumentType.Image = Resources.search_ok_24;
-                                        txtBoxDocumentType.Text = Language.GetLanguageTextByXPath(@"/DocumentCaptureParsing/GrpBoxDocumentCapture/DocumentTypes/Buy", LanguageName);
+                                        txtBoxDocumentType.Text = Language.GetLanguageTextByXPath(@"/DocumentCaptureParsing/GrpBoxDocumentCapture/DocumentTypes/Buy", SettingsConfiguration.LanguageName);
                                     }
 
                                     // Check if the sale identifier has been found
@@ -526,7 +527,7 @@ namespace SharePortfolioManager.DocumentCaptureParsing
                                         _saleIdentifierFound = true;
                                         DocumentType = DocumentParsingConfiguration.DocumentTypes.SaleDocument;
                                         picBoxDocumentType.Image = Resources.search_ok_24;
-                                        txtBoxDocumentType.Text = Language.GetLanguageTextByXPath(@"/DocumentCaptureParsing/GrpBoxDocumentCapture/DocumentTypes/Sale", LanguageName);
+                                        txtBoxDocumentType.Text = Language.GetLanguageTextByXPath(@"/DocumentCaptureParsing/GrpBoxDocumentCapture/DocumentTypes/Sale", SettingsConfiguration.LanguageName);
                                     }
 
                                     // Check if the dividend identifier has been found
@@ -540,7 +541,7 @@ namespace SharePortfolioManager.DocumentCaptureParsing
                                         _dividendIdentifierFound = true;
                                         DocumentType = DocumentParsingConfiguration.DocumentTypes.DividendDocument;
                                         picBoxDocumentType.Image = Resources.search_ok_24;
-                                        txtBoxDocumentType.Text = Language.GetLanguageTextByXPath(@"/DocumentCaptureParsing/GrpBoxDocumentCapture/DocumentTypes/Dividend", LanguageName);
+                                        txtBoxDocumentType.Text = Language.GetLanguageTextByXPath(@"/DocumentCaptureParsing/GrpBoxDocumentCapture/DocumentTypes/Dividend", SettingsConfiguration.LanguageName);
                                     }
 
                                     // Check if the brokerage identifier has been found
@@ -554,7 +555,7 @@ namespace SharePortfolioManager.DocumentCaptureParsing
                                         _brokerageIdentifierFound = true;
                                         DocumentType = DocumentParsingConfiguration.DocumentTypes.BrokerageDocument;
                                         picBoxDocumentType.Image = Resources.search_ok_24;
-                                        txtBoxDocumentType.Text = Language.GetLanguageTextByXPath(@"/DocumentCaptureParsing/GrpBoxDocumentCapture/DocumentTypes/Brokerage", LanguageName);
+                                        txtBoxDocumentType.Text = Language.GetLanguageTextByXPath(@"/DocumentCaptureParsing/GrpBoxDocumentCapture/DocumentTypes/Brokerage", SettingsConfiguration.LanguageName);
                                     }
 
                                     _parsingBackgroundWorker.ReportProgress(
@@ -837,7 +838,7 @@ namespace SharePortfolioManager.DocumentCaptureParsing
                             {
                                 // Create add share form
                                 IModelShareAdd model = new ModelShareAdd();
-                                IViewShareAdd view = new ViewShareAdd(ParentWindow, Logger, Language, LanguageName,
+                                IViewShareAdd view = new ViewShareAdd(ParentWindow, Logger, Language, SettingsConfiguration.LanguageName,
                                     WebSiteConfiguration.WebSiteRegexList, ParsingFileName);
                                 // ReSharper disable once UnusedVariable
                                 var presenterShareAdd = new PresenterShareAdd(view, model);
@@ -859,7 +860,7 @@ namespace SharePortfolioManager.DocumentCaptureParsing
                                 IModelBuyEdit model = new ModelBuyEdit();
                                 IViewBuyEdit view = new ViewBuyEdit(ShareObjectMarketValue, ShareObjectFinalValue,
                                     Logger,
-                                    Language, LanguageName,
+                                    Language, SettingsConfiguration.LanguageName,
                                     ParsingFileName);
                                 // ReSharper disable once UnusedVariable
                                 var presenterBuyEdit = new PresenterBuyEdit(view, model);
@@ -890,7 +891,7 @@ namespace SharePortfolioManager.DocumentCaptureParsing
                             IModelSaleEdit model = new ModelSaleEdit();
                             IViewSaleEdit view = new ViewSaleEdit(ShareObjectMarketValue, ShareObjectFinalValue,
                                 Logger,
-                                Language, LanguageName,
+                                Language, SettingsConfiguration.LanguageName,
                                 ParsingFileName);
                             // ReSharper disable once UnusedVariable
                             var presenterSaleEdit = new PresenterSaleEdit(view, model);
@@ -919,7 +920,7 @@ namespace SharePortfolioManager.DocumentCaptureParsing
                             IModelDividendEdit model = new ModelDividendEdit();
                             IViewDividendEdit view = new ViewDividendEdit(ShareObjectMarketValue, ShareObjectFinalValue,
                                 Logger,
-                                Language, LanguageName,
+                                Language, SettingsConfiguration.LanguageName,
                                 ParsingFileName);
                             // ReSharper disable once UnusedVariable
                             var presenterDividendEdit = new PresenterDividendEdit(view, model);

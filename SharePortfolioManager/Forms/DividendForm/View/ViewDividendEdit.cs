@@ -40,6 +40,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using SharePortfolioManager.Classes.Configurations;
 
 namespace SharePortfolioManager.DividendForm.View
 {
@@ -499,7 +500,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.AddSuccessful:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/StateMessages/AddSuccess", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/StateMessages/AddSuccess", SettingsConfiguration.LanguageName);
                         // Set flag to save the share object.
                         SaveFlag = true;
 
@@ -517,7 +518,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.AddFailed:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/AddFailed", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/AddFailed", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -545,7 +546,7 @@ namespace SharePortfolioManager.DividendForm.View
                         Icon = Resources.add;
 
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/StateMessages/EditSuccess", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/StateMessages/EditSuccess", SettingsConfiguration.LanguageName);
                         // Set flag to save the share object.
                         SaveFlag = true;
 
@@ -557,7 +558,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.EditFailed:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/EditFailed", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/EditFailed", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -569,19 +570,19 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.DeleteSuccessful:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/StateMessages/DeleteSuccess", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/StateMessages/DeleteSuccess", SettingsConfiguration.LanguageName);
                         // Set flag to save the share object.
                         SaveFlag = true;
 
                         // Enable button(s)
-                        btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Add", LanguageName);
+                        btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Add", SettingsConfiguration.LanguageName);
                         btnAddSave.Image = Resources.button_add_24;
 
                         // Disable button(s)
                         btnDelete.Enabled = false;
 
                         // Rename group box
-                        grpBoxAddDividend.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", LanguageName);
+                        grpBoxAddDividend.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", SettingsConfiguration.LanguageName);
 
                         // Reset dialog icon to add
                         Icon = Resources.add;
@@ -597,7 +598,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.DeleteFailed:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DeleteFailed", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DeleteFailed", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -609,7 +610,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.InputValuesInvalid:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/CheckInputFailure", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/CheckInputFailure", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -621,7 +622,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.ExchangeRatioEmpty:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/ExchangeRatioEmpty", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/ExchangeRatioEmpty", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -633,7 +634,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.ExchangeRatioWrongFormat:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/ExchangeRatioWrongFormat", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/ExchangeRatioWrongFormat", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -645,7 +646,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.ExchangeRatioWrongValue:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/ExchangeRatioWrongValue", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/ExchangeRatioWrongValue", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -657,7 +658,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.RateEmpty:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/RateEmpty", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/RateEmpty", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -669,7 +670,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.RateWrongFormat:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/RateWrongFormat", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/RateWrongFormat", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -681,7 +682,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.RateWrongValue:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/RateWrongValue", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/RateWrongValue", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -693,7 +694,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.TaxAtSourceWrongFormat:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/TaxAtSourceWrongFormat", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/TaxAtSourceWrongFormat", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -705,7 +706,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.TaxAtSourceWrongValue:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/TaxAtSourceWrongValue", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/TaxAtSourceWrongValue", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -717,7 +718,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.CapitalGainsTaxWrongFormat:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/CapitalGainsTaxWrongFormat", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/CapitalGainsTaxWrongFormat", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -729,7 +730,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.CapitalGainsTaxWrongValue:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/CapitalGainsTaxWrongValue", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/CapitalGainsTaxWrongValue", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -741,7 +742,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.SolidarityTaxWrongFormat:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/SolidarityTaxWrongFormat", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/SolidarityTaxWrongFormat", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -753,7 +754,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.SolidarityTaxWrongValue:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/SolidarityTaxWrongValue", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/SolidarityTaxWrongValue", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -765,7 +766,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.PriceEmpty:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/PriceEmpty", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/PriceEmpty", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -777,7 +778,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.PriceWrongFormat:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/PriceWrongFormat", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/PriceWrongFormat", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -789,7 +790,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.PriceWrongValue:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/PriceWrongValue", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/PriceWrongValue", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -801,7 +802,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.VolumeEmpty:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/VolumeEmpty", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/VolumeEmpty", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -813,7 +814,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.VolumeWrongFormat:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/VolumeWrongFormat", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/VolumeWrongFormat", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -825,7 +826,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.VolumeWrongValue:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/VolumeWrongValue", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/VolumeWrongValue", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -837,7 +838,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.DocumentDirectoryDoesNotExists:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DocumentDirectoryDoesNotExists", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DocumentDirectoryDoesNotExists", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -849,7 +850,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.DocumentFileDoesNotExists:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DocumentFileDoesNotExists", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DocumentFileDoesNotExists", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -861,7 +862,7 @@ namespace SharePortfolioManager.DividendForm.View
                 case DividendErrorCode.DocumentFileAlreadyExists:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DocumentFileAlreadyExists", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DocumentFileAlreadyExists", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -896,7 +897,7 @@ namespace SharePortfolioManager.DividendForm.View
                         txtBoxDocument.Text = @"-";
 
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/ChoseDocumentFailed", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/ChoseDocumentFailed", SettingsConfiguration.LanguageName);
                     } break;
                 default:
                 {
@@ -997,11 +998,11 @@ namespace SharePortfolioManager.DividendForm.View
             {
                 #region Language configuration
 
-                Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Caption", LanguageName);
+                Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Caption", SettingsConfiguration.LanguageName);
                 grpBoxAddDividend.Text =
-                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", LanguageName);
+                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", SettingsConfiguration.LanguageName);
                 grpBoxDocumentPreview.Text =
-                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxDocumentPreview/Caption", LanguageName);
+                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxDocumentPreview/Caption", SettingsConfiguration.LanguageName);
                 grpBoxDividends.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxDividend/Caption",
                         LanguageName);
@@ -1103,8 +1104,8 @@ namespace SharePortfolioManager.DividendForm.View
             {
 
                 Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/ShowFailed", LanguageName),
-                   Language, LanguageName,
+                   Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/ShowFailed", SettingsConfiguration.LanguageName),
+                   Language, SettingsConfiguration.LanguageName,
                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
                    ex);
             }
@@ -1136,6 +1137,10 @@ namespace SharePortfolioManager.DividendForm.View
         /// <param name="e">FormClosingEventArgs</param>
         private void ShareDividendEdit_FormClosing(object sender, FormClosingEventArgs e)
         {
+            // Cleanup web browser
+            Helper.WebBrowserPdf.CleanUp(webBrowser1);
+
+            // Check if a dividend change must be saved
             DialogResult = SaveFlag ? DialogResult.OK : DialogResult.Cancel;
         }
 
@@ -1198,7 +1203,7 @@ namespace SharePortfolioManager.DividendForm.View
 
             // Enable button(s)
             btnAddSave.Text = 
-                Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Add", LanguageName);
+                Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Add", SettingsConfiguration.LanguageName);
             btnAddSave.Image = Resources.button_add_24;
 
             // Disable button(s)
@@ -1206,7 +1211,7 @@ namespace SharePortfolioManager.DividendForm.View
 
             // Rename group box
             grpBoxAddDividend.Text =
-                Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", LanguageName);
+                Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", SettingsConfiguration.LanguageName);
 
             // Reset dialog icon to add
             Icon = Resources.add;
@@ -1666,8 +1671,8 @@ namespace SharePortfolioManager.DividendForm.View
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessageDividendDocumentParsing,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/ParsingErrors/ParsingFailed", LanguageName),
-                    Language, LanguageName,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/ParsingErrors/ParsingFailed", SettingsConfiguration.LanguageName),
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError,
                     (int)FrmMain.EComponentLevels.Application,
                     ex);
@@ -1705,7 +1710,7 @@ namespace SharePortfolioManager.DividendForm.View
                 // Disable controls
                 Enabled = false;
 
-                if (btnAddSave.Text == Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Add", LanguageName))
+                if (btnAddSave.Text == Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Add", SettingsConfiguration.LanguageName))
                 {
                     UpdateDividend = false;
 
@@ -1721,8 +1726,8 @@ namespace SharePortfolioManager.DividendForm.View
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/AddFailed", LanguageName),
-                    Language, LanguageName,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/AddFailed", SettingsConfiguration.LanguageName),
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -1745,12 +1750,12 @@ namespace SharePortfolioManager.DividendForm.View
                 toolStripStatusLabelMessageDividendDocumentParsing.Text = string.Empty;
                 toolStripProgressBarDividendDocumentParsing.Visible = false;
 
-                var strCaption = Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
+                var strCaption = Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", SettingsConfiguration.LanguageName)[
                     (int) EOwnMessageBoxInfoType.Info];
                 var strMessage = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/DividendDelete",
                     LanguageName);
-                var strOk = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", LanguageName);
-                var strCancel = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", LanguageName);
+                var strOk = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", SettingsConfiguration.LanguageName);
+                var strCancel = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", SettingsConfiguration.LanguageName);
 
                 var messageBox = new OwnMessageBox(strCaption, strMessage, strOk, strCancel, EOwnMessageBoxInfoType.Info);
 
@@ -1771,11 +1776,11 @@ namespace SharePortfolioManager.DividendForm.View
                 ResetValues();
 
                 // Enable button(s)
-                btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Add", LanguageName);
+                btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Add", SettingsConfiguration.LanguageName);
                 btnAddSave.Image = Resources.button_add_24;
 
                 // Rename group box
-                grpBoxAddDividend.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", LanguageName);
+                grpBoxAddDividend.Text = Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", SettingsConfiguration.LanguageName);
 
                 // Reset dialog icon to add
                 Icon = Resources.add;
@@ -1786,8 +1791,8 @@ namespace SharePortfolioManager.DividendForm.View
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DeleteFailed", LanguageName),
-                    Language, LanguageName,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DeleteFailed", SettingsConfiguration.LanguageName),
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -1809,8 +1814,8 @@ namespace SharePortfolioManager.DividendForm.View
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/CancelFailure", LanguageName),
-                    Language, LanguageName,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/CancelFailure", SettingsConfiguration.LanguageName),
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -1913,7 +1918,7 @@ namespace SharePortfolioManager.DividendForm.View
 
                     // Set TabPage caption
                     Text = Language.GetLanguageTextByXPath(
-                               @"/AddEditFormDividend/GrpBoxDividend/TabCtrl/TabPgOverview/Overview", LanguageName)
+                               @"/AddEditFormDividend/GrpBoxDividend/TabCtrl/TabPgOverview/Overview", SettingsConfiguration.LanguageName)
                            + @" (" + ShareObjectFinalValue.AllDividendEntries.DividendValueTotalWithTaxesAsStrUnit +
                            @")"
                 };
@@ -2127,8 +2132,8 @@ namespace SharePortfolioManager.DividendForm.View
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/ShowFailed", LanguageName),
-                    Language, LanguageName,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/ShowFailed", SettingsConfiguration.LanguageName),
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -2235,8 +2240,8 @@ namespace SharePortfolioManager.DividendForm.View
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/RenameColHeaderFailed", LanguageName),
-                    Language, LanguageName,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/RenameColHeaderFailed", SettingsConfiguration.LanguageName),
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -2269,8 +2274,8 @@ namespace SharePortfolioManager.DividendForm.View
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DeselectFailed", LanguageName),
-                    Language, LanguageName,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/DeselectFailed", SettingsConfiguration.LanguageName),
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -2411,8 +2416,8 @@ namespace SharePortfolioManager.DividendForm.View
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/SelectionChangeFailed", LanguageName),
-                    Language, LanguageName,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/SelectionChangeFailed", SettingsConfiguration.LanguageName),
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -2512,12 +2517,12 @@ namespace SharePortfolioManager.DividendForm.View
 
                         // Rename button
                         btnAddSave.Text =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Save", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Save", SettingsConfiguration.LanguageName);
                         btnAddSave.Image = Resources.button_pencil_24;
 
                         // Rename group box
                         grpBoxAddDividend.Text =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Edit_Caption", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Edit_Caption", SettingsConfiguration.LanguageName);
 
                         // Reset dialog icon to add
                         Icon = Resources.edit;
@@ -2580,8 +2585,8 @@ namespace SharePortfolioManager.DividendForm.View
                         btnDelete.Enabled = false;
 
                         Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
-                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/SelectionChangeFailed", LanguageName),
-                            Language, LanguageName,
+                            Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/SelectionChangeFailed", SettingsConfiguration.LanguageName),
+                            Language, SettingsConfiguration.LanguageName,
                             Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError,
                             (int)FrmMain.EComponentLevels.Application);
                     }
@@ -2590,12 +2595,12 @@ namespace SharePortfolioManager.DividendForm.View
                 {
                     // Rename button
                     btnAddSave.Text = 
-                        Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Add", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Buttons/Add", SettingsConfiguration.LanguageName);
                     btnAddSave.Image = Resources.button_add_24;
 
                     // Rename group box
                     grpBoxAddDividend.Text = 
-                        Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormDividend/GrpBoxAddEdit/Add_Caption", SettingsConfiguration.LanguageName);
 
                     // Reset dialog icon to add
                     Icon = Resources.add;
@@ -2657,7 +2662,7 @@ namespace SharePortfolioManager.DividendForm.View
                     if (ShowDividendsFlag) return;
 
                     var strCaption =
-                        Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
+                        Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", SettingsConfiguration.LanguageName)[
                             (int) EOwnMessageBoxInfoType.Error];
                     var strMessage =
                         Language.GetLanguageTextByXPath(
@@ -2699,8 +2704,8 @@ namespace SharePortfolioManager.DividendForm.View
 
                             Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                                 Language.GetLanguageTextByXPath(
-                                    @"/AddEditFormDividend/StateMessages/EditSuccess", LanguageName),
-                                Language, LanguageName,
+                                    @"/AddEditFormDividend/StateMessages/EditSuccess", SettingsConfiguration.LanguageName),
+                                Language, SettingsConfiguration.LanguageName,
                                 Color.Black, Logger, (int) FrmMain.EStateLevels.Info,
                                 (int) FrmMain.EComponentLevels.Application);
                         }
@@ -2708,8 +2713,8 @@ namespace SharePortfolioManager.DividendForm.View
                         {
                             Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
                                 Language.GetLanguageTextByXPath(
-                                    @"/AddEditFormDividend/Errors/EditFailed", LanguageName),
-                                Language, LanguageName,
+                                    @"/AddEditFormDividend/Errors/EditFailed", SettingsConfiguration.LanguageName),
+                                Language, SettingsConfiguration.LanguageName,
                                 Color.Red, Logger, (int) FrmMain.EStateLevels.Error,
                                 (int) FrmMain.EComponentLevels.Application);
                         }
@@ -2721,8 +2726,8 @@ namespace SharePortfolioManager.DividendForm.View
                 tabCtrlDividends.SelectedIndex = 0;
 
                 Helper.AddStatusMessage(toolStripStatusLabelMessageDividendEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/SelectionChangeFailed", LanguageName),
-                    Language, LanguageName,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormDividend/Errors/SelectionChangeFailed", SettingsConfiguration.LanguageName),
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);

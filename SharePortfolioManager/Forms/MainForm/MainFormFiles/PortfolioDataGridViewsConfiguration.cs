@@ -16,6 +16,7 @@ using SharePortfolioManager.Classes;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using SharePortfolioManager.Classes.Configurations;
 
 namespace SharePortfolioManager
 {
@@ -91,10 +92,10 @@ namespace SharePortfolioManager
                 InitFlag = false;
 
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/DgvPortfolio_Error/ConfigurationFailed",
-                        LanguageName),
-                    Language, LanguageName,
+                        SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }
@@ -182,10 +183,10 @@ namespace SharePortfolioManager
 
                 // Add statue message
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/DgvPortfolioFooter_Error/ConfigurationFailed",
-                        LanguageName),
-                    Language, LanguageName,
+                        SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }
@@ -203,52 +204,52 @@ namespace SharePortfolioManager
             try
             {
                 dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex].Name =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_WKN",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.ENameColumnIndex].Name =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_Name",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.EVolumeColumnIndex].Name =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_Volume",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.EPriceColumnIndex].Name =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_Price",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.EPerformancePrevDayColumnIndex]
                         .Name =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_PrevDay",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.EPerformanceColumnIndex].Name =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_Performance",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.EMarketValueColumnIndex].Name =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_PurchaseMarketValue",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.ECompletePerformanceColumnIndex]
                         .Name =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_CompletePerformance",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.ECompleteMarketValueColumnIndex]
                         .Name =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_CompletePurchaseMarketValue",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
             }
             catch (Exception ex)
             {
@@ -256,10 +257,10 @@ namespace SharePortfolioManager
                 InitFlag = false;
 
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/DgvPortfolio_Error/ColumnsHeaderCaptionFailed",
-                        LanguageName),
-                    Language, LanguageName,
+                        SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }
@@ -275,64 +276,64 @@ namespace SharePortfolioManager
 
                 dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
                         .HeaderText =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_WKN",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.ENameColumnIndex]
                         .HeaderText =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_Name",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.EVolumeColumnIndex]
                         .HeaderText =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_Volume",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.EPriceColumnIndex]
                         .HeaderText =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_Price",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioMarketValue
                         .Columns[(int) ColumnIndicesPortfolioMarketValue.EPerformancePrevDayColumnIndex]
                         .HeaderText =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_PrevDay",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.EPerformanceColumnIndex]
                         .HeaderText =
                     Strings.Replace(
-                        Language.GetLanguageTextByXPath(
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(
                             @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_Performance",
-                            LanguageName), "\\n", Environment.NewLine);
+                            SettingsConfiguration.LanguageName), "\\n", Environment.NewLine);
 
                 dgvPortfolioMarketValue.Columns[(int) ColumnIndicesPortfolioMarketValue.EMarketValueColumnIndex]
                         .HeaderText =
                     Strings.Replace(
-                        Language.GetLanguageTextByXPath(
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(
                             @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_PurchaseMarketValue",
-                            LanguageName), "\\n", Environment.NewLine);
+                            SettingsConfiguration.LanguageName), "\\n", Environment.NewLine);
 
                 dgvPortfolioMarketValue
                         .Columns[(int) ColumnIndicesPortfolioMarketValue.ECompletePerformanceColumnIndex]
                         .HeaderText =
                     Strings.Replace(
-                        Language.GetLanguageTextByXPath(
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(
                             @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_CompletePerformance",
-                            LanguageName), "\\n", Environment.NewLine);
+                            SettingsConfiguration.LanguageName), "\\n", Environment.NewLine);
 
                 dgvPortfolioMarketValue
                         .Columns[(int) ColumnIndicesPortfolioMarketValue.ECompleteMarketValueColumnIndex]
                         .HeaderText =
                     Strings.Replace(
-                        Language.GetLanguageTextByXPath(
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(
                             @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolio/ColHeader_CompletePurchaseMarketValue",
-                            LanguageName), "\\n", Environment.NewLine);
+                            SettingsConfiguration.LanguageName), "\\n", Environment.NewLine);
             }
             catch (Exception ex)
             {
@@ -340,10 +341,10 @@ namespace SharePortfolioManager
                 InitFlag = false;
 
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/DgvPortfolio_Error/ColumnsHeaderCaptionFailed",
-                        LanguageName),
-                    Language, LanguageName,
+                        SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }
@@ -361,58 +362,58 @@ namespace SharePortfolioManager
             try
             {
                 dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex].Name =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_WKN",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.ENameColumnIndex].Name =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Name",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EVolumeColumnIndex].Name =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Volume",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EBrokerageDividendColumnIndex]
                         .Name =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_BrokerageDividend",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EPriceColumnIndex].Name =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Price",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EPerformancePrevDayColumnIndex]
                         .Name =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_PrevDay",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EPerformanceColumnIndex].Name =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Performance",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EFinalValueColumnIndex].Name =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_PurchaseMarketValue",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.ECompletePerformanceColumnIndex]
                         .Name =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_CompletePerformance",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.ECompleteFinalValueColumnIndex]
                         .Name =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_CompletePurchaseMarketValue",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
             }
             catch (Exception ex)
             {
@@ -420,10 +421,10 @@ namespace SharePortfolioManager
                 InitFlag = false;
 
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/DgvPortfolio_Error/ColumnsHeaderNameFailed",
-                        LanguageName),
-                    Language, LanguageName,
+                        SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }
@@ -437,65 +438,65 @@ namespace SharePortfolioManager
             try
             {
                 dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex].HeaderText =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_WKN",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.ENameColumnIndex].HeaderText =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Name",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EVolumeColumnIndex].HeaderText =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Volume",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EBrokerageDividendColumnIndex]
                         .HeaderText =
                     Strings.Replace(
-                        Language.GetLanguageTextByXPath(
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(
                             @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_BrokerageDividend",
-                            LanguageName), "\\n", Environment.NewLine);
+                            SettingsConfiguration.LanguageName), "\\n", Environment.NewLine);
 
                 dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EPriceColumnIndex].HeaderText =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Price",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EPerformancePrevDayColumnIndex]
                         .HeaderText =
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_PrevDay",
-                        LanguageName);
+                        SettingsConfiguration.LanguageName);
 
                 dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EPerformanceColumnIndex]
                         .HeaderText =
                     Strings.Replace(
-                        Language.GetLanguageTextByXPath(
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(
                             @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_Performance",
-                            LanguageName), "\\n", Environment.NewLine);
+                            SettingsConfiguration.LanguageName), "\\n", Environment.NewLine);
 
                 dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.EFinalValueColumnIndex]
                         .HeaderText =
                     Strings.Replace(
-                        Language.GetLanguageTextByXPath(
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(
                             @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_PurchaseMarketValue",
-                            LanguageName), "\\n", Environment.NewLine);
+                            SettingsConfiguration.LanguageName), "\\n", Environment.NewLine);
 
                 dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.ECompletePerformanceColumnIndex]
                         .HeaderText =
                     Strings.Replace(
-                        Language.GetLanguageTextByXPath(
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(
                             @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_CompletePerformance",
-                            LanguageName), "\\n", Environment.NewLine);
+                            SettingsConfiguration.LanguageName), "\\n", Environment.NewLine);
 
                 dgvPortfolioFinalValue.Columns[(int) ColumnIndicesPortfolioFinalValue.ECompleteFinalValueColumnIndex]
                         .HeaderText =
                     Strings.Replace(
-                        Language.GetLanguageTextByXPath(
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(
                             @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolio/ColHeader_CompletePurchaseMarketValue",
-                            LanguageName), "\\n", Environment.NewLine);
+                            SettingsConfiguration.LanguageName), "\\n", Environment.NewLine);
             }
             catch (Exception ex)
             {
@@ -503,10 +504,10 @@ namespace SharePortfolioManager
                 InitFlag = false;
 
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/DgvPortfolio_Error/ColumnsHeaderCaptionFailed",
-                        LanguageName),
-                    Language, LanguageName,
+                        SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }
@@ -551,10 +552,10 @@ namespace SharePortfolioManager
                 InitFlag = false;
 
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/DgvPortfolio_Error/CellFormattingFailed",
-                        LanguageName),
-                    Language, LanguageName,
+                        SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }
@@ -595,10 +596,10 @@ namespace SharePortfolioManager
                 InitFlag = false;
 
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/DgvPortfolio_Error/CellFormattingFailed",
-                        LanguageName),
-                    Language, LanguageName,
+                        SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }
@@ -642,10 +643,10 @@ namespace SharePortfolioManager
                 InitFlag = false;
 
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/DgvPortfolioFooter_Error/CellFormattingFailed",
-                        LanguageName),
-                    Language, LanguageName,
+                        SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }
@@ -689,10 +690,10 @@ namespace SharePortfolioManager
                 InitFlag = false;
 
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/DgvPortfolioFooter_Error/CellFormattingFailed",
-                        LanguageName),
-                    Language, LanguageName,
+                        SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }
@@ -727,10 +728,10 @@ namespace SharePortfolioManager
                 InitFlag = false;
 
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/DgvPortfolio_Error/CellPaintingBorderFailed",
-                        LanguageName),
-                    Language, LanguageName,
+                        SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }
@@ -765,10 +766,10 @@ namespace SharePortfolioManager
                 InitFlag = false;
 
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/DgvPortfolio_Error/CellPaintingBorderFailed",
-                        LanguageName),
-                    Language, LanguageName,
+                        SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }
@@ -840,10 +841,10 @@ namespace SharePortfolioManager
                 InitFlag = false;
 
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/DgvPortfolioFooter_Error/CellPaintingBorderFailed",
-                        LanguageName),
-                    Language, LanguageName,
+                        SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }
@@ -915,10 +916,10 @@ namespace SharePortfolioManager
                 InitFlag = false;
 
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/DgvPortfolioFooter_Error/CellPaintingBorderFailed",
-                        LanguageName),
-                    Language, LanguageName,
+                        SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }

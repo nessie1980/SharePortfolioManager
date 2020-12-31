@@ -649,6 +649,13 @@ namespace SharePortfolioManager.SalesForm.Presenter
 
                 var strDate = _model.Date + " " + _model.Time;
 
+                // Check if a depot number for the buy is given
+                if (_model.DepotNumber == @"" || _model.DepotNumber == @"-")
+                {
+                    _model.ErrorCode = SaleErrorCode.DepotNumberEmpty;
+                    bErrorFlag = true;
+                }
+
                 // Check if a order number for the buy is given
                 if (_model.OrderNumber == @"")
                 {

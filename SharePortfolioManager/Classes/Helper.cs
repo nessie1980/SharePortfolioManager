@@ -369,7 +369,7 @@ namespace SharePortfolioManager.Classes
                                         Environment.NewLine;
 
                     // Check if the maximum of lines is reached and delete last line
-                    if (tempControl.Lines.Any() && tempControl.Lines.Length > logger.LoggerSize)
+                    if (tempControl.Lines.Any() && tempControl.Lines.Length > logger.LoggerSize && logger.LoggerSize > -1)
                     {
                         tempControl.SelectionStart =
                             tempControl.GetFirstCharIndexFromLine(tempControl.Lines.Length - 2);

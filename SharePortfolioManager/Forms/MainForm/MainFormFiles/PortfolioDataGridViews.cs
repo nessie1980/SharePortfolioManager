@@ -33,6 +33,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using SharePortfolioManager.ChartForm;
+using SharePortfolioManager.Classes.Configurations;
 
 namespace SharePortfolioManager
 {
@@ -252,9 +253,9 @@ namespace SharePortfolioManager
                 InitFlag = false;
 
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(
-                        @"/MainForm/Errors/SelectionChangeFailed", LanguageName),
-                    Language, LanguageName,
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
+                        @"/MainForm/Errors/SelectionChangeFailed", SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }
@@ -311,9 +312,9 @@ namespace SharePortfolioManager
                 InitFlag = false;
 
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(
-                        @"/MainForm/Errors/SelectionChangeFailed", LanguageName),
-                    Language, LanguageName,
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
+                        @"/MainForm/Errors/SelectionChangeFailed", SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }
@@ -444,9 +445,9 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(
-                        @"/MainForm/Errors/ResizeFailed", LanguageName),
-                    Language, LanguageName,
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
+                        @"/MainForm/Errors/ResizeFailed", SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }
@@ -717,10 +718,10 @@ namespace SharePortfolioManager
                 InitFlag = false;
 
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/DgvPortfolio_Error/DisplayFailed",
-                        LanguageName),
-                    Language, LanguageName,
+                        SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }
@@ -762,9 +763,9 @@ namespace SharePortfolioManager
                     var newFooterPurchaseValueOfAllShares = new object[]
                     {
                         $@"{
-                                Language.GetLanguageTextByXPath(
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
                                     @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolioFooter/RowContent_TotalPurchaseValue",
-                                    LanguageName)
+                                    SettingsConfiguration.LanguageName)
                             }",
                         @"",
                         ShareObjectListMarketValue[0].PortfolioPurchaseValueAsStrUnit,
@@ -777,9 +778,9 @@ namespace SharePortfolioManager
                     var newFooterDepotDevelopment = new object[]
                     {
                         $@"{
-                                Language.GetLanguageTextByXPath(
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
                                     @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolioFooter/RowContent_TotalPerformance",
-                                    LanguageName)
+                                    SettingsConfiguration.LanguageName)
                             }",
                         ShareObjectListMarketValue[0].PortfolioProfitLossPerformanceValueAsStr,
                         @"",
@@ -792,9 +793,9 @@ namespace SharePortfolioManager
                     var newFooterTotalDepotVolume = new object[]
                     {
                         $@"{
-                                Language.GetLanguageTextByXPath(
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
                                     @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgMarketDepotValue/DgvPortfolioFooter/RowContent_TotalDepotValue",
-                                    LanguageName)
+                                    SettingsConfiguration.LanguageName)
                             }",
                         @"",
                         ShareObjectListMarketValue[0].PortfolioMarketValueAsStrUnit,
@@ -841,9 +842,9 @@ namespace SharePortfolioManager
                         @"",
                         @"",
                         $@"{
-                                Language.GetLanguageTextByXPath(
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
                                     @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalPurchaseValue",
-                                    LanguageName)
+                                    SettingsConfiguration.LanguageName)
                             }",
                         @"",
                         ShareObjectListFinalValue[0].PortfolioPurchaseValueAsStrUnit,
@@ -856,15 +857,15 @@ namespace SharePortfolioManager
                     var newFooterDepotDevelopment = new object[]
                     {
                         $@"{
-                                Language.GetLanguageTextByXPath(
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
                                     @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalBrokerageDividend",
-                                    LanguageName)
+                                    SettingsConfiguration.LanguageName)
                             }",
                         ShareObjectListFinalValue[0].PortfolioCompleteBrokerageDividendsAsStrUnit,
                         $@"{
-                                Language.GetLanguageTextByXPath(
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
                                     @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalPerformance",
-                                    LanguageName)
+                                    SettingsConfiguration.LanguageName)
                             }",
                         ShareObjectListFinalValue[0].PortfolioProfitLossPerformanceAsStrUnit,
                         @"",
@@ -879,9 +880,9 @@ namespace SharePortfolioManager
                         @"",
                         @"",
                         $@"{
-                                Language.GetLanguageTextByXPath(
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
                                     @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/TabPgCompleteDepotValue/DgvPortfolioFooter/RowContent_TotalDepotValue",
-                                    LanguageName)
+                                    SettingsConfiguration.LanguageName)
                             }",
                         @"",
                         ShareObjectListFinalValue[0].PortfolioFinalValueAsStrUnit,
@@ -908,10 +909,10 @@ namespace SharePortfolioManager
                 InitFlag = false;
 
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/DgvPortfolioFooter_Error/ConfigurationFailed",
-                        LanguageName),
-                    Language, LanguageName,
+                        SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }
@@ -1145,10 +1146,10 @@ namespace SharePortfolioManager
                 InitFlag = false;
 
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/DgvPortfolio_Error/DisplayFailed",
-                        LanguageName),
-                    Language, LanguageName,
+                        SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }
@@ -1398,10 +1399,10 @@ namespace SharePortfolioManager
                 InitFlag = false;
 
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/DgvPortfolio_Error/DisplayFailed",
-                        LanguageName),
-                    Language, LanguageName,
+                        SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }
@@ -1531,10 +1532,10 @@ namespace SharePortfolioManager
                 InitFlag = false;
 
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(
                         @"/MainForm/GrpBoxPortfolio/TabCtrlShareOverviews/DgvPortfolioFooter_Error/RefreshFailed",
-                        LanguageName),
-                    Language, LanguageName,
+                        SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }
@@ -1681,8 +1682,8 @@ namespace SharePortfolioManager
             if (FrmChart == null)
                 FrmChart = new FrmChart(MarketValueOverviewTabSelected,
                     ShareObjectListFinalValue[rowIndex], ShareObjectListMarketValue[rowIndex],
-                    rchTxtBoxStateMessage, Logger, Language, LanguageName,
-                    ChartingInterval.Year, 1, ChartingColorDictionary);
+                    rchTxtBoxStateMessage, Logger, LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                    ChartingInterval.Year, 1, SettingsConfiguration.ChartingColorDictionary);
 
             // Set window title
             FrmChart.Text = ShareObjectListFinalValue[rowIndex].Name;
@@ -1756,9 +1757,9 @@ namespace SharePortfolioManager
                     // Create ShareDetails form
                     FrmShareDetailsForm = new FrmShareDetails(MarketValueOverviewTabSelected,
                         ShareObjectFinalValue, ShareObjectMarketValue,
-                        rchTxtBoxStateMessage, Logger, ChartingColorDictionary,
-                        ChartingIntervalValue, ChartingAmount,
-                        Language, LanguageName);
+                        rchTxtBoxStateMessage, Logger, SettingsConfiguration.ChartingColorDictionary,
+                        SettingsConfiguration.ChartingIntervalValue, SettingsConfiguration.ChartingAmount,
+                        LanguageConfiguration.Language, SettingsConfiguration.LanguageName);
 
                     // Set location and size for the chart window
                     // Offset under or above the mouse pointer
@@ -1801,8 +1802,8 @@ namespace SharePortfolioManager
                 catch (Exception ex)
                 {
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", LanguageName),
-                        Language, LanguageName,
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/Errors/EditSaveFailed", SettingsConfiguration.LanguageName),
+                        LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                         Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                         ex);
                 }

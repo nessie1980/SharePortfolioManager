@@ -25,31 +25,33 @@
 
 using System;
 using System.Collections.Generic;
-#if DEBUG_DOCUMENTS_CONFIGURATIONS
-using System.Windows.Forms;
-#endif
+using System.IO;
 using System.Xml;
 using Parser;
 using SharePortfolioManager.Classes.ParserRegex;
+#if DEBUG_DOCUMENTS_CONFIGURATIONS
+using System.Windows.Forms;
+#endif
 
-namespace SharePortfolioManager.Classes
+namespace SharePortfolioManager.Classes.Configurations
 {
     public static class DocumentParsingConfiguration
     {
         #region Error codes
 
         // Error codes of the DocumentParsingConfiguration class
-        public enum DocumentParsingErrorCode
+        public enum EDocumentParsingErrorCode
         {
             ConfigurationLoadSuccessful = 0,
-            ConfigurationEmpty = -1,
-            ConfigurationBankAttributesError = -2,
-            ConfigurationBankElementsError = -3,
-            ConfigurationDocumentElementsError = -4,
-            ConfigurationDocumentElementAttributeError = -5,
-            ConfigurationIdentifierAttributeError = -6,
-            ConfigurationSyntaxError = -7,
-            ConfigurationLoadFailed = -8
+            ConfigurationFileDoesNotExist = -1,
+            ConfigurationEmpty = -2,
+            ConfigurationBankAttributesError = -3,
+            ConfigurationBankElementsError = -4,
+            ConfigurationDocumentElementsError = -5,
+            ConfigurationDocumentElementAttributeError = -6,
+            ConfigurationIdentifierAttributeError = -7,
+            ConfigurationXmlError = -8,
+            ConfigurationLoadFailed = -9
         };
 
         #endregion Error codes
@@ -77,7 +79,7 @@ namespace SharePortfolioManager.Classes
         /// <summary>
         /// Error code of the document parsing configuration load
         /// </summary>
-        public static DocumentParsingErrorCode ErrorCode { internal set; get; }
+        public static EDocumentParsingErrorCode ErrorCode { internal set; get; }
 
         /// <summary>
         /// Last exception of the document parsing configuration load
@@ -87,7 +89,7 @@ namespace SharePortfolioManager.Classes
         /// <summary>
         /// XML file with the document parsing configuration
         /// </summary>
-        private const string FileName = @"Settings\Documents.XML";
+        public const string FileName = @"Settings\Documents.XML";
 
         public static XmlReaderSettings ReaderSettings { get; set; }
 
@@ -218,15 +220,21 @@ namespace SharePortfolioManager.Classes
         /// This function loads the document configurations from the Documents.XML
         /// This configuration is used by the Parser for parsing the given documents
         /// </summary>
-        public static void LoadDocumentParsingConfigurations(bool initFlag)
+        public static bool LoadDocumentParsingConfigurations(bool initFlag)
         {
             InitFlag = initFlag;
 
-            if (!InitFlag) return;
-
-            // Load websites file
+            // Load document parsing file
             try
             {
+                // Check if the document parsing configuration file exists
+                if (!File.Exists(FileName))
+                {
+                    ErrorCode = EDocumentParsingErrorCode.ConfigurationFileDoesNotExist;
+
+                    return false;
+                }
+
                 //// Create the validating reader and specify DTD validation.
                 //ReaderSettings = new XmlReaderSettings();
                 //ReaderSettings.DtdProcessing = DtdProcessing.Parse;
@@ -251,7 +259,7 @@ namespace SharePortfolioManager.Classes
                     InitFlag = false;
 
                     // Set error code
-                    ErrorCode = DocumentParsingErrorCode.ConfigurationEmpty;
+                    ErrorCode = EDocumentParsingErrorCode.ConfigurationEmpty;
                 }
                 else
                 {
@@ -272,7 +280,7 @@ namespace SharePortfolioManager.Classes
                                 nodeElement.Attributes?[BankEncodingAttrName] == null
                             )
                             {
-                                ErrorCode = DocumentParsingErrorCode.ConfigurationBankAttributesError;
+                                ErrorCode = EDocumentParsingErrorCode.ConfigurationBankAttributesError;
                                 loadSettings = false;
                             }
                             else
@@ -283,7 +291,7 @@ namespace SharePortfolioManager.Classes
 
                                 if (!nodeElement.HasChildNodes || nodeElement.ChildNodes.Count != BankTagCount)
                                 {
-                                    ErrorCode = DocumentParsingErrorCode.ConfigurationBankElementsError;
+                                    ErrorCode = EDocumentParsingErrorCode.ConfigurationBankElementsError;
                                     loadSettings = false;
                                 }
                                 else
@@ -328,7 +336,7 @@ namespace SharePortfolioManager.Classes
                                                         || nodeElement.ChildNodes[i].ChildNodes[j]
                                                             .Attributes[RegexOptionsAttrName] == null)
                                                     {
-                                                        ErrorCode = DocumentParsingErrorCode
+                                                        ErrorCode = EDocumentParsingErrorCode
                                                             .ConfigurationDocumentElementAttributeError;
                                                         loadSettings = false;
                                                     }
@@ -368,7 +376,7 @@ namespace SharePortfolioManager.Classes
                                             }
                                             else
                                             {
-                                                ErrorCode = DocumentParsingErrorCode.ConfigurationDocumentElementsError;
+                                                ErrorCode = EDocumentParsingErrorCode.ConfigurationDocumentElementsError;
                                                 loadSettings = false;
                                                 break;
                                             }
@@ -387,7 +395,7 @@ namespace SharePortfolioManager.Classes
                                                 || nodeElement.ChildNodes[i].Attributes[ResultEmptyAttrName] == null
                                                 || nodeElement.ChildNodes[i].Attributes[RegexOptionsAttrName] == null)
                                             {
-                                                ErrorCode = DocumentParsingErrorCode
+                                                ErrorCode = EDocumentParsingErrorCode
                                                     .ConfigurationIdentifierAttributeError;
                                                 loadSettings = false;
                                             }
@@ -439,17 +447,21 @@ namespace SharePortfolioManager.Classes
                         InitFlag = false;
 
                         // Set error code
-                        ErrorCode = DocumentParsingErrorCode.ConfigurationLoadFailed;
+                        if(ErrorCode == EDocumentParsingErrorCode.ConfigurationLoadSuccessful)
+                            ErrorCode = EDocumentParsingErrorCode.ConfigurationLoadFailed;
 
                         // Stop loading more website configurations
                         break;
                     }
 
-                    // Set error code
-                    ErrorCode = DocumentParsingErrorCode.ConfigurationLoadSuccessful;
+                    if (loadSettings)
+                    {
+                        // Set error code
+                        ErrorCode = EDocumentParsingErrorCode.ConfigurationLoadSuccessful;
+                    }
                 }
 
-
+                return InitFlag;
             }
             catch (XmlException ex)
             {
@@ -461,11 +473,12 @@ namespace SharePortfolioManager.Classes
                 // Close website reader
                 XmlReader?.Close();
 
+                // Set error code
+                ErrorCode = EDocumentParsingErrorCode.ConfigurationXmlError;
+
                 // Set initialization flag
                 InitFlag = false;
-
-                // Set error code
-                ErrorCode = DocumentParsingErrorCode.ConfigurationSyntaxError;
+                return InitFlag;
             }
             catch (Exception ex)
             {
@@ -477,11 +490,12 @@ namespace SharePortfolioManager.Classes
                 // Close website reader
                 XmlReader?.Close();
 
+                // Set error code
+                ErrorCode = EDocumentParsingErrorCode.ConfigurationLoadFailed;
+
                 // Set initialization flag
                 InitFlag = false;
-
-                // Set error code
-                ErrorCode = DocumentParsingErrorCode.ConfigurationLoadFailed;
+                return InitFlag;
             }
         }
 

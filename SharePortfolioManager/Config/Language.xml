@@ -253,6 +253,9 @@
 					<SaveFailed_2 text="' failed!" />
 					<Failure_1 text="Update of the 'MarketValues' of the share'" />
 					<Failure_2 text="' has been failed. Error: " />
+					<CurrencyError_1 text="The parsed currency is '" />
+					<CurrencyError_2 text="' but currency '" />
+					<CurrencyError_3 text="' will be expected! Update failed!" />
 				</MarketValues>
 				<DailyValues>
 					<StartFailed text="Start of the Parser for the 'DailyValues' failed." />
@@ -285,26 +288,72 @@
 				<EditSaveSuccessful text="Change was successful." />
 				<DeleteSuccessful text="Share delete was successful." />
 				<ChangeLanguageSuccessful text="Language has been changed." />
+				<LoadingSettingsConfigurationSuccessful text="Settings configuration has been successfully loaded." />
+				<LoadingLanguageConfigurationSuccessful text="Language configuration has been successfully loaded." />
+				<LoadingWebSiteConfigurationSuccessful text="WebSite configuration has been successfully loaded." />
+				<LoadingDocumentParsingConfigurationSuccessful text="Document configuration has been successfully loaded." />
+				<LoadingPortfolioSuccessful text="Portfolio has been successfully loaded." />
 				<ChangingPortfolioSuccessful text="Portfolio has been changed." />
 			</StatusMessages>
 			
 			<!-- Error messages -->
-			<Errors>
-				<FileDoesNotExists_1 text="File '" />
-				<FileDoesNotExists_2 text="' does not exists any more! Create a new portfolio." />
-				<CouldNotLoadFile_1 text="Could not load file '" />
+			<SettingsConfigurationErrors>
+				<FileDoesNotExists_1 text="Settings configuration file '" />
+				<FileDoesNotExists_2 text="' does not exists." />
+				<CouldNotLoadFile_1 text="Could not load settings configuration file '" />
 				<CouldNotLoadFile_2 text="'!" />
-				<XMLSyntaxFailure_1 text="A XML syntax error exists in the file '" />
+				<XMLSyntaxFailure_1 text="A XML syntax error exists in the settings configuration file '" />
 				<XMLSyntaxFailure_2 text="'!" />
+			</SettingsConfigurationErrors>
+			<WebSiteConfigurationErrors>
+				<FileDoesNotExists_1 text="WebSite configuration file '" />
+				<FileDoesNotExists_2 text="' does not exists." />
+				<CouldNotLoadFile_1 text="Could not load website configuration file '" />
+				<CouldNotLoadFile_2 text="'!" />
+				<XMLSyntaxFailure_1 text="A XML syntax error exists in the website configuration file '" />
+				<XMLSyntaxFailure_2 text="'!" />
+				<ConfigurationAttributeError_1 text="A XML attribute error exists in the website configuration file '" />
+				<ConfigurationAttributeError_2 text="'!" />
+				<ConfigurationListEmpty text="WebSite configuration list is empty!" />
+			</WebSiteConfigurationErrors>
+			<DocumentParsingConfigurationErrors>
+				<FileDoesNotExists_1 text="Document configuration file '" />
+				<FileDoesNotExists_2 text="' does not exists." />
+				<CouldNotLoadFile_1 text="Could not load document configuration file '" />
+				<CouldNotLoadFile_2 text="'!" />
+				<XMLSyntaxFailure_1 text="A XML syntax error exists in the document configuration file '" />
+				<XMLSyntaxFailure_2 text="'!" />
+				<ConfigurationListEmpty text="Document configuration list is empty!" />
+				<ConfigurationBankAttributeError_1 text="Bank attribute error in document configuration file '" />
+				<ConfigurationBankAttributeError_2 text="'!'" />
+				<ConfigurationBankElementsError_1 text="Bank element error in document configuration file '" />
+				<ConfigurationBankElementsError_2 text="'!'" />
+				<ConfigurationDocumentElementsError_1 text="Document element error in document configuration file '" />
+				<ConfigurationDocumentElementsError_2 text="'!'" />
+				<ConfigurationDocumentElementAttributeError_1 text="Document element attribute error in document configuration file '" />
+				<ConfigurationDocumentElementAttributeError_2 text="'!'" />
+				<ConfigurationIdentifierAttributeError_1 text="Identifier attribute error in document configuration file '" />
+				<ConfigurationIdentifierAttributeError_2 text="'!'" />
+			</DocumentParsingConfigurationErrors>
+			<PortfolioErrors>
+				<FileDoesNotExists_1 text="Portfolio file '" />
+				<FileDoesNotExists_2 text="' does not exists any more! Create a new portfolio." />
+				<CouldNotLoadFile_1 text="Could not load portfolio file '" />
+				<CouldNotLoadFile_2 text="'!" />
+				<XMLSyntaxFailure_1 text="A XML syntax error exists in the portfolio file '" />
+				<XMLSyntaxFailure_2 text="'!" />
+				<ConfigurationAttributeError_1 text="A XML attribute error exists in the portfolio file '" />
+				<ConfigurationAttributeError_2 text="'!" />
+				<PortfolioNotSet text="No portfolio set. Create a new portfolio or open an existing one." />
+				<ConfigurationListEmpty text="Portfolio is empty!" />
 				<ChangingPortfolioFailed text="Changing the portfolio failed!" />
-				<CouldNotLoadAllLanguageKeys text="Could not load all language keys!" />
 				<WebSiteRegexNotFound1_1 text="No parse configuration for the share " />
 				<WebSiteRegexNotFound1_2 text=" available!" />
 				<WebSiteRegexNotFound2_1 text="No parse configuration for the shares " />
 				<WebSiteRegexNotFound2_2 text=" available!" />
-				<PortfolioNotSet text="No portfolio set. Create a new portfolio or open an existing one." />
-				<PortfolioConfigurationListEmpty text="Portfolio is empty!" />
-				<PortfolioConfigurationListLoadFailed text="Configuration incomplete!"/>
+			</PortfolioErrors>
+			<Errors>
+				<CouldNotLoadAllLanguageKeys text="Could not load all language keys!" />
 				<AddShowFailed text="An error occurred while show!" />
 				<AddSaveFailed text="Add of the share failed!" />
 				<AddSaveErrorFailed text="An error occurred after the add share save!" />
@@ -878,7 +927,6 @@
 				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
 				<DocumentDirectoryDoesNotExists text="The directory does not exist!" />
 				<DocumentFileDoesNotExists text="The given file does not exist!" />
-				<DocumentShowFailed text="Show of the document failed!" />
 			</Errors>
 			<ParsingErrors>
 				<ParsingBankIdentifierFailed text="Bank identifier not found!" />
@@ -1022,7 +1070,6 @@
 				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
 				<DocumentDirectoryDoesNotExists text="The directory does not exist!" />
 				<DocumentFileDoesNotExists text="The given file does not exist!" />
-				<DocumentShowFailed text="Show of the document failed!" />
 			</Errors>
 			<ParsingErrors>
 				<ParsingBankIdentifierFailed text="Bank identifier not found!" />
@@ -1164,7 +1211,6 @@
 				<DocumentDirectoryDoesNotExists text="The directory does not exist!" />
 				<DocumentFileDoesNotExists text="The given file does not exist!" />
 				<DocumentFileAlreadyExists text="A dividend with this given file already exist!" />
-				<DocumentShowFailed text="Show of the document failed!" />
 			</Errors>
 			<ParsingErrors>
 				<ParsingBankIdentifierFailed text="Bank identifier not found!" />
@@ -1216,6 +1262,11 @@
 				</Buttons>				
 			</GrpBoxAddEdit>
 			
+			<!-- GroupBox document preview --> 
+			<GrpBoxDocumentPreview>
+				<Caption text="Document preview" />
+			</GrpBoxDocumentPreview>
+
 			<!-- GroupBox brokerage overview -->
 			<GrpBoxBrokerage>
 				<Caption text="Brokerage overview" />
@@ -1272,7 +1323,6 @@
 				<DocumentDirectoryDoesNotExists text="The directory does not exist!" />
 				<DocumentFileDoesNotExists text="The given file does not exist!" />
 				<ChoseDocumentFailed text="An exception occurred. Choosing a file failed!" />
-				<DocumentShowFailed text="Show of the document failed!" />
 			</Errors>
 		</AddEditFormBrokerage>
 		
@@ -1400,7 +1450,7 @@
 		</LoggerSettingsForm>
 
 		<!-- Sound settings -->
-		<SoundsSettingsForm>
+		<SoundSettingsForm>
 			<Caption text="Sounds" />
 
 			<!-- GroupBox update finish sound -->
@@ -1465,7 +1515,7 @@
 				<SaveSettingsFailed text="An exception occurred. Save of the settings failed!" />
 				<SaveSettingsSuccessful text="Save of the settings successful." />
 			</Errors>
-		</SoundsSettingsForm>
+		</SoundSettingsForm>
 		
 		<!-- Message box -->
 		<MessageBoxForm>
@@ -1786,6 +1836,9 @@
 					<SaveFailed_2 text="' ist fehlgeschlagen!" />
 					<Failure_1 text="Aktualisierung der 'Kurswerte' der Aktie'" />
 					<Failure_2 text="' ist fehlgeschlagen. Fehler: " />
+					<CurrencyError_1 text="Die gefundende Währung ist '" />
+					<CurrencyError_2 text="', aber Währung '" />
+					<CurrencyError_3 text="' wird erwartet! Aktualisierung ist fehlgeschlagen!" />
 				</MarketValues>
 				<DailyValues>
 					<StartFailed text="Starten des Parser für die 'Tageswerte' ist fehlgeschlagen." />
@@ -1818,26 +1871,72 @@
 				<EditSaveSuccessful text="Änderung war erfolgreich." />
 				<DeleteSuccessful text="Aktie wurde erfolgreich entfernt." />
 				<ChangeLanguageSuccessful text="Sprache wurde geändert." />
+				<LoadingSettingsConfigurationSuccessful text="Laden der Settings- Konfigurationen erfolgreich." />
+				<LoadingLanguageConfigurationSuccessful text="Laden der Sprache- Konfigurationen erfolgreich." />
+				<LoadingWebSiteConfigurationSuccessful text="Laden der WebSeiten- Konfigurationen erfolgreich." />
+				<LoadingDocumentParsingConfigurationSuccessful text="Laden der Dokumenten- Konfigurationen erfolgreich." />
+				<LoadingPortfolioSuccessful text="Laden des Portfolios erfolgreich." />
 				<ChangingPortfolioSuccessful text="Wechsel des Portfolios erfolgreich." />
 			</StatusMessages>
 			
 			<!-- Error messages -->
-			<Errors>
-				<FileDoesNotExists_1 text="Datei '" />
-				<FileDoesNotExists_2 text="' existiert nicht mehr! Legen Sie ein neues Portfolio an." />
-				<CouldNotLoadFile_1 text="Datei '" />
+			<SettingsConfigurationErrors>
+				<FileDoesNotExists_1 text="Settings- Konfigurations- Datei '" />
+				<FileDoesNotExists_2 text="' existiert nicht!" />
+				<CouldNotLoadFile_1 text="Settings- Konfigurations- Datei '" />
 				<CouldNotLoadFile_2 text="' konnte nicht geladen werden!" />
-				<XMLSyntaxFailure_1 text="Es ist ein XML- Syntax- Fehler in der Datei '" />
+				<XMLSyntaxFailure_1 text="Es ist ein XML- Syntax- Fehler in der Settings- Konfigurations- Datei '" />
 				<XMLSyntaxFailure_2 text="' vorhanden!" />
+			</SettingsConfigurationErrors>
+			<WebSiteConfigurationErrors>
+				<FileDoesNotExists_1 text="WebSeiten- Konfigurations- Datei '" />
+				<FileDoesNotExists_2 text="' existiert nicht!" />
+				<CouldNotLoadFile_1 text="WebSeiten- Konfigurations- Datei '" />
+				<CouldNotLoadFile_2 text="' konnte nicht geladen werden!" />
+				<XMLSyntaxFailure_1 text="Es ist ein XML- Syntax- Fehler in der WebSeiten- Konfigurations- Datei '" />
+				<XMLSyntaxFailure_2 text="' vorhanden!" />
+				<ConfigurationAttributeError_1 text="Es ist ein XML- Attribute- Fehler in der WebSeiten- Konfigurations- Datei '" />
+				<ConfigurationAttributeError_2 text="'!" />
+				<ConfigurationListEmpty text="WebSeiten- Konfiguration- Datei ist leer!" />
+			</WebSiteConfigurationErrors>
+			<DocumentParsingConfigurationErrors>
+				<FileDoesNotExists_1 text="Dokumenten- Konfigurations- Datei '" />
+				<FileDoesNotExists_2 text="' existiert nicht!" />
+				<CouldNotLoadFile_1 text="Dokumenten- Konfigurations- Datei '" />
+				<CouldNotLoadFile_2 text="' konnte nicht geladen werden!" />
+				<XMLSyntaxFailure_1 text="Es ist ein XML- Syntax- Fehler in der Dokumenten- Konfigurations- Datei '" />
+				<XMLSyntaxFailure_2 text="' vorhanden!" />
+				<ConfigurationListEmpty text="Dokumenten- Konfiguration- Datei ist leer!" />
+				<ConfigurationBankAttributeError_1 text="Bank- Attribut- Fehler in Dokumenten- Konfigurations- Datei '" />
+				<ConfigurationBankAttributeError_2 text="'!'" />
+				<ConfigurationBankElementsError_1 text="Bank- Element- Fehler in Dokumenten- Konfigurations- Datei '" />
+				<ConfigurationBankElementsError_2 text="'!'" />
+				<ConfigurationDocumentElementsError_1 text="Dokument- Element- Fehler in Dokumenten- Konfigurations- Datei '" />
+				<ConfigurationDocumentElementsError_2 text="'!'" />
+				<ConfigurationDocumentElementAttributeError_1 text="Dokument- Element- Attribut- Fehler in Dokumenten- Konfigurations- Datei '" />
+				<ConfigurationDocumentElementAttributeError_2 text="'!'" />
+				<ConfigurationIdentifierAttributeError_1 text="Identifiziere- Attribut- Fehler in Dokumenten- Konfigurations- Datei '" />
+				<ConfigurationIdentifierAttributeError_2 text="'!'" />
+			</DocumentParsingConfigurationErrors>
+			<PortfolioErrors>
+				<FileDoesNotExists_1 text="Portfolio- Datei '" />
+				<FileDoesNotExists_2 text="' existiert nicht mehr! Legen Sie ein neues Portfolio an." />
+				<CouldNotLoadFile_1 text="Portfolio- Datei '" />
+				<CouldNotLoadFile_2 text="' konnte nicht geladen werden!" />
+				<XMLSyntaxFailure_1 text="Es ist ein XML- Syntax- Fehler in der Portfolio- Datei '" />
+				<XMLSyntaxFailure_2 text="' vorhanden!" />
+				<ConfigurationAttributeError_1 text="Es ist ein XML- Attribut- Fehler in der Portfolio- Datei '" />
+				<ConfigurationAttributeError_2 text="'!" />
+				<PortfolioNotSet text="Kein Portfolio ausgewählt. Erstellen Sie ein Neues oder laden Sie ein Bestehendes." />
+				<ConfigurationListEmpty text="Portfolio ist leer!" />
 				<ChangingPortfolioFailed text="Wechseln des Portfolios ist fehlgeschlagen!" />
-				<CouldNotLoadAllLanguageKeys text="Es konnten nicht alle Sprach- Elemente geladen werden!" />
 				<WebSiteRegexNotFound1_1 text="Keine Parser- Konfiguration für die Aktie " />
 				<WebSiteRegexNotFound1_2 text=" verfügbar!" />
 				<WebSiteRegexNotFound2_1 text="Kein Parser-Konfiguration für die Aktien " />
 				<WebSiteRegexNotFound2_2 text=" verfügbar!" />
-				<PortfolioNotSet text="Kein Portfolio ausgewählt. Erstellen Sie ein Neues oder laden Sie ein Bestehendes." />
-				<PortfolioConfigurationListEmpty text="Portfolio ist leer!" />
-				<PortfolioConfigurationListLoadFailed text="Konfiguration unvollständig!"/>
+			</PortfolioErrors>
+			<Errors>
+				<CouldNotLoadAllLanguageKeys text="Es konnten nicht alle Sprach- Elemente geladen werden!" />
 				<AddShowFailed text="Es trat ein Fehler bei der Anzeige auf!" />
 				<AddSaveFailed text="Hinzufügen der Aktie ist fehlgeschlagen!" />
 				<AddSaveErrorFailed text="Es trat ein Fehler nach dem Speichern der Aktie auf!" />
@@ -2410,7 +2509,6 @@
 				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
 				<DocumentDirectoryDoesNotExists text="Das angegebene Verzeichnis existiert nicht!" />
 				<DocumentFileDoesNotExists text="Die angegebene Datei existiert nicht!" />
-				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
 			</Errors>
 			<ParsingErrors>
 				<ParsingBankIdentifierFailed text="Banken- Typ nicht gefunden!" />
@@ -2518,6 +2616,7 @@
 				<DeselectFailed text="Deselektieren der selektierten Zeile ist fehlgeschlagen!" />
 				<RenameColHeaderFailed text="Umbennenen der Spalten- Namen ist fehlgeschlagen!" />
 				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
+				<DepotNumberEmpty text="Bitte wählen Sie eine Depot aus." />
 				<OrderNumberEmpty text="Bitte geben Sie eine Ordernummer ein." />
 				<OrderNumberExists text="Die eingegebene Ordernummer existiert bereits." />
 				<VolumeEmpty text="Bitte geben Sie einen Anteile- Wert ein." />
@@ -2553,7 +2652,6 @@
 				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
 				<DocumentDirectoryDoesNotExists text="Das angegebene Verzeichnis existiert nicht!" />
 				<DocumentFileDoesNotExists text="Die angegebene Datei existiert nicht!" />
-				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
 			</Errors>
 			<ParsingErrors>
 				<ParsingBankIdentifierFailed text="Banken- Typ nicht gefunden!" />
@@ -2695,7 +2793,6 @@
 				<DocumentDirectoryDoesNotExists text="Das angegebene Verzeichnis existiert nicht!" />
 				<DocumentFileDoesNotExists text="Die angegebene Datei existiert nicht!" />
 				<DocumentFileAlreadyExists text="Eine Dividende mit der angegebenen Datei existiert bereits!" />
-				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
 			</Errors>
 			<ParsingErrors>
 				<ParsingBankIdentifierFailed text="Banken- Typ nicht gefunden!" />
@@ -2747,6 +2844,11 @@
 				</Buttons>				
 			</GrpBoxAddEdit>
 			
+			<!-- GroupBox document preview --> 
+			<GrpBoxDocumentPreview>
+				<Caption text="Dokumenten- Vorschau" />
+			</GrpBoxDocumentPreview>
+
 			<!-- GroupBox brokerage overview -->
 			<GrpBoxBrokerage>
 				<Caption text="Kosten- Übersicht" />
@@ -2802,7 +2904,6 @@
 				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
 				<DocumentDirectoryDoesNotExists text="Das angegebene Verzeichnis existiert nicht!" />
 				<DocumentFileDoesNotExists text="Die angegebene Datei existiert nicht!" />
-				<DocumentShowFailed text="Anzeigen des Dokuments ist fehlgeschlagen!" />
 			</Errors>
 		</AddEditFormBrokerage>
 
@@ -2930,7 +3031,7 @@
 		</LoggerSettingsForm>
 
 		<!-- Sound settings -->
-		<SoundsSettingsForm>
+		<SoundSettingsForm>
 			<Caption text="Sounds" />
 
 			<!-- GroupBox update finish sound -->
@@ -2953,9 +3054,9 @@
 				</OpenFileDialog>
 
 				<!-- Checkboxes -->
-				<Checkboxes>
+				<CheckBoxes>
 					<EnableUpdateFinishSound text="Aktiv" />
-				</Checkboxes>
+				</CheckBoxes>
 			</GrpBoxUpdateFinishedSound>
 
 			<!-- GroupBox update finish sound -->
@@ -2995,7 +3096,7 @@
 				<SaveSettingsFailed text="Es trat ein Fehler auf. Speichern der Einstellungen fehlgeschlagen!" />
 				<SaveSettingsSuccessful text="Speichern der Einstellung erfolgreich." />
 			</Errors>
-		</SoundsSettingsForm>
+		</SoundSettingsForm>
 		
 		<!-- Message box -->
 		<MessageBoxForm>

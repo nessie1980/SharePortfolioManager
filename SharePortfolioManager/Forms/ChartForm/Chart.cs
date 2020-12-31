@@ -121,7 +121,7 @@ namespace SharePortfolioManager.ChartForm
                 ShareObjectFinalValue.DailyValuesList.Entries.Last().Date >= date) return;
 
             toolStripLabelMessage.ForeColor = Color.Red;
-            toolStripLabelMessage.Text = Language.GetLanguageTextByXPath(@"/Chart/Messages/UpdatePossible", LanguageName);
+            toolStripLabelMessage.Text = Language.GetLanguageTextByXPath(@"/Chart/Messages/UpdatePossible", SettingsConfiguration.LanguageName);
         }
 
         #region Charting
@@ -162,7 +162,7 @@ namespace SharePortfolioManager.ChartForm
                     out Title,
                     MarketValueOverviewTabSelected,
                     ShareObjectFinalValue, ShareObjectMarketValue,
-                    Logger, LanguageName, Language,
+                    Logger, SettingsConfiguration.LanguageName, Language,
                     DateTime.Now,
                     chartDailyValues,
                     chartValues,
@@ -175,8 +175,8 @@ namespace SharePortfolioManager.ChartForm
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripLabelMessage,
-                    Language.GetLanguageTextByXPath(@"/Chart/Errors/ShowFailed", LanguageName),
-                    Language, LanguageName, Color.DarkRed, Logger,
+                    Language.GetLanguageTextByXPath(@"/Chart/Errors/ShowFailed", SettingsConfiguration.LanguageName),
+                    Language, SettingsConfiguration.LanguageName, Color.DarkRed, Logger,
                     (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
                     ex);
             }
@@ -202,8 +202,8 @@ namespace SharePortfolioManager.ChartForm
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripLabelMessage,
-                    Language.GetLanguageTextByXPath(@"/Chart/Errors/LegendCustomize", LanguageName),
-                    Language, LanguageName, Color.DarkRed, Logger,
+                    Language.GetLanguageTextByXPath(@"/Chart/Errors/LegendCustomize", SettingsConfiguration.LanguageName),
+                    Language, SettingsConfiguration.LanguageName, Color.DarkRed, Logger,
                     (int) FrmMain.EStateLevels.FatalError, (int) FrmMain.EComponentLevels.Application,
                     ex);
             }

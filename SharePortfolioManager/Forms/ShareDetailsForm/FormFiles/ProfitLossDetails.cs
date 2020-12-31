@@ -56,7 +56,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                 tabCtrlShareDetails.TabPages[TabPageDetailsProfitLossValueName].Text =
                     $@"{
                             Language.GetLanguageTextByXPath(
-                                @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Caption", LanguageName)
+                                @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Caption", SettingsConfiguration.LanguageName)
                         } ({ShareObjectFinalValue.AllSaleEntries.SaleProfitLossBrokerageReductionTotalAsStrUnit})";
 
                 #region Reset tab control
@@ -273,7 +273,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     Language.GetLanguageTextByXPath(
                         @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss_Error/ShowFailed",
                         LanguageName),
-                    Language, LanguageName,
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -375,7 +375,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     Language.GetLanguageTextByXPath(
                         @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss_Error/RenameHeaderFailed",
                         LanguageName),
-                    Language, LanguageName,
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -478,7 +478,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     Language.GetLanguageTextByXPath(
                         @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss_Error/SelectionChangeFailed",
                         LanguageName),
-                    Language, LanguageName,
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -523,7 +523,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     Language.GetLanguageTextByXPath(
                         @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss_Error/SelectionChangeFailed",
                         LanguageName),
-                    Language, LanguageName,
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -581,7 +581,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     else
                     {
                         var strCaption =
-                            Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
+                            Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", SettingsConfiguration.LanguageName)[
                                 (int)EOwnMessageBoxInfoType.Info];
                         var strMessage =
                             Language.GetLanguageTextByXPath(
@@ -610,7 +610,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     Language.GetLanguageTextByXPath(
                         @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss_Error/DocumentShowFailed",
                         LanguageName),
-                    Language, LanguageName,
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);

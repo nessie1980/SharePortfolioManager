@@ -57,7 +57,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                 tabCtrlShareDetails.TabPages[TabPageDetailsBrokerageValueName].Text =
                     $@"{
                             Language.GetLanguageTextByXPath(
-                                @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/Caption", LanguageName)
+                                @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/Caption", SettingsConfiguration.LanguageName)
                         } ({ShareObjectFinalValue.AllBrokerageEntries.BrokerageValueTotalAsStrUnit})";
 
                 #region Reset tab control
@@ -275,7 +275,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     Language.GetLanguageTextByXPath(
                         @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage_Error/ShowFailed",
                         LanguageName),
-                    Language, LanguageName,
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -386,7 +386,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     Language.GetLanguageTextByXPath(
                         @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage_Error/RenameHeaderFailed",
                         LanguageName),
-                    Language, LanguageName,
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -492,7 +492,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                 Helper.AddStatusMessage(_toolStripStatusLabelBrokerage,
                     Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage_Error/SelectionChangeFailed",
                         LanguageName),
-                    Language, LanguageName,
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -540,7 +540,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     Language.GetLanguageTextByXPath(
                         @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage_Error/SelectionChangeFailed",
                         LanguageName),
-                    Language, LanguageName,
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -600,7 +600,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     else
                     {
                         var strCaption =
-                            Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
+                            Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", SettingsConfiguration.LanguageName)[
                                 (int)EOwnMessageBoxInfoType.Info];
                         var strMessage =
                             Language.GetLanguageTextByXPath(
@@ -629,7 +629,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     Language.GetLanguageTextByXPath(
                         @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage_Error/DocumentShowFailed",
                         LanguageName),
-                    Language, LanguageName,
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);

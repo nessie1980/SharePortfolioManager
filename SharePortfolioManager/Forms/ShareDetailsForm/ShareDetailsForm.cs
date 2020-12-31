@@ -496,7 +496,7 @@ namespace SharePortfolioManager.ShareDetailsForm
 
                 tabCtrlShareDetails.TabPages[TabPageDetailsProfitLossValueName].Text =
                     Language.GetLanguageTextByXPath(
-                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Caption", LanguageName);
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Caption", SettingsConfiguration.LanguageName);
 
                 tabCtrlShareDetails.TabPages[TabPageDetailsProfitLossValueName].Controls.Add(new StatusStrip()
                 {
@@ -514,7 +514,7 @@ namespace SharePortfolioManager.ShareDetailsForm
 
                 tabCtrlShareDetails.TabPages[TabPageDetailsDividendValueName].Text =
                     Language.GetLanguageTextByXPath(
-                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/Caption", LanguageName);
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/Caption", SettingsConfiguration.LanguageName);
 
                 tabCtrlShareDetails.TabPages[TabPageDetailsDividendValueName].Controls.Add(new StatusStrip()
                 {
@@ -532,7 +532,7 @@ namespace SharePortfolioManager.ShareDetailsForm
 
                 tabCtrlShareDetails.TabPages[TabPageDetailsBrokerageValueName].Text =
                     Language.GetLanguageTextByXPath(
-                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/Caption", LanguageName);
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/Caption", SettingsConfiguration.LanguageName);
 
                 tabCtrlShareDetails.TabPages[TabPageDetailsBrokerageValueName].Controls.Add(new StatusStrip()
                 {
@@ -613,8 +613,8 @@ namespace SharePortfolioManager.ShareDetailsForm
                 numDrpDwnAmount.Enabled = false;
             }
 
-            btnOpenWebSite.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Buttons/OpenWebSite", LanguageName);
-            btnOk.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Buttons/Ok", LanguageName);
+            btnOpenWebSite.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Buttons/OpenWebSite", SettingsConfiguration.LanguageName);
+            btnOk.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Buttons/Ok", SettingsConfiguration.LanguageName);
 
             #region Settings
 
@@ -656,7 +656,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                 ( ShareObjectFinalValue.DailyValuesList.Entries.Count > 0 || ShareObjectMarketValue.DailyValuesList.Entries.Count > 0) ) return;
 
             toolStripStatusLabelUpdate.ForeColor = Color.Red;
-            toolStripStatusLabelUpdate.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Messages/UpdatePossible", LanguageName);
+            toolStripStatusLabelUpdate.Text = Language.GetLanguageTextByXPath(@"/ShareDetailsForm/Messages/UpdatePossible", SettingsConfiguration.LanguageName);
         }
 
         public sealed override string Text
@@ -688,7 +688,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                         Language.GetLanguageTextByXPath(
                             @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChartErrors/NoBrowserInstalled",
                             LanguageName),
-                        Language, LanguageName,
+                        Language, SettingsConfiguration.LanguageName,
                         Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                         (int) FrmMain.EComponentLevels.Application,
                         noBrowser);
@@ -700,7 +700,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     Language.GetLanguageTextByXPath(
                         @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgChartErrors/OpenWebSiteFailed",
                         LanguageName),
-                    Language, LanguageName,
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -847,7 +847,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     out Title,
                     MarketValueOverviewTabSelected,
                     ShareObjectFinalValue, ShareObjectMarketValue,
-                    Logger, LanguageName, Language,
+                    Logger, SettingsConfiguration.LanguageName, Language,
                     dateTimePickerStartDate.Value,
                     chartDailyValues,
                     ChartValues,
@@ -865,7 +865,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     Language.GetLanguageTextByXPath(
                         @"/ShareDetailsForm/Errors/SelectionChangeFailed",
                         LanguageName),
-                    Language, LanguageName,
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);

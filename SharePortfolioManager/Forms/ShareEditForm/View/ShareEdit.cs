@@ -203,31 +203,31 @@ namespace SharePortfolioManager
 
                 #region GroupBox General
 
-                Text = Language.GetLanguageTextByXPath(@"/EditFormShare/Caption", LanguageName);
-                grpBoxGeneral.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Caption", LanguageName);
-                lblWkn.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/WKN", LanguageName);
-                lblStockMarketLaunchDate.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/StockMarketLaunchDate", LanguageName);
-                lblDate.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Date", LanguageName);
-                lblName.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Name", LanguageName);
-                lblShareUpdate.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Update", LanguageName);
+                Text = Language.GetLanguageTextByXPath(@"/EditFormShare/Caption", SettingsConfiguration.LanguageName);
+                grpBoxGeneral.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Caption", SettingsConfiguration.LanguageName);
+                lblWkn.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/WKN", SettingsConfiguration.LanguageName);
+                lblStockMarketLaunchDate.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/StockMarketLaunchDate", SettingsConfiguration.LanguageName);
+                lblDate.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Date", SettingsConfiguration.LanguageName);
+                lblName.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Name", SettingsConfiguration.LanguageName);
+                lblShareUpdate.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Update", SettingsConfiguration.LanguageName);
 
-                rdbBoth.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Radio/Both", LanguageName);
-                rdbMarketPrice.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Radio/MarketPrice", LanguageName);
-                rdbDailyValues.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Radio/DailyValues", LanguageName);
-                rdbNone.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Radio/None", LanguageName);
+                rdbBoth.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Radio/Both", SettingsConfiguration.LanguageName);
+                rdbMarketPrice.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Radio/MarketPrice", SettingsConfiguration.LanguageName);
+                rdbDailyValues.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Radio/DailyValues", SettingsConfiguration.LanguageName);
+                rdbNone.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Radio/None", SettingsConfiguration.LanguageName);
 
-                lblPurchase.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Purchase", LanguageName);
-                lblVolume.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Volume", LanguageName);
-                lblWebSite.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/WebSite", LanguageName);
-                lblDailyValuesWebSite.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/DailyValuesWebSite", LanguageName);
-                lblCultureInfo.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/CultureInfo", LanguageName);
+                lblPurchase.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Purchase", SettingsConfiguration.LanguageName);
+                lblVolume.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Volume", SettingsConfiguration.LanguageName);
+                lblWebSite.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/WebSite", SettingsConfiguration.LanguageName);
+                lblDailyValuesWebSite.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/DailyValuesWebSite", SettingsConfiguration.LanguageName);
+                lblCultureInfo.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/CultureInfo", SettingsConfiguration.LanguageName);
 
-                lblDividendPayoutInterval.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/PayoutInterval", LanguageName);
+                lblDividendPayoutInterval.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/PayoutInterval", SettingsConfiguration.LanguageName);
                 // Add dividend payout interval values
-                Language.GetLanguageTextListByXPath(@"/ComboBoxItemsPayout/*", LanguageName).ForEach(item => cbxDividendPayoutInterval.Items.Add(item));
-                lblShareType.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/ShareType", LanguageName);
+                Language.GetLanguageTextListByXPath(@"/ComboBoxItemsPayout/*", SettingsConfiguration.LanguageName).ForEach(item => cbxDividendPayoutInterval.Items.Add(item));
+                lblShareType.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/ShareType", SettingsConfiguration.LanguageName);
                 // Add share type values
-                Language.GetLanguageTextListByXPath(@"/ComboBoxItemsShareType/*", LanguageName).ForEach(item => cbxShareType.Items.Add(item));
+                Language.GetLanguageTextListByXPath(@"/ComboBoxItemsShareType/*", SettingsConfiguration.LanguageName).ForEach(item => cbxShareType.Items.Add(item));
 
                 // Select the payout interval for the dividend
                 cbxDividendPayoutInterval.SelectedIndex = ShareObjectFinalValue.DividendPayoutInterval;
@@ -238,8 +238,8 @@ namespace SharePortfolioManager
 
                 #region GroupBox EarningsExpenditure
 
-                grpBoxEarningsExpenditure.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Caption", LanguageName);
-                lblBuys.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Buys", LanguageName);
+                grpBoxEarningsExpenditure.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Caption", SettingsConfiguration.LanguageName);
+                lblBuys.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Buys", SettingsConfiguration.LanguageName);
                 btnShareBuysEdit.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Buttons/Buys",
                     LanguageName);
                 lblSales.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Sales",
@@ -266,7 +266,7 @@ namespace SharePortfolioManager
                     LanguageName);
                 btnShareDividendsEdit.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Buttons/Dividend",
                     LanguageName);
-                lblBrokerage.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Brokerage", LanguageName);
+                lblBrokerage.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Brokerage", SettingsConfiguration.LanguageName);
                 btnShareBrokerageEdit.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Buttons/Brokerage",
                     LanguageName);
 
@@ -278,8 +278,8 @@ namespace SharePortfolioManager
 
                 #endregion GroupBox EarningsExpenditure
 
-                btnSave.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/Buttons/Save", LanguageName);
-                btnCancel.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/Buttons/Cancel", LanguageName);
+                btnSave.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/Buttons/Save", SettingsConfiguration.LanguageName);
+                btnCancel.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/Buttons/Cancel", SettingsConfiguration.LanguageName);
 
                 // Load button images
                 btnSave.Image = Resources.button_save_24;
@@ -290,8 +290,8 @@ namespace SharePortfolioManager
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(editShareStatusLabelMessage,
-                    Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/ShowFailed", LanguageName),
-                    Language, LanguageName,
+                    Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/ShowFailed", SettingsConfiguration.LanguageName),
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -363,8 +363,8 @@ namespace SharePortfolioManager
                     txtBoxName.Focus();
 
                     Helper.AddStatusMessage(editShareStatusLabelMessage,
-                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/NameEmpty", LanguageName),
-                        Language, LanguageName,
+                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/NameEmpty", SettingsConfiguration.LanguageName),
+                        Language, SettingsConfiguration.LanguageName,
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                     
                     errorFlag = true;
@@ -382,8 +382,8 @@ namespace SharePortfolioManager
                         txtBoxName.Focus();
 
                         Helper.AddStatusMessage(editShareStatusLabelMessage,
-                            Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/NameExists", LanguageName),
-                            Language, LanguageName,
+                            Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/NameExists", SettingsConfiguration.LanguageName),
+                            Language, SettingsConfiguration.LanguageName,
                             Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                         
                         break;
@@ -402,8 +402,8 @@ namespace SharePortfolioManager
                             txtBoxName.Focus();
 
                             Helper.AddStatusMessage(editShareStatusLabelMessage,
-                                Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/NameExists", LanguageName),
-                                Language, LanguageName,
+                                Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/NameExists", SettingsConfiguration.LanguageName),
+                                Language, SettingsConfiguration.LanguageName,
                                 Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                             
                             break;
@@ -423,8 +423,8 @@ namespace SharePortfolioManager
                     txtBoxDailyValuesWebSite.Focus();
 
                     Helper.AddStatusMessage(editShareStatusLabelMessage,
-                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/StockMarketLaunchDateNotModified", LanguageName),
-                        Language, LanguageName,
+                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/StockMarketLaunchDateNotModified", SettingsConfiguration.LanguageName),
+                        Language, SettingsConfiguration.LanguageName,
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                     
                     errorFlag = true;
@@ -436,8 +436,8 @@ namespace SharePortfolioManager
                     txtBoxWebSite.Focus();
 
                     Helper.AddStatusMessage(editShareStatusLabelMessage,
-                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteEmpty", LanguageName),
-                        Language, LanguageName,
+                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteEmpty", SettingsConfiguration.LanguageName),
+                        Language, SettingsConfiguration.LanguageName,
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                     
                     errorFlag = true;
@@ -447,8 +447,8 @@ namespace SharePortfolioManager
                     txtBoxWebSite.Focus();
                     
                     Helper.AddStatusMessage(editShareStatusLabelMessage,
-                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteWrongFormat", LanguageName),
-                        Language, LanguageName,
+                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteWrongFormat", SettingsConfiguration.LanguageName),
+                        Language, SettingsConfiguration.LanguageName,
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                     
                     errorFlag = true;
@@ -467,8 +467,8 @@ namespace SharePortfolioManager
                         txtBoxWebSite.Focus();
 
                         Helper.AddStatusMessage(editShareStatusLabelMessage,
-                            Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteExists", LanguageName),
-                            Language, LanguageName,
+                            Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteExists", SettingsConfiguration.LanguageName),
+                            Language, SettingsConfiguration.LanguageName,
                             Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                         
                         break;
@@ -488,8 +488,8 @@ namespace SharePortfolioManager
                             txtBoxWebSite.Focus();
                         
                             Helper.AddStatusMessage(editShareStatusLabelMessage,
-                                Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteExists", LanguageName),
-                                Language, LanguageName,
+                                Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteExists", SettingsConfiguration.LanguageName),
+                                Language, SettingsConfiguration.LanguageName,
                                 Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                             
                             break;
@@ -503,8 +503,8 @@ namespace SharePortfolioManager
                     txtBoxDailyValuesWebSite.Focus();
 
                     Helper.AddStatusMessage(editShareStatusLabelMessage,
-                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DailyValuesWebSiteEmpty", LanguageName),
-                        Language, LanguageName,
+                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DailyValuesWebSiteEmpty", SettingsConfiguration.LanguageName),
+                        Language, SettingsConfiguration.LanguageName,
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                     
                     errorFlag = true;
@@ -514,8 +514,8 @@ namespace SharePortfolioManager
                     txtBoxDailyValuesWebSite.Focus();
                     
                     Helper.AddStatusMessage(editShareStatusLabelMessage,
-                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DailyValuesWebSiteWrongFormat", LanguageName),
-                        Language, LanguageName,
+                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DailyValuesWebSiteWrongFormat", SettingsConfiguration.LanguageName),
+                        Language, SettingsConfiguration.LanguageName,
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                     
                     errorFlag = true;
@@ -534,8 +534,8 @@ namespace SharePortfolioManager
                         txtBoxDailyValuesWebSite.Focus();
                     
                         Helper.AddStatusMessage(editShareStatusLabelMessage,
-                            Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DailyValuesWebSiteExists", LanguageName),
-                            Language, LanguageName,
+                            Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DailyValuesWebSiteExists", SettingsConfiguration.LanguageName),
+                            Language, SettingsConfiguration.LanguageName,
                             Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                         
                         break;
@@ -555,8 +555,8 @@ namespace SharePortfolioManager
                             txtBoxDailyValuesWebSite.Focus();
                         
                             Helper.AddStatusMessage(editShareStatusLabelMessage,
-                                Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DailyValuesWebSiteExists", LanguageName),
-                                Language, LanguageName,
+                                Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DailyValuesWebSiteExists", SettingsConfiguration.LanguageName),
+                                Language, SettingsConfiguration.LanguageName,
                                 Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                             
                             break;
@@ -622,8 +622,8 @@ namespace SharePortfolioManager
                 StopFomClosingFlag = true;
 
                 Helper.AddStatusMessage(editShareStatusLabelMessage,
-                    Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/EditSaveFailed", LanguageName),
-                    Language, LanguageName,
+                    Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/EditSaveFailed", SettingsConfiguration.LanguageName),
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -649,7 +649,7 @@ namespace SharePortfolioManager
         private void OnBtnShareBuysEdit_Click(object sender, EventArgs e)
         {
             IModelBuyEdit model = new ModelBuyEdit();
-            IViewBuyEdit view = new ViewBuyEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, LanguageName);
+            IViewBuyEdit view = new ViewBuyEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, SettingsConfiguration.LanguageName);
             // ReSharper disable once UnusedVariable
             var presenterBuyEdit = new PresenterBuyEdit (view, model);
 
@@ -667,7 +667,7 @@ namespace SharePortfolioManager
         private void OnBtnShareSalesEdit_Click(object sender, EventArgs e)
         {
             IModelSaleEdit model = new ModelSaleEdit();
-            IViewSaleEdit view = new ViewSaleEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, LanguageName);
+            IViewSaleEdit view = new ViewSaleEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, SettingsConfiguration.LanguageName);
             // ReSharper disable once UnusedVariable
             var presenterSaleEdit = new PresenterSaleEdit(view, model);
 
@@ -685,7 +685,7 @@ namespace SharePortfolioManager
         private void OnBtnShareDividendsEdit_Click(object sender, EventArgs e)
         {
             IModelDividendEdit model = new ModelDividendEdit();
-            IViewDividendEdit view = new ViewDividendEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, LanguageName);
+            IViewDividendEdit view = new ViewDividendEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, SettingsConfiguration.LanguageName);
             // ReSharper disable once UnusedVariable
             var presenterDividendEdit = new PresenterDividendEdit(view, model);
 
@@ -703,7 +703,7 @@ namespace SharePortfolioManager
         private void OnBtnShareBrokerageEdit_Click(object sender, EventArgs e)
         {
             IModelBrokerageEdit model = new ModelBrokerageEdit();
-            IViewBrokerageEdit view = new ViewBrokerageEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, LanguageName);
+            IViewBrokerageEdit view = new ViewBrokerageEdit(ShareObjectMarketValue, ShareObjectFinalValue, Logger, Language, SettingsConfiguration.LanguageName);
             // ReSharper disable once UnusedVariable
             var presenterBrokerageEdit = new PresenterBrokerageEdit(view, model);
 

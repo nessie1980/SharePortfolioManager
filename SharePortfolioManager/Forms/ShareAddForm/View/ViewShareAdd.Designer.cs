@@ -1253,7 +1253,6 @@
         private System.Windows.Forms.GroupBox grpBoxDocumentPreview;
         private System.Windows.Forms.TableLayoutPanel tlpDocumentPreview;
         private System.Windows.Forms.WebBrowser webBrowser1;
-        private System.Windows.Forms.ToolStripContainer toolStripContainer1;
         private System.Windows.Forms.TableLayoutPanel tblLayPnlAddShareInput;
         private System.Windows.Forms.Label lblStockMarketLaunchDate;
         private System.Windows.Forms.Label lblWkn;

@@ -96,22 +96,22 @@ namespace SharePortfolioManager.SoundSettingsForm
             {
                 #region Language configuration
 
-                Text = Language.GetLanguageTextByXPath(@"/SoundsSettingsForm/Caption", LanguageName);
+                Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/Caption", SettingsConfiguration.LanguageName);
 
-                grpBoxUpdateFinishedSound.Text = Language.GetLanguageTextByXPath(@"/SoundsSettingsForm/GrpBoxUpdateFinishedSound/Caption", LanguageName);
-                lblUpdateFinishedSound.Text = Language.GetLanguageTextByXPath(@"/SoundsSettingsForm/GrpBoxUpdateFinishedSound/Labels/UpdateFinishSound", LanguageName);
-                btnUpdateFinishedSound.Text = Language.GetLanguageTextByXPath(@"/SoundsSettingsForm/GrpBoxUpdateFinishedSound/Buttons/Browse", LanguageName);
+                grpBoxUpdateFinishedSound.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxUpdateFinishedSound/Caption", SettingsConfiguration.LanguageName);
+                lblUpdateFinishedSound.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxUpdateFinishedSound/Labels/UpdateFinishSound", SettingsConfiguration.LanguageName);
+                btnUpdateFinishedSound.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxUpdateFinishedSound/Buttons/Browse", SettingsConfiguration.LanguageName);
 
-                chkBoxUpdateFinishedSoundPlay.Text = Language.GetLanguageTextByXPath(@"/SoundsSettingsForm/GrpBoxUpdateFinishedSound/CheckBoxes/EnableUpdateFinishSound", LanguageName);
+                chkBoxUpdateFinishedSoundPlay.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxUpdateFinishedSound/CheckBoxes/EnableUpdateFinishSound", SettingsConfiguration.LanguageName);
 
-                grpBoxErrorSound.Text = Language.GetLanguageTextByXPath(@"/SoundsSettingsForm/GrpBoxErrorSound/Caption", LanguageName);
-                lblErrorSound.Text = Language.GetLanguageTextByXPath(@"/SoundsSettingsForm/GrpBoxErrorSound/Labels/ErrorSound", LanguageName);
-                btnErrorSound.Text = Language.GetLanguageTextByXPath(@"/SoundsSettingsForm/GrpBoxErrorSound/Buttons/Browse", LanguageName);
+                grpBoxErrorSound.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxErrorSound/Caption", SettingsConfiguration.LanguageName);
+                lblErrorSound.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxErrorSound/Labels/ErrorSound", SettingsConfiguration.LanguageName);
+                btnErrorSound.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxErrorSound/Buttons/Browse", SettingsConfiguration.LanguageName);
 
-                chkBoxErrorSoundPlay.Text = Language.GetLanguageTextByXPath(@"/SoundsSettingsForm/GrpBoxErrorSound/CheckBoxes/EnableErrorSound", LanguageName);
+                chkBoxErrorSoundPlay.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxErrorSound/CheckBoxes/EnableErrorSound", SettingsConfiguration.LanguageName);
 
-                btnSave.Text = Language.GetLanguageTextByXPath(@"/SoundsSettingsForm/Buttons/Save", LanguageName);
-                btnCancel.Text = Language.GetLanguageTextByXPath(@"/SoundsSettingsForm/Buttons/Cancel", LanguageName);
+                btnSave.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/Buttons/Save", SettingsConfiguration.LanguageName);
+                btnCancel.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/Buttons/Cancel", SettingsConfiguration.LanguageName);
 
                 #endregion Language configuration
 
@@ -132,9 +132,9 @@ namespace SharePortfolioManager.SoundSettingsForm
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                    Language.GetLanguageTextByXPath(@"/SoundsSettingsForm/Errors/SoundSettingsShowFailed",
+                    Language.GetLanguageTextByXPath(@"/SoundSettingsForm/Errors/SoundSettingsShowFailed",
                         LanguageName),
-                    Language, LanguageName,
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -158,7 +158,7 @@ namespace SharePortfolioManager.SoundSettingsForm
             const string strFilter = "wav (*.wav)|*.wav";
             if (Helper.SetDocument(
                 Language.GetLanguageTextByXPath(
-                    @"/SoundsSettingsForm/GrpBoxUpdateFinishedSound/OpenFileDialog/Title", LanguageName),
+                    @"/SoundSettingsForm/GrpBoxUpdateFinishedSound/OpenFileDialog/Title", SettingsConfiguration.LanguageName), 
                 strFilter, ref strCurrentFile) != DialogResult.OK)
                 return;
 
@@ -179,7 +179,7 @@ namespace SharePortfolioManager.SoundSettingsForm
             const string strFilter = "wav (*.wav)|*.wav";
             if (Helper.SetDocument(
                 Language.GetLanguageTextByXPath(
-                    @"/SoundsSettingsForm/GrpBoxErrorSound/OpenFileDialog/Title", LanguageName),
+                    @"/SoundSettingsForm/GrpBoxErrorSound/OpenFileDialog/Title", SettingsConfiguration.LanguageName),
                 strFilter, ref strCurrentFile) != DialogResult.OK)
                 return;
 
@@ -205,63 +205,38 @@ namespace SharePortfolioManager.SoundSettingsForm
         private void OnBtnSave_Click(object sender, EventArgs e)
         {
             // Set window start position and window size
-            if (ParentWindow.Settings != null)
+            if (SettingsConfiguration.XmlDocument != null)
             {
                 try
                 {
                     #region Set update finished sound settings
 
                     // Save update finished file name
-                    var nodeUpdateFinishedSoundFileName =
-                        ParentWindow.Settings.SelectSingleNode("/Settings/Sounds/UpdateFinished");
-
-                    if (nodeUpdateFinishedSoundFileName != null)
-                    {
-                        Sound.UpdateFinishedFileName = Path.GetDirectoryName(Sound.UpdateFinishedFileName) + @"\" +
-                                                       lblUpdateFinishedSound.Text;
-
-                        // Set sound file name to the XML
-                        nodeUpdateFinishedSoundFileName.InnerXml = lblUpdateFinishedSound.Text;
-                    }
+                    Sound.UpdateFinishedFileName = Path.GetDirectoryName(Sound.UpdateFinishedFileName) + @"\" +
+                                                  lblUpdateFinishedSound.Text;
 
                     // Save update finished enable flag
-                    var nodeUpdateFinishedSoundEnable =
-                        ParentWindow.Settings.SelectSingleNode("/Settings/Sounds/UpdateFinishedEnabled");
-
-                    if (nodeUpdateFinishedSoundEnable != null)
-                    {
-                        Sound.UpdateFinishedEnable = chkBoxUpdateFinishedSoundPlay.Checked;
-
-                        // Set sound enable to the XML
-                        nodeUpdateFinishedSoundEnable.InnerXml = chkBoxUpdateFinishedSoundPlay.Checked.ToString();
-                    }
+                    Sound.UpdateFinishedEnable = chkBoxUpdateFinishedSoundPlay.Checked;
 
                     #endregion Set update finished sound settings
 
                     #region Set error sound settings
 
                     // Save error file name
-                    var nodeErrorSoundFileName =
-                        ParentWindow.Settings.SelectSingleNode("/Settings/Sounds/Error");
-
-                    if (nodeErrorSoundFileName != null)
-                    {
-                        Sound.ErrorFileName = Path.GetDirectoryName(Sound.ErrorFileName) + @"\" +
-                                                       lblErrorSound.Text;
-
-                        // Set sound file name to the XML
-                        nodeErrorSoundFileName.InnerXml = lblErrorSound.Text;
-                    }
+                    Sound.ErrorFileName = Path.GetDirectoryName(Sound.ErrorFileName) + @"\" +
+                                          lblErrorSound.Text;
 
                     // Save error enable flag
-                    var nodeErrorSoundEnable =
-                        ParentWindow.Settings.SelectSingleNode("/Settings/Sounds/ErrorEnabled");
+                    Sound.ErrorEnable = chkBoxErrorSoundPlay.Checked;
 
-                    if (nodeErrorSoundEnable != null)
-                    {
-                        // Set sound enable to the XML
-                        nodeErrorSoundEnable.InnerXml = chkBoxErrorSoundPlay.Checked.ToString();
-                    }
+                    if (SettingsConfiguration.SaveSettingsConfiguration()) return;
+
+                    Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                        Language.GetLanguageTextByXPath(@"/SoundSettingsForm/Errors/SaveSettingsFailed",
+                            LanguageName),
+                        Language, SettingsConfiguration.LanguageName,
+                        Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError,
+                        (int)FrmMain.EComponentLevels.Application);
 
                     #endregion Set update finished sound settings
                 }
@@ -272,7 +247,7 @@ namespace SharePortfolioManager.SoundSettingsForm
                     Helper.AddStatusMessage(toolStripStatusLabelMessage,
                         Language.GetLanguageTextByXPath(@"/SoundSettingsForm/Errors/SaveSettingsFailed",
                             LanguageName),
-                        Language, LanguageName,
+                        Language, SettingsConfiguration.LanguageName,
                         Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                         (int) FrmMain.EComponentLevels.Application,
                         ex);
@@ -283,8 +258,8 @@ namespace SharePortfolioManager.SoundSettingsForm
                 StopFomClosingFlag = true;
 
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                   Language.GetLanguageTextByXPath(@"/SoundSettingsForm/Errors/SaveSettingsFailed", LanguageName),
-                   Language, LanguageName,
+                   Language.GetLanguageTextByXPath(@"/SoundSettingsForm/Errors/SaveSettingsFailed", SettingsConfiguration.LanguageName),
+                   Language, SettingsConfiguration.LanguageName,
                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);               
             }
         }

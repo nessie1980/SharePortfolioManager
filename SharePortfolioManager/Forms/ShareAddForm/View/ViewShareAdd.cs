@@ -39,6 +39,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using SharePortfolioManager.Classes.Configurations;
 
 namespace SharePortfolioManager.ShareAddForm.View
 {
@@ -530,7 +531,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.AddSuccessful:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/StateMessages/AddSuccess", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/StateMessages/AddSuccess", SettingsConfiguration.LanguageName);
 
                     StopFomClosingFlag = false;
 
@@ -543,7 +544,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.AddFailed:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/AddFailed", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/AddFailed", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxVolume.Focus();
@@ -552,7 +553,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.WknEmpty:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WKNEmpty", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WKNEmpty", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxWkn.Focus();
@@ -561,7 +562,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.WknExists:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WKNExists", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WKNExists", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxWkn.Focus();
@@ -570,7 +571,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.NameEmpty:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/NameEmpty", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/NameEmpty", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxName.Focus();
@@ -579,7 +580,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.NameExists:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/NameExists", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/NameExists", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxName.Focus();
@@ -588,7 +589,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.StockMarketLaunchDateNotModified:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/StockMarketLaunchDateNotModified", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/StockMarketLaunchDateNotModified", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     dateTimePickerStockMarketLaunch.Focus();
@@ -597,7 +598,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.DepotNumberEmpty:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DepotNumberEmpty", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DepotNumberEmpty", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     cbxDepotNumber.Focus();
@@ -606,7 +607,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.OrderNumberEmpty:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/OrderNumberEmpty", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/OrderNumberEmpty", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxOrderNumber.Focus();
@@ -615,7 +616,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.OrderNumberExists:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/OrderNumberExists", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/OrderNumberExists", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxOrderNumber.Focus();
@@ -624,7 +625,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.VolumeEmpty:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/VolumeEmpty", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/VolumeEmpty", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxVolume.Focus();
@@ -633,7 +634,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.VolumeWrongFormat:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/VolumeWrongFormat", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/VolumeWrongFormat", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxVolume.Focus();
@@ -642,7 +643,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.VolumeWrongValue:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/VolumeWrongValue", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/VolumeWrongValue", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxVolume.Focus();
@@ -651,7 +652,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.SharePriceEmpty:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/SharePriceEmpty", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/SharePriceEmpty", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxSharePrice.Focus();
@@ -660,7 +661,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.SharePriceWrongFormat:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/SharePriceWrongFormat", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/SharePriceWrongFormat", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxSharePrice.Focus();
@@ -669,7 +670,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.SharePriceWrongValue:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/SharePriceWrongValue", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/SharePriceWrongValue", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxSharePrice.Focus();
@@ -678,7 +679,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.ProvisionWrongFormat:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ProvisionWrongFormat", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ProvisionWrongFormat", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxProvision.Focus();
@@ -687,7 +688,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.ProvisionWrongValue:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ProvisionWrongValue", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ProvisionWrongValue", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxProvision.Focus();
@@ -696,7 +697,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.BrokerFeeWrongFormat:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/BrokerFeeWrongFormat", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/BrokerFeeWrongFormat", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxBrokerFee.Focus();
@@ -705,7 +706,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.BrokerFeeWrongValue:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/BrokerFeeWrongValue", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/BrokerFeeWrongValue", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxBrokerFee.Focus();
@@ -724,7 +725,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.TraderPlaceFeeWrongValue:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/TraderPlaceFeeWrongValue", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/TraderPlaceFeeWrongValue", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxTraderPlaceFee.Focus();
@@ -733,7 +734,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.ReductionWrongFormat:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ReductionWrongFormat", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ReductionWrongFormat", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxReduction.Focus();
@@ -742,7 +743,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.ReductionWrongValue:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ReductionWrongValue", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ReductionWrongValue", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxReduction.Focus();
@@ -751,7 +752,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.BrokerageEmpty:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/BrokerageEmpty", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/BrokerageEmpty", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxBrokerage.Focus();
@@ -760,7 +761,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.BrokerageWrongFormat:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/BrokerageWrongFormat", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/BrokerageWrongFormat", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxBrokerage.Focus();
@@ -769,7 +770,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.BrokerageWrongValue:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/BrokerageWrongValue", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/BrokerageWrongValue", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxBrokerage.Focus();
@@ -778,7 +779,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.WebSiteEmpty:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WebSiteEmpty", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WebSiteEmpty", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxWebSite.Focus();
@@ -787,7 +788,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.WebSiteWrongFormat:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WebSiteWrongFormat", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WebSiteWrongFormat", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxWebSite.Focus();
@@ -796,7 +797,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.WebSiteExists:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WebSiteExists", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WebSiteExists", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxWebSite.Focus();
@@ -805,7 +806,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.DailyValuesWebSiteEmpty:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DailyValuesWebSiteEmpty", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DailyValuesWebSiteEmpty", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxDailyValuesWebSite.Focus();
@@ -814,7 +815,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.DailyValuesWebSiteWrongFormat:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DailyValuesWebSiteWrongFormat", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DailyValuesWebSiteWrongFormat", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxDailyValuesWebSite.Focus();
@@ -823,7 +824,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.DailyValuesWebSiteExists:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DailyValuesWebSiteExists", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DailyValuesWebSiteExists", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxDailyValuesWebSite.Focus();
@@ -832,7 +833,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.DocumentDirectoryDoesNotExists:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DocumentDirectoryDoesNotExists", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DocumentDirectoryDoesNotExists", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     break;
@@ -840,7 +841,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.DocumentFileDoesNotExists:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DocumentFileDoesNotExists", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DocumentFileDoesNotExists", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     break;
@@ -848,7 +849,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 case ShareAddErrorCode.WebSiteRegexNotFound:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WebSiteRegexNotFound", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WebSiteRegexNotFound", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     break;
@@ -856,7 +857,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 default:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/UnknownState", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/UnknownState", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     break;
@@ -902,7 +903,6 @@ namespace SharePortfolioManager.ShareAddForm.View
                         _parsingBackgroundWorker.RunWorkerAsync();
                     }
 
-                    //webBrowser1.Navigate(temp.DocumentAsStr);
                     Helper.WebBrowserPdf.Reload(webBrowser1, txtBoxDocument.Text);
                 } break;
             }
@@ -972,6 +972,11 @@ namespace SharePortfolioManager.ShareAddForm.View
                 // Stop closing the form
                 e.Cancel = true;
             }
+            else
+            {
+                // Cleanup web browser
+                Helper.WebBrowserPdf.CleanUp(webBrowser1);
+            }
 
             // Reset closing flag
             StopFomClosingFlag = false;
@@ -988,54 +993,54 @@ namespace SharePortfolioManager.ShareAddForm.View
             {
                 #region Language configuration
 
-                Text = Language.GetLanguageTextByXPath(@"/AddFormShare/Caption", LanguageName);
-                grpBoxGeneral.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Caption", LanguageName);
+                Text = Language.GetLanguageTextByXPath(@"/AddFormShare/Caption", SettingsConfiguration.LanguageName);
+                grpBoxGeneral.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Caption", SettingsConfiguration.LanguageName);
                 grpBoxDocumentPreview.Text =
-                    Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxDocumentPreview/Caption", LanguageName);
+                    Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxDocumentPreview/Caption", SettingsConfiguration.LanguageName);
 
-                lblWkn.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/WKN", LanguageName);
-                lblName.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Name", LanguageName);
-                lblStockMarketLaunchDate.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/StockMarketLaunchDate", LanguageName);
+                lblWkn.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/WKN", SettingsConfiguration.LanguageName);
+                lblName.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Name", SettingsConfiguration.LanguageName);
+                lblStockMarketLaunchDate.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/StockMarketLaunchDate", SettingsConfiguration.LanguageName);
 
-                lblShareType.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/ShareType", LanguageName);
+                lblShareType.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/ShareType", SettingsConfiguration.LanguageName);
                 // Add share type values
-                Language.GetLanguageTextListByXPath(@"/ComboBoxItemsShareType/*", LanguageName).ForEach(item => cbxShareType.Items.Add(item));
+                Language.GetLanguageTextListByXPath(@"/ComboBoxItemsShareType/*", SettingsConfiguration.LanguageName).ForEach(item => cbxShareType.Items.Add(item));
 
-                lblDividendPayoutInterval.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/PayoutInterval", LanguageName);
+                lblDividendPayoutInterval.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/PayoutInterval", SettingsConfiguration.LanguageName);
                 // Add dividend payout interval values
-                Language.GetLanguageTextListByXPath(@"/ComboBoxItemsPayout/*", LanguageName).ForEach(item => cbxDividendPayoutInterval.Items.Add(item));
+                Language.GetLanguageTextListByXPath(@"/ComboBoxItemsPayout/*", SettingsConfiguration.LanguageName).ForEach(item => cbxDividendPayoutInterval.Items.Add(item));
 
                 lblCultureInfo.Text =
-                    Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/CultureInfo", LanguageName);
+                    Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/CultureInfo", SettingsConfiguration.LanguageName);
 
-                lblWebSite.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/WebSite", LanguageName);
-                lblDailyValuesWebSite.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/DailyValuesWebSite", LanguageName);
-                lblDepotNumber.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/DepotNumber", LanguageName);
-                lblOrderNumber.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/OrderNumber", LanguageName);
-                lblDate.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Date", LanguageName);
-                lblVolume.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Volume", LanguageName);
+                lblWebSite.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/WebSite", SettingsConfiguration.LanguageName);
+                lblDailyValuesWebSite.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/DailyValuesWebSite", SettingsConfiguration.LanguageName);
+                lblDepotNumber.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/DepotNumber", SettingsConfiguration.LanguageName);
+                lblOrderNumber.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/OrderNumber", SettingsConfiguration.LanguageName);
+                lblDate.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Date", SettingsConfiguration.LanguageName);
+                lblVolume.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Volume", SettingsConfiguration.LanguageName);
                 lblVolumeUnit.Text = ShareObject.PieceUnit;
-                lblSharePrice.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/SharePrice", LanguageName);
+                lblSharePrice.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/SharePrice", SettingsConfiguration.LanguageName);
                 lblSharePriceUnit.Text = new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol;
-                lblBuyValue.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/MarketValue", LanguageName);
+                lblBuyValue.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/MarketValue", SettingsConfiguration.LanguageName);
                 lblBuyValueUnit.Text = new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol;
-                lblProvision.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Provision", LanguageName);
+                lblProvision.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Provision", SettingsConfiguration.LanguageName);
                 lblProvisionValueUnit.Text = new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol;
-                lblBrokerFee.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/BrokerFee", LanguageName);
+                lblBrokerFee.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/BrokerFee", SettingsConfiguration.LanguageName);
                 lblBrokerFeeValueUnit.Text = new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol;
-                lblTraderPlaceFee.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/TraderPlaceFee", LanguageName);
+                lblTraderPlaceFee.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/TraderPlaceFee", SettingsConfiguration.LanguageName);
                 lblTraderPlaceFeeValueUnit.Text = new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol;
-                lblReduction.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Reduction", LanguageName);
+                lblReduction.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Reduction", SettingsConfiguration.LanguageName);
                 lblReductionUnit.Text = new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol;
-                lblBrokerage.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Brokerage", LanguageName);
+                lblBrokerage.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Brokerage", SettingsConfiguration.LanguageName);
                 lblBrokerageUnit.Text = new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol;
-                lblBuyValueBrokerageReduction.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/FinalValue", LanguageName);
+                lblBuyValueBrokerageReduction.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/FinalValue", SettingsConfiguration.LanguageName);
                 lblBuyValueBrokerageReductionUnit.Text = new RegionInfo(Thread.CurrentThread.CurrentCulture.LCID).CurrencySymbol;
 
-                lblDocument.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Document", LanguageName);
+                lblDocument.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Document", SettingsConfiguration.LanguageName);
 
-                btnSave.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/Buttons/Save", LanguageName);
-                btnCancel.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/Buttons/Cancel", LanguageName);
+                btnSave.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/Buttons/Save", SettingsConfiguration.LanguageName);
+                btnCancel.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/Buttons/Cancel", SettingsConfiguration.LanguageName);
 
                 #endregion Language configuration
 
@@ -1088,8 +1093,8 @@ namespace SharePortfolioManager.ShareAddForm.View
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessageaAddShare,
-                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/AddShowFailed", LanguageName),
-                    Language, LanguageName,
+                    Language.GetLanguageTextByXPath(@"/MainForm/Errors/AddShowFailed", SettingsConfiguration.LanguageName),
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -1156,8 +1161,8 @@ namespace SharePortfolioManager.ShareAddForm.View
                 StopFomClosingFlag = true;
 
                 Helper.AddStatusMessage(toolStripStatusLabelMessageaAddShare,
-                    Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/AddSaveFailed", LanguageName),
-                    Language, LanguageName,
+                    Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/AddSaveFailed", SettingsConfiguration.LanguageName),
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -1368,8 +1373,8 @@ namespace SharePortfolioManager.ShareAddForm.View
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessageAddShareDocumentParsing,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingErrors/ParsingFailed", LanguageName),
-                    Language, LanguageName, Color.DarkRed, Logger,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingErrors/ParsingFailed", SettingsConfiguration.LanguageName),
+                    Language, SettingsConfiguration.LanguageName, Color.DarkRed, Logger,
                     (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
                     ex);
 
@@ -1838,7 +1843,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 {
                     toolStripStatusLabelMessageAddShareDocumentParsing.ForeColor = Color.Red;
                     toolStripStatusLabelMessageAddShareDocumentParsing.Text =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/ParsingErrors/ParsingParsingDocumentError", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/ParsingErrors/ParsingParsingDocumentError", SettingsConfiguration.LanguageName);
 
                     toolStripProgressBarAddShareDocumentParsing.Visible = false;
                     grpBoxGeneral.Enabled = true;
@@ -1848,7 +1853,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 {
                     toolStripStatusLabelMessageAddShareDocumentParsing.ForeColor = Color.Red;
                     toolStripStatusLabelMessageAddShareDocumentParsing.Text =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/ParsingErrors/ParsingFailed", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/ParsingErrors/ParsingFailed", SettingsConfiguration.LanguageName);
 
                     toolStripProgressBarAddShareDocumentParsing.Visible = false;
                     grpBoxGeneral.Enabled = true;
@@ -1883,7 +1888,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                     toolStripStatusLabelMessageAddShareDocumentParsing.ForeColor = Color.Red;
                     toolStripStatusLabelMessageAddShareDocumentParsing.Text =
                         Language.GetLanguageTextByXPath(
-                            @"/AddFormShare/ParsingErrors/ParsingDocumentTypeIdentifierFailed", LanguageName);
+                            @"/AddFormShare/ParsingErrors/ParsingDocumentTypeIdentifierFailed", SettingsConfiguration.LanguageName);
 
                     toolStripProgressBarAddShareDocumentParsing.Visible = false;
                     grpBoxGeneral.Enabled = true;
@@ -2117,7 +2122,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 {
                     toolStripStatusLabelMessageAddShareDocumentParsing.ForeColor = Color.Red;
                     toolStripStatusLabelMessageAddShareDocumentParsing.Text =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/ParsingErrors/ParsingFailed", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/ParsingErrors/ParsingFailed", SettingsConfiguration.LanguageName);
                 }
                 else
                 {

@@ -20,6 +20,8 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
+//#define DEBUG_LANGUAGE
+
 using System.Windows.Forms;
 
 namespace SharePortfolioManager.InvalidLanguageKeysForm

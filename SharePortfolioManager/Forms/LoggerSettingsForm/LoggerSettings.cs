@@ -56,7 +56,7 @@ namespace SharePortfolioManager.LoggerSettingsForm
         /// <summary>
         /// Constructor
         /// </summary>
-        public FrmLoggerSettings(FrmMain parentWindow, Logger logger, Language xmlLanguage, String strLanguage)
+        public FrmLoggerSettings(FrmMain parentWindow, Logger logger, Language xmlLanguage, string strLanguage)
         {
             InitializeComponent();
 
@@ -97,94 +97,94 @@ namespace SharePortfolioManager.LoggerSettingsForm
             {
                 #region Language configuration
 
-                Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Caption", LanguageName);
+                Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Caption", SettingsConfiguration.LanguageName);
 
-                grpBoxGUIEntries.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogGUIEntriesSize/Caption", LanguageName);
-                lblGUIEntriesSize.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogGUIEntriesSize/Labels/GUIEntriesSize", LanguageName);
+                grpBoxGUIEntries.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogGUIEntriesSize/Caption", SettingsConfiguration.LanguageName);
+                lblGUIEntriesSize.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogGUIEntriesSize/Labels/GUIEntriesSize", SettingsConfiguration.LanguageName);
 
-                grpBoxEnableFileLogging.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxFileLogging/Caption", LanguageName);
-                chkBoxEnableFileLogging.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxFileLogging/States/EnableFileLogging", LanguageName);
+                grpBoxEnableFileLogging.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxFileLogging/Caption", SettingsConfiguration.LanguageName);
+                chkBoxEnableFileLogging.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxFileLogging/States/EnableFileLogging", SettingsConfiguration.LanguageName);
 
-                grpBoxStoredLogFiles.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxStoredFiles/Caption", LanguageName);
-                lblStoredLogFiles.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxStoredFiles/Labels/StoredLogFiles", LanguageName);
-                btnLogFileCleanUp.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Buttons/CleanUp", LanguageName);
+                grpBoxStoredLogFiles.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxStoredFiles/Caption", SettingsConfiguration.LanguageName);
+                lblStoredLogFiles.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxStoredFiles/Labels/StoredLogFiles", SettingsConfiguration.LanguageName);
+                btnLogFileCleanUp.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Buttons/CleanUp", SettingsConfiguration.LanguageName);
 
-                grpBoxCleanUpAtStartUp.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxCleanUpAtStartUp/Caption", LanguageName);
-                chkBoxEnableCleanUpAtStartUp.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxCleanUpAtStartUp/States/EnableCleanUpAtStartUp", LanguageName);
+                grpBoxCleanUpAtStartUp.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxCleanUpAtStartUp/Caption", SettingsConfiguration.LanguageName);
+                chkBoxEnableCleanUpAtStartUp.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxCleanUpAtStartUp/States/EnableCleanUpAtStartUp", SettingsConfiguration.LanguageName);
 
-                grpBoxComponents.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogComponents/Caption", LanguageName);
-                chkBoxApplication.Text = Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Application", LanguageName);
-                chkBoxParser.Text = Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Parser", LanguageName);
-                chkBoxLanguageHander.Text = Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/LanguageHandler", LanguageName);
+                grpBoxComponents.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogComponents/Caption", SettingsConfiguration.LanguageName);
+                chkBoxApplication.Text = Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Application", SettingsConfiguration.LanguageName);
+                chkBoxParser.Text = Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/Parser", SettingsConfiguration.LanguageName);
+                chkBoxLanguageHander.Text = Language.GetLanguageTextByXPath(@"/Logger/ComponentNames/LanguageHandler", SettingsConfiguration.LanguageName);
 
-                grpBoxLogLevel.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogLevels/Caption", LanguageName);
-                chkBoxStart.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Start", LanguageName);
-                chkBoxInfo.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Info", LanguageName);
-                chkBoxWarning.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Warning", LanguageName);
-                chkBoxError.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Error", LanguageName);
-                chkBoxFatalError.Text = Language.GetLanguageTextByXPath(@"/Logger/States/FatalError", LanguageName);
+                grpBoxLogLevel.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogLevels/Caption", SettingsConfiguration.LanguageName);
+                chkBoxStart.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Start", SettingsConfiguration.LanguageName);
+                chkBoxInfo.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Info", SettingsConfiguration.LanguageName);
+                chkBoxWarning.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Warning", SettingsConfiguration.LanguageName);
+                chkBoxError.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Error", SettingsConfiguration.LanguageName);
+                chkBoxFatalError.Text = Language.GetLanguageTextByXPath(@"/Logger/States/FatalError", SettingsConfiguration.LanguageName);
 
-                grpBoxLogColors.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogLevelColors/Caption", LanguageName);
-                lblColorStart.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Start", LanguageName);
-                lblColorInfo.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Info", LanguageName);
-                lblColorWarning.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Warning", LanguageName);
-                lblColorError.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Error", LanguageName);
-                lblColorFatalError.Text = Language.GetLanguageTextByXPath(@"/Logger/States/FatalError", LanguageName);
+                grpBoxLogColors.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/GrpBoxLogLevelColors/Caption", SettingsConfiguration.LanguageName);
+                lblColorStart.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Start", SettingsConfiguration.LanguageName);
+                lblColorInfo.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Info", SettingsConfiguration.LanguageName);
+                lblColorWarning.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Warning", SettingsConfiguration.LanguageName);
+                lblColorError.Text = Language.GetLanguageTextByXPath(@"/Logger/States/Error", SettingsConfiguration.LanguageName);
+                lblColorFatalError.Text = Language.GetLanguageTextByXPath(@"/Logger/States/FatalError", SettingsConfiguration.LanguageName);
 
-                btnSave.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Buttons/Save", LanguageName);
-                btnCancel.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Buttons/Cancel", LanguageName);
+                btnSave.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Buttons/Save", SettingsConfiguration.LanguageName);
+                btnCancel.Text = Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Buttons/Cancel", SettingsConfiguration.LanguageName);
 
                 #endregion Language configuration
 
                 #region GUI log entries
 
-                var iIndexGui = cbxGUIEntriesList.FindStringExact(ParentWindow.LoggerGuiEntriesSize.ToString());
+                var iIndexGui = cbxGUIEntriesList.FindStringExact(SettingsConfiguration.LoggerGuiEntriesSize.ToString());
                 cbxGUIEntriesList.SelectedIndex = iIndexGui;
 
                 #endregion GUI log entries
 
                 #region Logging to file
 
-                bool.TryParse(ParentWindow.LoggerLogToFileEnabled.ToString(), out var bFlagLoggingToFile);
+                bool.TryParse(SettingsConfiguration.LoggerLogToFileEnabled.ToString(), out var bFlagLoggingToFile);
                 chkBoxEnableFileLogging.Checked = bFlagLoggingToFile;
 
                 #endregion Logging to file
 
                 #region Stored log files
 
-                var iIndexStored = cbxStoredLogFiles.FindStringExact(ParentWindow.LoggerStoredLogFiles.ToString());
+                var iIndexStored = cbxStoredLogFiles.FindStringExact(SettingsConfiguration.LoggerStoredLogFiles.ToString());
                 cbxStoredLogFiles.SelectedIndex = iIndexStored;
 
                 #endregion Stored log files
 
                 #region Logging to file
 
-                bool.TryParse(ParentWindow.LoggerLogCleanUpAtStartUpEnabled.ToString(), out var bFlagCleanUpAtStartUp);
+                bool.TryParse(SettingsConfiguration.LoggerLogCleanUpAtStartUpEnabled.ToString(), out var bFlagCleanUpAtStartUp);
                 chkBoxEnableCleanUpAtStartUp.Checked = bFlagCleanUpAtStartUp;
 
                 #endregion Logging to file
 
                 #region Log components
 
-                chkBoxApplication.Checked = (ParentWindow.LoggerComponentLevel & 1) == 1;
+                chkBoxApplication.Checked = (SettingsConfiguration.LoggerComponentLevel & 1) == 1;
 
-                chkBoxParser.Checked = (ParentWindow.LoggerComponentLevel & 2) == 2;
+                chkBoxParser.Checked = (SettingsConfiguration.LoggerComponentLevel & 2) == 2;
 
-                chkBoxLanguageHander.Checked = (ParentWindow.LoggerComponentLevel & 4) == 4;
+                chkBoxLanguageHander.Checked = (SettingsConfiguration.LoggerComponentLevel & 4) == 4;
 
                 #endregion Log components
 
                 #region Log state levels
 
-                chkBoxStart.Checked = (ParentWindow.LoggerStateLevel & 1) == 1;
+                chkBoxStart.Checked = (SettingsConfiguration.LoggerStateLevel & 1) == 1;
 
-                chkBoxInfo.Checked = (ParentWindow.LoggerStateLevel & 2) == 2;
+                chkBoxInfo.Checked = (SettingsConfiguration.LoggerStateLevel & 2) == 2;
 
-                chkBoxWarning.Checked = (ParentWindow.LoggerStateLevel & 4) == 4;
+                chkBoxWarning.Checked = (SettingsConfiguration.LoggerStateLevel & 4) == 4;
 
-                chkBoxError.Checked = (ParentWindow.LoggerStateLevel & 8) == 8;
+                chkBoxError.Checked = (SettingsConfiguration.LoggerStateLevel & 8) == 8;
 
-                chkBoxFatalError.Checked = (ParentWindow.LoggerStateLevel & 16) == 16;
+                chkBoxFatalError.Checked = (SettingsConfiguration.LoggerStateLevel & 16) == 16;
 
                 #endregion Log state levels
 
@@ -270,7 +270,7 @@ namespace SharePortfolioManager.LoggerSettingsForm
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
                     Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/LoggerSettingsShowFailed",
                         LanguageName),
-                    Language, LanguageName,
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -296,13 +296,13 @@ namespace SharePortfolioManager.LoggerSettingsForm
 
                 if(Logger.LoggerState == Logger.ELoggerState.CleanUpLogFilesSuccessful)
                     Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        Language.GetLanguageTextByXPath(@"/Logger/LoggerStateMessages/CleanUpLogFilesSuccessful", LanguageName),
-                        Language, LanguageName,
+                        Language.GetLanguageTextByXPath(@"/Logger/LoggerStateMessages/CleanUpLogFilesSuccessful", SettingsConfiguration.LanguageName),
+                        Language, SettingsConfiguration.LanguageName,
                         Color.Black, Logger, (int)FrmMain.EStateLevels.Info, (int)FrmMain.EComponentLevels.Application);
                 if (Logger.LoggerState == Logger.ELoggerState.CleanUpLogFilesFailed)
                     Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        Language.GetLanguageTextByXPath(@"/Logger/LoggerStateMessages/CleanUpLogFilesFailed", LanguageName),
-                        Language, LanguageName,
+                        Language.GetLanguageTextByXPath(@"/Logger/LoggerStateMessages/CleanUpLogFilesFailed", SettingsConfiguration.LanguageName),
+                        Language, SettingsConfiguration.LanguageName,
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
             }
             catch (LoggerException loggerException)
@@ -355,14 +355,14 @@ namespace SharePortfolioManager.LoggerSettingsForm
                 }
 
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                    message, Language, LanguageName,
+                    message, Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.Error, (int) FrmMain.EComponentLevels.Application,
                     loggerException);
             }
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                    Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/LogFileCleanUpFailed", LanguageName), Language, LanguageName,
+                    Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/LogFileCleanUpFailed", SettingsConfiguration.LanguageName), Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
                     ex);
             }
@@ -387,140 +387,107 @@ namespace SharePortfolioManager.LoggerSettingsForm
         private void OnBtnSave_Click(object sender, EventArgs e)
         {
             // Set window start position and window size
-            if (ParentWindow.Settings != null)
+            if (SettingsConfiguration.XmlDocument != null)
             {
                 try
                 {
                     #region GUI entries size
-
-                    // Save logger GUI entries size
-                    var nodeLogGuiEntriesSize = ParentWindow.Settings.SelectSingleNode("/Settings/Logger/GUIEntries");
-
-                    if (nodeLogGuiEntriesSize != null)
-                    {
-                        int.TryParse(cbxGUIEntriesList.SelectedItem.ToString(), out var iGuiEntriesSize);
-                        // Set GUI entries size value to FrmMain member variable
-                        ParentWindow.LoggerGuiEntriesSize = iGuiEntriesSize;
-                        // Set GUI entries size value to the XML
-                        nodeLogGuiEntriesSize.InnerXml = iGuiEntriesSize.ToString();
-                    }
+                    
+                    int.TryParse(cbxGUIEntriesList.SelectedItem.ToString(), out var iGuiEntriesSize);
+                    
+                    // Set GUI entries size value to FrmMain member variable
+                    SettingsConfiguration.LoggerGuiEntriesSize = iGuiEntriesSize;
 
                     #endregion GUI entries size
 
                     #region Write to file flag
 
-                    // Save logger flag write to file
-                    var nodeLogFlagWriteToFile = ParentWindow.Settings.SelectSingleNode("/Settings/Logger/LogToFileEnable");
-
-                    if (nodeLogFlagWriteToFile != null)
-                    {
-                        // Set GUI entries size value to FrmMain member variable
-                        ParentWindow.LoggerLogToFileEnabled = chkBoxEnableFileLogging.Checked;
-                        // Set GUI entries size value to the XML
-                        nodeLogFlagWriteToFile.InnerXml = chkBoxEnableFileLogging.Checked.ToString();
-                    }
-
+                    // Set GUI entries size value to FrmMain member variable
+                    SettingsConfiguration.LoggerLogToFileEnabled = chkBoxEnableFileLogging.Checked;
+                    
                     #endregion Write to file flag
 
                     #region Stored log files
 
-                    // Save logger stored log files
-                    var nodeLogStoredLogFiles = ParentWindow.Settings.SelectSingleNode("/Settings/Logger/StoredLogFiles");
-
-                    if (nodeLogStoredLogFiles != null)
-                    {
-                        int.TryParse(cbxStoredLogFiles.SelectedItem.ToString(), out var iStoredLogFiles);
-                        // Set GUI entries size value to FrmMain member variable
-                        ParentWindow.LoggerStoredLogFiles = iStoredLogFiles;
-                        // Set GUI entries size value to the XML
-                        nodeLogStoredLogFiles.InnerXml = iStoredLogFiles.ToString();
-                    }
+                    int.TryParse(cbxStoredLogFiles.SelectedItem.ToString(), out var iStoredLogFiles);
+                    
+                    // Set GUI entries size value to FrmMain member variable
+                    SettingsConfiguration.LoggerStoredLogFiles = iStoredLogFiles;
 
                     #endregion Stored log files
 
                     #region Cleanup log files at startup flag
 
-                    // Save logger flag write to file
-                    var nodeLogFlagCleanUpAtStartUp = ParentWindow.Settings.SelectSingleNode("/Settings/Logger/LogCleanUpAtStartUpEnable");
-
-                    if (nodeLogFlagCleanUpAtStartUp != null)
-                    {
-                        // Set GUI entries size value to FrmMain member variable
-                        ParentWindow.LoggerLogCleanUpAtStartUpEnabled = chkBoxEnableCleanUpAtStartUp.Checked;
-                        // Set GUI entries size value to the XML
-                        nodeLogFlagCleanUpAtStartUp.InnerXml = chkBoxEnableCleanUpAtStartUp.Checked.ToString();
-                    }
-
+                    // Set GUI entries size value to FrmMain member variable
+                    SettingsConfiguration.LoggerLogCleanUpAtStartUpEnabled = chkBoxEnableCleanUpAtStartUp.Checked;
+                    
                     #endregion Cleanup log files at startup flag
 
                     #region Component levels
 
-                    // Save logger component level 
-                    var nodeLogComponents = ParentWindow.Settings.SelectSingleNode("/Settings/Logger/LogComponents");
+                    // Calculate log components value
+                    var iLogComponents = 0;
+                    if (chkBoxApplication.Checked)
+                        iLogComponents += 1;
+                    if (chkBoxParser.Checked)
+                        iLogComponents += 2;
+                    if (chkBoxLanguageHander.Checked)
+                        iLogComponents += 4;
 
-                    if (nodeLogComponents != null)
-                    {
-                        // Calculate log components value
-                        var iLogComponents = 0;
-                        if (chkBoxApplication.Checked)
-                            iLogComponents += 1;
-                        if (chkBoxParser.Checked)
-                            iLogComponents += 2;
-                        if (chkBoxLanguageHander.Checked)
-                            iLogComponents += 4;
-
-                        // Set calculated log components value to FrmMain member variable
-                        ParentWindow.LoggerComponentLevel = iLogComponents;
-                        // Set calculated log components value to the XML
-                        nodeLogComponents.InnerXml = iLogComponents.ToString();
-                    }
+                    // Set calculated log components value to FrmMain member variable
+                    SettingsConfiguration.LoggerComponentLevel = iLogComponents;
 
                     #endregion Component levels
 
                     #region State levels
 
-                    // Save logger log state level
-                    var nodeLogStateLevels = ParentWindow.Settings.SelectSingleNode("/Settings/Logger/LogLevels");
+                    // Calculate log components value
+                    var iLogStateLevel = 0;
+                    if (chkBoxStart.Checked)
+                        iLogStateLevel += 1;
+                    if (chkBoxInfo.Checked)
+                        iLogStateLevel += 2;
+                    if (chkBoxWarning.Checked)
+                        iLogStateLevel += 4;
+                    if (chkBoxError.Checked)
+                        iLogStateLevel += 8;
+                    if (chkBoxFatalError.Checked)
+                        iLogStateLevel += 16;
 
-                    if (nodeLogStateLevels != null)
-                    {
-                        // Calculate log components value
-                        var iLogStateLevel = 0;
-                        if (chkBoxStart.Checked)
-                            iLogStateLevel += 1;
-                        if (chkBoxInfo.Checked)
-                            iLogStateLevel += 2;
-                        if (chkBoxWarning.Checked)
-                            iLogStateLevel += 4;
-                        if (chkBoxError.Checked)
-                            iLogStateLevel += 8;
-                        if (chkBoxFatalError.Checked)
-                            iLogStateLevel += 16;
-
-                        // Set calculated log components value to FrmMain member variable
-                        ParentWindow.LoggerStateLevel = iLogStateLevel;
-                        // Set calculated log components value to the XML
-                        nodeLogStateLevels.InnerXml = iLogStateLevel.ToString();
-                    }
+                    // Set calculated log components value to FrmMain member variable
+                    SettingsConfiguration.LoggerStateLevel = iLogStateLevel;
 
                     #endregion State levels
 
-                    // Show own message box that a restart of the software should be done
-                    var ombReboot = new OwnMessageBox(Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
-                        (int)EOwnMessageBoxInfoType.Info],
-                        Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/LoggerSettingsReboot", LanguageName),
-                        Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", LanguageName),
-                        Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", LanguageName),
-                        EOwnMessageBoxInfoType.Info);
-                    ombReboot.ShowDialog();
+                    if (!SettingsConfiguration.SaveSettingsConfiguration())
+                    {
+                        Helper.AddStatusMessage(toolStripStatusLabelMessage,
+                            Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/SaveSettingsFailed",
+                                LanguageName),
+                            Language, SettingsConfiguration.LanguageName,
+                            Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
+                            (int) FrmMain.EComponentLevels.Application,
+                            SettingsConfiguration.LastException);
+                    }
+                    else
+                    {
+                        // Show own message box that a restart of the software should be done
+                        var ombReboot = new OwnMessageBox(Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", SettingsConfiguration.LanguageName)[
+                                (int)EOwnMessageBoxInfoType.Info],
+                            Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/LoggerSettingsReboot", SettingsConfiguration.LanguageName),
+                            Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", SettingsConfiguration.LanguageName),
+                            Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", SettingsConfiguration.LanguageName),
+                            EOwnMessageBoxInfoType.Info);
+                        ombReboot.ShowDialog();
+                    }
                 }
                 catch (Exception ex)
                 {
                     StopFomClosingFlag = true;
 
                     Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                        Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/SaveSettingsFailed", LanguageName),
-                        Language, LanguageName,
+                        Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/SaveSettingsFailed", SettingsConfiguration.LanguageName),
+                        Language, SettingsConfiguration.LanguageName,
                         Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                         (int) FrmMain.EComponentLevels.Application,
                         ex);
@@ -531,8 +498,8 @@ namespace SharePortfolioManager.LoggerSettingsForm
                 StopFomClosingFlag = true;
 
                 Helper.AddStatusMessage(toolStripStatusLabelMessage,
-                   Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/SaveSettingsFailed", LanguageName),
-                   Language, LanguageName,
+                   Language.GetLanguageTextByXPath(@"/LoggerSettingsForm/Errors/SaveSettingsFailed", SettingsConfiguration.LanguageName),
+                   Language, SettingsConfiguration.LanguageName,
                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application);               
             }
         }

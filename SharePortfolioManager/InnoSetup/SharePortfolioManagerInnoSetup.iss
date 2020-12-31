@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "SharePortfolioManager"
-#define MyAppVersion "0.1.0.0"
+#define MyAppVersion "0.5.7.0"
 #define MyAppPublisher "Thomas Barth"
 #define MyAppURL "https://github.com/nessie1980/SharePortfolioManager"
 #define MyAppExeName "SharePortfolioManager.exe"

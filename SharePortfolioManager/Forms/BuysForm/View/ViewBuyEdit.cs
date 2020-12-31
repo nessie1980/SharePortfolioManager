@@ -39,6 +39,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using SharePortfolioManager.Classes.Configurations;
 
 namespace SharePortfolioManager.BuysForm.View
 {
@@ -472,7 +473,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.AddSuccessful:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/StateMessages/AddSuccess", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/StateMessages/AddSuccess", SettingsConfiguration.LanguageName);
                     // Set flag to save the share object.
                     SaveFlag = true;
 
@@ -490,7 +491,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.AddFailed:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/AddFailed", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/AddFailed", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -522,7 +523,7 @@ namespace SharePortfolioManager.BuysForm.View
                     Icon = Resources.add;
 
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/StateMessages/EditSuccess", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/StateMessages/EditSuccess", SettingsConfiguration.LanguageName);
                     // Set flag to save the share object.
                     SaveFlag = true;
 
@@ -534,7 +535,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.EditFailed:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/EditFailed", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/EditFailed", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -546,13 +547,13 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.DeleteSuccessful:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/StateMessages/DeleteSuccess", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/StateMessages/DeleteSuccess", SettingsConfiguration.LanguageName);
                     // Set flag to save the share object.
                     SaveFlag = true;
 
                     // Enable button(s)
                     btnAddSave.Text =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", SettingsConfiguration.LanguageName);
                     btnAddSave.Image = Resources.button_add_24;
 
                     // Disable button(s)
@@ -560,7 +561,7 @@ namespace SharePortfolioManager.BuysForm.View
 
                     // Rename group box
                     grpBoxAdd.Text =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Add_Caption", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Add_Caption", SettingsConfiguration.LanguageName);
 
                     // Reset dialog icon to add
                     Icon = Resources.add;
@@ -573,7 +574,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.DeleteFailed:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DeleteFailed", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DeleteFailed", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -585,7 +586,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.DeleteFailedUnerasable:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DeleteFailedUnErasable", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DeleteFailedUnErasable", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -597,7 +598,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.InputValuesInvalid:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/CheckInputFailure", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/CheckInputFailure", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -609,7 +610,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.DepotNumberEmpty:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DepotNumberEmpty", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DepotNumberEmpty", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -621,7 +622,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.OrderNumberEmpty:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/OrderNumberEmpty", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/OrderNumberEmpty", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -633,7 +634,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.OrderNumberExists:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/OrderNumberExists", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/OrderNumberExists", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -645,7 +646,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.VolumeEmpty:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/VolumeEmpty", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/VolumeEmpty", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -657,7 +658,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.VolumeWrongFormat:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/VolumeWrongFormat", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/VolumeWrongFormat", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -669,7 +670,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.VolumeWrongValue:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/VolumeWrongValue", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/VolumeWrongValue", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -681,7 +682,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.SharePriceEmpty:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SharePriceEmpty", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SharePriceEmpty", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -693,7 +694,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.SharePriceWrongFormat:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SharePriceWrongFormat", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SharePriceWrongFormat", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -705,7 +706,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.SharePriceWrongValue:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SharePriceWrongValue", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SharePriceWrongValue", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -717,7 +718,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.ProvisionWrongFormat:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ProvisionWrongFormat", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ProvisionWrongFormat", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -729,7 +730,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.ProvisionWrongValue:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ProvisionWrongValue", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ProvisionWrongValue", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -741,7 +742,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.BrokerFeeWrongFormat:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/BrokerFeeWrongFormat", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/BrokerFeeWrongFormat", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -753,7 +754,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.BrokerFeeWrongValue:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/BrokerFeeWrongValue", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/BrokerFeeWrongValue", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -765,7 +766,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.TraderPlaceFeeWrongFormat:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/TraderPlaceFeeWrongFormat", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/TraderPlaceFeeWrongFormat", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -777,7 +778,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.TraderPlaceFeeWrongValue:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/TraderPlaceFeeWrongValue", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/TraderPlaceFeeWrongValue", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -789,7 +790,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.ReductionWrongFormat:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ReductionWrongFormat", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ReductionWrongFormat", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -801,7 +802,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.ReductionWrongValue:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ReductionWrongValue", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ReductionWrongValue", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -813,7 +814,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.BrokerageEmpty:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/BrokerageEmpty", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/BrokerageEmpty", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -825,7 +826,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.BrokerageWrongFormat:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/BrokerageWrongFormat", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/BrokerageWrongFormat", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -837,7 +838,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.BrokerageWrongValue:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/BrokerageWrongValue", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/BrokerageWrongValue", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -849,7 +850,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.DocumentDirectoryDoesNotExists:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DocumentDirectoryDoesNotExists", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DocumentDirectoryDoesNotExists", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -861,7 +862,7 @@ namespace SharePortfolioManager.BuysForm.View
                 case BuyErrorCode.DocumentFileDoesNotExists:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DocumentFileDoesNotExists", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DocumentFileDoesNotExists", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -995,11 +996,11 @@ namespace SharePortfolioManager.BuysForm.View
             {
                 #region Language configuration
 
-                Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Caption", LanguageName);
+                Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Caption", SettingsConfiguration.LanguageName);
                 grpBoxAdd.Text =
-                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Add_Caption", LanguageName);
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Add_Caption", SettingsConfiguration.LanguageName);
                 grpBoxDocumentPreview.Text =
-                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxDocumentPreview/Caption", LanguageName);
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxDocumentPreview/Caption", SettingsConfiguration.LanguageName);
                 grpBoxBuys.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxBuy/Caption",
                         LanguageName);
@@ -1108,8 +1109,8 @@ namespace SharePortfolioManager.BuysForm.View
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ShowFailed", LanguageName),
-                    Language, LanguageName, Color.DarkRed, Logger,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ShowFailed", SettingsConfiguration.LanguageName),
+                    Language, SettingsConfiguration.LanguageName, Color.DarkRed, Logger,
                     (int) FrmMain.EStateLevels.FatalError, (int) FrmMain.EComponentLevels.Application,
                     ex);
             }
@@ -1189,7 +1190,7 @@ namespace SharePortfolioManager.BuysForm.View
 
             // Enable button(s)
             btnAddSave.Text =
-                Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", LanguageName);
+                Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", SettingsConfiguration.LanguageName);
             btnAddSave.Image = Resources.button_add_24;
             btnDocumentBrowse.Enabled = true;
 
@@ -1198,7 +1199,7 @@ namespace SharePortfolioManager.BuysForm.View
 
             // Rename group box
             grpBoxAdd.Text =
-                Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Add_Caption", LanguageName);
+                Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Add_Caption", SettingsConfiguration.LanguageName);
 
             // Reset dialog icon to add
             Icon = Resources.add;
@@ -1650,7 +1651,7 @@ namespace SharePortfolioManager.BuysForm.View
                 Helper.ShowExceptionMessage(ex);
 
                 toolStripStatusLabelMessageBuyDocumentParsing.ForeColor = Color.Red;
-                toolStripStatusLabelMessageBuyDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingErrors/ParsingFailed", LanguageName);
+                toolStripStatusLabelMessageBuyDocumentParsing.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBuy/ParsingErrors/ParsingFailed", SettingsConfiguration.LanguageName);
 
                 toolStripProgressBarBuyDocumentParsing.Visible = false;
                 grpBoxAdd.Enabled = true;
@@ -1687,7 +1688,7 @@ namespace SharePortfolioManager.BuysForm.View
             toolStripProgressBarBuyDocumentParsing.Visible = false;
 
             if (btnAddSave.Text ==
-                Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", LanguageName))
+                Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", SettingsConfiguration.LanguageName))
             {
                 UpdateBuy = false;
 
@@ -1703,8 +1704,8 @@ namespace SharePortfolioManager.BuysForm.View
         catch (Exception ex)
         {
             Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/AddFailed", LanguageName),
-                Language, LanguageName,
+                Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/AddFailed", SettingsConfiguration.LanguageName),
+                Language, SettingsConfiguration.LanguageName,
                 Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                 (int) FrmMain.EComponentLevels.Application,
                 ex);
@@ -1731,7 +1732,7 @@ namespace SharePortfolioManager.BuysForm.View
                 toolStripStatusLabelMessageBuyDocumentParsing.Text = string.Empty;
                 toolStripProgressBarBuyDocumentParsing.Visible = false;
 
-                var strCaption = Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
+                var strCaption = Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", SettingsConfiguration.LanguageName)[
                     (int) EOwnMessageBoxInfoType.Info];
                 var strMessage = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/BuyDelete",
                     LanguageName);
@@ -1760,12 +1761,12 @@ namespace SharePortfolioManager.BuysForm.View
 
                 // Enable button(s)
                 btnAddSave.Text =
-                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", LanguageName);
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", SettingsConfiguration.LanguageName);
                 btnAddSave.Image = Resources.button_add_24;
 
                 // Rename group box
                 grpBoxAdd.Text =
-                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Add_Caption", LanguageName);
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Add_Caption", SettingsConfiguration.LanguageName);
 
                 // Reset dialog icon to add
                 Icon = Resources.add;
@@ -1776,8 +1777,8 @@ namespace SharePortfolioManager.BuysForm.View
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DeleteFailed", LanguageName),
-                    Language, LanguageName,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DeleteFailed", SettingsConfiguration.LanguageName),
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -1800,8 +1801,8 @@ namespace SharePortfolioManager.BuysForm.View
             {
 
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/CancelFailure", LanguageName),
-                    Language, LanguageName,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/CancelFailure", SettingsConfiguration.LanguageName),
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -1910,7 +1911,7 @@ namespace SharePortfolioManager.BuysForm.View
 
                     // Set TabPage caption
                     Text = Language.GetLanguageTextByXPath(
-                               @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/TabPgOverview/Overview", LanguageName)
+                               @"/AddEditFormBuy/GrpBoxBuy/TabCtrl/TabPgOverview/Overview", SettingsConfiguration.LanguageName)
                            + @" (" + ShareObjectFinalValue.AllBuyEntries.BuyValueBrokerageReductionTotalAsStrUnit +
                            @")"
                 };
@@ -2063,8 +2064,8 @@ namespace SharePortfolioManager.BuysForm.View
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ShowFailed", LanguageName),
-                    Language, LanguageName, Color.DarkRed, Logger,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/ShowFailed", SettingsConfiguration.LanguageName),
+                    Language, SettingsConfiguration.LanguageName, Color.DarkRed, Logger,
                     (int) FrmMain.EStateLevels.FatalError, (int) FrmMain.EComponentLevels.Application,
                     ex);
             }
@@ -2180,8 +2181,8 @@ namespace SharePortfolioManager.BuysForm.View
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/RenameColHeaderFailed", LanguageName),
-                    Language, LanguageName,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/RenameColHeaderFailed", SettingsConfiguration.LanguageName),
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -2213,8 +2214,8 @@ namespace SharePortfolioManager.BuysForm.View
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DeselectFailed", LanguageName),
-                    Language, LanguageName,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/DeselectFailed", SettingsConfiguration.LanguageName),
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -2254,8 +2255,8 @@ namespace SharePortfolioManager.BuysForm.View
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SelectionChangeFailed", LanguageName),
-                    Language, LanguageName,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SelectionChangeFailed", SettingsConfiguration.LanguageName),
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -2368,8 +2369,8 @@ namespace SharePortfolioManager.BuysForm.View
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SelectionChangeFailed", LanguageName),
-                    Language, LanguageName,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SelectionChangeFailed", SettingsConfiguration.LanguageName),
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -2558,8 +2559,8 @@ namespace SharePortfolioManager.BuysForm.View
                         btnDelete.Enabled = false;
 
                         Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SelectionChangeFailed", LanguageName),
-                            Language, LanguageName,
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SelectionChangeFailed", SettingsConfiguration.LanguageName),
+                            Language, SettingsConfiguration.LanguageName,
                             Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError,
                             (int)FrmMain.EComponentLevels.Application);
                     }
@@ -2568,12 +2569,12 @@ namespace SharePortfolioManager.BuysForm.View
                 {
                     // Rename button
                     btnAddSave.Text =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Buttons/Add", SettingsConfiguration.LanguageName);
                     btnAddSave.Image = Resources.button_add_24;
 
                     // Rename group box
                     grpBoxAdd.Text =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Add_Caption", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBuy/GrpBoxAddEdit/Add_Caption", SettingsConfiguration.LanguageName);
 
                     // Reset dialog icon to add
                     Icon = Resources.add;
@@ -2620,7 +2621,7 @@ namespace SharePortfolioManager.BuysForm.View
                     if (ShowBuysFlag) return;
 
                     var strCaption =
-                        Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
+                        Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", SettingsConfiguration.LanguageName)[
                             (int) EOwnMessageBoxInfoType.Error];
                     var strMessage =
                         Language.GetLanguageTextByXPath(
@@ -2664,8 +2665,8 @@ namespace SharePortfolioManager.BuysForm.View
 
                             Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
                                 Language.GetLanguageTextByXPath(
-                                    @"/AddEditFormBuy/StateMessages/EditSuccess", LanguageName),
-                                Language, LanguageName,
+                                    @"/AddEditFormBuy/StateMessages/EditSuccess", SettingsConfiguration.LanguageName),
+                                Language, SettingsConfiguration.LanguageName,
                                 Color.Black, Logger, (int) FrmMain.EStateLevels.Info,
                                 (int) FrmMain.EComponentLevels.Application);
                         }
@@ -2673,8 +2674,8 @@ namespace SharePortfolioManager.BuysForm.View
                         {
                             Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
                                 Language.GetLanguageTextByXPath(
-                                    @"/AddEditFormBuy/Errors/EditFailed", LanguageName),
-                                Language, LanguageName,
+                                    @"/AddEditFormBuy/Errors/EditFailed", SettingsConfiguration.LanguageName),
+                                Language, SettingsConfiguration.LanguageName,
                                 Color.Red, Logger, (int) FrmMain.EStateLevels.Error,
                                 (int) FrmMain.EComponentLevels.Application);
                         }
@@ -2686,8 +2687,8 @@ namespace SharePortfolioManager.BuysForm.View
                 tabCtrlBuys.SelectedIndex = 0;
 
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBuyEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SelectionChangeFailed", LanguageName),
-                    Language, LanguageName,
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBuy/Errors/SelectionChangeFailed", SettingsConfiguration.LanguageName),
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);

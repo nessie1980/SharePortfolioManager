@@ -31,7 +31,6 @@ using SharePortfolioManager.OwnMessageBoxForm;
 using SharePortfolioManager.Properties;
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -148,6 +147,11 @@ namespace SharePortfolioManager.BrokeragesForm.View
         #endregion Flags
 
         public DataGridView SelectedDataGridView { get; internal set; }
+
+        /// <summary>
+        /// Flag if the show of the buy is running ( true ) or finished ( false )
+        /// </summary>
+        public bool ShowBrokerageFlag;
 
         #endregion Properties
 
@@ -310,7 +314,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 case BrokerageErrorCode.AddSuccessful:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/StateMessages/AddSuccess", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/StateMessages/AddSuccess", SettingsConfiguration.LanguageName);
                         // Set flag to save the share object.
                         SaveFlag = true;
 
@@ -322,7 +326,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 case BrokerageErrorCode.AddFailed:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/AddFailed", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/AddFailed", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -351,7 +355,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                         Icon = Resources.add;
 
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/StateMessages/EditSuccess", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/StateMessages/EditSuccess", SettingsConfiguration.LanguageName);
                         // Set flag to save the share object.
                         SaveFlag = true;
 
@@ -363,7 +367,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 case BrokerageErrorCode.EditFailed:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/EditFailed", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/EditFailed", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -375,12 +379,12 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 case BrokerageErrorCode.DeleteSuccessful:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/StateMessages/DeleteSuccess", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/StateMessages/DeleteSuccess", SettingsConfiguration.LanguageName);
                         // Set flag to save the share object.
                         SaveFlag = true;
 
                         // Enable button(s)
-                        btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Add", LanguageName);
+                        btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Add", SettingsConfiguration.LanguageName);
                         btnAddSave.Image = Resources.button_add_24;
 
                         // Disable button(s)
@@ -388,7 +392,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                         btnDelete.Enabled = false;
 
                         // Rename group box
-                        grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Add_Caption", LanguageName);
+                        grpBoxAdd.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Add_Caption", SettingsConfiguration.LanguageName);
 
                         // Reset dialog icon to add
                         Icon = Resources.add;
@@ -401,7 +405,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 case BrokerageErrorCode.DeleteFailed:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/DeleteFailed", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/DeleteFailed", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -413,7 +417,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 case BrokerageErrorCode.InputValuesInvalid:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/CheckInputFailure", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/CheckInputFailure", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -425,7 +429,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 case BrokerageErrorCode.ProvisionWrongFormat:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/ProvisionWrongFormat", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/ProvisionWrongFormat", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -437,7 +441,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 case BrokerageErrorCode.ProvisionWrongValue:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/ProvisionWrongValue", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/ProvisionWrongValue", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -449,7 +453,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 case BrokerageErrorCode.BrokerFeeWrongFormat:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/BrokerFeeWrongFormat", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/BrokerFeeWrongFormat", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -461,7 +465,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 case BrokerageErrorCode.BrokerFeeWrongValue:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/BrokerFeeWrongValue", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/BrokerFeeWrongValue", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -473,7 +477,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 case BrokerageErrorCode.TraderPlaceFeeWrongFormat:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/TraderPlaceFeeWrongFormat", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/TraderPlaceFeeWrongFormat", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -485,7 +489,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 case BrokerageErrorCode.TraderPlaceFeeWrongValue:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/TraderPlaceFeeWrongValue", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/TraderPlaceFeeWrongValue", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -497,7 +501,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 case BrokerageErrorCode.ReductionWrongFormat:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/ReductionWrongFormat", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/ReductionWrongFormat", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -509,7 +513,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 case BrokerageErrorCode.ReductionWrongValue:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/ReductionWrongValue", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/ReductionWrongValue", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -521,7 +525,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 case BrokerageErrorCode.BrokerageEmpty:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/BrokerageEmpty", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/BrokerageEmpty", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -533,7 +537,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 case BrokerageErrorCode.BrokerageWrongFormat:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/BrokerageWrongFormat", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/BrokerageWrongFormat", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -545,7 +549,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 case BrokerageErrorCode.BrokerageWrongValue:
                     {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/BrokerageWrongValue", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/BrokerageWrongValue", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
 
@@ -557,7 +561,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 case BrokerageErrorCode.DocumentDirectoryDoesNotExists:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/DocumentDirectoryDoesNotExists", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/DocumentDirectoryDoesNotExists", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -566,7 +570,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 case BrokerageErrorCode.DocumentFileDoesNotExists:
                     {
                         strMessage =
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/DocumentFileDoesNotExists", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/DocumentFileDoesNotExists", SettingsConfiguration.LanguageName);
                         clrMessage = Color.Red;
                         stateLevel = FrmMain.EStateLevels.Error;
 
@@ -598,7 +602,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                     txtBoxDocument.Text = @"-";
 
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/ChoseDocumentFailed", LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/ChoseDocumentFailed", SettingsConfiguration.LanguageName);
                     break;
                 }
             }
@@ -667,9 +671,11 @@ namespace SharePortfolioManager.BrokeragesForm.View
             {
                 #region Language configuration
 
-                Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Caption", LanguageName);
+                Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Caption", SettingsConfiguration.LanguageName);
                 grpBoxAdd.Text =
-                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Add_Caption", LanguageName);
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Add_Caption", SettingsConfiguration.LanguageName);
+                grpBoxDocumentPreview.Text =
+                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxDocumentPreview/Caption", SettingsConfiguration.LanguageName);
                 grpBoxOverview.Text =
                     Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxBrokerage/Caption",
                         LanguageName);
@@ -737,8 +743,8 @@ namespace SharePortfolioManager.BrokeragesForm.View
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/ShowFailed", LanguageName),
-                   Language, LanguageName, Color.DarkRed, Logger,
+                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/ShowFailed", SettingsConfiguration.LanguageName),
+                   Language, SettingsConfiguration.LanguageName, Color.DarkRed, Logger,
                    (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
                    ex);
             }
@@ -752,6 +758,9 @@ namespace SharePortfolioManager.BrokeragesForm.View
         /// <param name="e">FormClosingEventArgs</param>
         private void ShareBrokerageEdit_FormClosing(object sender, FormClosingEventArgs e)
         {
+            // Cleanup web browser
+            Helper.WebBrowserPdf.CleanUp(webBrowser1);
+
             // Check if a brokerage change must be saved
             DialogResult = SaveFlag ? DialogResult.OK : DialogResult.Cancel;
         }
@@ -792,7 +801,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
             toolStripStatusLabelMessageBrokerageEdit.Text = string.Empty;
 
             // Enable button(s)
-            btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Add", LanguageName);
+            btnAddSave.Text = Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Add", SettingsConfiguration.LanguageName);
             btnAddSave.Image = Resources.button_add_24;
 
             // Disable button(s)
@@ -800,7 +809,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
 
             // Rename group box
             grpBoxAdd.Text =
-                Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Add_Caption", LanguageName);
+                Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Add_Caption", SettingsConfiguration.LanguageName);
 
             // Reset dialog icon to add
             Icon = Resources.add;
@@ -814,6 +823,9 @@ namespace SharePortfolioManager.BrokeragesForm.View
             // Select overview tab
             if (tabCtrlBrokerage.TabPages.Count > 0)
                 tabCtrlBrokerage.SelectTab(0);
+
+            // Reset document web browser
+            Helper.WebBrowserPdf.Reload(webBrowser1, txtBoxDocument.Text);
 
             txtBoxProvision.Focus();
 
@@ -1088,7 +1100,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 // Disable controls
                 Enabled = false;
 
-                if (btnAddSave.Text == Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Add", LanguageName))
+                if (btnAddSave.Text == Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/GrpBoxAddEdit/Buttons/Add", SettingsConfiguration.LanguageName))
                 {
                     UpdateBrokerage = false;
 
@@ -1104,8 +1116,8 @@ namespace SharePortfolioManager.BrokeragesForm.View
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/AddFailed", LanguageName),
-                   Language, LanguageName,
+                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/AddFailed", SettingsConfiguration.LanguageName),
+                   Language, SettingsConfiguration.LanguageName,
                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
                    ex);
             }
@@ -1128,12 +1140,12 @@ namespace SharePortfolioManager.BrokeragesForm.View
 
                 toolStripStatusLabelMessageBrokerageEdit.Text = @"";
 
-                var strCaption = Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
+                var strCaption = Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", SettingsConfiguration.LanguageName)[
                     (int)EOwnMessageBoxInfoType.Info];
                 var strMessage = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/BrokerageDelete",
                     LanguageName);
-                var strOk = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", LanguageName);
-                var strCancel = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", LanguageName);
+                var strOk = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", SettingsConfiguration.LanguageName);
+                var strCancel = Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", SettingsConfiguration.LanguageName);
 
                 var messageBox = new OwnMessageBox(strCaption, strMessage, strOk, strCancel, EOwnMessageBoxInfoType.Info);
 
@@ -1146,8 +1158,8 @@ namespace SharePortfolioManager.BrokeragesForm.View
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/DeleteFailed", LanguageName),
-                   Language, LanguageName,
+                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/DeleteFailed", SettingsConfiguration.LanguageName),
+                   Language, SettingsConfiguration.LanguageName,
                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
                    ex);
             }
@@ -1168,8 +1180,8 @@ namespace SharePortfolioManager.BrokeragesForm.View
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/CancelFailure", LanguageName),
-                   Language, LanguageName,
+                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/CancelFailure", SettingsConfiguration.LanguageName),
+                   Language, SettingsConfiguration.LanguageName,
                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
                    ex);
             }
@@ -1224,6 +1236,9 @@ namespace SharePortfolioManager.BrokeragesForm.View
         {
             try
             {
+                // Set flag that the show brokerage is running
+                ShowBrokerageFlag = true;
+
                 // Reset tab control
                 foreach (TabPage tabPage in tabCtrlBrokerage.TabPages)
                 {
@@ -1241,7 +1256,6 @@ namespace SharePortfolioManager.BrokeragesForm.View
                             dataGridView.SelectionChanged -= OnDataGridViewBrokerageOfAYear_SelectionChanged;
                             dataGridView.MouseEnter -= OnDataGridViewBrokerageOfAYear_MouseEnter;
                             dataGridView.MouseLeave -= OnDataGridViewBrokerageOfAYear_MouseEnter;
-                            dataGridView.CellContentDoubleClick -= OnDataGridViewBrokerageOfAYear_CellContentDecimalClick;
                         }
 
                         dataGridView.DataBindingComplete -= OnDataGridViewBrokerage_DataBindingComplete;
@@ -1429,8 +1443,6 @@ namespace SharePortfolioManager.BrokeragesForm.View
                     dataGridViewBrokerageOfAYear.MouseEnter += OnDataGridViewBrokerageOfAYear_MouseEnter;
                     // Set row select event
                     dataGridViewBrokerageOfAYear.SelectionChanged += OnDataGridViewBrokerageOfAYear_SelectionChanged;
-                    // Set cell decimal click event
-                    dataGridViewBrokerageOfAYear.CellContentDoubleClick += OnDataGridViewBrokerageOfAYear_CellContentDecimalClick;
 
                     #endregion Events
 
@@ -1478,12 +1490,18 @@ namespace SharePortfolioManager.BrokeragesForm.View
 
                     #endregion Control add
                 }
+
+                tabCtrlBrokerage.TabPages[0].Select();
+
+                // Set flag that the show brokerage is finished
+                ShowBrokerageFlag = false;
+
             }
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/ShowFailed", LanguageName),
-                   Language, LanguageName, Color.DarkRed, Logger,
+                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/ShowFailed", SettingsConfiguration.LanguageName),
+                   Language, SettingsConfiguration.LanguageName, Color.DarkRed, Logger,
                    (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
                    ex);
             }
@@ -1604,8 +1622,8 @@ namespace SharePortfolioManager.BrokeragesForm.View
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/RenameColHeaderFailed", LanguageName),
-                   Language, LanguageName,
+                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/RenameColHeaderFailed", SettingsConfiguration.LanguageName),
+                   Language, SettingsConfiguration.LanguageName,
                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
                    ex);
             }
@@ -1636,8 +1654,8 @@ namespace SharePortfolioManager.BrokeragesForm.View
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/DeselectFailed", LanguageName),
-                   Language, LanguageName,
+                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/DeselectFailed", SettingsConfiguration.LanguageName),
+                   Language, SettingsConfiguration.LanguageName,
                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
                    ex);
             }
@@ -1772,8 +1790,8 @@ namespace SharePortfolioManager.BrokeragesForm.View
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/SelectionChangeFailed", LanguageName),
-                   Language, LanguageName,
+                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/SelectionChangeFailed", SettingsConfiguration.LanguageName),
+                   Language, SettingsConfiguration.LanguageName,
                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
                    ex);
             }
@@ -1811,6 +1829,8 @@ namespace SharePortfolioManager.BrokeragesForm.View
                         OnDeselectRowsOfDataGridViews((DataGridView)sender);
                 }
 
+                // If it is "1" a selection change has been made
+                // else an deselection has been made ( switch to the overview tab )
                 if (((DataGridView)sender).SelectedRows.Count == 1)
                 {
                     // Get the currently selected item in the ListBox
@@ -1950,8 +1970,8 @@ namespace SharePortfolioManager.BrokeragesForm.View
                         btnDelete.Enabled = false;
 
                         Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
-                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/SelectionChangeFailed", LanguageName),
-                            Language, LanguageName,
+                            Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/SelectionChangeFailed", SettingsConfiguration.LanguageName),
+                            Language, SettingsConfiguration.LanguageName,
                             Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError,
                             (int)FrmMain.EComponentLevels.Application);
                     }
@@ -1993,14 +2013,86 @@ namespace SharePortfolioManager.BrokeragesForm.View
                     // Reset stored DataGridView instance
                     SelectedDataGridView = null;
                 }
+
+
+                // Check if the file still exists or no document is set
+                if (File.Exists(txtBoxDocument.Text) || txtBoxDocument.Text == @"")
+                {
+                    Helper.WebBrowserPdf.Reload(webBrowser1, txtBoxDocument.Text);
+                }
+                else
+                {
+                    if (ShowBrokerageFlag) return;
+
+                    var strCaption =
+                        Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", SettingsConfiguration.LanguageName)[
+                            (int)EOwnMessageBoxInfoType.Error];
+                    var strMessage =
+                        Language.GetLanguageTextByXPath(
+                            @"/MessageBoxForm/Content/DocumentDoesNotExistDelete",
+                            LanguageName);
+                    var strOk =
+                        Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Yes",
+                            LanguageName);
+                    var strCancel =
+                        Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/No",
+                            LanguageName);
+
+                    var messageBox = new OwnMessageBox(strCaption, strMessage, strOk,
+                        strCancel, EOwnMessageBoxInfoType.Error);
+
+                    // Check if the user pressed cancel
+                    if (messageBox.ShowDialog() == DialogResult.Cancel) return;
+
+                    // Get the current selected row
+                    var curItem = ((DataGridView)sender).SelectedRows;
+                    // Get Guid of the selected buy item
+                    var strGuid = curItem[0].Cells[0].Value.ToString();
+
+                    // Check if a document is set
+                    if (curItem[0].Cells[((DataGridView)sender).ColumnCount - 1].Value == null) return;
+
+                    // Get doc from the buy with the Guid
+                    foreach (var temp in ShareObjectFinalValue.AllBuyEntries.GetAllBuysOfTheShare())
+                    {
+                        // Check if the buy Guid is the same as the Guid of the clicked buy item
+                        if (temp.Guid != strGuid) continue;
+
+                        // Remove move document from the buy objects
+                        if (ShareObjectFinalValue.SetBuyDocument(strGuid, temp.Date, string.Empty) &&
+                            ShareObjectMarketValue.SetBuyDocument(strGuid, temp.Date, string.Empty))
+                        {
+                            // Set flag to save the share object.
+                            SaveFlag = true;
+
+                            OnShowBrokerage();
+
+                            Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
+                                Language.GetLanguageTextByXPath(
+                                    @"/AddEditFormBrokerage/StateMessages/EditSuccess", SettingsConfiguration.LanguageName),
+                                Language, SettingsConfiguration.LanguageName,
+                                Color.Black, Logger, (int)FrmMain.EStateLevels.Info,
+                                (int)FrmMain.EComponentLevels.Application);
+                        }
+                        else
+                        {
+                            Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
+                                Language.GetLanguageTextByXPath(
+                                    @"/AddEditFormBrokerage/Errors/EditFailed", SettingsConfiguration.LanguageName),
+                                Language, SettingsConfiguration.LanguageName,
+                                Color.Red, Logger, (int)FrmMain.EStateLevels.Error,
+                                (int)FrmMain.EComponentLevels.Application);
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
                 tabCtrlBrokerage.SelectedIndex = 0;
 
                 Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
-                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/SelectionChangeFailed", LanguageName),
-                   Language, LanguageName,
+                   Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/SelectionChangeFailed", SettingsConfiguration.LanguageName),
+                   Language, SettingsConfiguration.LanguageName,
                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError, (int)FrmMain.EComponentLevels.Application,
                    ex);
             }
@@ -2014,110 +2106,6 @@ namespace SharePortfolioManager.BrokeragesForm.View
         private static void OnDataGridViewBrokerageOfAYear_MouseEnter(object sender, EventArgs args)
         {
             ((DataGridView)sender).Focus();
-        }
-
-        /// <summary>
-        /// This function opens the brokerage document if a document is present
-        /// </summary>
-        /// <param name="sender">DataGridView</param>
-        /// <param name="e">DataGridViewCellEventArgs</param>
-        private void OnDataGridViewBrokerageOfAYear_CellContentDecimalClick(object sender, DataGridViewCellEventArgs e)
-        {
-            try
-            {
-                // Get column count of the given DataGridView
-                var iColumnCount = ((DataGridView)sender).ColumnCount;
-
-                // Check if the last column (document column) has been clicked
-                if (e.ColumnIndex != iColumnCount - 1) return;
-
-                // Check if a row is selected
-                if (((DataGridView) sender).SelectedRows.Count != 1) return;
-
-                // Get the current selected row
-                var curItem = ((DataGridView)sender).SelectedRows;
-                // Get Guid of the selected buy item
-                var strGuidBuy = curItem[0].Cells[0].Value.ToString();
-                // Get date and time of the selected brokerage item
-                var strDateTime = curItem[0].Cells[1].Value.ToString();
-
-                // Check if a document is set
-                if (curItem[0].Cells[iColumnCount - 1].Value.ToString() == @"-") return;
-
-                // Get doc from the brokerage with the strDateTime
-                foreach (var temp in ShareObjectFinalValue.AllBrokerageEntries.GetAllBrokerageOfTheShare())
-                {
-                    // Check if the brokerage Guid is the same as the Guid of the clicked brokerage item
-                    if (temp.Guid != strGuidBuy) continue;
-
-                    // Check if the file still exists
-                    if (File.Exists(temp.DocumentAsStr))
-                        // Open the file
-                        Process.Start(temp.DocumentAsStr);
-                    else
-                    {
-                        var strCaption = Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", LanguageName)[
-                            (int)EOwnMessageBoxInfoType.Error];
-                        var strMessage =
-                            Language.GetLanguageTextByXPath(
-                                @"/MessageBoxForm/Content/DocumentDoesNotExistDelete",
-                                LanguageName);
-                        var strOk =
-                            Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Yes",
-                                LanguageName);
-                        var strCancel =
-                            Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/No",
-                                LanguageName);
-
-                        var messageBox = new OwnMessageBox(strCaption, strMessage, strOk,
-                            strCancel, EOwnMessageBoxInfoType.Error);
-                        if (messageBox.ShowDialog() == DialogResult.OK)
-                        {
-                            // Generate Guid
-                            var strGuidBrokerage = Guid.NewGuid().ToString();
-
-                            // Remove brokerage object and add it with no document
-                            if (ShareObjectFinalValue.RemoveBrokerage(temp.Guid ,temp.Date) &&
-                                ShareObjectFinalValue.AddBrokerage(temp.Guid, false, false, strGuidBrokerage,
-                                    strDateTime, temp.ProvisionValue, temp.BrokerFeeValue, temp.TraderPlaceFeeValue, temp.ReductionValue))
-                            {
-                                // Set flag to save the share object.
-                                SaveFlag = true;
-
-                                ResetValues();
-                                OnShowBrokerage();
-
-                                Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
-                                    Language.GetLanguageTextByXPath(
-                                        @"/AddEditFormBrokerage/StateMessages/EditSuccess", LanguageName),
-                                    Language, LanguageName,
-                                    Color.Black, Logger, (int)FrmMain.EStateLevels.Info,
-                                    (int)FrmMain.EComponentLevels.Application);
-                            }
-                            else
-                            {
-                                Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
-                                    Language.GetLanguageTextByXPath(
-                                        @"/AddEditFormBrokerage/Errors/EditFailed", LanguageName),
-                                    Language, LanguageName,
-                                    Color.Red, Logger, (int)FrmMain.EStateLevels.Error,
-                                    (int)FrmMain.EComponentLevels.Application);
-                            }
-                        }
-                    }
-
-                    break;
-                }
-            }
-            catch (Exception ex)
-            {
-                Helper.AddStatusMessage(toolStripStatusLabelMessageBrokerageEdit,
-                    Language.GetLanguageTextByXPath(@"/AddEditFormBrokerage/Errors/DocumentShowFailed", LanguageName),
-                    Language, LanguageName,
-                    Color.DarkRed, Logger, (int)FrmMain.EStateLevels.FatalError,
-                    (int)FrmMain.EComponentLevels.Application,
-                    ex);
-            }
         }
 
         #endregion Brokerage of a year

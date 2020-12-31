@@ -28,7 +28,9 @@ using SharePortfolioManager.Classes;
 using SharePortfolioManager.Classes.ShareObjects;
 using System;
 using System.Drawing;
+using System.Globalization;
 using System.Threading;
+using SharePortfolioManager.Classes.Configurations;
 using SharePortfolioManager.Properties;
 
 namespace SharePortfolioManager
@@ -41,8 +43,8 @@ namespace SharePortfolioManager
         /// </summary>
         private void InitializeParser()
         {
-            ParserMarketValues = new Parser.Parser(ParserMarketValuesDebuggingEnable);
-            ParserDailyValues = new Parser.Parser(ParserDailyValuesDebuggingEnable);
+            ParserMarketValues = new Parser.Parser(SettingsConfiguration.ParserMarketValuesDebuggingEnable);
+            ParserDailyValues = new Parser.Parser(SettingsConfiguration.ParserDailyValuesDebuggingEnable);
 
             // Set market values delegate
             if (InitFlag && ParserMarketValues != null)
@@ -68,8 +70,8 @@ namespace SharePortfolioManager
 
                     // Rename the button
                     btnRefreshAll.Text =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAllCancel",
-                            LanguageName);
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAllCancel",
+                            SettingsConfiguration.LanguageName);
                     btnRefreshAll.Image = Resources.button_cancel_24;
 
                     // Disable controls
@@ -161,11 +163,11 @@ namespace SharePortfolioManager
                                 true);
 
                             btnRefreshAll.Text =
-                                Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAll",
-                                    LanguageName);
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAll",
+                                    SettingsConfiguration.LanguageName);
                             btnRefresh.Text =
-                                Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Refresh",
-                                    LanguageName);
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Refresh",
+                                    SettingsConfiguration.LanguageName);
                             btnRefreshAll.Image = Resources.button_update_all_24;
                             btnRefresh.Image = Resources.button_update_24;
                         }
@@ -246,11 +248,11 @@ namespace SharePortfolioManager
                                 true);
 
                             btnRefreshAll.Text =
-                                Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAll",
-                                    LanguageName);
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAll",
+                                    SettingsConfiguration.LanguageName);
                             btnRefresh.Text =
-                                Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Refresh",
-                                    LanguageName);
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Refresh",
+                                    SettingsConfiguration.LanguageName);
                             btnRefreshAll.Image = Resources.button_update_all_24;
                             btnRefresh.Image = Resources.button_update_24;
                         }
@@ -259,16 +261,16 @@ namespace SharePortfolioManager
                 else
                 {
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/StartFailed", LanguageName),
-                        Language, LanguageName,
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/StartFailed", SettingsConfiguration.LanguageName),
+                        LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                         Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Application);
                 }
             }
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/StartFailed", LanguageName),
-                    Language, LanguageName,
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/StartFailed", SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }
@@ -295,8 +297,8 @@ namespace SharePortfolioManager
                         UpdateAllFlag = false;
 
                         btnRefresh.Text =
-                            Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshCancel",
-                                LanguageName);
+                            LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshCancel",
+                                SettingsConfiguration.LanguageName);
                         btnRefresh.Image = Resources.button_cancel_24;
 
                         // Disable controls
@@ -467,24 +469,24 @@ namespace SharePortfolioManager
                     else
                     {
                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/SelectAShare", LanguageName),
-                            Language, LanguageName,
+                            LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/StatusMessages/SelectAShare", SettingsConfiguration.LanguageName),
+                            LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                             Color.Orange, Logger, (int) EStateLevels.Warning, (int) EComponentLevels.Application);
                     }
                 }
                 else
                 {
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/StartFailed", LanguageName),
-                        Language, LanguageName,
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/StartFailed", SettingsConfiguration.LanguageName),
+                        LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                         Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Application);
                 }
             }
             catch (Exception ex)
             {
                 Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                    Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/StartFailed", LanguageName),
-                    Language, LanguageName,
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/StartFailed", SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                     ex);
             }
@@ -526,99 +528,125 @@ namespace SharePortfolioManager
                         case DataTypes.ParserErrorCodes.Finished:
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/MarketValues/Finish_1",
-                                    LanguageName) +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/MarketValues/Finish_1",
+                                    SettingsConfiguration.LanguageName) +
                                 shareName +
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/MarketValues/Finish_2",
-                                    LanguageName),
-                                Language, LanguageName,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/MarketValues/Finish_2",
+                                    SettingsConfiguration.LanguageName),
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Parser);
 
                             // Check if a share is selected
                             if (ShareObjectFinalValue != null && ShareObjectMarketValue != null)
                             {
-                                ShareObjectFinalValue.LastUpdateViaInternet = DateTime.Now;
-                                ShareObjectMarketValue.LastUpdateViaInternet = DateTime.Now;
+                                var ci = new RegionInfo(ShareObjectFinalValue.CultureInfo.LCID);
 
-                                if (e.ParserInfoState.SearchResult.ContainsKey("LastDate") &&
-                                    e.ParserInfoState.SearchResult.ContainsKey("LastTime"))
+                                if (e.ParserInfoState.SearchResult.ContainsKey("Currency") &&
+                                    e.ParserInfoState.SearchResult["Currency"][0] == ci.ISOCurrencySymbol)
                                 {
-                                    var dateTime =
-                                        $@"{e.ParserInfoState.SearchResult["LastDate"][0]} {e.ParserInfoState.SearchResult["LastTime"][0]}";
 
-                                    if (DateTime.TryParse(dateTime, out var dtTryParse))
+                                    ShareObjectFinalValue.LastUpdateViaInternet = DateTime.Now;
+                                    ShareObjectMarketValue.LastUpdateViaInternet = DateTime.Now;
+
+                                    if (e.ParserInfoState.SearchResult.ContainsKey("LastDate") &&
+                                        e.ParserInfoState.SearchResult.ContainsKey("LastTime"))
                                     {
-                                        ShareObjectMarketValue.LastUpdateShare = dtTryParse;
-                                        ShareObjectFinalValue.LastUpdateShare = dtTryParse;
+                                        var dateTime =
+                                            $@"{e.ParserInfoState.SearchResult["LastDate"][0]} {e.ParserInfoState.SearchResult["LastTime"][0]}";
+
+                                        if (DateTime.TryParse(dateTime, out var dtTryParse))
+                                        {
+                                            ShareObjectMarketValue.LastUpdateShare = dtTryParse;
+                                            ShareObjectFinalValue.LastUpdateShare = dtTryParse;
+                                        }
+                                        else
+                                        {
+                                            ShareObjectMarketValue.LastUpdateShare =
+                                                DateTime.Parse(dateTime);
+                                            ShareObjectFinalValue.LastUpdateShare =
+                                                DateTime.Parse(dateTime);
+                                        }
+                                    }
+
+                                    if (e.ParserInfoState.SearchResult.ContainsKey("Price"))
+                                    {
+                                        ShareObjectMarketValue.CurPrice =
+                                            Convert.ToDecimal(e.ParserInfoState.SearchResult["Price"][0]);
+                                        ShareObjectFinalValue.CurPrice =
+                                            Convert.ToDecimal(e.ParserInfoState.SearchResult["Price"][0]);
+                                    }
+
+                                    if (e.ParserInfoState.SearchResult.ContainsKey("PriceBefore"))
+                                    {
+                                        ShareObjectMarketValue.PrevPrice =
+                                            Convert.ToDecimal(e.ParserInfoState.SearchResult["PriceBefore"][0]);
+                                        ShareObjectFinalValue.PrevPrice =
+                                            Convert.ToDecimal(e.ParserInfoState.SearchResult["PriceBefore"][0]);
+                                    }
+
+                                    // Save the share values to the XML
+                                    if (ParserMarketValues.ParserErrorCode == DataTypes.ParserErrorCodes.Finished ||
+                                        ParserMarketValues.ParserErrorCode <= DataTypes.ParserErrorCodes.NoError
+                                    )
+                                    {
+                                        if (!ShareObjectFinalValue.SaveShareObject(ShareObjectFinalValue,
+                                            ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio,
+                                            SettingsConfiguration.PortfolioName, out var exception))
+                                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                                LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                                    @"/MainForm/UpdateErrors/MarketValues/SaveFailed_1",
+                                                    SettingsConfiguration.LanguageName) +
+                                                shareName +
+                                                LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                                    @"/MainForm/UpdateErrors/MarketValues/SaveFailed_2",
+                                                    SettingsConfiguration.LanguageName),
+                                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                                                Color.Red, Logger, (int) EStateLevels.Error,
+                                                (int) EComponentLevels.Application, exception);
+                                    }
+
+                                    // Save last displayed DataGridView row
+                                    if (MarketValueOverviewTabSelected)
+                                    {
+                                        if (dgvPortfolioMarketValue.FirstDisplayedCell != null)
+                                            LastFirstDisplayedRowIndex =
+                                                dgvPortfolioMarketValue.FirstDisplayedCell.RowIndex;
                                     }
                                     else
                                     {
-                                        ShareObjectMarketValue.LastUpdateShare =
-                                            DateTime.Parse(dateTime);
-                                        ShareObjectFinalValue.LastUpdateShare =
-                                            DateTime.Parse(dateTime);
+                                        if (dgvPortfolioFinalValue.FirstDisplayedCell != null)
+                                            LastFirstDisplayedRowIndex =
+                                                dgvPortfolioFinalValue.FirstDisplayedCell.RowIndex;
                                     }
-                                }
 
-                                if (e.ParserInfoState.SearchResult.ContainsKey("Price"))
-                                {
-                                    ShareObjectMarketValue.CurPrice =
-                                        Convert.ToDecimal(e.ParserInfoState.SearchResult["Price"][0]);
-                                    ShareObjectFinalValue.CurPrice =
-                                        Convert.ToDecimal(e.ParserInfoState.SearchResult["Price"][0]);
-                                }
+                                    // Update row with the new ShareObject values
+                                    dgvPortfolioFinalValue.Refresh();
+                                    dgvPortfolioMarketValue.Refresh();
 
-                                if (e.ParserInfoState.SearchResult.ContainsKey("PriceBefore"))
-                                {
-                                    ShareObjectMarketValue.PrevPrice =
-                                        Convert.ToDecimal(e.ParserInfoState.SearchResult["PriceBefore"][0]);
-                                    ShareObjectFinalValue.PrevPrice =
-                                        Convert.ToDecimal(e.ParserInfoState.SearchResult["PriceBefore"][0]);
-                                }
+                                    // Refresh the footer
+                                    RefreshFooters();
 
-                                // Save the share values to the XML
-                                if (ParserMarketValues.ParserErrorCode == DataTypes.ParserErrorCodes.Finished ||
-                                    ParserMarketValues.ParserErrorCode <= DataTypes.ParserErrorCodes.NoError
-                                )
-                                {
-                                    if (!ShareObjectFinalValue.SaveShareObject(ShareObjectFinalValue,
-                                        ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio,
-                                        _portfolioFileName, out var exception))
-                                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                            Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/SaveFailed_1",
-                                                LanguageName) +
-                                            shareName +
-                                            Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/SaveFailed_2",
-                                                LanguageName),
-                                            Language, LanguageName,
-                                            Color.Red, Logger, (int) EStateLevels.Error,
-                                            (int) EComponentLevels.Application, exception);
-                                }
-
-                                // Save last displayed DataGridView row
-                                if (MarketValueOverviewTabSelected)
-                                {
-                                    if (dgvPortfolioMarketValue.FirstDisplayedCell != null)
-                                        LastFirstDisplayedRowIndex =
-                                            dgvPortfolioMarketValue.FirstDisplayedCell.RowIndex;
+                                    // Reset share add flag
+                                    AddFlagMarketValue = false;
+                                    AddFlagFinalValue = false;
                                 }
                                 else
                                 {
-                                    if (dgvPortfolioFinalValue.FirstDisplayedCell != null)
-                                        LastFirstDisplayedRowIndex =
-                                            dgvPortfolioFinalValue.FirstDisplayedCell.RowIndex;
+                                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                        LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                            @"/MainForm/UpdateErrors/MarketValues/CurrencyError_1",
+                                            SettingsConfiguration.LanguageName) +
+                                        e.ParserInfoState.SearchResult["Currency"][0] +
+                                        LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                            @"/MainForm/UpdateErrors/MarketValues/CurrencyError_2",
+                                            SettingsConfiguration.LanguageName) +
+                                        ci.ISOCurrencySymbol +
+                                        LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                            @"/MainForm/UpdateErrors/MarketValues/CurrencyError_3",
+                                            SettingsConfiguration.LanguageName),
+                                        LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                                        Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Parser);
                                 }
-
-                                // Update row with the new ShareObject values
-                                dgvPortfolioFinalValue.Refresh();
-                                dgvPortfolioMarketValue.Refresh();
-
-                                // Refresh the footer
-                                RefreshFooters();
-
-                                // Reset share add flag
-                                AddFlagMarketValue = false;
-                                AddFlagFinalValue = false;
                             }
 
                             if (UpdateAllFlag)
@@ -700,46 +728,46 @@ namespace SharePortfolioManager
                         case DataTypes.ParserErrorCodes.SearchFinished:
                         {
                             Helper.AddStatusMessage(lblWebParserMarketValuesState,
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/MarketValues/SearchFinish",
-                                    LanguageName) + " ( " + e.ParserInfoState.Percentage + " % )",
-                                Language, LanguageName,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/MarketValues/SearchFinish",
+                                    SettingsConfiguration.LanguageName) + " ( " + e.ParserInfoState.Percentage + " % )",
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Parser);
                             break;
                         }
                         case DataTypes.ParserErrorCodes.SearchRunning:
                         {
                             Helper.AddStatusMessage(lblWebParserMarketValuesState,
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/MarketValues/SearchRunning",
-                                    LanguageName) + " ( " + e.ParserInfoState.Percentage + " % )",
-                                Language, LanguageName,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/MarketValues/SearchRunning",
+                                    SettingsConfiguration.LanguageName) + " ( " + e.ParserInfoState.Percentage + " % )",
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Parser);
                             break;
                         }
                         case DataTypes.ParserErrorCodes.SearchStarted:
                         {
                             Helper.AddStatusMessage(lblWebParserMarketValuesState,
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/MarketValues/SearchStarted",
-                                    LanguageName) + " ( " + e.ParserInfoState.Percentage + " % )",
-                                Language, LanguageName,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/MarketValues/SearchStarted",
+                                    SettingsConfiguration.LanguageName) + " ( " + e.ParserInfoState.Percentage + " % )",
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Parser);
                             break;
                         }
                         case DataTypes.ParserErrorCodes.ContentLoadFinished:
                         {
                             Helper.AddStatusMessage(lblWebParserMarketValuesState,
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/MarketValues/ContentLoaded",
-                                    LanguageName) + " ( " + e.ParserInfoState.Percentage + " % )",
-                                Language, LanguageName,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/MarketValues/ContentLoaded",
+                                    SettingsConfiguration.LanguageName) + " ( " + e.ParserInfoState.Percentage + " % )",
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Parser);
                             break;
                         }
                         case DataTypes.ParserErrorCodes.ContentLoadStarted:
                         {
                             Helper.AddStatusMessage(lblWebParserMarketValuesState,
-                                Language.GetLanguageTextByXPath(
-                                    @"/MainForm/UpdateMessages/MarketValues/ContentLoadStarted", LanguageName) + " ( " +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                    @"/MainForm/UpdateMessages/MarketValues/ContentLoadStarted", SettingsConfiguration.LanguageName) + " ( " +
                                 e.ParserInfoState.Percentage + " % )",
-                                Language, LanguageName,
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Parser);
                             break;
                         }
@@ -750,12 +778,12 @@ namespace SharePortfolioManager
                             progressBarWebParserMarketValues.Value = e.ParserInfoState.Percentage;
 
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/MarketValues/Start_1",
-                                    LanguageName) +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/MarketValues/Start_1",
+                                    SettingsConfiguration.LanguageName) +
                                 shareName +
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/MarketValues/Start_2",
-                                    LanguageName),
-                                Language, LanguageName,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/MarketValues/Start_2",
+                                    SettingsConfiguration.LanguageName),
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Parser);
                             break;
                         }
@@ -769,104 +797,104 @@ namespace SharePortfolioManager
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
                                 "",
-                                Language, LanguageName,
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Parser);
                             break;
                         }
                         case DataTypes.ParserErrorCodes.StartFailed:
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/StartFailed",
-                                    LanguageName),
-                                Language, LanguageName,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/StartFailed",
+                                    SettingsConfiguration.LanguageName),
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Parser);
                             break;
                         }
                         case DataTypes.ParserErrorCodes.BusyFailed:
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/BusyFailed",
-                                    LanguageName),
-                                Language, LanguageName,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/BusyFailed",
+                                    SettingsConfiguration.LanguageName),
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Parser);
                             break;
                         }
                         case DataTypes.ParserErrorCodes.InvalidWebSiteGiven:
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(
-                                    @"/MainForm/UpdateErrors/MarketValues/InvalidWebSiteGiven_1", LanguageName) +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                    @"/MainForm/UpdateErrors/MarketValues/InvalidWebSiteGiven_1", SettingsConfiguration.LanguageName) +
                             ParserMarketValues.ParsingValues.GivenWebSiteUrl +
-                            Language.GetLanguageTextByXPath(
-                                @"/MainForm/UpdateErrors/MarketValues/InvalidWebSiteGiven_2", LanguageName) +
+                            LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                @"/MainForm/UpdateErrors/MarketValues/InvalidWebSiteGiven_2", SettingsConfiguration.LanguageName) +
                             shareName +
-                            Language.GetLanguageTextByXPath(
-                                @"/MainForm/UpdateErrors/MarketValues/InvalidWebSiteGiven_3", LanguageName),
-                                Language, LanguageName,
+                            LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                @"/MainForm/UpdateErrors/MarketValues/InvalidWebSiteGiven_3", SettingsConfiguration.LanguageName),
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Parser);
                             break;
                         }
                         case DataTypes.ParserErrorCodes.NoRegexListGiven:
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(
-                                    @"/MainForm/UpdateErrors/MarketValues/NoRegexListGiven_1", LanguageName) +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                    @"/MainForm/UpdateErrors/MarketValues/NoRegexListGiven_1", SettingsConfiguration.LanguageName) +
                             shareName +
-                            Language.GetLanguageTextByXPath(
-                                @"/MainForm/UpdateErrors/MarketValues/NoRegexListGiven_2", LanguageName),
-                                Language, LanguageName,
+                            LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                @"/MainForm/UpdateErrors/MarketValues/NoRegexListGiven_2", SettingsConfiguration.LanguageName),
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Parser);
                             break;
                         }
                         case DataTypes.ParserErrorCodes.NoWebContentLoaded:
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(
-                                    @"/MainForm/UpdateErrors/MarketValues/ContentLoadedFailed_1", LanguageName) +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                    @"/MainForm/UpdateErrors/MarketValues/ContentLoadedFailed_1", SettingsConfiguration.LanguageName) +
                             shareName +
-                            Language.GetLanguageTextByXPath(
-                                @"/MainForm/UpdateErrors/MarketValues/ContentLoadedFailed_2", LanguageName),
-                                Language, LanguageName,
+                            LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                @"/MainForm/UpdateErrors/MarketValues/ContentLoadedFailed_2", SettingsConfiguration.LanguageName),
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Parser);
                             break;
                         }
                         case DataTypes.ParserErrorCodes.ParsingFailed:
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/ParsingFailed_1",
-                                    LanguageName) +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/ParsingFailed_1",
+                                    SettingsConfiguration.LanguageName) +
                                 e.ParserInfoState.LastRegexListKey +
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/ParsingFailed_2",
-                                    LanguageName) +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/ParsingFailed_2",
+                                    SettingsConfiguration.LanguageName) +
                                 shareName +
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/ParsingFailed_3",
-                                    LanguageName),
-                                Language, LanguageName,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/ParsingFailed_3",
+                                    SettingsConfiguration.LanguageName),
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Parser);
                             break;
                         }
                         case DataTypes.ParserErrorCodes.CancelThread:
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/CancelThread_1",
-                                    LanguageName) +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/CancelThread_1",
+                                    SettingsConfiguration.LanguageName) +
                                 shareName +
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/CancelThread_2",
-                                    LanguageName),
-                                Language, LanguageName,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/CancelThread_2",
+                                    SettingsConfiguration.LanguageName),
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Parser);
                             break;
                         }
                         case DataTypes.ParserErrorCodes.WebExceptionOccured:
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(
-                                    @"/MainForm/UpdateErrors/MarketValues/ContentLoadedFailed_1", LanguageName) +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                    @"/MainForm/UpdateErrors/MarketValues/ContentLoadedFailed_1", SettingsConfiguration.LanguageName) +
                                 shareName +
-                                Language.GetLanguageTextByXPath(
-                                    @"/MainForm/UpdateErrors/MarketValues/ContentLoadedFailed_2", LanguageName) +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                    @"/MainForm/UpdateErrors/MarketValues/ContentLoadedFailed_2", SettingsConfiguration.LanguageName) +
                                 e.ParserInfoState.Exception.Message,
-                                Language, LanguageName,
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Parser,
                                 e.ParserInfoState.Exception);
                             break;
@@ -874,13 +902,13 @@ namespace SharePortfolioManager
                         case DataTypes.ParserErrorCodes.ExceptionOccured:
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(
-                                    @"/MainForm/UpdateErrors/MarketValues/Failure_1", LanguageName) +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                    @"/MainForm/UpdateErrors/MarketValues/Failure_1", SettingsConfiguration.LanguageName) +
                                 shareName +
-                                Language.GetLanguageTextByXPath(
-                                    @"/MainForm/UpdateErrors/MarketValues/Failure_2", LanguageName) +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                    @"/MainForm/UpdateErrors/MarketValues/Failure_2", SettingsConfiguration.LanguageName) +
                                 e.ParserInfoState.Exception.Message,
-                                Language, LanguageName,
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Parser,
                                 e.ParserInfoState.Exception);
                             break;
@@ -944,12 +972,12 @@ namespace SharePortfolioManager
                 catch (Exception ex)
                 {
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/UpdateFailed_1",
-                            LanguageName) +
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/UpdateFailed_1",
+                            SettingsConfiguration.LanguageName) +
                         shareName +
-                        Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/UpdateFailed_2",
-                            LanguageName),
-                        Language, LanguageName,
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/UpdateFailed_2",
+                            SettingsConfiguration.LanguageName),
+                        LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                         Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                         ex);
 
@@ -960,9 +988,9 @@ namespace SharePortfolioManager
                     lblWebParserMarketValuesState.Text = @"";
 
                     btnRefreshAll.Text =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAll", LanguageName);
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAll", SettingsConfiguration.LanguageName);
                     btnRefresh.Text =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Refresh", LanguageName);
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Refresh", SettingsConfiguration.LanguageName);
                     btnRefreshAll.Image = Resources.button_update_all_24;
                     btnRefresh.Image = Resources.button_update_24;
                 }
@@ -993,12 +1021,12 @@ namespace SharePortfolioManager
                         case DataTypes.ParserErrorCodes.Finished:
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/DailyValues/Finish_1",
-                                    LanguageName) +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/DailyValues/Finish_1",
+                                    SettingsConfiguration.LanguageName) +
                                 shareName +
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/DailyValues/Finish_2",
-                                    LanguageName),
-                                Language, LanguageName,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/DailyValues/Finish_2",
+                                    SettingsConfiguration.LanguageName),
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Parser);
 
                             // Check if a share is selected
@@ -1016,14 +1044,14 @@ namespace SharePortfolioManager
                                     // Save the share values to the XML
                                     if (!ShareObjectFinalValue.SaveShareObject(ShareObjectFinalValue,
                                         ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio,
-                                        _portfolioFileName, out var exception))
+                                        SettingsConfiguration.PortfolioName, out var exception))
                                         Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                            Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/SaveFailed_1",
-                                                LanguageName) +
+                                            LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/SaveFailed_1",
+                                                SettingsConfiguration.LanguageName) +
                                             shareName +
-                                            Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/SaveFailed_2",
-                                                LanguageName),
-                                            Language, LanguageName,
+                                            LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/SaveFailed_2",
+                                                SettingsConfiguration.LanguageName),
+                                            LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                             Color.Red, Logger, (int)EStateLevels.Error,
                                             (int)EComponentLevels.Application,
                                             exception);
@@ -1127,46 +1155,46 @@ namespace SharePortfolioManager
                         case DataTypes.ParserErrorCodes.SearchFinished:
                         {
                             Helper.AddStatusMessage(lblWebParserDailyValuesState,
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/DailyValues/SearchFinish",
-                                    LanguageName) + " ( " + e.ParserInfoState.Percentage + " % )",
-                                Language, LanguageName,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/DailyValues/SearchFinish",
+                                    SettingsConfiguration.LanguageName) + " ( " + e.ParserInfoState.Percentage + " % )",
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Parser);
                             break;
                         }
                         case DataTypes.ParserErrorCodes.SearchRunning:
                         {
                             Helper.AddStatusMessage(lblWebParserDailyValuesState,
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/DailyValues/SearchRunning",
-                                    LanguageName) + " ( " + e.ParserInfoState.Percentage + " % )",
-                                Language, LanguageName,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/DailyValues/SearchRunning",
+                                    SettingsConfiguration.LanguageName) + " ( " + e.ParserInfoState.Percentage + " % )",
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Parser);
                             break;
                         }
                         case DataTypes.ParserErrorCodes.SearchStarted:
                         {
                             Helper.AddStatusMessage(lblWebParserDailyValuesState,
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/DailyValues/SearchStarted",
-                                    LanguageName) + " ( " + e.ParserInfoState.Percentage + " % )",
-                                Language, LanguageName,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/DailyValues/SearchStarted",
+                                    SettingsConfiguration.LanguageName) + " ( " + e.ParserInfoState.Percentage + " % )",
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Parser);
                             break;
                         }
                         case DataTypes.ParserErrorCodes.ContentLoadFinished:
                         {
                             Helper.AddStatusMessage(lblWebParserDailyValuesState,
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/DailyValues/ContentLoaded",
-                                    LanguageName) + " ( " + e.ParserInfoState.Percentage + " % )",
-                                Language, LanguageName,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/DailyValues/ContentLoaded",
+                                    SettingsConfiguration.LanguageName) + " ( " + e.ParserInfoState.Percentage + " % )",
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Parser);
                             break;
                         }
                         case DataTypes.ParserErrorCodes.ContentLoadStarted:
                         {
                             Helper.AddStatusMessage(lblWebParserDailyValuesState,
-                                Language.GetLanguageTextByXPath(
-                                    @"/MainForm/UpdateMessages/DailyValues/ContentLoadStarted", LanguageName) + " ( " +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                    @"/MainForm/UpdateMessages/DailyValues/ContentLoadStarted", SettingsConfiguration.LanguageName) + " ( " +
                                 e.ParserInfoState.Percentage + " % )",
-                                Language, LanguageName,
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Parser);
                             break;
                         }
@@ -1177,12 +1205,12 @@ namespace SharePortfolioManager
                             progressBarWebParserDailyValues.Value = e.ParserInfoState.Percentage;
 
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/DailyValues/Start_1",
-                                    LanguageName) +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/DailyValues/Start_1",
+                                    SettingsConfiguration.LanguageName) +
                                 shareName +
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/DailyValues/Start_2",
-                                    LanguageName),
-                                Language, LanguageName,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateMessages/DailyValues/Start_2",
+                                    SettingsConfiguration.LanguageName),
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Parser);
                             break;
                         }
@@ -1196,104 +1224,104 @@ namespace SharePortfolioManager
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
                                 "",
-                                Language, LanguageName,
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Black, Logger, (int) EStateLevels.Info, (int) EComponentLevels.Parser);
                             break;
                         }
                         case DataTypes.ParserErrorCodes.StartFailed:
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/StartFailed",
-                                    LanguageName),
-                                Language, LanguageName,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/StartFailed",
+                                    SettingsConfiguration.LanguageName),
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Parser);
                             break;
                         }
                         case DataTypes.ParserErrorCodes.BusyFailed:
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/BusyFailed",
-                                    LanguageName),
-                                Language, LanguageName,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/BusyFailed",
+                                    SettingsConfiguration.LanguageName),
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Parser);
                             break;
                         }
                         case DataTypes.ParserErrorCodes.InvalidWebSiteGiven:
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(
-                                    @"/MainForm/UpdateErrors/DailyValues/InvalidWebSiteGiven_1", LanguageName) +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                    @"/MainForm/UpdateErrors/DailyValues/InvalidWebSiteGiven_1", SettingsConfiguration.LanguageName) +
                                 ParserDailyValues.ParsingValues.GivenWebSiteUrl +
-                                Language.GetLanguageTextByXPath(
-                                    @"/MainForm/UpdateErrors/DailyValues/InvalidWebSiteGiven_2", LanguageName) +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                    @"/MainForm/UpdateErrors/DailyValues/InvalidWebSiteGiven_2", SettingsConfiguration.LanguageName) +
                                 shareName +
-                                Language.GetLanguageTextByXPath(
-                                    @"/MainForm/UpdateErrors/DailyValues/InvalidWebSiteGiven_3", LanguageName),
-                                Language, LanguageName,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                    @"/MainForm/UpdateErrors/DailyValues/InvalidWebSiteGiven_3", SettingsConfiguration.LanguageName),
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Parser);
                             break;
                         }
                         case DataTypes.ParserErrorCodes.NoRegexListGiven:
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(
-                                    @"/MainForm/UpdateErrors/DailyValues/NoRegexListGiven_1", LanguageName) +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                    @"/MainForm/UpdateErrors/DailyValues/NoRegexListGiven_1", SettingsConfiguration.LanguageName) +
                                 shareName +
-                                Language.GetLanguageTextByXPath(
-                                    @"/MainForm/UpdateErrors/DailyValues/NoRegexListGiven_2", LanguageName),
-                                Language, LanguageName,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                    @"/MainForm/UpdateErrors/DailyValues/NoRegexListGiven_2", SettingsConfiguration.LanguageName),
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Parser);
                             break;
                         }
                         case DataTypes.ParserErrorCodes.NoWebContentLoaded:
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(
-                                    @"/MainForm/UpdateErrors/DailyValues/ContentLoadedFailed_1", LanguageName) +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                    @"/MainForm/UpdateErrors/DailyValues/ContentLoadedFailed_1", SettingsConfiguration.LanguageName) +
                                 shareName +
-                                Language.GetLanguageTextByXPath(
-                                    @"/MainForm/UpdateErrors/DailyValues/ContentLoadedFailed_2", LanguageName),
-                                Language, LanguageName,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                    @"/MainForm/UpdateErrors/DailyValues/ContentLoadedFailed_2", SettingsConfiguration.LanguageName),
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Parser);
                             break;
                         }
                         case DataTypes.ParserErrorCodes.ParsingFailed:
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/ParsingFailed_1",
-                                    LanguageName) +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/ParsingFailed_1",
+                                    SettingsConfiguration.LanguageName) +
                                 e.ParserInfoState.LastRegexListKey +
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/ParsingFailed_2",
-                                    LanguageName) +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/ParsingFailed_2",
+                                    SettingsConfiguration.LanguageName) +
                                 shareName +
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/ParsingFailed_3",
-                                    LanguageName),
-                                Language, LanguageName,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/ParsingFailed_3",
+                                    SettingsConfiguration.LanguageName),
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Parser);
                             break;
                         }
                         case DataTypes.ParserErrorCodes.CancelThread:
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/CancelThread_1",
-                                    LanguageName) +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/CancelThread_1",
+                                    SettingsConfiguration.LanguageName) +
                                 shareName +
-                                Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/CancelThread_2",
-                                    LanguageName),
-                                Language, LanguageName,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/CancelThread_2",
+                                    SettingsConfiguration.LanguageName),
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Parser);
                             break;
                         }
                         case DataTypes.ParserErrorCodes.WebExceptionOccured:
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(
-                                    @"/MainForm/UpdateErrors/DailyValues/Failure_1", LanguageName) +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                    @"/MainForm/UpdateErrors/DailyValues/Failure_1", SettingsConfiguration.LanguageName) +
                                 shareName +
-                                Language.GetLanguageTextByXPath(
-                                @"/MainForm/UpdateErrors/DailyValues/Failure_2", LanguageName) +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                @"/MainForm/UpdateErrors/DailyValues/Failure_2", SettingsConfiguration.LanguageName) +
                                 e.ParserInfoState.Exception,
-                                Language, LanguageName,
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Parser,
                                 e.ParserInfoState.Exception);
                             break;
@@ -1301,13 +1329,13 @@ namespace SharePortfolioManager
                         case DataTypes.ParserErrorCodes.ExceptionOccured:
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                Language.GetLanguageTextByXPath(
-                                    @"/MainForm/UpdateErrors/DailyValues/Failure_1", LanguageName) +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                    @"/MainForm/UpdateErrors/DailyValues/Failure_1", SettingsConfiguration.LanguageName) +
                                 shareName +
-                                Language.GetLanguageTextByXPath(
-                                @"/MainForm/UpdateErrors/DailyValues/Failure_2", LanguageName) +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                @"/MainForm/UpdateErrors/DailyValues/Failure_2", SettingsConfiguration.LanguageName) +
                                 e.ParserInfoState.Exception,
-                                Language, LanguageName,
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                                 Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Parser,
                                 e.ParserInfoState.Exception);
                             break;
@@ -1371,12 +1399,12 @@ namespace SharePortfolioManager
                 catch (Exception ex)
                 {
                     Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/UpdateFailed_1",
-                            LanguageName) +
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/UpdateFailed_1",
+                            SettingsConfiguration.LanguageName) +
                         shareName +
-                        Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/UpdateFailed_2",
-                            LanguageName),
-                        Language, LanguageName,
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/UpdateFailed_2",
+                            SettingsConfiguration.LanguageName),
+                        LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
                         Color.DarkRed, Logger, (int) EStateLevels.FatalError, (int) EComponentLevels.Application,
                         ex);
 
@@ -1387,9 +1415,9 @@ namespace SharePortfolioManager
                     lblWebParserDailyValuesState.Text = @"";
 
                     btnRefreshAll.Text =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAll", LanguageName);
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/RefreshAll", SettingsConfiguration.LanguageName);
                     btnRefresh.Text =
-                        Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Refresh", LanguageName);
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Buttons/Refresh", SettingsConfiguration.LanguageName);
                     btnRefreshAll.Image = Resources.button_update_all_24;
                     btnRefresh.Image = Resources.button_update_24;
                 }

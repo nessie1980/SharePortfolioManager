@@ -57,23 +57,6 @@
     <DocumentationFile>bin\Release\SharePortfolioManager.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release_Tracing|x86'">
-    <OutputPath>bin\Release\</OutputPath>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisLogFile>bin\Release\SharePortfolioManager.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
-    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
-    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
-    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
-    <DefineConstants>TRACE</DefineConstants>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>9E7CACD22E6FF652C781CD5C0C23DD417EF80965</ManifestCertificateThumbprint>
   </PropertyGroup>
@@ -101,50 +84,6 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release_Revision|x86'">
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>
-    </DefineConstants>
-    <DocumentationFile>bin\Release\SharePortfolioManager.xml</DocumentationFile>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release_Build|x86'">
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>
-    </DefineConstants>
-    <DocumentationFile>bin\Release\SharePortfolioManager.xml</DocumentationFile>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release_Minor|x86'">
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>
-    </DefineConstants>
-    <DocumentationFile>bin\Release\SharePortfolioManager.xml</DocumentationFile>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release_Major|x86'">
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>
-    </DefineConstants>
-    <DocumentationFile>bin\Release\SharePortfolioManager.xml</DocumentationFile>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ConsoleTables, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -193,11 +132,12 @@
     <Compile Include="Classes\Sales\SaleObject.cs" />
     <Compile Include="Classes\Sales\AllSales.cs" />
     <Compile Include="Classes\Sales\SalesOfAYear.cs" />
+    <Compile Include="Classes\Configurations\SettingsConfiguration.cs" />
     <Compile Include="Classes\ShareObjects\ShareObject.cs" />
     <Compile Include="Classes\ShareObjects\ShareObjectFinalValue.cs" />
     <Compile Include="Classes\ShareObjects\ShareObjectMarketValue.cs" />
     <Compile Include="Classes\Helper.cs" />
-    <Compile Include="Classes\Sound.cs" />
+    <Compile Include="Classes\Configurations\Sound.cs" />
     <Compile Include="Forms\AboutForm\About.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -255,12 +195,13 @@
     <Compile Include="Forms\MainForm\MainFormFiles\Button.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\MainForm\MainFormFiles\CheckInitErrorCodes.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\MainForm\MainFormFiles\DocumentCapture.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\MainForm\MainFormFiles\Language.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Classes\Configurations\Language.cs" />
     <Compile Include="Forms\MainForm\MainFormFiles\Menu.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -273,13 +214,13 @@
     <Compile Include="Forms\MainForm\MainFormFiles\PortfolioDataGridViewsConfiguration.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\MainForm\MainFormFiles\Settings.cs">
+    <Compile Include="Forms\MainForm\MainFormFiles\SetLanguage.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\MainForm\MainFormFiles\WebParser.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Classes\DocumentsConfiguration.cs" />
+    <Compile Include="Classes\Configurations\DocumentsConfiguration.cs" />
     <Compile Include="Forms\OwnMessageBoxForm\OwnMessageBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -347,7 +288,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Classes\ParserRegex\WebSiteRegex.cs" />
-    <Compile Include="Classes\WebSitesConfiguration.cs" />
+    <Compile Include="Classes\Configurations\WebSitesConfiguration.cs" />
     <EmbeddedResource Include="Forms\AboutForm\About.resx">
       <DependentUpon>About.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -461,7 +402,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BuildTools\AssemblyInfoUpdater.exe" />
     <None Include="Resources\Icon\input.ico" />
     <None Include="Resources\Icon\warning.ico" />
     <None Include="Resources\Icon\info.ico" />
@@ -530,27 +470,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>REM Update Revision number
-
-echo "$(ConfigurationName)"
-
-if "$(ConfigurationName)" == "Release_Revision"  (
-$(ProjectDir)\BuildTools\AssemblyInfoUpdater.exe REVISION $(ProjectDir)Properties\AssemblyInfo.cs
-)
-
-if "$(ConfigurationName)" == "Release_Build" (
-$(ProjectDir)\BuildTools\AssemblyInfoUpdater.exe BUILD $(ProjectDir)Properties\AssemblyInfo.cs
-)
-
-if "$(ConfigurationName)" == "Release_Minor" (
-$(ProjectDir)\BuildTools\AssemblyInfoUpdater.exe MINOR $(ProjectDir)Properties\AssemblyInfo.cs
-)
-
-if "$(ConfigurationName)" == "Release_Major" (
-$(ProjectDir)\BuildTools\AssemblyInfoUpdater.exe MAJOR $(ProjectDir)Properties\AssemblyInfo.cs
-)
-
-REM Copy settings files if they do not exist already
+    <PreBuildEvent>REM Copy settings files if they do not exist already
 ECHO Copy settings
 ECHO.
 XCOPY "$(ProjectDir)Config\Settings.xml" "$(TargetDir)\Settings\" /Y /D

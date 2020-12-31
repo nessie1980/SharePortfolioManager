@@ -85,12 +85,12 @@ namespace SharePortfolioManager.ShareDetailsForm
                                 @"/ShareDetailsForm/GrpBoxDetails/ShareUpdate",
                                 LanguageName) + @" " +
                             Language.GetLanguageTextByXPath(
-                                @"/ShareDetailsForm/GrpBoxDetails/ShareUpdateNotDone", LanguageName) +
+                                @"/ShareDetailsForm/GrpBoxDetails/ShareUpdateNotDone", SettingsConfiguration.LanguageName) +
                             @" / " +
                             Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/ShareType",
                                 LanguageName) +
                             @" " +
-                            Language.GetLanguageTextListByXPath(@"/ComboBoxItemsShareType/*", LanguageName)[
+                            Language.GetLanguageTextListByXPath(@"/ComboBoxItemsShareType/*", SettingsConfiguration.LanguageName)[
                                 (int)ShareObjectMarketValue.ShareType];
                     }
                     else
@@ -104,7 +104,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                             Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/ShareType",
                                 LanguageName) +
                             @" " +
-                            Language.GetLanguageTextListByXPath(@"/ComboBoxItemsShareType/*", LanguageName)[
+                            Language.GetLanguageTextListByXPath(@"/ComboBoxItemsShareType/*", SettingsConfiguration.LanguageName)[
                                 (int)ShareObjectMarketValue.ShareType];
                     }
 
@@ -112,7 +112,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     {
                         // Set the share update date
                         lblDetailsMarketValueDateValue.Text =
-                            Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/ShareUpdateNotDone", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/ShareUpdateNotDone", SettingsConfiguration.LanguageName);
                     }
                     else
                     {
@@ -262,12 +262,12 @@ namespace SharePortfolioManager.ShareDetailsForm
                                 @"/ShareDetailsForm/GrpBoxDetails/ShareUpdate",
                                 LanguageName) + @" " +
                             Language.GetLanguageTextByXPath(
-                                @"/ShareDetailsForm/GrpBoxDetails/ShareUpdateNotDone", LanguageName) +
+                                @"/ShareDetailsForm/GrpBoxDetails/ShareUpdateNotDone", SettingsConfiguration.LanguageName) +
                             @" / " +
                             Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/ShareType",
                                 LanguageName) +
                             @" " +
-                            Language.GetLanguageTextListByXPath(@"/ComboBoxItemsShareType/*", LanguageName)[
+                            Language.GetLanguageTextListByXPath(@"/ComboBoxItemsShareType/*", SettingsConfiguration.LanguageName)[
                                 (int)ShareObjectFinalValue.ShareType];
                     }
                     else
@@ -281,7 +281,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                             Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/ShareType",
                                 LanguageName) +
                             @" " +
-                            Language.GetLanguageTextListByXPath(@"/ComboBoxItemsShareType/*", LanguageName)[
+                            Language.GetLanguageTextListByXPath(@"/ComboBoxItemsShareType/*", SettingsConfiguration.LanguageName)[
                                 (int)ShareObjectFinalValue.ShareType];
                     }
 
@@ -289,7 +289,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     {
                         // Set the share update date
                         lblDetailsFinalValueDateValue.Text += @" " +
-                            Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/ShareUpdateNotDone", LanguageName);
+                            Language.GetLanguageTextByXPath(@"/ShareDetailsForm/GrpBoxDetails/ShareUpdateNotDone", SettingsConfiguration.LanguageName);
                     }
                     else
                     {
@@ -427,7 +427,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     Language.GetLanguageTextByXPath(
                         @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgWithCompleteMarketDepotValuesErrors/ShowFailed",
                         LanguageName),
-                    Language, LanguageName,
+                    Language, SettingsConfiguration.LanguageName,
                     Color.DarkRed, Logger, (int) FrmMain.EStateLevels.FatalError,
                     (int) FrmMain.EComponentLevels.Application,
                     ex);
@@ -456,17 +456,17 @@ namespace SharePortfolioManager.ShareDetailsForm
             if (tabCtrlShareDetails.TabPages.ContainsKey(TabPageDetailsProfitLossValueName))
                 tabCtrlShareDetails.TabPages[TabPageDetailsProfitLossValueName].Text =
                     Language.GetLanguageTextByXPath(
-                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Caption", LanguageName);
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgProfitLoss/Caption", SettingsConfiguration.LanguageName);
 
             if (tabCtrlShareDetails.TabPages.ContainsKey(TabPageDetailsDividendValueName))
                 tabCtrlShareDetails.TabPages[TabPageDetailsDividendValueName].Text =
                     Language.GetLanguageTextByXPath(
-                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/Caption", LanguageName);
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/Caption", SettingsConfiguration.LanguageName);
 
             if (tabCtrlShareDetails.TabPages.ContainsKey(TabPageDetailsBrokerageValueName))
                 tabCtrlShareDetails.TabPages[TabPageDetailsBrokerageValueName].Text =
                     Language.GetLanguageTextByXPath(
-                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/Caption", LanguageName);
+                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgBrokerage/Caption", SettingsConfiguration.LanguageName);
 
             // Label values of the market value
             lblDetailsMarketValueDateValue.Text = @"";
