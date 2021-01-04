@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -951,9 +951,13 @@ namespace SharePortfolioManager.ShareAddForm.View
             _parsingBackgroundWorker.WorkerReportsProgress = true;
             _parsingBackgroundWorker.WorkerSupportsCancellation = true;
 
-            _parsingBackgroundWorker.DoWork += DocumentParsing;
-            _parsingBackgroundWorker.ProgressChanged += OnDocumentParsingProgressChanged;
-            _parsingBackgroundWorker.RunWorkerCompleted += OnDocumentParsingRunWorkerCompleted;
+            // Check if the PDF converter is installed so initialize the background worker for the parsing
+            if (Helper.PdfParserInstalled())
+            {
+                _parsingBackgroundWorker.DoWork += DocumentParsing;
+                _parsingBackgroundWorker.ProgressChanged += OnDocumentParsingProgressChanged;
+                _parsingBackgroundWorker.RunWorkerCompleted += OnDocumentParsingRunWorkerCompleted;
+            }
 
             #endregion Parsing backgroundworker
         }
@@ -1352,7 +1356,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 // Check if the document is a PDF
                 var extenstion = Path.GetExtension(txtBoxDocument.Text);
 
-                if (string.Compare(extenstion, ".PDF", StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(extenstion, ".PDF", StringComparison.OrdinalIgnoreCase) == 0 && _parsingStartAllow)
                 {
                     if (_parsingBackgroundWorker.IsBusy)
                     {
@@ -1381,10 +1385,14 @@ namespace SharePortfolioManager.ShareAddForm.View
                 toolStripProgressBarAddShareDocumentParsing.Visible = false;
                 grpBoxGeneral.Enabled = true;
 
-                DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
                 _parsingStartAllow = false;
                 _parsingThreadFinished = true;
-                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
+
+                if (_parsingBackgroundWorker.WorkerReportsProgress)
+                    _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
+
+                if (DocumentTypeParser != null)
+                    DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
             }
         }
 
@@ -1432,8 +1440,6 @@ namespace SharePortfolioManager.ShareAddForm.View
                 DocumentTypeParser = null;
                 DictionaryParsingResult = null;
 
-                Console.WriteLine(@"File: {0}", txtBoxDocument.Text);
-
                 Helper.RunProcess(Helper.PdfToTextApplication,
                     $"-simple \"{txtBoxDocument.Text}\" {Helper.ParsingDocumentFileName}");
 
@@ -1452,14 +1458,20 @@ namespace SharePortfolioManager.ShareAddForm.View
                 // Show exception is not allowed here (THREAD)
                 // Only do progress report progress
                 _parsingThreadFinished = true;
-                _parsingBackgroundWorker.ReportProgress((int) ParsingErrorCode.ParsingDocumentFailed);
+                _parsingStartAllow = false;
+
+                if (_parsingBackgroundWorker.WorkerReportsProgress)
+                    _parsingBackgroundWorker.ReportProgress((int) ParsingErrorCode.ParsingDocumentFailed);
             }
             catch (Exception)
             {
                 // Show exception is not allowed here (THREAD)
                 // Only do progress report progress
                 _parsingThreadFinished = true;
-                _parsingBackgroundWorker.ReportProgress((int) ParsingErrorCode.ParsingDocumentFailed);
+                _parsingStartAllow = false;
+
+                if (_parsingBackgroundWorker.WorkerReportsProgress)
+                    _parsingBackgroundWorker.ReportProgress((int) ParsingErrorCode.ParsingDocumentFailed);
             }
         }
 
@@ -1510,7 +1522,10 @@ namespace SharePortfolioManager.ShareAddForm.View
                 // Show exception is not allowed here (THREAD)
                 // Only do progress report progress
                 _parsingThreadFinished = true;
-                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingFailed);
+                _parsingStartAllow = false;
+
+                if (_parsingBackgroundWorker.WorkerReportsProgress)
+                    _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingFailed);
             }
         }
 
@@ -1807,9 +1822,13 @@ namespace SharePortfolioManager.ShareAddForm.View
                         // Show exception is not allowed here (THREAD)
                         // Only do progress report progress
                         _parsingThreadFinished = true;
-                        _parsingBackgroundWorker.ReportProgress((int) ParsingErrorCode.ParsingDocumentFailed);
+                        _parsingStartAllow = false;
 
-                        DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                        if (_parsingBackgroundWorker.WorkerReportsProgress)
+                            _parsingBackgroundWorker.ReportProgress((int) ParsingErrorCode.ParsingDocumentFailed);
+
+                        if (DocumentTypeParser != null)
+                            DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
                     }
                 }
             }
@@ -1818,9 +1837,13 @@ namespace SharePortfolioManager.ShareAddForm.View
                 // Show exception is not allowed here (THREAD)
                 // Only do progress report progress
                 _parsingThreadFinished = true;
-                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
+                _parsingStartAllow = false;
 
-                DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                if (_parsingBackgroundWorker.WorkerReportsProgress)
+                    _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
+
+                if (DocumentTypeParser != null)
+                    DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
             }
         }
 

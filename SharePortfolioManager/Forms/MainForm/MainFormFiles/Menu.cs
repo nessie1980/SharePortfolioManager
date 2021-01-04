@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -48,76 +48,68 @@ namespace SharePortfolioManager
         /// <param name="e">EventArgs</param>
         private void OnNewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // Save old portfolio filename
-            var oldPortfolioFileName = SettingsConfiguration.PortfolioName;
-
-            var dlgPortfolioFileName = new OwnMessageBox(
-                LanguageConfiguration.Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", SettingsConfiguration.LanguageName)[
-                    (int) EOwnMessageBoxInfoType.InputFileName],
-                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/InputPortfolioName", SettingsConfiguration.LanguageName),
-                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", SettingsConfiguration.LanguageName),
-                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", SettingsConfiguration.LanguageName),
-                EOwnMessageBoxInfoType.InputFileName,
-                true);
-            var dlgResult = dlgPortfolioFileName.ShowDialog();
-
-            if (dlgResult != DialogResult.OK) return;
-
-            SettingsConfiguration.PortfolioName = Application.StartupPath + "\\Portfolios\\" + dlgPortfolioFileName.InputString + ".xml";
-
-            // Check if the portfolio file already exists
-            if (File.Exists(SettingsConfiguration.PortfolioName))
+            try
             {
-                var dlgPortfolioFileExists = new OwnMessageBox(
-                    LanguageConfiguration.Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", SettingsConfiguration.LanguageName)[
-                        (int) EOwnMessageBoxInfoType.Info],
-                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/PortfolioNameExists", SettingsConfiguration.LanguageName),
-                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", SettingsConfiguration.LanguageName),
-                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", SettingsConfiguration.LanguageName),
-                    EOwnMessageBoxInfoType.Info);
+                // Save old portfolio filename
+                var oldPortfolioFileName = SettingsConfiguration.PortfolioName;
+                var savePortfolioName = SettingsConfiguration.PortfolioName;
 
-                var dlgResultFileExists = dlgPortfolioFileExists.ShowDialog();
+                const string strFilter = "XML (*.XML)|*.XML";
 
-                if (dlgResultFileExists == DialogResult.Cancel)
-                    SettingsConfiguration.PortfolioName = "";
-            }
+                var dlgResult = Helper.NewPortfolio(
+                    LanguageConfiguration.Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*",
+                        SettingsConfiguration.LanguageName)[(int)EOwnMessageBoxInfoType.InputFileName],
+                    strFilter,
+                    ref savePortfolioName
+                );
 
-            // Cancel has been pressed so do nothing
-            if (SettingsConfiguration.PortfolioName == "")
-            {
-                SettingsConfiguration.PortfolioName = oldPortfolioFileName;
-                return;
-            }
+                if (dlgResult != DialogResult.OK) return;
 
-            // Check if the portfolio directory does not exist so create it
-            var path = Path.GetDirectoryName(SettingsConfiguration.PortfolioName);
-            if (path != null && !Directory.Exists(path))
-                Directory.CreateDirectory(path);
+                SettingsConfiguration.PortfolioName = savePortfolioName;
 
-            // Check if the portfolio directory creation was successful
-            if (Directory.Exists(Path.GetDirectoryName(SettingsConfiguration.PortfolioName)))
-            {
-                using (var writer = XmlWriter.Create(SettingsConfiguration.PortfolioName))
+                // Check if the portfolio directory does not exist so create it
+                var path = Path.GetDirectoryName(SettingsConfiguration.PortfolioName);
+                if (path != null && !Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+
+                // Check if the portfolio directory creation was successful
+                if (Directory.Exists(Path.GetDirectoryName(SettingsConfiguration.PortfolioName)))
                 {
-                    writer.WriteStartElement("Portfolio");
-                    writer.WriteEndElement();
-                    writer.Flush();
+                    // Close current reader for a rewrite if the file should be overwritten
+                    ReaderPortfolio?.Close();
+
+                    using (var writer = XmlWriter.Create(SettingsConfiguration.PortfolioName))
+                    {
+                        writer.WriteStartElement("Portfolio");
+                        writer.WriteEndElement();
+                        writer.Flush();
+                    }
+
+                    // Do GUI changes for the portfolio change
+                    ChangePortfolio();
                 }
+                else
+                {
+                    var dlgPortfolioDirectoryCreationFailed = new OwnMessageBox(
+                        LanguageConfiguration.Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", SettingsConfiguration.LanguageName)[
+                            (int)EOwnMessageBoxInfoType.Info],
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/PortfolioDirectoryCreationFailed", SettingsConfiguration.LanguageName),
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", SettingsConfiguration.LanguageName),
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", SettingsConfiguration.LanguageName),
+                        EOwnMessageBoxInfoType.Info);
 
-                // Do GUI changes for the portfolio change
-                ChangePortfolio();
+                    dlgPortfolioDirectoryCreationFailed.ShowDialog();
+
+                    SettingsConfiguration.PortfolioName = oldPortfolioFileName;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                var dlgPortfolioDirectoryCreationFailed = new OwnMessageBox(
-                    LanguageConfiguration.Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", SettingsConfiguration.LanguageName)[
-                        (int)EOwnMessageBoxInfoType.Info],
-                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/PortfolioDirectoryCreationFailed", SettingsConfiguration.LanguageName),
-                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", SettingsConfiguration.LanguageName),
-                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", SettingsConfiguration.LanguageName),
-                    EOwnMessageBoxInfoType.Info);
-
-                dlgPortfolioDirectoryCreationFailed.ShowDialog();
+                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/Errors/SavePortfolioFailed", SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application,
+                    ex);
             }
         }
 
@@ -141,6 +133,76 @@ namespace SharePortfolioManager
             {
                 // Do GUI changes for the portfolio change
                 ChangePortfolio();
+            }
+        }
+
+        /// <summary>
+        /// This function save portfolio under a another file
+        /// </summary>
+        /// <param name="sender">Menu button</param>
+        /// <param name="e">EventArgs</param>
+        private void OnSaveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Save old portfolio filename
+                var oldPortfolioFileName = SettingsConfiguration.PortfolioName;
+                var savePortfolioName = SettingsConfiguration.PortfolioName;
+
+                const string strFilter = "XML (*.XML)|*.XML";
+
+                var dlgResult = Helper.SaveAsPortfolio(
+                    LanguageConfiguration.Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*",
+                        SettingsConfiguration.LanguageName)[(int)EOwnMessageBoxInfoType.InputFileName],
+                    strFilter,
+                    ref savePortfolioName
+                );
+
+                if (dlgResult != DialogResult.OK) return;
+
+                SettingsConfiguration.PortfolioName = savePortfolioName;
+
+                // Check if the portfolio directory does not exist so create it
+                var path = Path.GetDirectoryName(SettingsConfiguration.PortfolioName);
+                if (path != null && !Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+
+                // Check if the portfolio directory creation was successful
+                if (Directory.Exists(Path.GetDirectoryName(SettingsConfiguration.PortfolioName)))
+                {
+                    // Close current reader for a rewrite if the file should be overwritten
+                    ReaderPortfolio?.Close();
+
+                    // Read old content
+                    var oldContent = File.ReadAllText(oldPortfolioFileName);
+                    // Write old content to new file
+                    File.WriteAllText(SettingsConfiguration.PortfolioName, oldContent);
+
+                    // Do GUI changes for the portfolio change
+                    ChangePortfolio();
+                }
+                else
+                {
+                    var dlgPortfolioDirectoryCreationFailed = new OwnMessageBox(
+                        LanguageConfiguration.Language.GetLanguageTextListByXPath(@"/MessageBoxForm/Captions/*", SettingsConfiguration.LanguageName)[
+                            (int)EOwnMessageBoxInfoType.Info],
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MessageBoxForm/Content/PortfolioDirectoryCreationFailed", SettingsConfiguration.LanguageName),
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Ok", SettingsConfiguration.LanguageName),
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MessageBoxForm/Buttons/Cancel", SettingsConfiguration.LanguageName),
+                        EOwnMessageBoxInfoType.Info);
+
+                    dlgPortfolioDirectoryCreationFailed.ShowDialog();
+
+                    SettingsConfiguration.PortfolioName = oldPortfolioFileName;
+                }
+            }
+            catch (Exception ex)
+            {
+                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/Errors/SavePortfolioFailed", SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application,
+                    ex);
             }
         }
 

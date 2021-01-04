@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,8 @@
 
 using LanguageHandler;
 using System;
-using System.Windows.Forms;
+using System.Drawing;using System.Windows.Forms;
+using SharePortfolioManager.Classes;
 
 namespace SharePortfolioManager.AboutForm
 {
@@ -82,12 +83,13 @@ namespace SharePortfolioManager.AboutForm
             lblParserDllVersion.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/ParserDLLVersion", _strLanguage);
             lblLanguageDllVersion.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/LanguageDLLVersion", _strLanguage);
             lblLoggerDllVersion.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/LoggerDLLVersion", _strLanguage);
-            grpBoxIconSet.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/IconSet", _strLanguage);
-            lblIconSetInfo.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/IconSetInfo", _strLanguage);
-            lblIconSetInfoLink.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/IconSetInfoLink", _strLanguage);
+            lblPdfConverterVersion.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/PdfConverterVersion", _strLanguage);
             grpBoxPdfConverter.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/PdfConverter", _strLanguage);
             lblPdfConverterInfo.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/PdfConverterInfo", _strLanguage);
             lblPdfConverterInfoLink.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/PdfConverterInfoLink", _strLanguage);
+            grpBoxIconSet.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/IconSet", _strLanguage);
+            lblIconSetInfo.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/IconSetInfo", _strLanguage);
+            lblIconSetInfoLink.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/IconSetInfoLink", _strLanguage);
             btnOk.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Buttons/Ok", _strLanguage);
 
             #endregion Language configuration
@@ -98,11 +100,17 @@ namespace SharePortfolioManager.AboutForm
 
             lblApplicationVersionValue.Text = verApp.ToString();
 
+            #region Parser
+
             var assParser = typeof(Parser.Parser).Assembly;
             var assParserName = assParser.GetName();
             var verParser = assParserName.Version;
 
             lblParserDllVersionValue.Text = verParser.ToString();
+            
+            #endregion Parser
+
+            #region Language
 
             var assLanguage = typeof(Language).Assembly;
             var assLanguageName = assLanguage.GetName();
@@ -110,11 +118,46 @@ namespace SharePortfolioManager.AboutForm
 
             lblLanguageDllVersionValue.Text = verLanguage.ToString();
 
+            #endregion Language
+
+            #region Logger
+
             var assLogger = typeof(Logging.Logger).Assembly;
             var assLoggerName = assLogger.GetName();
             var verLogger = assLoggerName.Version;
 
             lblLoggerDllVersionValue.Text = verLogger.ToString();
+
+            #endregion Logger
+
+            #region PDF parser
+
+            if (Helper.PdfParserInstalled())
+            {
+                Helper.RunProcess(Helper.PdfToTextApplication,
+                    "-v");
+
+                if (Helper.ProcessErrOutput != string.Empty)
+                {
+                    string[] separatingStrings = { "version", "Copyright" };
+                    var version = Helper.ProcessErrOutput.Split(separatingStrings, StringSplitOptions.RemoveEmptyEntries);
+
+                    if(version.Length >= 2)
+                        lblPdfConverterVersionValue.Text = version[1];
+                }
+                else
+                {
+                    lblPdfConverterVersionValue.ForeColor = Color.Red;
+                    lblPdfConverterVersionValue.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/PdfConverterNotInstalled", _strLanguage);
+                }
+            }
+            else
+            {
+                lblPdfConverterVersionValue.ForeColor = Color.Red;
+                lblPdfConverterVersionValue.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/PdfConverterNotInstalled", _strLanguage);
+            }
+
+            #endregion PDF parser
         }
 
         /// <summary>

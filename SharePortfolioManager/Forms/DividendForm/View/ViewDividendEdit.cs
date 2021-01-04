@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -978,12 +978,15 @@ namespace SharePortfolioManager.DividendForm.View
             _parsingBackgroundWorker.WorkerReportsProgress = true;
             _parsingBackgroundWorker.WorkerSupportsCancellation = true;
 
-            _parsingBackgroundWorker.DoWork += DocumentParsing;
-            _parsingBackgroundWorker.ProgressChanged += OnDocumentParsingProgressChanged;
-            _parsingBackgroundWorker.RunWorkerCompleted += OnDocumentParsingRunWorkerCompleted;
+            // Check if the PDF converter is installed so initialize the background worker for the parsing
+            if (Helper.PdfParserInstalled())
+            {
+                _parsingBackgroundWorker.DoWork += DocumentParsing;
+                _parsingBackgroundWorker.ProgressChanged += OnDocumentParsingProgressChanged;
+                _parsingBackgroundWorker.RunWorkerCompleted += OnDocumentParsingRunWorkerCompleted;
+            }
 
             #endregion Parsing backgroundworker
-
         }
 
         /// <summary>
@@ -1681,10 +1684,14 @@ namespace SharePortfolioManager.DividendForm.View
                 grpBoxAddDividend.Enabled = true;
                 grpBoxDividends.Enabled = true;
 
-                DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
                 _parsingStartAllow = false;
                 _parsingThreadFinished = true;
-                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
+
+                if (_parsingBackgroundWorker.WorkerReportsProgress)
+                    _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
+
+                if (DocumentTypeParser != null)
+                    DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
             }
         }
 
@@ -1928,7 +1935,11 @@ namespace SharePortfolioManager.DividendForm.View
                 #region Data source, data binding and data grid view
 
                 // Check if dividends exists
-                if (ShareObjectFinalValue.AllDividendEntries.GetAllDividendsTotalValues().Count <= 0) return;
+                if (ShareObjectFinalValue.AllDividendEntries.GetAllDividendsTotalValues().Count <= 0)
+                {
+                    ShowDividendsFlag = false;
+                    return;
+                }
 
                 // Reverse list so the latest is a top of the data grid view
                 var reversDataSourceOverview = ShareObjectFinalValue.AllDividendEntries.GetAllDividendsTotalValues()
@@ -2863,7 +2874,9 @@ namespace SharePortfolioManager.DividendForm.View
                 // Only do progress report progress
                 _parsingThreadFinished = true;
                 _parsingStartAllow = false;
-                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
+
+                if (_parsingBackgroundWorker.WorkerReportsProgress)
+                    _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
             }
             catch (Exception)
             {
@@ -2871,7 +2884,9 @@ namespace SharePortfolioManager.DividendForm.View
                 // Only do progress report progress
                 _parsingThreadFinished = true;
                 _parsingStartAllow = false;
-                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
+
+                if (_parsingBackgroundWorker.WorkerReportsProgress)
+                    _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
             }
         }
 
@@ -2923,7 +2938,9 @@ namespace SharePortfolioManager.DividendForm.View
                 // Only do progress report progress
                 _parsingThreadFinished = true;
                 _parsingStartAllow = false;
-                _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingFailed);
+
+                if (_parsingBackgroundWorker.WorkerReportsProgress)
+                    _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingFailed);
             }
         }
 
@@ -3216,7 +3233,8 @@ namespace SharePortfolioManager.DividendForm.View
                         _parsingStartAllow = false;
                         _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
 
-                        DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                        if (DocumentTypeParser != null)
+                            DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
                     }
                 }
             }
@@ -3228,7 +3246,8 @@ namespace SharePortfolioManager.DividendForm.View
                 _parsingStartAllow = false;
                 _parsingBackgroundWorker.ReportProgress((int)ParsingErrorCode.ParsingDocumentFailed);
 
-                DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
+                if (DocumentTypeParser != null)
+                    DocumentTypeParser.OnParserUpdate -= DocumentTypeParser_UpdateGUI;
             }
         }
 

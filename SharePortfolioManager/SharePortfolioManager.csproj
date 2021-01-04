@@ -35,7 +35,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -479,22 +479,15 @@ XCOPY "$(ProjectDir)Config\Language.xml" "$(TargetDir)\Settings\" /Y /D
 XCOPY "$(ProjectDir)Config\Documents.xml" "$(TargetDir)\Settings\" /Y /D
 ECHO.
 
-ECHO Copy DLLs
 ECHO.
-ECHO XCOPY "$(ProjectDir)DLLs\*.*" "$(TargetDir)" /Y /D
-XCOPY "$(ProjectDir)DLLs\*.*" "$(TargetDir)" /Y /D
+ECHO Copy PDF converter
+XCOPY "$(ProjectDir)Tools\xpdf-tools-win-4.00\bin32\pdftotext.exe" "$(TargetDir)\Tools\" /Y /D
 ECHO.
 
 ECHO Copy sounds
 ECHO.
 ECHO XCOPY "$(ProjectDir)Sounds\*.*" "$(TargetDir)Sounds\" /Y /D
 XCOPY "$(ProjectDir)Sounds\*.*" "$(TargetDir)Sounds\" /Y /D
-ECHO.
-
-REM Reset portfolio
-ECHO.
-ECHO XCOPY "$(TargetDir)Portfolios\ShareList - Kopie.xml" "$(TargetDir)Portfolios\ShareList.xml" /Y
-XCOPY "$(TargetDir)Portfolios\ShareList - Kopie.xml" "$(TargetDir)Portfolios\ShareList.xml" /Y
 ECHO.
 </PreBuildEvent>
   </PropertyGroup>

@@ -54,11 +54,11 @@ namespace SharePortfolioManager
             this.btnRefresh = new System.Windows.Forms.Button();
             this.tabCtrlShareOverviews = new System.Windows.Forms.TabControl();
             this.tabPgFinalValue = new System.Windows.Forms.TabPage();
+            this.dgvPortfolioFooterFinalValue = new System.Windows.Forms.DataGridView();
             this.tblLayPnlLoadingPortfolio = new System.Windows.Forms.TableLayoutPanel();
             this.pgbLoadingPortfolio = new System.Windows.Forms.ProgressBar();
             this.lblLoadingPortfolio = new System.Windows.Forms.Label();
             this.dgvPortfolioFinalValue = new System.Windows.Forms.DataGridView();
-            this.dgvPortfolioFooterFinalValue = new System.Windows.Forms.DataGridView();
             this.tabPgMarketValue = new System.Windows.Forms.TabPage();
             this.dgvPortfolioMarketValue = new System.Windows.Forms.DataGridView();
             this.dgvPortfolioFooterMarketValue = new System.Windows.Forms.DataGridView();
@@ -84,9 +84,9 @@ namespace SharePortfolioManager
             this.tblLayPnlShareOverviews.SuspendLayout();
             this.tabCtrlShareOverviews.SuspendLayout();
             this.tabPgFinalValue.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPortfolioFooterFinalValue)).BeginInit();
             this.tblLayPnlLoadingPortfolio.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPortfolioFinalValue)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvPortfolioFooterFinalValue)).BeginInit();
             this.tabPgMarketValue.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPortfolioMarketValue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPortfolioFooterMarketValue)).BeginInit();
@@ -148,6 +148,7 @@ namespace SharePortfolioManager
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
             this.saveAsToolStripMenuItem.Text = "SaveAs_";
+            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.OnSaveAsToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -356,6 +357,34 @@ namespace SharePortfolioManager
             this.tabPgFinalValue.Text = "_tabPageCompleteDepotValues";
             this.tabPgFinalValue.UseVisualStyleBackColor = true;
             // 
+            // dgvPortfolioFooterFinalValue
+            // 
+            this.dgvPortfolioFooterFinalValue.AllowUserToAddRows = false;
+            this.dgvPortfolioFooterFinalValue.AllowUserToDeleteRows = false;
+            this.dgvPortfolioFooterFinalValue.AllowUserToResizeColumns = false;
+            this.dgvPortfolioFooterFinalValue.AllowUserToResizeRows = false;
+            this.dgvPortfolioFooterFinalValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvPortfolioFooterFinalValue.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvPortfolioFooterFinalValue.ColumnHeadersVisible = false;
+            this.dgvPortfolioFooterFinalValue.Enabled = false;
+            this.dgvPortfolioFooterFinalValue.EnableHeadersVisualStyles = false;
+            this.dgvPortfolioFooterFinalValue.Location = new System.Drawing.Point(0, 359);
+            this.dgvPortfolioFooterFinalValue.MultiSelect = false;
+            this.dgvPortfolioFooterFinalValue.Name = "dgvPortfolioFooterFinalValue";
+            this.dgvPortfolioFooterFinalValue.ReadOnly = true;
+            this.dgvPortfolioFooterFinalValue.RowHeadersVisible = false;
+            this.dgvPortfolioFooterFinalValue.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dgvPortfolioFooterFinalValue.RowTemplate.Height = 24;
+            this.dgvPortfolioFooterFinalValue.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dgvPortfolioFooterFinalValue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvPortfolioFooterFinalValue.Size = new System.Drawing.Size(1353, 75);
+            this.dgvPortfolioFooterFinalValue.TabIndex = 10;
+            this.dgvPortfolioFooterFinalValue.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DgvPortfolioFooterFinalValue_CellFormatting);
+            this.dgvPortfolioFooterFinalValue.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.DgvPortfolioFooterFinalValue_CellPainting);
+            this.dgvPortfolioFooterFinalValue.SelectionChanged += new System.EventHandler(this.DgvPortfolioFooterFinalValue_SelectionChanged);
+            this.dgvPortfolioFooterFinalValue.Resize += new System.EventHandler(this.DgvPortfolioFooterFinalValue_Resize);
+            // 
             // tblLayPnlLoadingPortfolio
             // 
             this.tblLayPnlLoadingPortfolio.BackColor = System.Drawing.SystemColors.AppWorkspace;
@@ -424,34 +453,6 @@ namespace SharePortfolioManager
             this.dgvPortfolioFinalValue.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnDgvPortfolioFinalValue_MouseDown);
             this.dgvPortfolioFinalValue.MouseEnter += new System.EventHandler(this.DgvPortfolioFinalValue_MouseEnter);
             this.dgvPortfolioFinalValue.Resize += new System.EventHandler(this.DgvPortfolioFinalValue_Resize);
-            // 
-            // dgvPortfolioFooterFinalValue
-            // 
-            this.dgvPortfolioFooterFinalValue.AllowUserToAddRows = false;
-            this.dgvPortfolioFooterFinalValue.AllowUserToDeleteRows = false;
-            this.dgvPortfolioFooterFinalValue.AllowUserToResizeColumns = false;
-            this.dgvPortfolioFooterFinalValue.AllowUserToResizeRows = false;
-            this.dgvPortfolioFooterFinalValue.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvPortfolioFooterFinalValue.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvPortfolioFooterFinalValue.ColumnHeadersVisible = false;
-            this.dgvPortfolioFooterFinalValue.Enabled = false;
-            this.dgvPortfolioFooterFinalValue.EnableHeadersVisualStyles = false;
-            this.dgvPortfolioFooterFinalValue.Location = new System.Drawing.Point(0, 359);
-            this.dgvPortfolioFooterFinalValue.MultiSelect = false;
-            this.dgvPortfolioFooterFinalValue.Name = "dgvPortfolioFooterFinalValue";
-            this.dgvPortfolioFooterFinalValue.ReadOnly = true;
-            this.dgvPortfolioFooterFinalValue.RowHeadersVisible = false;
-            this.dgvPortfolioFooterFinalValue.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.dgvPortfolioFooterFinalValue.RowTemplate.Height = 24;
-            this.dgvPortfolioFooterFinalValue.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dgvPortfolioFooterFinalValue.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvPortfolioFooterFinalValue.Size = new System.Drawing.Size(1353, 75);
-            this.dgvPortfolioFooterFinalValue.TabIndex = 10;
-            this.dgvPortfolioFooterFinalValue.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DgvPortfolioFooterFinalValue_CellFormatting);
-            this.dgvPortfolioFooterFinalValue.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.DgvPortfolioFooterFinalValue_CellPainting);
-            this.dgvPortfolioFooterFinalValue.SelectionChanged += new System.EventHandler(this.DgvPortfolioFooterFinalValue_SelectionChanged);
-            this.dgvPortfolioFooterFinalValue.Resize += new System.EventHandler(this.DgvPortfolioFooterFinalValue_Resize);
             // 
             // tabPgMarketValue
             // 
@@ -754,10 +755,10 @@ namespace SharePortfolioManager
             this.tblLayPnlShareOverviews.PerformLayout();
             this.tabCtrlShareOverviews.ResumeLayout(false);
             this.tabPgFinalValue.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPortfolioFooterFinalValue)).EndInit();
             this.tblLayPnlLoadingPortfolio.ResumeLayout(false);
             this.tblLayPnlLoadingPortfolio.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPortfolioFinalValue)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvPortfolioFooterFinalValue)).EndInit();
             this.tabPgMarketValue.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvPortfolioMarketValue)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPortfolioFooterMarketValue)).EndInit();

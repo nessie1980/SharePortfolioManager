@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -390,7 +390,10 @@ namespace SharePortfolioManager
                         EnableDisableControlNames.Add("grpBoxShareDetails");
                         EnableDisableControlNames.Add("grpBoxStatusMessage");
                         EnableDisableControlNames.Add("grpBoxUpdateState");
-                        EnableDisableControlNames.Add("grpBoxDocumentCapture");
+
+                        // Check if PDF converter installed
+                        if (Helper.PdfParserInstalled())
+                            EnableDisableControlNames.Add("grpBoxDocumentCapture");
 
                         EnableDisableControlNames.Add("btnAdd");
                         Helper.EnableDisableControls(true, this, EnableDisableControlNames);
@@ -430,7 +433,11 @@ namespace SharePortfolioManager
                         EnableDisableControlNames.Add("grpBoxShareDetails");
                         EnableDisableControlNames.Add("grpBoxStatusMessage");
                         EnableDisableControlNames.Add("grpBoxUpdateState");
-                        EnableDisableControlNames.Add("grpBoxDocumentCapture");
+
+                        // Check if PDF converter installed
+                        if (Helper.PdfParserInstalled())
+                            EnableDisableControlNames.Add("grpBoxDocumentCapture");
+    
                         Helper.EnableDisableControls(true, this, EnableDisableControlNames);
 
                         EnableDisableControlNames.Clear();
@@ -748,7 +755,6 @@ namespace SharePortfolioManager
                 // Check if the portfolio file exists
                 if (!File.Exists(SettingsConfiguration.PortfolioName))
                 {
-                    SettingsConfiguration.PortfolioName = @"";
                     // Set portfolio file does not exist state
                     PortfolioLoadState = EStatePortfolioLoad.FileDoesNotExit;
 

@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -21,11 +21,13 @@
 //SOFTWARE.
 
 using System;
+using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace SharePortfolioManager
 {
-    static class Program
+    internal static class Program
     {
         /// <summary>
         /// Main entry point of the application
@@ -33,14 +35,31 @@ namespace SharePortfolioManager
         [STAThread]
         private static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+            try
+            {
+                // Check if the necessary DLLs exists
+                if (!File.Exists(@"LanguageHandler.dll"))
+                    throw new FileNotFoundException(@"LanguageHandler.dll does not exist!");
 
-            // Create a controller and pass an instance of your application from the MainForm
-            var controller = new Classes.ApplicationController(new FrmMain());
+                if (!File.Exists(@"Logger.dll"))
+                    throw new FileNotFoundException(@"Logger.dll does not exist!");
 
-            //Run application
-            controller.Run(Environment.GetCommandLineArgs());
+                if (!File.Exists(@"Parser.dll"))
+                    throw new FileNotFoundException(@"Parser.dll does not exist!");
+
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+
+                // Create a controller and pass an instance of your application from the MainForm
+                var controller = new Classes.ApplicationController(new FrmMain());
+
+                //Run application
+                controller.Run(Environment.GetCommandLineArgs());
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, @"Error", MessageBoxButtons.OK);
+            }
         }
     }
 }

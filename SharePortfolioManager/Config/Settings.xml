@@ -38,7 +38,7 @@
 		<GUIEntries>20</GUIEntries>
 		<LogToFileEnable>true</LogToFileEnable>
 		<StoredLogFiles>25</StoredLogFiles>
-		<LogCleanUpAtStartUpEnable>false</LogCleanUpAtStartUpEnable>
+		<LogCleanUpAtStartUpEnable>true</LogCleanUpAtStartUpEnable>
 		<LogComponents>7</LogComponents>
 		<LogLevels>31</LogLevels>
 		<LogColors>
@@ -51,7 +51,7 @@
 	</Logger>
 	<ShowExceptionMessages>true</ShowExceptionMessages>
 	<Parser>
-		<MarketValuesDebuggingEnable>true</MarketValuesDebuggingEnable>
-		<DailyValuesDebuggingEnable>true</DailyValuesDebuggingEnable>
+		<MarketValuesDebuggingEnable>false</MarketValuesDebuggingEnable>
+		<DailyValuesDebuggingEnable>false</DailyValuesDebuggingEnable>
 	</Parser>
 </Settings>

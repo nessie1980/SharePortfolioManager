@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -1073,13 +1073,6 @@ namespace SharePortfolioManager.BrokeragesForm.View
             if (files.Length <= 0 || files.Length > 1) return;
 
             txtBoxDocument.Text = files[0];
-
-            // TODO Parse PDF and set values to the form
-            //var pdf = new PdfDocument(new PdfReader(txtBoxDocument.Text));
-            //var text = PdfTextExtractor.GetTextFromPage(pdf.GetPage(1), new LocationTextExtractionStrategy());
-            //pdf.Close();
-            //Console.WriteLine(@"Extracted text:");
-            //Console.WriteLine(text);
         }
 
         #endregion TextBoxes

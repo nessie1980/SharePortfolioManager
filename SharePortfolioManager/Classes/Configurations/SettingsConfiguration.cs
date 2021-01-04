@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -30,6 +30,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
+using SharePortfolioManager.Classes.Configurations;
 
 namespace SharePortfolioManager.Classes
 {
@@ -409,7 +410,7 @@ namespace SharePortfolioManager.Classes
                 var nodeUpdateFinishSound = XmlDocument.SelectSingleNode("/Settings/Sounds/UpdateFinished");
                 if (nodeUpdateFinishSound != null)
                 {
-                    Sound.UpdateFinishedFileName = Path.GetDirectoryName(Application.ExecutablePath) + @"\Sounds\" + nodeUpdateFinishSound.InnerText;
+                    Sound.UpdateFinishedFileName = Path.GetDirectoryName(Application.ExecutablePath) + Sound.SoundFilesDirectory + nodeUpdateFinishSound.InnerText;
                 }
                 else
                     loadSettings = false;
@@ -428,7 +429,7 @@ namespace SharePortfolioManager.Classes
                 var nodeErrorSound = XmlDocument.SelectSingleNode("/Settings/Sounds/Error");
                 if (nodeErrorSound != null)
                 {
-                    Sound.ErrorFileName = Path.GetDirectoryName(Application.ExecutablePath) + @"\Sounds\" + nodeErrorSound.InnerText;
+                    Sound.ErrorFileName = Path.GetDirectoryName(Application.ExecutablePath) + Sound.SoundFilesDirectory + nodeErrorSound.InnerText;
                 }
                 else
                     loadSettings = false;

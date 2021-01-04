@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Media;
 
-namespace SharePortfolioManager.Classes
+namespace SharePortfolioManager.Classes.Configurations
 {
     internal static class Sound
     {
@@ -40,6 +40,11 @@ namespace SharePortfolioManager.Classes
         #endregion Variables
 
         #region Properties
+
+        /// <summary>
+        /// Directory where the sound files are stored
+        /// </summary>
+        public static string SoundFilesDirectory = @"\Sounds\";
 
         /// <summary>
         /// Flag if the update finish sound file should be played

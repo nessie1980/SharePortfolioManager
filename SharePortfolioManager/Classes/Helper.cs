@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -41,8 +41,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SharePortfolioManager.Classes.Configurations;
 using SharePortfolioManager.Classes.ShareObjects;
-using MenuItem = System.Windows.Forms.MenuItem;
 
 namespace SharePortfolioManager.Classes
 {
@@ -165,6 +165,8 @@ namespace SharePortfolioManager.Classes
 
         public static string ParsingDocumentFileName =
             Path.GetDirectoryName(Application.ExecutablePath) + @"\Tools\Parsing.txt";
+
+        public static bool PdfParserInstalled() => File.Exists(PdfToTextApplication);
 
         #endregion Convert PDF to text
 
@@ -990,6 +992,106 @@ namespace SharePortfolioManager.Classes
 
         #endregion Open file dialog for setting document
 
+        #region Open file dialog for creating a new portfolio
+
+        /// <summary>
+        /// This function show a save file dialog
+        /// and returns the chosen file
+        /// </summary>
+        /// <param name="strTitle">Title for the save file dialog</param>
+        /// <param name="strFilter">Filter for the save file dialog</param>
+        /// <param name="strCurrentPortfolio">Current loaded portfolio file</param>
+        /// <returns>Chosen portfolio file</returns>
+        public static DialogResult NewPortfolio(string strTitle, string strFilter, ref string strCurrentPortfolio)
+        {
+            // Save old portfolio file name
+            var strOldPortfolioName = strCurrentPortfolio;
+
+            var initialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\SharePortfolioManager\Portfolios\" ;
+            var restoreDirectory = false;
+
+            if (strCurrentPortfolio != "")
+            {
+                initialDirectory = strCurrentPortfolio;
+                restoreDirectory = true;
+            }
+
+            var saveFileDlg = new SaveFileDialog
+            {
+                Title = strTitle,
+                InitialDirectory = initialDirectory,
+                RestoreDirectory = restoreDirectory,
+                FileName = "Portfolio.xml",
+                ValidateNames = true,
+                DefaultExt = @"xml",
+                AddExtension = true,
+                Filter = strFilter,
+                FilterIndex = 1,
+                SupportMultiDottedExtensions = false,
+                AutoUpgradeEnabled = true,
+                CheckPathExists = true,
+                OverwritePrompt = true,
+            };
+            var dlgResult = saveFileDlg.ShowDialog();
+
+            strCurrentPortfolio = dlgResult == DialogResult.OK ? saveFileDlg.FileName : strOldPortfolioName;
+
+            return dlgResult;
+        }
+
+        #endregion Open file dialog for creating a new portfolio
+
+        #region Save file dialog for saving portfolio
+
+        /// <summary>
+        /// This function show a save file dialog
+        /// and returns the chosen file
+        /// </summary>
+        /// <param name="strTitle">Title for the save file dialog</param>
+        /// <param name="strFilter">Filter for the save file dialog</param>
+        /// <param name="strCurrentPortfolio">Current loaded portfolio file</param>
+        /// <returns>Chosen portfolio file</returns>
+        public static DialogResult SaveAsPortfolio(string strTitle, string strFilter, ref string strCurrentPortfolio)
+        {
+            // Save old portfolio file name
+            var strOldPortfolioName = strCurrentPortfolio;
+
+            var initialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\SharePortfolioManager\Portfolios\";
+            var fileName = @"Portfolio.xml";
+            var restoreDirectory = false;
+
+            if (strCurrentPortfolio != "")
+            {
+                initialDirectory = strCurrentPortfolio;
+                fileName = Path.GetFileName(strCurrentPortfolio);
+                restoreDirectory = true;
+            }
+
+            var saveFileDlg = new SaveFileDialog
+            {
+                Title = strTitle,
+                InitialDirectory = initialDirectory,
+                RestoreDirectory = restoreDirectory,
+                FileName = fileName,
+                ValidateNames = true,
+                DefaultExt = @"xml",
+                AddExtension = true,
+                Filter = strFilter,
+                FilterIndex = 1,
+                SupportMultiDottedExtensions = false,
+                AutoUpgradeEnabled = true,
+                CheckPathExists = true,
+                OverwritePrompt = true,
+            };
+            var dlgResult = saveFileDlg.ShowDialog();
+
+            strCurrentPortfolio = dlgResult == DialogResult.OK ? saveFileDlg.FileName : strOldPortfolioName;
+
+            return dlgResult;
+        }
+
+        #endregion Open file dialog for saving portfolio
+
         #region Open file dialog for loading portfolio
 
         /// <summary>
@@ -1220,10 +1322,17 @@ namespace SharePortfolioManager.Classes
 
         #region Async process
 
+        public static string ProcessStdOutput { internal set; get; }
+        public static string ProcessErrOutput { internal set; get; }
+
         public static int RunProcess(string fileName, string args)
         {
             try
             {
+                // Reset output strings
+                ProcessStdOutput = string.Empty;
+                ProcessErrOutput = string.Empty;
+
                 using (var process = new Process
                 {
                     StartInfo =
@@ -1260,8 +1369,8 @@ namespace SharePortfolioManager.Classes
             var tcs = new TaskCompletionSource<int>();
 
             process.Exited += (s, ea) => tcs.SetResult(process.ExitCode);
-            process.OutputDataReceived += (s, ea) => Console.WriteLine(ea.Data);
-            process.ErrorDataReceived += (s, ea) => Console.WriteLine(@"ERR: " + ea.Data);
+            process.OutputDataReceived += (s, ea) => ProcessStdOutput += ea.Data;
+            process.ErrorDataReceived += (s, ea) => ProcessErrOutput += ea.Data;
 
             var started = process.Start();
             if (!started)
@@ -1273,7 +1382,7 @@ namespace SharePortfolioManager.Classes
 
             process.BeginOutputReadLine();
             process.BeginErrorReadLine();
-
+            
             return tcs.Task.Result;
         }
 

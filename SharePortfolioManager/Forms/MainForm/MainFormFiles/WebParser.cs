@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -928,10 +928,6 @@ namespace SharePortfolioManager
                             Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex,
                                 LastFirstDisplayedRowIndex, true);
 
-                            // Reset index
-                            // 07.06.2020
-                            //SelectedDataGridViewShareIndex = 0;
-
                             dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
 
                             // Scroll to the selected row
@@ -946,15 +942,7 @@ namespace SharePortfolioManager
                             Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex,
                                 LastFirstDisplayedRowIndex, true);
 
-                            // Reset index
-                            // 07.06.2020
-                            //SelectedDataGridViewShareIndex = 0;
-
                             dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
-
-                            // Scroll to the selected row
-                            //Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex,
-                            //    LastFirstDisplayedRowIndex, true);
                         }
 
                         if (
@@ -1355,10 +1343,6 @@ namespace SharePortfolioManager
                             Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex,
                                 LastFirstDisplayedRowIndex, true);
 
-                            // Reset index
-                            // 07.06.2020
-                            //SelectedDataGridViewShareIndex = 0;
-
                             dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
 
                             // Scroll to the selected row
@@ -1372,10 +1356,6 @@ namespace SharePortfolioManager
                             // Scroll to the selected row
                             Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex,
                                 LastFirstDisplayedRowIndex, true);
-
-                            // Reset index
-                            //07.06.2020
-                            //SelectedDataGridViewShareIndex = 0;
 
                             dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
 

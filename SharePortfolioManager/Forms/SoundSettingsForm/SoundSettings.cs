@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2020 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -30,6 +30,7 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using SharePortfolioManager.Classes.Configurations;
 
 namespace SharePortfolioManager.SoundSettingsForm
 {
@@ -55,7 +56,7 @@ namespace SharePortfolioManager.SoundSettingsForm
         /// <summary>
         /// Constructor
         /// </summary>
-        public FrmSoundSettings(FrmMain parentWindow, Logger logger, Language xmlLanguage, String strLanguage)
+        public FrmSoundSettings(FrmMain parentWindow, Logger logger, Language xmlLanguage, string strLanguage)
         {
             InitializeComponent();
 
@@ -99,15 +100,9 @@ namespace SharePortfolioManager.SoundSettingsForm
                 Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/Caption", SettingsConfiguration.LanguageName);
 
                 grpBoxUpdateFinishedSound.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxUpdateFinishedSound/Caption", SettingsConfiguration.LanguageName);
-                lblUpdateFinishedSound.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxUpdateFinishedSound/Labels/UpdateFinishSound", SettingsConfiguration.LanguageName);
-                btnUpdateFinishedSound.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxUpdateFinishedSound/Buttons/Browse", SettingsConfiguration.LanguageName);
-
                 chkBoxUpdateFinishedSoundPlay.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxUpdateFinishedSound/CheckBoxes/EnableUpdateFinishSound", SettingsConfiguration.LanguageName);
 
                 grpBoxErrorSound.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxErrorSound/Caption", SettingsConfiguration.LanguageName);
-                lblErrorSound.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxErrorSound/Labels/ErrorSound", SettingsConfiguration.LanguageName);
-                btnErrorSound.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxErrorSound/Buttons/Browse", SettingsConfiguration.LanguageName);
-
                 chkBoxErrorSoundPlay.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/GrpBoxErrorSound/CheckBoxes/EnableErrorSound", SettingsConfiguration.LanguageName);
 
                 btnSave.Text = Language.GetLanguageTextByXPath(@"/SoundSettingsForm/Buttons/Save", SettingsConfiguration.LanguageName);
@@ -124,8 +119,22 @@ namespace SharePortfolioManager.SoundSettingsForm
 
                 #region Sounds filename
 
-                lblUpdateFinishedSound.Text = Path.GetFileName(Sound.UpdateFinishedFileName);
-                lblErrorSound.Text = Path.GetFileName(Sound.ErrorFileName);
+                var files = Directory.GetFiles(Path.GetDirectoryName(Application.ExecutablePath) + Sound.SoundFilesDirectory);
+
+                foreach (var file in files)
+                {
+                    var fileName = Path.GetFileName(file);
+                    cbxUpdateFinishedSound.Items.Add(fileName);
+                }
+
+                foreach (var file in files)
+                {
+                    var fileName = Path.GetFileName(file);
+                    cbxErrorSound.Items.Add(fileName);
+                }
+
+                cbxUpdateFinishedSound.SelectedIndex = cbxUpdateFinishedSound.Items.IndexOf(Path.GetFileName(Sound.UpdateFinishedFileName));
+                cbxErrorSound.SelectedIndex = cbxErrorSound.Items.IndexOf(Path.GetFileName(Sound.ErrorFileName));
 
                 #endregion Sounds filename
             }
@@ -147,46 +156,6 @@ namespace SharePortfolioManager.SoundSettingsForm
         #region Buttons
 
         /// <summary>
-        /// This function allows the user to open a file dialog to change the update finished sound.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnBtnUpdateFinishedSoundBrowse_Click(object sender, EventArgs e)
-        {
-            var strCurrentFile = Sound.UpdateFinishedFileName;
-
-            const string strFilter = "wav (*.wav)|*.wav";
-            if (Helper.SetDocument(
-                Language.GetLanguageTextByXPath(
-                    @"/SoundSettingsForm/GrpBoxUpdateFinishedSound/OpenFileDialog/Title", SettingsConfiguration.LanguageName), 
-                strFilter, ref strCurrentFile) != DialogResult.OK)
-                return;
-
-            Sound.UpdateFinishedFileName = strCurrentFile;
-            lblUpdateFinishedSound.Text = Path.GetFileName(strCurrentFile);
-
-        }
-
-        /// <summary>
-        /// This function allows the user to open a file dialog to change the error sound.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnBtnErrorSoundBrowse_Click(object sender, EventArgs e)
-        {
-            var strCurrentFile = Sound.ErrorFileName;
-
-            const string strFilter = "wav (*.wav)|*.wav";
-            if (Helper.SetDocument(
-                Language.GetLanguageTextByXPath(
-                    @"/SoundSettingsForm/GrpBoxErrorSound/OpenFileDialog/Title", SettingsConfiguration.LanguageName),
-                strFilter, ref strCurrentFile) != DialogResult.OK)
-                return;
-
-            lblErrorSound.Text = Path.GetFileName(strCurrentFile);
-        }
-
-        /// <summary>
         /// This function close the form
         /// </summary>
         /// <param name="sender">Button</param>
@@ -204,7 +173,6 @@ namespace SharePortfolioManager.SoundSettingsForm
         /// <param name="e">EventArgs</param>
         private void OnBtnSave_Click(object sender, EventArgs e)
         {
-            // Set window start position and window size
             if (SettingsConfiguration.XmlDocument != null)
             {
                 try
@@ -212,8 +180,9 @@ namespace SharePortfolioManager.SoundSettingsForm
                     #region Set update finished sound settings
 
                     // Save update finished file name
-                    Sound.UpdateFinishedFileName = Path.GetDirectoryName(Sound.UpdateFinishedFileName) + @"\" +
-                                                  lblUpdateFinishedSound.Text;
+                    Sound.UpdateFinishedFileName =
+                        Path.GetDirectoryName(Application.ExecutablePath) + Sound.SoundFilesDirectory +
+                        cbxUpdateFinishedSound.SelectedItem;
 
                     // Save update finished enable flag
                     Sound.UpdateFinishedEnable = chkBoxUpdateFinishedSoundPlay.Checked;
@@ -223,8 +192,9 @@ namespace SharePortfolioManager.SoundSettingsForm
                     #region Set error sound settings
 
                     // Save error file name
-                    Sound.ErrorFileName = Path.GetDirectoryName(Sound.ErrorFileName) + @"\" +
-                                          lblErrorSound.Text;
+                    Sound.ErrorFileName =
+                        Path.GetDirectoryName(Application.ExecutablePath) + Sound.SoundFilesDirectory +
+                        cbxErrorSound.SelectedItem;
 
                     // Save error enable flag
                     Sound.ErrorEnable = chkBoxErrorSoundPlay.Checked;

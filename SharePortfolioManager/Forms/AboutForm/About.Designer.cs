@@ -49,6 +49,8 @@
             this.lblPdfConverterInfoLink = new System.Windows.Forms.LinkLabel();
             this.grpBoxPdfConverter = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.lblPdfConverterVersionValue = new System.Windows.Forms.Label();
+            this.lblPdfConverterVersion = new System.Windows.Forms.Label();
             this.grpBoxVersions.SuspendLayout();
             this.tblLayPnlVersions.SuspendLayout();
             this.tblLayPnlButton.SuspendLayout();
@@ -62,7 +64,7 @@
             // 
             this.btnOk.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnOk.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnOk.Location = new System.Drawing.Point(137, 1);
+            this.btnOk.Location = new System.Drawing.Point(140, 1);
             this.btnOk.Margin = new System.Windows.Forms.Padding(1);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(178, 33);
@@ -133,7 +135,7 @@
             this.grpBoxVersions.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grpBoxVersions.Location = new System.Drawing.Point(5, 5);
             this.grpBoxVersions.Name = "grpBoxVersions";
-            this.grpBoxVersions.Size = new System.Drawing.Size(322, 121);
+            this.grpBoxVersions.Size = new System.Drawing.Size(322, 145);
             this.grpBoxVersions.TabIndex = 6;
             this.grpBoxVersions.TabStop = false;
             this.grpBoxVersions.Text = "_grpBoxVersions";
@@ -143,6 +145,8 @@
             this.tblLayPnlVersions.ColumnCount = 2;
             this.tblLayPnlVersions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65F));
             this.tblLayPnlVersions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
+            this.tblLayPnlVersions.Controls.Add(this.lblPdfConverterVersion, 0, 4);
+            this.tblLayPnlVersions.Controls.Add(this.lblPdfConverterVersionValue, 0, 4);
             this.tblLayPnlVersions.Controls.Add(this.lblLoggerDllVersionValue, 1, 3);
             this.tblLayPnlVersions.Controls.Add(this.lblApplicationVersion, 0, 0);
             this.tblLayPnlVersions.Controls.Add(this.lblApplicationVersionValue, 1, 0);
@@ -155,14 +159,13 @@
             this.tblLayPnlVersions.Location = new System.Drawing.Point(3, 18);
             this.tblLayPnlVersions.Margin = new System.Windows.Forms.Padding(1);
             this.tblLayPnlVersions.Name = "tblLayPnlVersions";
-            this.tblLayPnlVersions.RowCount = 4;
+            this.tblLayPnlVersions.RowCount = 5;
             this.tblLayPnlVersions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tblLayPnlVersions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tblLayPnlVersions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tblLayPnlVersions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tblLayPnlVersions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tblLayPnlVersions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tblLayPnlVersions.Size = new System.Drawing.Size(316, 96);
+            this.tblLayPnlVersions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+            this.tblLayPnlVersions.Size = new System.Drawing.Size(316, 120);
             this.tblLayPnlVersions.TabIndex = 0;
             // 
             // lblLoggerDllVersionValue
@@ -225,11 +228,11 @@
             this.tblLayPnlButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblLayPnlButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 180F));
             this.tblLayPnlButton.Controls.Add(this.btnOk, 1, 0);
-            this.tblLayPnlButton.Location = new System.Drawing.Point(11, 290);
+            this.tblLayPnlButton.Location = new System.Drawing.Point(8, 314);
             this.tblLayPnlButton.Name = "tblLayPnlButton";
             this.tblLayPnlButton.RowCount = 1;
             this.tblLayPnlButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblLayPnlButton.Size = new System.Drawing.Size(316, 35);
+            this.tblLayPnlButton.Size = new System.Drawing.Size(319, 35);
             this.tblLayPnlButton.TabIndex = 1;
             // 
             // lblIconSetInfo
@@ -264,7 +267,7 @@
             // grpBoxIconSet
             // 
             this.grpBoxIconSet.Controls.Add(this.tableLayoutPanel1);
-            this.grpBoxIconSet.Location = new System.Drawing.Point(5, 132);
+            this.grpBoxIconSet.Location = new System.Drawing.Point(5, 235);
             this.grpBoxIconSet.Name = "grpBoxIconSet";
             this.grpBoxIconSet.Size = new System.Drawing.Size(322, 73);
             this.grpBoxIconSet.TabIndex = 7;
@@ -318,7 +321,7 @@
             // grpBoxPdfConverter
             // 
             this.grpBoxPdfConverter.Controls.Add(this.tableLayoutPanel2);
-            this.grpBoxPdfConverter.Location = new System.Drawing.Point(5, 211);
+            this.grpBoxPdfConverter.Location = new System.Drawing.Point(5, 156);
             this.grpBoxPdfConverter.Name = "grpBoxPdfConverter";
             this.grpBoxPdfConverter.Size = new System.Drawing.Size(322, 73);
             this.grpBoxPdfConverter.TabIndex = 8;
@@ -340,12 +343,39 @@
             this.tableLayoutPanel2.Size = new System.Drawing.Size(315, 49);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
+            // lblPdfConverterVersionValue
+            // 
+            this.lblPdfConverterVersionValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblPdfConverterVersionValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblPdfConverterVersionValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblPdfConverterVersionValue.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPdfConverterVersionValue.Location = new System.Drawing.Point(206, 97);
+            this.lblPdfConverterVersionValue.Margin = new System.Windows.Forms.Padding(1);
+            this.lblPdfConverterVersionValue.Name = "lblPdfConverterVersionValue";
+            this.lblPdfConverterVersionValue.Size = new System.Drawing.Size(109, 22);
+            this.lblPdfConverterVersionValue.TabIndex = 10;
+            this.lblPdfConverterVersionValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lblPdfConverterVersion
+            // 
+            this.lblPdfConverterVersion.BackColor = System.Drawing.Color.LightGray;
+            this.lblPdfConverterVersion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblPdfConverterVersion.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblPdfConverterVersion.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPdfConverterVersion.Location = new System.Drawing.Point(1, 97);
+            this.lblPdfConverterVersion.Margin = new System.Windows.Forms.Padding(1);
+            this.lblPdfConverterVersion.Name = "lblPdfConverterVersion";
+            this.lblPdfConverterVersion.Size = new System.Drawing.Size(203, 22);
+            this.lblPdfConverterVersion.TabIndex = 11;
+            this.lblPdfConverterVersion.Text = "_Pdf converter version:";
+            this.lblPdfConverterVersion.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // FrmAbout
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.ClientSize = new System.Drawing.Size(330, 329);
+            this.ClientSize = new System.Drawing.Size(330, 353);
             this.Controls.Add(this.grpBoxPdfConverter);
             this.Controls.Add(this.tblLayPnlButton);
             this.Controls.Add(this.grpBoxIconSet);
@@ -394,5 +424,7 @@
         private System.Windows.Forms.LinkLabel lblPdfConverterInfoLink;
         private System.Windows.Forms.GroupBox grpBoxPdfConverter;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.Label lblPdfConverterVersion;
+        private System.Windows.Forms.Label lblPdfConverterVersionValue;
     }
 }

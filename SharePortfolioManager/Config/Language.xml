@@ -362,6 +362,7 @@
 				<DeleteFailed text="Delete of the share failed!" />
 				<DeleteErrorFailed text="An error occurred after the share delete!" />
 				<SaveSettingsFailed text="Settings save failed!" />
+				<SavePortfolioFailed text="Portfolio save failed!" />
 				<SelectionChangeFailed text="The selection change failed!" />
 				<ResizeFailed text="Resize failed!" />
 				<ChangeLanguageFailed text="Changing the language failed!" />
@@ -1456,21 +1457,6 @@
 			<!-- GroupBox update finish sound -->
 			<GrpBoxUpdateFinishedSound>
 				<Caption text="Sound for the share update finish" />
-				
-				<!-- Labels -->
-				<Labels>
-					<UpdateFinishSound text="Update finish sound:" />
-				</Labels>
-
-				<!-- Buttons -->
-				<Buttons>
-					<Browse text="Browse..." />
-				</Buttons>
-
-				<!-- Open file dialog title -->
-				<OpenFileDialog>
-					<Title text="Chose update finished sound file" />
-				</OpenFileDialog>
 
 				<!-- Checkboxes -->
 				<CheckBoxes>
@@ -1481,21 +1467,6 @@
 			<!-- GroupBox update finish sound -->
 			<GrpBoxErrorSound>
 				<Caption text="Sound for the error" />
-				
-				<!-- Labels -->
-				<Labels>
-					<ErrorSound text="Error sound:" />
-				</Labels>
-
-				<!-- Buttons -->
-				<Buttons>
-					<Browse text="Browse..." />
-				</Buttons>
-
-				<!-- Open file dialog title -->
-				<OpenFileDialog>
-					<Title text="Chose error sound file" />
-				</OpenFileDialog>
 
 				<!-- Checkboxes -->
 				<CheckBoxes>
@@ -1546,9 +1517,7 @@
 				<DocumentDoesNotExist text="The document does not exist! Mayby network drive mapped?"/>
 				<ShareDelete text="Do you really want to delete this share from the portfolio?"/>
 				<LoggerSettingsReboot text="The changes of the logger settings will be used after a software restarted"/>
-				<InputPortfolioName text="Please input the portfolio name:"/>
 				<PortfolioDirectoryCreationFailed text="Creation of the portfolio directory failed!" />
-				<PortfolioNameExists text="A portfolio with the given name already exists. Should this portfolio be overwritten?"/>
 				<DocumentCaptureOnlyPdf text="Document capture is only possible with PDFs!" />
 			</Content>
 		</MessageBoxForm>
@@ -1564,12 +1533,14 @@
 				<ParserDLLVersion text="Parser DLL version:" />
 				<LanguageDLLVersion text="Language DLL version:" />
 				<LoggerDLLVersion text="Logger DLL version:" />
-				<IconSet text="Icons" />
-				<IconSetInfo text="The used icons are taken from:" />
-				<IconSetInfoLink text="Link to Icon8" />
+				<PdfConverterVersion text="PDF converter version:" />
+				<PdfConverterNotInstalled text="not installed" />
 				<PdfConverter text="PDF converter" />
 				<PdfConverterInfo text="The used PDF converter is taken from:" />
 				<PdfConverterInfoLink text="Link to XpdfReader" />
+				<IconSet text="Icons" />
+				<IconSetInfo text="The used icons are taken from:" />
+				<IconSetInfoLink text="Link to Icon8" />
 			</Labels>
 			
 			<!-- Buttons -->
@@ -1945,6 +1916,7 @@
 				<DeleteFailed text="Entfernen der Aktie ist fehlgeschlagen!" />
 				<DeleteErrorFailed text="Es trat ein Fehler nach dem Entfernen der Aktie auf!" />
 				<SaveSettingsFailed text="Speichern der Einstellungen fehlgeschalgen!" />
+				<SavePortfolioFailed text="Speichern des Portfolios fehlgeschlagen!" />
 				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
 				<ResizeFailed text="Ändern der Größe ist fehlgeschlagen!" />
 				<ChangeLanguageFailed text="Ändern der Sprache fehlgeschlagen!" />
@@ -3037,21 +3009,6 @@
 			<!-- GroupBox update finish sound -->
 			<GrpBoxUpdateFinishedSound>
 				<Caption text="Sound für das Ende einer Aktien- Aktualisierung" />
-				
-				<!-- Labels -->
-				<Labels>
-					<UpdateFinishSound text="Aktualisierungs- Sound:" />
-				</Labels>
-
-				<!-- Buttons -->
-				<Buttons>
-					<Browse text="Browse..." />
-				</Buttons>
-
-				<!-- Open file dialog title -->
-				<OpenFileDialog>
-					<Title text="Aktualisierungs- Ende Sound- Datei auswählen" />
-				</OpenFileDialog>
 
 				<!-- Checkboxes -->
 				<CheckBoxes>
@@ -3063,21 +3020,6 @@
 			<GrpBoxErrorSound>
 				<Caption text="Sound für das Anzeigen einers Fehlers" />
 				
-				<!-- Labels -->
-				<Labels>
-					<ErrorSound text="Fehler- Sound:" />
-				</Labels>
-
-				<!-- Buttons -->
-				<Buttons>
-					<Browse text="Browse..." />
-				</Buttons>
-
-				<!-- Open file dialog title -->
-				<OpenFileDialog>
-					<Title text="Fehler- Sound- Datei auswählen" />
-				</OpenFileDialog>
-
 				<!-- Checkboxes -->
 				<CheckBoxes>
 					<EnableErrorSound text="Aktiv" />
@@ -3127,9 +3069,7 @@
 				<DocumentDoesNotExist text="Das Dokument existiert nicht! Evtl. ist das Netzwerk- Laufwerk nicht verbunden?"/>
 				<ShareDelete text="Möchten Sie den Aktien- Eintrag wirklich aus dem Portfolio entfernen?"/>
 				<LoggerSettingsReboot text="Die Änderungen der Logger- Einstellung werden erst nach meinem Software- Neustart angewendet."/>
-				<InputPortfolioName text="Bitte geben Sie den Portfolioname ein:"/>
 				<PortfolioDirectoryCreationFailed text="Erzeugen des Portfolio- Verzeichnisses ist fehlgeschlagen!" />
-				<PortfolioNameExists text="Es existiert bereits in Portfolio mit dem angegeben Namen. Soll dieses Portfolio überschrieben werden?"/>
 				<DocumentCaptureOnlyPdf text="Dokumentenerfassung ist nur mit PDFs möglich!" />
 			</Content>
 		</MessageBoxForm>
@@ -3145,6 +3085,8 @@
 				<ParserDLLVersion text="Parser- DLL- Version:" />
 				<LanguageDLLVersion text="Sprach- DLL- Version:" />
 				<LoggerDLLVersion text="Logger- DLL- Version:" />
+				<PdfConverterVersion text="PDF- Konverter- Version:" />
+				<PdfConverterNotInstalled text="nicht installiert" />
 				<IconSet text="Icons" />
 				<IconSetInfo text="Die benutzten Icons stammt von:" />
 				<IconSetInfoLink text="Link zu Icon8" />

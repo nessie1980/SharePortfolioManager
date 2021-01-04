@@ -488,6 +488,12 @@ namespace SharePortfolioManager
             #endregion Document parsing configuration error code check
 
             #endregion Check configuration error 
+
+            #region Check if PDF converter is installed
+
+            grpBoxDocumentCapture.Enabled = Helper.PdfParserInstalled();
+
+            #endregion Check if PDF converter is installed
         }
 
     }

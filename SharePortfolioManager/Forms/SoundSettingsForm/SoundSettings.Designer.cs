@@ -36,13 +36,11 @@ namespace SharePortfolioManager.SoundSettingsForm
             this.toolStripStatusLabelMessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.chkBoxUpdateFinishedSoundPlay = new System.Windows.Forms.CheckBox();
             this.grpBoxUpdateFinishedSound = new System.Windows.Forms.GroupBox();
-            this.btnUpdateFinishedSound = new System.Windows.Forms.Button();
-            this.lblUpdateFinishedSound = new System.Windows.Forms.Label();
             this.grpBoxErrorSound = new System.Windows.Forms.GroupBox();
             this.chkBoxErrorSoundPlay = new System.Windows.Forms.CheckBox();
-            this.btnErrorSound = new System.Windows.Forms.Button();
-            this.lblErrorSound = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.cbxUpdateFinishedSound = new System.Windows.Forms.ComboBox();
+            this.cbxErrorSound = new System.Windows.Forms.ComboBox();
             this.grpBoxUpdateFinishedSound.SuspendLayout();
             this.grpBoxErrorSound.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -89,7 +87,7 @@ namespace SharePortfolioManager.SoundSettingsForm
             // chkBoxUpdateFinishedSoundPlay
             // 
             this.chkBoxUpdateFinishedSoundPlay.AutoSize = true;
-            this.chkBoxUpdateFinishedSoundPlay.Location = new System.Drawing.Point(587, 25);
+            this.chkBoxUpdateFinishedSoundPlay.Location = new System.Drawing.Point(551, 23);
             this.chkBoxUpdateFinishedSoundPlay.Name = "chkBoxUpdateFinishedSoundPlay";
             this.chkBoxUpdateFinishedSoundPlay.Size = new System.Drawing.Size(124, 19);
             this.chkBoxUpdateFinishedSoundPlay.TabIndex = 0;
@@ -98,9 +96,8 @@ namespace SharePortfolioManager.SoundSettingsForm
             // 
             // grpBoxUpdateFinishedSound
             // 
+            this.grpBoxUpdateFinishedSound.Controls.Add(this.cbxUpdateFinishedSound);
             this.grpBoxUpdateFinishedSound.Controls.Add(this.chkBoxUpdateFinishedSoundPlay);
-            this.grpBoxUpdateFinishedSound.Controls.Add(this.btnUpdateFinishedSound);
-            this.grpBoxUpdateFinishedSound.Controls.Add(this.lblUpdateFinishedSound);
             this.grpBoxUpdateFinishedSound.Location = new System.Drawing.Point(8, 5);
             this.grpBoxUpdateFinishedSound.Name = "grpBoxUpdateFinishedSound";
             this.grpBoxUpdateFinishedSound.Size = new System.Drawing.Size(717, 54);
@@ -108,32 +105,10 @@ namespace SharePortfolioManager.SoundSettingsForm
             this.grpBoxUpdateFinishedSound.TabStop = false;
             this.grpBoxUpdateFinishedSound.Text = "_grpBoxUpdateFinishedSound";
             // 
-            // btnUpdateFinishedSound
-            // 
-            this.btnUpdateFinishedSound.Location = new System.Drawing.Point(467, 21);
-            this.btnUpdateFinishedSound.Name = "btnUpdateFinishedSound";
-            this.btnUpdateFinishedSound.Size = new System.Drawing.Size(114, 25);
-            this.btnUpdateFinishedSound.TabIndex = 6;
-            this.btnUpdateFinishedSound.Text = "_browse";
-            this.btnUpdateFinishedSound.UseVisualStyleBackColor = true;
-            this.btnUpdateFinishedSound.Click += new System.EventHandler(this.OnBtnUpdateFinishedSoundBrowse_Click);
-            // 
-            // lblUpdateFinishedSound
-            // 
-            this.lblUpdateFinishedSound.BackColor = System.Drawing.Color.LightGray;
-            this.lblUpdateFinishedSound.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblUpdateFinishedSound.Location = new System.Drawing.Point(10, 22);
-            this.lblUpdateFinishedSound.Name = "lblUpdateFinishedSound";
-            this.lblUpdateFinishedSound.Size = new System.Drawing.Size(451, 23);
-            this.lblUpdateFinishedSound.TabIndex = 3;
-            this.lblUpdateFinishedSound.Text = "_UpdateFinishedSound";
-            this.lblUpdateFinishedSound.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // grpBoxErrorSound
             // 
+            this.grpBoxErrorSound.Controls.Add(this.cbxErrorSound);
             this.grpBoxErrorSound.Controls.Add(this.chkBoxErrorSoundPlay);
-            this.grpBoxErrorSound.Controls.Add(this.btnErrorSound);
-            this.grpBoxErrorSound.Controls.Add(this.lblErrorSound);
             this.grpBoxErrorSound.Location = new System.Drawing.Point(8, 65);
             this.grpBoxErrorSound.Name = "grpBoxErrorSound";
             this.grpBoxErrorSound.Size = new System.Drawing.Size(717, 54);
@@ -144,33 +119,12 @@ namespace SharePortfolioManager.SoundSettingsForm
             // chkBoxErrorSoundPlay
             // 
             this.chkBoxErrorSoundPlay.AutoSize = true;
-            this.chkBoxErrorSoundPlay.Location = new System.Drawing.Point(587, 25);
+            this.chkBoxErrorSoundPlay.Location = new System.Drawing.Point(551, 25);
             this.chkBoxErrorSoundPlay.Name = "chkBoxErrorSoundPlay";
             this.chkBoxErrorSoundPlay.Size = new System.Drawing.Size(117, 19);
             this.chkBoxErrorSoundPlay.TabIndex = 0;
             this.chkBoxErrorSoundPlay.Text = "_chkBoxEsPlay";
             this.chkBoxErrorSoundPlay.UseVisualStyleBackColor = true;
-            // 
-            // btnErrorSound
-            // 
-            this.btnErrorSound.Location = new System.Drawing.Point(467, 21);
-            this.btnErrorSound.Name = "btnErrorSound";
-            this.btnErrorSound.Size = new System.Drawing.Size(114, 25);
-            this.btnErrorSound.TabIndex = 5;
-            this.btnErrorSound.Text = "_browse";
-            this.btnErrorSound.UseVisualStyleBackColor = true;
-            this.btnErrorSound.Click += new System.EventHandler(this.OnBtnErrorSoundBrowse_Click);
-            // 
-            // lblErrorSound
-            // 
-            this.lblErrorSound.BackColor = System.Drawing.Color.LightGray;
-            this.lblErrorSound.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblErrorSound.Location = new System.Drawing.Point(10, 22);
-            this.lblErrorSound.Name = "lblErrorSound";
-            this.lblErrorSound.Size = new System.Drawing.Size(451, 22);
-            this.lblErrorSound.TabIndex = 3;
-            this.lblErrorSound.Text = "_ErrorSound";
-            this.lblErrorSound.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // statusStrip1
             // 
@@ -182,6 +136,24 @@ namespace SharePortfolioManager.SoundSettingsForm
             this.statusStrip1.Size = new System.Drawing.Size(734, 22);
             this.statusStrip1.TabIndex = 9;
             this.statusStrip1.Text = "statusStrip";
+            // 
+            // cbxUpdateFinishedSound
+            // 
+            this.cbxUpdateFinishedSound.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxUpdateFinishedSound.FormattingEnabled = true;
+            this.cbxUpdateFinishedSound.Location = new System.Drawing.Point(10, 21);
+            this.cbxUpdateFinishedSound.Name = "cbxUpdateFinishedSound";
+            this.cbxUpdateFinishedSound.Size = new System.Drawing.Size(535, 23);
+            this.cbxUpdateFinishedSound.TabIndex = 7;
+            // 
+            // cbxErrorSound
+            // 
+            this.cbxErrorSound.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxErrorSound.FormattingEnabled = true;
+            this.cbxErrorSound.Location = new System.Drawing.Point(10, 23);
+            this.cbxErrorSound.Name = "cbxErrorSound";
+            this.cbxErrorSound.Size = new System.Drawing.Size(535, 23);
+            this.cbxErrorSound.TabIndex = 6;
             // 
             // FrmSoundSettings
             // 
@@ -223,12 +195,10 @@ namespace SharePortfolioManager.SoundSettingsForm
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelMessage;
         private System.Windows.Forms.CheckBox chkBoxUpdateFinishedSoundPlay;
         private System.Windows.Forms.GroupBox grpBoxUpdateFinishedSound;
-        private System.Windows.Forms.Label lblUpdateFinishedSound;
         private System.Windows.Forms.GroupBox grpBoxErrorSound;
-        private System.Windows.Forms.Label lblErrorSound;
-        private System.Windows.Forms.Button btnErrorSound;
         private System.Windows.Forms.CheckBox chkBoxErrorSoundPlay;
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.Button btnUpdateFinishedSound;
+        private System.Windows.Forms.ComboBox cbxUpdateFinishedSound;
+        private System.Windows.Forms.ComboBox cbxErrorSound;
     }
 }
