@@ -66,8 +66,8 @@ Source: "DLLs\LanguageHandler.dll"; DestDir: "{app}"; Components: application; F
 Source: "DLLs\Logger.dll"; DestDir: "{app}"; Components: application; Flags: ignoreversion
 Source: "DLLs\Parser.dll"; DestDir: "{app}"; Components: application; Flags: ignoreversion
 
-Source: "Sounds\Error.wav"; DestDir: "{app}\Sound"; Components: sounds; Flags: ignoreversion
-Source: "Sounds\UpdateFinished.wav"; DestDir: "{app}\Sound"; Components: sounds; Flags: ignoreversion
+Source: "Sounds\Error.wav"; DestDir: "{app}\Sounds"; Components: sounds; Flags: ignoreversion
+Source: "Sounds\UpdateFinished.wav"; DestDir: "{app}\Sounds"; Components: sounds; Flags: ignoreversion
 
 Source: "Tools\xpdf-tools-win-4.00\bin32\pdftotext.exe"; Components: tools; DestDir: "{app}\Tools\"; Flags: ignoreversion
 Source: "Tools\xpdf-tools-win-4.00\ANNOUNCE"; DestDir: "{app}\Tools"; Components: tools; Flags: ignoreversion
@@ -79,7 +79,7 @@ Source: "Tools\xpdf-tools-win-4.00\README"; DestDir: "{app}\Tools"; Components: 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Dirs]
-Name: "{userdocs}\{#MyAppName}\Portfolios"; Flags: uninsalwaysuninstall
+Name: "{userdocs}\{#MyAppName}\Portfolios"; Flags: uninsneveruninstall
 
 [Icons]
 ;Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
@@ -95,4 +95,15 @@ Type: filesandordirs; Name: "{app}\Logs"
 Type: filesandordirs; Name: "{app}\Settings"
 Type: filesandordirs; Name: "{app}\Sounds"
 Type: filesandordirs; Name: "{app}\Tools"
-Type: filesandordirs; Name: "{userdocs}\{#MyAppName}\Portfolios"
+
+[Code]
+procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+begin
+  if CurUninstallStep = usUninstall then
+  begin
+    if MsgBox('Do you want to delete folder ' + ExpandConstant('{userdocs}\{#MyAppName}') + '?', mbConfirmation, MB_YESNO) = idYes then
+    begin
+      DelTree(ExpandConstant('{userdocs}\{#MyAppName}'), True, True, True);
+    end;
+  end;
+end;
