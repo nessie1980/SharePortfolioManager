@@ -23,14 +23,14 @@ AppUpdatesURL={#MyAppURL}
 LicenseFile=InnoSetup\license.txt
 DisableWelcomePage=no
 UsePreviousAppDir=no
-DefaultDirName={commonpf}\{#MyAppName}
+DefaultDirName={userappdata}\{#MyAppName}
 DisableProgramGroupPage=yes
-DisableDirPage=no
+DisableDirPage=yes
 
 WizardStyle=modern
 
 SourceDir=..\
-PrivilegesRequired=poweruser
+PrivilegesRequired=lowest
 
 OutputDir=Installer
 OutputBaseFilename=SharePortfolioManagerInstaller_{#MyAppVersion}
@@ -82,9 +82,9 @@ Source: "Tools\xpdf-tools-win-4.00\README"; DestDir: "{app}\Tools"; Components: 
 Name: "{userdocs}\{#MyAppName}\Portfolios"; Flags: uninsalwaysuninstall
 
 [Icons]
-Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
-Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
-Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: quicklaunchicon
+;Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
+Name: "{userdesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
+Name: "{userstartmenu}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: quicklaunchicon
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
