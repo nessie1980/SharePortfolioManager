@@ -988,7 +988,7 @@
             this.grpBoxBuys.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grpBoxBuys.Location = new System.Drawing.Point(5, 427);
             this.grpBoxBuys.Name = "grpBoxBuys";
-            this.grpBoxBuys.Size = new System.Drawing.Size(760, 170);
+            this.grpBoxBuys.Size = new System.Drawing.Size(760, 196);
             this.grpBoxBuys.TabIndex = 16;
             this.grpBoxBuys.TabStop = false;
             this.grpBoxBuys.Text = "_grpBoxBuys";
@@ -1004,7 +1004,7 @@
             this.tblLayPnlOverviewTabControl.Name = "tblLayPnlOverviewTabControl";
             this.tblLayPnlOverviewTabControl.RowCount = 1;
             this.tblLayPnlOverviewTabControl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblLayPnlOverviewTabControl.Size = new System.Drawing.Size(754, 149);
+            this.tblLayPnlOverviewTabControl.Size = new System.Drawing.Size(754, 175);
             this.tblLayPnlOverviewTabControl.TabIndex = 0;
             // 
             // tabCtrlBuys
@@ -1015,7 +1015,7 @@
             this.tabCtrlBuys.Location = new System.Drawing.Point(3, 3);
             this.tabCtrlBuys.Name = "tabCtrlBuys";
             this.tabCtrlBuys.SelectedIndex = 0;
-            this.tabCtrlBuys.Size = new System.Drawing.Size(748, 143);
+            this.tabCtrlBuys.Size = new System.Drawing.Size(748, 169);
             this.tabCtrlBuys.TabIndex = 0;
             this.tabCtrlBuys.TabStop = false;
             this.tabCtrlBuys.SelectedIndexChanged += new System.EventHandler(this.OnTabCtrlBuys_SelectedIndexChanged);
@@ -1039,7 +1039,7 @@
             this.grpBoxDocumentPreview.Controls.Add(this.tableLayoutPanel1);
             this.grpBoxDocumentPreview.Location = new System.Drawing.Point(769, 5);
             this.grpBoxDocumentPreview.Name = "grpBoxDocumentPreview";
-            this.grpBoxDocumentPreview.Size = new System.Drawing.Size(510, 592);
+            this.grpBoxDocumentPreview.Size = new System.Drawing.Size(510, 618);
             this.grpBoxDocumentPreview.TabIndex = 17;
             this.grpBoxDocumentPreview.TabStop = false;
             this.grpBoxDocumentPreview.Text = "_grpBoxDocumentPreview";
@@ -1056,7 +1056,7 @@
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(504, 571);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(504, 597);
             this.tableLayoutPanel1.TabIndex = 6;
             // 
             // webBrowser1
@@ -1065,7 +1065,7 @@
             this.webBrowser1.Location = new System.Drawing.Point(3, 3);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(23, 22);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(498, 565);
+            this.webBrowser1.Size = new System.Drawing.Size(498, 591);
             this.webBrowser1.TabIndex = 1;
             // 
             // ViewBuyEdit
@@ -1075,16 +1075,16 @@
             this.AutoScroll = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.ClientSize = new System.Drawing.Size(1284, 601);
+            this.ClientSize = new System.Drawing.Size(1284, 627);
             this.Controls.Add(this.grpBoxDocumentPreview);
             this.Controls.Add(this.grpBoxBuys);
             this.Controls.Add(this.grpBoxAdd);
             this.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(1300, 640);
+            this.MaximumSize = new System.Drawing.Size(1300, 666);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(1300, 640);
+            this.MinimumSize = new System.Drawing.Size(1300, 666);
             this.Name = "ViewBuyEdit";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "_shareBuyEdit";

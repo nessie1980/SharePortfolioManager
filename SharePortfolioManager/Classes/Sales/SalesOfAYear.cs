@@ -91,7 +91,7 @@ namespace SharePortfolioManager.Classes.Sales
         public decimal SalePayoutBrokerageReductionYear { get; internal set; } = -1;
 
         [Browsable(false)]
-        public string SalePayoutBrokerageReductionYearUnitAsStr => Helper.FormatDecimal(SalePayoutBrokerageReductionYear, Helper.CurrencyTwoLength, false,
+        public string SalePayoutBrokerageReductionYearUnitAsStr => Helper.FormatDecimal(SalePayoutBrokerageReductionYear, Helper.CurrencyTwoLength, true,
                 Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
 
         [Browsable(false)]
@@ -120,7 +120,7 @@ namespace SharePortfolioManager.Classes.Sales
 
         [Browsable(false)]
         public string SaleProfitLossBrokerageReductionYearWithUnitAsStr => Helper.FormatDecimal(
-            SaleProfitLossBrokerageReductionYear, Helper.CurrencyTwoLength, false,
+            SaleProfitLossBrokerageReductionYear, Helper.CurrencyTwoLength, true,
             Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
 
         [Browsable(false)]
@@ -138,6 +138,8 @@ namespace SharePortfolioManager.Classes.Sales
         // ReSharper disable once UnusedMember.Global
         public string DgvSaleYear => SaleYearAsStr;
 
+        /// HINT: If any format is changed here it must also be changed in file "ViewSalesEdit.cs" at the variable "volumeFormatted"
+        /// in the function "OnDataGridViewSalesOfAYear_DataBindingComplete"
         [Browsable(true)]
         [DisplayName(@"YearVolume")]
         // ReSharper disable once UnusedMember.Global
@@ -145,13 +147,17 @@ namespace SharePortfolioManager.Classes.Sales
             ? Helper.FormatDecimal(SaleVolumeYear, Helper.CurrencyFiveLength, false,
                 Helper.CurrencyTwoFixLength, true, ShareObject.PieceUnit, SaleCultureInfo)
             : @"-";
-        
+
+        /// HINT: If any format is changed here it must also be changed in file "ViewSalesEdit.cs" at the variable "payoutFormatted"
+        /// in the function "OnDataGridViewSalesOfAYear_DataBindingComplete"
         [Browsable(true)]
         [DisplayName(@"YearPayout")]
         // ReSharper disable once UnusedMember.Global
-        public string DgvSalePayoutYearAsStr => Helper.FormatDecimal(SalePayoutYear, Helper.CurrencyTwoLength, true,
+        public string DgvSalePayoutYearAsStr => Helper.FormatDecimal(SalePayoutBrokerageReductionYear, Helper.CurrencyTwoLength, true,
                 Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo);
 
+        /// HINT: If any format is changed here it must also be changed in file "ViewSalesEdit.cs" at the variable "profitLossFormatted"
+        /// in the function "OnDataGridViewSalesOfAYear_DataBindingComplete"
         [Browsable(true)]
         [DisplayName(@"YearProfitLoss")]
         // ReSharper disable once UnusedMember.Global

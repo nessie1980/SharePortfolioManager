@@ -64,6 +64,28 @@ namespace SharePortfolioManager.BrokeragesForm.View
         DocumentFileDoesNotExists
     };
 
+    // Column indices values of the overview DataGridView
+    public enum DataGridViewOverViewIndices
+    {
+        ColumnIndicesYear,
+        ColumnIndicesBrokerage,
+        ColumnIndicesReduction,
+        ColumnIndicesBrokerageReduction,
+        ColumnIndicesScrollBar
+    }
+
+    // Column indices values of the years DataGridView
+    public enum DataGridViewYearIndices
+    {
+        ColumnIndicesGuid,
+        ColumnIndicesDate,
+        ColumnIndicesBrokerage,
+        ColumnIndicesReduction,
+        ColumnIndicesBrokerageReduction,
+        ColumnIndicesDocument,
+        ColumnIndicesScrollBar
+    }
+
     /// <inheritdoc />
     /// <summary>
     /// Interface of the BrokerageEdit view
@@ -123,6 +145,34 @@ namespace SharePortfolioManager.BrokeragesForm.View
         /// Stores the last focused date time picker or text box
         /// </summary>
         private Control _focusedControl;
+
+        /// <summary>
+        /// Postfix for the DataGridView footer name
+        /// </summary>
+        private readonly string _dataGridViewFooterPostfix = "_Footer";
+
+        /// <summary>
+        /// If the row count is greater then 4 the scrollbar will be shown
+        /// </summary>
+        private const int DataGridViewRowsScrollbar = 4;
+
+        /// <summary>
+        /// Height of the DataGridView footer
+        /// </summary>
+        private const int DataGridViewFooterHeight = 24;
+
+        #region Column width for the dgvContentOverView and dgvContentOverViewFooter
+
+        private const int OverViewDateColumnSize = 85;
+        private const int OverViewBrokerageColumnSize = 200;
+        private const int OverViewReductionColumnSize = 200;
+
+        private const int YearDateColumnSize = 85;
+        private const int YearBrokerageColumnSize = 175;
+        private const int YearReductionColumnSize = 175;
+        private const int YearBrokerageReductionColumnSize = 175;
+
+        #endregion Column width for the dgvPortfolio and dgvPortfolioFooter
 
         #endregion Fields
 
@@ -1268,9 +1318,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                 var newTabPageOverviewYears = new TabPage
                 {
                     // Set TabPage name
-                    Name = Language.GetLanguageTextByXPath(
-                        @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/TabPgOverview/Overview",
-                        LanguageName),
+                    Name = @"Overview",
 
                     // Set TabPage caption
                     Text = Language.GetLanguageTextByXPath(
@@ -1313,6 +1361,21 @@ namespace SharePortfolioManager.BrokeragesForm.View
                         DataGridViewColumnHeadersHeightSizeMode.DisableResizing
                 };
 
+                // Create DataGridView
+                var dataGridViewBuysOverviewOfAYearsFooter = new DataGridView
+                {
+                    Name = @"Overview" + _dataGridViewFooterPostfix,
+                    Dock = DockStyle.Bottom,
+                    AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None,
+
+                    // Disable column header resize
+                    ColumnHeadersHeightSizeMode =
+                        DataGridViewColumnHeadersHeightSizeMode.DisableResizing,
+
+                    // Set height via Size height
+                    Size = new Size(1, DataGridViewFooterHeight)
+                };
+
                 #endregion Data source, data binding and data grid view
 
                 #region Events
@@ -1328,42 +1391,16 @@ namespace SharePortfolioManager.BrokeragesForm.View
 
                 #region Style 
 
-                // Advanced configuration DataGridView brokerage
-                dataGridViewBrokerageOverviewOfAYears.EnableHeadersVisualStyles = false;
-                // Column header styling
-                dataGridViewBrokerageOverviewOfAYears.ColumnHeadersDefaultCellStyle.Alignment =
-                    DataGridViewContentAlignment.MiddleCenter;
-                dataGridViewBrokerageOverviewOfAYears.ColumnHeadersDefaultCellStyle.BackColor =
-                    DataGridViewHelper.DataGridViewHeaderColors;
-                dataGridViewBrokerageOverviewOfAYears.ColumnHeadersDefaultCellStyle.SelectionBackColor =
-                    DataGridViewHelper.DataGridViewHeaderColors;
-                dataGridViewBrokerageOverviewOfAYears.ColumnHeadersHeight = 25;
-                dataGridViewBrokerageOverviewOfAYears.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-                // Column styling
-                dataGridViewBrokerageOverviewOfAYears.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                // Row styling
-                dataGridViewBrokerageOverviewOfAYears.RowHeadersVisible = false;
-                dataGridViewBrokerageOverviewOfAYears.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
-                dataGridViewBrokerageOverviewOfAYears.RowsDefaultCellStyle.BackColor = Color.White;
-                dataGridViewBrokerageOverviewOfAYears.MultiSelect = false;
-                dataGridViewBrokerageOverviewOfAYears.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                // Cell styling
+                DataGridViewHelper.DataGridViewConfiguration(dataGridViewBrokerageOverviewOfAYears);
 
-                dataGridViewBrokerageOverviewOfAYears.DefaultCellStyle.SelectionBackColor = Color.Blue;
-                dataGridViewBrokerageOverviewOfAYears.DefaultCellStyle.SelectionForeColor = Color.Yellow;
-                dataGridViewBrokerageOverviewOfAYears.CellBorderStyle = DataGridViewCellBorderStyle.Single;
-                dataGridViewBrokerageOverviewOfAYears.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-                // Allow styling
-                dataGridViewBrokerageOverviewOfAYears.AllowUserToResizeColumns = false;
-                dataGridViewBrokerageOverviewOfAYears.AllowUserToResizeRows = false;
-                dataGridViewBrokerageOverviewOfAYears.AllowUserToAddRows = false;
-                dataGridViewBrokerageOverviewOfAYears.AllowUserToDeleteRows = false;
+                dataGridViewBuysOverviewOfAYearsFooter.ColumnHeadersVisible = false;
 
                 #endregion Style
 
                 #region Control add
 
                 newTabPageOverviewYears.Controls.Add(dataGridViewBrokerageOverviewOfAYears);
+                newTabPageOverviewYears.Controls.Add(dataGridViewBuysOverviewOfAYearsFooter);
                 dataGridViewBrokerageOverviewOfAYears.Parent = newTabPageOverviewYears;
                 tabCtrlBrokerage.Controls.Add(newTabPageOverviewYears);
                 newTabPageOverviewYears.Parent = tabCtrlBrokerage;
@@ -1426,6 +1463,20 @@ namespace SharePortfolioManager.BrokeragesForm.View
                             DataGridViewColumnHeadersHeightSizeMode.DisableResizing
                     };
 
+                    // Create DataGridView
+                    var dataGridViewBuysOfAYearFooter = new DataGridView
+                    {
+                        Name = keyName + _dataGridViewFooterPostfix,
+                        Dock = DockStyle.Bottom,
+
+                        // Disable column header resize
+                        ColumnHeadersHeightSizeMode =
+                            DataGridViewColumnHeadersHeightSizeMode.DisableResizing,
+
+                        // Set height via Size height
+                        Size = new Size(1, DataGridViewFooterHeight)
+                    };
+
                     #endregion Data source, data binding and data grid view
 
                     #region Events
@@ -1441,42 +1492,16 @@ namespace SharePortfolioManager.BrokeragesForm.View
 
                     #region Style
 
-                    // Advanced configuration DataGridView brokerage
-                    dataGridViewBrokerageOfAYear.EnableHeadersVisualStyles = false;
-                    // Column header styling
-                    dataGridViewBrokerageOfAYear.ColumnHeadersDefaultCellStyle.Alignment =
-                        DataGridViewContentAlignment.MiddleCenter;
-                    dataGridViewBrokerageOfAYear.ColumnHeadersDefaultCellStyle.BackColor =
-                        DataGridViewHelper.DataGridViewHeaderColors;
-                    dataGridViewBrokerageOfAYear.ColumnHeadersDefaultCellStyle.SelectionBackColor =
-                        DataGridViewHelper.DataGridViewHeaderColors;
-                    dataGridViewBrokerageOfAYear.ColumnHeadersHeight = 25;
-                    dataGridViewBrokerageOfAYear.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-                    // Column styling
-                    dataGridViewBrokerageOfAYear.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                    // Row styling
-                    dataGridViewBrokerageOfAYear.RowHeadersVisible = false;
-                    dataGridViewBrokerageOfAYear.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
-                    dataGridViewBrokerageOfAYear.RowsDefaultCellStyle.BackColor = Color.White;
-                    dataGridViewBrokerageOfAYear.MultiSelect = false;
-                    dataGridViewBrokerageOfAYear.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                    // Cell styling
+                    DataGridViewHelper.DataGridViewConfiguration(dataGridViewBrokerageOfAYear);
 
-                    dataGridViewBrokerageOfAYear.DefaultCellStyle.SelectionBackColor = Color.Blue;
-                    dataGridViewBrokerageOfAYear.DefaultCellStyle.SelectionForeColor = Color.Yellow;
-                    dataGridViewBrokerageOfAYear.CellBorderStyle = DataGridViewCellBorderStyle.Single;
-                    dataGridViewBrokerageOfAYear.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-                    // Allow styling
-                    dataGridViewBrokerageOfAYear.AllowUserToResizeColumns = false;
-                    dataGridViewBrokerageOfAYear.AllowUserToResizeRows = false;
-                    dataGridViewBrokerageOfAYear.AllowUserToAddRows = false;
-                    dataGridViewBrokerageOfAYear.AllowUserToDeleteRows = false;
+                    dataGridViewBuysOfAYearFooter.ColumnHeadersVisible = false;
 
                     #endregion Style
 
                     #region Control add
 
                     newTabPage.Controls.Add(dataGridViewBrokerageOfAYear);
+                    newTabPage.Controls.Add(dataGridViewBuysOfAYearFooter);
                     dataGridViewBrokerageOfAYear.Parent = newTabPage;
                     tabCtrlBrokerage.Controls.Add(newTabPage);
                     newTabPage.Parent = tabCtrlBrokerage;
@@ -1509,23 +1534,30 @@ namespace SharePortfolioManager.BrokeragesForm.View
         {
             try
             {
+                var dgvContent = ((DataGridView) sender);
                 // Set column headers
-                for (var i = 0; i < ((DataGridView)sender).ColumnCount; i++)
+                for (var i = 0; i < dgvContent.ColumnCount; i++)
                 {
-                    // Set alignment of the column
-                    ((DataGridView)sender).Columns[i].DefaultCellStyle.Alignment =
-                        DataGridViewContentAlignment.MiddleCenter;
+                    // Disable sorting of the columns ( remove sort arrow )
+                    dgvContent.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
+
+                    // Get index of the current added column
+                    var index = ((DataGridView)tabCtrlBrokerage.TabPages[dgvContent.Name]
+                            .Controls[dgvContent.Name + _dataGridViewFooterPostfix]).Columns
+                        .Add(dgvContent.Name + _dataGridViewFooterPostfix, "Header " + i);
 
                     // Disable sorting of the columns ( remove sort arrow )
-                    ((DataGridView)sender).Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
+                    ((DataGridView)tabCtrlBrokerage.TabPages[dgvContent.Name]
+                            .Controls[dgvContent.Name + _dataGridViewFooterPostfix]).Columns[index].SortMode =
+                        DataGridViewColumnSortMode.NotSortable;
 
                     switch (i)
                     {
                         case 0:
                         {
-                            if (((DataGridView)sender).Name == @"Overview")
+                            if (dgvContent.Name == @"Overview")
                             {
-                                ((DataGridView)sender).Columns[i].HeaderText =
+                                dgvContent.Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Year",
                                         LanguageName);
@@ -1533,16 +1565,16 @@ namespace SharePortfolioManager.BrokeragesForm.View
                         } break;
                         case 1:
                         {
-                            if (((DataGridView) sender).Name == @"Overview")
+                            if (dgvContent.Name == @"Overview")
                             {
-                                ((DataGridView) sender).Columns[i].HeaderText =
+                                dgvContent.Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Brokerage",
                                         LanguageName);
                             }
                             else
                             {
-                                ((DataGridView) sender).Columns[i].HeaderText =
+                                dgvContent.Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Date",
                                         LanguageName);
@@ -1550,16 +1582,16 @@ namespace SharePortfolioManager.BrokeragesForm.View
                         } break;
                         case 2:
                         {
-                            if (((DataGridView)sender).Name == @"Overview")
+                            if (dgvContent.Name == @"Overview")
                             {
-                                ((DataGridView)sender).Columns[i].HeaderText =
+                                dgvContent.Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Reduction",
                                         LanguageName);
                             }
                             else
                             {
-                                ((DataGridView) sender).Columns[i].HeaderText =
+                                dgvContent.Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Brokerage",
                                         LanguageName);
@@ -1567,16 +1599,16 @@ namespace SharePortfolioManager.BrokeragesForm.View
                         } break;
                         case 3:
                         {
-                            if (((DataGridView) sender).Name == @"Overview")
+                            if (dgvContent.Name == @"Overview")
                             {
-                                ((DataGridView) sender).Columns[i].HeaderText =
+                                dgvContent.Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_BrokerageReduction",
                                         LanguageName);
                             }
                             else
                             {
-                                ((DataGridView) sender).Columns[i].HeaderText =
+                                dgvContent.Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Reduction",
                                         LanguageName);
@@ -1585,14 +1617,14 @@ namespace SharePortfolioManager.BrokeragesForm.View
                         } break;
                         case 4:
                         {
-                            ((DataGridView) sender).Columns[i].HeaderText =
+                            dgvContent.Columns[i].HeaderText =
                                 Language.GetLanguageTextByXPath(
                                     @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_BrokerageReduction",
                                     LanguageName);
                         } break;
                         case 5:
                         {
-                            ((DataGridView) sender).Columns[i].HeaderText =
+                            dgvContent.Columns[i].HeaderText =
                                 Language.GetLanguageTextByXPath(
                                     @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/ColHeader_Document",
                                     LanguageName);
@@ -1600,14 +1632,236 @@ namespace SharePortfolioManager.BrokeragesForm.View
                     }
                 }
 
-                if (((DataGridView)sender).Rows.Count > 0)
+                if (dgvContent.Rows.Count > 0)
                 {
-                    ((DataGridView)sender).Rows[0].Selected = false;
-                    ((DataGridView)sender).ScrollBars = ScrollBars.Both;
+                    dgvContent.Rows[0].Selected = false;
+                    dgvContent.ScrollBars = ScrollBars.Both;
                 }
 
-                if (((DataGridView)sender).Name != @"Overview")
-                    ((DataGridView)sender).Columns[0].Visible = false;
+                if (dgvContent.Name != @"Overview")
+                {
+                    // Hide first column with the GUID
+                    ((DataGridView)tabCtrlBrokerage.TabPages[dgvContent.Name]
+                            .Controls[dgvContent.Name]).Columns[0].Visible =
+                        false;
+
+                    ((DataGridView)tabCtrlBrokerage.TabPages[dgvContent.Name]
+                            .Controls[dgvContent.Name + _dataGridViewFooterPostfix]).Columns[0].Visible =
+                        false;
+
+                    #region Column size content
+
+                    // Content DataGridView column width resize
+                    dgvContent.Columns[(int)DataGridViewYearIndices.ColumnIndicesDate].Width =
+                        YearDateColumnSize;
+                    dgvContent.Columns[(int)DataGridViewYearIndices.ColumnIndicesBrokerage].Width =
+                        YearBrokerageColumnSize;
+                    dgvContent.Columns[(int)DataGridViewYearIndices.ColumnIndicesReduction].Width =
+                        YearReductionColumnSize;
+                    dgvContent.Columns[(int)DataGridViewYearIndices.ColumnIndicesBrokerageReduction].Width =
+                        YearBrokerageReductionColumnSize;
+
+                    dgvContent.Columns[(int)DataGridViewYearIndices.ColumnIndicesDocument].AutoSizeMode =
+                        DataGridViewAutoSizeColumnMode.Fill;
+                    dgvContent.Columns[(int)DataGridViewYearIndices.ColumnIndicesDocument].FillWeight = 10;
+
+                    #endregion Column size content
+
+                    #region Column size footer
+
+                    // Get footer DataGridView
+                    var dgvFooter = (DataGridView)tabCtrlBrokerage.TabPages[dgvContent.Name]
+                        .Controls[dgvContent.Name + _dataGridViewFooterPostfix];
+
+                    // Footer DataGridView column width resize
+                    dgvFooter.Columns[(int)DataGridViewYearIndices.ColumnIndicesDate].Width =
+                        YearDateColumnSize;
+                    dgvFooter.Columns[(int)DataGridViewYearIndices.ColumnIndicesBrokerage].Width =
+                        YearBrokerageColumnSize;
+                    dgvFooter.Columns[(int)DataGridViewYearIndices.ColumnIndicesReduction].Width =
+                        YearReductionColumnSize;
+                    dgvFooter.Columns[(int)DataGridViewYearIndices.ColumnIndicesBrokerageReduction].Width =
+                        YearBrokerageReductionColumnSize;
+
+                    dgvFooter.Columns[(int)DataGridViewYearIndices.ColumnIndicesDocument].AutoSizeMode =
+                        DataGridViewAutoSizeColumnMode.Fill;
+                    dgvFooter.Columns[(int)DataGridViewYearIndices.ColumnIndicesDocument].FillWeight = 10;
+
+                    #endregion Column size footer
+
+                    // Get culture info
+                    var cultureInfo = ShareObjectFinalValue.AllBrokerageEntries
+                        .AllBrokerageReductionOfTheShareDictionary[dgvContent.Name]
+                        .BrokerageReductionCultureInfo;
+
+                    #region Brokerage
+
+                    var brokerage =
+                        ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageReductionOfTheShareDictionary[dgvContent.Name]
+                            .BrokerageReductionListYear.Sum(x => x.BrokerageValue);
+
+                    // HINT: If any format is changed here it must also be changed in file "BrokerageObject.cs" at the property "DgvBrokerageValueAsStr"
+                    var brokerageFormatted = brokerage > 0
+                            ? Helper.FormatDecimal(brokerage, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
+                                @"", cultureInfo)
+                            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
+                                @"", cultureInfo);
+
+                    #endregion Brokerage
+
+                    #region Redcution
+
+                    var reduction =
+                        ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageReductionOfTheShareDictionary[dgvContent.Name]
+                            .BrokerageReductionListYear.Sum(x => x.ReductionValue);
+
+                    // HINT: If any format is changed here it must also be changed in file "BrokerageObject.cs" at the property "DgvReductionValueAsStr"
+                    var reductionFormatted = reduction > 0
+                        ? Helper.FormatDecimal(reduction, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
+                            @"", cultureInfo)
+                        : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
+                            @"", cultureInfo);
+
+                    #endregion Reduction
+
+                    #region BrokerageReduction
+
+                    var brokerageReduction =
+                        ShareObjectFinalValue.AllBrokerageEntries.AllBrokerageReductionOfTheShareDictionary[dgvContent.Name]
+                            .BrokerageReductionListYear.Sum(x => x.BrokerageReductionValue);
+
+                    // HINT: If any format is changed here it must also be changed in file "BrokerageObject.cs" at the property "DgvBrokerageReductionValueAsStr"
+                    var brokerageReductionFormatted = brokerageReduction > 0
+                        ? Helper.FormatDecimal(brokerageReduction, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
+                            @"", cultureInfo)
+                        : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
+                            @"", cultureInfo);
+
+                    #endregion BrokerageReduction
+
+                    // Footer with sum values
+                    if (dgvFooter.Rows.Count == 1)
+                        dgvFooter.Rows.Add("",
+                            Language.GetLanguageTextByXPath(
+                                @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/Footer_Totals",
+                                SettingsConfiguration.LanguageName),
+                            brokerageFormatted, reductionFormatted, brokerageReductionFormatted, "-");
+
+                    // Check if the vertical scrollbar is shown
+                    if (dgvContent.RowCount > DataGridViewRowsScrollbar)
+                    {
+                        dgvFooter.Columns.Add("Scrollbar", "Scrollbar");
+
+                        dgvFooter.Columns[(int)DataGridViewYearIndices.ColumnIndicesScrollBar].Width =
+                            SystemInformation.VerticalScrollBarWidth;
+
+                        // Disable sorting of the columns ( remove sort arrow )
+                        dgvFooter.Columns[dgvFooter.Columns.Count - 1].SortMode = DataGridViewColumnSortMode.NotSortable;
+                    }
+
+                    DataGridViewHelper.DataGridViewConfigurationFooter(dgvFooter);
+                }
+                else
+                {
+                    #region Column size content
+
+                    // Content DataGridView column width resize
+                    dgvContent.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesYear].Width =
+                        OverViewDateColumnSize;
+                    dgvContent.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesBrokerage].Width =
+                        OverViewBrokerageColumnSize;
+                    dgvContent.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesReduction].Width =
+                        OverViewReductionColumnSize;
+
+                    dgvContent.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesBrokerageReduction].AutoSizeMode =
+                        DataGridViewAutoSizeColumnMode.Fill;
+                    dgvContent.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesBrokerageReduction].FillWeight = 10;
+
+                    #endregion Column size content
+
+                    #region Column size footer
+
+                    // Get footer DataGridView
+                    var dgvFooter = (DataGridView)tabCtrlBrokerage.TabPages[dgvContent.Name]
+                        .Controls[dgvContent.Name + _dataGridViewFooterPostfix];
+
+                    // Footer DataGridView column width resize
+                    dgvFooter.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesYear].Width =
+                        OverViewDateColumnSize;
+                    dgvFooter.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesBrokerage].Width =
+                        OverViewBrokerageColumnSize;
+                    dgvFooter.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesReduction].Width =
+                        OverViewReductionColumnSize;
+
+                    dgvFooter.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesBrokerageReduction].AutoSizeMode =
+                        DataGridViewAutoSizeColumnMode.Fill;
+                    dgvFooter.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesBrokerageReduction].FillWeight = 10;
+
+                    #endregion Column size footer
+
+                    // Get culture info
+                    var cultureInfo = ShareObjectFinalValue.AllBrokerageEntries.CultureInfo;
+
+                    #region Brokerage
+
+                    var brokerage =
+                        ShareObjectFinalValue.AllBrokerageEntries.GetAllBrokerageTotalValues()
+                            .Sum(x => x.BrokerageValueYear);
+
+                    // HINT: If any format is changed here it must also be changed in file "BrokerageOfAYear.cs" at the property "BrokerageValueYearAsStrUnit"
+                    var brokerageFormatted = Helper.FormatDecimal(brokerage,
+                        Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"",
+                        cultureInfo);
+
+                    #endregion Brokerage
+
+                    #region Reduction
+
+                    var reduction = ShareObjectFinalValue.AllBrokerageEntries.GetAllBrokerageTotalValues()
+                        .Sum(x => x.ReductionValueYear);
+
+                    // HINT: If any format is changed here it must also be changed in file "BrokerageOfAYear.cs" at the property "ReductionValueYearAsStrUnit"
+                    var reductionFormatted = Helper.FormatDecimal(reduction,
+                        Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"",
+                        cultureInfo);
+
+                    #endregion Reduction
+
+                    #region Brokerage - Reduction
+
+                    var brokerageReduction = ShareObjectFinalValue.AllBrokerageEntries.GetAllBrokerageTotalValues()
+                        .Sum(x => x.BrokerageWithReductionValueYear);
+
+                    // HINT: If any format is changed here it must also be changed in file "BrokerageOfAYear.cs" at the property "ReductionValueYearAsStrUnit"
+                    var brokerageReductionFormatted = Helper.FormatDecimal(
+                        brokerageReduction, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength,
+                        true, @"",
+                        cultureInfo);
+
+                    #endregion Brokerage - Reduction
+
+                    // Footer with sum values
+                    if (dgvFooter.Rows.Count == 1)
+                        dgvFooter.Rows.Add(
+                            Language.GetLanguageTextByXPath(
+                                @"/AddEditFormBrokerage/GrpBoxBrokerage/TabCtrl/DgvBrokerageOverview/Footer_Totals",
+                                SettingsConfiguration.LanguageName),
+                            brokerageFormatted, reductionFormatted, brokerageReductionFormatted);
+
+                    // Check if the vertical scrollbar is shown
+                    if (dgvContent.RowCount > DataGridViewRowsScrollbar)
+                    {
+                        dgvFooter.Columns.Add("Scrollbar", "Scrollbar");
+
+                        dgvFooter.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesScrollBar].Width =
+                            SystemInformation.VerticalScrollBarWidth;
+
+                        // Disable sorting of the columns ( remove sort arrow )
+                        dgvFooter.Columns[dgvFooter.Columns.Count - 1].SortMode = DataGridViewColumnSortMode.NotSortable;
+                    }
+
+                    DataGridViewHelper.DataGridViewConfigurationFooter(dgvFooter);
+                }
 
                 // Reset the text box values
                 ResetValues();
@@ -1762,12 +2016,17 @@ namespace SharePortfolioManager.BrokeragesForm.View
         /// <param name="args"></param>
         private void OnDataGridViewBrokerageOfYears_SelectionChanged(object sender, EventArgs args)
         {
+            var dgvContent = ((DataGridView) sender);
+
+            // Check if a brokerage show is running break
+            if (ShowBrokerageFlag) return;
+
             try
             {
-                if (((DataGridView) sender).SelectedRows.Count != 1) return;
+                if (dgvContent.SelectedRows.Count != 1) return;
 
                 // Get the currently selected item in the ListBox
-                var curItem = ((DataGridView)sender).SelectedRows;
+                var curItem = dgvContent.SelectedRows;
 
                 foreach (TabPage tabPage in tabCtrlBrokerage.TabPages)
                 {
@@ -1813,21 +2072,26 @@ namespace SharePortfolioManager.BrokeragesForm.View
         /// <param name="args">EventArgs</param>
         private void OnDataGridViewBrokerageOfAYear_SelectionChanged(object sender, EventArgs args)
         {
+            var dgvContent = ((DataGridView) sender);
+
+            // Check if a brokerage show is running break
+            if (ShowBrokerageFlag) return;
+
             try
             {
                 if (tabCtrlBrokerage.TabPages.Count > 0)
                 {
                     // Deselect row only of the other TabPages DataGridViews
-                    if (tabCtrlBrokerage.SelectedTab.Controls.Contains((DataGridView)sender))
-                        OnDeselectRowsOfDataGridViews((DataGridView)sender);
+                    if (tabCtrlBrokerage.SelectedTab.Controls.Contains(dgvContent))
+                        OnDeselectRowsOfDataGridViews(dgvContent);
                 }
 
                 // If it is "1" a selection change has been made
                 // else an deselection has been made ( switch to the overview tab )
-                if (((DataGridView)sender).SelectedRows.Count == 1)
+                if (dgvContent.SelectedRows.Count == 1)
                 {
                     // Get the currently selected item in the ListBox
-                    var curItem = ((DataGridView)sender).SelectedRows;
+                    var curItem = dgvContent.SelectedRows;
 
                     // Set selected date
                     if (curItem[0].Cells[1].Value != null)
@@ -1921,7 +2185,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                         Icon = Resources.edit;
 
                         // Store DataGridView instance
-                        SelectedDataGridView = (DataGridView)sender;
+                        SelectedDataGridView = dgvContent;
 
                         // Format the input value
                         FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
@@ -2038,12 +2302,12 @@ namespace SharePortfolioManager.BrokeragesForm.View
                     if (messageBox.ShowDialog() == DialogResult.Cancel) return;
 
                     // Get the current selected row
-                    var curItem = ((DataGridView)sender).SelectedRows;
+                    var curItem = dgvContent.SelectedRows;
                     // Get Guid of the selected buy item
                     var strGuid = curItem[0].Cells[0].Value.ToString();
 
                     // Check if a document is set
-                    if (curItem[0].Cells[((DataGridView)sender).ColumnCount - 1].Value == null) return;
+                    if (curItem[0].Cells[dgvContent.ColumnCount - 1].Value == null) return;
 
                     // Get doc from the buy with the Guid
                     foreach (var temp in ShareObjectFinalValue.AllBuyEntries.GetAllBuysOfTheShare())

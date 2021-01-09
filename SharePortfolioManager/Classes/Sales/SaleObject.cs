@@ -403,6 +403,8 @@ namespace SharePortfolioManager.Classes.Sales
         [Browsable(false)]
         public decimal BuyValueBrokerageReduction { get; internal set; } = -1;
 
+        /// HINT: If any format is changed here it must also be changed in file "ViewSalesEdit.cs" at the variable "buyValueFormatted"
+        /// in the function "OnDataGridViewSalesOfAYear_DataBindingComplete"
         [Browsable(false)]
         public string BuyValueBrokerageReductionAsStr => BuyValueBrokerageReduction > 0
             ? Helper.FormatDecimal(BuyValueBrokerageReduction, Helper.CurrencyTwoLength, true,
@@ -438,6 +440,8 @@ namespace SharePortfolioManager.Classes.Sales
         [Browsable(false)]
         public decimal ProfitLossBrokerageReduction { get; internal set; }
 
+        /// HINT: If any format is changed here it must also be changed in file "ViewSalesEdit.cs" at the variable "profitLossFormatted"
+        /// in the function "OnDataGridViewSalesOfAYear_DataBindingComplete"
         [Browsable(false)]
         public string ProfitLossBrokerageReductionAsStr => Helper.FormatDecimal(ProfitLossBrokerageReduction, Helper.CurrencyTwoLength,
                 true, Helper.CurrencyTwoFixLength);
@@ -466,6 +470,8 @@ namespace SharePortfolioManager.Classes.Sales
         [Browsable(false)]
         public decimal PayoutBrokerageReduction { get; internal set; }
 
+        /// HINT: If any format is changed here it must also be changed in file "ViewSalesEdit.cs" at the variable "saleValueFormatted"
+        /// in the function "OnDataGridViewSalesOfAYear_DataBindingComplete"
         [Browsable(false)]
         public string PayoutBrokerageReductionAsStr => Helper.FormatDecimal(PayoutBrokerageReduction, Helper.CurrencyTwoLength, true,
                 Helper.CurrencyTwoFixLength);
@@ -660,20 +666,20 @@ namespace SharePortfolioManager.Classes.Sales
         /// This is the comparer class for the SaleObject.
         /// It is used for the sort for the sales lists.
         /// </summary>
-        public class SaleObjectComparer : IComparer<SaleObject>
+    public class SaleObjectComparer : IComparer<SaleObject>
+{
+    #region Methods
+
+    public int Compare(SaleObject object1, SaleObject object2)
     {
-        #region Methods
+        if (object1 == null) return 0;
+        if (object2 == null) return 0;
 
-        public int Compare(SaleObject object1, SaleObject object2)
-        {
-            if (object1 == null) return 0;
-            if (object2 == null) return 0;
-
-            return DateTime.Compare(Convert.ToDateTime(object1.Date), Convert.ToDateTime(object2.Date));
-        }
-
-        #endregion Methods
+        return DateTime.Compare(Convert.ToDateTime(object1.Date), Convert.ToDateTime(object2.Date));
     }
+
+    #endregion Methods
+}
 
     [Serializable]
     public class SaleBuyDetails

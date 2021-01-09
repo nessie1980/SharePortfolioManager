@@ -111,6 +111,8 @@ namespace SharePortfolioManager.Classes.Buys
         /// <summary>
         /// Volume of the buys of a year for the DataGridView display
         /// </summary>
+        /// HINT: If any format is changed here it must also be changed in file "ViewBuyEdit.cs" at the variable "volumeFormatted"
+        /// in the function "OnDataGridViewBuys_DataBindingComplete"
         [Browsable(true)]
         // ReSharper disable once UnusedMember.Global
         public string DgvBuyVolumeYear => BuyVolumeYear > 0
@@ -121,6 +123,8 @@ namespace SharePortfolioManager.Classes.Buys
         /// <summary>
         /// Buy value plus brokerage and minus reduction of all buys of a year for the DataGridView display
         /// </summary>
+        /// HINT: If any format is changed here it must also be changed in file "ViewBuyEdit.cs" at the variable "buyValueBrokerageReductionFormatted"
+        /// in the function "OnDataGridViewBuys_DataBindingComplete"
         [Browsable(true)]
         // ReSharper disable once UnusedMember.Global
         public string DgvBuyValueBrokerageReductionYear => BuyValueBrokerageReductionYear > 0

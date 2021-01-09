@@ -437,6 +437,8 @@ namespace SharePortfolioManager.Classes.Buys
         /// <summary>
         /// Volume of the buy for the DataGridView display
         /// </summary>
+        /// HINT: If any format is changed here it must also be changed in file "ViewBuyEdit.cs" at the variable "volumeFormatted"
+        /// in the function "OnDataGridViewBuys_DataBindingComplete"
         [Browsable(true)]
         [DisplayName(@"Volume")]
         // ReSharper disable once UnusedMember.Global
@@ -459,6 +461,8 @@ namespace SharePortfolioManager.Classes.Buys
         /// <summary>
         /// Brokerage of the buy for the DataGridView display
         /// </summary>
+        /// HINT: If any format is changed here it must also be changed in file "ViewBuyEdit.cs" at the variable "brokerageFormatted"
+        /// in the function "OnDataGridViewBuys_DataBindingComplete"
         [Browsable(true)]
         [DisplayName(@"BrokerageReduction")]
         // ReSharper disable once UnusedMember.Global
@@ -470,6 +474,8 @@ namespace SharePortfolioManager.Classes.Buys
         /// <summary>
         /// Buy value - reduction of the buy for the DataGridView display
         /// </summary>
+        /// HINT: If any format is changed here it must also be changed in file "ViewBuyEdit.cs" at the variable "buyValueBrokerageReductionFormatted"
+        /// in the function "OnDataGridViewBuys_DataBindingComplete"
         [Browsable(true)]
         [DisplayName(@"BuyValueBrokerageReduction")]
         // ReSharper disable once UnusedMember.Global

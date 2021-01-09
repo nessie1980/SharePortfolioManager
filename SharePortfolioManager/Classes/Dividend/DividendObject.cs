@@ -613,23 +613,14 @@ namespace SharePortfolioManager.Classes.Dividend
             : Helper.FormatDecimal(0, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true,
                 ShareObject.PieceUnit, DividendCultureInfo);
 
-        [Browsable(true)]
-        [DisplayName(@"TaxSum")]
-        // ReSharper disable once UnusedMember.Global
-        public string DgvTaxSum => _taxSum >= 0
-            ? Helper.FormatDecimal(_taxSum, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
-                @"", DividendCultureInfo)
-            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
-                @"", DividendCultureInfo);
-
-        [Browsable(true)]
-        [DisplayName(@"PayoutWithTaxes")]
-        // ReSharper disable once UnusedMember.Global
-        public string DgvPayoutWithTaxes => _dividendPayoutWithTaxes > 0
-            ? Helper.FormatDecimal(_dividendPayoutWithTaxes, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength,
-                true, @"", DividendCultureInfo)
-            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength,
-                true, @"", DividendCultureInfo);
+        //[Browsable(true)]
+        //[DisplayName(@"TaxSum")]
+        //// ReSharper disable once UnusedMember.Global
+        //public string DgvTaxSum => _taxSum >= 0
+        //    ? Helper.FormatDecimal(_taxSum, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
+        //        @"", DividendCultureInfo)
+        //    : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
+        //        @"", DividendCultureInfo);
 
         [Browsable(true)]
         [DisplayName(@"Yield")]
@@ -641,6 +632,17 @@ namespace SharePortfolioManager.Classes.Dividend
             : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength,
                 true,
                 @"%", DividendCultureInfo);
+
+        /// HINT: If any format is changed here it must also be changed in file "ViewDividendEdit.cs" at the variable "payoutFormatted"
+        /// in the function "OnDataGridViewDividends_DataBindingComplete"
+        [Browsable(true)]
+        [DisplayName(@"PayoutWithTaxes")]
+        // ReSharper disable once UnusedMember.Global
+        public string DgvPayoutWithTaxes => _dividendPayoutWithTaxes > 0
+            ? Helper.FormatDecimal(_dividendPayoutWithTaxes, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength,
+                true, @"", DividendCultureInfo)
+            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength,
+                true, @"", DividendCultureInfo);
 
         [Browsable(true)]
         [DisplayName(@"Document")]

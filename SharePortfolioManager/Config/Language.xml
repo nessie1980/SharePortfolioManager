@@ -878,6 +878,7 @@
 						<ColHeader_Brokerage text="Brokerage" />
 						<ColHeader_Purchase text="Purchase" />
 						<ColHeader_Document text="Document" />
+						<Footer_Totals text="Total:" />
 					</DgvBuyOverview>
 				</TabCtrl>
 			</GrpBoxBuy>
@@ -1014,6 +1015,7 @@
 						<ColHeader_ProfitLoss text="Profit / Loss" />
 						<ColHeader_Sale text="Sale" />
 						<ColHeader_Document text="Document" />
+						<Footer_Totals text="Total:" />
 					</DgvSaleOverview>
 				</TabCtrl>
 			</GrpBoxSale>
@@ -1156,18 +1158,20 @@
 					
 					<!-- DataGridView dividend -->
 					<DgvDividendOverview>
+						<ColHeader_Year text="Year" />
 						<ColHeader_Date text="Date" />
 						<ColHeader_Dividend text="Dividend" />
 						<ColHeader_Volume text="Volume" />
-						<ColHeader_TaxSum text="Taxes" />
+						<!-- <ColHeader_TaxSum text="Taxes" /> -->
 						<ColHeader_PayoutWithTaxes text="Payout" />
 						<ColHeader_Yield text="Yield" />
 						<ColHeader_Document text="Document" />
+						<Footer_Totals text="Total:" />
 					</DgvDividendOverview>
 				</TabCtrl>
 			</GrpBoxDividend>
 						
-			<!-- Dividen add / edit state messages -->
+			<!-- Dividend add / edit state messages -->
 			<StateMessages>
 				<AddSuccess text="Dividend has been added." />
 				<EditSuccess text="Dividend changes has been saved." />
@@ -1288,6 +1292,7 @@
 						<ColHeader_Reduction text="Reduction" />
 						<ColHeader_BrokerageReduction text="Broker. - Red." />
 						<ColHeader_Document text="Document" />
+						<Footer_Totals text="Total:" />
 					</DgvBrokerageOverview>
 				</TabCtrl>
 			</GrpBoxBrokerage>
@@ -2431,6 +2436,7 @@
 						<ColHeader_Brokerage text="Gebühren" />
 						<ColHeader_Purchase text="Einzahlung" />
 						<ColHeader_Document text="Dokument" />
+						<Footer_Totals text="Gesamt:" />
 					</DgvBuyOverview>
 				</TabCtrl>
 			</GrpBoxBuy>
@@ -2567,6 +2573,7 @@
 						<ColHeader_ProfitLoss text="Gewinn / Verlust" />
 						<ColHeader_Sale text="Verkaufsumme" />
 						<ColHeader_Document text="Dokument" />
+						<Footer_Totals text="Gesamt:" />
 					</DgvSaleOverview>
 				</TabCtrl>
 			</GrpBoxSale>
@@ -2709,13 +2716,15 @@
 					
 					<!-- DataGridView dividend -->
 					<DgvDividendOverview>
+						<ColHeader_Year text="Jahr" />
 						<ColHeader_Date text="Datum" />
 						<ColHeader_Dividend text="Dividende" />
 						<ColHeader_Volume text="Anteile" />
-						<ColHeader_TaxSum text="Steuern" />
+						<!-- <ColHeader_TaxSum text="Steuern" /> -->
 						<ColHeader_PayoutWithTaxes text="Ausz." />
 						<ColHeader_Yield text="Rendite" />
 						<ColHeader_Document text="Dokument" />
+						<Footer_Totals text="Gesamt:" />						
 					</DgvDividendOverview>
 				</TabCtrl>
 			</GrpBoxDividend>
@@ -2840,6 +2849,7 @@
 						<ColHeader_Reduction text="Rabatt" />
 						<ColHeader_BrokerageReduction text="Kosten - Rabatt" />
 						<ColHeader_Document text="Dokument" />
+						<Footer_Totals text="Gesamt:" />
 					</DgvBrokerageOverview>
 				</TabCtrl>
 			</GrpBoxBrokerage>

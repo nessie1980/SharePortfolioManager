@@ -134,6 +134,8 @@ namespace SharePortfolioManager.Classes.Brokerage
         // ReSharper disable once UnusedMember.Global
         public string DgvBrokerageDate => DateAsStr;
 
+        /// HINT: If any format is changed here it must also be changed in file "ViewBrokerageEdit.cs" at the variable "brokerageFormatted"
+        /// in the function "OnDataGridViewBrokerage_DataBindingComplete"
         [Browsable(true)]
         [DisplayName(@"Brokerage")]
         // ReSharper disable once UnusedMember.Global
@@ -143,6 +145,8 @@ namespace SharePortfolioManager.Classes.Brokerage
             : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
                 @"", CultureInfo);
 
+        /// HINT: If any format is changed here it must also be changed in file "ViewBrokerageEdit.cs" at the variable "reductionFormatted"
+        /// in the function "OnDataGridViewBrokerage_DataBindingComplete"
         [Browsable(true)]
         [DisplayName(@"Reduction")]
         // ReSharper disable once UnusedMember.Global
@@ -152,6 +156,8 @@ namespace SharePortfolioManager.Classes.Brokerage
             : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength, true,
                 @"", CultureInfo);
 
+        /// HINT: If any format is changed here it must also be changed in file "ViewBrokerageEdit.cs" at the variable "brokerageReductionFormatted"
+        /// in the function "OnDataGridViewBrokerage_DataBindingComplete"
         [Browsable(true)]
         [DisplayName(@"Broker. - Red.")]
         // ReSharper disable once UnusedMember.Global

@@ -159,7 +159,7 @@ namespace SharePortfolioManager.Classes
         #region Variables
 
         #region Convert PDF to text
-        
+
         public static string PdfToTextApplication =
             Path.GetDirectoryName(Application.ExecutablePath) + @"\Tools\pdftotext.exe";
 
@@ -326,9 +326,9 @@ namespace SharePortfolioManager.Classes
                 var result = false;
                 var stateMessageError = "";
 
-                if(stateLevel == (int) SharePortfolioManager.FrmMain.EStateLevels.Error ||
-                   stateLevel == (int) SharePortfolioManager.FrmMain.EStateLevels.FatalError
-                   )
+                if (stateLevel == (int) SharePortfolioManager.FrmMain.EStateLevels.Error ||
+                    stateLevel == (int) SharePortfolioManager.FrmMain.EStateLevels.FatalError
+                )
                     Sound.PlayErrorSound();
 
                 // Check if the given logger is initialized
@@ -371,7 +371,8 @@ namespace SharePortfolioManager.Classes
                                         Environment.NewLine;
 
                     // Check if the maximum of lines is reached and delete last line
-                    if (tempControl.Lines.Any() && tempControl.Lines.Length > logger.LoggerSize && logger.LoggerSize > -1)
+                    if (tempControl.Lines.Any() && tempControl.Lines.Length > logger.LoggerSize &&
+                        logger.LoggerSize > -1)
                     {
                         tempControl.SelectionStart =
                             tempControl.GetFirstCharIndexFromLine(tempControl.Lines.Length - 2);
@@ -501,7 +502,7 @@ namespace SharePortfolioManager.Classes
                     // MenuStrip
                     if (control.GetType() == typeof(MenuStrip))
                     {
-                        var castControl = (MenuStrip)control;
+                        var castControl = (MenuStrip) control;
 #if DEBUG_HELPER
                         Console.WriteLine(castControl.Name);
 #endif
@@ -1007,7 +1008,8 @@ namespace SharePortfolioManager.Classes
             // Save old portfolio file name
             var strOldPortfolioName = strCurrentPortfolio;
 
-            var initialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\SharePortfolioManager\Portfolios\" ;
+            var initialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
+                                   @"\SharePortfolioManager\Portfolios\";
             var restoreDirectory = false;
 
             if (strCurrentPortfolio != "")
@@ -1056,7 +1058,8 @@ namespace SharePortfolioManager.Classes
             // Save old portfolio file name
             var strOldPortfolioName = strCurrentPortfolio;
 
-            var initialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\SharePortfolioManager\Portfolios\";
+            var initialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
+                                   @"\SharePortfolioManager\Portfolios\";
             var fileName = @"Portfolio.xml";
             var restoreDirectory = false;
 
@@ -1200,7 +1203,8 @@ namespace SharePortfolioManager.Classes
             out decimal decBuyValueBrokerageReduction, out decimal decBrokerage, out decimal decBrokerageReduction)
         {
             // Calculate brokerage
-            CalcBrokerageValues(decProvision, decBrokerFee, decTraderPlaceFee, decReduction, out decBrokerage, out decBrokerageReduction);
+            CalcBrokerageValues(decProvision, decBrokerFee, decTraderPlaceFee, decReduction, out decBrokerage,
+                out decBrokerageReduction);
 
             // Calculate market value and deposit ( market value + brokerage )
             if (decVolume > 0 && decSharePrice > 0)
@@ -1223,7 +1227,8 @@ namespace SharePortfolioManager.Classes
 
         #region Calculate brokerage value
 
-        public static void CalcBrokerageValues(decimal decProvision, decimal decBrokerFee, decimal decTraderPlaceFee, decimal decReduction,
+        public static void CalcBrokerageValues(decimal decProvision, decimal decBrokerFee, decimal decTraderPlaceFee,
+            decimal decReduction,
             out decimal decBrokerage, out decimal decBrokerageReduction)
         {
             // Calculate brokerage
@@ -1382,7 +1387,7 @@ namespace SharePortfolioManager.Classes
 
             process.BeginOutputReadLine();
             process.BeginErrorReadLine();
-            
+
             return tcs.Task.Result;
         }
 
@@ -1390,7 +1395,8 @@ namespace SharePortfolioManager.Classes
 
         #region Time function
 
-        public static string BuildDailyValuesUrl(List<Parser.DailyValues> dailyValues, string webSiteUrl, ShareObject.ShareTypes shareType)
+        public static string BuildDailyValuesUrl(List<Parser.DailyValues> dailyValues, string webSiteUrl,
+            ShareObject.ShareTypes shareType)
         {
             var strDailyValuesWebSite = "";
 
@@ -1455,7 +1461,8 @@ namespace SharePortfolioManager.Classes
                                 strDailyValuesWebSite = string.Format(webSiteUrl,
                                     DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy"), "Y5");
                             }
-                        } break;
+                        }
+                            break;
                         // Share type "Fond"
                         case ShareObject.ShareTypes.Fond:
                         {
@@ -1479,7 +1486,8 @@ namespace SharePortfolioManager.Classes
                                 strDailyValuesWebSite = string.Format(webSiteUrl,
                                     DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy"), "5Y");
                             }
-                        } break;
+                        }
+                            break;
                         // Share type "ETF"
                         case ShareObject.ShareTypes.Etf:
                         {
@@ -1504,7 +1512,8 @@ namespace SharePortfolioManager.Classes
                                     DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy"), "5Y");
                             }
 
-                        } break;
+                        }
+                            break;
                         default:
                             throw new NotImplementedException();
                     }
@@ -1621,9 +1630,6 @@ namespace SharePortfolioManager.Classes
             styleColumnHeader.BackColor = DataGridViewHeaderColors;
             styleColumnHeader.SelectionBackColor = DataGridViewHeaderColors;
 
-            // Column styling
-            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
             // Row styling
             dgv.RowHeadersVisible = false;
             dgv.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
@@ -1632,6 +1638,7 @@ namespace SharePortfolioManager.Classes
             dgv.MultiSelect = false;
 
             // Cell styling
+            dgv.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dgv.DefaultCellStyle.SelectionBackColor = Color.Blue;
             dgv.DefaultCellStyle.SelectionForeColor = Color.Yellow;
             dgv.CellBorderStyle = DataGridViewCellBorderStyle.Single;
@@ -1644,11 +1651,47 @@ namespace SharePortfolioManager.Classes
             dgv.AllowUserToDeleteRows = false;
         }
 
+        public static void DataGridViewConfigurationFooter(DataGridView dgv)
+        {
+            dgv.Font = new Font(@"Consolas", 9, FontStyle.Bold);
+
+            // Column header styling
+            dgv.EnableHeadersVisualStyles = false;
+            dgv.ColumnHeadersHeight = 25;
+            dgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+
+            var styleColumnHeader = dgv.ColumnHeadersDefaultCellStyle;
+            styleColumnHeader.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            styleColumnHeader.BackColor = DataGridViewHeaderColors;
+            styleColumnHeader.SelectionBackColor = DataGridViewHeaderColors;
+
+            // Row styling
+            dgv.RowHeadersVisible = false;
+            dgv.AlternatingRowsDefaultCellStyle.BackColor = Color.DimGray;
+            dgv.RowsDefaultCellStyle.BackColor = Color.DimGray;
+            dgv.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgv.MultiSelect = false;
+
+            // Cell styling
+            dgv.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dgv.DefaultCellStyle.SelectionBackColor = Color.DimGray;
+            dgv.DefaultCellStyle.SelectionForeColor = Color.Black;
+            dgv.CellBorderStyle = DataGridViewCellBorderStyle.Single;
+            dgv.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+
+            // Allow styling
+            dgv.AllowUserToResizeColumns = false;
+            dgv.AllowUserToResizeRows = false;
+            dgv.AllowUserToAddRows = false;
+            dgv.AllowUserToDeleteRows = false;
+        }
+
         #endregion Methods
     }
+}
 
-    // This class stores the information of a culture info
-    public class CultureInformation
+// This class stores the information of a culture info
+public class CultureInformation
     {
         public string CurrencySymbol { get; set; }
 
@@ -1724,12 +1767,12 @@ namespace SharePortfolioManager.Classes
         {
             internal readonly struct Rect
             {
-                public static Rect CreateInstance(int left, int top, int right, int bottom)
-                {
-                    return new Rect(left, top, right, bottom);
-                }
+            public static Rect CreateInstance(int left, int top, int right, int bottom)
+            {
+                return new Rect(left, top, right, bottom);
+            }
 
-                public readonly int Left;
+            public readonly int Left;
                 public readonly int Top;
                 public readonly int Right;
                 public readonly int Bottom;
@@ -1770,4 +1813,3 @@ namespace SharePortfolioManager.Classes
             internal static extern bool GetWindowRect(IntPtr hWnd, out Rect lpRect);
         }
     }
-}

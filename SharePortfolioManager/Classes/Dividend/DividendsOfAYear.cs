@@ -45,6 +45,8 @@ namespace SharePortfolioManager.Classes.Dividend
         [Browsable(false)]
         public decimal DividendValueYear { get; internal set; } = -1;
 
+        /// HINT: If any format is changed here it must also be changed in file "ViewDividendEdit.cs" at the variable "payoutFormatted"
+        /// in the function "OnDataGridViewDividends_DataBindingComplete"
         [Browsable(false)]
         public string DividendValueYearAsStrUnit => DividendValueYear > 0
             ? Helper.FormatDecimal(DividendValueYear, Helper.CurrencyTwoLength, true,

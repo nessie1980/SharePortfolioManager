@@ -168,9 +168,9 @@ namespace SharePortfolioManager
         private void OnLoadPortfolio_RunWorkerCompleted(
             object sender, RunWorkerCompletedEventArgs e)
         {
+            // Not used
             if (e.Cancelled)
             {
-                // TODO Error handling
                 // Next, handle the case where the user canceled 
                 // the operation.
                 // Note that due to a race condition in 

@@ -37,6 +37,7 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.tblLayPnlDividendInput = new System.Windows.Forms.TableLayoutPanel();
             this.lblDate = new System.Windows.Forms.Label();
+            this.lblAddTax = new System.Windows.Forms.Label();
             this.dateTimePickerDate = new System.Windows.Forms.DateTimePicker();
             this.lblCapitalGainsTaxUnit = new System.Windows.Forms.Label();
             this.txtBoxTax = new System.Windows.Forms.TextBox();
@@ -91,7 +92,6 @@
             this.toolStripStatusLabelMessageDividendEdit = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBarDividendDocumentParsing = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabelMessageDividendDocumentParsing = new System.Windows.Forms.ToolStripStatusLabel();
-            this.lblAddTax = new System.Windows.Forms.Label();
             this.grpBoxDividends = new System.Windows.Forms.GroupBox();
             this.tblLayPnlOverviewTabControl = new System.Windows.Forms.TableLayoutPanel();
             this.tabCtrlDividends = new System.Windows.Forms.TabControl();
@@ -229,6 +229,7 @@
             this.tblLayPnlDividendInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 60F));
             this.tblLayPnlDividendInput.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tblLayPnlDividendInput.Controls.Add(this.lblDate, 0, 0);
+            this.tblLayPnlDividendInput.Controls.Add(this.lblAddTax, 0, 9);
             this.tblLayPnlDividendInput.Controls.Add(this.dateTimePickerDate, 1, 0);
             this.tblLayPnlDividendInput.Controls.Add(this.lblCapitalGainsTaxUnit, 5, 7);
             this.tblLayPnlDividendInput.Controls.Add(this.txtBoxTax, 1, 9);
@@ -314,6 +315,18 @@
             this.lblDate.TabIndex = 2;
             this.lblDate.Text = "_addDate";
             this.lblDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // lblAddTax
+            // 
+            this.lblAddTax.BackColor = System.Drawing.Color.LightGray;
+            this.lblAddTax.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblAddTax.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblAddTax.Location = new System.Drawing.Point(3, 216);
+            this.lblAddTax.Name = "lblAddTax";
+            this.lblAddTax.Size = new System.Drawing.Size(294, 24);
+            this.lblAddTax.TabIndex = 47;
+            this.lblAddTax.Text = "_addTax";
+            this.lblAddTax.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // dateTimePickerDate
             // 
@@ -1008,26 +1021,14 @@
             this.toolStripStatusLabelMessageDividendDocumentParsing.Name = "toolStripStatusLabelMessageDividendDocumentParsing";
             this.toolStripStatusLabelMessageDividendDocumentParsing.Size = new System.Drawing.Size(0, 17);
             // 
-            // lblAddTax
-            // 
-            this.lblAddTax.BackColor = System.Drawing.Color.LightGray;
-            this.lblAddTax.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblAddTax.Location = new System.Drawing.Point(17, 151);
-            this.lblAddTax.Name = "lblAddTax";
-            this.lblAddTax.Size = new System.Drawing.Size(300, 22);
-            this.lblAddTax.TabIndex = 47;
-            this.lblAddTax.Text = "_addTax";
-            this.lblAddTax.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // grpBoxDividends
             // 
             this.grpBoxDividends.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.grpBoxDividends.Controls.Add(this.tblLayPnlOverviewTabControl);
-            this.grpBoxDividends.Controls.Add(this.lblAddTax);
             this.grpBoxDividends.Location = new System.Drawing.Point(5, 427);
             this.grpBoxDividends.Name = "grpBoxDividends";
-            this.grpBoxDividends.Size = new System.Drawing.Size(760, 124);
+            this.grpBoxDividends.Size = new System.Drawing.Size(760, 196);
             this.grpBoxDividends.TabIndex = 3;
             this.grpBoxDividends.TabStop = false;
             this.grpBoxDividends.Text = "_grpBoxDividends";
@@ -1044,8 +1045,8 @@
             this.tblLayPnlOverviewTabControl.Name = "tblLayPnlOverviewTabControl";
             this.tblLayPnlOverviewTabControl.RowCount = 1;
             this.tblLayPnlOverviewTabControl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblLayPnlOverviewTabControl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 128F));
-            this.tblLayPnlOverviewTabControl.Size = new System.Drawing.Size(754, 103);
+            this.tblLayPnlOverviewTabControl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 151F));
+            this.tblLayPnlOverviewTabControl.Size = new System.Drawing.Size(754, 175);
             this.tblLayPnlOverviewTabControl.TabIndex = 48;
             // 
             // tabCtrlDividends
@@ -1055,7 +1056,7 @@
             this.tabCtrlDividends.Location = new System.Drawing.Point(3, 3);
             this.tabCtrlDividends.Name = "tabCtrlDividends";
             this.tabCtrlDividends.SelectedIndex = 0;
-            this.tabCtrlDividends.Size = new System.Drawing.Size(748, 97);
+            this.tabCtrlDividends.Size = new System.Drawing.Size(748, 169);
             this.tabCtrlDividends.TabIndex = 0;
             this.tabCtrlDividends.SelectedIndexChanged += new System.EventHandler(this.OnTabCtrlDividends_SelectedIndexChanged);
             this.tabCtrlDividends.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnTabCtrlDividends_KeyDown);
@@ -1111,7 +1112,7 @@
             this.grpBoxDocumentPreview.Controls.Add(this.tableLayoutPanel1);
             this.grpBoxDocumentPreview.Location = new System.Drawing.Point(770, 5);
             this.grpBoxDocumentPreview.Name = "grpBoxDocumentPreview";
-            this.grpBoxDocumentPreview.Size = new System.Drawing.Size(510, 592);
+            this.grpBoxDocumentPreview.Size = new System.Drawing.Size(510, 618);
             this.grpBoxDocumentPreview.TabIndex = 18;
             this.grpBoxDocumentPreview.TabStop = false;
             this.grpBoxDocumentPreview.Text = "_grpBoxDocumentPreview";
@@ -1128,7 +1129,7 @@
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(504, 571);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(504, 597);
             this.tableLayoutPanel1.TabIndex = 6;
             // 
             // webBrowser1
@@ -1137,7 +1138,7 @@
             this.webBrowser1.Location = new System.Drawing.Point(3, 3);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(23, 22);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(498, 565);
+            this.webBrowser1.Size = new System.Drawing.Size(498, 591);
             this.webBrowser1.TabIndex = 1;
             // 
             // ViewDividendEdit
@@ -1147,16 +1148,16 @@
             this.AutoScroll = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.ClientSize = new System.Drawing.Size(1284, 601);
+            this.ClientSize = new System.Drawing.Size(1284, 627);
             this.Controls.Add(this.grpBoxDocumentPreview);
             this.Controls.Add(this.grpBoxDividends);
             this.Controls.Add(this.grpBoxAddDividend);
             this.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(1300, 640);
+            this.MaximumSize = new System.Drawing.Size(1300, 666);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(1300, 640);
+            this.MinimumSize = new System.Drawing.Size(1300, 666);
             this.Name = "ViewDividendEdit";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "_shareDividendEdit";
@@ -1228,7 +1229,6 @@
         private System.Windows.Forms.Label lblPayoutAfterTaxUnit;
         private System.Windows.Forms.Label lblTaxUnit;
         private System.Windows.Forms.TextBox txtBoxTax;
-        private System.Windows.Forms.Label lblAddTax;
         private System.Windows.Forms.Label lblSolidarityTaxUnit;
         private System.Windows.Forms.TextBox txtBoxSolidarityTax;
         private System.Windows.Forms.Label lblSolidarityTax;
@@ -1262,5 +1262,6 @@
         private System.Windows.Forms.GroupBox grpBoxDocumentPreview;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.WebBrowser webBrowser1;
+        private System.Windows.Forms.Label lblAddTax;
     }
 }

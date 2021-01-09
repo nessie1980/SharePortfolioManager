@@ -140,7 +140,7 @@ namespace SharePortfolioManager.SalesForm.View
             this.grpBoxSales.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grpBoxSales.Location = new System.Drawing.Point(5, 499);
             this.grpBoxSales.Name = "grpBoxSales";
-            this.grpBoxSales.Size = new System.Drawing.Size(760, 193);
+            this.grpBoxSales.Size = new System.Drawing.Size(760, 196);
             this.grpBoxSales.TabIndex = 3;
             this.grpBoxSales.TabStop = false;
             this.grpBoxSales.Text = "_grpBoxSales";
@@ -159,7 +159,7 @@ namespace SharePortfolioManager.SalesForm.View
             this.tblLayPnlOverviewTabControl.RowCount = 1;
             this.tblLayPnlOverviewTabControl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblLayPnlOverviewTabControl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 172F));
-            this.tblLayPnlOverviewTabControl.Size = new System.Drawing.Size(754, 172);
+            this.tblLayPnlOverviewTabControl.Size = new System.Drawing.Size(754, 175);
             this.tblLayPnlOverviewTabControl.TabIndex = 0;
             // 
             // tabCtrlSales
@@ -170,7 +170,7 @@ namespace SharePortfolioManager.SalesForm.View
             this.tabCtrlSales.Location = new System.Drawing.Point(3, 3);
             this.tabCtrlSales.Name = "tabCtrlSales";
             this.tabCtrlSales.SelectedIndex = 0;
-            this.tabCtrlSales.Size = new System.Drawing.Size(748, 166);
+            this.tabCtrlSales.Size = new System.Drawing.Size(748, 169);
             this.tabCtrlSales.TabIndex = 0;
             this.tabCtrlSales.SelectedIndexChanged += new System.EventHandler(this.TabCtrlSales_SelectedIndexChanged);
             this.tabCtrlSales.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnTabCtrlSales_KeyDown);
@@ -1228,7 +1228,7 @@ namespace SharePortfolioManager.SalesForm.View
             this.grpBoxDocumentPreview.Controls.Add(this.tableLayoutPanel1);
             this.grpBoxDocumentPreview.Location = new System.Drawing.Point(769, 5);
             this.grpBoxDocumentPreview.Name = "grpBoxDocumentPreview";
-            this.grpBoxDocumentPreview.Size = new System.Drawing.Size(510, 686);
+            this.grpBoxDocumentPreview.Size = new System.Drawing.Size(510, 690);
             this.grpBoxDocumentPreview.TabIndex = 18;
             this.grpBoxDocumentPreview.TabStop = false;
             this.grpBoxDocumentPreview.Text = "_grpBoxDocumentPreview";
@@ -1245,7 +1245,7 @@ namespace SharePortfolioManager.SalesForm.View
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(504, 665);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(504, 669);
             this.tableLayoutPanel1.TabIndex = 6;
             // 
             // webBrowser1
@@ -1254,7 +1254,7 @@ namespace SharePortfolioManager.SalesForm.View
             this.webBrowser1.Location = new System.Drawing.Point(3, 3);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(23, 22);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(498, 659);
+            this.webBrowser1.Size = new System.Drawing.Size(498, 663);
             this.webBrowser1.TabIndex = 1;
             // 
             // ViewSaleEdit
@@ -1264,16 +1264,16 @@ namespace SharePortfolioManager.SalesForm.View
             this.AutoScroll = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.ClientSize = new System.Drawing.Size(1284, 694);
+            this.ClientSize = new System.Drawing.Size(1284, 696);
             this.Controls.Add(this.grpBoxDocumentPreview);
             this.Controls.Add(this.grpBoxSales);
             this.Controls.Add(this.grpBoxAdd);
             this.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(1300, 800);
+            this.MaximumSize = new System.Drawing.Size(1300, 735);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(1300, 710);
+            this.MinimumSize = new System.Drawing.Size(1300, 735);
             this.Name = "ViewSaleEdit";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "_shareSalesEdit";

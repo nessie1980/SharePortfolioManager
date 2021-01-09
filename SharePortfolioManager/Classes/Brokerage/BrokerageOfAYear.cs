@@ -44,6 +44,8 @@ namespace SharePortfolioManager.Classes.Brokerage
         [Browsable(false)]
         public decimal BrokerageValueYear { get; internal set; } = -1;
 
+        /// HINT: If any format is changed here it must also be changed in file "ViewBrokerageEdit.cs" at the variable "brokerageFormatted"
+        /// in the function "OnDataGridViewBrokerage_DataBindingComplete"
         [Browsable(false)]
         public string BrokerageValueYearAsStrUnit => Helper.FormatDecimal(BrokerageValueYear,
             Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", BrokerageReductionCultureInfo);
@@ -51,6 +53,8 @@ namespace SharePortfolioManager.Classes.Brokerage
         [Browsable(false)]
         public decimal ReductionValueYear { get; internal set; } = -1;
 
+        /// HINT: If any format is changed here it must also be changed in file "ViewBrokerageEdit.cs" at the variable "reductionFormatted"
+        /// in the function "OnDataGridViewBrokerage_DataBindingComplete"
         [Browsable(false)]
         public string ReductionValueYearAsStrUnit => Helper.FormatDecimal(ReductionValueYear,
             Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"", BrokerageReductionCultureInfo);
@@ -58,6 +62,8 @@ namespace SharePortfolioManager.Classes.Brokerage
         [Browsable(false)]
         public decimal BrokerageWithReductionValueYear { get; internal set; } = -1;
 
+        /// HINT: If any format is changed here it must also be changed in file "ViewBrokerageEdit.cs" at the variable "brokerageReductionFormatted"
+        /// in the function "OnDataGridViewBrokerage_DataBindingComplete"
         [Browsable(false)]
         public string BrokerageWithReductionValueYearAsStrUnit => Helper.FormatDecimal(
             BrokerageWithReductionValueYear, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true, @"",

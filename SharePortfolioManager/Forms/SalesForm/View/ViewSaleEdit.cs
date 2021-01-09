@@ -100,6 +100,28 @@ namespace SharePortfolioManager.SalesForm.View
         ParsingIdentifierValuesFound = 1
     }
 
+    // Column indices values of the overview DataGridView
+    public enum DataGridViewOverViewIndices
+    {
+        ColumnIndicesYear,
+        ColumnIndicesVolume,
+        ColumnIndicesPayout,
+        ColumnIndicesProfitLoss,
+        ColumnIndicesScrollBar
+    }
+
+    // Column indices values of the years DataGridView
+    public enum DataGridViewYearIndices
+    {
+        ColumnIndicesGuid,
+        ColumnIndicesDate,
+        ColumnIndicesBuyValue,
+        ColumnIndicesProfitLoss,
+        ColumnIndicesPayout,
+        ColumnIndicesDocument,
+        ColumnIndicesScrollBar
+    }
+
     /// <inheritdoc />
     /// <summary>
     /// Interface of the SaleEdit view
@@ -179,6 +201,34 @@ namespace SharePortfolioManager.SalesForm.View
         /// Stores the last focused date time picker or text box
         /// </summary>
         private Control _focusedControl;
+
+        /// <summary>
+        /// Postfix for the DataGridView footer name
+        /// </summary>
+        private readonly string _dataGridViewFooterPostfix = "_Footer";
+
+        /// <summary>
+        /// If the row count is greater then 4 the scrollbar will be shown
+        /// </summary>
+        private const int DataGridViewRowsScrollbar = 4;
+
+        /// <summary>
+        /// Height of the DataGridView footer
+        /// </summary>
+        private const int DataGridViewFooterHeight = 24;
+
+        #region Column width for the dgvContentOverView and dgvContentOverViewFooter
+
+        private const int OverViewDateColumnSize = 85;
+        private const int OverViewVolumeColumnSize = 200;
+        private const int OverViewPayoutColumnSize = 200;
+
+        private const int YearDateColumnSize = 85;
+        private const int YearBuyValueColumnSize = 175;
+        private const int YearProfitLossColumnSize = 175;
+        private const int YearPayoutColumnSize = 175;
+
+        #endregion Column width for the dgvPortfolio and dgvPortfolioFooter
 
         #endregion Fields
 
@@ -2377,17 +2427,15 @@ namespace SharePortfolioManager.SalesForm.View
                 var newTabPageOverviewYears = new TabPage
                 {
                     // Set TabPage name
-                    Name = Language.GetLanguageTextByXPath(
-                        @"/AddEditFormSale/GrpBoxSale/TabCtrl/TabPgOverview/Overview",
-                        LanguageName),
+                    Name = @"Overview",
 
                     // Set TabPage caption
                     Text = Language.GetLanguageTextByXPath(
                                @"/AddEditFormSale/GrpBoxSale/TabCtrl/TabPgOverview/Overview", SettingsConfiguration.LanguageName)
                            + @" ("
-                           + ShareObjectFinalValue.AllSaleEntries.SalePayoutTotalAsStrUnit
+                           + ShareObjectFinalValue.AllSaleEntries.SalePayoutBrokerageReductionTotalAsStrUnit
                            + @" / "
-                           + ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotalAsStrUnit
+                           + ShareObjectFinalValue.AllSaleEntries.SaleProfitLossBrokerageReductionTotalAsStrUnit
                            + @")"
                 };
 
@@ -2425,6 +2473,21 @@ namespace SharePortfolioManager.SalesForm.View
                         DataGridViewColumnHeadersHeightSizeMode.DisableResizing
                 };
 
+                // Create DataGridView
+                var dataGridViewSalesOverviewOfAYearsFooter = new DataGridView
+                {
+                    Name = @"Overview" + _dataGridViewFooterPostfix,
+                    Dock = DockStyle.Bottom,
+                    AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None,
+
+                    // Disable column header resize
+                    ColumnHeadersHeightSizeMode =
+                        DataGridViewColumnHeadersHeightSizeMode.DisableResizing,
+
+                    // Set height via Size height
+                    Size = new Size(1, DataGridViewFooterHeight)
+                };
+
                 #endregion Data source, data binding and data grid view
 
                 #region Events
@@ -2440,41 +2503,16 @@ namespace SharePortfolioManager.SalesForm.View
 
                 #region Style
 
-                // Advanced configuration DataGridView sales
-                dataGridViewSalesOverviewOfAYears.EnableHeadersVisualStyles = false;
-                // Column header styling
-                dataGridViewSalesOverviewOfAYears.ColumnHeadersDefaultCellStyle.Alignment =
-                    DataGridViewContentAlignment.MiddleCenter;
-                dataGridViewSalesOverviewOfAYears.ColumnHeadersDefaultCellStyle.BackColor =
-                    DataGridViewHelper.DataGridViewHeaderColors;
-                dataGridViewSalesOverviewOfAYears.ColumnHeadersDefaultCellStyle.SelectionBackColor =
-                    DataGridViewHelper.DataGridViewHeaderColors;
-                dataGridViewSalesOverviewOfAYears.ColumnHeadersHeight = 25;
-                dataGridViewSalesOverviewOfAYears.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-                // Column styling
-                dataGridViewSalesOverviewOfAYears.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                // Row styling
-                dataGridViewSalesOverviewOfAYears.RowHeadersVisible = false;
-                dataGridViewSalesOverviewOfAYears.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
-                dataGridViewSalesOverviewOfAYears.RowsDefaultCellStyle.BackColor = Color.White;
-                dataGridViewSalesOverviewOfAYears.MultiSelect = false;
-                dataGridViewSalesOverviewOfAYears.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                // Cell styling
-                dataGridViewSalesOverviewOfAYears.DefaultCellStyle.SelectionBackColor = Color.Blue;
-                dataGridViewSalesOverviewOfAYears.DefaultCellStyle.SelectionForeColor = Color.Yellow;
-                dataGridViewSalesOverviewOfAYears.CellBorderStyle = DataGridViewCellBorderStyle.Single;
-                dataGridViewSalesOverviewOfAYears.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-                // Allow styling
-                dataGridViewSalesOverviewOfAYears.AllowUserToResizeColumns = false;
-                dataGridViewSalesOverviewOfAYears.AllowUserToResizeRows = false;
-                dataGridViewSalesOverviewOfAYears.AllowUserToAddRows = false;
-                dataGridViewSalesOverviewOfAYears.AllowUserToDeleteRows = false;
+                DataGridViewHelper.DataGridViewConfiguration(dataGridViewSalesOverviewOfAYears);
+
+                dataGridViewSalesOverviewOfAYearsFooter.ColumnHeadersVisible = false;
 
                 #endregion Style
 
                 #region Control add
 
                 newTabPageOverviewYears.Controls.Add(dataGridViewSalesOverviewOfAYears);
+                newTabPageOverviewYears.Controls.Add(dataGridViewSalesOverviewOfAYearsFooter);
                 dataGridViewSalesOverviewOfAYears.Parent = newTabPageOverviewYears;
                 tabCtrlSales.Controls.Add(newTabPageOverviewYears);
                 newTabPageOverviewYears.Parent = tabCtrlSales;
@@ -2505,10 +2543,10 @@ namespace SharePortfolioManager.SalesForm.View
                         Text = keyName
                                + @" ("
                                + ShareObjectFinalValue.AllSaleEntries.AllSalesOfTheShareDictionary[keyName]
-                                   .SalePayoutYearWithUnitAsStr
+                                   .SalePayoutBrokerageReductionYearUnitAsStr
                                + @" / "
                                + ShareObjectFinalValue.AllSaleEntries.AllSalesOfTheShareDictionary[keyName]
-                                   .SaleProfitLossYearWithUnitAsStr
+                                   .SaleProfitLossBrokerageReductionYearWithUnitAsStr
                                + @")"
                     };
 
@@ -2541,6 +2579,21 @@ namespace SharePortfolioManager.SalesForm.View
                             DataGridViewColumnHeadersHeightSizeMode.DisableResizing
                     };
 
+                    // Create DataGridView
+                    var dataGridViewSalesOfAYearFooter = new DataGridView
+                    {
+                        Name = keyName + _dataGridViewFooterPostfix,
+                        Dock = DockStyle.Bottom,
+                        AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None,
+
+                        // Disable column header resize
+                        ColumnHeadersHeightSizeMode =
+                            DataGridViewColumnHeadersHeightSizeMode.DisableResizing,
+
+                        // Set height via Size height
+                        Size = new Size(1, DataGridViewFooterHeight)
+                    };
+
                     #endregion Data source, data binding and data grid view
 
                     #region Events
@@ -2556,41 +2609,17 @@ namespace SharePortfolioManager.SalesForm.View
 
                     #region Style
 
-                    // Advanced configuration DataGridView sales
-                    dataGridViewSalesOfAYear.EnableHeadersVisualStyles = false;
-                    // Column header styling
-                    dataGridViewSalesOfAYear.ColumnHeadersDefaultCellStyle.Alignment =
-                        DataGridViewContentAlignment.MiddleCenter;
-                    dataGridViewSalesOfAYear.ColumnHeadersDefaultCellStyle.BackColor =
-                        DataGridViewHelper.DataGridViewHeaderColors;
-                    dataGridViewSalesOfAYear.ColumnHeadersDefaultCellStyle.SelectionBackColor =
-                        DataGridViewHelper.DataGridViewHeaderColors;
-                    dataGridViewSalesOfAYear.ColumnHeadersHeight = 25;
-                    dataGridViewSalesOfAYear.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-                    // Column styling
-                    dataGridViewSalesOfAYear.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                    // Row styling
-                    dataGridViewSalesOfAYear.RowHeadersVisible = false;
-                    dataGridViewSalesOfAYear.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
-                    dataGridViewSalesOfAYear.RowsDefaultCellStyle.BackColor = Color.White;
-                    dataGridViewSalesOfAYear.MultiSelect = false;
-                    dataGridViewSalesOfAYear.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                    // Cell styling
-                    dataGridViewSalesOfAYear.DefaultCellStyle.SelectionBackColor = Color.Blue;
-                    dataGridViewSalesOfAYear.DefaultCellStyle.SelectionForeColor = Color.Yellow;
-                    dataGridViewSalesOfAYear.CellBorderStyle = DataGridViewCellBorderStyle.Single;
-                    dataGridViewSalesOfAYear.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-                    // Allow styling
-                    dataGridViewSalesOfAYear.AllowUserToResizeColumns = false;
-                    dataGridViewSalesOfAYear.AllowUserToResizeRows = false;
-                    dataGridViewSalesOfAYear.AllowUserToAddRows = false;
-                    dataGridViewSalesOfAYear.AllowUserToDeleteRows = false;
+                    DataGridViewHelper.DataGridViewConfiguration(dataGridViewSalesOfAYear);
+
+                    dataGridViewSalesOfAYearFooter.ColumnHeadersVisible = false;
+
 
                     #endregion Style
 
                     #region Control add
 
                     newTabPage.Controls.Add(dataGridViewSalesOfAYear);
+                    newTabPage.Controls.Add(dataGridViewSalesOfAYearFooter);
                     dataGridViewSalesOfAYear.Parent = newTabPage;
                     tabCtrlSales.Controls.Add(newTabPage);
                     newTabPage.Parent = tabCtrlSales;
@@ -2624,23 +2653,32 @@ namespace SharePortfolioManager.SalesForm.View
         {
             try
             {
+                // Local variables of the DataGridView
+                var dgvContent = (DataGridView)sender;
+
                 // Set column headers
-                for (var i = 0; i < ((DataGridView) sender).ColumnCount; i++)
+                for (var i = 0; i < dgvContent.ColumnCount; i++)
                 {
-                    // Set alignment of the column
-                    ((DataGridView) sender).Columns[i].DefaultCellStyle.Alignment =
-                        DataGridViewContentAlignment.MiddleCenter;
+                    // Disable sorting of the columns ( remove sort arrow )
+                    dgvContent.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
+
+                    // Get index of the current added column
+                    var index = ((DataGridView)tabCtrlSales.TabPages[dgvContent.Name]
+                            .Controls[dgvContent.Name + _dataGridViewFooterPostfix]).Columns
+                        .Add(dgvContent.Name + _dataGridViewFooterPostfix, "Header " + i);
 
                     // Disable sorting of the columns ( remove sort arrow )
-                    ((DataGridView) sender).Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
+                    ((DataGridView)tabCtrlSales.TabPages[dgvContent.Name]
+                            .Controls[dgvContent.Name + _dataGridViewFooterPostfix]).Columns[index].SortMode =
+                        DataGridViewColumnSortMode.NotSortable;
 
                     switch (i)
                     {
                         case 0:
                         {
-                            if (((DataGridView) sender).Name == @"Overview")
+                            if (dgvContent.Name == @"Overview")
                             {
-                                ((DataGridView) sender).Columns[i].HeaderText =
+                                dgvContent.Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormSale/GrpBoxSale/TabCtrl/DgvSaleOverview/ColHeader_Year",
                                         LanguageName);
@@ -2650,16 +2688,16 @@ namespace SharePortfolioManager.SalesForm.View
                         case 1:
                         {
                             // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
-                            if (((DataGridView) sender).Name == @"Overview")
+                            if (dgvContent.Name == @"Overview")
                             {
-                                ((DataGridView) sender).Columns[i].HeaderText =
+                                dgvContent.Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormSale/GrpBoxSale/TabCtrl/DgvSaleOverview/ColHeader_Volume",
                                         LanguageName);
                             }
                             else
                             {
-                                ((DataGridView) sender).Columns[i].HeaderText =
+                                dgvContent.Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormSale/GrpBoxSale/TabCtrl/DgvSaleOverview/ColHeader_Date",
                                         LanguageName);
@@ -2668,16 +2706,16 @@ namespace SharePortfolioManager.SalesForm.View
                             break;
                         case 2:
                             // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
-                            if (((DataGridView) sender).Name == @"Overview")
+                            if (dgvContent.Name == @"Overview")
                             {
-                                ((DataGridView) sender).Columns[i].HeaderText =
+                                dgvContent.Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormSale/GrpBoxSale/TabCtrl/DgvSaleOverview/ColHeader_Payout",
                                         LanguageName);
                             }
                             else
                             {
-                                ((DataGridView) sender).Columns[i].HeaderText =
+                                dgvContent.Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/AddEditFormSale/GrpBoxSale/TabCtrl/DgvSaleOverview/ColHeader_Purchase",
                                         LanguageName);
@@ -2685,19 +2723,19 @@ namespace SharePortfolioManager.SalesForm.View
 
                             break;
                         case 3:
-                            ((DataGridView) sender).Columns[i].HeaderText =
+                            dgvContent.Columns[i].HeaderText =
                                 Language.GetLanguageTextByXPath(
                                     @"/AddEditFormSale/GrpBoxSale/TabCtrl/DgvSaleOverview/ColHeader_ProfitLoss",
                                     LanguageName);
                             break;
                         case 4:
-                            ((DataGridView) sender).Columns[i].HeaderText =
+                            dgvContent.Columns[i].HeaderText =
                                 Language.GetLanguageTextByXPath(
                                     @"/AddEditFormSale/GrpBoxSale/TabCtrl/DgvSaleOverview/ColHeader_Sale",
                                     LanguageName);
                             break;
                         case 5:
-                            ((DataGridView) sender).Columns[i].HeaderText =
+                            dgvContent.Columns[i].HeaderText =
                                 Language.GetLanguageTextByXPath(
                                     @"/AddEditFormSale/GrpBoxSale/TabCtrl/DgvSaleOverview/ColHeader_Document",
                                     LanguageName);
@@ -2705,14 +2743,226 @@ namespace SharePortfolioManager.SalesForm.View
                     }
                 }
 
-                if (((DataGridView) sender).Rows.Count > 0)
+                if (dgvContent.Rows.Count > 0)
                 {
-                    ((DataGridView) sender).Rows[0].Selected = false;
-                    ((DataGridView) sender).ScrollBars = ScrollBars.Both;
+                    dgvContent.Rows[0].Selected = false;
+                    dgvContent.ScrollBars = ScrollBars.Both;
                 }
 
-                if (((DataGridView) sender).Name != @"Overview")
-                    ((DataGridView) sender).Columns[0].Visible = false;
+                if (dgvContent.Name != @"Overview")
+                {
+                    // Hide first column with the GUID
+                    ((DataGridView)tabCtrlSales.TabPages[dgvContent.Name]
+                            .Controls[dgvContent.Name]).Columns[0].Visible =
+                        false;
+
+                    ((DataGridView)tabCtrlSales.TabPages[dgvContent.Name]
+                            .Controls[dgvContent.Name + _dataGridViewFooterPostfix]).Columns[0].Visible =
+                        false;
+
+                    #region Column size content
+
+                    // Content DataGridView column width resize
+                    dgvContent.Columns[(int)DataGridViewYearIndices.ColumnIndicesDate].Width =
+                        YearDateColumnSize;
+                    dgvContent.Columns[(int)DataGridViewYearIndices.ColumnIndicesBuyValue].Width =
+                        YearBuyValueColumnSize;
+                    dgvContent.Columns[(int)DataGridViewYearIndices.ColumnIndicesProfitLoss].Width =
+                        YearProfitLossColumnSize;
+                    dgvContent.Columns[(int)DataGridViewYearIndices.ColumnIndicesPayout].Width =
+                        YearPayoutColumnSize;
+
+                    dgvContent.Columns[(int)DataGridViewYearIndices.ColumnIndicesDocument].AutoSizeMode =
+                        DataGridViewAutoSizeColumnMode.Fill;
+                    dgvContent.Columns[(int)DataGridViewYearIndices.ColumnIndicesDocument].FillWeight = 10;
+
+                    #endregion Column size content
+
+                    #region Column size footer
+
+                    // Get footer DataGridView
+                    var dgvFooter = (DataGridView)tabCtrlSales.TabPages[dgvContent.Name]
+                        .Controls[dgvContent.Name + _dataGridViewFooterPostfix];
+
+                    // Footer DataGridView column width resize
+                    dgvFooter.Columns[(int)DataGridViewYearIndices.ColumnIndicesDate].Width =
+                        YearDateColumnSize;
+                    dgvFooter.Columns[(int)DataGridViewYearIndices.ColumnIndicesBuyValue].Width =
+                        YearBuyValueColumnSize;
+                    dgvFooter.Columns[(int)DataGridViewYearIndices.ColumnIndicesProfitLoss].Width =
+                        YearProfitLossColumnSize;
+                    dgvFooter.Columns[(int)DataGridViewYearIndices.ColumnIndicesPayout].Width =
+                        YearPayoutColumnSize;
+
+                    dgvFooter.Columns[(int)DataGridViewYearIndices.ColumnIndicesDocument].AutoSizeMode =
+                        DataGridViewAutoSizeColumnMode.Fill;
+                    dgvFooter.Columns[(int)DataGridViewYearIndices.ColumnIndicesDocument].FillWeight = 10;
+
+                    #endregion Column size footer
+
+                    // Get culture info
+                    var cultureInfo = ShareObjectFinalValue.AllSaleEntries
+                        .AllSalesOfTheShareDictionary[dgvContent.Name]
+                        .SaleCultureInfo;
+
+                    #region Purchase
+
+                    var buyValue =
+                        ShareObjectFinalValue.AllSaleEntries.AllSalesOfTheShareDictionary[dgvContent.Name]
+                            .SaleListYear.Sum(x => x.BuyValueBrokerageReduction);
+
+                    // HINT: If any format is changed here it must also be changed in file "SaleObject.cs" at the property "BuyValueBrokerageReductionAsStr"
+                    var buyValueFormatted = buyValue > 0
+                        ? Helper.FormatDecimal(buyValue, Helper.CurrencyTwoLength, true,
+                            Helper.CurrencyTwoFixLength, true, @"", cultureInfo)
+                        : @"-";
+
+                    #endregion Purchase
+
+                    #region Profit / Loss
+
+                    var profitLoss =
+                        ShareObjectFinalValue.AllSaleEntries.AllSalesOfTheShareDictionary[dgvContent.Name]
+                            .SaleListYear.Sum(x => x.ProfitLossBrokerageReduction);
+
+                    // HINT: If any format is changed here it must also be changed in file "SaleObject.cs" at the property "ProfitLossBrokerageReductionAsStr"
+                    var profitLossFormatted = Helper.FormatDecimal(profitLoss, Helper.CurrencyTwoLength, true,
+                            Helper.CurrencyTwoFixLength, true, @"", cultureInfo);
+
+                    #endregion Profit / Loss
+
+                    #region SaleValue
+
+                    var saleValue =
+                        ShareObjectFinalValue.AllSaleEntries.AllSalesOfTheShareDictionary[dgvContent.Name]
+                            .SaleListYear.Sum(x => x.PayoutBrokerageReduction);
+
+                    // HINT: If any format is changed here it must also be changed in file "BuyObject.cs" at the property "PayoutBrokerageReductionAsStr"
+                    var saleValueFormatted = Helper.FormatDecimal(saleValue, Helper.CurrencyTwoLength, true,
+                        Helper.CurrencyTwoFixLength, true, @"", cultureInfo);
+
+                    #endregion SaleValue
+
+                    // Footer with sum values
+                    if (dgvFooter.Rows.Count == 1)
+                        dgvFooter.Rows.Add("",
+                            Language.GetLanguageTextByXPath(
+                                @"/AddEditFormSale/GrpBoxSale/TabCtrl/DgvSaleOverview/Footer_Totals",
+                                SettingsConfiguration.LanguageName),
+                            buyValueFormatted, profitLossFormatted, saleValueFormatted, "-");
+
+                    // Check if the vertical scrollbar is shown
+                    if (dgvContent.RowCount > DataGridViewRowsScrollbar)
+                    {
+                        dgvFooter.Columns.Add("Scrollbar", "Scrollbar");
+
+                        dgvFooter.Columns[(int)DataGridViewYearIndices.ColumnIndicesScrollBar].Width =
+                            SystemInformation.VerticalScrollBarWidth;
+
+                        // Disable sorting of the columns ( remove sort arrow )
+                        dgvFooter.Columns[dgvFooter.Columns.Count - 1].SortMode = DataGridViewColumnSortMode.NotSortable;
+                    }
+
+                    DataGridViewHelper.DataGridViewConfigurationFooter(dgvFooter);
+                }
+                else
+                {
+                    #region Column size content
+
+                    // Content DataGridView column width resize
+                    dgvContent.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesYear].Width =
+                        OverViewDateColumnSize;
+                    dgvContent.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesVolume].Width =
+                        OverViewVolumeColumnSize;
+                    dgvContent.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesPayout].Width =
+                        OverViewPayoutColumnSize;
+
+                    dgvContent.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesProfitLoss].AutoSizeMode =
+                        DataGridViewAutoSizeColumnMode.Fill;
+                    dgvContent.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesProfitLoss].FillWeight = 10;
+
+                    #endregion Column size content
+
+                    #region Columns size footer
+
+                    // Get footer DataGridView
+                    var dgvFooter = (DataGridView)tabCtrlSales.TabPages[dgvContent.Name]
+                        .Controls[dgvContent.Name + _dataGridViewFooterPostfix];
+
+                    // Footer DataGridView column width resize
+                    dgvFooter.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesYear].Width =
+                        OverViewDateColumnSize;
+                    dgvFooter.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesVolume].Width =
+                        OverViewVolumeColumnSize;
+                    dgvFooter.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesPayout].Width =
+                        OverViewPayoutColumnSize;
+
+                    dgvFooter.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesProfitLoss].AutoSizeMode =
+                        DataGridViewAutoSizeColumnMode.Fill;
+                    dgvFooter.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesProfitLoss].FillWeight = 10;
+
+                    #endregion Column size footer
+
+                    // Get culture info
+                    var cultureInfo = ShareObjectFinalValue.AllSaleEntries.SaleCultureInfo;
+
+                    #region Volume
+
+                    var volume =
+                        ShareObjectFinalValue.AllSaleEntries.GetAllSalesTotalValues().Sum(x => x.SaleVolumeYear);
+
+                    // HINT: If any format is changed here it must also be changed in file "SalesOfAYear.cs" at the property "DgvSaleVolumeYear"
+                    var volumeFormatted = volume > 0
+                        ? Helper.FormatDecimal(volume, Helper.CurrencyFiveLength, false,
+                            Helper.CurrencyTwoFixLength, true, ShareObject.PieceUnit, cultureInfo)
+                        : @"-";
+
+                    #endregion Voluem
+
+                    #region Payout
+
+                    var payout =
+                        ShareObjectFinalValue.AllSaleEntries.GetAllSalesTotalValues().Sum(x => x.SalePayoutBrokerageReductionYear);
+
+                    // HINT: If any format is changed here it must also be changed in file "SalesOfAYear.cs" at the property "DgvSalePayoutYearAsStr"
+                    var payoutFormatted = Helper.FormatDecimal(payout, Helper.CurrencyTwoLength, true,
+                        Helper.CurrencyTwoFixLength, true, @"", cultureInfo);
+
+                    #endregion Payout
+
+                    #region Profit / Loss
+
+                    var profitLoss =
+                        ShareObjectFinalValue.AllSaleEntries.GetAllSalesTotalValues().Sum(x => x.SaleProfitLossBrokerageReductionYear);
+
+                    // HINT: If any format is changed here it must also be changed in file "SalesOfAYear.cs" at the property "DgvSaleProfitLossYearAsStr"
+                    var profitLossFormatted = Helper.FormatDecimal(profitLoss, Helper.CurrencyTwoLength, true,
+                        Helper.CurrencyTwoFixLength, true, @"", cultureInfo);
+
+                    #endregion Profit / Loss
+
+                    // Footer with sum values
+                    if (dgvFooter.Rows.Count == 1)
+                        dgvFooter.Rows.Add(
+                            Language.GetLanguageTextByXPath(
+                                @"/AddEditFormSale/GrpBoxSale/TabCtrl/DgvSaleOverview/Footer_Totals",
+                                SettingsConfiguration.LanguageName),
+                            volumeFormatted, payoutFormatted, profitLossFormatted);
+
+                    // Check if the vertical scrollbar is shown
+                    if (dgvContent.RowCount > DataGridViewRowsScrollbar)
+                    {
+                        dgvFooter.Columns.Add("Scrollbar", "Scrollbar");
+
+                        dgvFooter.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesScrollBar].Width =
+                            SystemInformation.VerticalScrollBarWidth;
+
+                        // Disable sorting of the columns ( remove sort arrow )
+                        dgvFooter.Columns[dgvFooter.Columns.Count - 1].SortMode = DataGridViewColumnSortMode.NotSortable;
+                    }
+
+                    DataGridViewHelper.DataGridViewConfigurationFooter(dgvFooter);
+                }
 
                 // Reset the text box values
                 ResetValues();
@@ -2903,6 +3153,9 @@ namespace SharePortfolioManager.SalesForm.View
         /// <param name="args"></param>
         private void OnDataGridViewSalesOfYears_SelectionChanged(object sender, EventArgs args)
         {
+            // Check if a sale show is running break
+            if (ShowSalesRunningFlag) return;
+
             try
             {
                 if (((DataGridView) sender).SelectedRows.Count != 1) return;
@@ -2956,6 +3209,9 @@ namespace SharePortfolioManager.SalesForm.View
         /// <param name="args"></param>
         private void OnDataGridViewSalesOfAYear_SelectionChanged(object sender, EventArgs args)
         {
+            // Check if a sale show is running break
+            if (ShowSalesRunningFlag) return;
+
             try
             {
                 // Set load running flag
