@@ -32,6 +32,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 using LanguageHandler;
 using Logging;
 using SharePortfolioManager.Classes;
+using SharePortfolioManager.Classes.Configurations;
 using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager.ChartForm
@@ -54,7 +55,7 @@ namespace SharePortfolioManager.ChartForm
 
         public int ChartingAmount;
 
-        public Dictionary<string, Color>ChartingColorDictionary;
+        public ChartingColors ChartingColorsDictionary;
 
         public string Title;
 
@@ -72,7 +73,7 @@ namespace SharePortfolioManager.ChartForm
             ShareObjectFinalValue shareObjectFinalValue, ShareObjectMarketValue shareObjectMarketValue,
             RichTextBox rchTxtBoxStateMessage, Logger logger,
             Language language, string languageName,
-            ChartingInterval iChartingInterval, int iChartingAmount, Dictionary<string, Color>chartingColorDictionary)
+            ChartingInterval iChartingInterval, int iChartingAmount, ChartingColors chartingColorsDictionary)
         {
             InitializeComponent();
 
@@ -89,7 +90,7 @@ namespace SharePortfolioManager.ChartForm
 
             ChartingInterval = iChartingInterval;
             ChartingAmount = iChartingAmount;
-            ChartingColorDictionary = chartingColorDictionary;
+            ChartingColorsDictionary = chartingColorsDictionary;
 
             chartDailyValues.MouseWheel += OnChartDailyValues_MouseWheel;
         }
@@ -136,7 +137,7 @@ namespace SharePortfolioManager.ChartForm
                     true,
                     SeriesChartType.Line,
                     2,
-                    ChartingColorDictionary[Parser.DailyValues.ClosingPriceName],
+                    ChartingColorsDictionary.GetClosingPriceColor(),
                     Parser.DailyValues.DateName,
                     Parser.DailyValues.ClosingPriceName
                 );
@@ -168,8 +169,7 @@ namespace SharePortfolioManager.ChartForm
                     chartValues,
                     lblNoDataMessage,
                     true,
-                    ChartingColorDictionary[Helper.BuyInformationName],
-                    ChartingColorDictionary[Helper.SaleInformationName]
+                    ChartingColorsDictionary
                 );
             }
             catch (Exception ex)
@@ -209,6 +209,8 @@ namespace SharePortfolioManager.ChartForm
             }
         }
 
+        #region Mouse wheel action
+
         private void OnChartDailyValues_MouseWheel(object sender, MouseEventArgs e)
         {
             // Calculate the scroll interval
@@ -242,5 +244,7 @@ namespace SharePortfolioManager.ChartForm
 
             Close();
         }
+
+        #endregion Mouse wheel action
     }
 }

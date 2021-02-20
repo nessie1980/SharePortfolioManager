@@ -34,6 +34,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using SharePortfolioManager.Classes.Configurations;
 
 namespace SharePortfolioManager.ShareDetailsForm
 {
@@ -111,7 +112,7 @@ namespace SharePortfolioManager.ShareDetailsForm
 
         public Logger Logger;
 
-        public Dictionary<string, Color> ChartingColorDictionary;
+        public ChartingColors ChartingColorsDictionary;
 
         public string LanguageName;
 
@@ -142,7 +143,7 @@ namespace SharePortfolioManager.ShareDetailsForm
         public FrmShareDetails( bool marketValueOverviewTabSelected,
             ShareObjectFinalValue shareObjectFinalValue, ShareObjectMarketValue shareObjectMarketValue,
             RichTextBox rchTxtBoxStateMessage, Logger logger,
-            Dictionary<string, Color>chartingColorDictionary,
+            ChartingColors chartingColorsDictionary,
             ChartingInterval chartingInterval, int chartingAmount,
             Language language, string languageName)
         {
@@ -171,7 +172,7 @@ namespace SharePortfolioManager.ShareDetailsForm
 
             #region Charting
 
-            ChartingColorDictionary = chartingColorDictionary;
+            ChartingColorsDictionary = chartingColorsDictionary;
             ChartingIntervalValue = chartingInterval;
             ChartingAmount = chartingAmount;
 
@@ -738,7 +739,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                         true,
                         SeriesChartType.Line,
                         2,
-                        ChartingColorDictionary[Parser.DailyValues.ClosingPriceName],
+                        ChartingColorsDictionary.GetClosingPriceColor(),
                         Parser.DailyValues.DateName,
                         Parser.DailyValues.ClosingPriceName
                     );
@@ -752,7 +753,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                         true,
                         SeriesChartType.Line,
                         2,
-                        ChartingColorDictionary[Parser.DailyValues.OpeningPriceName],
+                        ChartingColorsDictionary.GetOpeningPriceColor(),
                         Parser.DailyValues.DateName,
                         Parser.DailyValues.OpeningPriceName
                     );
@@ -766,7 +767,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                         true,
                         SeriesChartType.Line,
                         2,
-                        ChartingColorDictionary[Parser.DailyValues.TopName],
+                        ChartingColorsDictionary.GetTopPriceColor(),
                         Parser.DailyValues.DateName,
                         Parser.DailyValues.TopName
                     );
@@ -780,7 +781,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                         true,
                         SeriesChartType.Line,
                         2,
-                        ChartingColorDictionary[Parser.DailyValues.BottomName],
+                        ChartingColorsDictionary.GetBottomPriceColor(),
                         Parser.DailyValues.DateName,
                         Parser.DailyValues.BottomName
                     );
@@ -794,7 +795,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                         true,
                         SeriesChartType.Line,
                         2,
-                        ChartingColorDictionary[Parser.DailyValues.VolumeName],
+                        ChartingColorsDictionary.GetVolumeColor(),
                         Parser.DailyValues.DateName,
                         Parser.DailyValues.VolumeName
                     );
@@ -853,8 +854,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     ChartValues,
                     lblNoDataMessage,
                     false,
-                    ChartingColorDictionary[Helper.BuyInformationName],
-                    ChartingColorDictionary[Helper.SaleInformationName]
+                    ChartingColorsDictionary
                 );
 
                 Text = Title;

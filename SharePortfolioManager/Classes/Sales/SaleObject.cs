@@ -151,6 +151,12 @@ namespace SharePortfolioManager.Classes.Sales
             : Helper.FormatDecimal(0, Helper.CurrencyFiveLength, false,
                     Helper.CurrencyTwoFixLength);
 
+        [Browsable(false)]
+        public string VolumeUnitAsStr => Volume > 0
+            ? Helper.FormatDecimal(_volume, Helper.CurrencyFiveLength, false, Helper.CurrencyTwoFixLength, true,
+                ShareObject.PieceUnit, SaleCultureInfo)
+            : @"-";
+
         [Browsable(false)] public List<SaleBuyDetails> SaleBuyDetails = new List<SaleBuyDetails>();
 
         [Browsable(false)]
@@ -172,6 +178,12 @@ namespace SharePortfolioManager.Classes.Sales
                 Helper.CurrencyTwoFixLength)
             : Helper.FormatDecimal(0, Helper.CurrencyFiveLength, false,
                     Helper.CurrencyTwoFixLength);
+
+        [Browsable(false)]
+        public string SalePriceUnitAsStr => SalePrice > 0
+            ? Helper.FormatDecimal(_salePrice, Helper.CurrencyTwoLength, true,
+                Helper.CurrencyTwoFixLength, true, @"", SaleCultureInfo)
+            : @"-";
 
         [Browsable(false)]
         public decimal TaxAtSource

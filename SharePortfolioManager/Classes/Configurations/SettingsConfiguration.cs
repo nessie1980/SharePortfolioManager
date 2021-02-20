@@ -30,10 +30,176 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
-using SharePortfolioManager.Classes.Configurations;
 
-namespace SharePortfolioManager.Classes
+namespace SharePortfolioManager.Classes.Configurations
 {
+    public class ChartingColors
+    {
+        #region Variablen
+
+        private const string ClosingPriceKeyName = Parser.DailyValues.ClosingPriceName;
+        private readonly Color _closingPriceColor = Color.Black;
+
+        private const string OpeningPriceKeyName = Parser.DailyValues.OpeningPriceName;
+        private readonly Color _openingPriceColor = Color.DarkGreen;
+
+        private const string TopPriceKeyName = Parser.DailyValues.TopName;
+        private readonly Color _topPriceColor = Color.DarkBlue;
+
+        private const string BottomPriceKeyName = Parser.DailyValues.BottomName;
+        private readonly Color _bottomPriceColor = Color.DarkRed;
+
+        private const string VolumeKeyName = Parser.DailyValues.VolumeName;
+        private readonly Color _volumeColor = Color.Goldenrod;
+
+        private const string LastBuyKeyName = "LastBuy";
+        private readonly Color _lastBuyColor = Color.Blue;
+
+        private const string AllBuysWithoutLastBuyKeyName = "RestOfBuys";
+        private readonly Color _allBuysWithoutLastBuyColor = Color.Red;
+
+        private const string LastSaleKeyName = "LastSale";
+        private readonly Color _lastSaleColor = Color.Aqua;
+
+        private const string AllSalesWithoutLastSaleKeyName = "RstOfSales";
+        private readonly Color _allSalesWithoutLastSaleColor = Color.OrangeRed;
+
+        private readonly Dictionary<string, Color> _chartingColors = new Dictionary<string, Color>();
+
+        #endregion Variablen
+
+        #region Methods
+
+        public ChartingColors()
+        {
+            // Set default colors
+            SetDefaultColors();
+        }
+
+        public void SetDefaultColors()
+        {
+            _chartingColors.Clear();
+
+            _chartingColors.Add(ClosingPriceKeyName, _closingPriceColor);
+            _chartingColors.Add(OpeningPriceKeyName, _openingPriceColor);
+            _chartingColors.Add(TopPriceKeyName, _topPriceColor);
+            _chartingColors.Add(BottomPriceKeyName, _bottomPriceColor);
+            _chartingColors.Add(VolumeKeyName, _volumeColor);
+
+            _chartingColors.Add(LastBuyKeyName, _lastBuyColor);
+            _chartingColors.Add(LastSaleKeyName, _allBuysWithoutLastBuyColor);
+            _chartingColors.Add(AllBuysWithoutLastBuyKeyName, _lastSaleColor);
+            _chartingColors.Add(AllSalesWithoutLastSaleKeyName, _allSalesWithoutLastSaleColor);
+        }
+
+        public bool SetColorViaKeyName(string keyName, Color color)
+        {
+            if (!_chartingColors.ContainsKey(keyName)) return false;
+
+            _chartingColors[keyName] = color;
+            return true;
+        }
+
+        public bool GetColorViaKeyName(string keyName, out Color color)
+        {
+            if (!_chartingColors.ContainsKey(keyName))
+            {
+                color = Color.Black;
+                return false;
+            }
+
+            color = _chartingColors[keyName];
+            return true;
+        }
+
+        public bool SetClosingPriceColor( Color color)
+        {
+            if (!_chartingColors.ContainsKey(ClosingPriceKeyName)) return false;
+
+            _chartingColors[ClosingPriceKeyName] = color;
+            return true;
+        }
+
+        public Color GetClosingPriceColor()
+        {
+            return _chartingColors.ContainsKey(ClosingPriceKeyName) ? _chartingColors[ClosingPriceKeyName] : _closingPriceColor;
+        }
+
+        public bool SetOpeningPriceColor(Color color)
+        {
+            if (!_chartingColors.ContainsKey(OpeningPriceKeyName)) return false;
+
+            _chartingColors[OpeningPriceKeyName] = color;
+            return true;
+        }
+
+        public Color GetOpeningPriceColor()
+        {
+            return _chartingColors.ContainsKey(OpeningPriceKeyName) ? _chartingColors[OpeningPriceKeyName] : _openingPriceColor;
+        }
+
+        public bool SetTopPriceColor(Color color)
+        {
+            if (!_chartingColors.ContainsKey(TopPriceKeyName)) return false;
+
+            _chartingColors[TopPriceKeyName] = color;
+            return true;
+        }
+
+        public Color GetTopPriceColor()
+        {
+            return _chartingColors.ContainsKey(TopPriceKeyName) ? _chartingColors[TopPriceKeyName] : _topPriceColor;
+        }
+
+        public bool SetBottomPriceColor(Color color)
+        {
+            if (!_chartingColors.ContainsKey(BottomPriceKeyName)) return false;
+
+            _chartingColors[BottomPriceKeyName] = color;
+            return true;
+        }
+
+        public Color GetBottomPriceColor()
+        {
+            return _chartingColors.ContainsKey(BottomPriceKeyName) ? _chartingColors[BottomPriceKeyName] : _bottomPriceColor;
+        }
+
+        public bool SetVolumeColor(Color color)
+        {
+            if (!_chartingColors.ContainsKey(VolumeKeyName)) return false;
+
+            _chartingColors[VolumeKeyName] = color;
+            return true;
+        }
+
+        public Color GetVolumeColor()
+        {
+            return _chartingColors.ContainsKey(VolumeKeyName) ? _chartingColors[VolumeKeyName] : _volumeColor;
+        }
+
+        public Color GetLastBuyColor()
+        {
+            return _chartingColors.ContainsKey(LastBuyKeyName) ? _chartingColors[LastBuyKeyName] : _lastBuyColor;
+        }
+
+        public Color GetLastSaleColor()
+        {
+            return _chartingColors.ContainsKey(LastSaleKeyName) ? _chartingColors[LastSaleKeyName] : _lastSaleColor;
+        }
+
+        public Color GetAllBuysColor()
+        {
+            return _chartingColors.ContainsKey(AllBuysWithoutLastBuyKeyName) ? _chartingColors[AllBuysWithoutLastBuyKeyName] : _allBuysWithoutLastBuyColor;
+        }
+
+        public Color GetAllSalesColor()
+        {
+            return _chartingColors.ContainsKey(AllSalesWithoutLastSaleKeyName) ? _chartingColors[AllSalesWithoutLastSaleKeyName] : _allSalesWithoutLastSaleColor;
+        }
+
+        #endregion Methods
+    }
+
     public static class SettingsConfiguration
     {
         #region Error codes
@@ -121,7 +287,7 @@ namespace SharePortfolioManager.Classes
 
         public static int ChartingAmount { internal set; get; } = 1;
 
-        public static Dictionary<string, Color> ChartingColorDictionary { internal set; get; } = new Dictionary<string, Color>();
+        public static ChartingColors ChartingColors { internal set; get; } = new ChartingColors();
 
         #endregion Charting
 
@@ -478,41 +644,45 @@ namespace SharePortfolioManager.Classes
 
                 #region Charting colors
 
-                // Read the colors for the various logger levels
+                // Read the colors for the various charting lines
                 var nodeChartingColorsDailyValues = XmlDocument.SelectSingleNode("/Settings/Charting/Colors/DailyValues");
                 if (nodeChartingColorsDailyValues != null)
                 {
                     foreach (XmlNode color in nodeChartingColorsDailyValues.ChildNodes)
                     {
-                        ChartingColorDictionary.Add(color.Name, Color.FromName(color.InnerText));
+                        if (!ChartingColors.SetColorViaKeyName(color.Name, Color.FromName(color.InnerText)))
+                        {
+                            ChartingColors.SetDefaultColors();
+
+                            loadSettings = false;
+                            break;
+                        }
                     }
                 }
                 else
                 {
-                    ChartingColorDictionary.Clear();
-                    ChartingColorDictionary.Add(@"ClosingPrice", Color.Black);
-                    ChartingColorDictionary.Add(@"OpeningPrice", Color.DarkGreen);
-                    ChartingColorDictionary.Add(@"Top", Color.DarkBlue);
-                    ChartingColorDictionary.Add(@"Bottom", Color.DarkRed);
-                    ChartingColorDictionary.Add(@"Volume", Color.Goldenrod);
+                    ChartingColors.SetDefaultColors();
 
                     loadSettings = false;
                 }
 
-                // Read the colors for the various logger levels
-                var nodeChartingColors = XmlDocument.SelectSingleNode("/Settings/Charting/Colors/Information");
-                if (nodeChartingColors != null)
+                // Read the colors for the various charting lines
+                if (loadSettings)
                 {
-                    foreach (XmlNode color in nodeChartingColors.ChildNodes)
+                    var nodeChartingColors = XmlDocument.SelectSingleNode("/Settings/Charting/Colors/Information");
+                    if (nodeChartingColors != null)
                     {
-                        ChartingColorDictionary.Add(color.Name, Color.FromName(color.InnerText));
+                        foreach (XmlNode color in nodeChartingColors.ChildNodes)
+                        {
+                            ChartingColors.SetColorViaKeyName(color.Name, Color.FromName(color.InnerText));
+                        }
                     }
-                }
-                else
-                {
-                    ChartingColorDictionary.Add(@"Buy", Color.Blue);
-                    ChartingColorDictionary.Add(@"Sale", Color.Red);
-                    loadSettings = false;
+                    else
+                    {
+                        ChartingColors.SetDefaultColors();
+
+                        loadSettings = false;
+                    }
                 }
 
                 #endregion Charting colors
@@ -838,7 +1008,7 @@ namespace SharePortfolioManager.Classes
 
                     #region Start next share update timer
 
-                    // Read the time value for starting the next share update
+                    // Save the time value for starting the next share update
                     var nodeStartNextShareUpdate = XmlDocument.SelectSingleNode("/Settings/StartNextShareUpdate");
                     if (nodeStartNextShareUpdate != null)
                     {
@@ -853,7 +1023,7 @@ namespace SharePortfolioManager.Classes
 
                     #region State clear timer
 
-                    // Read the time value for clearing the status message
+                    // Save the time value for clearing the status message
                     var nodeStatusMessageClear = XmlDocument.SelectSingleNode("/Settings/StatusMessageClear");
                     if (nodeStatusMessageClear != null)
                     {
@@ -868,6 +1038,7 @@ namespace SharePortfolioManager.Classes
 
                     #region Sounds
 
+                    // Save sounds
                     var nodeUpdateFinishSoundEnable = XmlDocument.SelectSingleNode("/Settings/Sounds/UpdateFinishedEnabled");
                     if (nodeUpdateFinishSoundEnable != null)
                     {
@@ -912,7 +1083,7 @@ namespace SharePortfolioManager.Classes
 
                     #region Charting values
 
-                    // Read the charting values
+                    // Save the charting values
                     var nodeChartingInterval = XmlDocument.SelectSingleNode("/Settings/Charting/Interval");
                     if (nodeChartingInterval != null)
                     {
@@ -954,7 +1125,7 @@ namespace SharePortfolioManager.Classes
                         saveSettings = false;
                     }
 
-                    // Read the charting values
+                    // Save the charting values
                     var nodeChartingAmount = XmlDocument.SelectSingleNode("/Settings/Charting/Amount");
                     if (nodeChartingAmount != null)
                     {
@@ -967,15 +1138,15 @@ namespace SharePortfolioManager.Classes
 
                     #region Charting colors
 
-                    // Read the colors for the various logger levels
+                    // Save the colors for the various charting lines
                     var nodeChartingColorsDailyValues = XmlDocument.SelectSingleNode("/Settings/Charting/Colors/DailyValues");
                     if (nodeChartingColorsDailyValues != null)
                     {
                         foreach (XmlNode color in nodeChartingColorsDailyValues.ChildNodes)
                         {
-                            if (ChartingColorDictionary.ContainsKey(color.Name))
+                            if (ChartingColors.GetColorViaKeyName(color.Name, out var getColor))
                             {
-                                color.InnerXml = ChartingColorDictionary[color.Name].Name;
+                                color.InnerXml = getColor.Name;
                             }
                             else
                             {
@@ -988,15 +1159,15 @@ namespace SharePortfolioManager.Classes
                         saveSettings = false;
                     }
 
-                    // Read the colors for the various logger levels
+                    // Save the colors for the various logger levels
                     var nodeChartingColors = XmlDocument.SelectSingleNode("/Settings/Charting/Colors/Information");
                     if (nodeChartingColors != null)
                     {
                         foreach (XmlNode color in nodeChartingColors.ChildNodes)
                         {
-                            if (ChartingColorDictionary.ContainsKey(color.Name))
+                            if (ChartingColors.GetColorViaKeyName(color.Name, out var getColor))
                             {
-                                color.InnerXml = ChartingColorDictionary[color.Name].Name;
+                                color.InnerXml = getColor.Name;
                             }
                             else
                             {
@@ -1015,7 +1186,7 @@ namespace SharePortfolioManager.Classes
 
                     #region Logger GUI stores size
 
-                    // Read the GUI entries size
+                    // Save the GUI entries size
                     var nodeGuiEntriesSize = XmlDocument.SelectSingleNode("/Settings/Logger/GUIEntries");
                     if (nodeGuiEntriesSize != null)
                     {
@@ -1030,7 +1201,7 @@ namespace SharePortfolioManager.Classes
 
                     #region Logger enable to log file
 
-                    // Read the flag if the logger should be used
+                    // Save the flag if the logger should be used
                     var nodeLoggerLogToFileEnabled = XmlDocument.SelectSingleNode("/Settings/Logger/LogToFileEnable");
                     if (nodeLoggerLogToFileEnabled != null)
                     {
@@ -1045,7 +1216,7 @@ namespace SharePortfolioManager.Classes
 
                     #region Logger stored log files
 
-                    // Read the time value for clearing the status message
+                    // Save the time value for clearing the status message
                     var nodeStoredLogFiles = XmlDocument.SelectSingleNode("/Settings/Logger/StoredLogFiles");
                     if (nodeStoredLogFiles != null)
                     {
@@ -1060,7 +1231,7 @@ namespace SharePortfolioManager.Classes
 
                     #region Logger cleanup at startup enable
 
-                    // Read the flag if the logger should be used
+                    // Save the flag if the logger should be used
                     var nodeLoggerCleanUpAtStartUpEnabled =
                         XmlDocument.SelectSingleNode("/Settings/Logger/LogCleanUpAtStartUpEnable");
                     if (nodeLoggerCleanUpAtStartUpEnabled != null)
@@ -1076,7 +1247,7 @@ namespace SharePortfolioManager.Classes
 
                     #region Logger components level
 
-                    // Read the value which logger components should be logged
+                    // Save the value which logger components should be logged
                     var nodeLogComponents = XmlDocument.SelectSingleNode("/Settings/Logger/LogComponents");
                     if (nodeLogComponents != null)
                     {
@@ -1091,7 +1262,7 @@ namespace SharePortfolioManager.Classes
 
                     #region Logger log level
 
-                    // Read the value which logger levels should be logged
+                    // Save the value which logger levels should be logged
                     var nodeLogLevels = XmlDocument.SelectSingleNode("/Settings/Logger/LogLevels");
                     if (nodeLogLevels != null)
                     {  
@@ -1106,7 +1277,7 @@ namespace SharePortfolioManager.Classes
 
                     #region Logger colors
 
-                    // Read the colors for the various logger levels
+                    // Save the colors for the various logger levels
                     var nodeLogColors = XmlDocument.SelectSingleNode("/Settings/Logger/LogColors");
                     if (nodeLogColors != null)
                     {
@@ -1129,7 +1300,7 @@ namespace SharePortfolioManager.Classes
 
                     #region Show exception messages
 
-                    // Read the flag if exception messages should be shown
+                    // Save the flag if exception messages should be shown
                     var nodeShowExceptionMessages = XmlDocument.SelectSingleNode("/Settings/ShowExceptionMessages");
                     if (nodeShowExceptionMessages != null)
                     {
@@ -1144,7 +1315,7 @@ namespace SharePortfolioManager.Classes
 
                     #region Read parser debugging flag
 
-                    // Read the flag if parser for the market value should be enabled
+                    // Save the flag if parser for the market value should be enabled
                     var nodeMarketValuesParserDebugging = XmlDocument.SelectSingleNode("/Settings/Parser/MarketValuesDebuggingEnable");
                     if (nodeMarketValuesParserDebugging != null)
                     {
@@ -1155,7 +1326,7 @@ namespace SharePortfolioManager.Classes
                         saveSettings = false;
                     }
 
-                    // Read the flag if parser for the market value should be enabled
+                    // Save the flag if parser for the market value should be enabled
                     var nodeDailyValuesParserDebugging = XmlDocument.SelectSingleNode("/Settings/Parser/DailyValuesDebuggingEnable");
                     if (nodeDailyValuesParserDebugging != null)
                     {

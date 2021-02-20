@@ -1348,17 +1348,21 @@
 				<Volume text="Volume" />
 				<VolumeYTitle text="Amount" />
 				<LastBuy text="Last buy" />
+				<AllBuys text="Rest of buys" />
 				<LastSale text="Last sale" />
+				<AllSales text="Rest of sales" />
 				<Period text="Period" />
 				<Development text="Development" />
 			</Legend>
 			
 			<!-- ToolTip -->
 			<ToolTip>
-				<Date text="Date:" />
-				<Value text="Value:" />
-				<Minimum text="Min:" />
-				<Maximum text="Max:" />
+				<Date text="Date" />
+				<BuyPrice text="Buy price" />
+				<SalePrice text="Sale price" />
+				<Volume text="Volume" />
+				<Minimum text="Min" />
+				<Maximum text="Max" />
 			</ToolTip>
 
 			<!-- Message -->
@@ -1996,7 +2000,7 @@
 						<OpeningPrice text="Eröffungs- Kurs" />
 						<Top text="Höchstwert" />
 						<Bottom text="Tiefstwert" />
-						<Volume text="Volume" />
+						<Volume text="Anteile" />
 						<Selection text="Selektion:" />
 						<StartDate text="Start- Datum:" />
 						<Interval text="Interval:" />
@@ -2902,20 +2906,24 @@
 				<TopYTitle text="Preis" />
 				<Bottom text="Tiefstwert" />
 				<BottomYTitle text="Preis" />
-				<Volume text="Volume" />
+				<Volume text="Anteile" />
 				<VolumeYTitle text="Anzahl" />
 				<LastBuy text="Letzter Kauf" />
+				<AllBuys text="Restliche Käufe" />
 				<LastSale text="Letzter Verkauf" />
+				<AllSales text="Restliche Verkäufe" />
 				<Period text="Zeitraum" />
 				<Development text="Entwicklung" />
 			</Legend>
 
 			<!-- ToolTip -->
 			<ToolTip>
-				<Date text="Datum:" />
-				<Value text="Wert:" />
-				<Minimum text="Min:" />
-				<Maximum text="Max:" />
+				<Date text="Datum" />
+				<BuyPrice text="Kaufpreis" />
+				<SalePrice text="Verkaufspreis" />
+				<Volume text="Anteile" />
+				<Minimum text="Min" />
+				<Maximum text="Max" />
 			</ToolTip>
 			
 			<!-- Message -->

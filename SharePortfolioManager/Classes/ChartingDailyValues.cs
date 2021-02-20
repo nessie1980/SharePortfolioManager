@@ -31,6 +31,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms.DataVisualization.Charting;
+using SharePortfolioManager.Classes.Buys;
+using SharePortfolioManager.Classes.Configurations;
+using SharePortfolioManager.Classes.Sales;
 using static System.Double;
 
 namespace SharePortfolioManager.Classes
@@ -58,9 +61,7 @@ namespace SharePortfolioManager.Classes
 
         private static Language _language;
 
-        private static Color _colorBuyInformation;
-
-        private static Color _colorSaleInformation;
+        private static ChartingColors _chartingColors;
 
         #endregion Variables
 
@@ -80,9 +81,8 @@ namespace SharePortfolioManager.Classes
             ChartValues chartValues,
             System.Windows.Forms.Label lblBoxNoDataMessage,
             bool showTitle,
-            Color buyInformationColor,
-            Color saleInformationColor
-            )
+            ChartingColors chartingColors
+        )
         {
             #region Set private values
 
@@ -103,8 +103,7 @@ namespace SharePortfolioManager.Classes
 
             _chartValues = chartValues;
 
-            _colorBuyInformation = buyInformationColor;
-            _colorSaleInformation = saleInformationColor;
+            _chartingColors = chartingColors;
 
             #endregion Set private values
 
@@ -195,64 +194,127 @@ namespace SharePortfolioManager.Classes
 
             #region Sale information
 
-            var bShowSaleInformation = false;
-            var bShowSaleStripLine = false;
+            var bShowLastSaleInformation = false;
+            var bShowLastSaleStripLine = false;
             decimal decLastSalePrice = 0;
-            var dateLastSalePrice = string.Empty;
+            string dateLastSalePrice;
             var iIndexSale = -1.0;
-            var strSaleDate = "";
-            var saleObject = marketValueOverviewTabSelected ? shareObjectMarketValue.GetLastAddedSale() : shareObjectFinalValue.GetLastAddedSale();
+            var strLastSaleDate = string.Empty;
+            var lastSaleObject = marketValueOverviewTabSelected ? shareObjectMarketValue.GetLastAddedSale() : shareObjectFinalValue.GetLastAddedSale();
 
-            if (saleObject != null)
+            if (lastSaleObject != null)
             {
-                bShowSaleInformation = true;
-                decLastSalePrice = saleObject.SalePrice;
-                dateLastSalePrice = saleObject.Date;
+                bShowLastSaleInformation = true;
+
+                decLastSalePrice = lastSaleObject.SalePrice;
+                dateLastSalePrice = lastSaleObject.Date;
 
                 // Check if the sale is in the daily values list
-                if (dailyValuesList.Any(x => x.Date.ToShortDateString() == DateTime.Parse(dateLastSalePrice).ToShortDateString()))
-                    bShowSaleStripLine = true;
+                if (dailyValuesList.Any(x =>
+                    x.Date.ToShortDateString() == DateTime.Parse(dateLastSalePrice).ToShortDateString()))
+                    bShowLastSaleStripLine = true;
+
+                if (dateLastSalePrice != @"")
+                {
+                    strLastSaleDate = DateTime.Parse(DateTime.Parse(dateLastSalePrice).ToShortDateString()).ToShortDateString();
+                    iIndexSale =
+                        dailyValuesList.FindIndex(x =>
+                            x.Date == DateTime.Parse(DateTime.Parse(dateLastSalePrice).ToShortDateString())) +
+                        1.009;
+                }
             }
 
-            if (dateLastSalePrice != @"")
+            var allSalesWithoutLastElement = new List<SaleObject>();
+            var dictionaryAllSalesWithoutLastElementOfInterval = new Dictionary<double, SaleObject>();
+            var allSales = marketValueOverviewTabSelected ? shareObjectMarketValue.AllSaleEntries : shareObjectFinalValue.AllSaleEntries;
+
+            // Get the all sales without the last sale date in the currently selected date range
+            if (lastSaleObject != null)
+                allSalesWithoutLastElement = allSales.GetAllSalesOfTheShare().Where(x =>
+                    x.Date != lastSaleObject.Date && DateTime.Parse(x.Date) <= dailyValuesList.Max(y => y.Date) &&
+                    DateTime.Parse(x.Date) >= dailyValuesList.Min(y => y.Date)).ToList();
+
+            // Add sales to the dictionary with the charting index
+            foreach (var saleObject in allSalesWithoutLastElement)
             {
-                strSaleDate = DateTime.Parse(DateTime.Parse(dateLastSalePrice).ToShortDateString()).ToShortDateString();
-                iIndexSale =
-                    dailyValuesList.FindIndex(x =>
-                        x.Date == DateTime.Parse(DateTime.Parse(dateLastSalePrice).ToShortDateString())) +
-                    1.009;
+                var saleDate = saleObject.Date;
+
+                if (saleDate == @"") continue;
+
+                if (dailyValuesList.FindIndex(x =>
+                    x.Date == DateTime.Parse(DateTime.Parse(saleDate).ToShortDateString())) != -1)
+                {
+                    var iIndexBuys =
+                        dailyValuesList.FindIndex(x =>
+                            x.Date == DateTime.Parse(DateTime.Parse(saleDate).ToShortDateString())) +
+                        1.009;
+
+                    dictionaryAllSalesWithoutLastElementOfInterval.Add(iIndexBuys, saleObject);
+                }
             }
 
             #endregion Sale information
 
             #region Buy information
 
-            var bShowBuyInformation = false;
-            var bShowBuyStripLine = false;
+            var bShowLastBuyInformation = false;
+            var bShowLastBuyStripLine = false;
             decimal decLastBuyPrice = 0;
-            var dateLastBuyPrice = string.Empty;
+            string dateLastBuyPrice;
             var iIndexBuy = -1.0;
-            var strBuyDate = "";
-            var buyObject = marketValueOverviewTabSelected ? shareObjectMarketValue.GetLastAddedBuy() : shareObjectFinalValue.GetLastAddedBuy();
+            var strLastBuyDate = "";
 
-            if (buyObject != null)
+            var lastBuyObject = marketValueOverviewTabSelected ? shareObjectMarketValue.GetLastAddedBuy() : shareObjectFinalValue.GetLastAddedBuy();
+
+            if (lastBuyObject != null)
             {
-                bShowBuyInformation = true;
-                decLastBuyPrice = buyObject.Price;
-                dateLastBuyPrice = buyObject.Date;
+                bShowLastBuyInformation = true;
+
+                decLastBuyPrice = lastBuyObject.Price;
+                dateLastBuyPrice = lastBuyObject.Date;
 
                 // Check if the sale is in the daily values list
-                if (dailyValuesList.Any(x => x.Date.ToShortDateString() == DateTime.Parse(dateLastBuyPrice).ToShortDateString()))
-                    bShowBuyStripLine = true;
+                if (dailyValuesList.Any(x =>
+                    x.Date.ToShortDateString() == DateTime.Parse(dateLastBuyPrice).ToShortDateString()))
+                    bShowLastBuyStripLine = true;
+
+                if (dateLastBuyPrice != @"")
+                {
+                    strLastBuyDate = DateTime.Parse(DateTime.Parse(dateLastBuyPrice).ToShortDateString()).ToShortDateString();
+                    iIndexBuy =
+                        dailyValuesList.FindIndex(x =>
+                            x.Date == DateTime.Parse(DateTime.Parse(dateLastBuyPrice).ToShortDateString())) +
+                        1.009;
+                }
             }
 
-            if (dateLastBuyPrice != @"")
+            var allBuysWithoutLastElement = new List<BuyObject>();
+            var dictionaryAllBuysWithoutLastElementOfInterval = new Dictionary<double, BuyObject>();
+            var allBuys = marketValueOverviewTabSelected ? shareObjectMarketValue.AllBuyEntries : shareObjectFinalValue.AllBuyEntries;
+
+            // Get the all buys without the last buy date in the currently selected date range
+            if (lastBuyObject != null)
+                allBuysWithoutLastElement = allBuys.GetAllBuysOfTheShare().Where(x =>
+                    x.Date != lastBuyObject.Date && DateTime.Parse(x.Date) <= dailyValuesList.Max(y => y.Date) &&
+                    DateTime.Parse(x.Date) >= dailyValuesList.Min(y => y.Date)).ToList();
+
+            // Add buys to the dictionary with the charting index
+            foreach (var buyObject in allBuysWithoutLastElement)
             {
-                strBuyDate = DateTime.Parse(DateTime.Parse(dateLastBuyPrice).ToShortDateString()).ToShortDateString();
-                iIndexBuy =
-                    dailyValuesList.FindIndex(x =>
-                        x.Date == DateTime.Parse(DateTime.Parse(dateLastBuyPrice).ToShortDateString())) +
-                    1.009;
+                var buyDate = buyObject.Date;
+
+                if (buyDate == @"") continue;
+
+                if (dailyValuesList.FindIndex(x =>
+                    x.Date == DateTime.Parse(DateTime.Parse(buyDate).ToShortDateString())) != -1)
+                {
+                    var iIndexBuys =
+                        dailyValuesList.FindIndex(x =>
+                            x.Date == DateTime.Parse(DateTime.Parse(buyDate).ToShortDateString())) +
+                        1.009;
+
+                    dictionaryAllBuysWithoutLastElementOfInterval.Add(iIndexBuys, buyObject);
+                }
             }
 
             #endregion Buy information
@@ -271,6 +333,9 @@ namespace SharePortfolioManager.Classes
                 Console.WriteLine(@"Diff:  {0}", diffDatetime.Days);
             }
 #endif
+
+            #region General charting settings
+
             _chartDailyValues.ChartAreas.Add("ChosenValues");
 
             // Primary axis Y
@@ -299,7 +364,8 @@ namespace SharePortfolioManager.Classes
             _chartDailyValues.ChartAreas[0].AxisX.IntervalType = _chartValues.IntervalType;
             _chartDailyValues.ChartAreas[0].AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount;
             _chartDailyValues.ChartAreas[0].AxisX.IntervalOffset = 0;
-            
+
+            #endregion General charting settings
 
             #region Legend
 
@@ -330,9 +396,9 @@ namespace SharePortfolioManager.Classes
 
                         var toolTipFormat =
                         _language.GetLanguageTextByXPath(@"/Chart/ToolTip/Date", _languageName) +
-                        " #VALX{dd.MM.yyyy}" + "\n" +
-                        _language.GetLanguageTextByXPath(@"/Chart/ToolTip/Value", _languageName) +
-                        " #VAL{N2} " + _shareObjectFinalValue.CurrencyUnit;
+                        ": #VALX{dd.MM.yyyy}" + "\n" +
+                        _language.GetLanguageTextByXPath(@"/Chart/Legend/ClosingPrice", _languageName) +
+                        ": #VAL{N2} " + _shareObjectFinalValue.CurrencyUnit;
                         
                         _chartDailyValues.ChartAreas[0].AxisY.Title = @"" 
                                                                   + _language.GetLanguageTextByXPath(@"/Chart/Legend/ClosingPriceYTitle", _languageName) + 
@@ -356,7 +422,7 @@ namespace SharePortfolioManager.Classes
                         _chartDailyValues.Series[Parser.DailyValues.ClosingPriceName].IsVisibleInLegend = false;
                         _chartDailyValues.Series[Parser.DailyValues.ClosingPriceName].MarkerStyle = MarkerStyle.Square;
                         _chartDailyValues.Series[Parser.DailyValues.ClosingPriceName].MarkerSize = 6;
-                        _chartDailyValues.Series[Parser.DailyValues.ClosingPriceName].ToolTip = _language.GetLanguageTextByXPath(@"/Chart/Legend/ClosingPrice", _languageName) + "\n" + toolTipFormat;
+                        _chartDailyValues.Series[Parser.DailyValues.ClosingPriceName].ToolTip = toolTipFormat;
 
                         #endregion Series
                             
@@ -401,9 +467,9 @@ namespace SharePortfolioManager.Classes
 
                         var toolTipFormat =
                         _language.GetLanguageTextByXPath(@"/Chart/ToolTip/Date", _languageName) +
-                        " #VALX{dd.MM.yyyy}" + "\n" +
-                        _language.GetLanguageTextByXPath(@"/Chart/ToolTip/Value", _languageName) +
-                        " #VAL{N2} " + _shareObjectFinalValue.CurrencyUnit;
+                        ": #VALX{dd.MM.yyyy}" + "\n" +
+                        _language.GetLanguageTextByXPath(@"/Chart/Legend/OpeningPrice", _languageName) +
+                        ": #VAL{N2} " + _shareObjectFinalValue.CurrencyUnit;
 
                         _chartDailyValues.ChartAreas[0].AxisY.Title = @""
                                                                       + _language.GetLanguageTextByXPath(@"/Chart/Legend/OpeningPriceYTitle", _languageName) +
@@ -427,7 +493,7 @@ namespace SharePortfolioManager.Classes
                         _chartDailyValues.Series[Parser.DailyValues.OpeningPriceName].IsVisibleInLegend = false;
                         _chartDailyValues.Series[Parser.DailyValues.OpeningPriceName].MarkerStyle = MarkerStyle.Square;
                         _chartDailyValues.Series[Parser.DailyValues.OpeningPriceName].MarkerSize = 6;
-                        _chartDailyValues.Series[Parser.DailyValues.OpeningPriceName].ToolTip = _language.GetLanguageTextByXPath(@"/Chart/Legend/OpeningPrice", _languageName) + "\n" + toolTipFormat;
+                        _chartDailyValues.Series[Parser.DailyValues.OpeningPriceName].ToolTip = toolTipFormat;
 
                         #endregion Series
 
@@ -472,9 +538,9 @@ namespace SharePortfolioManager.Classes
 
                         var toolTipFormat =
                         _language.GetLanguageTextByXPath(@"/Chart/ToolTip/Date", _languageName) +
-                        " #VALX{dd.MM.yyyy}" + "\n" +
-                        _language.GetLanguageTextByXPath(@"/Chart/ToolTip/Value", _languageName) +
-                        " #VAL{N2} " + _shareObjectFinalValue.CurrencyUnit;
+                        ": #VALX{dd.MM.yyyy}" + "\n" +
+                        _language.GetLanguageTextByXPath(@"/Chart/Legend/Top", _languageName) +
+                        ": #VAL{N2} " + _shareObjectFinalValue.CurrencyUnit;
 
                         _chartDailyValues.ChartAreas[0].AxisY.Title = @""
                                                               + _language.GetLanguageTextByXPath(@"/Chart/Legend/TopYTitle", _languageName) +
@@ -498,7 +564,7 @@ namespace SharePortfolioManager.Classes
                         _chartDailyValues.Series[Parser.DailyValues.TopName].IsVisibleInLegend = false;
                         _chartDailyValues.Series[Parser.DailyValues.TopName].MarkerStyle = MarkerStyle.Square;
                         _chartDailyValues.Series[Parser.DailyValues.TopName].MarkerSize = 6;
-                        _chartDailyValues.Series[Parser.DailyValues.TopName].ToolTip = _language.GetLanguageTextByXPath(@"/Chart/Legend/Top", _languageName) + "\n" + toolTipFormat;
+                        _chartDailyValues.Series[Parser.DailyValues.TopName].ToolTip = toolTipFormat;
 
                         #endregion Series
 
@@ -543,9 +609,9 @@ namespace SharePortfolioManager.Classes
 
                         var toolTipFormat =
                         _language.GetLanguageTextByXPath(@"/Chart/ToolTip/Date", _languageName) +
-                        " #VALX{dd.MM.yyyy}" + "\n" +
-                        _language.GetLanguageTextByXPath(@"/Chart/ToolTip/Value", _languageName) +
-                        " #VAL{N2} " + _shareObjectFinalValue.CurrencyUnit;
+                        ": #VALX{dd.MM.yyyy}" + "\n" +
+                        _language.GetLanguageTextByXPath(@"/Chart/Legend/Bottom", _languageName) +
+                        ": #VAL{N2} " + _shareObjectFinalValue.CurrencyUnit;
 
                         _chartDailyValues.ChartAreas[0].AxisY.Title = @""
                                                               + _language.GetLanguageTextByXPath(@"/Chart/Legend/BottomYTitle", _languageName) +
@@ -569,7 +635,7 @@ namespace SharePortfolioManager.Classes
                         _chartDailyValues.Series[Parser.DailyValues.BottomName].IsVisibleInLegend = false;
                         _chartDailyValues.Series[Parser.DailyValues.BottomName].MarkerStyle = MarkerStyle.Square;
                         _chartDailyValues.Series[Parser.DailyValues.BottomName].MarkerSize = 6;
-                        _chartDailyValues.Series[Parser.DailyValues.BottomName].ToolTip = _language.GetLanguageTextByXPath(@"/Chart/Legend/Bottom", _languageName) + "\n" + toolTipFormat;
+                        _chartDailyValues.Series[Parser.DailyValues.BottomName].ToolTip = toolTipFormat;
 
                         #endregion Series
 
@@ -614,9 +680,9 @@ namespace SharePortfolioManager.Classes
 
                         var toolTipFormat =
                         _language.GetLanguageTextByXPath(@"/Chart/ToolTip/Date", _languageName) +
-                        " #VALX{dd.MM.yyyy}" + "\n" +
-                        _language.GetLanguageTextByXPath(@"/Chart/ToolTip/Value", _languageName) +
-                        " #VAL{N2} " + ShareObject.PieceUnit;
+                        ": #VALX{dd.MM.yyyy} " + "\n" +
+                        _language.GetLanguageTextByXPath(@"/Chart/Legend/Volume", _languageName) +
+                        ": #VAL{N2} " + ShareObject.PieceUnit;
 
                         #endregion ToolTip
 
@@ -648,7 +714,7 @@ namespace SharePortfolioManager.Classes
                             _chartDailyValues.Series[Parser.DailyValues.VolumeName].IsVisibleInLegend = false;
                             _chartDailyValues.Series[Parser.DailyValues.VolumeName].MarkerStyle = MarkerStyle.Square;
                             _chartDailyValues.Series[Parser.DailyValues.VolumeName].MarkerSize = 6;
-                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].ToolTip = _language.GetLanguageTextByXPath(@"/Chart/Legend/Volume", _languageName) + "\n" + toolTipFormat;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].ToolTip = toolTipFormat;
 
                                 #endregion Series
 
@@ -714,7 +780,7 @@ namespace SharePortfolioManager.Classes
                             _chartDailyValues.Series[Parser.DailyValues.VolumeName].IsVisibleInLegend = false;
                             _chartDailyValues.Series[Parser.DailyValues.VolumeName].MarkerStyle = MarkerStyle.Square;
                             _chartDailyValues.Series[Parser.DailyValues.VolumeName].MarkerSize = 6;
-                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].ToolTip = _language.GetLanguageTextByXPath(@"/Chart/Legend/Volume", _languageName) + "\n" + toolTipFormat;
+                            _chartDailyValues.Series[Parser.DailyValues.VolumeName].ToolTip = toolTipFormat;
 
                             #endregion Series
 
@@ -765,92 +831,12 @@ namespace SharePortfolioManager.Classes
             var lastPrice = dailyValuesList.Last().ClosingPrice;
             var lastDate = dailyValuesList.Last().Date.ToShortDateString();
 
-            // Check if sale information should be shown
-            if (bShowSaleInformation)
+            // Check if last buy information should be shown
+            if (bShowLastBuyInformation)
             {
-                // Check if the strip line should be shown
-                if (bShowSaleStripLine)
+                if (bShowLastBuyStripLine)
                 {
-                    var stripSaleHorizontal = new StripLine
-                    {
-                        Interval = 0,
-                        IntervalOffset = (double) decLastSalePrice,
-                        StripWidth = 0.0,
-                        BorderWidth = 2,
-                        BorderColor = _colorSaleInformation,
-                        BackColor = _colorSaleInformation,
-                        BorderDashStyle = ChartDashStyle.Solid
-                    };
-                    _chartDailyValues.ChartAreas["ChosenValues"].AxisY.StripLines.Add(stripSaleHorizontal);
-
-                    var stripSaleVertical = new StripLine
-                    {
-                        Interval = 0,
-                        IntervalType = DateTimeIntervalType.Days,
-                        IntervalOffsetType = DateTimeIntervalType.Days,
-                        IntervalOffset = iIndexSale,
-                        StripWidth = 0.0,
-                        BorderWidth = 2,
-                        BorderColor = _colorSaleInformation,
-                        BackColor = _colorSaleInformation,
-                        BorderDashStyle = ChartDashStyle.Solid
-                    };
-                    _chartDailyValues.ChartAreas["ChosenValues"].AxisX.StripLines.Add(stripSaleVertical);
-                }
-
-                // Legend item creation
-                var legendSaleItem = new LegendItem
-                {
-                    SeriesName = "Sale",
-                    Color = _colorSaleInformation,
-                    Name = "Sale_Item"
-                };
-
-                // Legend first cell creation
-                var firstCellSale = new LegendCell(LegendCellType.SeriesSymbol,
-                    "Sale_FirstCell", ContentAlignment.MiddleRight);
-
-                // Legend second cell creation
-                var differenceSalePrice = lastPrice - decLastSalePrice;
-                var percentageSalePrice = (lastPrice * 100 / decLastSalePrice - 100).ToString(@"F");
-                var secondCellSale = new LegendCell(LegendCellType.Text,
-                    $@"{_language.GetLanguageTextByXPath(@"/Chart/Legend/LastSale", _languageName)}:\n{strSaleDate}: {decLastSalePrice}{unit}\n{lastPrice}{unit} - {decLastSalePrice}{unit} = {differenceSalePrice}{unit} ( {percentageSalePrice} % )",
-                    ContentAlignment.MiddleLeft);
-
-                if (Parse(percentageSalePrice) > 0.0)
-                    secondCellSale.ForeColor = Color.Green;
-                else if (Parse(percentageSalePrice) < 0.0)
-                    secondCellSale.ForeColor = Color.Red;
-                else
-                    secondCellSale.ForeColor = Color.Black;
-
-                legendSaleItem.Cells.Add(firstCellSale);
-                legendSaleItem.Cells.Add(secondCellSale);
-                var cells1BuySale = legendSaleItem.Cells;
-
-                cells1BuySale[0].Margins = new Margins(80, 30, 0, 30);
-                cells1BuySale[1].Margins = new Margins(80, 30, 30, 0);
-                _chartDailyValues.Legends[@"Chart"].CustomItems.Add(legendSaleItem);
-            }
-
-            // Check if buy information should be shown
-            if (bShowBuyInformation)
-            {
-                // Check if the strip line should be shown
-                if (bShowBuyStripLine)
-                {
-                    var stripBuyHorizontal = new StripLine
-                    {
-                        Interval = 0,
-                        IntervalOffset = (double) decLastBuyPrice,
-                        StripWidth = 0.0,
-                        BorderWidth = 2,
-                        BorderColor = _colorBuyInformation,
-                        BackColor = _colorBuyInformation,
-                        BorderDashStyle = ChartDashStyle.Solid
-                    };
-                    _chartDailyValues.ChartAreas["ChosenValues"].AxisY.StripLines.Add(stripBuyHorizontal);
-
+                    // Last Buy strip line
                     var stripBuyVertical = new StripLine
                     {
                         Interval = 0,
@@ -859,46 +845,52 @@ namespace SharePortfolioManager.Classes
                         IntervalOffset = iIndexBuy,
                         StripWidth = 0.0,
                         BorderWidth = 2,
-                        BorderColor = _colorBuyInformation,
-                        BackColor = _colorBuyInformation,
-                        BorderDashStyle = ChartDashStyle.Solid
+                        BorderColor = _chartingColors.GetLastBuyColor(),
+                        BackColor = _chartingColors.GetLastBuyColor(),
+                        BorderDashStyle = ChartDashStyle.Solid,
+                        ToolTip =
+                            $@"{_language.GetLanguageTextByXPath(@"/Chart/ToolTip/Date", _languageName)}: {lastBuyObject.DateAsStr}{Environment.NewLine}{_language.GetLanguageTextByXPath(@"/Chart/ToolTip/BuyPrice", _languageName)}: {lastBuyObject.DgvSharePriceAsStr}{Environment.NewLine}{_language.GetLanguageTextByXPath(@"/Chart/ToolTip/Volume", _languageName)}: {lastBuyObject.DgvVolumeAsStr}"
                     };
+
                     _chartDailyValues.ChartAreas["ChosenValues"].AxisX.StripLines.Add(stripBuyVertical);
                 }
 
+                #region Last sale legend item
+
                 // Legend item creation
-                var legendBuyItem = new LegendItem
+                var legendLastBuyItem = new LegendItem
                 {
-                    SeriesName = "Buy",
-                    Color = _colorBuyInformation,
-                    Name = "Buy_Item"
+                    SeriesName = "LastBuy",
+                    Color = _chartingColors.GetLastBuyColor(),
+                    Name = "LastBuy_Item"
                 };
 
                 // Legend first cell creation
-                var firstCellBuy = new LegendCell(LegendCellType.SeriesSymbol,
-                    "Buy_FirstCell", ContentAlignment.MiddleRight);
+                var firstCellLastBuy = new LegendCell(LegendCellType.SeriesSymbol,
+                    "LastBuy_FirstCell", ContentAlignment.MiddleRight);
 
                 // Legend second cell creation
-                var differenceBuyPrice = lastPrice - decLastBuyPrice;
-                var percentageBuyPrice = (lastPrice * 100 / decLastBuyPrice - 100).ToString(@"F");
-                var secondCellBuy = new LegendCell(LegendCellType.Text,
-                    $@"{_language.GetLanguageTextByXPath(@"/Chart/Legend/LastBuy", _languageName)}:\n{strBuyDate}: {decLastBuyPrice}{unit}\n{lastPrice}{unit} - {decLastBuyPrice}{unit} = {differenceBuyPrice}{unit} ( {percentageBuyPrice} % )",
+                var differenceLastBuyPrice = lastPrice - decLastBuyPrice;
+                var percentageLastBuyPrice = (lastPrice * 100 / decLastBuyPrice - 100).ToString(@"F");
+                var secondCellLastBuy = new LegendCell(LegendCellType.Text,
+                    $@"{_language.GetLanguageTextByXPath(@"/Chart/Legend/LastBuy", _languageName)}:\n{strLastBuyDate}: {decLastBuyPrice}{unit}\n{lastPrice}{unit} - {decLastBuyPrice}{unit} = {differenceLastBuyPrice}{unit} ( {percentageLastBuyPrice} % )",
                     ContentAlignment.MiddleLeft);
 
-                if (Parse(percentageBuyPrice) > 0.0)
-                    secondCellBuy.ForeColor = Color.Green;
-                else if (Parse(percentageBuyPrice) < 0.0)
-                    secondCellBuy.ForeColor = Color.Red;
+                if (Parse(percentageLastBuyPrice) > 0.0)
+                    secondCellLastBuy.ForeColor = Color.Green;
+                else if (Parse(percentageLastBuyPrice) < 0.0)
+                    secondCellLastBuy.ForeColor = Color.Red;
                 else
-                    secondCellBuy.ForeColor = Color.Black;
+                    secondCellLastBuy.ForeColor = Color.Black;
 
-                legendBuyItem.Cells.Add(firstCellBuy);
-                legendBuyItem.Cells.Add(secondCellBuy);
-                var cellsBuy = legendBuyItem.Cells;
-                if (bShowSaleInformation)
+                legendLastBuyItem.Cells.Add(firstCellLastBuy);
+                legendLastBuyItem.Cells.Add(secondCellLastBuy);
+
+                var cellsBuy = legendLastBuyItem.Cells;
+                if (bShowLastBuyInformation)
                 {
-                    cellsBuy[0].Margins = new Margins(0, 30, 0, 30);
-                    cellsBuy[1].Margins = new Margins(0, 30, 30, 0);
+                    cellsBuy[0].Margins = new Margins(80, 30, 0, 30);
+                    cellsBuy[1].Margins = new Margins(80, 30, 30, 0);
                 }
                 else
                 {
@@ -906,7 +898,190 @@ namespace SharePortfolioManager.Classes
                     cellsBuy[1].Margins = new Margins(100, 30, 30, 0);
                 }
 
-                _chartDailyValues.Legends[@"Chart"].CustomItems.Add(legendBuyItem);
+                _chartDailyValues.Legends[@"Chart"].CustomItems.Add(legendLastBuyItem);
+
+                #endregion Last sale legend item 
+            }
+
+            // Check if any buys information beside the last buys information should be shown
+            if (dictionaryAllBuysWithoutLastElementOfInterval.Count > 0)
+            {
+                // Add strip lines for the buys without the last buy
+                foreach (var buys in dictionaryAllBuysWithoutLastElementOfInterval)
+                {
+                    var stripSaleVerticalBuys = new StripLine
+                    {
+                        Interval = 0,
+                        IntervalType = DateTimeIntervalType.Days,
+                        IntervalOffsetType = DateTimeIntervalType.Days,
+                        IntervalOffset = buys.Key,
+                        StripWidth = 0.0,
+                        BorderWidth = 2,
+                        BorderColor = _chartingColors.GetAllBuysColor(),
+                        BackColor = _chartingColors.GetAllBuysColor(),
+                        BorderDashStyle = ChartDashStyle.Solid,
+                        ToolTip = 
+                            $@"{_language.GetLanguageTextByXPath(@"/Chart/ToolTip/Date", _languageName)}: {buys.Value.DateAsStr}{Environment.NewLine}{_language.GetLanguageTextByXPath(@"/Chart/ToolTip/BuyPrice", _languageName)}: {buys.Value.DgvSharePriceAsStr}{Environment.NewLine}{_language.GetLanguageTextByXPath(@"/Chart/ToolTip/Volume", _languageName)}: {buys.Value.DgvVolumeAsStr}"
+                    };
+                    _chartDailyValues.ChartAreas["ChosenValues"].AxisX.StripLines.Add(stripSaleVerticalBuys);
+                }
+
+                #region All buys legend item 
+
+                // Legend item creation for all buys
+                var legendAllBuysItem = new LegendItem
+                {
+                    SeriesName = "AllBuys",
+                    Color = _chartingColors.GetAllBuysColor(),
+                    Name = "AllBuys_Item"
+                };
+
+                // Legend first cell creation
+                var firstCellAllBuys = new LegendCell(LegendCellType.SeriesSymbol,
+                    "AllBuys_FirstCell", ContentAlignment.MiddleRight);
+
+                // Legend second cell creation
+                var secondCellAllBuys = new LegendCell(LegendCellType.Text,
+                    $@"{_language.GetLanguageTextByXPath(@"/Chart/Legend/AllBuys", _languageName)}",
+                    ContentAlignment.MiddleLeft)
+                { ForeColor = Color.Black };
+
+                legendAllBuysItem.Cells.Add(firstCellAllBuys);
+                legendAllBuysItem.Cells.Add(secondCellAllBuys);
+
+                var cellsBuy = legendAllBuysItem.Cells;
+                cellsBuy[0].Margins = new Margins(0, 30, 0, 30);
+                cellsBuy[1].Margins = new Margins(0, 30, 30, 0);
+
+                _chartDailyValues.Legends[@"Chart"].CustomItems.Add(legendAllBuysItem);
+
+                #endregion All sales legend item
+            }
+
+            // Check if last sale information should be shown
+            if (bShowLastSaleInformation)
+            {
+                if (bShowLastSaleStripLine)
+                {
+                    // Last sale strip line
+                    var stripSaleVertical = new StripLine
+                    {
+                        Interval = 0,
+                        IntervalType = DateTimeIntervalType.Days,
+                        IntervalOffsetType = DateTimeIntervalType.Days,
+                        IntervalOffset = iIndexSale,
+                        StripWidth = 0.0,
+                        BorderWidth = 2,
+                        BorderColor = _chartingColors.GetLastSaleColor(),
+                        BackColor = _chartingColors.GetLastSaleColor(),
+                        BorderDashStyle = ChartDashStyle.Solid,
+                        ToolTip =
+                            $@"{_language.GetLanguageTextByXPath(@"/Chart/ToolTip/Date", _languageName)}: {lastSaleObject.DateAsStr}{Environment.NewLine}{_language.GetLanguageTextByXPath(@"/Chart/ToolTip/SalePrice", _languageName)}: {lastSaleObject.SalePriceUnitAsStr}{Environment.NewLine}{_language.GetLanguageTextByXPath(@"/Chart/ToolTip/Volume", _languageName)}: {lastSaleObject.VolumeUnitAsStr}"
+                    };
+
+                    _chartDailyValues.ChartAreas["ChosenValues"].AxisX.StripLines.Add(stripSaleVertical);
+                }
+
+                #region Last sale legend item
+
+                // Legend item creation for last sale
+                var legendLastSaleItem = new LegendItem
+                {
+                    SeriesName = "LastSale",
+                    Color = _chartingColors.GetLastSaleColor(),
+                    Name = "LastSale_Item"
+                };
+
+                // Legend first cell creation
+                var firstCellLastSale = new LegendCell(LegendCellType.SeriesSymbol,
+                    "^LastSale_FirstCell", ContentAlignment.MiddleRight);
+
+                // Legend second cell creation
+                var differenceLastSalePrice = lastPrice - decLastSalePrice;
+                var percentageLastSalePrice = (lastPrice * 100 / decLastSalePrice - 100).ToString(@"F");
+                var secondCellLastSale = new LegendCell(LegendCellType.Text,
+                    $@"{_language.GetLanguageTextByXPath(@"/Chart/Legend/LastSale", _languageName)}:\n{strLastSaleDate}: {decLastSalePrice}{unit}\n{lastPrice}{unit} - {decLastSalePrice}{unit} = {differenceLastSalePrice}{unit} ( {percentageLastSalePrice} % )",
+                    ContentAlignment.MiddleLeft);
+
+                if (Parse(percentageLastSalePrice) > 0.0)
+                    secondCellLastSale.ForeColor = Color.Green;
+                else if (Parse(percentageLastSalePrice) < 0.0)
+                    secondCellLastSale.ForeColor = Color.Red;
+                else
+                    secondCellLastSale.ForeColor = Color.Black;
+
+                legendLastSaleItem.Cells.Add(firstCellLastSale);
+                legendLastSaleItem.Cells.Add(secondCellLastSale);
+
+                var cellsSale = legendLastSaleItem.Cells;
+                if (bShowLastSaleInformation)
+                {
+                    cellsSale[0].Margins = new Margins(80, 30, 0, 30);
+                    cellsSale[1].Margins = new Margins(80, 30, 30, 0);
+                }
+                else
+                {
+                    cellsSale[0].Margins = new Margins(100, 30, 0, 30);
+                    cellsSale[1].Margins = new Margins(100, 30, 30, 0);
+                }
+
+                _chartDailyValues.Legends[@"Chart"].CustomItems.Add(legendLastSaleItem);
+
+                #endregion Last sale legend item
+            }
+
+            // Check if any sales information beside the last sale information should be shown
+            if (allSalesWithoutLastElement.Count > 0)
+            {
+                // Add strip lines for the sales without the last sale
+                foreach (var sales in dictionaryAllSalesWithoutLastElementOfInterval)
+                {
+                    var stripSaleVerticalSales = new StripLine
+                    {
+                        Interval = 0,
+                        IntervalType = DateTimeIntervalType.Days,
+                        IntervalOffsetType = DateTimeIntervalType.Days,
+                        IntervalOffset = sales.Key,
+                        StripWidth = 0.0,
+                        BorderWidth = 2,
+                        BorderColor = _chartingColors.GetAllSalesColor(),
+                        BackColor = _chartingColors.GetAllSalesColor(),
+                        BorderDashStyle = ChartDashStyle.Solid,
+                        ToolTip =
+                            $@"{_language.GetLanguageTextByXPath(@"/Chart/ToolTip/Date", _languageName)}: {sales.Value.DateAsStr}{Environment.NewLine}{_language.GetLanguageTextByXPath(@"/Chart/ToolTip/SalePrice", _languageName)}: {sales.Value.SalePriceUnitAsStr}{Environment.NewLine}{_language.GetLanguageTextByXPath(@"/Chart/ToolTip/Volume", _languageName)}: {sales.Value.VolumeUnitAsStr}"
+                    };
+                    _chartDailyValues.ChartAreas["ChosenValues"].AxisX.StripLines.Add(stripSaleVerticalSales);
+                }
+
+                #region All sales legend item 
+
+                // Legend item creation for all sales
+                var legendAllSalesItem = new LegendItem
+                {
+                    SeriesName = "AllSales",
+                    Color = _chartingColors.GetAllSalesColor(),
+                    Name = "AllSales_Item"
+                };
+
+                // Legend first cell creation
+                var firstCellAllSales = new LegendCell(LegendCellType.SeriesSymbol,
+                    "AllSales_FirstCell", ContentAlignment.MiddleRight);
+
+                // Legend second cell creation
+                var secondCellAllSales = new LegendCell(LegendCellType.Text,
+                    $@"{_language.GetLanguageTextByXPath(@"/Chart/Legend/AllSales", _languageName)}",
+                    ContentAlignment.MiddleLeft) {ForeColor = Color.Black};
+
+                legendAllSalesItem.Cells.Add(firstCellAllSales);
+                legendAllSalesItem.Cells.Add(secondCellAllSales);
+
+                var cellsSale = legendAllSalesItem.Cells;
+                cellsSale[0].Margins = new Margins(0, 30, 0, 30);
+                cellsSale[1].Margins = new Margins(0, 30, 30, 0);
+
+                _chartDailyValues.Legends[@"Chart"].CustomItems.Add(legendAllSalesItem);
+
+                #endregion All sales legend item 
             }
 
             if (showTitle)

@@ -1683,7 +1683,7 @@ namespace SharePortfolioManager
                 FrmChart = new FrmChart(MarketValueOverviewTabSelected,
                     ShareObjectListFinalValue[rowIndex], ShareObjectListMarketValue[rowIndex],
                     rchTxtBoxStateMessage, Logger, LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
-                    ChartingInterval.Year, 1, SettingsConfiguration.ChartingColorDictionary);
+                    ChartingInterval.Year, 1, SettingsConfiguration.ChartingColors);
 
             // Set window title
             FrmChart.Text = ShareObjectListFinalValue[rowIndex].Name;
@@ -1757,7 +1757,7 @@ namespace SharePortfolioManager
                     // Create ShareDetails form
                     FrmShareDetailsForm = new FrmShareDetails(MarketValueOverviewTabSelected,
                         ShareObjectFinalValue, ShareObjectMarketValue,
-                        rchTxtBoxStateMessage, Logger, SettingsConfiguration.ChartingColorDictionary,
+                        rchTxtBoxStateMessage, Logger, SettingsConfiguration.ChartingColors,
                         SettingsConfiguration.ChartingIntervalValue, SettingsConfiguration.ChartingAmount,
                         LanguageConfiguration.Language, SettingsConfiguration.LanguageName);
 
