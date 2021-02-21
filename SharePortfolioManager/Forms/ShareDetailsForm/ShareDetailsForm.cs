@@ -678,8 +678,8 @@ namespace SharePortfolioManager.ShareDetailsForm
             try
             {
                 System.Diagnostics.Process.Start(MarketValueOverviewTabSelected
-                    ? ShareObjectMarketValue.UpdateWebSiteUrl
-                    : ShareObjectFinalValue.UpdateWebSiteUrl);
+                    ? ShareObjectMarketValue.DetailsWebSiteUrl
+                    : ShareObjectFinalValue.DetailsWebSiteUrl);
             }
             catch (Win32Exception noBrowser)
             {

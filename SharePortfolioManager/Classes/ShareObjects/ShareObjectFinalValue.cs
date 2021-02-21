@@ -1403,8 +1403,11 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="brokerFee">Broker fee of the buy</param>
         /// <param name="traderPlaceFee">Trader place fee of the buy</param>
         /// <param name="reduction">Reduction of the share</param>
-        /// <param name="webSite">Website address of the share</param>
+        /// <param name="detailsWebSite">Website address for the share</param>
+        /// <param name="marketValuesWebSite">Website address for the market values of the share</param>
+        /// <param name="marketValuesParsingOption">Parsing option for the market values</param>
         /// <param name="dailyValuesWebSite">>Website address for the daily values of the share</param>
+        /// <param name="dailyValuesParsingOption">Parsing option for the market values</param>
         /// <param name="imageListForDayBeforePerformance">Images for the prev day performance indication</param>
         /// <param name="imageListForCompletePerformance">Images for the complete performance indication</param>
         /// <param name="regexList">RegEx list for the share</param>
@@ -1416,10 +1419,16 @@ namespace SharePortfolioManager.Classes.ShareObjects
             string guid, string wkn, string bank, string orderNumber, string addDateTime, string stockMarketLaunchDate, string name,
             DateTime lastUpdateInternet, DateTime lastUpdateShare,
             decimal price, decimal volume, decimal volumeSold, decimal provision, decimal brokerFee, decimal traderPlaceFee, decimal reduction,
-            string webSite, string dailyValuesWebSite, List<Image> imageListForDayBeforePerformance, List<Image> imageListForCompletePerformance, Parser.RegExList regexList, CultureInfo cultureInfo,
+            string detailsWebSite,
+            string marketValuesWebSite, ParsingTypes marketValuesParsingOption,
+            string dailyValuesWebSite, ParsingTypes dailyValuesParsingOption,
+            List<Image> imageListForDayBeforePerformance, List<Image> imageListForCompletePerformance, Parser.RegExList regexList, CultureInfo cultureInfo,
             int dividendPayoutInterval, ShareTypes shareType, string document)
             : base(wkn, addDateTime, stockMarketLaunchDate, name, lastUpdateInternet, lastUpdateShare,
-                    price, webSite, dailyValuesWebSite, imageListForDayBeforePerformance, imageListForCompletePerformance,
+                    price, detailsWebSite,
+                    marketValuesWebSite, marketValuesParsingOption,
+                    dailyValuesWebSite, dailyValuesParsingOption,
+                    imageListForDayBeforePerformance, imageListForCompletePerformance,
                     regexList, cultureInfo, shareType)
         {
             BrokerageReductionObject tempBrokerageObject = null;
@@ -2267,6 +2276,9 @@ namespace SharePortfolioManager.Classes.ShareObjects
                             {
                                 #region General
 
+                                case (int)FrmMain.PortfolioParts.DetailsWebSite:
+                                    nodeElement.ChildNodes[i].InnerText = shareObject.DetailsWebSiteUrl;
+                                    break;
                                 case (int) FrmMain.PortfolioParts.StockMarketLaunchDate:
                                     nodeElement.ChildNodes[i].InnerText =
                                         $@"{shareObject.StockMarketLaunchDate}";
@@ -2289,9 +2301,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                 case (int) FrmMain.PortfolioParts.SharePriceBefore:
                                     nodeElement.ChildNodes[i].InnerText = shareObject.PrevPriceAsStr;
                                     break;
-                                case (int) FrmMain.PortfolioParts.WebSite:
-                                    nodeElement.ChildNodes[i].InnerText = shareObject.UpdateWebSiteUrl;
-                                    break;
                                 case (int) FrmMain.PortfolioParts.Culture:
                                     nodeElement.ChildNodes[i].InnerXml = shareObject.CultureInfoAsStr;
                                     break;
@@ -2300,6 +2309,18 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                     break;
 
                                 #endregion General
+
+                                #region Market values
+
+                                case (int)FrmMain.PortfolioParts.MarketValues:
+                                    nodeElement.ChildNodes[i].Attributes[GeneralMarketValuesWebSiteAttrName].InnerText =
+                                        shareObject.MarketValuesUpdateWebSiteUrl;
+
+                                    nodeElement.ChildNodes[i].Attributes[GeneralParsingMarketValuesAttrName].InnerText =
+                                        shareObject.MarketValuesParsingOptionAsStr;
+                                    break;
+
+                                #endregion Market values
 
                                 #region Daily values
 
@@ -2589,6 +2610,13 @@ namespace SharePortfolioManager.Classes.ShareObjects
                         xmlAttributeUpdateFlag.Value = shareObject.InternetUpdateOptionAsStr;
                         newShareNode.Attributes.Append(xmlAttributeUpdateFlag);
 
+                        // Add child nodes (share details website)
+                        var newShareDetailsWebSite = xmlPortfolio.CreateElement(GeneralDetailsWebSiteAttrName);
+                        // Add child inner text
+                        var shareDetailsWebSite = xmlPortfolio.CreateTextNode(shareObject.DetailsWebSiteUrl);
+                        newShareNode.AppendChild(newShareDetailsWebSite);
+                        newShareNode.LastChild.AppendChild(shareDetailsWebSite);
+
                         // Add child nodes (last update Internet)
                         var newStockMarketLaunchDate = xmlPortfolio.CreateElement(GeneralStockMarketLaunchDateAttrName);
                         // Add child inner text
@@ -2629,13 +2657,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
                         newShareNode.AppendChild(newSharePriceBefore);
                         newShareNode.LastChild.AppendChild(sharePriceBefore);
 
-                        // Add child nodes (website)
-                        var newWebsite = xmlPortfolio.CreateElement(GeneralWebSiteAttrName);
-                        // Add child inner text
-                        var webSite = xmlPortfolio.CreateTextNode(shareObject.UpdateWebSiteUrl);
-                        newShareNode.AppendChild(newWebsite);
-                        newShareNode.LastChild.AppendChild(webSite);
-
                         // Add child nodes (culture)
                         var newCulture = xmlPortfolio.CreateElement(GeneralCultureAttrName);
                         // Add child inner text
@@ -2652,7 +2673,13 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
                         #endregion General
 
-                        #region DailyValues / Brokerage / Buys / Sales / Dividends
+                        #region Marketvalues / DailyValues / Brokerage / Buys / Sales / Dividends
+
+                        // Add attributes (market values)
+                        var newMarketValues = xmlPortfolio.CreateElement(GeneralMarketValuesAttrName);
+                        newMarketValues.SetAttribute(GeneralMarketValuesWebSiteAttrName, shareObject.MarketValuesUpdateWebSiteUrl);
+                        newMarketValues.SetAttribute(GeneralParsingMarketValuesAttrName, shareObject.MarketValuesParsingOptionAsStr);
+                        newShareNode.AppendChild(newMarketValues);
 
                         // Add child nodes (daily values)
                         var newDailyValues = xmlPortfolio.CreateElement(GeneralDailyValuesAttrName);

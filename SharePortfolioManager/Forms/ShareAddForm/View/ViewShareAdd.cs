@@ -55,6 +55,15 @@ namespace SharePortfolioManager.ShareAddForm.View
         NameEmpty,
         NameExists,
         StockMarketLaunchDateNotModified,
+        DetailsWebSiteEmpty,
+        DetailsWebSiteWrongFormat,
+        DetailsWebSiteExists,
+        MarketValuesWebSiteEmpty,
+        MarketWebSiteWrongFormat,
+        MarketWebSiteExists,
+        DailyValuesWebSiteEmpty,
+        DailyValuesWebSiteWrongFormat,
+        DailyValuesWebSiteExists,
         DepotNumberEmpty,
         OrderNumberEmpty,
         OrderNumberExists,
@@ -75,12 +84,6 @@ namespace SharePortfolioManager.ShareAddForm.View
         BrokerageEmpty,
         BrokerageWrongFormat,
         BrokerageWrongValue,
-        WebSiteEmpty,
-        WebSiteWrongFormat,
-        WebSiteExists,
-        DailyValuesWebSiteEmpty,
-        DailyValuesWebSiteWrongFormat,
-        DailyValuesWebSiteExists,
         DocumentBrowseFailed,
         DocumentDirectoryDoesNotExists,
         DocumentFileDoesNotExists,
@@ -144,8 +147,11 @@ namespace SharePortfolioManager.ShareAddForm.View
         string Reduction { get; set; }
         string Brokerage { get; set; }
         string BuyValueBrokerageReduction { get; set; }
-        string WebSite { get; set; }
+        string DetailsWebSite { get; set; }
+        string MarketValuesWebSite { get; set; }
+        ShareObject.ParsingTypes MarketValuesParsingOption { get; set; }
         string DailyValuesWebSite { get; set; }
+        ShareObject.ParsingTypes DailyValuesParsingOption { get; set; }
         CultureInfo CultureInfo { get; }
         int DividendPayoutInterval { get; set; }
         ShareObject.ShareTypes ShareType { get; set; }
@@ -331,19 +337,41 @@ namespace SharePortfolioManager.ShareAddForm.View
         {
             get
             {
-                var cultureName = cbxBoxCultureInfo.SelectedItem.ToString();
+                var cultureName = cbxCultureInfo.SelectedItem.ToString();
                 return Helper.GetCultureByName(cultureName);
             }
         }
 
-        public string WebSite
+        public string DetailsWebSite
         {
-            get => txtBoxWebSite.Text;
+            get => txtBoxDetailsWebSite.Text;
             set
             {
-                if (txtBoxWebSite.Text == value)
+                if (txtBoxDetailsWebSite.Text == value)
                     return;
-                txtBoxWebSite.Text = value;
+                txtBoxDetailsWebSite.Text = value;
+            }
+        }
+
+        public string MarketValuesWebSite
+        {
+            get => txtBoxMarketWebSite.Text;
+            set
+            {
+                if (txtBoxMarketWebSite.Text == value)
+                    return;
+                txtBoxMarketWebSite.Text = value;
+            }
+        }
+
+        public ShareObject.ParsingTypes MarketValuesParsingOption
+        {
+            get => (ShareObject.ParsingTypes)cbxMarketWebSiteParsingType.SelectedIndex;
+            set
+            {
+                if ((ShareObject.ParsingTypes)cbxMarketWebSiteParsingType.SelectedIndex == value)
+                    return;
+                cbxMarketWebSiteParsingType.SelectedIndex = (int)value;
             }
         }
 
@@ -355,6 +383,16 @@ namespace SharePortfolioManager.ShareAddForm.View
                 if (txtBoxDailyValuesWebSite.Text == value)
                     return;
                 txtBoxDailyValuesWebSite.Text = value;
+            }
+        }
+        public ShareObject.ParsingTypes DailyValuesParsingOption
+        {
+            get => (ShareObject.ParsingTypes)cbxDailyValuesWebSiteParsingType.SelectedIndex;
+            set
+            {
+                if ((ShareObject.ParsingTypes)cbxDailyValuesWebSiteParsingType.SelectedIndex == value)
+                    return;
+                cbxDailyValuesWebSiteParsingType.SelectedIndex = (int)value;
             }
         }
 
@@ -776,31 +814,61 @@ namespace SharePortfolioManager.ShareAddForm.View
                     txtBoxBrokerage.Focus();
                     break;
                 }
-                case ShareAddErrorCode.WebSiteEmpty:
+
+                case ShareAddErrorCode.DetailsWebSiteEmpty:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WebSiteEmpty", SettingsConfiguration.LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DetailsWebSiteEmpty", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
-                    txtBoxWebSite.Focus();
+                    txtBoxDetailsWebSite.Focus();
                     break;
                 }
-                case ShareAddErrorCode.WebSiteWrongFormat:
+                case ShareAddErrorCode.DetailsWebSiteWrongFormat:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WebSiteWrongFormat", SettingsConfiguration.LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DetailsWebSiteWrongFormat", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
-                    txtBoxWebSite.Focus();
+                    txtBoxDetailsWebSite.Focus();
                     break;
                 }
-                case ShareAddErrorCode.WebSiteExists:
+                case ShareAddErrorCode.DetailsWebSiteExists:
                 {
                     strMessage =
-                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/WebSiteExists", SettingsConfiguration.LanguageName);
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/DetailsWebSiteExists", SettingsConfiguration.LanguageName);
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
-                    txtBoxWebSite.Focus();
+                    txtBoxDetailsWebSite.Focus();
+                    break;
+                }
+
+
+                case ShareAddErrorCode.MarketValuesWebSiteEmpty:
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/MarketValuesWebSiteEmpty", SettingsConfiguration.LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxMarketWebSite.Focus();
+                    break;
+                }
+                case ShareAddErrorCode.MarketWebSiteWrongFormat:
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/MarketValuesWebSiteWrongFormat", SettingsConfiguration.LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxMarketWebSite.Focus();
+                    break;
+                }
+                case ShareAddErrorCode.MarketWebSiteExists:
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/MarketValuesWebSiteExists", SettingsConfiguration.LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxMarketWebSite.Focus();
                     break;
                 }
                 case ShareAddErrorCode.DailyValuesWebSiteEmpty:
@@ -1017,8 +1085,15 @@ namespace SharePortfolioManager.ShareAddForm.View
                 lblCultureInfo.Text =
                     Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/CultureInfo", SettingsConfiguration.LanguageName);
 
-                lblWebSite.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/WebSite", SettingsConfiguration.LanguageName);
+                lblDetailsWebSite.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/DetailsWebSite", SettingsConfiguration.LanguageName);
+                lblMarketWebSite.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/MarketValuesWebSite", SettingsConfiguration.LanguageName);
+                // Add parsing options values
+                Language.GetLanguageTextListByXPath(@"/ComboBoxItemsParsingType/*", SettingsConfiguration.LanguageName).ForEach(item => cbxMarketWebSiteParsingType.Items.Add(item));
+
                 lblDailyValuesWebSite.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/DailyValuesWebSite", SettingsConfiguration.LanguageName);
+                // Add parsing options values
+                Language.GetLanguageTextListByXPath(@"/ComboBoxItemsParsingType/*", SettingsConfiguration.LanguageName).ForEach(item => cbxDailyValuesWebSiteParsingType.Items.Add(item));
+
                 lblDepotNumber.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/DepotNumber", SettingsConfiguration.LanguageName);
                 lblOrderNumber.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/OrderNumber", SettingsConfiguration.LanguageName);
                 lblDate.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Date", SettingsConfiguration.LanguageName);
@@ -1061,12 +1136,12 @@ namespace SharePortfolioManager.ShareAddForm.View
                 foreach (var value in listCultures)
                 {
                     if (value != "")
-                        cbxBoxCultureInfo.Items.Add(value);
+                        cbxCultureInfo.Items.Add(value);
                 }
 
                 var cultureInfo = CultureInfo.CurrentCulture;
 
-                cbxBoxCultureInfo.SelectedIndex = cbxBoxCultureInfo.FindStringExact(cultureInfo.Name);
+                cbxCultureInfo.SelectedIndex = cbxCultureInfo.FindStringExact(cultureInfo.Name);
 
                 #endregion Get culture info
 
@@ -1088,6 +1163,9 @@ namespace SharePortfolioManager.ShareAddForm.View
 
                 cbxDividendPayoutInterval.SelectedIndex = 0;
                 cbxShareType.SelectedIndex = 0;
+
+                cbxMarketWebSiteParsingType.SelectedIndex = 0;
+                cbxDailyValuesWebSiteParsingType.SelectedIndex = 0;
 
                 dateTimePickerStockMarketLaunch.MinDate = DateTime.MinValue;
                 dateTimePickerStockMarketLaunch.Value = dateTimePickerStockMarketLaunch.MinDate;
@@ -1220,9 +1298,14 @@ namespace SharePortfolioManager.ShareAddForm.View
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("StockMarketLaunchDate"));
         }
 
-        private void OnTxtBoxWebSite_TextChanged(object sender, EventArgs e)
+        private void OnTxtBoxDetailsWebSite_TextChanged(object sender, EventArgs e)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WebSite"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DetailsWebSite"));
+        }
+
+        private void OnTxtBoxMarketValuesWebSite_TextChanged(object sender, EventArgs e)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MarketValuesWebSite"));
         }
 
         private void OnTxtBoxDailyValuesWebSite_TextChanged(object sender, EventArgs e)
@@ -1400,19 +1483,34 @@ namespace SharePortfolioManager.ShareAddForm.View
 
         #region ComboBoxes
 
-        private void CboBoxCultureInfo_SelectedIndexChanged(object sender, EventArgs e)
+        private void OnCboBoxCultureInfo_SelectedIndexChanged(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CultureInfo"));
         }
 
-        private void CbxDividendPayoutInterval_SelectedIndexChanged(object sender, EventArgs e)
+        private void OnCbxDividendPayoutInterval_SelectedIndexChanged(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DividendPayoutInterval"));
         }
 
-        private void CbxShareType_SelectedIndexChanged(object sender, EventArgs e)
+        private void OnCbxDepotNumber_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DepotNumber"));
+        }
+
+        private void OnCbxShareType_SelectedIndexChanged(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ShareType"));
+        }
+
+        private void OnCbxMarketValuesParsingOption_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MarketValuesParsingOption"));
+        }
+
+        private void OnCbxDailyValuesParsingOption_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DailyValuesParsingOption"));
         }
 
         #endregion ComboBoxes
@@ -1623,11 +1721,19 @@ namespace SharePortfolioManager.ShareAddForm.View
                             {
                                 break;
                             }
-                            case DataTypes.ParserErrorCodes.WebExceptionOccured:
+                            case DataTypes.ParserErrorCodes.FileExceptionOccurred:
                             {
                                 break;
                             }
-                            case DataTypes.ParserErrorCodes.ExceptionOccured:
+                            case DataTypes.ParserErrorCodes.JsonExceptionOccurred:
+                            {
+                                break;
+                            }
+                            case DataTypes.ParserErrorCodes.WebExceptionOccurred:
+                            {
+                                break;
+                            }
+                            case DataTypes.ParserErrorCodes.ExceptionOccurred:
                             {
                                 break;
                             }
@@ -2185,8 +2291,11 @@ namespace SharePortfolioManager.ShareAddForm.View
             cbxDividendPayoutInterval.SelectedIndex = 0;
             dateTimePickerDate.Value = DateTime.Now;
             dateTimePickerTime.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
-            txtBoxWebSite.Text = string.Empty;
+            txtBoxDetailsWebSite.Text = string.Empty;
+            txtBoxMarketWebSite.Text = string.Empty;
+            cbxMarketWebSiteParsingType.SelectedIndex = 0;
             txtBoxDailyValuesWebSite.Text = string.Empty;
+            cbxDailyValuesWebSiteParsingType.SelectedIndex = 0;
             cbxDepotNumber.SelectedIndex = 0;
             txtBoxOrderNumber.Text = string.Empty;
             txtBoxVolume.Text = string.Empty;

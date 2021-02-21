@@ -73,14 +73,15 @@ namespace SharePortfolioManager
         /// </summary>
         public enum PortfolioParts
         {
+            DetailsWebSite,
             StockMarketLaunchDate,
             LastUpdateInternet,
             LastUpdateShare,
             SharePrice,
             SharePriceBefore,
-            WebSite,
             Culture,
             ShareType,
+            MarketValues,
             DailyValues,
             Brokerages,
             Buys,
@@ -881,6 +882,14 @@ namespace SharePortfolioManager
                                     {
                                         #region General
 
+                                        case (int)PortfolioParts.DetailsWebSite:
+                                            ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
+                                                    .DetailsWebSiteUrl =
+                                                nodeElement.ChildNodes[i].InnerText;
+                                            ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                                    .DetailsWebSiteUrl =
+                                                nodeElement.ChildNodes[i].InnerText;
+                                            break;
                                         case (int) PortfolioParts.StockMarketLaunchDate:
                                             ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
                                                     .StockMarketLaunchDate =
@@ -917,14 +926,6 @@ namespace SharePortfolioManager
                                             ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].PrevPrice =
                                                 Convert.ToDecimal(nodeElement.ChildNodes[i].InnerText);
                                             break;
-                                        case (int) PortfolioParts.WebSite:
-                                            ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
-                                                    .UpdateWebSiteUrl =
-                                                nodeElement.ChildNodes[i].InnerText;
-                                            ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
-                                                    .UpdateWebSiteUrl =
-                                                nodeElement.ChildNodes[i].InnerText;
-                                            break;
                                         case (int) PortfolioParts.Culture:
                                             ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
                                                     .CultureInfo =
@@ -941,6 +942,57 @@ namespace SharePortfolioManager
 
                                         #endregion General
 
+                                        #region MarketValues
+
+                                        case (int)PortfolioParts.MarketValues:
+                                            // Read market values website
+                                            if (nodeElement.ChildNodes[i].Attributes != null)
+                                            {
+                                                ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                                    .MarketValuesUpdateWebSiteUrl =
+                                                    nodeElement.ChildNodes[i].Attributes[
+                                                        ShareObject.GeneralMarketValuesWebSiteAttrName].InnerText;
+                                                ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
+                                                        .MarketValuesUpdateWebSiteUrl =
+                                                    nodeElement.ChildNodes[i].Attributes[
+                                                        ShareObject.GeneralMarketValuesWebSiteAttrName].InnerText;
+                                            }
+                                            else
+                                                bLoadPortfolio = false;
+
+                                            // Parsing type of the share
+                                            if (nodeElement.ChildNodes[i].Attributes != null)
+                                            {
+                                                if (nodeElement.ChildNodes[i]
+                                                        .Attributes[ShareObject.GeneralParsingMarketValuesAttrName]
+                                                        .InnerText ==
+                                                    ShareObject.ParsingTypes.Regex.ToString())
+                                                {
+                                                    ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
+                                                        .MarketValuesParsingOption = ShareObject.ParsingTypes.Regex;
+                                                    ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                                        .MarketValuesParsingOption = ShareObject.ParsingTypes.Regex;
+                                                }
+                                                else if (nodeElement.ChildNodes[i]
+                                                        .Attributes[ShareObject.GeneralParsingMarketValuesAttrName]
+                                                        .InnerText ==
+                                                    ShareObject.ParsingTypes.Api.ToString())
+                                                {
+                                                    ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
+                                                        .MarketValuesParsingOption = ShareObject.ParsingTypes.Api;
+                                                    ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                                        .MarketValuesParsingOption = ShareObject.ParsingTypes.Api;
+                                                }
+                                                else
+                                                    bLoadPortfolio = false;
+                                            }
+                                            else
+                                                bLoadPortfolio = false;
+
+                                            break;
+
+                                        #endregion MarketValues
+
                                         #region DailyValues
 
                                         case (int) PortfolioParts.DailyValues:
@@ -954,6 +1006,36 @@ namespace SharePortfolioManager
                                             }
                                             else
                                                 bLoadPortfolio = false;
+
+                                            // Parsing type of the share
+                                            if (nodeElement.ChildNodes[i].Attributes != null)
+                                            {
+                                                if (nodeElement.ChildNodes[i]
+                                                        .Attributes[ShareObject.GeneralParsingDailyValuesAttrName]
+                                                        .InnerText ==
+                                                    ShareObject.ParsingTypes.Regex.ToString())
+                                                {
+                                                    ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
+                                                        .DailyValuesParsingOption = ShareObject.ParsingTypes.Regex;
+                                                    ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                                        .DailyValuesParsingOption = ShareObject.ParsingTypes.Regex;
+                                                }
+                                                else if (nodeElement.ChildNodes[i]
+                                                        .Attributes[ShareObject.GeneralParsingDailyValuesAttrName]
+                                                        .InnerText ==
+                                                    ShareObject.ParsingTypes.Api.ToString())
+                                                {
+                                                    ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
+                                                        .DailyValuesParsingOption = ShareObject.ParsingTypes.Api;
+                                                    ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                                        .DailyValuesParsingOption = ShareObject.ParsingTypes.Api;
+                                                }
+                                                else
+                                                    bLoadPortfolio = false;
+                                            }
+                                            else
+                                                bLoadPortfolio = false;
+
 
                                             foreach (XmlElement nodeList in nodeElement.ChildNodes[i].ChildNodes)
                                             {
@@ -1414,7 +1496,8 @@ namespace SharePortfolioManager
                                 // Set website configuration and encoding to the share object.
                                 // The encoding is necessary for the Parser for encoding the download result.
                                 if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
-                                    .SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList))
+                                    .SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList) &&
+                                    ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].MarketValuesParsingOption == ShareObject.ParsingTypes.Regex)
                                 {
                                     var newItem = new InvalidRegexConfigurations(id)
                                     {
@@ -1440,7 +1523,9 @@ namespace SharePortfolioManager
                                         .WebSiteConfigurationFound = true;
 
                                 if (!ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
-                                    .SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList))
+                                    .SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList) &&
+                                    ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].MarketValuesParsingOption == ShareObject.ParsingTypes.Regex
+                                    )
                                 {
                                     var newItem = new InvalidRegexConfigurations(id)
                                     {
@@ -1524,6 +1609,7 @@ namespace SharePortfolioManager
             }
             catch (Exception ex)
             {
+                Console.WriteLine(@"Share: {0}", ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].Name);
                 // Close portfolio reader
                 ReaderPortfolio?.Close();
 

@@ -1279,9 +1279,23 @@ namespace SharePortfolioManager.Classes
 
         public static string RegexReplaceStartDateAndInterval(string strWebSite)
         {
+            // Replace date for example 01.01.1979
             strWebSite = Regex.Replace(strWebSite,
                 "[=]([0-9][0-9].[0-9][0-9].[0-9][0-9][0-9][0-9])[&]", "={0}&");
 
+            // Replace date for example 01-01-1979
+            strWebSite = Regex.Replace(strWebSite,
+                "[=]([0-9][0-9]-[0-9][0-9]-[0-9][0-9][0-9][0-9])[&]", "={0}&");
+
+            // Replace date for example 1979.01.01
+            strWebSite = Regex.Replace(strWebSite,
+                "[=]([0-9][0-9][0-9][0-9].[0-9][0-9].[0-9][0-9])[&]", "={0}&");
+
+            // Replace date for example 1979-01-01
+            strWebSite = Regex.Replace(strWebSite,
+                "[=]([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9])[&]", "={0}&");
+
+            // Replace intervals
             strWebSite = Regex.Replace(strWebSite,
                 "[=]([M,Y][1,3,5,6])[&]", "={1}&");
 
@@ -1396,7 +1410,7 @@ namespace SharePortfolioManager.Classes
         #region Time function
 
         public static string BuildDailyValuesUrl(List<Parser.DailyValues> dailyValues, string webSiteUrl,
-            ShareObject.ShareTypes shareType)
+            ShareObject.ShareTypes shareType, ShareObject.ParsingTypes parsingType)
         {
             var strDailyValuesWebSite = "";
 
@@ -1414,15 +1428,22 @@ namespace SharePortfolioManager.Classes
                     {
                         // Share type "Share"
                         case ShareObject.ShareTypes.Share:
-                            strDailyValuesWebSite = string.Format(webSiteUrl, date.ToString("dd.MM.yyyy"), "Y5");
+                            strDailyValuesWebSite = string.Format(webSiteUrl,
+                                parsingType == ShareObject.ParsingTypes.Regex
+                                    ? date.ToString("dd.MM.yyyy")
+                                    : date.ToString("yyyy-MM-dd"), "Y5");
                             break;
                         // Share type "Fond"
                         case ShareObject.ShareTypes.Fond:
-                            strDailyValuesWebSite = string.Format(webSiteUrl, date.ToString("dd.MM.yyyy"), "5Y");
+                            strDailyValuesWebSite = parsingType == ShareObject.ParsingTypes.Regex
+                                ? string.Format(webSiteUrl, date.ToString("dd.MM.yyyy"), "5Y")
+                                : string.Format(webSiteUrl, date.ToString("yyyy-MM-dd"), "Y5");
                             break;
                         // Share type "ETF"
                         case ShareObject.ShareTypes.Etf:
-                            strDailyValuesWebSite = string.Format(webSiteUrl, date.ToString("dd.MM.yyyy"), "5Y");
+                            strDailyValuesWebSite = parsingType == ShareObject.ParsingTypes.Regex
+                                ? string.Format(webSiteUrl, date.ToString("dd.MM.yyyy"), "5Y")
+                                : string.Format(webSiteUrl, date.ToString("yyyy-MM-dd"), "Y5");
                             break;
                         default:
                             throw new NotFiniteNumberException();
@@ -1443,48 +1464,82 @@ namespace SharePortfolioManager.Classes
                         {
                             if (diffMonth < 1)
                                 strDailyValuesWebSite = string.Format(webSiteUrl,
-                                    DateTime.Now.AddMonths(-1).ToString("dd.MM.yyyy"), "M1");
+                                    parsingType == ShareObject.ParsingTypes.Regex
+                                        ? DateTime.Now.AddMonths(-1).ToString("dd.MM.yyyy")
+                                        : DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd"), "M1");
                             else if (diffMonth < 3)
                                 strDailyValuesWebSite = string.Format(webSiteUrl,
-                                    DateTime.Now.AddMonths(-3).ToString("dd.MM.yyyy"), "M3");
+                                    parsingType == ShareObject.ParsingTypes.Regex
+                                        ? DateTime.Now.AddMonths(-3).ToString("dd.MM.yyyy")
+                                        : DateTime.Now.AddMonths(-3).ToString("yyyy-MM-dd"), "M3");
                             else if (diffMonth < 6)
                                 strDailyValuesWebSite = string.Format(webSiteUrl,
-                                    DateTime.Now.AddMonths(-6).ToString("dd.MM.yyyy"), "M6");
+                                    parsingType == ShareObject.ParsingTypes.Regex
+                                        ? DateTime.Now.AddMonths(-6).ToString("dd.MM.yyyy")
+                                        : DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd"), "M6");
                             else if (diffMonth < 12)
                                 strDailyValuesWebSite = string.Format(webSiteUrl,
-                                    DateTime.Now.AddMonths(-12).ToString("dd.MM.yyyy"), "Y1");
+                                    parsingType == ShareObject.ParsingTypes.Regex
+                                        ? DateTime.Now.AddMonths(-12).ToString("dd.MM.yyyy")
+                                        : DateTime.Now.AddMonths(-12).ToString("yyyy-MM-dd"), "Y1");
                             else if (diffMonth < 36)
                                 strDailyValuesWebSite = string.Format(webSiteUrl,
-                                    DateTime.Now.AddMonths(-36).ToString("dd.MM.yyyy"), "Y3");
+                                    parsingType == ShareObject.ParsingTypes.Regex
+                                        ? DateTime.Now.AddMonths(-36).ToString("dd.MM.yyyy")
+                                        : DateTime.Now.AddMonths(-36).ToString("yyyy-MM-dd"), "Y3");
                             else
-                            {
                                 strDailyValuesWebSite = string.Format(webSiteUrl,
-                                    DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy"), "Y5");
-                            }
+                                    parsingType == ShareObject.ParsingTypes.Regex
+                                        ? DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy")
+                                        : DateTime.Now.AddMonths(-60).ToString("yyyy-MM-dd"), "Y5");
                         }
                             break;
                         // Share type "Fond"
                         case ShareObject.ShareTypes.Fond:
                         {
                             if (diffMonth < 1)
-                                strDailyValuesWebSite = string.Format(webSiteUrl,
-                                    DateTime.Now.AddMonths(-1).ToString("dd.MM.yyyy"), "1M");
+                                if (parsingType == ShareObject.ParsingTypes.Regex)
+                                    strDailyValuesWebSite = string.Format(webSiteUrl,
+                                        DateTime.Now.AddMonths(-1).ToString("dd.MM.yyyy"), "1M");
+                                else
+                                    strDailyValuesWebSite = string.Format(webSiteUrl,
+                                        DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd"), "M1");
                             else if (diffMonth < 3)
-                                strDailyValuesWebSite = string.Format(webSiteUrl,
-                                    DateTime.Now.AddMonths(-3).ToString("dd.MM.yyyy"), "3M");
+                                if (parsingType == ShareObject.ParsingTypes.Regex)
+                                    strDailyValuesWebSite = string.Format(webSiteUrl,
+                                        DateTime.Now.AddMonths(-3).ToString("dd.MM.yyyy"), "3M");
+                                else
+                                    strDailyValuesWebSite = string.Format(webSiteUrl,
+                                        DateTime.Now.AddMonths(-3).ToString("yyyy-MM-dd"), "M3");
                             else if (diffMonth < 6)
-                                strDailyValuesWebSite = string.Format(webSiteUrl,
-                                    DateTime.Now.AddMonths(-6).ToString("dd.MM.yyyy"), "6M");
+                                if (parsingType == ShareObject.ParsingTypes.Regex)
+                                    strDailyValuesWebSite = string.Format(webSiteUrl,
+                                        DateTime.Now.AddMonths(-6).ToString("dd.MM.yyyy"), "6M");
+                                else
+                                    strDailyValuesWebSite = string.Format(webSiteUrl,
+                                        DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd"), "M6");
                             else if (diffMonth < 12)
-                                strDailyValuesWebSite = string.Format(webSiteUrl,
-                                    DateTime.Now.AddMonths(-12).ToString("dd.MM.yyyy"), "1Y");
+                                if (parsingType == ShareObject.ParsingTypes.Regex)
+                                    strDailyValuesWebSite = string.Format(webSiteUrl,
+                                        DateTime.Now.AddMonths(-12).ToString("dd.MM.yyyy"), "1Y");
+                                else
+                                    strDailyValuesWebSite = string.Format(webSiteUrl,
+                                        DateTime.Now.AddMonths(-12).ToString("yyyy-MM-dd"), "Y1");
                             else if (diffMonth < 36)
-                                strDailyValuesWebSite = string.Format(webSiteUrl,
-                                    DateTime.Now.AddMonths(-36).ToString("dd.MM.yyyy"), "3Y");
+                                if (parsingType == ShareObject.ParsingTypes.Regex)
+                                    strDailyValuesWebSite = string.Format(webSiteUrl,
+                                        DateTime.Now.AddMonths(-36).ToString("dd.MM.yyyy"), "3Y");
+                                else
+                                    strDailyValuesWebSite = string.Format(webSiteUrl,
+                                        DateTime.Now.AddMonths(-36).ToString("yyyy-MM-dd"), "Y3");
                             else
                             {
-                                strDailyValuesWebSite = string.Format(webSiteUrl,
-                                    DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy"), "5Y");
+                                if (parsingType == ShareObject.ParsingTypes.Regex)
+                                    strDailyValuesWebSite = string.Format(webSiteUrl,
+                                        DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy"), "5Y");
+                                else
+                                    strDailyValuesWebSite = string.Format(webSiteUrl,
+                                        DateTime.Now.AddMonths(-60).ToString("yyyy-MM-dd"), "Y5");
                             }
                         }
                             break;
@@ -1492,26 +1547,49 @@ namespace SharePortfolioManager.Classes
                         case ShareObject.ShareTypes.Etf:
                         {
                             if (diffMonth < 1)
-                                strDailyValuesWebSite = string.Format(webSiteUrl,
-                                    DateTime.Now.AddMonths(-1).ToString("dd.MM.yyyy"), "1M");
+                                if (parsingType == ShareObject.ParsingTypes.Regex)
+                                    strDailyValuesWebSite = string.Format(webSiteUrl,
+                                        DateTime.Now.AddMonths(-1).ToString("dd.MM.yyyy"), "1M");
+                                else
+                                    strDailyValuesWebSite = string.Format(webSiteUrl,
+                                        DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd"), "M1");
                             else if (diffMonth < 3)
-                                strDailyValuesWebSite = string.Format(webSiteUrl,
-                                    DateTime.Now.AddMonths(-3).ToString("dd.MM.yyyy"), "3M");
+                                if (parsingType == ShareObject.ParsingTypes.Regex)
+                                    strDailyValuesWebSite = string.Format(webSiteUrl,
+                                        DateTime.Now.AddMonths(-3).ToString("dd.MM.yyyy"), "3M");
+                                else
+                                    strDailyValuesWebSite = string.Format(webSiteUrl,
+                                        DateTime.Now.AddMonths(-3).ToString("yyyy-MM-dd"), "M3");
                             else if (diffMonth < 6)
-                                strDailyValuesWebSite = string.Format(webSiteUrl,
-                                    DateTime.Now.AddMonths(-6).ToString("dd.MM.yyyy"), "6M");
+                                if (parsingType == ShareObject.ParsingTypes.Regex)
+                                    strDailyValuesWebSite = string.Format(webSiteUrl,
+                                        DateTime.Now.AddMonths(-6).ToString("dd.MM.yyyy"), "6M");
+                                else
+                                    strDailyValuesWebSite = string.Format(webSiteUrl,
+                                        DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd"), "M6");
                             else if (diffMonth < 12)
-                                strDailyValuesWebSite = string.Format(webSiteUrl,
-                                    DateTime.Now.AddMonths(-12).ToString("dd.MM.yyyy"), "1Y");
+                                if (parsingType == ShareObject.ParsingTypes.Regex)
+                                    strDailyValuesWebSite = string.Format(webSiteUrl,
+                                        DateTime.Now.AddMonths(-12).ToString("dd.MM.yyyy"), "1Y");
+                                else
+                                    strDailyValuesWebSite = string.Format(webSiteUrl,
+                                        DateTime.Now.AddMonths(-12).ToString("yyyy-MM-dd"), "Y1");
                             else if (diffMonth < 36)
-                                strDailyValuesWebSite = string.Format(webSiteUrl,
-                                    DateTime.Now.AddMonths(-36).ToString("dd.MM.yyyy"), "3Y");
+                                if (parsingType == ShareObject.ParsingTypes.Regex)
+                                    strDailyValuesWebSite = string.Format(webSiteUrl,
+                                        DateTime.Now.AddMonths(-36).ToString("dd.MM.yyyy"), "3Y");
+                                else
+                                    strDailyValuesWebSite = string.Format(webSiteUrl,
+                                        DateTime.Now.AddMonths(-36).ToString("yyyy-MM-dd"), "Y3");
                             else
                             {
-                                strDailyValuesWebSite = string.Format(webSiteUrl,
-                                    DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy"), "5Y");
+                                if (parsingType == ShareObject.ParsingTypes.Regex)
+                                    strDailyValuesWebSite = string.Format(webSiteUrl,
+                                        DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy"), "5Y");
+                                else
+                                    strDailyValuesWebSite = string.Format(webSiteUrl,
+                                        DateTime.Now.AddMonths(-60).ToString("yyyy-MM-dd"), "Y5");
                             }
-
                         }
                             break;
                         default:

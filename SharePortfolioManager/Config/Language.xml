@@ -31,6 +31,12 @@
 			<Item2 text="ETF" />
 		</ComboBoxItemsShareType>				
 
+		<!-- Combo box items for the share parsing type -->
+		<ComboBoxItemsParsingType>
+			<Item0 text="Regex" />
+			<Item1 text="API" />
+		</ComboBoxItemsParsingType>				
+
 		<!-- Logger -->
 		<Logger>
 			<!-- States -->
@@ -242,6 +248,10 @@
 					<NoRegexListGiven_2 text="' given." />
 					<ContentLoadedFailed_1 text="Load of the website content for the 'MarketValues' of the share'" />
 					<ContentLoadedFailed_2 text="' failed." />
+					<FileFailed_1 text="File error occurred while loading the 'MarketValues' of the share'" />
+					<FileFailed_2 text="' failed." />
+					<JsonFailed_1 text="JSON error occurred while loading the 'MarketValues' of the share'" />
+					<JsonFailed_2 text="' failed." />
 					<ParsingFailed_1 text="Parsing of the key '" />
 					<ParsingFailed_2 text="' for the 'MarketValues' for the share '" />
 					<ParsingFailed_3 text="' failed." />
@@ -267,6 +277,10 @@
 					<NoRegexListGiven_2 text="' given." />
 					<ContentLoadedFailed_1 text="Load of the website content for the 'DailyValues' of the share'" />
 					<ContentLoadedFailed_2 text="' failed." />
+					<FileFailed_1 text="File error occurred while loading the 'DailyValues' of the share'" />
+					<FileFailed_2 text="' failed." />
+					<JsonFailed_1 text="JSON error occurred while loading the 'DailyValues' of the share'" />
+					<JsonFailed_2 text="' failed." />
 					<ParsingFailed_1 text="Parsing of the key '" />
 					<ParsingFailed_2 text="' for the 'DailyValues' for the share '" />
 					<ParsingFailed_3 text="' failed." />
@@ -637,7 +651,8 @@
 					<ShareType text="Type:" />
 					<PayoutInterval text="Dividend payout interval:" />
 					<CultureInfo text="Country info:" />
-					<WebSite text="Website:" />
+					<DetailsWebSite text="Details website:" />
+					<MarketValuesWebSite text="Market values website:" />
 					<DailyValuesWebSite text="Daily values website:" />
 					<DepotNumber text="Depot number:" />
 					<OrderNumber text="Order number:" />
@@ -707,13 +722,16 @@
 				<BrokerageEmpty text="Please insert a value for the brokerage." />
 				<BrokerageWrongFormat text="Format for the value 'Brokerage' is invalid." />
 				<BrokerageWrongValue text="The value for 'Brokerage' must be higher than '0'." />
-				<WebSiteEmpty text="Please enter a web page address." />
-				<WebSiteWrongFormat text="The web page address you entered is invalid or unreachable. Try again." />
-				<WebSiteExists text="The entered web page address already exists." />
-				<WebSiteRegexNotFound text="No parser configuration available for the specified web page address!" />
+				<DetailsWebSiteEmpty text="Please enter a details web page address." />
+				<DetailsWebSiteWrongFormat text="The details web page address you entered is invalid or unreachable. Try again." />
+				<DetailsWebSiteExists text="The entered details web page address already exists." />
+				<MarketValuesWebSiteEmpty text="Please enter a market values web page address." />
+				<MarketValuesWebSiteWrongFormat text="The market values web page address you entered is invalid or unreachable. Try again." />
+				<MarketValuesWebSiteExists text="The entered market values web page address already exists." />
 				<DailyValuesWebSiteEmpty text="Please enter a web page address for the daily values." />
 				<DailyValuesWebSiteWrongFormat text="The web page address for the daily values you entered is invalid or unreachable. Try again" />
 				<DailyValuesWebSiteExists text="The entered web page address for the daily values already exists." />
+				<WebSiteRegexNotFound text="No parser configuration for one the specified web page address available!" />
 				<AddFailed text="Buy add has been failed!" />
 				<AddSaveFailed text="An error occurred. Adding share failed!" />
 				<ChoseDocumentFailed text="An error occurred. Failed to select file!" />
@@ -749,7 +767,8 @@
 					<Date text="Date:" />
 					<Purchase text="Purchase:" />
 					<Volume text="Volume:" />
-					<WebSite text="Website:" />
+					<DetailsWebSite text="Details website:" />
+					<MarketValuesWebSite text="Market values website:" />
 					<DailyValuesWebSite text="Daily values website:" />
 					<CultureInfo text="Country info:" />
 					<PayoutInterval text="Dividend payout interval:" />
@@ -800,9 +819,12 @@
 				<NameEmpty text="Please insert a name." />
 				<NameExists text="The name already exists." />
 				<StockMarketLaunchDateNotModified text="Stock exchange quotation date not changed." />
-				<WebSiteEmpty text="Please insert a website address." />
-				<WebSiteWrongFormat text="The website address has an invalid format or is not reachable. Try it again." />
-				<WebSiteExists text="The website already exists." />
+				<DetailsWebSiteEmpty text="Please enter a details web page address." />
+				<DetailsWebSiteWrongFormat text="The details web page address you entered is invalid or unreachable. Try again." />
+				<DetailsWebSiteExists text="The entered details web page address already exists." />
+				<MarketValuesWebSiteEmpty text="Please enter a market values web page address." />
+				<MarketValuesWebSiteWrongFormat text="The market values web page address you entered is invalid or unreachable. Try again." />
+				<MarketValuesWebSiteExists text="The entered market values web page address already exists." />
 				<DailyValuesWebSiteEmpty text="Please enter a web page address for the daily values." />
 				<DailyValuesWebSiteWrongFormat text="The web page address for the daily values you entered is invalid or unreachable. Try again" />
 				<DailyValuesWebSiteExists text="The entered web page address for the daily values already exists." />
@@ -1353,6 +1375,8 @@
 				<AllSales text="Rest of sales" />
 				<Period text="Period" />
 				<Development text="Development" />
+				<Minimum text="Min: " />
+				<Maximum text="Max: " />
 			</Legend>
 			
 			<!-- ToolTip -->
@@ -1361,8 +1385,6 @@
 				<BuyPrice text="Buy price" />
 				<SalePrice text="Sale price" />
 				<Volume text="Volume" />
-				<Minimum text="Min" />
-				<Maximum text="Max" />
 			</ToolTip>
 
 			<!-- Message -->
@@ -1594,6 +1616,12 @@
 			<Item2 text="ETF" />
 		</ComboBoxItemsShareType>				
 
+		<!-- Combo box items for the share parsing type -->
+		<ComboBoxItemsParsingType>
+			<Item0 text="Regex" />
+			<Item1 text="API" />
+		</ComboBoxItemsParsingType>				
+
 		<!-- Logger -->
 		<Logger>
 			<!-- States -->
@@ -1805,6 +1833,10 @@
 					<NoRegexListGiven_2 text="' übergeben." />
 					<ContentLoadedFailed_1 text="Laden des Webseiten- Inhalts für die 'Kurswerte' der Aktie '" />
 					<ContentLoadedFailed_2 text="' ist fehlgeschlagen." />
+					<FileFailed_1 text="Datei- Fehler während des Ladens der 'Kurswerte' der Aktie'" />
+					<FileFailed_2 text="' aufgetreten ." />
+					<JsonFailed_1 text="JSON- Fehler während des Ladens der 'Kurswerte' der Aktie'" />
+					<JsonFailed_2 text="' aufgetreten ." />
 					<ParsingFailed_1 text="Parsen des Schlüssels '" />
 					<ParsingFailed_2 text="' für die 'Kurswerte' der Aktie '" />
 					<ParsingFailed_3 text="' ist fehlgeschlagen." />
@@ -1830,6 +1862,10 @@
 					<NoRegexListGiven_2 text="' übergeben." />
 					<ContentLoadedFailed_1 text="Laden des Webseiten- Inhalts für die 'Tageswerte' der Aktie '" />
 					<ContentLoadedFailed_2 text="' ist fehlgeschlagen." />
+					<FileFailed_1 text="Datei- Fehler während des Ladens der 'Tageswerte' der Aktie'" />
+					<FileFailed_2 text="' aufgetreten ." />
+					<JsonFailed_1 text="JSON- Fehler während des Ladens der 'Tageswerte' der Aktie'" />
+					<JsonFailed_2 text="' aufgetreten ." />
 					<ParsingFailed_1 text="Parsen des Schlüssels '" />
 					<ParsingFailed_2 text="' für die 'Tageswerte' der Aktie '" />
 					<ParsingFailed_3 text="' ist fehlgeschlagen." />
@@ -2199,8 +2235,9 @@
 					<ShareType text="Typ:" />
 					<PayoutInterval text="Dividendenauszahlungs- Interval:" />
 					<CultureInfo text="Länder- Info:" />
-					<WebSite text="Webseite:" />
-					<DailyValuesWebSite text="Tages-Werte Webseite:" />
+					<DetailsWebSite text="Details- Webseite:" />
+					<MarketValuesWebSite text="Markt- Werte- Website:" />
+					<DailyValuesWebSite text="Tages- Werte- Webseite:" />
 					<DepotNumber text="Depot number:" />
 					<OrderNumber text="Ordernummer:" />
 					<Date text="Datum:" />
@@ -2269,13 +2306,16 @@
 				<BrokerageEmpty text="Bitte geben Sie die Kosten ein." />
 				<BrokerageWrongFormat text="Das Format für die eingegebene Provision ist ungültig." />
 				<BrokerageWrongValue text="Der Wert für 'Kosten' muss größer als '0' sein." />
-				<WebSiteEmpty text="Bitte geben Sie eine Webseiten- Adresse ein." />
-				<WebSiteWrongFormat text="Die eingegebene Webseiten- Adresse ist ungültig oder nicht erreichbar. Versuchen Sie es noch einmal." />
-				<WebSiteExists text="Die eingegebene Webseite existiert bereits." />
-				<WebSiteRegexNotFound text="Keine Parser-Konfiguration für die angegebene Web- Addresse verfügbar!" />
+				<DetailsWebSiteEmpty text="Bitte geben Sie eine Details- Webseiten- Adresse ein." />
+				<DetailsWebSiteWrongFormat text="Die eingegebene Details- Webseiten- Adresse ist ungültig oder nicht erreichbar. Versuchen Sie es noch einmal." />
+				<DetailsWebSiteExists text="Die eingegebene Details- Webseite existiert bereits." />
+				<MarketValuesWebSiteEmpty text="Bitte geben Sie eine Markt- Wert Webseiten- Adresse ein." />
+				<MarketValuesWebSiteWrongFormat text="Die eingegebene Markt- Wert Webseiten- Adresse ist ungültig oder nicht erreichbar. Versuchen Sie es noch einmal." />
+				<MarketValuesWebSiteExists text="Die eingegebene Markt- Wert Webseite existiert bereits." />
 				<DailyValuesWebSiteEmpty text="Bitte geben Sie eine Webseiten- Adresse für die Tags- Werte ein." />
 				<DailyValuesWebSiteWrongFormat text="Die eingegebene Webseiten- Adresse für die Tages- Werte ist ungültig oder nicht erreichbar. Versuchen Sie es noch einmal." />
 				<DailyValuesWebSiteExists text="Die eingegebene Webseite für die Tages- Werte existiert bereits." />
+				<WebSiteRegexNotFound text="Keine Parser-Konfiguration für eine der angegebenen Web- Addressen verfügbar!" />
 				<AddFailed text="Hinzufügen des Kaufs ist fehlgeschlagen!" />
 				<AddSaveFailed text="Es trat ein Fehler auf. Hinzufügen der Aktien ist fehlgeschlagen!" />
 				<ChoseDocumentFailed text="Es trat ein Fehler auf. Auswählen der Datei fehlgeschlagen!" />
@@ -2311,8 +2351,9 @@
 					<Date text="Datum:" />
 					<Purchase text="Einzahlung:" />
 					<Volume text="Anteile:" />
-					<WebSite text="Webseite:" />
-					<DailyValuesWebSite text="Tages-Werte Webseite:" />
+					<DetailsWebSite text="Details- Webseite:" />
+					<MarketValuesWebSite text="Markt- Wert- Webseite:" />
+					<DailyValuesWebSite text="Tages-Werte- Webseite:" />
 					<CultureInfo text="Länder- Info:" />
 					<PayoutInterval text="Dividendenauszahlungs- Interval:" />
 					<ShareType text="Typ:" />
@@ -2362,9 +2403,12 @@
 				<NameEmpty text="Bitte geben Sie einen Namen ein." />
 				<NameExists text="Der Name existiert bereits." />
 				<StockMarketLaunchDateNotModified text="Börsennotierungs- Datum nicht angepasst." />
-				<WebSiteEmpty text="Bitte geben Sie eine Webseiten- Adresse ein." />
-				<WebSiteWrongFormat text="Die eingegebene Webseiten- Adresse ist ungültig oder nicht erreichbar. Versuchen Sie es noch einmal." />
-				<WebSiteExists text="Die Webseite existiert bereits." />
+				<DetailsWebSiteEmpty text="Bitte geben Sie eine Details- Webseiten- Adresse ein." />
+				<DetailsWebSiteWrongFormat text="Die eingegebene Details- Webseiten- Adresse ist ungültig oder nicht erreichbar. Versuchen Sie es noch einmal." />
+				<DetailsWebSiteExists text="Die eingegebene Details- Webseite existiert bereits." />
+				<MarketValuesWebSiteEmpty text="Bitte geben Sie eine Markt- Wert Webseiten- Adresse ein." />
+				<MarketValuesWebSiteWrongFormat text="Die eingegebene Markt- Wert Webseiten- Adresse ist ungültig oder nicht erreichbar. Versuchen Sie es noch einmal." />
+				<MarketValuesWebSiteExists text="Die eingegebene Markt- Wert Webseite existiert bereits." />
 				<DailyValuesWebSiteEmpty text="Bitte geben Sie eine Webseiten- Adresse für die Tags- Werte ein." />
 				<DailyValuesWebSiteWrongFormat text="Die eingegebene Webseiten- Adresse für die Tages- Werte ist ungültig oder nicht erreichbar. Versuchen Sie es noch einmal." />
 				<DailyValuesWebSiteExists text="Die eingegebene Webseite für die Tages- Werte existiert bereits." />
@@ -2914,6 +2958,8 @@
 				<AllSales text="Restliche Verkäufe" />
 				<Period text="Zeitraum" />
 				<Development text="Entwicklung" />
+				<Minimum text="Min: " />
+				<Maximum text="Max: " />
 			</Legend>
 
 			<!-- ToolTip -->
@@ -2922,8 +2968,6 @@
 				<BuyPrice text="Kaufpreis" />
 				<SalePrice text="Verkaufspreis" />
 				<Volume text="Anteile" />
-				<Minimum text="Min" />
-				<Maximum text="Max" />
 			</ToolTip>
 			
 			<!-- Message -->

@@ -3769,11 +3769,19 @@ namespace SharePortfolioManager.SalesForm.View
                             {
                                 break;
                             }
-                            case DataTypes.ParserErrorCodes.WebExceptionOccured:
+                            case DataTypes.ParserErrorCodes.FileExceptionOccurred:
                             {
                                 break;
                             }
-                            case DataTypes.ParserErrorCodes.ExceptionOccured:
+                            case DataTypes.ParserErrorCodes.JsonExceptionOccurred:
+                            {
+                                break;
+                            }
+                            case DataTypes.ParserErrorCodes.WebExceptionOccurred:
+                            {
+                                break;
+                            }
+                            case DataTypes.ParserErrorCodes.ExceptionOccurred:
                             {
                                 break;
                             }

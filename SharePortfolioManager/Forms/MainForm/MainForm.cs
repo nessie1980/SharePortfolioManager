@@ -751,6 +751,14 @@ namespace SharePortfolioManager
         {
             timerStartNextShareUpdate.Enabled = false;
 
+            // Reset labels
+            lblWebParserMarketValuesState.Text = @"";
+            lblWebParserDailyValuesState.Text = @"";
+
+            // Reset progress bar
+            progressBarWebParserMarketValues.Value = 0;
+            progressBarWebParserDailyValues.Value = 0;
+
             // Check if another share object should be updated
             if (SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1)
             {
@@ -791,9 +799,9 @@ namespace SharePortfolioManager
                         {
                             // Start the asynchronous operation of the Parser for the market values
                             ParserMarketValues.ParsingValues = new ParsingValues(
-                                new Uri(ShareObjectListMarketValue[SelectedDataGridViewShareIndex].UpdateWebSiteUrl),
+                                new Uri(ShareObjectListMarketValue[SelectedDataGridViewShareIndex].MarketValuesUpdateWebSiteUrl),
                                 ShareObjectListMarketValue[SelectedDataGridViewShareIndex].WebSiteEncodingType,
-                                ShareObjectListMarketValue[SelectedDataGridViewShareIndex].RegexList
+                                DataTypes.ParsingType.OnVistaRealTime
                             );
                             ParserMarketValues.StartParsing();
                         }
@@ -809,9 +817,11 @@ namespace SharePortfolioManager
                                     ShareObjectListMarketValue[SelectedDataGridViewShareIndex].DailyValuesList.Entries,
                                     ShareObjectListMarketValue[SelectedDataGridViewShareIndex]
                                         .DailyValuesUpdateWebSiteUrl,
-                                    ShareObjectListMarketValue[SelectedDataGridViewShareIndex].ShareType
+                                    ShareObjectListMarketValue[SelectedDataGridViewShareIndex].ShareType,
+                                    ShareObjectListMarketValue[SelectedDataGridViewShareIndex].DailyValuesParsingOption
                                 )),
-                                ShareObjectListMarketValue[SelectedDataGridViewShareIndex].WebSiteEncodingType
+                                ShareObjectListMarketValue[SelectedDataGridViewShareIndex].WebSiteEncodingType,
+                                DataTypes.ParsingType.OnVistaHistoryData
                             );
                             ParserDailyValues.StartParsing();
                         }
@@ -850,9 +860,9 @@ namespace SharePortfolioManager
                         {
                             // Start the asynchronous operation of the Parser for the market values
                             ParserMarketValues.ParsingValues = new ParsingValues(
-                                new Uri(ShareObjectListFinalValue[SelectedDataGridViewShareIndex].UpdateWebSiteUrl),
+                                new Uri(ShareObjectListFinalValue[SelectedDataGridViewShareIndex].MarketValuesUpdateWebSiteUrl),
                                 ShareObjectListFinalValue[SelectedDataGridViewShareIndex].WebSiteEncodingType,
-                                ShareObjectListFinalValue[SelectedDataGridViewShareIndex].RegexList
+                                DataTypes.ParsingType.OnVistaRealTime
                             );
                             ParserMarketValues.StartParsing();
                         }
@@ -868,9 +878,11 @@ namespace SharePortfolioManager
                                     ShareObjectListFinalValue[SelectedDataGridViewShareIndex].DailyValuesList.Entries,
                                     ShareObjectListFinalValue[SelectedDataGridViewShareIndex]
                                         .DailyValuesUpdateWebSiteUrl,
-                                    ShareObjectListFinalValue[SelectedDataGridViewShareIndex].ShareType
+                                    ShareObjectListFinalValue[SelectedDataGridViewShareIndex].ShareType,
+                                    ShareObjectListFinalValue[SelectedDataGridViewShareIndex].DailyValuesParsingOption
                                 )),
-                                ShareObjectListFinalValue[SelectedDataGridViewShareIndex].WebSiteEncodingType
+                                ShareObjectListFinalValue[SelectedDataGridViewShareIndex].WebSiteEncodingType,
+                                DataTypes.ParsingType.OnVistaHistoryData
                             );
                             ParserDailyValues.StartParsing();
                         }

@@ -36,6 +36,7 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
+using Parser;
 using SharePortfolioManager.Properties;
 
 namespace SharePortfolioManager.Classes.ShareObjects
@@ -79,6 +80,19 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
         #endregion Share update types
 
+        #region Parsing types
+
+        /// <summary>
+        /// Types for the various parsing options of a share
+        /// </summary>
+        public enum ParsingTypes
+        {
+            Regex,
+            Api
+        }
+
+        #endregion Parsing types
+
         #region Variables
 
         #region General variables
@@ -91,7 +105,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <summary>
         /// Stores the count of the share object tags in the XML
         /// </summary>
-        internal const short ShareObjectTagCount = 13;
+        internal const short ShareObjectTagCount = 14;
 
         /// <summary>
         /// Stores a list of images for the previous day performance visualization
@@ -142,6 +156,11 @@ namespace SharePortfolioManager.Classes.ShareObjects
         internal const string GeneralUpdateAttrName = "Update";
 
         /// <summary>
+        /// Stores the XML attribute name for the share details website
+        /// </summary>
+        internal const string GeneralDetailsWebSiteAttrName = "DetailsWebSite";
+
+        /// <summary>
         /// Stores the XML attribute name for the share stock market launch date
         /// </summary>
         internal const string GeneralStockMarketLaunchDateAttrName = "StockMarketLaunchDate";
@@ -167,11 +186,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
         internal const string GeneralSharePriceBeforeAttrName = "SharePriceBefore";
 
         /// <summary>
-        /// Stores the XML attribute name for the website of the share update
-        /// </summary>
-        internal const string GeneralWebSiteAttrName = "WebSite";
-
-        /// <summary>
         /// Stores the XML attribute name for the culture of the share
         /// </summary>
         internal const string GeneralCultureAttrName = "Culture";
@@ -180,6 +194,11 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Stores the XML attribute name for the share type
         /// </summary>
         internal const string GeneralShareTypeAttrName = "ShareType";
+
+        /// <summary>
+        /// Stores the XML attribute name for the market values website of the share update
+        /// </summary>
+        internal const string GeneralMarketValuesAttrName = "MarketValues";
 
         /// <summary>
         /// Stores the XML attribute name for the daily value entries
@@ -207,6 +226,74 @@ namespace SharePortfolioManager.Classes.ShareObjects
         internal const string GeneralDividendsAttrName = "Dividends";
 
         #endregion General XML variables
+
+        #region MarketValues XML Variables
+
+        /// <summary>
+        /// Stores the XML attribute name for the website of the share update
+        /// </summary>
+        internal const string GeneralMarketValuesWebSiteAttrName = "WebSite";
+
+        /// <summary>
+        /// Stores the XML attribute name for the flag in which the parsing of the market values should be done (Regex / API)
+        /// </summary>
+        internal const string GeneralParsingMarketValuesAttrName = "Parsing";
+
+        #endregion MarketValues XML Variables
+
+        #region DailyValues XML variables
+
+        /// <summary>
+        /// Stores the XML attribute name for the website for the daily values update
+        /// </summary>
+        internal const string DailyValuesWebSiteAttrName = "WebSite";
+
+        /// <summary>
+        /// Stores the XML attribute name for the flag in which the parsing of the daily values should be done (Regex / API)
+        /// </summary>
+        internal const string GeneralParsingDailyValuesAttrName = "Parsing";
+
+        /// <summary>
+        /// Stores the tag name prefix of a daily values entry
+        /// </summary>
+        internal const string DailyValuesTagNamePre = "Entry";
+
+        /// <summary>
+        /// Stores the XML attribute name for the date of the daily value
+        /// </summary>
+        public const string DailyValuesDateTagName = "D";
+
+        /// <summary>
+        /// Stores the XML attribute name for the closing price of the daily value
+        /// </summary>
+        public const string DailyValuesClosingPriceTagName = "C";
+
+        /// <summary>
+        /// Stores the XML attribute name for the top price of the daily value
+        /// </summary>
+        public const string DailyValuesOpeningPriceTagName = "O";
+
+        /// <summary>
+        /// Stores the XML attribute name for the opening price of the daily value
+        /// </summary>
+        public const string DailyValuesTopTagName = "T";
+
+        /// <summary>
+        /// Stores the XML attribute name for the bottom price of the daily value
+        /// </summary>
+        public const string DailyValuesBottomTagName = "B";
+
+        /// <summary>
+        /// Stores the XML attribute name for the volume price of the daily value
+        /// </summary>
+        public const string DailyValuesVolumeTagName = "V";
+
+        /// <summary>
+        /// Stores the attribute count for the daily values
+        /// </summary>
+        public const short DailyValuesAttrCount = 6; // Date / ClosingPrice / OpeningPrice / Top / Bottom / Volume
+
+        #endregion DailyValues XML variables
 
         #region Buy XML variables
 
@@ -549,55 +636,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
         #endregion Dividends XML variables
 
-        #region DailyValues XML variables
-
-        /// <summary>
-        /// Stores the tag name prefix of a daily values entry
-        /// </summary>
-        internal const string DailyValuesTagNamePre = "Entry";
-
-        /// <summary>
-        /// Stores the XML attribute name for the website for the daily values update
-        /// </summary>
-        internal const string DailyValuesWebSiteAttrName = "WebSite";
-
-        /// <summary>
-        /// Stores the XML attribute name for the date of the daily value
-        /// </summary>
-        public const string DailyValuesDateTagName = "D";
-
-        /// <summary>
-        /// Stores the XML attribute name for the closing price of the daily value
-        /// </summary>
-        public const string DailyValuesClosingPriceTagName = "C";
-
-        /// <summary>
-        /// Stores the XML attribute name for the top price of the daily value
-        /// </summary>
-        public const string DailyValuesOpeningPriceTagName = "O";
-
-        /// <summary>
-        /// Stores the XML attribute name for the opening price of the daily value
-        /// </summary>
-        public const string DailyValuesTopTagName = "T";
-
-        /// <summary>
-        /// Stores the XML attribute name for the bottom price of the daily value
-        /// </summary>
-        public const string DailyValuesBottomTagName = "B";
-
-        /// <summary>
-        /// Stores the XML attribute name for the volume price of the daily value
-        /// </summary>
-        public const string DailyValuesVolumeTagName = "V";
-
-        /// <summary>
-        /// Stores the attribute count for the daily values
-        /// </summary>
-        public const short DailyValuesAttrCount = 6; // Date / ClosingPrice / OpeningPrice / Top / Bottom / Volume
-
-        #endregion DailyValues XML variables
-
         #endregion Variables
 
         #region Properties
@@ -657,6 +695,12 @@ namespace SharePortfolioManager.Classes.ShareObjects
         public string Wkn { get; set; }
 
         /// <summary>
+        /// Details website of the share
+        /// </summary>
+        [Browsable(false)]
+        public string DetailsWebSiteUrl { get; set; }
+
+        /// <summary>
         /// Date and time of share add ( first buy )
         /// </summary>
         [Browsable(false)]
@@ -705,12 +749,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
         public DateTime LastUpdateShare { get; set; }
 
         /// <summary>
-        /// Website url for the share update value parsing
-        /// </summary>
-        [Browsable(false)]
-        public string UpdateWebSiteUrl { get; set; }
-
-        /// <summary>
         /// Encoding type for the website
         /// </summary>
         [Browsable(false)]
@@ -720,7 +758,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Reg expression list for the website parsing of the share update values
         /// </summary>
         [Browsable(false)]
-        public Parser.RegExList RegexList { get; set; }
+        public RegExList RegexList { get; set; }
 
         /// <summary>
         /// Culture info for the share
@@ -761,6 +799,28 @@ namespace SharePortfolioManager.Classes.ShareObjects
         [Browsable(false)]
         public ShareTypes ShareType { get; set; }
 
+        #region Market values
+
+        /// <summary>
+        /// Website url for the share update value parsing
+        /// </summary>
+        [Browsable(false)]
+        public string MarketValuesUpdateWebSiteUrl { get; set; }
+
+        /// <summary>
+        /// Flag if in which way a parsing for the market values should be done "Regex" or "API"
+        /// </summary>
+        [Browsable(false)]
+        public ParsingTypes MarketValuesParsingOption { get; set; } = ParsingTypes.Regex;
+
+        /// <summary>
+        /// Flag if in which way a parsing for the market values should be done "Regex" or "API" as string
+        /// </summary>
+        [Browsable(false)]
+        public string MarketValuesParsingOptionAsStr => MarketValuesParsingOption.ToString();
+
+        #endregion Market values
+
         #region Daily values
 
         /// <summary>
@@ -768,6 +828,18 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         [Browsable(false)]
         public string DailyValuesUpdateWebSiteUrl { get; set; }
+
+        /// <summary>
+        /// Flag if in which way a parsing for the daily values should be done "Regex" or "API"
+        /// </summary>
+        [Browsable(false)]
+        public ParsingTypes DailyValuesParsingOption { get; set; } = ParsingTypes.Regex;
+
+        /// <summary>
+        /// Flag if in which way a parsing for the daily values should be done "Regex" or "API" as string
+        /// </summary>
+        [Browsable(false)]
+        public string DailyValuesParsingOptionAsStr => DailyValuesParsingOption.ToString();
 
         /// <summary>
         /// List of the daily values of the share ( Date / ClosingPrice / OpeningPrice / Top / Bottom / Volume )
@@ -1049,8 +1121,11 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="lastUpdateInternet">Date and time of the last update from the Internet</param>
         /// <param name="lastUpdateShare">Date and time of the last update on the Internet site of the share</param>
         /// <param name="price">Current price of the share</param>
-        /// <param name="webSite">Website address of the share</param>
+        /// <param name="detailsWebSite">Website for the share details</param>
+        /// <param name="marketValuesWebSite">Website for the market values update</param>
+        /// <param name="marketValuesParsingOption">Parsing option for the market values (e.g Regex / API)</param>
         /// <param name="dailyValuesWebSite">WebSite for the daily values update</param>
+        /// <param name="detailsValuesParsingOption">Parsing option for the daily values (e.g Regex / API)</param>
         /// <param name="imageListForDayBeforePerformance">Images for the prev day performance indication</param>
         /// <param name="imageListForCompletePerformance">Images for the complete performance indication</param>
         /// <param name="regexList">RegEx list for the share</param>
@@ -1059,7 +1134,10 @@ namespace SharePortfolioManager.Classes.ShareObjects
         public ShareObject(
             string wkn, string addDateTime, string stockMarketLaunchDate, string name,
             DateTime lastUpdateInternet, DateTime lastUpdateShare,
-            decimal price, string webSite, string dailyValuesWebSite, List<Image> imageListForDayBeforePerformance, List<Image> imageListForCompletePerformance,
+            decimal price, string detailsWebSite,
+            string marketValuesWebSite, ParsingTypes marketValuesParsingOption,
+            string dailyValuesWebSite, ParsingTypes detailsValuesParsingOption,
+            List<Image> imageListForDayBeforePerformance, List<Image> imageListForCompletePerformance,
             Parser.RegExList regexList, CultureInfo cultureInfo,
             ShareTypes shareType)
         {
@@ -1071,8 +1149,11 @@ namespace SharePortfolioManager.Classes.ShareObjects
             LastUpdateShare = lastUpdateShare;
             // ReSharper disable once VirtualMemberCallInConstructor
             CurPrice = price;
-            UpdateWebSiteUrl = webSite;
+            DetailsWebSiteUrl = detailsWebSite;
+            MarketValuesUpdateWebSiteUrl = marketValuesWebSite;
+            MarketValuesParsingOption = marketValuesParsingOption;
             DailyValuesUpdateWebSiteUrl = dailyValuesWebSite;
+            DailyValuesParsingOption = DailyValuesParsingOption;
             ImageListPrevDayPerformance = imageListForDayBeforePerformance;
             ImageListCompleteProfitLossPerformance = imageListForCompletePerformance;
             ImagePrevDayPerformance = ImageListPrevDayPerformance[0];
@@ -1260,7 +1341,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             foreach (var webSiteRegexElement in webSiteRegexList)
             {
                 // Check if the current share object use the current website configuration
-                if (!UpdateWebSiteUrl.Contains(webSiteRegexElement.WebSiteName)) continue;
+                if (!MarketValuesUpdateWebSiteUrl.Contains(webSiteRegexElement.WebSiteName)) continue;
 
                 // Set the website configuration to the share object
                 RegexList = webSiteRegexElement.WebSiteRegexList;

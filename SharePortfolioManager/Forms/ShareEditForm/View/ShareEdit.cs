@@ -145,7 +145,8 @@ namespace SharePortfolioManager
                         } break;
                     }
 
-                    txtBoxWebSite.Text = ShareObjectFinalValue.UpdateWebSiteUrl;
+                    txtBoxDetailsWebSite.Text = ShareObjectFinalValue.DetailsWebSiteUrl;
+                    txtBoxMarketValuesWebSite.Text = ShareObjectFinalValue.MarketValuesUpdateWebSiteUrl;
                     txtBoxDailyValuesWebSite.Text = ShareObjectFinalValue.DailyValuesUpdateWebSiteUrl;
 
                     // Set units
@@ -219,8 +220,18 @@ namespace SharePortfolioManager
 
                 lblPurchase.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Purchase", SettingsConfiguration.LanguageName);
                 lblVolume.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Volume", SettingsConfiguration.LanguageName);
-                lblWebSite.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/WebSite", SettingsConfiguration.LanguageName);
+                lblDetailsWebSite.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/DetailsWebSite", SettingsConfiguration.LanguageName);
+
+                lblMarketValuesWebSite.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/MarketValuesWebSite", SettingsConfiguration.LanguageName);
+                // Add parsing options values
+                Language.GetLanguageTextListByXPath(@"/ComboBoxItemsParsingType/*", SettingsConfiguration.LanguageName).ForEach(item => cbxMarketValuesParsingOption.Items.Add(item));
+                cbxMarketValuesParsingOption.SelectedIndex = (int) ShareObjectFinalValue.MarketValuesParsingOption;
+
                 lblDailyValuesWebSite.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/DailyValuesWebSite", SettingsConfiguration.LanguageName);
+                // Add parsing options values
+                Language.GetLanguageTextListByXPath(@"/ComboBoxItemsParsingType/*", SettingsConfiguration.LanguageName).ForEach(item => cbxDailyValuesParsingOption.Items.Add(item));
+                cbxDailyValuesParsingOption.SelectedIndex = (int)ShareObjectFinalValue.DailyValuesParsingOption;
+
                 lblCultureInfo.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/CultureInfo", SettingsConfiguration.LanguageName);
 
                 lblDividendPayoutInterval.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/PayoutInterval", SettingsConfiguration.LanguageName);
@@ -353,12 +364,25 @@ namespace SharePortfolioManager
                 statusStrip1.Text = "";
 
                 // Needed for the URL check
-                var decodedUrlWebSite = txtBoxWebSite.Text;
+                var decodedUrlDetailsWebSite = txtBoxDetailsWebSite.Text;
+                var decodedUrlMarketValuesWebSite = txtBoxMarketValuesWebSite.Text;
                 var decodeUrlDailyValuesWebSite = txtBoxDailyValuesWebSite.Text;
-                // Set start date and interval for the test
-                decodeUrlDailyValuesWebSite =
-                    string.Format(decodeUrlDailyValuesWebSite, DateTime.Now.AddMonths(-1).ToShortDateString(), "M1");
 
+                // Set start date and interval for the test
+                // Check which parsing option is selected
+                if (string.Equals(cbxMarketValuesParsingOption.Text, ShareObject.ParsingTypes.Regex.ToString(), StringComparison.CurrentCultureIgnoreCase))
+                {
+                    decodeUrlDailyValuesWebSite =
+                        string.Format(decodeUrlDailyValuesWebSite, DateTime.Now.AddMonths(-1).ToShortDateString(), "M1");
+                }
+                else
+                {
+                    decodeUrlDailyValuesWebSite =
+                        string.Format(decodeUrlDailyValuesWebSite, DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd"),
+                            "M1");
+                }
+
+                // Check if the name is empty
                 if (txtBoxName.Text == @"")
                 {
                     txtBoxName.Focus();
@@ -431,24 +455,91 @@ namespace SharePortfolioManager
                     errorFlag = true;
                 }
 
-                // Update website
-                if (txtBoxWebSite.Text == @"" && (rdbBoth.Checked || rdbMarketPrice.Checked) && errorFlag == false)
+                // Details share website
+                if (txtBoxDetailsWebSite.Text == @"")
                 {
-                    txtBoxWebSite.Focus();
+                    txtBoxDetailsWebSite.Focus();
 
                     Helper.AddStatusMessage(editShareStatusLabelMessage,
-                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteEmpty", SettingsConfiguration.LanguageName),
+                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DetailsWebSiteEmpty", SettingsConfiguration.LanguageName),
+                        Language, SettingsConfiguration.LanguageName,
+                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+
+                    errorFlag = true;
+                }
+                else if (!Helper.UrlChecker(ref decodedUrlDetailsWebSite, 10000))
+                {
+                    txtBoxDetailsWebSite.Focus();
+
+                    Helper.AddStatusMessage(editShareStatusLabelMessage,
+                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DetailsWebSiteWrongFormat", SettingsConfiguration.LanguageName),
+                        Language, SettingsConfiguration.LanguageName,
+                        Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+
+                    errorFlag = true;
+                }
+                else if (errorFlag == false)
+                {
+                    // Check if a market value share  with the given website already exists
+                    foreach (var shareObjectMarketValue in ParentWindow.ShareObjectListMarketValue)
+                    {
+                        if (txtBoxDetailsWebSite.Text == @"" ||
+                            shareObjectMarketValue.DetailsWebSiteUrl != txtBoxDetailsWebSite.Text ||
+                            shareObjectMarketValue == ShareObjectMarketValue) continue;
+
+                        errorFlag = true;
+                        StopFomClosingFlag = true;
+                        txtBoxDetailsWebSite.Focus();
+
+                        Helper.AddStatusMessage(editShareStatusLabelMessage,
+                            Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DetailsWebSiteExists", SettingsConfiguration.LanguageName),
+                            Language, SettingsConfiguration.LanguageName,
+                            Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+
+                        break;
+                    }
+
+                    if (errorFlag == false)
+                    {
+                        // Check if a final value share with the given website already exists
+                        foreach (var shareObjectFinalValue in ParentWindow.ShareObjectListFinalValue)
+                        {
+                            if (txtBoxDetailsWebSite.Text == @"" ||
+                                shareObjectFinalValue.DetailsWebSiteUrl != txtBoxDetailsWebSite.Text ||
+                                shareObjectFinalValue == ShareObjectFinalValue) continue;
+
+                            errorFlag = true;
+                            StopFomClosingFlag = true;
+                            txtBoxDetailsWebSite.Focus();
+
+                            Helper.AddStatusMessage(editShareStatusLabelMessage,
+                                Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/DetailsWebSiteExists", SettingsConfiguration.LanguageName),
+                                Language, SettingsConfiguration.LanguageName,
+                                Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
+
+                            break;
+                        }
+                    }
+                }
+
+                // Market values update website
+                if (txtBoxMarketValuesWebSite.Text == @"" && (rdbBoth.Checked || rdbMarketPrice.Checked) && errorFlag == false)
+                {
+                    txtBoxMarketValuesWebSite.Focus();
+
+                    Helper.AddStatusMessage(editShareStatusLabelMessage,
+                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/MarketValuesWebSiteEmpty", SettingsConfiguration.LanguageName),
                         Language, SettingsConfiguration.LanguageName,
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                     
                     errorFlag = true;
                 }
-                else if ((rdbBoth.Checked || rdbMarketPrice.Checked) && !Helper.UrlChecker(ref decodedUrlWebSite, 10000))
+                else if ((rdbBoth.Checked || rdbMarketPrice.Checked) && !Helper.UrlChecker(ref decodedUrlMarketValuesWebSite, 10000))
                 {
-                    txtBoxWebSite.Focus();
+                    txtBoxMarketValuesWebSite.Focus();
                     
                     Helper.AddStatusMessage(editShareStatusLabelMessage,
-                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteWrongFormat", SettingsConfiguration.LanguageName),
+                        Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/MarketValuesWebSiteWrongFormat", SettingsConfiguration.LanguageName),
                         Language, SettingsConfiguration.LanguageName,
                         Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                     
@@ -459,16 +550,16 @@ namespace SharePortfolioManager
                     // Check if a market value share with the given website already exists
                     foreach (var shareObjectMarketValue in ParentWindow.ShareObjectListMarketValue)
                     {
-                        if (txtBoxWebSite.Text == @"" ||
-                            shareObjectMarketValue.UpdateWebSiteUrl != txtBoxWebSite.Text ||
+                        if (txtBoxMarketValuesWebSite.Text == @"" ||
+                            shareObjectMarketValue.MarketValuesUpdateWebSiteUrl != txtBoxMarketValuesWebSite.Text ||
                             shareObjectMarketValue == ShareObjectMarketValue) continue;
 
                         errorFlag = true;
                         StopFomClosingFlag = true;
-                        txtBoxWebSite.Focus();
+                        txtBoxMarketValuesWebSite.Focus();
 
                         Helper.AddStatusMessage(editShareStatusLabelMessage,
-                            Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteExists", SettingsConfiguration.LanguageName),
+                            Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/MarketValuesWebSiteExists", SettingsConfiguration.LanguageName),
                             Language, SettingsConfiguration.LanguageName,
                             Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                         
@@ -480,16 +571,16 @@ namespace SharePortfolioManager
                         // Check if a final value share with the given website already exists
                         foreach (var shareObjectFinalValue in ParentWindow.ShareObjectListFinalValue)
                         {
-                            if (txtBoxWebSite.Text == @"" ||
-                                shareObjectFinalValue.UpdateWebSiteUrl != txtBoxWebSite.Text ||
+                            if (txtBoxMarketValuesWebSite.Text == @"" ||
+                                shareObjectFinalValue.MarketValuesUpdateWebSiteUrl != txtBoxMarketValuesWebSite.Text ||
                                 shareObjectFinalValue == ShareObjectFinalValue) continue;
 
                             errorFlag = true;
                             StopFomClosingFlag = true;
-                            txtBoxWebSite.Focus();
+                            txtBoxMarketValuesWebSite.Focus();
                         
                             Helper.AddStatusMessage(editShareStatusLabelMessage,
-                                Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/WebSiteExists", SettingsConfiguration.LanguageName),
+                                Language.GetLanguageTextByXPath(@"/EditFormShare/Errors/MarketValuesWebSiteExists", SettingsConfiguration.LanguageName),
                                 Language, SettingsConfiguration.LanguageName,
                                 Color.Red, Logger, (int)FrmMain.EStateLevels.Error, (int)FrmMain.EComponentLevels.Application);
                             
@@ -526,7 +617,7 @@ namespace SharePortfolioManager
                     // Check if a market value share with the given daily values website already exists
                     foreach (var shareObjectMarketValue in ParentWindow.ShareObjectListMarketValue)
                     {
-                        if (txtBoxWebSite.Text == @"" ||
+                        if (txtBoxMarketValuesWebSite.Text == @"" ||
                             shareObjectMarketValue.DailyValuesUpdateWebSiteUrl != txtBoxDailyValuesWebSite.Text ||
                             shareObjectMarketValue == ShareObjectMarketValue) continue;
 
@@ -547,7 +638,7 @@ namespace SharePortfolioManager
                         // Check if a final value share with the given daily values website already exists
                         foreach (var shareObjectFinalValue in ParentWindow.ShareObjectListFinalValue)
                         {
-                            if (txtBoxWebSite.Text == @"" ||
+                            if (txtBoxMarketValuesWebSite.Text == @"" ||
                                 shareObjectFinalValue.DailyValuesUpdateWebSiteUrl != txtBoxDailyValuesWebSite.Text ||
                                 shareObjectFinalValue == ShareObjectFinalValue) continue;
 
@@ -567,7 +658,7 @@ namespace SharePortfolioManager
 
                 if (errorFlag) return;
 
-                txtBoxWebSite.Text = decodedUrlWebSite;
+                txtBoxMarketValuesWebSite.Text = decodedUrlMarketValuesWebSite;
                 txtBoxDailyValuesWebSite.Text = Helper.RegexReplaceStartDateAndInterval(decodeUrlDailyValuesWebSite);
 
                 StopFomClosingFlag = false; 
@@ -591,7 +682,7 @@ namespace SharePortfolioManager
                 if (rdbNone.Checked)
                     ShareObjectMarketValue.InternetUpdateOption = ShareObject.ShareUpdateTypes.None;
 
-                ShareObjectMarketValue.UpdateWebSiteUrl = txtBoxWebSite.Text;
+                ShareObjectMarketValue.MarketValuesUpdateWebSiteUrl = txtBoxMarketValuesWebSite.Text;
                 ShareObjectMarketValue.DailyValuesUpdateWebSiteUrl = txtBoxDailyValuesWebSite.Text;
                 ShareObjectMarketValue.CultureInfo = cultureInfo;
                 ShareObjectMarketValue.ShareType = (ShareObject.ShareTypes)cbxShareType.SelectedIndex;
@@ -612,7 +703,7 @@ namespace SharePortfolioManager
                 if (rdbNone.Checked)
                     ShareObjectFinalValue.InternetUpdateOption = ShareObject.ShareUpdateTypes.None;
 
-                ShareObjectFinalValue.UpdateWebSiteUrl = txtBoxWebSite.Text;
+                ShareObjectFinalValue.MarketValuesUpdateWebSiteUrl = txtBoxMarketValuesWebSite.Text;
                 ShareObjectFinalValue.DailyValuesUpdateWebSiteUrl = txtBoxDailyValuesWebSite.Text;
                 ShareObjectFinalValue.CultureInfo = cultureInfo;
                 ShareObjectFinalValue.DividendPayoutInterval = cbxDividendPayoutInterval.SelectedIndex;

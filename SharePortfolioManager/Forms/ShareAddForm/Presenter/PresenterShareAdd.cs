@@ -62,7 +62,8 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
             _view.Wkn = _model.Wkn;
             _view.ShareName = _model.Name;
             _view.StockMarketLaunchDate = _model.StockMarketLaunchDate;
-            _view.WebSite = _model.WebSite;
+            _view.DetailsWebSite = _model.DetailsWebSite;
+            _view.MarketValuesWebSite = _model.MarketValuesWebSite;
             _view.DailyValuesWebSite = _model.DailyValuesWebSite;
             _view.Date = _model.Date;
             _view.Time = _model.Time;
@@ -116,7 +117,8 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
             _model.ShareType = _view.ShareType;
             _model.DividendPayoutInterval = _view.DividendPayoutInterval;
             _model.CultureInfo = _view.CultureInfo;
-            _model.WebSite = _view.WebSite;
+            _model.DetailsWebSite = _view.DetailsWebSite;
+            _model.MarketValuesWebSite = _view.MarketValuesWebSite;
             _model.DailyValuesWebSite = _view.DailyValuesWebSite;
             _model.Date = _view.Date;
             _model.Time = _view.Time;
@@ -207,8 +209,11 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                         _model.BrokerFeeDec,
                         _model.TraderPlaceFeeDec,
                         _model.ReductionDec,
-                        _model.WebSite,
+                        _model.DetailsWebSite,
+                        _model.MarketValuesWebSite,
+                        _model.MarketValuesParsingOption,
                         _model.DailyValuesWebSite,
+                        _model.DailyValuesParsingOption,
                         _model.ImageListPrevDayPerformance,
                         _model.ImageListCompletePerformance,
                         null,
@@ -238,8 +243,11 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                         _model.BrokerFeeDec,
                         _model.TraderPlaceFeeDec,
                         _model.ReductionDec,
-                        _model.WebSite,
+                        _model.DetailsWebSite,
+                        _model.MarketValuesWebSite,
+                        _model.MarketValuesParsingOption,
                         _model.DailyValuesWebSite,
+                        _model.DailyValuesParsingOption,
                         _model.ImageListPrevDayPerformance,
                         _model.ImageListCompletePerformance,
                         null,
@@ -276,8 +284,11 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                         _model.BrokerFeeDec,
                         _model.TraderPlaceFeeDec,
                         _model.ReductionDec,
-                        _model.WebSite,
+                        _model.DetailsWebSite,
+                        _model.MarketValuesWebSite,
+                        _model.MarketValuesParsingOption,
                         _model.DailyValuesWebSite,
+                        _model.DailyValuesParsingOption,
                         _model.ImageListPrevDayPerformance,
                         _model.ImageListCompletePerformance,
                         null,
@@ -304,8 +315,11 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                         _model.BrokerFeeDec,
                         _model.TraderPlaceFeeDec,
                         _model.ReductionDec,
-                        _model.WebSite,
+                        _model.DetailsWebSite,
+                        _model.MarketValuesWebSite,
+                        _model.MarketValuesParsingOption,
                         _model.DailyValuesWebSite,
+                        _model.DailyValuesParsingOption,
                         _model.ImageListPrevDayPerformance,
                         _model.ImageListCompletePerformance,
                         null,
@@ -414,7 +428,8 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
         private bool CheckInputValues()
         {
             var bErrorFlag = false;
-            var decodedUrlWebSite = _model.WebSite;
+            var decodedUrlDetailsWebSite = _model.DetailsWebSite;
+            var decodedUrlMarketValuesWebSite = _model.MarketValuesWebSite;
             var decodeUrlDailyValuesWebSite = Helper.RegexReplaceStartDateAndInterval(_model.DailyValuesWebSite);
 
             _model.ErrorCode = ShareAddErrorCode.AddSuccessful;
@@ -497,29 +512,29 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                 bErrorFlag = true;
             }
 
-            // Check website input
-            if (_model.WebSite == @"" && bErrorFlag == false)
+            // Check details website input
+            if (_model.DetailsWebSite == @"" && bErrorFlag == false)
             {
-                _model.ErrorCode = ShareAddErrorCode.WebSiteEmpty;
+                _model.ErrorCode = ShareAddErrorCode.DetailsWebSiteEmpty;
                 bErrorFlag = true;
             }
-            // Check website format
-            else if (bErrorFlag == false && !Helper.UrlChecker(ref decodedUrlWebSite, 10000))
+            // Check details website format
+            else if (bErrorFlag == false && !Helper.UrlChecker(ref decodedUrlDetailsWebSite, 10000))
             {
-                _model.ErrorCode = ShareAddErrorCode.WebSiteWrongFormat;
+                _model.ErrorCode = ShareAddErrorCode.DetailsWebSiteWrongFormat;
                 bErrorFlag = true;
             }
-            // Check if the website is already used
+            // Check if the details website is already used
             else if (bErrorFlag == false)
             {
 
                 // Check if a market value share with the given website already exists
                 foreach (var shareObjectMarketValue in _model.ShareObjectListMarketValue)
                 {
-                    if (shareObjectMarketValue.UpdateWebSiteUrl != _model.WebSite ||
+                    if (shareObjectMarketValue.DetailsWebSiteUrl != _model.DetailsWebSite ||
                         shareObjectMarketValue == _model.ShareObjectMarketValue) continue;
 
-                    _model.ErrorCode = ShareAddErrorCode.WebSiteExists;
+                    _model.ErrorCode = ShareAddErrorCode.DetailsWebSiteExists;
                     bErrorFlag = true;
                     break;
                 }
@@ -529,10 +544,51 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                     // Check if a final value share with the given website already exists
                     foreach (var shareObjectFinalValue in _model.ShareObjectListFinalValue)
                     {
-                        if (shareObjectFinalValue.UpdateWebSiteUrl != _model.WebSite ||
+                        if (shareObjectFinalValue.DetailsWebSiteUrl != _model.DetailsWebSite ||
                             shareObjectFinalValue == _model.ShareObjectFinalValue) continue;
 
-                        _model.ErrorCode = ShareAddErrorCode.WebSiteExists;
+                        _model.ErrorCode = ShareAddErrorCode.DetailsWebSiteExists;
+                        bErrorFlag = true;
+                        break;
+                    }
+                }
+            }
+            // Check market values website input
+            if (_model.MarketValuesWebSite == @"" && bErrorFlag == false)
+            {
+                _model.ErrorCode = ShareAddErrorCode.MarketValuesWebSiteEmpty;
+                bErrorFlag = true;
+            }
+            // Check market values website format
+            else if (bErrorFlag == false && !Helper.UrlChecker(ref decodedUrlMarketValuesWebSite, 10000))
+            {
+                _model.ErrorCode = ShareAddErrorCode.MarketWebSiteWrongFormat;
+                bErrorFlag = true;
+            }
+            // Check if the market values website is already used
+            else if (bErrorFlag == false)
+            {
+
+                // Check if a market value share with the given website already exists
+                foreach (var shareObjectMarketValue in _model.ShareObjectListMarketValue)
+                {
+                    if (shareObjectMarketValue.MarketValuesUpdateWebSiteUrl != _model.MarketValuesWebSite ||
+                        shareObjectMarketValue == _model.ShareObjectMarketValue) continue;
+
+                    _model.ErrorCode = ShareAddErrorCode.MarketWebSiteExists;
+                    bErrorFlag = true;
+                    break;
+                }
+
+                if (bErrorFlag == false)
+                {
+                    // Check if a final value share with the given website already exists
+                    foreach (var shareObjectFinalValue in _model.ShareObjectListFinalValue)
+                    {
+                        if (shareObjectFinalValue.MarketValuesUpdateWebSiteUrl != _model.MarketValuesWebSite ||
+                            shareObjectFinalValue == _model.ShareObjectFinalValue) continue;
+
+                        _model.ErrorCode = ShareAddErrorCode.MarketWebSiteExists;
                         bErrorFlag = true;
                         break;
                     }
@@ -541,7 +597,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
 
             // Check daily values website input
             var dummyDailyValues = new List<Parser.DailyValues>();
-            var dummyUrl = Helper.BuildDailyValuesUrl(dummyDailyValues, decodeUrlDailyValuesWebSite, _model.ShareType);
+            var dummyUrl = Helper.BuildDailyValuesUrl(dummyDailyValues, decodeUrlDailyValuesWebSite, _model.ShareType, _model.DailyValuesParsingOption);
             if (_model.DailyValuesWebSite == @"" && bErrorFlag == false)
             {
                 _model.ErrorCode = ShareAddErrorCode.DailyValuesWebSiteEmpty;
@@ -740,7 +796,8 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                 _model.ErrorCode = ShareAddErrorCode.DocumentFileDoesNotExists;
             }
 
-            _model.WebSite = decodedUrlWebSite;
+            _model.DetailsWebSite = decodedUrlDetailsWebSite;
+            _model.MarketValuesWebSite = decodedUrlMarketValuesWebSite;
             _model.DailyValuesWebSite = Helper.RegexReplaceStartDateAndInterval(decodeUrlDailyValuesWebSite);
 
             return bErrorFlag;

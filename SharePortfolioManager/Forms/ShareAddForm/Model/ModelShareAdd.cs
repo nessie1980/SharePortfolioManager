@@ -64,8 +64,11 @@ namespace SharePortfolioManager.ShareAddForm.Model
         ShareObject.ShareTypes ShareType { get; set; }
         int DividendPayoutInterval { get; set; }
         CultureInfo CultureInfo { get; set; }
-        string WebSite { get; set; }
+        string DetailsWebSite { get; set; }
+        string MarketValuesWebSite { get; set; }
+        ShareObject.ParsingTypes MarketValuesParsingOption { get; set; }
         string DailyValuesWebSite { get; set; }
+        ShareObject.ParsingTypes DailyValuesParsingOption { get; set; }
         string Date { get; set; }
         string Time { get; set; }
         string DepotNumber { get; set; }
@@ -111,8 +114,11 @@ namespace SharePortfolioManager.ShareAddForm.Model
         private ShareObject.ShareTypes _shareType;
         private int _dividendPayoutInterval;
         private CultureInfo _cultureInfo;
-        private string _webSite;
+        private string _detailsWebSite;
+        private string _marketValuesWebSite;
+        private ShareObject.ParsingTypes _marketValuesParsingOption;
         private string _dailyValuesWebSite;
+        private ShareObject.ParsingTypes _dailyValuesParsingOption;
         private string _date;
         private string _time;
         private string _depotNumber;
@@ -239,14 +245,36 @@ namespace SharePortfolioManager.ShareAddForm.Model
             }
         }
 
-        public string WebSite
+        public string DetailsWebSite
         {
-            get => _webSite;
+            get => _detailsWebSite;
             set
             {
-                if (Equals(_webSite, value))
+                if (Equals(_detailsWebSite, value))
                     return;
-                _webSite = value;
+                _detailsWebSite = value;
+            }
+        }
+
+        public string MarketValuesWebSite
+        {
+            get => _marketValuesWebSite;
+            set
+            {
+                if (Equals(_marketValuesWebSite, value))
+                    return;
+                _marketValuesWebSite = value;
+            }
+        }
+
+        public ShareObject.ParsingTypes MarketValuesParsingOption
+        {
+            get => _marketValuesParsingOption;
+            set
+            {
+                if (Equals(_marketValuesParsingOption, value))
+                    return;
+                _marketValuesParsingOption = value;
             }
         }
 
@@ -258,6 +286,17 @@ namespace SharePortfolioManager.ShareAddForm.Model
                 if (Equals(_dailyValuesWebSite, value))
                     return;
                 _dailyValuesWebSite = value;
+            }
+        }
+
+        public ShareObject.ParsingTypes DailyValuesParsingOption
+        {
+            get => _dailyValuesParsingOption;
+            set
+            {
+                if (Equals(_dailyValuesParsingOption, value))
+                    return;
+                _dailyValuesParsingOption = value;
             }
         }
 

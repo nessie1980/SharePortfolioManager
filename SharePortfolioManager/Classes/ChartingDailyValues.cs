@@ -443,9 +443,9 @@ namespace SharePortfolioManager.Classes
                         // Legend second cell creation
                         var secondCellChart = new LegendCell(LegendCellType.Text,
                         string.Format(_language.GetLanguageTextByXPath(@"/Chart/Legend/ClosingPrice", _languageName) + "( " + _shareObjectFinalValue.CurrencyUnit + " )\n" +
-                                      _language.GetLanguageTextByXPath(@"/Chart/ToolTip/Minimum", _languageName) +
+                                      _language.GetLanguageTextByXPath(@"/Chart/Legend/Minimum", _languageName) +
                                       "{0} / " +
-                                      _language.GetLanguageTextByXPath(@"/Chart/ToolTip/Maximum", _languageName) +
+                                      _language.GetLanguageTextByXPath(@"/Chart/Legend/Maximum", _languageName) +
                                       "{1}", dailyValuesList.Aggregate((min, x) => x.ClosingPrice < min.ClosingPrice ? x : min).ClosingPrice, dailyValuesList.Aggregate((max, x) => x.ClosingPrice > max.ClosingPrice ? x : max).ClosingPrice),
                         ContentAlignment.MiddleLeft);
 
@@ -514,9 +514,9 @@ namespace SharePortfolioManager.Classes
                         // Legend second cell creation
                         var secondCell = new LegendCell(LegendCellType.Text,
                         string.Format(_language.GetLanguageTextByXPath(@"/Chart/Legend/OpeningPrice", _languageName) + "( " + _shareObjectFinalValue.CurrencyUnit + " )\n" +
-                                      _language.GetLanguageTextByXPath(@"/Chart/ToolTip/Minimum", _languageName) +
+                                      _language.GetLanguageTextByXPath(@"/Chart/Legend/Minimum", _languageName) +
                                       "{0} / " +
-                                      _language.GetLanguageTextByXPath(@"/Chart/ToolTip/Maximum", _languageName) +
+                                      _language.GetLanguageTextByXPath(@"/Chart/Legend/Maximum", _languageName) +
                                       "{1}", dailyValuesList.Aggregate((min, x) => x.OpeningPrice < min.OpeningPrice ? x : min).OpeningPrice, dailyValuesList.Aggregate((max, x) => x.OpeningPrice > max.OpeningPrice ? x : max).OpeningPrice),
                         ContentAlignment.MiddleLeft);
 
@@ -585,9 +585,9 @@ namespace SharePortfolioManager.Classes
                         // Legend second cell creation
                         var secondCell = new LegendCell(LegendCellType.Text,
                         string.Format(_language.GetLanguageTextByXPath(@"/Chart/Legend/Top", _languageName) + "( " + _shareObjectFinalValue.CurrencyUnit + " )\n" +
-                                      _language.GetLanguageTextByXPath(@"/Chart/ToolTip/Minimum", _languageName) +
+                                      _language.GetLanguageTextByXPath(@"/Chart/Legend/Minimum", _languageName) +
                                       "{0} / " +
-                                      _language.GetLanguageTextByXPath(@"/Chart/ToolTip/Maximum", _languageName) +
+                                      _language.GetLanguageTextByXPath(@"/Chart/Legend/Maximum", _languageName) +
                                       "{1}", dailyValuesList.Aggregate((min, x) => x.Top < min.Top ? x : min).Top, dailyValuesList.Aggregate((max, x) => x.Top > max.Top ? x : max).Top),
                         ContentAlignment.MiddleLeft);
 
@@ -656,9 +656,9 @@ namespace SharePortfolioManager.Classes
                         // Legend second cell creation
                         var secondCell = new LegendCell(LegendCellType.Text,
                         string.Format(_language.GetLanguageTextByXPath(@"/Chart/Legend/Bottom", _languageName) + "( " + _shareObjectFinalValue.CurrencyUnit + " )\n" +
-                                      _language.GetLanguageTextByXPath(@"/Chart/ToolTip/Minimum", _languageName) +
+                                      _language.GetLanguageTextByXPath(@"/Chart/Legend/Minimum", _languageName) +
                                       "{0} / " +
-                                      _language.GetLanguageTextByXPath(@"/Chart/ToolTip/Maximum", _languageName) +
+                                      _language.GetLanguageTextByXPath(@"/Chart/Legend/Maximum", _languageName) +
                                       "{1}", dailyValuesList.Aggregate((min, x) => x.Bottom < min.Bottom ? x : min).Bottom, dailyValuesList.Aggregate((max, x) => x.Bottom > max.Bottom ? x : max).Bottom),
                         ContentAlignment.MiddleLeft);
 
@@ -735,9 +735,9 @@ namespace SharePortfolioManager.Classes
                             // Legend second cell creation
                             var secondCell = new LegendCell(LegendCellType.Text,
                                 string.Format(_language.GetLanguageTextByXPath(@"/Chart/Legend/Volume", _languageName) + "( " + ShareObject.PieceUnit + " )\n" +
-                                              _language.GetLanguageTextByXPath(@"/Chart/ToolTip/Minimum", _languageName) +
+                                              _language.GetLanguageTextByXPath(@"/Chart/Legend/Minimum", _languageName) +
                                               "{0} / " +
-                                              _language.GetLanguageTextByXPath(@"/Chart/ToolTip/Maximum", _languageName) +
+                                              _language.GetLanguageTextByXPath(@"/Chart/Legend/Maximum", _languageName) +
                                               "{1}", dailyValuesList.Aggregate((min, x) => x.Volume < min.Volume ? x : min).Volume, dailyValuesList.Aggregate((max, x) => x.Volume > max.Volume ? x : max).Volume),
                                 ContentAlignment.MiddleLeft);
 
@@ -801,9 +801,9 @@ namespace SharePortfolioManager.Classes
                             // Legend second cell creation
                             var secondCell = new LegendCell(LegendCellType.Text,
                                 string.Format(_language.GetLanguageTextByXPath(@"/Chart/Legend/Volume", _languageName) + "( " + ShareObject.PieceUnit + " )\n" +
-                                              _language.GetLanguageTextByXPath(@"/Chart/ToolTip/Minimum", _languageName) +
+                                              _language.GetLanguageTextByXPath(@"/Chart/Legend/Minimum", _languageName) +
                                               "{0} / " +
-                                              _language.GetLanguageTextByXPath(@"/Chart/ToolTip/Maximum", _languageName) +
+                                              _language.GetLanguageTextByXPath(@"/Chart/Legend/Maximum", _languageName) +
                                               "{1}", dailyValuesList.Aggregate((min, x) => x.Volume < min.Volume ? x : min).Volume, dailyValuesList.Aggregate((max, x) => x.Volume > max.Volume ? x : max).Volume),
                                 ContentAlignment.MiddleLeft);
 
