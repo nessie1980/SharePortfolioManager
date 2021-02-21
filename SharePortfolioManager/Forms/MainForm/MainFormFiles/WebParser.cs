@@ -541,6 +541,7 @@ namespace SharePortfolioManager
                             {
                                 var ci = new RegionInfo(ShareObjectFinalValue.CultureInfo.LCID);
 
+                                // Check if the parsed value have the right currency
                                 if (e.ParserInfoState.SearchResult.ContainsKey("Currency") &&
                                     e.ParserInfoState.SearchResult["Currency"][0] == ci.ISOCurrencySymbol)
                                 {
@@ -679,13 +680,72 @@ namespace SharePortfolioManager
                                     )
                                 )
                                 {
-                                    if (SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1)
+                                    var openUpdates = false;
+                                    Console.WriteLine(@"SelectedDataGridViewShareIndex: {0}", SelectedDataGridViewShareIndex);
+
+                                        // Check if in the next shares still is a share which should be updated
+                                        for (var i = SelectedDataGridViewShareIndex + 1; i < ShareObject.ObjectCounter; i++)
+                                    {
+                                        if (ShareObjectListFinalValue[i].InternetUpdateOption !=
+                                            ShareObject.ShareUpdateTypes.None)
+                                            openUpdates = true;
+                                    }
+
+                                    Console.WriteLine(@"OpenUpdate: {0}", openUpdates);
+
+                                    // Start next share update if still shares exists which must be updated
+                                    if (SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1 && openUpdates)
                                         timerStartNextShareUpdate.Enabled = true;
 
-                                    if (SelectedDataGridViewShareIndex == ShareObject.ObjectCounter - 1)
+                                    // Do not start the next share update because the last share has been reached
+                                    if (SelectedDataGridViewShareIndex == ShareObject.ObjectCounter - 1 || !openUpdates)
                                     {
                                         Sound.PlayUpdateFinishedSound();
-    
+
+                                        // Check which share overview is selected
+                                        if (MarketValueOverviewTabSelected)
+                                        {
+                                            // This is done for the data grid view scrolling
+                                            // Clear current selection
+                                            dgvPortfolioMarketValue.ClearSelection();
+
+                                            if (ShareObject.ObjectCounter > 1)
+                                            {
+                                                SelectedDataGridViewShareIndex--;
+
+                                                // Scroll to the selected row
+                                                Helper.ScrollDgvToIndex(dgvPortfolioMarketValue,
+                                                    SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
+
+                                                SelectedDataGridViewShareIndex++;
+                                            }
+
+                                            // Select the new share update
+                                            dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected =
+                                                true;
+                                        }
+                                        else
+                                        {
+                                            // This is done for the data grid view scrolling
+                                            // Clear current selection
+                                            dgvPortfolioFinalValue.ClearSelection();
+
+                                            if (ShareObject.ObjectCounter > 1)
+                                            {
+                                                SelectedDataGridViewShareIndex--;
+
+                                                // Scroll to the selected row
+                                                Helper.ScrollDgvToIndex(dgvPortfolioFinalValue,
+                                                    SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
+
+                                                SelectedDataGridViewShareIndex++;
+                                            }
+
+                                            // Select the new share update
+                                            dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected =
+                                                true;
+                                        }
+
                                         timerStatusMessageClear.Enabled = true;
                                     }
                                 }
@@ -920,6 +980,8 @@ namespace SharePortfolioManager
                     {
                         UpdateAllFlag = false;
 
+                        var shareUpdateTypes = ShareObject.ShareUpdateTypes.None;
+
                         if (MarketValueOverviewTabSelected)
                         {
                             dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
@@ -933,6 +995,9 @@ namespace SharePortfolioManager
                             // Scroll to the selected row
                             Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex,
                                 LastFirstDisplayedRowIndex, true);
+
+                            if (ShareObjectMarketValue != null)
+                                shareUpdateTypes = ShareObjectMarketValue.InternetUpdateOption;
                         }
                         else
                         {
@@ -943,11 +1008,18 @@ namespace SharePortfolioManager
                                 LastFirstDisplayedRowIndex, true);
 
                             dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+
+                            if (ShareObjectFinalValue != null)
+                                shareUpdateTypes = ShareObjectFinalValue.InternetUpdateOption;
                         }
 
+                        // Check if the daily values parser has finished his work or has no error so far
                         if (
-                            (ParserDailyValues.ParserErrorCode == DataTypes.ParserErrorCodes.Finished ||
-                             ParserDailyValues.ParserErrorCode < DataTypes.ParserErrorCodes.NoError
+                            (
+                                shareUpdateTypes == ShareObject.ShareUpdateTypes.Both ||
+                                shareUpdateTypes == ShareObject.ShareUpdateTypes.MarketPrice ||
+                                ParserDailyValues.ParserErrorCode == DataTypes.ParserErrorCodes.Finished ||
+                                ParserDailyValues.ParserErrorCode < DataTypes.ParserErrorCodes.NoError
                              )
                             &&
                             ParserMarketValues.ParserErrorCode <= DataTypes.ParserErrorCodes.NoError
@@ -1076,30 +1148,70 @@ namespace SharePortfolioManager
                                     )
                                 )
                                 {
-                                    if (SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1)
+                                    var openUpdates = false;
+                                    Console.WriteLine(@"SelectedDataGridViewShareIndex: {0}", SelectedDataGridViewShareIndex);
+
+                                    // Check if in the next shares still is a share which should be updated
+                                    for (var i = SelectedDataGridViewShareIndex + 1; i < ShareObject.ObjectCounter; i++)
+                                    {
+                                        if (ShareObjectListFinalValue[i].InternetUpdateOption !=
+                                            ShareObject.ShareUpdateTypes.None)
+                                            openUpdates = true;
+                                    }
+
+                                    Console.WriteLine(@"OpenUpdate: {0}", openUpdates);
+
+                                    // Start next share update if still shares exists which must be updated
+                                    if (SelectedDataGridViewShareIndex < ShareObject.ObjectCounter - 1 && openUpdates)
                                         timerStartNextShareUpdate.Enabled = true;
 
-                                    if (SelectedDataGridViewShareIndex == ShareObject.ObjectCounter - 1)
+                                    if (SelectedDataGridViewShareIndex == ShareObject.ObjectCounter - 1 || !openUpdates)
                                     {
                                         Sound.PlayUpdateFinishedSound();
 
-                                        // This is done for the data grid view scrolling
-                                        // Clear current selection
-                                        dgvPortfolioMarketValue.ClearSelection();
-
-                                        if (ShareObject.ObjectCounter > 1)
+                                        // Check which share overview is selected
+                                        if (MarketValueOverviewTabSelected)
                                         {
-                                            SelectedDataGridViewShareIndex--;
+                                            // This is done for the data grid view scrolling
+                                            // Clear current selection
+                                            dgvPortfolioMarketValue.ClearSelection();
 
-                                            // Scroll to the selected row
-                                            Helper.ScrollDgvToIndex(dgvPortfolioFinalValue,
-                                                SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
+                                            if (ShareObject.ObjectCounter > 1)
+                                            {
+                                                SelectedDataGridViewShareIndex--;
 
-                                            SelectedDataGridViewShareIndex++;
+                                                // Scroll to the selected row
+                                                Helper.ScrollDgvToIndex(dgvPortfolioMarketValue,
+                                                    SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
+
+                                                SelectedDataGridViewShareIndex++;
+                                            }
+
+                                            // Select the new share update
+                                            dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected =
+                                                true;
                                         }
+                                        else
+                                        {
+                                            // This is done for the data grid view scrolling
+                                            // Clear current selection
+                                            dgvPortfolioFinalValue.ClearSelection();
 
-                                        // Select the new share update
-                                        dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
+                                            if (ShareObject.ObjectCounter > 1)
+                                            {
+                                                SelectedDataGridViewShareIndex--;
+
+                                                // Scroll to the selected row
+                                                Helper.ScrollDgvToIndex(dgvPortfolioFinalValue,
+                                                    SelectedDataGridViewShareIndex, LastFirstDisplayedRowIndex);
+
+                                                SelectedDataGridViewShareIndex++;
+                                            }
+
+                                            // Select the new share update
+                                            dgvPortfolioFinalValue.Rows[SelectedDataGridViewShareIndex].Selected =
+                                                true;
+                                        }
 
                                         timerStatusMessageClear.Enabled = true;
                                     }
@@ -1335,6 +1447,8 @@ namespace SharePortfolioManager
                     {
                         UpdateAllFlag = false;
 
+                        var shareUpdateTypes = ShareObject.ShareUpdateTypes.None;
+
                         if (MarketValueOverviewTabSelected)
                         {
                             dgvPortfolioMarketValue.Rows[SelectedDataGridViewShareIndex].Selected = true;
@@ -1348,6 +1462,9 @@ namespace SharePortfolioManager
                             // Scroll to the selected row
                             Helper.ScrollDgvToIndex(dgvPortfolioMarketValue, SelectedDataGridViewShareIndex,
                                 LastFirstDisplayedRowIndex, true);
+
+                            if (ShareObjectMarketValue != null)
+                                shareUpdateTypes = ShareObjectMarketValue.InternetUpdateOption;
                         }
                         else
                         {
@@ -1362,11 +1479,17 @@ namespace SharePortfolioManager
                             // Scroll to the selected row
                             Helper.ScrollDgvToIndex(dgvPortfolioFinalValue, SelectedDataGridViewShareIndex,
                                 LastFirstDisplayedRowIndex, true);
+
+                            if (ShareObjectFinalValue != null)
+                                shareUpdateTypes = ShareObjectFinalValue.InternetUpdateOption;
                         }
 
-                        if ((
-                            ParserMarketValues.ParserErrorCode == DataTypes.ParserErrorCodes.Finished ||
-                            ParserMarketValues.ParserErrorCode < DataTypes.ParserErrorCodes.NoError
+                        if (
+                            (
+                                shareUpdateTypes == ShareObject.ShareUpdateTypes.Both ||
+                                shareUpdateTypes == ShareObject.ShareUpdateTypes.DailyValues ||
+                                ParserMarketValues.ParserErrorCode == DataTypes.ParserErrorCodes.Finished ||
+                                ParserMarketValues.ParserErrorCode < DataTypes.ParserErrorCodes.NoError
                             )
                             &&
                             ParserDailyValues.ParserErrorCode <= DataTypes.ParserErrorCodes.NoError
