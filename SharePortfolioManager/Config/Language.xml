@@ -109,6 +109,7 @@
 			<GrpBoxPortfolio>
 				<Caption text="Portfolio overview" />
 				<Entries text="Entries" />
+				<LastUpdate text="Last update:" />
 
 				<!-- TabControl with share overviews -->
 				<TabCtrlShareOverviews>
@@ -1694,6 +1695,7 @@
 			<GrpBoxPortfolio>
 				<Caption text="Portfolio- Übersicht" />
 				<Entries text="Einträge" />
+				<LastUpdate text="Letzte Aktualisierung:" />
 
 				<!-- TabControl with share overviews -->
 				<TabCtrlShareOverviews>

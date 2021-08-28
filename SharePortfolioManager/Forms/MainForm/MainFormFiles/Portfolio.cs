@@ -498,7 +498,9 @@ namespace SharePortfolioManager
                     @" ( " +
                     LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Entries", SettingsConfiguration.LanguageName) +
                     @": " +
-                    ShareObjectListFinalValue.Count + @" )";
+                    ShareObjectListFinalValue.Count + @" ) / " +
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/LastUpdate", SettingsConfiguration.LanguageName) +
+                    Helper.GetLastShareUpdate(ShareObjectListFinalValue);
 
 #if DEBUG_SHARE_PORTFOLIO
                 Console.WriteLine(@"");

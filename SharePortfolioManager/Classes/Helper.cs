@@ -1624,6 +1624,19 @@ namespace SharePortfolioManager.Classes
             return monthsDiff - 1;
         }
 
+        public static string GetLastShareUpdate(List<ShareObjectFinalValue> listShareObjectFinalValues)
+        {
+            DateTime lastUpdateTime = default;
+
+            foreach (var listShareObjectFinalValue in listShareObjectFinalValues)
+            {
+                if (listShareObjectFinalValue.LastUpdateViaInternet > lastUpdateTime)
+                    lastUpdateTime = listShareObjectFinalValue.LastUpdateViaInternet;
+            }
+
+            return lastUpdateTime.ToShortDateString() + " " + lastUpdateTime.ToShortTimeString();
+        }
+
         #endregion Time function
 
         #endregion Methods
