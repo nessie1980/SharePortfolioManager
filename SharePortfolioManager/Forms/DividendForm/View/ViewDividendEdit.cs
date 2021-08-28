@@ -2132,11 +2132,14 @@ namespace SharePortfolioManager.DividendForm.View
                     #region Events
 
                     // Set the delegate for the DataBindingComplete event
-                    dataGridViewDividendsOfAYear.DataBindingComplete += OnDataGridViewDividends_DataBindingComplete;
+                    dataGridViewDividendsOfAYear.DataBindingComplete +=
+                        OnDataGridViewDividends_DataBindingComplete;
                     // Set the delegate for the mouse enter event
-                    dataGridViewDividendsOfAYear.MouseEnter += OnDataGridViewDividendsOfAYear_MouseEnter;
+                    dataGridViewDividendsOfAYear.MouseEnter +=
+                        OnDataGridViewDividendsOfAYear_MouseEnter;
                     // Set row select event
-                    dataGridViewDividendsOfAYear.SelectionChanged += DataGridViewDividendsOfAYear_SelectionChanged;
+                    dataGridViewDividendsOfAYear.SelectionChanged +=
+                        DataGridViewDividendsOfAYear_SelectionChanged;
 
                     #endregion Events
 
@@ -2176,7 +2179,7 @@ namespace SharePortfolioManager.DividendForm.View
                     ex);
             }
         }
-
+        
         /// <summary>
         /// This function deselects the select row after the DataBinding is complete
         /// </summary>
@@ -2400,7 +2403,7 @@ namespace SharePortfolioManager.DividendForm.View
                     #endregion Column size footer
 
                     // Get culture info
-                    var cultureInfo = ShareObjectFinalValue.AllBuyEntries.BuyCultureInfo;
+                    var cultureInfo = ShareObjectFinalValue.AllDividendEntries.DividendCultureInfo;
 
                     #region Payout
 

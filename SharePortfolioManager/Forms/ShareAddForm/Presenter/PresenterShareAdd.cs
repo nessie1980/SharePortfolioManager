@@ -119,7 +119,9 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
             _model.CultureInfo = _view.CultureInfo;
             _model.DetailsWebSite = _view.DetailsWebSite;
             _model.MarketValuesWebSite = _view.MarketValuesWebSite;
+            _model.MarketValuesParsingOption = _view.MarketValuesParsingOption;
             _model.DailyValuesWebSite = _view.DailyValuesWebSite;
+            _model.DailyValuesParsingOption = _view.DailyValuesParsingOption;
             _model.Date = _view.Date;
             _model.Time = _view.Time;
             _model.DepotNumber = _view.DepotNumber;
@@ -259,8 +261,8 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                 };
 
                 // Check if for the given shares a website configuration exists
-                if (tempShareObjectMarketValue[0].SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList) &&
-                    tempShareObjectFinalValue[0].SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList)
+                if (tempShareObjectMarketValue[0].SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList, _model.MarketValuesParsingOption) &&
+                    tempShareObjectFinalValue[0].SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList, _model.MarketValuesParsingOption)
                 )
                 {
                     // Generate Guid
@@ -331,13 +333,13 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
 
                     // Set parsing expression to the market value share list
                     _model.ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1]
-                        .SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList);
+                        .SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList, _model.MarketValuesParsingOption);
                     _model.ShareObjectMarketValue =
                         _model.ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1];
 
                     // Set parsing expression to the  final value share list
                     _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1]
-                        .SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList);
+                        .SetWebSiteRegexListAndEncoding(_model.WebSiteRegexList, _model.MarketValuesParsingOption);
                     _model.ShareObjectFinalValue =
                         _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1];
 
@@ -361,12 +363,12 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                     _model.ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1]
                         .WebSiteConfigurationFound = _model
                         .ShareObjectListFinalValue[_model.ShareObjectListFinalValue.Count - 1]
-                        .SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList);
+                        .SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList, _model.MarketValuesParsingOption);
 
                     _model.ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1]
                         .WebSiteConfigurationFound = _model
                         .ShareObjectListMarketValue[_model.ShareObjectListMarketValue.Count - 1]
-                        .SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList);
+                        .SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList, _model.MarketValuesParsingOption);
 
                     // Sort portfolio list in order of the share names
                     _model.ShareObjectListMarketValue.Sort(new ShareObjectListComparer());

@@ -1125,7 +1125,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="marketValuesWebSite">Website for the market values update</param>
         /// <param name="marketValuesParsingOption">Parsing option for the market values (e.g Regex / API)</param>
         /// <param name="dailyValuesWebSite">WebSite for the daily values update</param>
-        /// <param name="detailsValuesParsingOption">Parsing option for the daily values (e.g Regex / API)</param>
+        /// <param name="dailyValuesParsingOption">Parsing option for the daily values (e.g Regex / API)</param>
         /// <param name="imageListForDayBeforePerformance">Images for the prev day performance indication</param>
         /// <param name="imageListForCompletePerformance">Images for the complete performance indication</param>
         /// <param name="regexList">RegEx list for the share</param>
@@ -1136,7 +1136,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             DateTime lastUpdateInternet, DateTime lastUpdateShare,
             decimal price, string detailsWebSite,
             string marketValuesWebSite, ParsingTypes marketValuesParsingOption,
-            string dailyValuesWebSite, ParsingTypes detailsValuesParsingOption,
+            string dailyValuesWebSite, ParsingTypes dailyValuesParsingOption,
             List<Image> imageListForDayBeforePerformance, List<Image> imageListForCompletePerformance,
             Parser.RegExList regexList, CultureInfo cultureInfo,
             ShareTypes shareType)
@@ -1153,7 +1153,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
             MarketValuesUpdateWebSiteUrl = marketValuesWebSite;
             MarketValuesParsingOption = marketValuesParsingOption;
             DailyValuesUpdateWebSiteUrl = dailyValuesWebSite;
-            DailyValuesParsingOption = DailyValuesParsingOption;
+            DailyValuesParsingOption = dailyValuesParsingOption;
             ImageListPrevDayPerformance = imageListForDayBeforePerformance;
             ImageListCompleteProfitLossPerformance = imageListForCompletePerformance;
             ImagePrevDayPerformance = ImageListPrevDayPerformance[0];
@@ -1331,23 +1331,32 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Also set the website encoding.
         /// </summary>
         /// <param name="webSiteRegexList">List of the websites and their RegEx list</param>
+        /// <param name="parsingType">Type of the parsing (Regex / API)</param>
         /// <returns>Flag if a website configuration for share exists</returns>
-        public bool SetWebSiteRegexListAndEncoding(List<WebSiteRegex> webSiteRegexList)
+        public bool SetWebSiteRegexListAndEncoding(List<WebSiteRegex> webSiteRegexList, ParsingTypes parsingType)
         {
             // Flag if the website of the current share exists in the website configuration list
             var bRegexFound = false;
 
-            // Loop through the given website configuration list
-            foreach (var webSiteRegexElement in webSiteRegexList)
+            if (parsingType == ParsingTypes.Api)
             {
-                // Check if the current share object use the current website configuration
-                if (!MarketValuesUpdateWebSiteUrl.Contains(webSiteRegexElement.WebSiteName)) continue;
-
-                // Set the website configuration to the share object
-                RegexList = webSiteRegexElement.WebSiteRegexList;
-                WebSiteEncodingType = webSiteRegexElement.WebSiteEncodingType;
                 bRegexFound = true;
-                break;
+
+            }
+            else
+            {
+                // Loop through the given website configuration list
+                foreach (var webSiteRegexElement in webSiteRegexList)
+                {
+                    // Check if the current share object use the current website configuration
+                    if (!MarketValuesUpdateWebSiteUrl.Contains(webSiteRegexElement.WebSiteName)) continue;
+
+                    // Set the website configuration to the share object
+                    RegexList = webSiteRegexElement.WebSiteRegexList;
+                    WebSiteEncodingType = webSiteRegexElement.WebSiteEncodingType;
+                    bRegexFound = true;
+                    break;
+                }
             }
 
             return bRegexFound;

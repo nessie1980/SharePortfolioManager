@@ -1496,8 +1496,11 @@ namespace SharePortfolioManager
                                 // Set website configuration and encoding to the share object.
                                 // The encoding is necessary for the Parser for encoding the download result.
                                 if (!ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
-                                    .SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList) &&
-                                    ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].MarketValuesParsingOption == ShareObject.ParsingTypes.Regex)
+                                    .SetWebSiteRegexListAndEncoding(
+                                        WebSiteConfiguration.WebSiteRegexList,
+                                        ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].MarketValuesParsingOption
+                                        )
+                                    )
                                 {
                                     var newItem = new InvalidRegexConfigurations(id)
                                     {
@@ -1523,8 +1526,10 @@ namespace SharePortfolioManager
                                         .WebSiteConfigurationFound = true;
 
                                 if (!ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
-                                    .SetWebSiteRegexListAndEncoding(WebSiteConfiguration.WebSiteRegexList) &&
-                                    ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].MarketValuesParsingOption == ShareObject.ParsingTypes.Regex
+                                    .SetWebSiteRegexListAndEncoding(
+                                        WebSiteConfiguration.WebSiteRegexList,
+                                        ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].MarketValuesParsingOption
+                                        )
                                     )
                                 {
                                     var newItem = new InvalidRegexConfigurations(id)

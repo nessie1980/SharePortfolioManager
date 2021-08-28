@@ -2029,6 +2029,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
                         // Add child nodes (daily values)
                         var newDailyValues = xmlPortfolio.CreateElement(GeneralDailyValuesAttrName);
                         newDailyValues.SetAttribute(DailyValuesWebSiteAttrName,shareObject.DailyValuesUpdateWebSiteUrl);
+                        newDailyValues.SetAttribute(GeneralParsingDailyValuesAttrName, shareObject.DailyValuesParsingOptionAsStr);
                         newShareNode.AppendChild(newDailyValues);
 
                         // Add child nodes (brokerage)
