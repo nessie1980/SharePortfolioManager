@@ -366,6 +366,8 @@
 				<WebSiteRegexNotFound1_2 text=" available!" />
 				<WebSiteRegexNotFound2_1 text="No parse configuration for the shares " />
 				<WebSiteRegexNotFound2_2 text=" available!" />
+				<BackupCleanupDone text="Cleanup of the backup files has been successfully done." />
+				<BackupCleanupFailed text="Cleanup of the backup files failed!" />
 			</PortfolioErrors>
 			<Errors>
 				<CouldNotLoadAllLanguageKeys text="Could not load all language keys!" />
@@ -1885,7 +1887,7 @@
 			<!-- Status messages -->
 			<StatusMessages>
 				<SelectAShare text="Bitte eine Aktie auswählen." />
-				<AddSaveSuccessful text="Aktie wurde erfoglreich hinzugefügt." />
+				<AddSaveSuccessful text="Aktie wurde erfolgreich hinzugefügt." />
 				<EditSaveSuccessful text="Änderung war erfolgreich." />
 				<DeleteSuccessful text="Aktie wurde erfolgreich entfernt." />
 				<ChangeLanguageSuccessful text="Sprache wurde geändert." />
@@ -1952,6 +1954,8 @@
 				<WebSiteRegexNotFound1_2 text=" verfügbar!" />
 				<WebSiteRegexNotFound2_1 text="Kein Parser-Konfiguration für die Aktien " />
 				<WebSiteRegexNotFound2_2 text=" verfügbar!" />
+				<BackupCleanupDone text="Löschen der Backup- Dateien war erfolgreich." />
+				<BackupCleanupFailed text="Löschen der Backup- Dateien ist fehlgeschlagen!" />
 			</PortfolioErrors>
 			<Errors>
 				<CouldNotLoadAllLanguageKeys text="Es konnten nicht alle Sprach- Elemente geladen werden!" />
@@ -1962,7 +1966,7 @@
 				<EditSaveErrorFailed text="Es trat ein Fehler nach dem Editieren der Aktie auf!" />
 				<DeleteFailed text="Entfernen der Aktie ist fehlgeschlagen!" />
 				<DeleteErrorFailed text="Es trat ein Fehler nach dem Entfernen der Aktie auf!" />
-				<SaveSettingsFailed text="Speichern der Einstellungen fehlgeschalgen!" />
+				<SaveSettingsFailed text="Speichern der Einstellungen fehlgeschlagen!" />
 				<SavePortfolioFailed text="Speichern des Portfolios fehlgeschlagen!" />
 				<SelectionChangeFailed text="Auswahländerung fehlgeschlagen!" />
 				<ResizeFailed text="Ändern der Größe ist fehlgeschlagen!" />
