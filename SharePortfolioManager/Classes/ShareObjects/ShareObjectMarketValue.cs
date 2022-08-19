@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2022 nessie1980(nessie1980@gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -1174,12 +1174,13 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc cref="ShareObject" />
         /// <summary>
         /// Constructor with parameters
         /// </summary>
         /// <param name="guid">Guid of the buy</param>
         /// <param name="wkn">WKN number of the share</param>
+        /// <param name="isin">ISIN number of the share</param>
         /// <param name="depotNumber">Depot number where the buy has been done</param>
         /// <param name="orderNumber">order number of the first buy</param>
         /// <param name="addDateTime">Date and time of the add</param>
@@ -1197,8 +1198,10 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="detailsWebSite">Website address of the details of the share</param>
         /// <param name="marketValuesWebSite">Website address of the market values of the share</param>
         /// <param name="marketValuesParsingOption">Parsing option for the market values</param>
+        /// <param name="marketValuesParsingApiKey">Parsing API key for the market values</param>
         /// <param name="dailyValuesWebSite">>Website address for the daily values of the share</param>
         /// <param name="dailyValuesParsingOption">Parsing option for the daily values</param>
+        /// <param name="dailyValuesParsingApiKey">Parsing API key for the daily values</param>
         /// <param name="imageListForDayBeforePerformance">Images for the prev day performance indication</param>
         /// <param name="imageListForCompletePerformance">Images for hte complete performance indication</param>
         /// <param name="regexList">RegEx list for the share</param>
@@ -1206,18 +1209,18 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="shareType">Type of the share</param>
         /// <param name="document">Document of the first buy</param>
         public ShareObjectMarketValue(
-            string guid, string wkn, string depotNumber, string orderNumber, string addDateTime, string stockMarketLaunchDate, string name,
+            string guid, string wkn, string isin, string depotNumber, string orderNumber, string addDateTime, string stockMarketLaunchDate, string name,
             DateTime lastUpdateInternet, DateTime lastUpdateShare,
             decimal price, decimal volume, decimal volumeSold, decimal provision, decimal brokerFee, decimal traderPlaceFee, decimal reduction,
             string detailsWebSite,
-            string marketValuesWebSite, ParsingTypes marketValuesParsingOption,
-            string dailyValuesWebSite, ParsingTypes dailyValuesParsingOption,
+            string marketValuesWebSite, ParsingTypes marketValuesParsingOption, string marketValuesParsingApiKey,
+            string dailyValuesWebSite, ParsingTypes dailyValuesParsingOption, string dailyValuesParsingApiKey,
             List<Image> imageListForDayBeforePerformance, List<Image> imageListForCompletePerformance, Parser.RegExList regexList, CultureInfo cultureInfo,
             ShareTypes shareType, string document) 
-            : base(wkn, addDateTime, stockMarketLaunchDate, name, lastUpdateInternet, lastUpdateShare,
+            : base(wkn, isin, addDateTime, stockMarketLaunchDate, name, lastUpdateInternet, lastUpdateShare,
                     price, detailsWebSite,
-                    marketValuesWebSite, marketValuesParsingOption,
-                    dailyValuesWebSite, dailyValuesParsingOption,
+                    marketValuesWebSite, marketValuesParsingOption, marketValuesParsingApiKey,
+                    dailyValuesWebSite, dailyValuesParsingOption, dailyValuesParsingApiKey,
                     imageListForDayBeforePerformance, imageListForCompletePerformance,
                     regexList, cultureInfo, shareType)
         {
@@ -1758,11 +1761,14 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                 #region Market values
 
                                 case (int)FrmMain.PortfolioParts.MarketValues:
-                                    nodeElement.ChildNodes[i].Attributes[GeneralMarketValuesWebSiteAttrName].InnerText = 
+                                    nodeElement.ChildNodes[i].Attributes[MarketValuesWebSiteAttrName].InnerText = 
                                         shareObject.MarketValuesUpdateWebSiteUrl;
 
-                                    nodeElement.ChildNodes[i].Attributes[GeneralParsingMarketValuesAttrName].InnerText =
+                                    nodeElement.ChildNodes[i].Attributes[MarketValuesParsingAttrName].InnerText =
                                         shareObject.MarketValuesParsingOptionAsStr;
+
+                                    nodeElement.ChildNodes[i].Attributes[MarketValuesParsingApiKeyAttrName].InnerText =
+                                        shareObject.MarketValuesParsingApiKey;
                                     break;
 
                                 #endregion Market values
@@ -1773,7 +1779,12 @@ namespace SharePortfolioManager.Classes.ShareObjects
                                     // Remove old daily values
                                     while (nodeElement.ChildNodes[i].FirstChild != null)
                                         nodeElement.ChildNodes[i].RemoveChild(nodeElement.ChildNodes[i].FirstChild);
-                                    nodeElement.ChildNodes[i].Attributes[DailyValuesWebSiteAttrName].InnerText = shareObject.DailyValuesUpdateWebSiteUrl;
+                                    nodeElement.ChildNodes[i].Attributes[DailyValuesWebSiteAttrName].InnerText =
+                                        shareObject.DailyValuesUpdateWebSiteUrl;
+                                    nodeElement.ChildNodes[i].Attributes[DailyValuesParsingAttrName].InnerText =
+                                        shareObject.DailyValuesParsingOptionAsStr;
+                                    nodeElement.ChildNodes[i].Attributes[DailyValuesParsingApiKeyAttrName].InnerText =
+                                        shareObject.DailyValuesParsingApiKey;
 
                                     foreach (var dailyValue in shareObject.DailyValuesList.Entries)
                                     {
@@ -2022,14 +2033,16 @@ namespace SharePortfolioManager.Classes.ShareObjects
 
                         // Add attributes (market values)
                         var newMarketValues = xmlPortfolio.CreateElement(GeneralMarketValuesAttrName);
-                        newMarketValues.SetAttribute(GeneralMarketValuesWebSiteAttrName, shareObject.MarketValuesUpdateWebSiteUrl);
-                        newMarketValues.SetAttribute(GeneralParsingMarketValuesAttrName, shareObject.MarketValuesParsingOptionAsStr);
+                        newMarketValues.SetAttribute(MarketValuesWebSiteAttrName, shareObject.MarketValuesUpdateWebSiteUrl);
+                        newMarketValues.SetAttribute(MarketValuesParsingAttrName, shareObject.MarketValuesParsingOptionAsStr);
+                        newMarketValues.SetAttribute(MarketValuesParsingApiKeyAttrName, shareObject.MarketValuesParsingApiKey);
                         newShareNode.AppendChild(newMarketValues);
 
                         // Add child nodes (daily values)
                         var newDailyValues = xmlPortfolio.CreateElement(GeneralDailyValuesAttrName);
                         newDailyValues.SetAttribute(DailyValuesWebSiteAttrName,shareObject.DailyValuesUpdateWebSiteUrl);
-                        newDailyValues.SetAttribute(GeneralParsingDailyValuesAttrName, shareObject.DailyValuesParsingOptionAsStr);
+                        newDailyValues.SetAttribute(DailyValuesParsingAttrName, shareObject.DailyValuesParsingOptionAsStr);
+                        newDailyValues.SetAttribute(DailyValuesParsingApiKeyAttrName, shareObject.DailyValuesParsingApiKey);
                         newShareNode.AppendChild(newDailyValues);
 
                         // Add child nodes (brokerage)

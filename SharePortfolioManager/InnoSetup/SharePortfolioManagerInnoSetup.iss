@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "SharePortfolioManager"
-#define MyAppVersion "0.5.8.1"
+#define MyAppVersion "0.5.9.4"
 #define MyAppPublisher "Thomas Barth"
 #define MyAppURL "https://github.com/nessie1980/SharePortfolioManager"
 #define MyAppExeName "SharePortfolioManager.exe"
@@ -69,13 +69,13 @@ Source: "DLLs\Parser.dll"; DestDir: "{app}"; Components: application; Flags: ign
 Source: "Sounds\Error.wav"; DestDir: "{app}\Sounds"; Components: sounds; Flags: ignoreversion
 Source: "Sounds\UpdateFinished.wav"; DestDir: "{app}\Sounds"; Components: sounds; Flags: ignoreversion
 
-Source: "Tools\xpdf-tools-win-4.00\bin32\pdftotext.exe"; Components: tools; DestDir: "{app}\Tools\"; Flags: ignoreversion
-Source: "Tools\xpdf-tools-win-4.00\ANNOUNCE"; DestDir: "{app}\Tools"; Components: tools; Flags: ignoreversion
-Source: "Tools\xpdf-tools-win-4.00\CHANGES"; DestDir: "{app}\Tools"; Components: tools; Flags: ignoreversion
-Source: "Tools\xpdf-tools-win-4.00\COPYING"; DestDir: "{app}\Tools"; Components: tools; Flags: ignoreversion
-Source: "Tools\xpdf-tools-win-4.00\COPYING3"; DestDir: "{app}\Tools"; Components: tools; Flags: ignoreversion
-Source: "Tools\xpdf-tools-win-4.00\INSTALL"; DestDir: "{app}\Tools"; Components: tools; Flags: ignoreversion
-Source: "Tools\xpdf-tools-win-4.00\README"; DestDir: "{app}\Tools"; Components: tools; Flags: ignoreversion
+Source: "Tools\xpdf-tools-win\bin32\pdftotext.exe"; Components: tools; DestDir: "{app}\Tools\"; Flags: ignoreversion
+Source: "Tools\xpdf-tools-win\ANNOUNCE"; DestDir: "{app}\Tools"; Components: tools; Flags: ignoreversion
+Source: "Tools\xpdf-tools-win\CHANGES"; DestDir: "{app}\Tools"; Components: tools; Flags: ignoreversion
+Source: "Tools\xpdf-tools-win\COPYING"; DestDir: "{app}\Tools"; Components: tools; Flags: ignoreversion
+Source: "Tools\xpdf-tools-win\COPYING3"; DestDir: "{app}\Tools"; Components: tools; Flags: ignoreversion
+Source: "Tools\xpdf-tools-win\INSTALL"; DestDir: "{app}\Tools"; Components: tools; Flags: ignoreversion
+Source: "Tools\xpdf-tools-win\README"; DestDir: "{app}\Tools"; Components: tools; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Dirs]

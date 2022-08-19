@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2022 nessie1980(nessie1980@gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -22,8 +22,11 @@
 
 using LanguageHandler;
 using System;
-using System.Drawing;using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
 using SharePortfolioManager.Classes;
+using System.Text;
 
 namespace SharePortfolioManager.AboutForm
 {
@@ -90,30 +93,35 @@ namespace SharePortfolioManager.AboutForm
             grpBoxIconSet.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/IconSet", _strLanguage);
             lblIconSetInfo.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/IconSetInfo", _strLanguage);
             lblIconSetInfoLink.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Labels/IconSetInfoLink", _strLanguage);
+            btnClipBoard.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Buttons/ClipBoard", _strLanguage);
             btnOk.Text = _xmlLanguage.GetLanguageTextByXPath(@"/AboutForm/Buttons/Ok", _strLanguage);
 
             #endregion Language configuration
 
-            var assApp = typeof(FrmMain).Assembly;
-            var assAppName = assApp.GetName();
+            #region Application
+
+            var appApp = typeof(FrmMain).Assembly;
+            var assAppName = appApp.GetName();
             var verApp = assAppName.Version;
 
             lblApplicationVersionValue.Text = verApp.ToString();
 
+            #endregion
+
             #region Parser
 
-            var assParser = typeof(Parser.Parser).Assembly;
-            var assParserName = assParser.GetName();
+            var appParser = typeof(Parser.Parser).Assembly;
+            var assParserName = appParser.GetName();
             var verParser = assParserName.Version;
 
             lblParserDllVersionValue.Text = verParser.ToString();
-            
+
             #endregion Parser
 
             #region Language
 
-            var assLanguage = typeof(Language).Assembly;
-            var assLanguageName = assLanguage.GetName();
+            var appLanguage = typeof(Language).Assembly;
+            var assLanguageName = appLanguage.GetName();
             var verLanguage = assLanguageName.Version;
 
             lblLanguageDllVersionValue.Text = verLanguage.ToString();
@@ -122,8 +130,8 @@ namespace SharePortfolioManager.AboutForm
 
             #region Logger
 
-            var assLogger = typeof(Logging.Logger).Assembly;
-            var assLoggerName = assLogger.GetName();
+            var appLogger = typeof(Logging.Logger).Assembly;
+            var assLoggerName = appLogger.GetName();
             var verLogger = assLoggerName.Version;
 
             lblLoggerDllVersionValue.Text = verLogger.ToString();
@@ -139,7 +147,7 @@ namespace SharePortfolioManager.AboutForm
 
                 if (Helper.ProcessErrOutput != string.Empty)
                 {
-                    string[] separatingStrings = { "version", "Copyright" };
+                    string[] separatingStrings = { "version ", " [" };
                     var version = Helper.ProcessErrOutput.Split(separatingStrings, StringSplitOptions.RemoveEmptyEntries);
 
                     if(version.Length >= 2)
@@ -215,5 +223,36 @@ namespace SharePortfolioManager.AboutForm
         }
 
         #endregion Link to the PDF converter tool
+
+        private void OnBtnClipBoard_Click(object sender, EventArgs e)
+        {
+
+            var versions = new Dictionary<string, string>
+            {
+                { lblApplicationVersion.Text, lblApplicationVersionValue.Text },
+                { lblParserDllVersion.Text, lblParserDllVersionValue.Text },
+                { lblLanguageDllVersion.Text, lblLanguageDllVersionValue.Text },
+                { lblLoggerDllVersion.Text, lblLoggerDllVersionValue.Text },
+                { lblPdfConverterVersion.Text, lblPdfConverterVersionValue.Text }
+            };
+
+            var versionValues = new StringBuilder();
+            var counter = 0;
+            foreach (var version in versions)
+            {
+                if (counter < versions.Count - 1)
+                {
+                    versionValues.AppendFormat("{0,-25} {1}{2}", version.Key, version.Value, Environment.NewLine);
+                }
+                else
+                {
+                    versionValues.AppendFormat("{0,-25} {1}", version.Key, version.Value);
+                }
+
+                counter++;
+            }
+            
+            Clipboard.SetText(versionValues.ToString());
+        }
     }
 }

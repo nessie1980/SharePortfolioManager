@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2022 nessie1980(nessie1980@gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,6 @@
 
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace SharePortfolioManager

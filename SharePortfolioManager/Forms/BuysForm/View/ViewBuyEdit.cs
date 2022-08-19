@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2022 nessie1980(nessie1980@gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -1284,7 +1284,7 @@ namespace SharePortfolioManager.BuysForm.View
 
             dateTimePickerDate.Focus();
 
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion Form
@@ -1308,7 +1308,7 @@ namespace SharePortfolioManager.BuysForm.View
         /// <param name="e">EventArgs</param>
         private void OnDatePickerDate_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1338,7 +1338,7 @@ namespace SharePortfolioManager.BuysForm.View
         /// <param name="e">EventArgs</param>
         private void OnDatePickerTime_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1393,7 +1393,7 @@ namespace SharePortfolioManager.BuysForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxVolume_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1414,7 +1414,7 @@ namespace SharePortfolioManager.BuysForm.View
         private void OnTxtBoxAddVolumeSold_TextChanged(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("VolumeSold"));
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1424,7 +1424,7 @@ namespace SharePortfolioManager.BuysForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxVolumeSold_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1444,7 +1444,7 @@ namespace SharePortfolioManager.BuysForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxPrice_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1474,7 +1474,7 @@ namespace SharePortfolioManager.BuysForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxProvision_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1514,7 +1514,7 @@ namespace SharePortfolioManager.BuysForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxBrokerFee_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1544,7 +1544,7 @@ namespace SharePortfolioManager.BuysForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxTraderPlaceFee_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1564,7 +1564,7 @@ namespace SharePortfolioManager.BuysForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxBrokerage_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1594,7 +1594,7 @@ namespace SharePortfolioManager.BuysForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxReduction_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1639,7 +1639,7 @@ namespace SharePortfolioManager.BuysForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxDocument_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1896,7 +1896,7 @@ namespace SharePortfolioManager.BuysForm.View
             toolStripStatusLabelMessageBuyEdit.Text = string.Empty;
             toolStripStatusLabelMessageBuyDocumentParsing.Text = string.Empty;
 
-            DocumentBrowseEventHandler?.Invoke(this, new EventArgs());
+            DocumentBrowseEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion Buttons
@@ -2841,7 +2841,7 @@ namespace SharePortfolioManager.BuysForm.View
                     SelectedDataGridView = (DataGridView) sender;
 
                     // Format the input value
-                    FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+                    FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
                 }
                 else
                 {
@@ -3236,6 +3236,10 @@ namespace SharePortfolioManager.BuysForm.View
                                 {
                                     break;
                                 }
+                            case DataTypes.ParserErrorCodes.JsonError:
+                                {
+                                    break;
+                                }
                             case DataTypes.ParserErrorCodes.ParsingFailed:
                                 {
                                     break;
@@ -3589,7 +3593,7 @@ namespace SharePortfolioManager.BuysForm.View
                 }
                 else
                 {
-#region Check which values are found
+                    #region Check which values are found
 
                     foreach (var resultEntry in DictionaryParsingResult)
                     {
@@ -3640,15 +3644,15 @@ namespace SharePortfolioManager.BuysForm.View
                         }
                     }
 
-#endregion Check which values are found
+                    #endregion Check which values are found
 
-#region Not found values
+                    #region Not found values
 
                     // Which values are not found
                     if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyDepotNumber) ||
                         DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyDepotNumber) &&
                         DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeBuyDepotNumber].Count == 0
-                    )
+                       )
                     {
                         picBoxDepotNumberParseState.Image = Resources.search_failed_24;
                         cbxDepotNumber.SelectedIndex = 0;
@@ -3658,7 +3662,7 @@ namespace SharePortfolioManager.BuysForm.View
                     if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyOrderNumber) ||
                         DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyOrderNumber) &&
                         DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeBuyOrderNumber].Count == 0
-                    )
+                       )
                     {
                         picBoxOrderNumberParseState.Image = Resources.search_failed_24;
                         txtBoxOrderNumber.Text = string.Empty;
@@ -3668,7 +3672,7 @@ namespace SharePortfolioManager.BuysForm.View
                     if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyDate) ||
                         DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyDate) &&
                         DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeBuyDate].Count == 0
-                    )
+                       )
                     {
                         picBoxDateParseState.Image = Resources.search_failed_24;
                         dateTimePickerDate.Value = DateTime.Now;
@@ -3681,7 +3685,7 @@ namespace SharePortfolioManager.BuysForm.View
                     if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyTime) ||
                         DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyTime) &&
                         DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeBuyTime].Count == 0
-                    )
+                       )
                     {
                         dateTimePickerTime.Value =
                             new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
@@ -3691,7 +3695,7 @@ namespace SharePortfolioManager.BuysForm.View
                     if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyVolume) ||
                         DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyVolume) &&
                         DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeBuyVolume].Count == 0
-                    )
+                       )
                     {
                         picBoxVolumeParseState.Image = Resources.search_failed_24;
                         txtBoxVolume.Text = string.Empty;
@@ -3701,7 +3705,7 @@ namespace SharePortfolioManager.BuysForm.View
                     if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyPrice) ||
                         DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyPrice) &&
                         DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeBuyPrice].Count == 0
-                    )
+                       )
                     {
                         picBoxVolumeParseState.Image = Resources.search_failed_24;
                         txtBoxSharePrice.Text = string.Empty;
@@ -3711,7 +3715,7 @@ namespace SharePortfolioManager.BuysForm.View
                     if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyProvision) ||
                         DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyProvision) &&
                         DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeBuyProvision].Count == 0
-                    )
+                       )
                     {
                         picBoxProvisionParseState.Image = Resources.search_info_24;
                     }
@@ -3719,7 +3723,7 @@ namespace SharePortfolioManager.BuysForm.View
                     if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyBrokerFee) ||
                         DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyBrokerFee) &&
                         DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeBuyBrokerFee].Count == 0
-                    )
+                       )
                     {
                         picBoxBrokerFeeParseState.Image = Resources.search_info_24;
                     }
@@ -3727,7 +3731,7 @@ namespace SharePortfolioManager.BuysForm.View
                     if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyBrokerFee) ||
                         DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyBrokerFee) &&
                         DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeBuyBrokerFee].Count == 0
-                    )
+                       )
                     {
                         picBoxBrokerFeeParseState.Image = Resources.search_info_24;
                     }
@@ -3735,7 +3739,7 @@ namespace SharePortfolioManager.BuysForm.View
                     if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyTraderPlaceFee) ||
                         DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyTraderPlaceFee) &&
                         DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeBuyTraderPlaceFee].Count == 0
-                    )
+                       )
                     {
                         picBoxTraderPlaceFeeParseState.Image = Resources.search_info_24;
                     }
@@ -3743,12 +3747,12 @@ namespace SharePortfolioManager.BuysForm.View
                     if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyReduction) ||
                         DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyReduction) &&
                         DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeBuyReduction].Count == 0
-                    )
+                       )
                     {
                         picBoxReductionParseState.Image = Resources.search_info_24;
                     }
 
-#endregion Not found values
+                    #endregion Not found values
 
                     if (!_parsingResult)
                     {

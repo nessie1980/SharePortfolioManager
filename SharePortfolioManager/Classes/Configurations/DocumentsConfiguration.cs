@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2022 nessie1980(nessie1980@gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -133,6 +133,7 @@ namespace SharePortfolioManager.Classes.Configurations
 
         public const string DocumentTypeBuy = "Buy";
         public const string DocumentTypeBuyWkn = "Wkn";
+        public const string DocumentTypeBuyIsin = "Isin";
         public const string DocumentTypeBuyDepotNumber = "DepotNumber";
         public const string DocumentTypeBuyOrderNumber = "OrderNumber";
         public const string DocumentTypeBuyName = "Name";
@@ -151,6 +152,7 @@ namespace SharePortfolioManager.Classes.Configurations
 
         public const string DocumentTypeSale = "Sale";
         public const string DocumentTypeSaleWkn = "Wkn";
+        public const string DocumentTypeSaleIsin = "Isin";
         public const string DocumentTypeSaleDepotNumber = "DepotNumber";
         public const string DocumentTypeSaleOrderNumber = "OrderNumber";
         public const string DocumentTypeSaleDate = "Date";
@@ -171,6 +173,7 @@ namespace SharePortfolioManager.Classes.Configurations
 
         public const string DocumentTypeDividend = "Dividend";
         public const string DocumentTypeDividendWkn = "Wkn";
+        public const string DocumentTypeDividendIsin = "Isin";
         public const string DocumentTypeDividendDate = "Date";
         public const string DocumentTypeDividendTime = "Time";
         public const string DocumentTypeDividendExchangeRate = "ExchangeRate";
@@ -187,6 +190,7 @@ namespace SharePortfolioManager.Classes.Configurations
         // TODO: (thomas:2020-07-29) This implementation may not be complete and must be corrected 
         public const string DocumentTypeBrokerage = "Brokerage";
         public const string DocumentTypeBrokerageWkn = "Wkn";
+        public const string DocumentTypeBrokerageIsin = "Isin";
         public const string DocumentTypeBrokerageDate = "Date";
         public const string DocumentTypeBrokerageTime = "Time";
         public const string DocumentTypeBrokerageProvision = "Provision";

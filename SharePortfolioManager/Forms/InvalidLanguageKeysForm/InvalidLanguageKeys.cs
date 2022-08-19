@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2022 nessie1980(nessie1980@gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -20,8 +20,6 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-//#define DEBUG_LANGUAGE
-
 using System.Windows.Forms;
 
 namespace SharePortfolioManager.InvalidLanguageKeysForm
@@ -33,11 +31,16 @@ namespace SharePortfolioManager.InvalidLanguageKeysForm
             InitializeComponent();
         }
 
-#if DEBUG_LANGUAGE
+        #if DEBUG_LANGUAGE
         public void SetText(string strText)
         {
             richTextBox1.Text = strText;
         }
-#endif
+        #endif
+        
+        private void OnBtnClipBoard_Click(object sender, System.EventArgs e)
+        {
+            Clipboard.SetText(richTextBox1.Text);
+        }
     }
 }

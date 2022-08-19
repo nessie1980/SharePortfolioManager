@@ -471,6 +471,9 @@
     <None Include="Resources\Pic_24\button_back_24.png" />
     <None Include="Resources\Pic_24\button_add_24.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Pic_24\button_clipboard_24.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>REM Copy settings files if they do not exist already
@@ -484,7 +487,7 @@ ECHO.
 
 ECHO.
 ECHO Copy PDF converter
-XCOPY "$(ProjectDir)Tools\xpdf-tools-win-4.00\bin32\pdftotext.exe" "$(TargetDir)\Tools\" /Y /D
+XCOPY "$(ProjectDir)Tools\xpdf-tools-win\bin32\pdftotext.exe" "$(TargetDir)\Tools\" /Y /D
 ECHO.
 
 ECHO Copy sounds

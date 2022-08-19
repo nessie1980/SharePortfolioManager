@@ -65,6 +65,7 @@
 		<BrokerageIdentifier Name="BrokerageIdentifier" FoundIndex="0" ResultEmpty="true" RegexOptions="None">(Ges. Kosten)</BrokerageIdentifier>
 		<Document Type="Buy" TypeIdentifierValue="Wertpapierabrechnung" Encoding="UTF-8">
 			<Wkn Name="Wkn" FoundIndex="0" ResultEmpty="true" RegexOptions="None">ISIN [(]WKN[)](?:[ ]{1,})(?:[A-Za-z0-9]{1,})(?:[ ]{1,})[(]([A-z0-9]{1,})[)]</Wkn>
+			<Isin Name="Isin" FoundIndex="0" ResultEmpty="true" RegexOptions="None">ISIN [(]WKN[)](?:[ ]{1,})([A-Za-z0-9]{1,})(?:[ ]{1,})[(]</Isin>
 			<DepotNumber Name="DepotNumber" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Direkt-Depot Nr.:\s+([0-9]{1,10})</DepotNumber>
 			<OrderNumber Name="OrderNumber" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Ordernummer(.*\s+.*\s+)ISIN</OrderNumber>
 			<Name Name="Name" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Wertpapierbezeichnung (.*\s+.*\s+)Nominale</Name>
@@ -79,6 +80,7 @@
 		</Document>
 		<Document Type="Sale" TypeIdentifierValue="Verkauf" Encoding="UTF-8">
 			<Wkn Name="Wkn" FoundIndex="0" ResultEmpty="true" RegexOptions="None">ISIN [(]WKN[)](?:[ ]{1,})(?:[A-Za-z0-9]{1,})(?:[ ]{1,})[(]([A-z0-9]{1,})[)]</Wkn>
+			<Isin Name="Isin" FoundIndex="0" ResultEmpty="true" RegexOptions="None">ISIN [(]WKN[)](?:[ ]{1,})([A-Za-z0-9]{1,})(?:[ ]{1,})[(]</Isin>
 			<DepotNumber Name="DepotNumber" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Direkt-Depot Nr.:\s+([0-9]{1,10})</DepotNumber>
 			<OrderNumber Name="OrderNumber" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Ordernummer(.*\s+.*\s+)ISIN</OrderNumber>
 			<Date Name="Date" FoundIndex="1" ResultEmpty="true" RegexOptions="None">([0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,4})</Date>
@@ -95,6 +97,7 @@
 		</Document>
 		<Document Type="Dividend" TypeIdentifierValue="Dividendengutschrift" Encoding="UTF-8">
 			<Wkn Name="Wkn" FoundIndex="0" ResultEmpty="true" RegexOptions="None">ISIN [(]WKN[)](?:[ ]{1,})(?:[A-Za-z0-9]{1,})(?:[ ]{1,})[(]([A-z0-9]{1,})[)]</Wkn>
+			<Isin Name="Isin" FoundIndex="0" ResultEmpty="true" RegexOptions="None">ISIN [(]WKN[)](?:[ ]{1,})([A-Za-z0-9]{1,})(?:[ ]{1,})[(]</Isin>
 			<ExchangeRate Name="ExchangeRate" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Dev.-Kurs [(]([0-9,. ]{1,})[)]</ExchangeRate>
 			<Date Name="Date" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Zahltag\s+([0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,4})</Date>
 			<Time Name="Time" FoundIndex="0" ResultEmpty="true" RegexOptions="None">([0-9]{1,2}[:][0-9]{1,2}[:][0-9]{1,2})</Time>
@@ -106,6 +109,7 @@
 		</Document>
 		<Document Type="Brokerage" TypeIdentifierValue="Gebühren" Encoding="UTF-8">
 			<Wkn Name="Wkn" FoundIndex="0" ResultEmpty="true" RegexOptions="None">ISIN [(]WKN[)](?:[ ]{1,})(?:[A-Za-z0-9]{1,})(?:[ ]{1,})[(]([A-z0-9]{1,})[)]</Wkn>
+			<Isin Name="Isin" FoundIndex="0" ResultEmpty="true" RegexOptions="None">ISIN [(]WKN[)](?:[ ]{1,})([A-Za-z0-9]{1,})(?:[ ]{1,})[(]</Isin>
 			<Date Name="Date" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Zahltag\s+([0-9]{1,2}[.][0-9]{1,2}[.][0-9]{1,4})</Date>
 			<Time Name="Time" FoundIndex="0" ResultEmpty="true" RegexOptions="None">([0-9]{1,2}[:][0-9]{1,2}[:][0-9]{1,2})</Time>
 			<Provision Name="Provision" FoundIndex="0" ResultEmpty="true" RegexOptions="None">Provision(?:[ ]{1,})EUR([0-9,. ]{1,})</Provision>

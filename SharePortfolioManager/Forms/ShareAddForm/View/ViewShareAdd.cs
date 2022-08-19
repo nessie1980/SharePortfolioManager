@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2022 nessie1980(nessie1980@gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -52,6 +52,8 @@ namespace SharePortfolioManager.ShareAddForm.View
         AddFailed,
         WknEmpty,
         WknExists,
+        IsinEmpty,
+        IsinExists,
         NameEmpty,
         NameExists,
         StockMarketLaunchDateNotModified,
@@ -132,6 +134,7 @@ namespace SharePortfolioManager.ShareAddForm.View
         string LanguageName { get; }
 
         string Wkn { get; set; }
+        string Isin { get; set; }
         string ShareName { get; set; }
         string StockMarketLaunchDate { get; set; }
         string Date { get; set; }
@@ -150,8 +153,10 @@ namespace SharePortfolioManager.ShareAddForm.View
         string DetailsWebSite { get; set; }
         string MarketValuesWebSite { get; set; }
         ShareObject.ParsingTypes MarketValuesParsingOption { get; set; }
+        string MarketValuesParsingApiKey { get; set; }
         string DailyValuesWebSite { get; set; }
         ShareObject.ParsingTypes DailyValuesParsingOption { get; set; }
+        string DailyValuesParsingApiKey { get; set; }
         CultureInfo CultureInfo { get; }
         int DividendPayoutInterval { get; set; }
         ShareObject.ShareTypes ShareType { get; set; }
@@ -289,6 +294,17 @@ namespace SharePortfolioManager.ShareAddForm.View
             }
         }
 
+        public string Isin
+        {
+            get => txtBoxIsin.Text;
+            set
+            {
+                if (txtBoxIsin.Text == value)
+                    return;
+                txtBoxIsin.Text = value;
+            }
+        }
+
         public string ShareName
         {
             get => txtBoxName.Text;
@@ -375,6 +391,17 @@ namespace SharePortfolioManager.ShareAddForm.View
             }
         }
 
+        public string MarketValuesParsingApiKey
+        {
+            get => txtBoxMarketWebSiteApiKey.Text;
+            set
+            {
+                if (txtBoxMarketWebSiteApiKey.Text == value)
+                    return;
+                txtBoxMarketWebSiteApiKey.Text = value;
+            }
+        }
+
         public string DailyValuesWebSite
         {
             get => txtBoxDailyValuesWebSite.Text;
@@ -385,6 +412,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 txtBoxDailyValuesWebSite.Text = value;
             }
         }
+
         public ShareObject.ParsingTypes DailyValuesParsingOption
         {
             get => (ShareObject.ParsingTypes)cbxDailyValuesWebSiteParsingType.SelectedIndex;
@@ -393,6 +421,17 @@ namespace SharePortfolioManager.ShareAddForm.View
                 if ((ShareObject.ParsingTypes)cbxDailyValuesWebSiteParsingType.SelectedIndex == value)
                     return;
                 cbxDailyValuesWebSiteParsingType.SelectedIndex = (int)value;
+            }
+        }
+
+        public string DailyValuesParsingApiKey
+        {
+            get => txtBoxDailyValuesWebSiteApiKey.Text;
+            set
+            {
+                if (txtBoxDailyValuesWebSiteApiKey.Text == value)
+                    return;
+                txtBoxDailyValuesWebSiteApiKey.Text = value;
             }
         }
 
@@ -604,6 +643,24 @@ namespace SharePortfolioManager.ShareAddForm.View
                     clrMessage = Color.Red;
                     stateLevel = FrmMain.EStateLevels.Error;
                     txtBoxWkn.Focus();
+                    break;
+                }
+                case ShareAddErrorCode.IsinEmpty:
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ISINEmpty", SettingsConfiguration.LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxIsin.Focus();
+                    break;
+                }
+                case ShareAddErrorCode.IsinExists:
+                {
+                    strMessage =
+                        Language.GetLanguageTextByXPath(@"/AddFormShare/Errors/ISINExists", SettingsConfiguration.LanguageName);
+                    clrMessage = Color.Red;
+                    stateLevel = FrmMain.EStateLevels.Error;
+                    txtBoxIsin.Focus();
                     break;
                 }
                 case ShareAddErrorCode.NameEmpty:
@@ -1071,6 +1128,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                     Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxDocumentPreview/Caption", SettingsConfiguration.LanguageName);
 
                 lblWkn.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/WKN", SettingsConfiguration.LanguageName);
+                lblIsin.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/ISIN", SettingsConfiguration.LanguageName);
                 lblName.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/Name", SettingsConfiguration.LanguageName);
                 lblStockMarketLaunchDate.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/StockMarketLaunchDate", SettingsConfiguration.LanguageName);
 
@@ -1089,10 +1147,12 @@ namespace SharePortfolioManager.ShareAddForm.View
                 lblMarketWebSite.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/MarketValuesWebSite", SettingsConfiguration.LanguageName);
                 // Add parsing options values
                 Language.GetLanguageTextListByXPath(@"/ComboBoxItemsParsingType/*", SettingsConfiguration.LanguageName).ForEach(item => cbxMarketWebSiteParsingType.Items.Add(item));
+                lblMarketWebSiteApiKey.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/MarketValuesWebSiteApiKey", SettingsConfiguration.LanguageName);
 
                 lblDailyValuesWebSite.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/DailyValuesWebSite", SettingsConfiguration.LanguageName);
                 // Add parsing options values
                 Language.GetLanguageTextListByXPath(@"/ComboBoxItemsParsingType/*", SettingsConfiguration.LanguageName).ForEach(item => cbxDailyValuesWebSiteParsingType.Items.Add(item));
+                lblDailyValuesWebSiteApiKey.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/DailyValuesWebSiteApiKey", SettingsConfiguration.LanguageName);
 
                 lblDepotNumber.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/DepotNumber", SettingsConfiguration.LanguageName);
                 lblOrderNumber.Text = Language.GetLanguageTextByXPath(@"/AddFormShare/GrpBoxGeneral/Labels/OrderNumber", SettingsConfiguration.LanguageName);
@@ -1191,7 +1251,7 @@ namespace SharePortfolioManager.ShareAddForm.View
         /// <param name="e"></param>
         private void FrmShareAdd_Shown(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
 
             // If a parsing file name is given the form directly starts with the document parsing
             if (ParsingFileName != null)
@@ -1218,7 +1278,7 @@ namespace SharePortfolioManager.ShareAddForm.View
             toolStripStatusLabelMessageAddShareDocumentParsing.Text = string.Empty;
             toolStripStatusLabelMessageaAddShare.Text = string.Empty;
 
-            DocumentBrowseEventHandler?.Invoke(this, new EventArgs());
+            DocumentBrowseEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1236,7 +1296,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 // Reset parsing status message
                 toolStripStatusLabelMessageAddShareDocumentParsing.Text = string.Empty;
 
-                ShareAddEventHandler?.Invoke(this, new EventArgs());
+                ShareAddEventHandler?.Invoke(this, EventArgs.Empty);
             }
             catch (Exception ex)
             {
@@ -1288,6 +1348,11 @@ namespace SharePortfolioManager.ShareAddForm.View
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Wkn"));
         }
 
+        private void OnTxtBoxIsin_TextChanged(object sender, EventArgs e)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Isin"));
+        }
+
         private void OnTxtBoxName_TextChanged(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Name"));
@@ -1308,6 +1373,11 @@ namespace SharePortfolioManager.ShareAddForm.View
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MarketValuesWebSite"));
         }
 
+        private void OnTxtBoxMarketValuesParsingApiKey_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
         private void OnTxtBoxDailyValuesWebSite_TextChanged(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DailyValuesWebSite"));
@@ -1315,7 +1385,12 @@ namespace SharePortfolioManager.ShareAddForm.View
 
         private void OnTxtBoxDailyValuesWebSite_Leave(object sender, EventArgs e)
         {
-            txtBoxDailyValuesWebSite.Text = Helper.RegexReplaceStartDateAndInterval(txtBoxDailyValuesWebSite.Text);
+            txtBoxDailyValuesWebSite.Text = Helper.RegexReplaceStartDateAndInterval(txtBoxDailyValuesWebSite.Text, DailyValuesParsingOption);
+        }
+
+        private void OnTxtBoxDailyValuesParsingApiKey_TextChanged(object sender, EventArgs e)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DailyValuesWebSiteApiKey"));
         }
 
         private void OntTxtBoxOrderNumber_TextChanged(object sender, EventArgs e)
@@ -1330,7 +1405,7 @@ namespace SharePortfolioManager.ShareAddForm.View
 
         private void OnTxtBoxVolume_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnTxtBoxSharePrice_TextChanged(object sender, EventArgs e)
@@ -1340,7 +1415,7 @@ namespace SharePortfolioManager.ShareAddForm.View
 
         private void OnTxtBoxSharePrice_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnTxtBoxProvision_TextChanged(object sender, EventArgs e)
@@ -1350,7 +1425,7 @@ namespace SharePortfolioManager.ShareAddForm.View
 
         private void OnTxtBoxProvision_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnTxtBoxBrokerFee_TextChanged(object sender, EventArgs e)
@@ -1360,7 +1435,7 @@ namespace SharePortfolioManager.ShareAddForm.View
 
         private void OnTxtBoxBrokerFee_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnTxtBoxTraderPlaceFee_TextChanged(object sender, EventArgs e)
@@ -1370,7 +1445,7 @@ namespace SharePortfolioManager.ShareAddForm.View
 
         private void OnTxtBoxTraderPlaceFee_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnTxtBoxReduction_TextChanged(object sender, EventArgs e)
@@ -1380,7 +1455,7 @@ namespace SharePortfolioManager.ShareAddForm.View
 
         private void OnTxtBoxReduction_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnTxtBoxBrokerage_TextChanged(object sender, EventArgs e)
@@ -1390,7 +1465,7 @@ namespace SharePortfolioManager.ShareAddForm.View
 
         private void OnTxtBoxBrokerage_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnTxtBoxDocument_TextChanged(object sender, EventArgs e)
@@ -1415,7 +1490,7 @@ namespace SharePortfolioManager.ShareAddForm.View
 
         private void OnTxtBoxDocument_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnTxtBoxDocument_DragEnter(object sender, DragEventArgs e)
@@ -1506,11 +1581,34 @@ namespace SharePortfolioManager.ShareAddForm.View
         private void OnCbxMarketValuesParsingOption_SelectedIndexChanged(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MarketValuesParsingOption"));
+
+            // Disable text box for the API key if RegEx is selected
+            if(((ComboBox)sender).SelectedIndex == 0)
+            {
+                txtBoxMarketWebSiteApiKey.Enabled = false;
+                txtBoxMarketWebSiteApiKey.Text = string.Empty;
+            }
+            else
+            {
+                txtBoxMarketWebSiteApiKey.Enabled = true;
+            }
         }
 
         private void OnCbxDailyValuesParsingOption_SelectedIndexChanged(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DailyValuesParsingOption"));
+
+            // Disable text box for the API key if RegEx is selected
+            if (((ComboBox)sender).SelectedIndex == 0)
+            {
+                txtBoxDailyValuesWebSiteApiKey.Enabled = false;
+                txtBoxDailyValuesWebSiteApiKey.Text = string.Empty;
+            }
+            else
+            {
+                txtBoxDailyValuesWebSiteApiKey.Enabled = true;
+                txtBoxDailyValuesWebSite.Text = Helper.RegexReplaceStartDateAndInterval(txtBoxDailyValuesWebSite.Text, DailyValuesParsingOption);
+            }
         }
 
         #endregion ComboBoxes
@@ -1585,6 +1683,7 @@ namespace SharePortfolioManager.ShareAddForm.View
                 {
                     if (DocumentTypeParser == null)
                         DocumentTypeParser = new Parser.Parser();
+
                     DocumentTypeParser.ParsingValues = new ParsingValues(ParsingText,
                         DocumentParsingConfiguration.BankRegexList[_bankCounter].BankEncodingType,
                         DocumentParsingConfiguration.BankRegexList[_bankCounter].BankRegexList
@@ -1710,6 +1809,10 @@ namespace SharePortfolioManager.ShareAddForm.View
                                 break;
                             }
                             case DataTypes.ParserErrorCodes.NoWebContentLoaded:
+                            {
+                                break;
+                            }
+                            case DataTypes.ParserErrorCodes.JsonError:
                             {
                                 break;
                             }
@@ -2067,6 +2170,12 @@ namespace SharePortfolioManager.ShareAddForm.View
                             txtBoxWkn.Text = resultEntry.Value[0].Trim();
                             break;
                         }
+                        case DocumentParsingConfiguration.DocumentTypeBuyIsin:
+                        {
+                            picBoxIsinParseState.Image = Resources.search_ok_24;
+                            txtBoxIsin.Text = resultEntry.Value[0].Trim();
+                            break;
+                        }
                         case DocumentParsingConfiguration.DocumentTypeBuyDepotNumber:
                         {
                             picBoxDepotNumberParseState.Image = Resources.search_ok_24;
@@ -2149,6 +2258,16 @@ namespace SharePortfolioManager.ShareAddForm.View
                 {
                     picBoxWknParseState.Image = Resources.search_failed_24;
                     txtBoxWkn.Text = string.Empty;
+                    _parsingResult = false;
+                }
+
+                if (!DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyIsin) ||
+                    DictionaryParsingResult.ContainsKey(DocumentParsingConfiguration.DocumentTypeBuyIsin) &&
+                    DictionaryParsingResult[DocumentParsingConfiguration.DocumentTypeBuyIsin].Count == 0
+                   )
+                {
+                    picBoxIsinParseState.Image = Resources.search_failed_24;
+                    txtBoxIsin.Text = string.Empty;
                     _parsingResult = false;
                 }
 
@@ -2269,10 +2388,11 @@ namespace SharePortfolioManager.ShareAddForm.View
         private void ResetValues()
         {
             // Reset state pictures
+            picBoxWknParseState.Image = Resources.empty_arrow;
+            picBoxIsinParseState.Image = Resources.empty_arrow;
+            picBoxNameParseState.Image = Resources.empty_arrow;
             picBoxDepotNumberParseState.Image = Resources.empty_arrow;
             picBoxOrderNumberParseState.Image = Resources.empty_arrow;
-            picBoxWknParseState.Image = Resources.empty_arrow;
-            picBoxNameParseState.Image = Resources.empty_arrow;
             picBoxDateParseState.Image = Resources.empty_arrow;
             picBoxTimeParseState.Image = Resources.empty_arrow;
             picBoxVolumeParseState.Image = Resources.empty_arrow;
@@ -2284,6 +2404,7 @@ namespace SharePortfolioManager.ShareAddForm.View
 
             // Reset textboxes
             txtBoxWkn.Text = string.Empty;
+            txtBoxIsin.Text = string.Empty;
             txtBoxName.Text = string.Empty;
             dateTimePickerStockMarketLaunch.MinDate = DateTime.MinValue;
             dateTimePickerStockMarketLaunch.Value = dateTimePickerStockMarketLaunch.MinDate;
@@ -2294,8 +2415,10 @@ namespace SharePortfolioManager.ShareAddForm.View
             txtBoxDetailsWebSite.Text = string.Empty;
             txtBoxMarketWebSite.Text = string.Empty;
             cbxMarketWebSiteParsingType.SelectedIndex = 0;
+            txtBoxMarketWebSiteApiKey.Text = string.Empty;
             txtBoxDailyValuesWebSite.Text = string.Empty;
             cbxDailyValuesWebSiteParsingType.SelectedIndex = 0;
+            txtBoxDailyValuesWebSiteApiKey.Text = string.Empty;
             cbxDepotNumber.SelectedIndex = 0;
             txtBoxOrderNumber.Text = string.Empty;
             txtBoxVolume.Text = string.Empty;

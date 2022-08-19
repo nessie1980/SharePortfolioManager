@@ -34,7 +34,8 @@
 		<!-- Combo box items for the share parsing type -->
 		<ComboBoxItemsParsingType>
 			<Item0 text="Regex" />
-			<Item1 text="API" />
+			<Item1 text="ApiOnvista" />
+			<Item2 text="ApiYahoo" />
 		</ComboBoxItemsParsingType>				
 
 		<!-- Logger -->
@@ -249,15 +250,17 @@
 					<NoRegexListGiven_2 text="' given." />
 					<ContentLoadedFailed_1 text="Load of the website content for the 'MarketValues' of the share'" />
 					<ContentLoadedFailed_2 text="' failed." />
-					<FileFailed_1 text="File error occurred while loading the 'MarketValues' of the share'" />
+					<FileFailed_1 text="File exception occurred while loading the 'MarketValues' of the share'" />
 					<FileFailed_2 text="' failed." />
-					<JsonFailed_1 text="JSON error occurred while loading the 'MarketValues' of the share'" />
+					<JsonFailed_1 text="JSON exception occurred while loading the 'MarketValues' of the share'" />
 					<JsonFailed_2 text="' failed." />
 					<ParsingFailed_1 text="Parsing of the key '" />
 					<ParsingFailed_2 text="' for the 'MarketValues' for the share '" />
 					<ParsingFailed_3 text="' failed." />
 					<CancelThread_1 text="Update of the 'MarketValues' of the share '" />
 					<CancelThread_2 text="' has been cancelled." />
+					<JsonError_1 text="JSON error occurred while loading the 'MarketValues' of the share'" />
+					<JsonError_2 text="' failed." />
 					<UpdateFailed_1 text="Update of the 'MarketValues' of the share'" />
 					<UpdateFailed_2 text="' failed!" />
 					<SaveFailed_1 text="Save of the 'MarketValues' of the share '" />
@@ -278,15 +281,17 @@
 					<NoRegexListGiven_2 text="' given." />
 					<ContentLoadedFailed_1 text="Load of the website content for the 'DailyValues' of the share'" />
 					<ContentLoadedFailed_2 text="' failed." />
-					<FileFailed_1 text="File error occurred while loading the 'DailyValues' of the share'" />
+					<FileFailed_1 text="File exception occurred while loading the 'DailyValues' of the share'" />
 					<FileFailed_2 text="' failed." />
-					<JsonFailed_1 text="JSON error occurred while loading the 'DailyValues' of the share'" />
+					<JsonFailed_1 text="JSON exception occurred while loading the 'DailyValues' of the share'" />
 					<JsonFailed_2 text="' failed." />
 					<ParsingFailed_1 text="Parsing of the key '" />
 					<ParsingFailed_2 text="' for the 'DailyValues' for the share '" />
 					<ParsingFailed_3 text="' failed." />
 					<CancelThread_1 text="Update of the 'DailyValues' of the share '" />
 					<CancelThread_2 text="' has been cancelled." />
+					<JsonError_1 text="JSON error occurred while loading the 'DailyValues' of the share'" />
+					<JsonError_2 text="' failed." />
 					<UpdateFailed_1 text="Update of the 'DailyValues' of the share'" />
 					<UpdateFailed_2 text="' failed!" />
 					<SaveFailed_1 text="Save of the 'DailyValues' of the share '" />
@@ -328,8 +333,8 @@
 				<XMLSyntaxFailure_1 text="A XML syntax error exists in the website configuration file '" />
 				<XMLSyntaxFailure_2 text="'!" />
 				<ConfigurationAttributeError_1 text="A XML attribute error exists in the website configuration file '" />
-				<ConfigurationAttributeError_2 text="'!" />
 				<ConfigurationListEmpty text="WebSite configuration list is empty!" />
+				<ConfigurationAttributeError_2 text="'!" />
 			</WebSiteConfigurationErrors>
 			<DocumentParsingConfigurationErrors>
 				<FileDoesNotExists_1 text="Document configuration file '" />
@@ -649,6 +654,7 @@
 				<!-- Labels -->
 				<Labels>
 					<WKN text="WKN:" />
+					<ISIN text="ISIN:" />
 					<Name text="Name:" />
 					<StockMarketLaunchDate text="Stock exchange quotation:" />
 					<ShareType text="Type:" />
@@ -656,7 +662,9 @@
 					<CultureInfo text="Country info:" />
 					<DetailsWebSite text="Details website:" />
 					<MarketValuesWebSite text="Market values website:" />
+					<MarketValuesWebSiteApiKey text="API key:" />
 					<DailyValuesWebSite text="Daily values website:" />
+					<DailyValuesWebSiteApiKey text="API key:" />
 					<DepotNumber text="Depot number:" />
 					<OrderNumber text="Order number:" />
 					<Date text="Date:" />
@@ -702,6 +710,8 @@
 			<Errors>
 				<WKNEmpty text="Please enter a WKN number." />
 				<WKNExists text="The WKN number already exists." />
+				<ISINEmpty text="Please enter a ISIN number." />
+				<ISINExists text="The ISIN number already exists." />
 				<NameEmpty text="Please enter a share name." />
 				<NameExists text="The share name already exists." />
 				<StockMarketLaunchDateNotModified text="Stock exchange quotation date not changed." />
@@ -763,7 +773,7 @@
 				
 				<!-- Labels -->
 				<Labels>
-					<WKN text="WKN:" />
+					<WKN_ISIN text="WKN (ISIN):" />
 					<Name text="Name:" />
 					<StockMarketLaunchDate text="Stock exchange quotation:" />
 					<Update text="Do update via internet:" />
@@ -772,7 +782,9 @@
 					<Volume text="Volume:" />
 					<DetailsWebSite text="Details website:" />
 					<MarketValuesWebSite text="Market values website:" />
+					<MarketValuesWebSiteApiKey text="API key:" />
 					<DailyValuesWebSite text="Daily values website:" />
+					<DailyValuesWebSiteApiKey text="API key:" />
 					<CultureInfo text="Country info:" />
 					<PayoutInterval text="Dividend payout interval:" />
 					<ShareType text="Type:" />
@@ -1555,6 +1567,24 @@
 				<DocumentCaptureOnlyPdf text="Document capture is only possible with PDFs!" />
 			</Content>
 		</MessageBoxForm>
+
+		<!-- ExceptionMessage box -->
+		<ExceptionMessageBoxForm>
+			
+			<!-- Captions -->
+			<Caption text="An exception occurred!" />
+			<CaptionInner text="An inner exception occurred!" />
+						
+			<!-- Content -->
+			<Content>
+				<Source text="Source:" />
+				<Function text="Function:" />
+				<Message text="Message:" />
+				<StackTrace text="StackTrace:" />
+				<Data text="Data:?"/>
+				<HelpLink text="HelpLink"/>
+			</Content>
+		</ExceptionMessageBoxForm>
 		
 		<!-- About window -->
 		<AboutForm>
@@ -1580,6 +1610,7 @@
 			<!-- Buttons -->
 			<Buttons>
 				<Ok text="Ok" />
+				<ClipBoard text="Clipboard" />
 			</Buttons>
 			
 			<!-- Errors -->
@@ -1587,6 +1618,12 @@
 				<ShowAboutBoxFailed text="Showing the 'About' box failed!" />
 			</Errors>
 		</AboutForm>
+		
+		<!-- General error -->
+		<GeneralErrors>
+			<Caption text="General error!" />
+			<CaptionParser text="Parser error:" />
+		</GeneralErrors>
 	</English>
 	<German>
 		<!-- Application name -->
@@ -1622,7 +1659,8 @@
 		<!-- Combo box items for the share parsing type -->
 		<ComboBoxItemsParsingType>
 			<Item0 text="Regex" />
-			<Item1 text="API" />
+			<Item1 text="ApiOnvista" />
+			<Item2 text="ApiYahoo" />
 		</ComboBoxItemsParsingType>				
 
 		<!-- Logger -->
@@ -1837,15 +1875,17 @@
 					<NoRegexListGiven_2 text="' übergeben." />
 					<ContentLoadedFailed_1 text="Laden des Webseiten- Inhalts für die 'Kurswerte' der Aktie '" />
 					<ContentLoadedFailed_2 text="' ist fehlgeschlagen." />
-					<FileFailed_1 text="Datei- Fehler während des Ladens der 'Kurswerte' der Aktie'" />
+					<FileFailed_1 text="Datei- Ausnahme während des Ladens der 'Kurswerte' der Aktie'" />
 					<FileFailed_2 text="' aufgetreten ." />
-					<JsonFailed_1 text="JSON- Fehler während des Ladens der 'Kurswerte' der Aktie'" />
+					<JsonFailed_1 text="JSON- Ausnahme während des Ladens der 'Kurswerte' der Aktie'" />
 					<JsonFailed_2 text="' aufgetreten ." />
 					<ParsingFailed_1 text="Parsen des Schlüssels '" />
 					<ParsingFailed_2 text="' für die 'Kurswerte' der Aktie '" />
 					<ParsingFailed_3 text="' ist fehlgeschlagen." />
 					<CancelThread_1 text="Aktualisierung der 'Kurswerte' der Aktie '" />
 					<CancelThread_2 text="' wurde abgebrochen." />
+					<JsonError_1 text="JSON- Fehler während des Ladens der 'Kurswerte' der Aktie'" />
+					<JsonError_2 text="' aufgetreten ." />
 					<UpdateFailed_1 text="Aktualisieren der 'Kurswerte' der Aktie'" />
 					<UpdateFailed_2 text="' ist fehlgeschlagen!" />
 					<SaveFailed_1 text="Speichern der 'Kurswerte' der Aktie '" />
@@ -1866,15 +1906,17 @@
 					<NoRegexListGiven_2 text="' übergeben." />
 					<ContentLoadedFailed_1 text="Laden des Webseiten- Inhalts für die 'Tageswerte' der Aktie '" />
 					<ContentLoadedFailed_2 text="' ist fehlgeschlagen." />
-					<FileFailed_1 text="Datei- Fehler während des Ladens der 'Tageswerte' der Aktie'" />
+					<FileFailed_1 text="Datei- Ausnahme während des Ladens der 'Tageswerte' der Aktie'" />
 					<FileFailed_2 text="' aufgetreten ." />
-					<JsonFailed_1 text="JSON- Fehler während des Ladens der 'Tageswerte' der Aktie'" />
+					<JsonFailed_1 text="JSON- Ausnahme während des Ladens der 'Tageswerte' der Aktie'" />
 					<JsonFailed_2 text="' aufgetreten ." />
 					<ParsingFailed_1 text="Parsen des Schlüssels '" />
 					<ParsingFailed_2 text="' für die 'Tageswerte' der Aktie '" />
 					<ParsingFailed_3 text="' ist fehlgeschlagen." />
 					<CancelThread_1 text="Aktualisierung der 'Tageswerte' für die Aktie '" />
 					<CancelThread_2 text="' wurde abgebrochen." />
+					<JsonError_1 text="JSON- Fehler während des Ladens der 'Tageswerte' der Aktie'" />
+					<JsonError_2 text="' aufgetreten ." />
 					<UpdateFailed_1 text="Aktualisieren der 'Tageswerte' der Aktie'" />
 					<UpdateFailed_2 text="' ist fehlgeschlagen!" />
 					<SaveFailed_1 text="Speichern der 'Tageswerte' der Aktie '" />
@@ -2236,6 +2278,7 @@
 				<!-- Labels -->
 				<Labels>
 					<WKN text="WKN:" />
+					<ISIN text="ISIN:" />
 					<Name text="Name:" />
 					<StockMarketLaunchDate text="Börsennotierung:" />
 					<ShareType text="Typ:" />
@@ -2243,7 +2286,9 @@
 					<CultureInfo text="Länder- Info:" />
 					<DetailsWebSite text="Details- Webseite:" />
 					<MarketValuesWebSite text="Markt- Werte- Website:" />
+					<MarketValuesWebSiteApiKey text="API Schlüssel:" />
 					<DailyValuesWebSite text="Tages- Werte- Webseite:" />
+					<DailyValuesWebSiteApiKey text="API Schlüssel:" />
 					<DepotNumber text="Depot number:" />
 					<OrderNumber text="Ordernummer:" />
 					<Date text="Datum:" />
@@ -2289,6 +2334,8 @@
 			<Errors>
 				<WKNEmpty text="Bitte geben Sie eine WKN- Nummer ein." />
 				<WKNExists text="Die eingegebene WKN- Nummber existiert bereits." />
+				<ISINEmpty text="Bitte geben Sie eine ISIN- Nummer ein." />
+				<ISINExists text="Die eingegebene ISIN- Nummber existiert bereits." />
 				<NameEmpty text="Bitte geben Sie einen Aktien- Namen ein." />
 				<NameExists text="Der eingegebene Aktien- Name existiert bereits." />
 				<StockMarketLaunchDateNotModified text="Börsennotierungs- Datum nicht angepasst." />
@@ -2350,7 +2397,7 @@
 
 				<!-- Labels -->
 				<Labels>
-					<WKN text="WKN:" />
+					<WKN_ISIN text="WKN (ISIN):" />
 					<Name text="Name:" />
 					<StockMarketLaunchDate text="Börsennotierung:" />
 					<Update text="Update via Internet durchführen:" />
@@ -2359,7 +2406,9 @@
 					<Volume text="Anteile:" />
 					<DetailsWebSite text="Details- Webseite:" />
 					<MarketValuesWebSite text="Markt- Wert- Webseite:" />
+					<MarketValuesWebSiteApiKey text="API Schlüssel:" />
 					<DailyValuesWebSite text="Tages-Werte- Webseite:" />
+					<DailyValuesWebSiteApiKey text="API Schlüssel:" />
 					<CultureInfo text="Länder- Info:" />
 					<PayoutInterval text="Dividendenauszahlungs- Interval:" />
 					<ShareType text="Typ:" />
@@ -3141,7 +3190,25 @@
 				<DocumentCaptureOnlyPdf text="Dokumentenerfassung ist nur mit PDFs möglich!" />
 			</Content>
 		</MessageBoxForm>
-					
+				
+		<!-- ExceptionMessage box -->
+		<ExceptionMessageBoxForm>
+			
+			<!-- Captions -->
+			<Caption text="Eine Ausnahme ist aufgetreten!" />
+			<CaptionInner text="Ein 'innerer' Ausnahme ist aufgetreten!" />
+						
+			<!-- Content -->
+			<Content>
+				<Source text="Quelle:" />
+				<Function text="Funktion:" />
+				<Message text="Meldung:" />
+				<StackTrace text="StackTrace:" />
+				<Data text="Daten:?"/>
+				<HelpLink text="Hilfe- Link:"/>
+			</Content>
+		</ExceptionMessageBoxForm>
+				
 		<!-- About window -->
 		<AboutForm>
 			<Caption text="Über" />
@@ -3166,6 +3233,7 @@
 			<!-- Buttons -->
 			<Buttons>
 				<Ok text="Ok" />
+				<ClipBoard text="Zwischenablage" />
 			</Buttons>
 			
 			<!-- Errors -->
@@ -3173,5 +3241,11 @@
 				<ShowAboutBoxFailed text="Anzeigen des 'Über'- Dialogs fehlgeschlagen!" />
 			</Errors>
 		</AboutForm>
+		
+		<!-- General error -->
+		<GeneralErrors>
+			<Caption text="Allgemeiner Fehler" />
+			<CaptionParser text="Parser- Fehler:" />
+		</GeneralErrors>
 	</German>
 </Language>

@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2022 nessie1980(nessie1980@gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -576,13 +576,6 @@ namespace SharePortfolioManager.ShareDetailsForm
 
             UpdateShareDetails(MarketValueOverviewTabSelected);
 
-            if (!MarketValueOverviewTabSelected)
-            {
-                UpdateProfitLossDetails();
-                UpdateBrokerageDetails();
-                UpdateDividendDetails();
-            }
-
             // Check if daily values already exist
             int iAmount;
             if (MarketValueOverviewTabSelected)
@@ -1043,6 +1036,16 @@ namespace SharePortfolioManager.ShareDetailsForm
 
             // Set new amount to numeric up / down control
             numDrpDwnAmount.Value = ChartingAmount;
+        }
+
+        private void FrmShareDetails_Load(object sender, EventArgs e)
+        {
+            if (!MarketValueOverviewTabSelected)
+            {
+               // UpdateProfitLossDetails();
+                //UpdateBrokerageDetails();
+                UpdateDividendDetails();
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2022 nessie1980(nessie1980@gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -116,7 +116,7 @@ namespace SharePortfolioManager
                     #region GroupBox General 
 
                     // Set values
-                    lblWknValue.Text = ShareObjectFinalValue.Wkn;
+                    lblWknValue.Text = ShareObjectFinalValue.Wkn + @" (" + ShareObjectFinalValue.Isin + @")";
                     dateTimeStockMarketLaunchDate.Value = DateTime.Parse(ShareObjectFinalValue.StockMarketLaunchDate);
                     lblDateValue.Text = ShareObjectFinalValue.AllBuyEntries.AllBuysOfTheShareDictionary.Values.First().BuyListYear.First().Date;
                     txtBoxName.Text = ShareObjectFinalValue.Name;
@@ -147,7 +147,9 @@ namespace SharePortfolioManager
 
                     txtBoxDetailsWebSite.Text = ShareObjectFinalValue.DetailsWebSiteUrl;
                     txtBoxMarketValuesWebSite.Text = ShareObjectFinalValue.MarketValuesUpdateWebSiteUrl;
+                    txtBoxMarketValuesWebSiteApiKey.Text = ShareObjectFinalValue.MarketValuesParsingApiKey;
                     txtBoxDailyValuesWebSite.Text = ShareObjectFinalValue.DailyValuesUpdateWebSiteUrl;
+                    txtBoxDailyValuesWebSiteApiKey.Text = ShareObjectFinalValue.DailyValuesParsingApiKey;
 
                     // Set units
                     lblPurchaseUnit.Text = ShareObjectFinalValue.CurrencyUnit;
@@ -207,7 +209,7 @@ namespace SharePortfolioManager
 
                 Text = Language.GetLanguageTextByXPath(@"/EditFormShare/Caption", SettingsConfiguration.LanguageName);
                 grpBoxGeneral.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Caption", SettingsConfiguration.LanguageName);
-                lblWkn.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/WKN", SettingsConfiguration.LanguageName);
+                lblWkn.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/WKN_ISIN", SettingsConfiguration.LanguageName);
                 lblStockMarketLaunchDate.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/StockMarketLaunchDate", SettingsConfiguration.LanguageName);
                 lblDate.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Date", SettingsConfiguration.LanguageName);
                 lblName.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/Name", SettingsConfiguration.LanguageName);
@@ -226,11 +228,13 @@ namespace SharePortfolioManager
                 // Add parsing options values
                 Language.GetLanguageTextListByXPath(@"/ComboBoxItemsParsingType/*", SettingsConfiguration.LanguageName).ForEach(item => cbxMarketValuesParsingOption.Items.Add(item));
                 cbxMarketValuesParsingOption.SelectedIndex = (int) ShareObjectFinalValue.MarketValuesParsingOption;
+                lblMarketValuesWebSiteApiKey.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/MarketValuesWebSiteApiKey", SettingsConfiguration.LanguageName);
 
                 lblDailyValuesWebSite.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/DailyValuesWebSite", SettingsConfiguration.LanguageName);
                 // Add parsing options values
                 Language.GetLanguageTextListByXPath(@"/ComboBoxItemsParsingType/*", SettingsConfiguration.LanguageName).ForEach(item => cbxDailyValuesParsingOption.Items.Add(item));
                 cbxDailyValuesParsingOption.SelectedIndex = (int)ShareObjectFinalValue.DailyValuesParsingOption;
+                lblDailyValuesWebSiteApiKey.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/DailyValuesWebSiteApiKey", SettingsConfiguration.LanguageName);
 
                 lblCultureInfo.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxGeneral/Labels/CultureInfo", SettingsConfiguration.LanguageName);
 
@@ -250,8 +254,10 @@ namespace SharePortfolioManager
 
                 #region GroupBox EarningsExpenditure
 
-                grpBoxEarningsExpenditure.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Caption", SettingsConfiguration.LanguageName);
-                lblBuys.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Buys", SettingsConfiguration.LanguageName);
+                grpBoxEarningsExpenditure.Text = Language.GetLanguageTextByXPath(
+                    @"/EditFormShare/GrpBoxEarningsExpenditure/Caption", SettingsConfiguration.LanguageName);
+                lblBuys.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Buys",
+                    SettingsConfiguration.LanguageName);
                 btnShareBuysEdit.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Buttons/Buys",
                     LanguageName);
                 lblSales.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Sales",
@@ -260,18 +266,19 @@ namespace SharePortfolioManager
                     Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Buttons/Sales",
                     LanguageName);
 
+                // Get correct caption if profit or loss
                 if (ShareObjectFinalValue.AllSaleEntries.SaleProfitLossTotal < 0)
                 {
+                    lblProfitLoss.Text = Language.GetLanguageTextByXPath(
+                        @"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Loss", SettingsConfiguration.LanguageName);
 
-                    lblProfitLoss.Text =
-                        Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Loss",
-                            LanguageName);
                 }
                 else
                 {
-                    lblProfitLoss.Text =
-                        Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Profit",
-                            LanguageName);
+                    lblProfitLoss.Text = Language.GetLanguageTextByXPath(
+                        @"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Profit", SettingsConfiguration.LanguageName);
+
+
                 }
 
                 lblDividend.Text = Language.GetLanguageTextByXPath(@"/EditFormShare/GrpBoxEarningsExpenditure/Labels/Dividend",
@@ -341,7 +348,8 @@ namespace SharePortfolioManager
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxDailyValuesWebSite_Leave(object sender, EventArgs e)
         {
-            txtBoxDailyValuesWebSite.Text = Helper.RegexReplaceStartDateAndInterval(txtBoxDailyValuesWebSite.Text);
+            txtBoxDailyValuesWebSite.Text =
+                Helper.RegexReplaceStartDateAndInterval(txtBoxDailyValuesWebSite.Text, (ShareObject.ParsingTypes)cbxDailyValuesParsingOption.SelectedIndex);
         }
 
         #endregion Form
@@ -370,6 +378,7 @@ namespace SharePortfolioManager
 
                 // Set start date and interval for the test
                 // Check which parsing option is selected
+                // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                 if (string.Equals(cbxMarketValuesParsingOption.Text, ShareObject.ParsingTypes.Regex.ToString(), StringComparison.CurrentCultureIgnoreCase))
                 {
                     decodeUrlDailyValuesWebSite =
@@ -467,7 +476,7 @@ namespace SharePortfolioManager
 
                     errorFlag = true;
                 }
-                else if (!Helper.UrlChecker(ref decodedUrlDetailsWebSite, 10000))
+                else if (!Helper.UrlChecker(ref decodedUrlDetailsWebSite, @"", 10000))
                 {
                     txtBoxDetailsWebSite.Focus();
 
@@ -520,6 +529,13 @@ namespace SharePortfolioManager
                             break;
                         }
                     }
+
+                    // Set details website URL to share objects
+                    if (errorFlag == false)
+                    {
+                        ShareObjectMarketValue.DetailsWebSiteUrl = txtBoxDetailsWebSite.Text;
+                        ShareObjectFinalValue.DetailsWebSiteUrl = txtBoxDetailsWebSite.Text;
+                    }
                 }
 
                 // Market values update website
@@ -534,7 +550,7 @@ namespace SharePortfolioManager
                     
                     errorFlag = true;
                 }
-                else if ((rdbBoth.Checked || rdbMarketPrice.Checked) && !Helper.UrlChecker(ref decodedUrlMarketValuesWebSite, 10000))
+                else if ((rdbBoth.Checked || rdbMarketPrice.Checked) && !Helper.UrlChecker(ref decodedUrlMarketValuesWebSite, txtBoxDailyValuesWebSiteApiKey.Text, 10000))
                 {
                     txtBoxMarketValuesWebSite.Focus();
                     
@@ -601,7 +617,7 @@ namespace SharePortfolioManager
                     
                     errorFlag = true;
                 }
-                else if ((rdbBoth.Checked || rdbDailyValues.Checked) && !Helper.UrlChecker(ref decodeUrlDailyValuesWebSite, 10000))
+                else if ((rdbBoth.Checked || rdbDailyValues.Checked) && !Helper.UrlChecker(ref decodeUrlDailyValuesWebSite, txtBoxDailyValuesWebSiteApiKey.Text, 10000))
                 {
                     txtBoxDailyValuesWebSite.Focus();
                     
@@ -659,7 +675,8 @@ namespace SharePortfolioManager
                 if (errorFlag) return;
 
                 txtBoxMarketValuesWebSite.Text = decodedUrlMarketValuesWebSite;
-                txtBoxDailyValuesWebSite.Text = Helper.RegexReplaceStartDateAndInterval(decodeUrlDailyValuesWebSite);
+                txtBoxDailyValuesWebSite.Text =
+                    Helper.RegexReplaceStartDateAndInterval(decodeUrlDailyValuesWebSite, (ShareObject.ParsingTypes)cbxDailyValuesParsingOption.SelectedIndex);
 
                 StopFomClosingFlag = false; 
                 Save = true;
@@ -683,7 +700,11 @@ namespace SharePortfolioManager
                     ShareObjectMarketValue.InternetUpdateOption = ShareObject.ShareUpdateTypes.None;
 
                 ShareObjectMarketValue.MarketValuesUpdateWebSiteUrl = txtBoxMarketValuesWebSite.Text;
+                ShareObjectMarketValue.MarketValuesParsingOption = (ShareObject.ParsingTypes)cbxMarketValuesParsingOption.SelectedIndex;
+                ShareObjectMarketValue.MarketValuesParsingApiKey = txtBoxMarketValuesWebSiteApiKey.Text;
                 ShareObjectMarketValue.DailyValuesUpdateWebSiteUrl = txtBoxDailyValuesWebSite.Text;
+                ShareObjectMarketValue.DailyValuesParsingOption = (ShareObject.ParsingTypes)cbxDailyValuesParsingOption.SelectedIndex;
+                ShareObjectMarketValue.DailyValuesParsingApiKey = txtBoxDailyValuesWebSiteApiKey.Text;
                 ShareObjectMarketValue.CultureInfo = cultureInfo;
                 ShareObjectMarketValue.ShareType = (ShareObject.ShareTypes)cbxShareType.SelectedIndex;
 
@@ -704,7 +725,11 @@ namespace SharePortfolioManager
                     ShareObjectFinalValue.InternetUpdateOption = ShareObject.ShareUpdateTypes.None;
 
                 ShareObjectFinalValue.MarketValuesUpdateWebSiteUrl = txtBoxMarketValuesWebSite.Text;
+                ShareObjectFinalValue.MarketValuesParsingOption = (ShareObject.ParsingTypes)cbxMarketValuesParsingOption.SelectedIndex;
+                ShareObjectFinalValue.MarketValuesParsingApiKey = txtBoxMarketValuesWebSiteApiKey.Text;
                 ShareObjectFinalValue.DailyValuesUpdateWebSiteUrl = txtBoxDailyValuesWebSite.Text;
+                ShareObjectFinalValue.DailyValuesParsingOption = (ShareObject.ParsingTypes)cbxDailyValuesParsingOption.SelectedIndex;
+                ShareObjectFinalValue.DailyValuesParsingApiKey = txtBoxDailyValuesWebSiteApiKey.Text;
                 ShareObjectFinalValue.CultureInfo = cultureInfo;
                 ShareObjectFinalValue.DividendPayoutInterval = cbxDividendPayoutInterval.SelectedIndex;
                 ShareObjectFinalValue.ShareType = (ShareObject.ShareTypes)cbxShareType.SelectedIndex;
@@ -821,5 +846,22 @@ namespace SharePortfolioManager
         }
 
         #endregion Button
+
+        #region ComboBoxes
+
+        private void OnCbxMarketValuesParsingOption_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            txtBoxDailyValuesWebSite.Text = 
+                Helper.RegexReplaceStartDateAndInterval(txtBoxDailyValuesWebSite.Text, (ShareObject.ParsingTypes)cbxDailyValuesParsingOption.SelectedIndex);
+        }
+
+        private void OnCbxDailyValuesParsingOption_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            txtBoxDailyValuesWebSite.Text =
+                Helper.RegexReplaceStartDateAndInterval(txtBoxDailyValuesWebSite.Text, (ShareObject.ParsingTypes)cbxDailyValuesParsingOption.SelectedIndex);
+        }
+
+        #endregion Comboboxes
+
     }
 }

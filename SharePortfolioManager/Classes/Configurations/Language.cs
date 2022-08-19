@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2022 nessie1980(nessie1980@gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -126,31 +126,56 @@ namespace SharePortfolioManager.Classes.Configurations
 
                         if (Language.InvalidLanguageKeysOfProject.Count != 0)
                         {
+                            var counter = 0;
+
                             strInvalidKeys =
                                 Language.InvalidLanguageKeysOfProject.Count +
                                 " invalid language keys in the project files.\n";
 
                             foreach (var invalidKeyProject in Language.InvalidLanguageKeysOfProject)
                             {
-                                strInvalidKeys += invalidKeyProject + Environment.NewLine;
+                                if (counter < Language.InvalidLanguageKeysOfProject.Count -1)
+                                {
+                                    strInvalidKeys += invalidKeyProject + Environment.NewLine;
+                                }
+                                else
+                                {
+                                    strInvalidKeys += invalidKeyProject;
+                                }
+
+                                counter++;
                             }
 
-                            strInvalidKeys += Environment.NewLine;
+                            if (Language.InvalidLanguageKeysOfXml.Count != 0)
+                            {
+                                strInvalidKeys += Environment.NewLine;
+                                strInvalidKeys += Environment.NewLine;
+                            }
                         }
 
                         if (Language.InvalidLanguageKeysOfXml.Count != 0)
                         {
+                            var counter = 0;
+
                             strInvalidKeys +=
                                 Language.InvalidLanguageKeysOfXml.Count + " unused XML language keys in file \"" +
                                 FileName + Environment.NewLine;
                             foreach (var invalidKeyXml in Language.InvalidLanguageKeysOfXml)
                             {
-                                strInvalidKeys += invalidKeyXml + Environment.NewLine;
+                                if (counter < Language.InvalidLanguageKeysOfXml.Count -1)
+                                {
+                                    strInvalidKeys += invalidKeyXml + Environment.NewLine;
+                                }
+                                else
+                                {
+                                    strInvalidKeys += invalidKeyXml;
+                                }
 
+                                counter++;
                             }
                         }
 
-                        FrmInvalidLanguageKeys invalidLanguageKeysDlg = new FrmInvalidLanguageKeys();
+                        var invalidLanguageKeysDlg = new FrmInvalidLanguageKeys();
                         invalidLanguageKeysDlg.Text += @" - (Project path: " + strProjectPath + @")";
                         invalidLanguageKeysDlg.SetText(strInvalidKeys);
                         invalidLanguageKeysDlg.ShowDialog();

@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2022 nessie1980(nessie1980@gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -1288,7 +1288,7 @@ namespace SharePortfolioManager.DividendForm.View
             // Reset document web browser
             Helper.WebBrowserPdf.Reload(webBrowser1, txtBoxDocument.Text);
 
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
         
         #endregion Form
@@ -1366,7 +1366,7 @@ namespace SharePortfolioManager.DividendForm.View
         /// <param name="e">EventArgs</param>
         private void OnDatePickerDate_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1396,7 +1396,7 @@ namespace SharePortfolioManager.DividendForm.View
         /// <param name="e">EventArgs</param>
         private void OnDatePickerTime_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1431,7 +1431,7 @@ namespace SharePortfolioManager.DividendForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxExchangeRatio_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1461,7 +1461,7 @@ namespace SharePortfolioManager.DividendForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxRate_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1491,7 +1491,7 @@ namespace SharePortfolioManager.DividendForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxVolume_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1521,7 +1521,7 @@ namespace SharePortfolioManager.DividendForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxTaxAtSource_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1551,7 +1551,7 @@ namespace SharePortfolioManager.DividendForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxCapitalGainsTax_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1581,7 +1581,7 @@ namespace SharePortfolioManager.DividendForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxSolidarityTax_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1611,7 +1611,7 @@ namespace SharePortfolioManager.DividendForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxPrice_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1656,7 +1656,7 @@ namespace SharePortfolioManager.DividendForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxDocument_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1898,7 +1898,7 @@ namespace SharePortfolioManager.DividendForm.View
             toolStripStatusLabelMessageDividendEdit.Text = string.Empty;
             toolStripStatusLabelMessageDividendDocumentParsing.Text = string.Empty;
 
-            DocumentBrowseEventHandler?.Invoke(this, new EventArgs());
+            DocumentBrowseEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion Buttons
@@ -2750,7 +2750,7 @@ namespace SharePortfolioManager.DividendForm.View
                         SelectedDataGridView = dgvContent;
 
                         // Format the input value
-                        FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+                        FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
 
                         // Enabled delete button
                         btnDelete.Enabled = true;
@@ -3236,6 +3236,10 @@ namespace SharePortfolioManager.DividendForm.View
                                     break;
                                 }
                             case DataTypes.ParserErrorCodes.NoWebContentLoaded:
+                                {
+                                    break;
+                                }
+                            case DataTypes.ParserErrorCodes.JsonError:
                                 {
                                     break;
                                 }

@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2022 nessie1980(nessie1980@gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -261,44 +261,132 @@ namespace SharePortfolioManager.Classes
         /// This functions shows a message box with the given caption and some exception information
         /// </summary>
         /// <param name="ex">Exception which should be shown</param>
-        public static void ShowExceptionMessage(Exception ex)
+        /// <param name="xmlLanguage">Language file</param>
+        /// <param name="language">Language</param>
+        /// <param name="bInnerException">Flag if an inner exception is given</param>
+        /// <param name="iInnerExceptionCounter">Counter which counts the amount of given inner exceptions</param>
+        public static void ShowExceptionMessage(Exception ex, Language xmlLanguage = null, string language = null, bool bInnerException = false, int iInnerExceptionCounter = 0)
         {
             // Check if not all necessary values for the show are given
             if (!ShowExceptionMessageFlag || ex == null) return;
 
-            const string caption = @"An exception occurred";
+            string message;
+            string caption;
 
-            var message = @"Source: " + Environment.NewLine + ex.Source
-                          + Environment.NewLine + Environment.NewLine
-                          + @"Function: " + Environment.NewLine + ex.TargetSite
-                          + Environment.NewLine + Environment.NewLine
-                          + @"Message: "
-                          + Environment.NewLine
-                          + ex.Message
-                          + Environment.NewLine + Environment.NewLine
-                          + @"StackTrace: "
-                          + Environment.NewLine
-                          + ex.StackTrace;
-
-            if (ex.Data.Count > 0)
-                message += @"Data: " + Environment.NewLine;
-
-            foreach (DictionaryEntry entry in ex.Data)
+            if (xmlLanguage == null || language == null)
             {
-                message += entry.Value
-                           + Environment.NewLine + Environment.NewLine;
+                if (!bInnerException)
+                {
+                    caption = @"An exception occurred!";
+                }
+                else
+                {
+                    caption = @"An inner exception (" + iInnerExceptionCounter + ") occurred!";
+                }
+
+                message = @"Source: "
+                    + Environment.NewLine + ex.Source
+                    + Environment.NewLine + Environment.NewLine
+                    + @"Function: "
+                    + Environment.NewLine + ex.TargetSite
+                    + Environment.NewLine + Environment.NewLine
+                    + @"Message: "
+                    + Environment.NewLine
+                    + ex.Message
+                    + Environment.NewLine + Environment.NewLine
+                    + @"StackTrace: "
+                    + Environment.NewLine
+                    + ex.StackTrace;
+
+                if (ex.Data.Count > 0)
+                {
+                    message += @"Data: "
+                        + Environment.NewLine;
+                }
+
+                foreach (DictionaryEntry entry in ex.Data)
+                {
+                    message += entry.Value
+                        + Environment.NewLine + Environment.NewLine;
+                }
+
+                if (ex.HelpLink != null)
+                {
+                    message += Environment.NewLine
+                        + Environment.NewLine
+                        + @"HelpLink: "
+                        + Environment.NewLine
+                        + ex.HelpLink;
+                }
+            }
+            else
+            {
+                // Get caption for inner or normal exception
+                if (!bInnerException)
+                {
+                    caption = xmlLanguage.GetLanguageTextByXPath(@"/ExceptionMessageBoxForm/Caption", language);
+                }
+                else
+                {
+                    caption = xmlLanguage.GetLanguageTextByXPath(@"/ExceptionMessageBoxForm/CaptionInner", language);
+                }
+
+                message = xmlLanguage.GetLanguageTextByXPath(
+                        @"/ExceptionMessageBoxForm/Content/Source",
+                        language) + " "
+                    + Environment.NewLine + ex.Source
+                    + Environment.NewLine + Environment.NewLine
+                    + xmlLanguage.GetLanguageTextByXPath(
+                        @"/ExceptionMessageBoxForm/Content/Function",
+                        language) + " "
+                    + Environment.NewLine + ex.TargetSite
+                    + Environment.NewLine + Environment.NewLine
+                    + xmlLanguage.GetLanguageTextByXPath(
+                        @"/ExceptionMessageBoxForm/Content/Message",
+                        language) + " "
+                    + Environment.NewLine
+                    + ex.Message
+                    + Environment.NewLine + Environment.NewLine
+                    + xmlLanguage.GetLanguageTextByXPath(
+                        @"/ExceptionMessageBoxForm/Content/StackTrace",
+                        language) + " "
+                    + Environment.NewLine
+                    + ex.StackTrace;
+
+                if (ex.Data.Count > 0)
+                {
+                    message += xmlLanguage.GetLanguageTextByXPath(
+                            @"/ExceptionMessageBoxForm/Content/Data",
+                            language)
+                        + " " + Environment.NewLine;
+                }
+
+                foreach (DictionaryEntry entry in ex.Data)
+                {
+                    message += entry.Value
+                        + Environment.NewLine + Environment.NewLine;
+                }
+
+                if (ex.HelpLink != null)
+                {
+                    message += Environment.NewLine
+                        + Environment.NewLine
+                        + xmlLanguage.GetLanguageTextByXPath(
+                            @"/ExceptionMessageBoxForm/Content/HelpLink",
+                            language) + " "
+                        + Environment.NewLine
+                        + ex.HelpLink;
+                }
             }
 
-            if (ex.HelpLink != null)
-            {
-                message += Environment.NewLine + Environment.NewLine
-                                               + @"HelpLink: "
-                                               + Environment.NewLine
-                                               + ex.HelpLink;
-            }
-
+            // TODO: (thomas:2022-08-18) It looks like centering of the message box does no more work
             if (FrmMain != null)
                 MessageBoxHelper.PrepToCenterMessageBoxOnForm(FrmMain);
+
+            if (ex.InnerException != null)
+            {
+                ShowExceptionMessage(ex.InnerException, xmlLanguage, language, true, ++iInnerExceptionCounter);
+            }
 
             MessageBox.Show(message, caption, MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
@@ -434,13 +522,13 @@ namespace SharePortfolioManager.Classes
                 }
 
                 // Check show given exception 
-                ShowExceptionMessage(exception);
+                ShowExceptionMessage(exception, xmlLanguage, language);
 
                 return result;
             }
             catch (Exception ex)
             {
-                ShowExceptionMessage(ex);
+                ShowExceptionMessage(ex, xmlLanguage, language);
 
                 return false;
             }
@@ -1240,7 +1328,7 @@ namespace SharePortfolioManager.Classes
 
         #region URL checker
 
-        public static bool UrlChecker(ref string url, int timeout)
+        public static bool UrlChecker(ref string url, string apiKey, int timeout)
         {
             if (string.IsNullOrEmpty(url))
             {
@@ -1253,7 +1341,16 @@ namespace SharePortfolioManager.Classes
                 var request = (HttpWebRequest) WebRequest.Create(urlCheck);
                 request.Timeout = timeout;
                 request.UserAgent =
-                    "Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.9.0.13) Gecko/2009073022 Firefox/3.0.13";
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/99.0";
+                request.Method = "GET";
+                request.AllowAutoRedirect = true;
+                request.MaximumAutomaticRedirections = 1;
+
+                // Check if an API key is given
+                if (apiKey != string.Empty)
+                {
+                    request.Headers["X-API-KEY"] = apiKey;
+                }
 
                 // Using is necessary here, because after various response the connection fails with timeout
                 HttpWebResponse response;
@@ -1277,36 +1374,54 @@ namespace SharePortfolioManager.Classes
             }
         }
 
-        public static string RegexReplaceStartDateAndInterval(string strWebSite)
+        public static string RegexReplaceStartDateAndInterval(string strWebSite, ShareObject.ParsingTypes parsingType)
         {
-            // Replace date for example 01.01.1979
-            strWebSite = Regex.Replace(strWebSite,
-                "[=]([0-9][0-9].[0-9][0-9].[0-9][0-9][0-9][0-9])[&]", "={0}&");
+            if (parsingType == ShareObject.ParsingTypes.ApiOnVista)
+            {
+                // Replace date for example 01.01.1979
+                strWebSite = Regex.Replace(strWebSite,
+                    "[=]([0-9][0-9].[0-9][0-9].[0-9][0-9][0-9][0-9])[&]", "={0}&");
 
-            // Replace date for example 01-01-1979
-            strWebSite = Regex.Replace(strWebSite,
-                "[=]([0-9][0-9]-[0-9][0-9]-[0-9][0-9][0-9][0-9])[&]", "={0}&");
+                // Replace date for example 01-01-1979
+                strWebSite = Regex.Replace(strWebSite,
+                    "[=]([0-9][0-9]-[0-9][0-9]-[0-9][0-9][0-9][0-9])[&]", "={0}&");
 
-            // Replace date for example 1979.01.01
-            strWebSite = Regex.Replace(strWebSite,
-                "[=]([0-9][0-9][0-9][0-9].[0-9][0-9].[0-9][0-9])[&]", "={0}&");
+                // Replace date for example 1979.01.01
+                strWebSite = Regex.Replace(strWebSite,
+                    "[=]([0-9][0-9][0-9][0-9].[0-9][0-9].[0-9][0-9])[&]", "={0}&");
 
-            // Replace date for example 1979-01-01
-            strWebSite = Regex.Replace(strWebSite,
-                "[=]([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9])[&]", "={0}&");
+                // Replace date for example 1979-01-01
+                strWebSite = Regex.Replace(strWebSite,
+                    "[=]([0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9])[&]", "={0}&");
 
-            // Replace intervals
-            strWebSite = Regex.Replace(strWebSite,
-                "[=]([M,Y][1,3,5,6])[&]", "={1}&");
+                // Replace ranges
+                strWebSite = Regex.Replace(strWebSite,
+                    "[e][=]([M,Y][1,3,5,6])[&]", "e={1}&");
 
-            strWebSite = Regex.Replace(strWebSite,
-                "[=]([M,Y][1,3,5,6])", "={1}");
+                strWebSite = Regex.Replace(strWebSite,
+                    "[e][=]([M,Y][1,3,5,6])", "e={1}");
 
-            strWebSite = Regex.Replace(strWebSite,
-                "[=]([1,3,5,6][M,Y])[&]", "={1}&");
+                strWebSite = Regex.Replace(strWebSite,
+                    "[e][=]([1,3,5,6][M,Y])[&]", "e={1}&");
 
-            strWebSite = Regex.Replace(strWebSite,
-                "[=]([1,3,5,6][M,Y])[&]", "={1}&");
+                strWebSite = Regex.Replace(strWebSite,
+                    "[e][=]([1,3,5,6][M,Y])[&]", "e={1}&");
+            }
+            else if (parsingType == ShareObject.ParsingTypes.ApiYahoo)
+            {
+                // Replace ranges for 1d / 5d
+                strWebSite = Regex.Replace(strWebSite,
+                    "[e][=]([1,5][d])[&]", "e={0}&");
+                // Replace ranges for 1m / 3m / 6m
+                strWebSite = Regex.Replace(strWebSite,
+                    "[e][=]([1,3,6][m][o])[&]", "e={0}&");
+                // Replace ranges for 1y / 5y / 10y / 20y
+                strWebSite = Regex.Replace(strWebSite,
+                    "[e][=]([1,5][y]|[1][0][y]|[2][0][y])[&]", "e={0}&");
+            }
+            else
+            {
+            }
 
             return strWebSite;
         }
@@ -1419,34 +1534,91 @@ namespace SharePortfolioManager.Classes
                 // Check if any daily values already exists
                 if (dailyValues.Count == 0)
                 {
-                    var date = DateTime.Now;
-
-                    // Go five years back
-                    date = date.AddYears(-5);
-
-                    switch (shareType)
+                    switch (parsingType)
                     {
-                        // Share type "Share"
-                        case ShareObject.ShareTypes.Share:
-                            strDailyValuesWebSite = string.Format(webSiteUrl,
-                                parsingType == ShareObject.ParsingTypes.Regex
-                                    ? date.ToString("dd.MM.yyyy")
-                                    : date.ToString("yyyy-MM-dd"), "Y5");
+                        case ShareObject.ParsingTypes.Regex:
+                            {
+                                var date = DateTime.Now;
+
+                                // Go five years back
+                                date = date.AddYears(-5);
+
+                                switch (shareType)
+                                {
+                                    // Share type "Share"
+                                    case ShareObject.ShareTypes.Share:
+                                        {
+                                            strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                date.ToString("dd.MM.yyyy"), "Y5");
+                                        }
+                                        break;
+                                    // Share type "Fond"
+                                    case ShareObject.ShareTypes.Fond:
+                                        {
+                                            strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                date.ToString("dd.MM.yyyy"), "5Y");
+                                        }
+                                        break;
+                                    // Share type "ETF"
+                                    case ShareObject.ShareTypes.Etf:
+                                        {
+                                            strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                date.ToString("dd.MM.yyyy"), "5Y");
+                                        }
+                                        break;
+                                    default:
+                                        {
+                                            throw new NotImplementedException();
+                                        }
+                                }
+                            }
                             break;
-                        // Share type "Fond"
-                        case ShareObject.ShareTypes.Fond:
-                            strDailyValuesWebSite = parsingType == ShareObject.ParsingTypes.Regex
-                                ? string.Format(webSiteUrl, date.ToString("dd.MM.yyyy"), "5Y")
-                                : string.Format(webSiteUrl, date.ToString("yyyy-MM-dd"), "Y5");
+                        case ShareObject.ParsingTypes.ApiOnVista:
+                            {
+                                var date = DateTime.Now;
+
+                                // Go five years back
+                                date = date.AddYears(-5);
+
+                                switch (shareType)
+                                {
+                                    // Share type "Share"
+                                    case ShareObject.ShareTypes.Share:
+                                        {
+                                            strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                date.ToString("yyyy-MM-dd"), "Y5");
+                                        }
+                                        break;
+                                    // Share type "Fond"
+                                    case ShareObject.ShareTypes.Fond:
+                                        {
+                                            strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                date.ToString("yyyy-MM-dd"), "Y5");
+                                        }
+                                        break;
+                                    // Share type "ETF"
+                                    case ShareObject.ShareTypes.Etf:
+                                        {
+                                            strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                date.ToString("yyyy-MM-dd"), "Y5");
+                                        }
+                                        break;
+                                    default:
+                                        {
+                                            throw new NotImplementedException();
+                                        }
+                                }
+                            }
                             break;
-                        // Share type "ETF"
-                        case ShareObject.ShareTypes.Etf:
-                            strDailyValuesWebSite = parsingType == ShareObject.ParsingTypes.Regex
-                                ? string.Format(webSiteUrl, date.ToString("dd.MM.yyyy"), "5Y")
-                                : string.Format(webSiteUrl, date.ToString("yyyy-MM-dd"), "Y5");
+                        case ShareObject.ParsingTypes.ApiYahoo:
+                            {
+                                strDailyValuesWebSite = string.Format(webSiteUrl, "20y");
+                            }
                             break;
                         default:
-                            throw new NotFiniteNumberException();
+                            {
+                                throw new NotImplementedException();
+                            }
                     }
                 }
                 else
@@ -1457,143 +1629,272 @@ namespace SharePortfolioManager.Classes
                     // Check if the days are less or equal than 27 days
                     var diffMonth = GetTotalMonthsFrom(DateTime.Now, lastDate);
 
-                    switch (shareType)
+                    switch (parsingType)
                     {
-                        // Share type "Share"
-                        case ShareObject.ShareTypes.Share:
+                        case ShareObject.ParsingTypes.Regex:
                         {
-                            if (diffMonth < 1)
-                                strDailyValuesWebSite = string.Format(webSiteUrl,
-                                    parsingType == ShareObject.ParsingTypes.Regex
-                                        ? DateTime.Now.AddMonths(-1).ToString("dd.MM.yyyy")
-                                        : DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd"), "M1");
-                            else if (diffMonth < 3)
-                                strDailyValuesWebSite = string.Format(webSiteUrl,
-                                    parsingType == ShareObject.ParsingTypes.Regex
-                                        ? DateTime.Now.AddMonths(-3).ToString("dd.MM.yyyy")
-                                        : DateTime.Now.AddMonths(-3).ToString("yyyy-MM-dd"), "M3");
-                            else if (diffMonth < 6)
-                                strDailyValuesWebSite = string.Format(webSiteUrl,
-                                    parsingType == ShareObject.ParsingTypes.Regex
-                                        ? DateTime.Now.AddMonths(-6).ToString("dd.MM.yyyy")
-                                        : DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd"), "M6");
-                            else if (diffMonth < 12)
-                                strDailyValuesWebSite = string.Format(webSiteUrl,
-                                    parsingType == ShareObject.ParsingTypes.Regex
-                                        ? DateTime.Now.AddMonths(-12).ToString("dd.MM.yyyy")
-                                        : DateTime.Now.AddMonths(-12).ToString("yyyy-MM-dd"), "Y1");
-                            else if (diffMonth < 36)
-                                strDailyValuesWebSite = string.Format(webSiteUrl,
-                                    parsingType == ShareObject.ParsingTypes.Regex
-                                        ? DateTime.Now.AddMonths(-36).ToString("dd.MM.yyyy")
-                                        : DateTime.Now.AddMonths(-36).ToString("yyyy-MM-dd"), "Y3");
-                            else
-                                strDailyValuesWebSite = string.Format(webSiteUrl,
-                                    parsingType == ShareObject.ParsingTypes.Regex
-                                        ? DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy")
-                                        : DateTime.Now.AddMonths(-60).ToString("yyyy-MM-dd"), "Y5");
-                        }
-                            break;
-                        // Share type "Fond"
-                        case ShareObject.ShareTypes.Fond:
-                        {
-                            if (diffMonth < 1)
-                                if (parsingType == ShareObject.ParsingTypes.Regex)
-                                    strDailyValuesWebSite = string.Format(webSiteUrl,
-                                        DateTime.Now.AddMonths(-1).ToString("dd.MM.yyyy"), "1M");
-                                else
-                                    strDailyValuesWebSite = string.Format(webSiteUrl,
-                                        DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd"), "M1");
-                            else if (diffMonth < 3)
-                                if (parsingType == ShareObject.ParsingTypes.Regex)
-                                    strDailyValuesWebSite = string.Format(webSiteUrl,
-                                        DateTime.Now.AddMonths(-3).ToString("dd.MM.yyyy"), "3M");
-                                else
-                                    strDailyValuesWebSite = string.Format(webSiteUrl,
-                                        DateTime.Now.AddMonths(-3).ToString("yyyy-MM-dd"), "M3");
-                            else if (diffMonth < 6)
-                                if (parsingType == ShareObject.ParsingTypes.Regex)
-                                    strDailyValuesWebSite = string.Format(webSiteUrl,
-                                        DateTime.Now.AddMonths(-6).ToString("dd.MM.yyyy"), "6M");
-                                else
-                                    strDailyValuesWebSite = string.Format(webSiteUrl,
-                                        DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd"), "M6");
-                            else if (diffMonth < 12)
-                                if (parsingType == ShareObject.ParsingTypes.Regex)
-                                    strDailyValuesWebSite = string.Format(webSiteUrl,
-                                        DateTime.Now.AddMonths(-12).ToString("dd.MM.yyyy"), "1Y");
-                                else
-                                    strDailyValuesWebSite = string.Format(webSiteUrl,
-                                        DateTime.Now.AddMonths(-12).ToString("yyyy-MM-dd"), "Y1");
-                            else if (diffMonth < 36)
-                                if (parsingType == ShareObject.ParsingTypes.Regex)
-                                    strDailyValuesWebSite = string.Format(webSiteUrl,
-                                        DateTime.Now.AddMonths(-36).ToString("dd.MM.yyyy"), "3Y");
-                                else
-                                    strDailyValuesWebSite = string.Format(webSiteUrl,
-                                        DateTime.Now.AddMonths(-36).ToString("yyyy-MM-dd"), "Y3");
-                            else
+                            switch (shareType)
                             {
-                                if (parsingType == ShareObject.ParsingTypes.Regex)
-                                    strDailyValuesWebSite = string.Format(webSiteUrl,
-                                        DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy"), "5Y");
-                                else
-                                    strDailyValuesWebSite = string.Format(webSiteUrl,
-                                        DateTime.Now.AddMonths(-60).ToString("yyyy-MM-dd"), "Y5");
+                                // Share type "Share"
+                                case ShareObject.ShareTypes.Share:
+                                    {
+                                            if (diffMonth < 1)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                    DateTime.Now.AddMonths(-1).ToString("dd.MM.yyyy"), "M1");
+                                            }
+                                            else if (diffMonth < 3)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                    DateTime.Now.AddMonths(-3).ToString("dd.MM.yyyy"), "M3");
+                                            }
+                                            else if (diffMonth < 6)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                    DateTime.Now.AddMonths(-6).ToString("dd.MM.yyyy"), "M6");
+                                            }
+                                            else if (diffMonth < 12)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                    DateTime.Now.AddMonths(-12).ToString("dd.MM.yyyy"), "Y1");
+                                            }
+                                            else if (diffMonth < 36)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                    DateTime.Now.AddMonths(-36).ToString("dd.MM.yyyy"), "Y3");
+                                            }
+                                            else
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                    DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy"), "Y5");
+                                            }
+                                    }
+                                    break;
+                                // Share type "Fond"
+                                case ShareObject.ShareTypes.Fond:
+                                    {
+                                            if (diffMonth < 1)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                        DateTime.Now.AddMonths(-1).ToString("dd.MM.yyyy"), "1M");
+                                            }
+                                            else if (diffMonth < 3)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                        DateTime.Now.AddMonths(-3).ToString("dd.MM.yyyy"), "3M");
+                                            }
+                                            else if (diffMonth < 6)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                        DateTime.Now.AddMonths(-6).ToString("dd.MM.yyyy"), "6M");
+                                            }
+                                            else if (diffMonth < 12)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                         DateTime.Now.AddMonths(-12).ToString("dd.MM.yyyy"), "1Y");
+                                            }
+                                            else if (diffMonth < 36)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                        DateTime.Now.AddMonths(-36).ToString("dd.MM.yyyy"), "3Y");
+                                            }
+                                            else
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                        DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy"), "5Y");
+                                            }
+                                    }
+                                    break;
+                                // Share type "ETF"
+                                case ShareObject.ShareTypes.Etf:
+                                    {
+                                            if (diffMonth < 1)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                        DateTime.Now.AddMonths(-1).ToString("dd.MM.yyyy"), "1M");
+                                            }
+                                            else if (diffMonth < 3)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                         DateTime.Now.AddMonths(-3).ToString("dd.MM.yyyy"), "3M");
+                                            }
+                                            else if (diffMonth < 6)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                        DateTime.Now.AddMonths(-6).ToString("dd.MM.yyyy"), "6M");
+                                            }
+                                            else if (diffMonth < 12)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                        DateTime.Now.AddMonths(-12).ToString("dd.MM.yyyy"), "1Y");
+                                            }
+                                            else if (diffMonth < 36)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                        DateTime.Now.AddMonths(-36).ToString("dd.MM.yyyy"), "3Y");
+                                            }
+                                            else
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                        DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy"), "5Y");
+                                            }
+                                    }
+                                    break;
+                                default:
+                                    {
+                                        throw new NotImplementedException();
+                                    }
                             }
                         }
-                            break;
-                        // Share type "ETF"
-                        case ShareObject.ShareTypes.Etf:
-                        {
-                            if (diffMonth < 1)
-                                if (parsingType == ShareObject.ParsingTypes.Regex)
-                                    strDailyValuesWebSite = string.Format(webSiteUrl,
-                                        DateTime.Now.AddMonths(-1).ToString("dd.MM.yyyy"), "1M");
-                                else
-                                    strDailyValuesWebSite = string.Format(webSiteUrl,
-                                        DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd"), "M1");
-                            else if (diffMonth < 3)
-                                if (parsingType == ShareObject.ParsingTypes.Regex)
-                                    strDailyValuesWebSite = string.Format(webSiteUrl,
-                                        DateTime.Now.AddMonths(-3).ToString("dd.MM.yyyy"), "3M");
-                                else
-                                    strDailyValuesWebSite = string.Format(webSiteUrl,
-                                        DateTime.Now.AddMonths(-3).ToString("yyyy-MM-dd"), "M3");
-                            else if (diffMonth < 6)
-                                if (parsingType == ShareObject.ParsingTypes.Regex)
-                                    strDailyValuesWebSite = string.Format(webSiteUrl,
-                                        DateTime.Now.AddMonths(-6).ToString("dd.MM.yyyy"), "6M");
-                                else
-                                    strDailyValuesWebSite = string.Format(webSiteUrl,
-                                        DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd"), "M6");
-                            else if (diffMonth < 12)
-                                if (parsingType == ShareObject.ParsingTypes.Regex)
-                                    strDailyValuesWebSite = string.Format(webSiteUrl,
-                                        DateTime.Now.AddMonths(-12).ToString("dd.MM.yyyy"), "1Y");
-                                else
-                                    strDailyValuesWebSite = string.Format(webSiteUrl,
-                                        DateTime.Now.AddMonths(-12).ToString("yyyy-MM-dd"), "Y1");
-                            else if (diffMonth < 36)
-                                if (parsingType == ShareObject.ParsingTypes.Regex)
-                                    strDailyValuesWebSite = string.Format(webSiteUrl,
-                                        DateTime.Now.AddMonths(-36).ToString("dd.MM.yyyy"), "3Y");
-                                else
-                                    strDailyValuesWebSite = string.Format(webSiteUrl,
-                                        DateTime.Now.AddMonths(-36).ToString("yyyy-MM-dd"), "Y3");
-                            else
+                        break;
+                        case ShareObject.ParsingTypes.ApiOnVista:
                             {
-                                if (parsingType == ShareObject.ParsingTypes.Regex)
-                                    strDailyValuesWebSite = string.Format(webSiteUrl,
-                                        DateTime.Now.AddMonths(-60).ToString("dd.MM.yyyy"), "5Y");
-                                else
-                                    strDailyValuesWebSite = string.Format(webSiteUrl,
-                                        DateTime.Now.AddMonths(-60).ToString("yyyy-MM-dd"), "Y5");
+                                switch (shareType)
+                                {
+                                    // Share type "Share"
+                                    case ShareObject.ShareTypes.Share:
+                                        {
+                                            if (diffMonth < 1)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                    DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd"), "M1");
+                                            }
+                                            else if (diffMonth < 3)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                    DateTime.Now.AddMonths(-3).ToString("yyyy-MM-dd"), "M3");
+                                            }
+                                            else if (diffMonth < 6)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                    DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd"), "M6");
+                                            }
+                                            else if (diffMonth < 12)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                    DateTime.Now.AddMonths(-12).ToString("yyyy-MM-dd"), "Y1");
+                                            }
+                                            else if (diffMonth < 36)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                    DateTime.Now.AddMonths(-36).ToString("yyyy-MM-dd"), "Y3");
+                                            }
+                                            else
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                    DateTime.Now.AddMonths(-60).ToString("yyyy-MM-dd"), "Y5");
+                                            }
+                                        }
+                                        break;
+                                    // Share type "Fond"
+                                    case ShareObject.ShareTypes.Fond:
+                                        {
+                                            if (diffMonth < 1)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                    DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd"), "M1");
+                                            }
+                                            else if (diffMonth < 3)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                    DateTime.Now.AddMonths(-3).ToString("yyyy-MM-dd"), "M3");
+                                            }
+                                            else if (diffMonth < 6)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                    DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd"), "M6");
+                                            }
+                                            else if (diffMonth < 12)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                    DateTime.Now.AddMonths(-12).ToString("yyyy-MM-dd"), "Y1");
+                                            }
+                                            else if (diffMonth < 36)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                    DateTime.Now.AddMonths(-36).ToString("yyyy-MM-dd"), "Y3");
+                                            }
+                                            else
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                    DateTime.Now.AddMonths(-60).ToString("yyyy-MM-dd"), "Y5");
+                                            }
+                                        }
+                                        break;
+                                    // Share type "ETF"
+                                    case ShareObject.ShareTypes.Etf:
+                                        {
+                                            if (diffMonth < 1)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                    DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd"), "M1");
+                                            }
+                                            else if (diffMonth < 3)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                    DateTime.Now.AddMonths(-3).ToString("yyyy-MM-dd"), "M3");
+                                            }
+                                            else if (diffMonth < 6)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                    DateTime.Now.AddMonths(-6).ToString("yyyy-MM-dd"), "M6");
+                                            }
+                                            else if (diffMonth < 12)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                    DateTime.Now.AddMonths(-12).ToString("yyyy-MM-dd"), "Y1");
+                                            }
+                                            else if (diffMonth < 36)
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                    DateTime.Now.AddMonths(-36).ToString("yyyy-MM-dd"), "Y3");
+                                            }
+                                            else
+                                            {
+                                                strDailyValuesWebSite = string.Format(webSiteUrl,
+                                                    DateTime.Now.AddMonths(-60).ToString("yyyy-MM-dd"), "Y5");
+                                            }
+                                        }
+                                        break;
+                                    default:
+                                        {
+                                            throw new NotImplementedException();
+                                        }
+                                }
                             }
-                        }
+                            break;
+                        case ShareObject.ParsingTypes.ApiYahoo:
+                            {
+                                if (diffMonth < 1)
+                                {
+                                    strDailyValuesWebSite = string.Format(webSiteUrl, "1mo");
+                                }
+                                else if (diffMonth < 3)
+                                {
+                                    strDailyValuesWebSite = string.Format(webSiteUrl, "3mo");
+                                }
+                                else if (diffMonth < 6)
+                                {
+                                    strDailyValuesWebSite = string.Format(webSiteUrl, "6mo");
+                                }
+                                else if (diffMonth < 12)
+                                {
+                                    strDailyValuesWebSite = string.Format(webSiteUrl, "1y");
+                                }
+                                else if (diffMonth < 36)
+                                {
+                                    strDailyValuesWebSite = string.Format(webSiteUrl, "3y");
+                                }
+                                else
+                                {
+                                    strDailyValuesWebSite = string.Format(webSiteUrl, "5y");
+                                }
+                            }
                             break;
                         default:
-                            throw new NotImplementedException();
+                            {
+                                throw new NotImplementedException();
+                            }
                     }
                 }
             }
@@ -1858,12 +2159,12 @@ public class CultureInformation
         {
             internal readonly struct Rect
             {
-            public static Rect CreateInstance(int left, int top, int right, int bottom)
-            {
-                return new Rect(left, top, right, bottom);
-            }
+                //public static Rect CreateInstance(int left, int top, int right, int bottom)
+                //{
+                //    return new Rect(left, top, right, bottom);
+                //}
 
-            public readonly int Left;
+                public readonly int Left;
                 public readonly int Top;
                 public readonly int Right;
                 public readonly int Bottom;

@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2022 nessie1980(nessie1980@gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -60,11 +60,16 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
             _view.ErrorCode = _model.ErrorCode;
 
             _view.Wkn = _model.Wkn;
+            _view.Isin = _model.Isin;
             _view.ShareName = _model.Name;
             _view.StockMarketLaunchDate = _model.StockMarketLaunchDate;
             _view.DetailsWebSite = _model.DetailsWebSite;
             _view.MarketValuesWebSite = _model.MarketValuesWebSite;
+            _view.MarketValuesParsingOption = _model.MarketValuesParsingOption;
+            _view.MarketValuesParsingApiKey = _model.MarketValuesParsingApiKey;
             _view.DailyValuesWebSite = _model.DailyValuesWebSite;
+            _view.DailyValuesParsingOption = _model.DailyValuesParsingOption;
+            _view.DailyValuesParsingApiKey = _model.DailyValuesParsingApiKey;
             _view.Date = _model.Date;
             _view.Time = _model.Time;
             _view.DepotNumber = _model.DepotNumber;
@@ -112,6 +117,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
             _model.ErrorCode = _view.ErrorCode;
 
             _model.Wkn = _view.Wkn;
+            _model.Isin = _view.Isin;
             _model.Name = _view.ShareName;
             _model.StockMarketLaunchDate = _view.StockMarketLaunchDate;
             _model.ShareType = _view.ShareType;
@@ -120,8 +126,10 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
             _model.DetailsWebSite = _view.DetailsWebSite;
             _model.MarketValuesWebSite = _view.MarketValuesWebSite;
             _model.MarketValuesParsingOption = _view.MarketValuesParsingOption;
+            _model.MarketValuesParsingApiKey = _view.MarketValuesParsingApiKey;
             _model.DailyValuesWebSite = _view.DailyValuesWebSite;
             _model.DailyValuesParsingOption = _view.DailyValuesParsingOption;
+            _model.DailyValuesParsingApiKey = _view.DailyValuesParsingApiKey;
             _model.Date = _view.Date;
             _model.Time = _view.Time;
             _model.DepotNumber = _view.DepotNumber;
@@ -197,6 +205,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                     new ShareObjectMarketValue(
                         @"",
                         _model.Wkn,
+                        _model.Isin,
                         _model.DepotNumber,
                         _model.OrderNumber,
                         strDateTime,
@@ -214,8 +223,10 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                         _model.DetailsWebSite,
                         _model.MarketValuesWebSite,
                         _model.MarketValuesParsingOption,
+                        _model.MarketValuesParsingApiKey,
                         _model.DailyValuesWebSite,
                         _model.DailyValuesParsingOption,
+                        _model.DailyValuesParsingApiKey,
                         _model.ImageListPrevDayPerformance,
                         _model.ImageListCompletePerformance,
                         null,
@@ -231,6 +242,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                     new ShareObjectFinalValue(
                         @"",
                         _model.Wkn,
+                        _model.Isin,
                         _model.DepotNumber,
                         _model.OrderNumber,
                         strDateTime,
@@ -248,8 +260,10 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                         _model.DetailsWebSite,
                         _model.MarketValuesWebSite,
                         _model.MarketValuesParsingOption,
+                        _model.MarketValuesParsingApiKey,
                         _model.DailyValuesWebSite,
                         _model.DailyValuesParsingOption,
+                        _model.DailyValuesParsingApiKey,
                         _model.ImageListPrevDayPerformance,
                         _model.ImageListCompletePerformance,
                         null,
@@ -272,6 +286,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                     _model.ShareObjectListMarketValue.Add(new ShareObjectMarketValue(
                         guid,
                         _model.Wkn,
+                        _model.Isin,
                         _model.DepotNumber,
                         _model.OrderNumber,
                         strDateTime,
@@ -289,8 +304,10 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                         _model.DetailsWebSite,
                         _model.MarketValuesWebSite,
                         _model.MarketValuesParsingOption,
+                        _model.MarketValuesParsingApiKey,
                         _model.DailyValuesWebSite,
                         _model.DailyValuesParsingOption,
+                        _model.DailyValuesParsingApiKey,
                         _model.ImageListPrevDayPerformance,
                         _model.ImageListCompletePerformance,
                         null,
@@ -303,6 +320,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                     _model.ShareObjectListFinalValue.Add(new ShareObjectFinalValue(
                         guid,
                         _model.Wkn,
+                        _model.Isin,
                         _model.DepotNumber,
                         _model.OrderNumber,
                         strDateTime,
@@ -320,8 +338,10 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                         _model.DetailsWebSite,
                         _model.MarketValuesWebSite,
                         _model.MarketValuesParsingOption,
+                        _model.MarketValuesParsingApiKey,
                         _model.DailyValuesWebSite,
                         _model.DailyValuesParsingOption,
+                        _model.DailyValuesParsingApiKey,
                         _model.ImageListPrevDayPerformance,
                         _model.ImageListCompletePerformance,
                         null,
@@ -432,7 +452,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
             var bErrorFlag = false;
             var decodedUrlDetailsWebSite = _model.DetailsWebSite;
             var decodedUrlMarketValuesWebSite = _model.MarketValuesWebSite;
-            var decodeUrlDailyValuesWebSite = Helper.RegexReplaceStartDateAndInterval(_model.DailyValuesWebSite);
+            var decodeUrlDailyValuesWebSite = Helper.RegexReplaceStartDateAndInterval(_model.DailyValuesWebSite, _model.DailyValuesParsingOption);
 
             _model.ErrorCode = ShareAddErrorCode.AddSuccessful;
 
@@ -464,6 +484,39 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                     if (shareObjectFinalValue.Wkn != _model.Wkn) continue;
 
                     _model.ErrorCode = ShareAddErrorCode.WknExists;
+                    bErrorFlag = true;
+                    break;
+                }
+            }
+
+            // Check ISIN number input
+            if (_model.Isin == @"")
+            {
+                _model.ErrorCode = ShareAddErrorCode.IsinEmpty;
+                bErrorFlag = true;
+            }
+
+            // Check if a market value share with the given ISIN number already exists
+            if (!bErrorFlag)
+            {
+                foreach (var shareObjectMarketValue in _model.ShareObjectListMarketValue)
+                {
+                    if (shareObjectMarketValue.Isin != _model.Isin) continue;
+
+                    _model.ErrorCode = ShareAddErrorCode.IsinExists;
+                    bErrorFlag = true;
+                    break;
+                }
+            }
+
+            // Check if final value share with the given ISIN number already exists
+            if (!bErrorFlag)
+            {
+                foreach (var shareObjectFinalValue in _model.ShareObjectListFinalValue)
+                {
+                    if (shareObjectFinalValue.Isin != _model.Isin) continue;
+
+                    _model.ErrorCode = ShareAddErrorCode.IsinExists;
                     bErrorFlag = true;
                     break;
                 }
@@ -521,7 +574,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                 bErrorFlag = true;
             }
             // Check details website format
-            else if (bErrorFlag == false && !Helper.UrlChecker(ref decodedUrlDetailsWebSite, 10000))
+            else if (bErrorFlag == false && !Helper.UrlChecker(ref decodedUrlDetailsWebSite, _model.DailyValuesParsingApiKey, 10000))
             {
                 _model.ErrorCode = ShareAddErrorCode.DetailsWebSiteWrongFormat;
                 bErrorFlag = true;
@@ -562,7 +615,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                 bErrorFlag = true;
             }
             // Check market values website format
-            else if (bErrorFlag == false && !Helper.UrlChecker(ref decodedUrlMarketValuesWebSite, 10000))
+            else if (bErrorFlag == false && !Helper.UrlChecker(ref decodedUrlMarketValuesWebSite, _model.MarketValuesParsingApiKey, 10000))
             {
                 _model.ErrorCode = ShareAddErrorCode.MarketWebSiteWrongFormat;
                 bErrorFlag = true;
@@ -606,7 +659,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                 bErrorFlag = true;
             }
             // Check daily values website format
-            else if (bErrorFlag == false && !Helper.UrlChecker(ref dummyUrl, 10000))
+            else if (bErrorFlag == false && !Helper.UrlChecker(ref dummyUrl, _model.DailyValuesParsingApiKey, 10000))
             {
                 _model.ErrorCode = ShareAddErrorCode.DailyValuesWebSiteWrongFormat;
                 bErrorFlag = true;
@@ -800,7 +853,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
 
             _model.DetailsWebSite = decodedUrlDetailsWebSite;
             _model.MarketValuesWebSite = decodedUrlMarketValuesWebSite;
-            _model.DailyValuesWebSite = Helper.RegexReplaceStartDateAndInterval(decodeUrlDailyValuesWebSite);
+            _model.DailyValuesWebSite = Helper.RegexReplaceStartDateAndInterval(decodeUrlDailyValuesWebSite, _model.DailyValuesParsingOption);
 
             return bErrorFlag;
         }

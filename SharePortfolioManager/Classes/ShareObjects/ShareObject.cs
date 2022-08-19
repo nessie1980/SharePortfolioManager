@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2022 nessie1980(nessie1980@gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -88,7 +88,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
         public enum ParsingTypes
         {
             Regex,
-            Api
+            ApiOnVista,
+            ApiYahoo
         }
 
         #endregion Parsing types
@@ -144,6 +145,11 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Stores the XML attribute name for the WKN
         /// </summary>
         internal const string GeneralWknAttrName= "WKN";
+
+        /// <summary>
+        /// Stores the XML attribute name for the ISIN
+        /// </summary>
+        internal const string GeneralIsinAttrName = "ISIN";
 
         /// <summary>
         /// Stores the XML attribute name for the share name
@@ -232,12 +238,17 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <summary>
         /// Stores the XML attribute name for the website of the share update
         /// </summary>
-        internal const string GeneralMarketValuesWebSiteAttrName = "WebSite";
+        internal const string MarketValuesWebSiteAttrName = "WebSite";
 
         /// <summary>
         /// Stores the XML attribute name for the flag in which the parsing of the market values should be done (Regex / API)
         /// </summary>
-        internal const string GeneralParsingMarketValuesAttrName = "Parsing";
+        internal const string MarketValuesParsingAttrName = "Parsing";
+
+        /// <summary>
+        /// Stores the XML attribute name for the API key which is used by parsing of the market values
+        /// </summary>
+        internal const string MarketValuesParsingApiKeyAttrName = "ApiKey";
 
         #endregion MarketValues XML Variables
 
@@ -251,7 +262,12 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <summary>
         /// Stores the XML attribute name for the flag in which the parsing of the daily values should be done (Regex / API)
         /// </summary>
-        internal const string GeneralParsingDailyValuesAttrName = "Parsing";
+        internal const string DailyValuesParsingAttrName = "Parsing";
+
+        /// <summary>
+        /// Stores the XML attribute name for the API key which is used by parsing of the daily values
+        /// </summary>
+        internal const string DailyValuesParsingApiKeyAttrName = "ApiKey";
 
         /// <summary>
         /// Stores the tag name prefix of a daily values entry
@@ -695,6 +711,12 @@ namespace SharePortfolioManager.Classes.ShareObjects
         public string Wkn { get; set; }
 
         /// <summary>
+        /// ISIN of the share
+        /// </summary>
+        [Browsable(false)]
+        public string Isin { get; set; }
+
+        /// <summary>
         /// Details website of the share
         /// </summary>
         [Browsable(false)]
@@ -819,6 +841,12 @@ namespace SharePortfolioManager.Classes.ShareObjects
         [Browsable(false)]
         public string MarketValuesParsingOptionAsStr => MarketValuesParsingOption.ToString();
 
+        /// <summary>
+        /// API key for the API parsing if necessary for the market values
+        /// </summary>
+        [Browsable(false)]
+        public string MarketValuesParsingApiKey { get; set; }
+
         #endregion Market values
 
         #region Daily values
@@ -840,6 +868,12 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         [Browsable(false)]
         public string DailyValuesParsingOptionAsStr => DailyValuesParsingOption.ToString();
+
+        /// <summary>
+        /// API key for the API parsing if necessary for the daily values
+        /// </summary>
+        [Browsable(false)]
+        public string DailyValuesParsingApiKey { get; set; }
 
         /// <summary>
         /// List of the daily values of the share ( Date / ClosingPrice / OpeningPrice / Top / Bottom / Volume )
@@ -1114,7 +1148,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <summary>
         /// Constructor with parameters
         /// </summary>
-        /// <param name="wkn">WKN number of the share</param>
+        /// <param name="wkn">WKN number of the share (Wertpapier Kennnummer)</param>
+        /// <param name="isin">ISIN number of the share (International Securities Identification Number)</param>
         /// <param name="addDateTime">Date and time of the add</param>
         /// <param name="stockMarketLaunchDate">Date of the stock market launch</param>
         /// <param name="name">Name of the share</param>
@@ -1124,24 +1159,27 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="detailsWebSite">Website for the share details</param>
         /// <param name="marketValuesWebSite">Website for the market values update</param>
         /// <param name="marketValuesParsingOption">Parsing option for the market values (e.g Regex / API)</param>
+        /// <param name="marketValuesParsingApiKey">Parsing API key for the market values</param>
         /// <param name="dailyValuesWebSite">WebSite for the daily values update</param>
         /// <param name="dailyValuesParsingOption">Parsing option for the daily values (e.g Regex / API)</param>
+        /// <param name="dailyValuesParsingApiKey">Parsing API key for the daily values</param>
         /// <param name="imageListForDayBeforePerformance">Images for the prev day performance indication</param>
         /// <param name="imageListForCompletePerformance">Images for the complete performance indication</param>
         /// <param name="regexList">RegEx list for the share</param>
         /// <param name="cultureInfo">Culture of the share</param>
         /// <param name="shareType">Type of the share</param>
         public ShareObject(
-            string wkn, string addDateTime, string stockMarketLaunchDate, string name,
+            string wkn, string isin, string addDateTime, string stockMarketLaunchDate, string name,
             DateTime lastUpdateInternet, DateTime lastUpdateShare,
             decimal price, string detailsWebSite,
-            string marketValuesWebSite, ParsingTypes marketValuesParsingOption,
-            string dailyValuesWebSite, ParsingTypes dailyValuesParsingOption,
+            string marketValuesWebSite, ParsingTypes marketValuesParsingOption, string marketValuesParsingApiKey,
+            string dailyValuesWebSite, ParsingTypes dailyValuesParsingOption, string dailyValuesParsingApiKey,
             List<Image> imageListForDayBeforePerformance, List<Image> imageListForCompletePerformance,
             Parser.RegExList regexList, CultureInfo cultureInfo,
             ShareTypes shareType)
         {
             Wkn = wkn;
+            Isin = isin;
             AddDateTime = addDateTime;
             StockMarketLaunchDate = stockMarketLaunchDate;
             Name = name;
@@ -1152,8 +1190,10 @@ namespace SharePortfolioManager.Classes.ShareObjects
             DetailsWebSiteUrl = detailsWebSite;
             MarketValuesUpdateWebSiteUrl = marketValuesWebSite;
             MarketValuesParsingOption = marketValuesParsingOption;
+            MarketValuesParsingApiKey = marketValuesParsingApiKey;
             DailyValuesUpdateWebSiteUrl = dailyValuesWebSite;
             DailyValuesParsingOption = dailyValuesParsingOption;
+            DailyValuesParsingApiKey = dailyValuesParsingApiKey;
             ImageListPrevDayPerformance = imageListForDayBeforePerformance;
             ImageListCompleteProfitLossPerformance = imageListForCompletePerformance;
             ImagePrevDayPerformance = ImageListPrevDayPerformance[0];
@@ -1338,10 +1378,9 @@ namespace SharePortfolioManager.Classes.ShareObjects
             // Flag if the website of the current share exists in the website configuration list
             var bRegexFound = false;
 
-            if (parsingType == ParsingTypes.Api)
+            if (parsingType != ParsingTypes.Regex)
             {
                 bRegexFound = true;
-
             }
             else
             {

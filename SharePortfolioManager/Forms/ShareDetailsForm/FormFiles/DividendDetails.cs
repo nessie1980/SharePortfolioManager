@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2022 nessie1980(nessie1980@gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -33,10 +33,58 @@ using System.Linq;
 using System.Windows.Forms;
 using SharePortfolioManager.Classes.Configurations;
 
+// TODO: (thomas:2022-08-19) Correct namespace
 namespace SharePortfolioManager.ShareDetailsForm
 {
     public partial class FrmShareDetails
     {
+        // Column indices values of the overview DataGridView
+        public enum DataGridViewOverViewIndices
+        {
+            ColumnIndicesYear,
+            ColumnIndicesDividendValue,
+            ColumnIndicesScrollBar
+        }
+
+        // Column indices values of the years DataGridView
+        public enum DataGridViewYearIndices
+        {
+            ColumnIndicesGuid,
+            ColumnIndicesDate,
+            ColumnIndicesVolume,
+            ColumnIndicesDividend,
+            ColumnIndicesYield,
+            ColumnIndicesPayout,
+            ColumnIndicesDocument,
+            ColumnIndicesScrollBar
+        }
+
+        /// <summary>
+        /// Postfix for the DataGridView footer name
+        /// </summary>
+        private readonly string _dataGridViewFooterPostfix = "_Footer";
+
+        /// <summary>
+        /// If the row count is greater then 4 the scrollbar will be shown
+        /// </summary>
+        private const int DataGridViewRowsScrollbar = 4;
+
+        /// <summary>
+        /// Height of the DataGridView footer
+        /// </summary>
+        private const int DataGridViewFooterHeight = 24;
+
+        #region Column width for the dgvContentOverView and dgvContentOverViewFooter
+
+        private const int OverViewDateColumnSize = 85;
+
+        private const int YearDateColumnSize = 85;
+        private const int YearVolumeColumnSize = 155;
+        private const int YearDividendColumnSize = 145;
+        private const int YearYieldColumnSize = 100;
+        private const int YearPayoutColumnSize = 150;
+
+        #endregion Column width for the dgvPortfolio and dgvPortfolioFooter
 
         #region Dividend details
 
@@ -64,7 +112,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                 #region Reset tab control
 
                 // Disconnect delegates and remove pages
-                tabPgDetailsDividendValues.SelectedIndexChanged -= OnTabCtrlDividend_SelectedIndexChanged;
+                //tabPgDetailsDividendValues.SelectedIndexChanged -= OnTabCtrlDividend_SelectedIndexChanged;
                 foreach (TabPage tabPage in tabPgDetailsDividendValues.TabPages)
                 {
                     foreach (var control in tabPage.Controls)
@@ -80,9 +128,8 @@ namespace SharePortfolioManager.ShareDetailsForm
                         {
                             dataGridView.SelectionChanged -= OnDataGridViewDividendOfAYear_SelectionChanged;
                             dataGridView.MouseEnter -= OnDataGridViewDividendOfAYear_MouseEnter;
-                            dataGridView.MouseLeave -= OnDataGridViewDividendOfAYear_MouseEnter;
-                            dataGridView.CellContentDoubleClick -=
-                                OnDataGridViewDividendOfAYear_CellContentDecimalClick;
+//                            dataGridView.CellContentDoubleClick -=
+//                                OnDataGridViewDividendOfAYear_CellContentDecimalClick;
                         }
 
                         dataGridView.DataBindingComplete -= OnDataGridViewDividend_DataBindingComplete;
@@ -98,15 +145,13 @@ namespace SharePortfolioManager.ShareDetailsForm
 
                 #region Add years overview page
 
-                tabPgDetailsDividendValues.SelectedIndexChanged += OnTabCtrlDividend_SelectedIndexChanged;
+                //tabPgDetailsDividendValues.SelectedIndexChanged += OnTabCtrlDividend_SelectedIndexChanged;
 
                 // Create TabPage for the dividend of the years
                 var newTabPageOverviewYears = new TabPage
                 {
                     // Set TabPage name
-                    Name = Language.GetLanguageTextByXPath(
-                        @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/Overview",
-                        LanguageName),
+                    Name = @"Overview",
 
                     // Set TabPage caption
                     Text = Language.GetLanguageTextByXPath(
@@ -121,8 +166,8 @@ namespace SharePortfolioManager.ShareDetailsForm
                 if (ShareObjectFinalValue.AllDividendEntries.GetAllDividendsTotalValues().Count <= 0) return;
 
                 // Reverse list so the latest is a top of the data grid view
-                var reversDataSourceOverview = ShareObjectFinalValue.AllDividendEntries.GetAllDividendsTotalValues();
-                reversDataSourceOverview.Reverse();
+                var reversDataSourceOverview = ShareObjectFinalValue.AllDividendEntries.GetAllDividendsTotalValues()
+                    .OrderByDescending(x => x.DgvDividendYear).ToList();
 
                 var bindingSourceOverview = new BindingSource
                 {
@@ -143,6 +188,21 @@ namespace SharePortfolioManager.ShareDetailsForm
                         DataGridViewColumnHeadersHeightSizeMode.DisableResizing
                 };
 
+                // Create DataGridView
+                var dataGridViewDividendsOverviewOfAYearsFooter = new DataGridView
+                {
+                    Name = @"Overview" + _dataGridViewFooterPostfix,
+                    Dock = DockStyle.Bottom,
+                    AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None,
+
+                    // Disable column header resize
+                    ColumnHeadersHeightSizeMode =
+                        DataGridViewColumnHeadersHeightSizeMode.DisableResizing,
+
+                    // Set height via Size height
+                    Size = new Size(1, DataGridViewFooterHeight)
+                };
+
                 #endregion Data source, data binding and data grid view
 
                 #region Events
@@ -151,7 +211,8 @@ namespace SharePortfolioManager.ShareDetailsForm
                 dataGridViewDividendOverviewOfYears.DataBindingComplete +=
                     OnDataGridViewDividend_DataBindingComplete;
                 // Set the delegate for the mouse enter event
-                dataGridViewDividendOverviewOfYears.MouseEnter += OnDataGridViewDividendOfYears_MouseEnter;
+                dataGridViewDividendOverviewOfYears.MouseEnter +=
+                    OnDataGridViewDividendOfYears_MouseEnter;
                 // Set row select event
                 dataGridViewDividendOverviewOfYears.SelectionChanged +=
                     OnDataGridViewDividendOfYears_SelectionChanged;
@@ -162,11 +223,14 @@ namespace SharePortfolioManager.ShareDetailsForm
 
                 DataGridViewHelper.DataGridViewConfiguration(dataGridViewDividendOverviewOfYears);
 
+                dataGridViewDividendsOverviewOfAYearsFooter.ColumnHeadersVisible = false;
+
                 #endregion Style
 
                 #region Control add
 
                 newTabPageOverviewYears.Controls.Add(dataGridViewDividendOverviewOfYears);
+                newTabPageOverviewYears.Controls.Add(dataGridViewDividendsOverviewOfAYearsFooter);
                 dataGridViewDividendOverviewOfYears.Parent = newTabPageOverviewYears;
                 ((TabControl)tabCtrlShareDetails.TabPages[TabPageDetailsDividendValueName].Controls[0]).TabPages.Add(
                     newTabPageOverviewYears);
@@ -177,7 +241,7 @@ namespace SharePortfolioManager.ShareDetailsForm
 
                 #endregion Add years overview page
 
-                // Check if brokerage exists
+                // Check if dividends exists
                 if (ShareObjectFinalValue.AllDividendEntries.AllDividendsOfTheShareDictionary.Count <=
                     0) return;
 
@@ -210,8 +274,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                     // Reverse list so the latest is a top of the data grid view
                     var reversDataSource =
                         ShareObjectFinalValue.AllDividendEntries.AllDividendsOfTheShareDictionary[keyName]
-                            .DividendListYear;
-                    reversDataSource.Reverse();
+                            .DividendListYear.OrderByDescending(x => DateTime.Parse(x.Date)).ToList();
 
                     // Create Binding source for the dividend data
                     var bindingSource = new BindingSource
@@ -233,6 +296,21 @@ namespace SharePortfolioManager.ShareDetailsForm
                             DataGridViewColumnHeadersHeightSizeMode.DisableResizing
                     };
 
+                    // Create DataGridView
+                    var dataGridViewDividendsOfAYearFooter = new DataGridView
+                    {
+                        Name = keyName + _dataGridViewFooterPostfix,
+                        Dock = DockStyle.Bottom,
+                        AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None,
+
+                        // Disable column header resize
+                        ColumnHeadersHeightSizeMode =
+                            DataGridViewColumnHeadersHeightSizeMode.DisableResizing,
+
+                        // Set height via Size height
+                        Size = new Size(1, DataGridViewFooterHeight)
+                    };
+
                     #endregion Data source, data binding and data grid view
 
                     #region Events
@@ -246,9 +324,6 @@ namespace SharePortfolioManager.ShareDetailsForm
                     // Set row select event
                     dataGridViewDividendOfAYear.SelectionChanged +=
                         OnDataGridViewDividendOfAYear_SelectionChanged;
-                    // Set cell decimal click event
-                    dataGridViewDividendOfAYear.CellContentDoubleClick +=
-                        OnDataGridViewDividendOfAYear_CellContentDecimalClick;
 
                     #endregion Events
 
@@ -256,16 +331,19 @@ namespace SharePortfolioManager.ShareDetailsForm
 
                     DataGridViewHelper.DataGridViewConfiguration(dataGridViewDividendOfAYear);
 
+                    dataGridViewDividendsOverviewOfAYearsFooter.ColumnHeadersVisible = false;
+
                     #endregion Style
 
                     #region Control add
 
                     newTabPage.Controls.Add(dataGridViewDividendOfAYear);
+                    newTabPage.Controls.Add(dataGridViewDividendsOfAYearFooter);
                     dataGridViewDividendOfAYear.Parent = newTabPage;
                     ((TabControl)tabCtrlShareDetails.TabPages[TabPageDetailsDividendValueName].Controls[0]).TabPages
                         .Add(newTabPage);
                     newTabPage.Parent =
-                        ((TabControl)tabCtrlShareDetails.TabPages[TabPageDetailsDividendValueName].Controls[0]);
+                        (TabControl)tabCtrlShareDetails.TabPages[TabPageDetailsDividendValueName].Controls[0];
 
                     #endregion Control add
                 }
@@ -292,24 +370,39 @@ namespace SharePortfolioManager.ShareDetailsForm
         {
             try
             {
+                // Local variables of the DataGridView
+                var dgvContent = (DataGridView)sender;
+
                 // Set column headers
-                for (var i = 0; i < ((DataGridView)sender).ColumnCount; i++)
+                for (var i = 0; i < dgvContent.ColumnCount; i++)
                 {
-                    // Set alignment of the column
-                    ((DataGridView)sender).Columns[i].DefaultCellStyle.Alignment =
-                        DataGridViewContentAlignment.MiddleCenter;
+                    // Disable sorting of the columns ( remove sort arrow )
+                    dgvContent.Columns[i].SortMode =
+                        DataGridViewColumnSortMode.NotSortable;
+
+                    // Get index of the current added column
+                    var index = ((DataGridView) ((TabControl) tabCtrlShareDetails
+                                .TabPages[TabPageDetailsDividendValueName].Controls[0]).TabPages[dgvContent.Name]
+                            .Controls[dgvContent.Name + _dataGridViewFooterPostfix]).Columns
+                        .Add(dgvContent.Name + _dataGridViewFooterPostfix, "Header " + i);
 
                     // Disable sorting of the columns ( remove sort arrow )
-                    ((DataGridView)sender).Columns[i].SortMode =
+                    ((DataGridView) ((TabControl) tabCtrlShareDetails.TabPages[TabPageDetailsDividendValueName]
+                                .Controls[0]).TabPages[dgvContent.Name]
+                            .Controls[dgvContent.Name + _dataGridViewFooterPostfix]).Columns[index].SortMode =
                         DataGridViewColumnSortMode.NotSortable;
+
+                    // Set alignment of the column
+                    dgvContent.Columns[i].DefaultCellStyle.Alignment =
+                        DataGridViewContentAlignment.MiddleCenter;
 
                     switch (i)
                     {
                         case 0:
                             {
-                                if (((DataGridView)sender).Name == @"Overview")
+                                if (dgvContent.Name == @"Overview")
                                 {
-                                    ((DataGridView)sender).Columns[i].HeaderText =
+                                    dgvContent.Columns[i].HeaderText =
                                         Language.GetLanguageTextByXPath(
                                             @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Year",
                                             LanguageName);
@@ -318,16 +411,16 @@ namespace SharePortfolioManager.ShareDetailsForm
                             break;
                         case 1:
                             {
-                                if (((DataGridView)sender).Name == @"Overview")
+                                if (dgvContent.Name == @"Overview")
                                 {
-                                    ((DataGridView)sender).Columns[i].HeaderText =
+                                    dgvContent.Columns[i].HeaderText =
                                         Language.GetLanguageTextByXPath(
                                             @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Dividend",
                                             LanguageName);
                                 }
                                 else
                                 {
-                                    ((DataGridView)sender).Columns[i].HeaderText =
+                                    dgvContent.Columns[i].HeaderText =
                                         Language.GetLanguageTextByXPath(
                                             @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Date",
                                             LanguageName);
@@ -336,7 +429,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                             break;
                         case 2:
                             {
-                                ((DataGridView)sender).Columns[i].HeaderText =
+                                dgvContent.Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Dividend",
                                         LanguageName);
@@ -344,7 +437,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                             break;
                         case 3:
                             {
-                                ((DataGridView)sender).Columns[i].HeaderText =
+                                dgvContent.Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Volume",
                                         LanguageName);
@@ -352,7 +445,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                             break;
                         case 4:
                             {
-                                ((DataGridView)sender).Columns[i].HeaderText =
+                                dgvContent.Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Taxes",
                                         LanguageName);
@@ -360,7 +453,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                             break;
                         case 5:
                             {
-                                ((DataGridView)sender).Columns[i].HeaderText =
+                                dgvContent.Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Payout",
                                         LanguageName);
@@ -368,7 +461,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                             break;
                             case 6:
                             {
-                                ((DataGridView)sender).Columns[i].HeaderText =
+                                dgvContent.Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Yield",
                                         LanguageName);
@@ -376,7 +469,7 @@ namespace SharePortfolioManager.ShareDetailsForm
                             break;
                         case 7:
                             {
-                                ((DataGridView)sender).Columns[i].HeaderText =
+                                dgvContent.Columns[i].HeaderText =
                                     Language.GetLanguageTextByXPath(
                                         @"/ShareDetailsForm/GrpBoxDetails/TabCtrlDetails/TabPgDividend/DgvDividendOverview/ColHeader_Document",
                                         LanguageName);
@@ -385,17 +478,190 @@ namespace SharePortfolioManager.ShareDetailsForm
                     }
                 }
 
-                if (((DataGridView)sender).Rows.Count > 0)
+                if (dgvContent.Rows.Count > 0)
                 {
-                    ((DataGridView)sender).Rows[0].Selected = false;
-                    ((DataGridView)sender).ScrollBars = ScrollBars.Both;
+                    dgvContent.Rows[0].Selected = false;
+                    dgvContent.ScrollBars = ScrollBars.Both;
                 }
 
-                if (((DataGridView)sender).Name != @"Overview")
-                    ((DataGridView)sender).Columns[0].Visible = false;
+                //if (dgvContent.Name != @"Overview")
+                //    dgvContent.Columns[0].Visible = false;
+
+                if (dgvContent.Name != @"Overview")
+                {
+                    // Hide first column with the GUID
+                    ((DataGridView)((TabControl)tabCtrlShareDetails.TabPages[TabPageDetailsDividendValueName]
+                                .Controls[0]).TabPages[dgvContent.Name]
+                            .Controls[dgvContent.Name]).Columns[0].Visible =
+                        false;
+
+                    ((DataGridView)((TabControl)tabCtrlShareDetails.TabPages[TabPageDetailsDividendValueName]
+                                .Controls[0]).TabPages[dgvContent.Name]
+                            .Controls[dgvContent.Name + _dataGridViewFooterPostfix]).Columns[0].Visible =
+                        false;
+
+                    #region Column size content
+
+                    // Content DataGridView column width resize
+                    dgvContent.Columns[(int)DataGridViewYearIndices.ColumnIndicesDate].Width =
+                        YearDateColumnSize;
+                    dgvContent.Columns[(int)DataGridViewYearIndices.ColumnIndicesVolume].Width =
+                        YearVolumeColumnSize;
+                    dgvContent.Columns[(int)DataGridViewYearIndices.ColumnIndicesDividend].Width =
+                        YearDividendColumnSize;
+                    dgvContent.Columns[(int)DataGridViewYearIndices.ColumnIndicesYield].Width =
+                        YearYieldColumnSize;
+                    dgvContent.Columns[(int)DataGridViewYearIndices.ColumnIndicesPayout].Width =
+                        YearPayoutColumnSize;
+
+                    dgvContent.Columns[(int)DataGridViewYearIndices.ColumnIndicesDocument].AutoSizeMode =
+                        DataGridViewAutoSizeColumnMode.Fill;
+                    dgvContent.Columns[(int)DataGridViewYearIndices.ColumnIndicesDocument].FillWeight = 10;
+
+                    #endregion Column size content
+
+                    #region Column size footer
+
+                    // Get footer DataGridView
+                    var dgvFooter = (DataGridView)((TabControl)tabCtrlShareDetails.TabPages[TabPageDetailsDividendValueName]
+                            .Controls[0]).TabPages[dgvContent.Name]
+                        .Controls[dgvContent.Name + _dataGridViewFooterPostfix];
+
+                    // Footer DataGridView column width resize
+                    dgvFooter.Columns[(int)DataGridViewYearIndices.ColumnIndicesDate].Width =
+                        YearDateColumnSize;
+                    dgvFooter.Columns[(int)DataGridViewYearIndices.ColumnIndicesVolume].Width =
+                        YearVolumeColumnSize;
+                    dgvFooter.Columns[(int)DataGridViewYearIndices.ColumnIndicesDividend].Width =
+                        YearDividendColumnSize;
+                    dgvFooter.Columns[(int)DataGridViewYearIndices.ColumnIndicesYield].Width =
+                        YearYieldColumnSize;
+                    dgvFooter.Columns[(int)DataGridViewYearIndices.ColumnIndicesPayout].Width =
+                        YearPayoutColumnSize;
+
+                    dgvFooter.Columns[(int)DataGridViewYearIndices.ColumnIndicesDocument].AutoSizeMode =
+                        DataGridViewAutoSizeColumnMode.Fill;
+                    dgvFooter.Columns[(int)DataGridViewYearIndices.ColumnIndicesDocument].FillWeight = 10;
+
+                    #endregion Column size footer
+
+                    // Get culture info
+                    var cultureInfo = ShareObjectFinalValue.AllDividendEntries
+                        .AllDividendsOfTheShareDictionary[dgvContent.Name]
+                        .DividendCultureInfo;
+
+                    #region Payout
+
+                    var payout =
+                        ShareObjectFinalValue.AllDividendEntries
+                            .AllDividendsOfTheShareDictionary[dgvContent.Name]
+                            .DividendListYear.Sum(x => x.DividendPayoutWithTaxes);
+
+                    // HINT: If any format is changed here it must also be changed in file "DividendObject.cs" at the property "DgvPayoutWithTaxes"
+                    var payoutFormatted = payout > 0
+                        ? Helper.FormatDecimal(payout, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength,
+                            true, @"", cultureInfo)
+                        : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, true, Helper.CurrencyTwoFixLength,
+                            true, @"", cultureInfo);
+
+                    #endregion Payout
+
+                    // Footer with sum values
+                    if (dgvFooter.Rows.Count == 1)
+                        dgvFooter.Rows.Add("",
+                            Language.GetLanguageTextByXPath(
+                                @"/AddEditFormDividend/GrpBoxDividend/TabCtrl/DgvDividendOverview/Footer_Totals",
+                                SettingsConfiguration.LanguageName),
+                            "-", "-", "-", payoutFormatted, "-");
+
+                    // Check if the vertical scrollbar is shown
+                    if (dgvContent.RowCount > DataGridViewRowsScrollbar)
+                    {
+                        dgvFooter.Columns.Add("Scrollbar", "Scrollbar");
+
+                        dgvFooter.Columns[(int)DataGridViewYearIndices.ColumnIndicesScrollBar].Width =
+                            SystemInformation.VerticalScrollBarWidth;
+
+                        // Disable sorting of the columns ( remove sort arrow )
+                        dgvFooter.Columns[dgvFooter.Columns.Count - 1].SortMode = DataGridViewColumnSortMode.NotSortable;
+                    }
+
+                    DataGridViewHelper.DataGridViewConfigurationFooter(dgvFooter);
+                }
+                else
+                {
+                    #region Column size content
+
+                    // Content DataGridView column width resize
+                    dgvContent.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesYear].Width =
+                        OverViewDateColumnSize;
+
+                    dgvContent.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesDividendValue].AutoSizeMode =
+                        DataGridViewAutoSizeColumnMode.Fill;
+                    dgvContent.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesDividendValue].FillWeight = 10;
+
+                    #endregion Column size content
+
+                    #region Column size footer
+
+                    // Get footer DataGridView
+                    var dgvFooter = (DataGridView)((TabControl)tabCtrlShareDetails.TabPages[TabPageDetailsDividendValueName]
+                            .Controls[0]).TabPages[dgvContent.Name]
+                        .Controls[dgvContent.Name + _dataGridViewFooterPostfix];
+
+                    // Footer DataGridView column width resize
+                    dgvFooter.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesYear].Width =
+                        OverViewDateColumnSize;
+
+                    dgvFooter.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesDividendValue].AutoSizeMode =
+                        DataGridViewAutoSizeColumnMode.Fill;
+                    dgvFooter.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesDividendValue].FillWeight = 10;
+
+                    #endregion Column size footer
+
+                    // Get culture info
+                    var cultureInfo = ShareObjectFinalValue.AllDividendEntries.DividendCultureInfo;
+
+                    #region Payout
+
+                    var payout =
+                        ShareObjectFinalValue.AllDividendEntries.GetAllDividendsTotalValues().Sum(x => x.DividendValueYear);
+
+                    // HINT: If any format is changed here it must also be changed in file "DividendsOfAYear.cs" at the property "DividendValueYearAsStrUnit"
+                    var payoutFormatted = payout > 0
+                            ? Helper.FormatDecimal(payout, Helper.CurrencyTwoLength, true,
+                                Helper.CurrencyTwoFixLength, true, @"", cultureInfo)
+                            : Helper.FormatDecimal(0, Helper.CurrencyTwoLength, false,
+                                Helper.CurrencyTwoFixLength, true, @"", cultureInfo);
+
+                    #endregion Payout
+
+                    // Footer with sum values
+                    if (dgvFooter.Rows.Count == 1)
+                        dgvFooter.Rows.Add(
+                            Language.GetLanguageTextByXPath(
+                                @"/AddEditFormDividend/GrpBoxDividend/TabCtrl/DgvDividendOverview/Footer_Totals",
+                                SettingsConfiguration.LanguageName),
+                            payoutFormatted);
+
+                    // Check if the vertical scrollbar is shown
+                    if (dgvContent.RowCount > DataGridViewRowsScrollbar)
+                    {
+                        dgvFooter.Columns.Add("Scrollbar", "Scrollbar");
+
+                        dgvFooter.Columns[(int)DataGridViewOverViewIndices.ColumnIndicesScrollBar].Width =
+                            SystemInformation.VerticalScrollBarWidth;
+
+                        // Disable sorting of the columns ( remove sort arrow )
+                        dgvFooter.Columns[dgvFooter.Columns.Count - 1].SortMode = DataGridViewColumnSortMode.NotSortable;
+                    }
+
+                    DataGridViewHelper.DataGridViewConfigurationFooter(dgvFooter);
+
+                }
 
                 // Deselect rows
-                OnDeselectRowsOfDividendDetailsDataGridViews(null);
+                //OnDeselectRowsOfDividendDetailsDataGridViews(null);
             }
             catch (Exception ex)
             {
@@ -477,6 +743,8 @@ namespace SharePortfolioManager.ShareDetailsForm
         /// <param name="args"></param>
         private void OnDataGridViewDividendOfYears_SelectionChanged(object sender, EventArgs args)
         {
+            var dgvContent = (DataGridView)sender;
+
             try
             {
                 if (tabPgDetailsDividendValues.TabPages.Count > 0)
@@ -486,10 +754,10 @@ namespace SharePortfolioManager.ShareDetailsForm
                         OnDeselectRowsOfDividendDetailsDataGridViews((DataGridView)sender);
                 }
 
-                if (((DataGridView)sender).SelectedRows.Count != 1) return;
+                if (dgvContent.SelectedRows.Count != 1) return;
 
                 // Get the currently selected item in the ListBox
-                var curItem = ((DataGridView)sender).SelectedRows;
+                var curItem = dgvContent.SelectedRows;
 
                 foreach (TabPage tabPage in ((TabControl)tabCtrlShareDetails.TabPages[TabPageDetailsDividendValueName]
                     .Controls[0]).TabPages)

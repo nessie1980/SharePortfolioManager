@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2022 nessie1980(nessie1980@gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -32,6 +32,7 @@ using System.Globalization;
 using System.Threading;
 using SharePortfolioManager.Classes.Configurations;
 using SharePortfolioManager.Properties;
+using System.Net;
 
 namespace SharePortfolioManager
 {
@@ -119,13 +120,27 @@ namespace SharePortfolioManager
                                 ShareObjectMarketValue.InternetUpdateOption ==
                                 ShareObject.ShareUpdateTypes.MarketPrice)
                             {
-                                // Start the asynchronous operation of the Parser for the market values
-                                ParserMarketValues.ParsingValues = new ParsingValues(
-                                    new Uri(ShareObjectMarketValue.MarketValuesUpdateWebSiteUrl),
-                                    ShareObjectMarketValue.WebSiteEncodingType,
-                                    DataTypes.ParsingType.OnVistaRealTime
-                                );
+                                // Build parsing values for the market values update
+                                if (ShareObjectMarketValue.MarketValuesParsingOptionAsStr == "ApiOnVista")
+                                {
+                                    ParserMarketValues.ParsingValues = new ParsingValues(
+                                        new Uri(ShareObjectMarketValue.MarketValuesUpdateWebSiteUrl),
+                                        ShareObjectMarketValue.MarketValuesParsingApiKey,
+                                        ShareObjectMarketValue.WebSiteEncodingType,
+                                        DataTypes.ParsingType.OnVistaRealTime
+                                    );
+                                }
+                                else if (ShareObjectMarketValue.MarketValuesParsingOptionAsStr == "ApiYahoo")
+                                {
+                                    ParserMarketValues.ParsingValues = new ParsingValues(
+                                        new Uri(ShareObjectMarketValue.MarketValuesUpdateWebSiteUrl),
+                                        ShareObjectMarketValue.MarketValuesParsingApiKey,
+                                        ShareObjectMarketValue.WebSiteEncodingType,
+                                        DataTypes.ParsingType.YahooRealTime
+                                    );
+                                }
 
+                                // Start the asynchronous operation of the Parser for the market values
                                 ParserMarketValues.StartParsing();
                             }
 
@@ -134,16 +149,33 @@ namespace SharePortfolioManager
                                 ShareObjectMarketValue.InternetUpdateOption ==
                                 ShareObject.ShareUpdateTypes.DailyValues)
                             {
-                                // Start the asynchronous operation of the Parser for the daily market values
-                                ParserDailyValues.ParsingValues = new ParsingValues(
-                                    new Uri(Helper.BuildDailyValuesUrl(ShareObjectMarketValue.DailyValuesList.Entries,
+                                // Build parsing values for the daily values update
+                                if (ShareObjectMarketValue.DailyValuesParsingOptionAsStr == "ApiOnVista")
+                                {
+                                    ParserDailyValues.ParsingValues = new ParsingValues(
+                                        new Uri(Helper.BuildDailyValuesUrl(ShareObjectMarketValue.DailyValuesList.Entries,
                                         ShareObjectMarketValue.DailyValuesUpdateWebSiteUrl,
                                         ShareObjectMarketValue.ShareType,
                                         ShareObjectMarketValue.DailyValuesParsingOption)),
+                                        ShareObjectMarketValue.MarketValuesParsingApiKey,
                                         ShareObjectMarketValue.WebSiteEncodingType,
-                                    DataTypes.ParsingType.OnVistaHistoryData
-                                );
+                                        DataTypes.ParsingType.OnVistaHistoryData
+                                    );
+                                }
+                                else if (ShareObjectMarketValue.DailyValuesParsingOptionAsStr == "ApiYahoo")
+                                {
+                                    ParserDailyValues.ParsingValues = new ParsingValues(
+                                        new Uri(Helper.BuildDailyValuesUrl(ShareObjectMarketValue.DailyValuesList.Entries,
+                                        ShareObjectMarketValue.DailyValuesUpdateWebSiteUrl,
+                                        ShareObjectMarketValue.ShareType,
+                                        ShareObjectMarketValue.DailyValuesParsingOption)),
+                                        ShareObjectMarketValue.MarketValuesParsingApiKey,
+                                        ShareObjectMarketValue.WebSiteEncodingType,
+                                        DataTypes.ParsingType.YahooHistoryData
+                                    );
+                                }
 
+                                // Start the asynchronous operation of the Parser for the daily market values
                                 ParserDailyValues.StartParsing();
                             }
                         }
@@ -203,34 +235,67 @@ namespace SharePortfolioManager
                         if (ShareObjectFinalValue.InternetUpdateOption != ShareObject.ShareUpdateTypes.None &&
                             ShareObjectFinalValue.WebSiteConfigurationFound)
                         {
-                            if (ShareObjectMarketValue.InternetUpdateOption ==
+                            if (ShareObjectFinalValue.InternetUpdateOption ==
                                 ShareObject.ShareUpdateTypes.Both ||
-                                ShareObjectMarketValue.InternetUpdateOption ==
+                                ShareObjectFinalValue.InternetUpdateOption ==
                                 ShareObject.ShareUpdateTypes.MarketPrice)
                             {
+                                // Build parsing values for the market values update
+                                if (ShareObjectFinalValue.MarketValuesParsingOptionAsStr == "ApiOnVista")
+                                {
+                                    ParserMarketValues.ParsingValues = new ParsingValues(
+                                        new Uri(ShareObjectFinalValue.MarketValuesUpdateWebSiteUrl),
+                                        ShareObjectFinalValue.MarketValuesParsingApiKey,
+                                        ShareObjectFinalValue.WebSiteEncodingType,
+                                        DataTypes.ParsingType.OnVistaRealTime
+                                    );
+                                }
+                                else if (ShareObjectFinalValue.MarketValuesParsingOptionAsStr == "ApiYahoo")
+                                {
+                                    ParserMarketValues.ParsingValues = new ParsingValues(
+                                        new Uri(ShareObjectFinalValue.MarketValuesUpdateWebSiteUrl),
+                                        ShareObjectFinalValue.MarketValuesParsingApiKey,
+                                        ShareObjectMarketValue.WebSiteEncodingType,
+                                        DataTypes.ParsingType.YahooRealTime
+                                    );
+                                }
+
                                 // Start the asynchronous operation of the Parser for the market values
-                                ParserMarketValues.ParsingValues = new ParsingValues(
-                                    new Uri(ShareObjectFinalValue.MarketValuesUpdateWebSiteUrl),
-                                    ShareObjectFinalValue.WebSiteEncodingType,
-                                    DataTypes.ParsingType.OnVistaRealTime
-                                );
                                 ParserMarketValues.StartParsing();
                             }
 
-                            if (ShareObjectMarketValue.InternetUpdateOption ==
+                            if (ShareObjectFinalValue.InternetUpdateOption ==
                                 ShareObject.ShareUpdateTypes.Both ||
-                                ShareObjectMarketValue.InternetUpdateOption ==
+                                ShareObjectFinalValue.InternetUpdateOption ==
                                 ShareObject.ShareUpdateTypes.DailyValues)
                             {
-                                // Start the asynchronous operation of the Parser for the daily market values
-                                ParserDailyValues.ParsingValues = new ParsingValues(
-                                    new Uri(Helper.BuildDailyValuesUrl(ShareObjectFinalValue.DailyValuesList.Entries,
+                                // Build parsing values for the daily values update
+                                if (ShareObjectFinalValue.DailyValuesParsingOptionAsStr == "ApiOnVista")
+                                {
+                                    ParserDailyValues.ParsingValues = new ParsingValues(
+                                        new Uri(Helper.BuildDailyValuesUrl(ShareObjectFinalValue.DailyValuesList.Entries,
                                         ShareObjectFinalValue.DailyValuesUpdateWebSiteUrl,
                                         ShareObjectFinalValue.ShareType,
                                         ShareObjectFinalValue.DailyValuesParsingOption)),
-                                    ShareObjectFinalValue.WebSiteEncodingType,
-                                    DataTypes.ParsingType.OnVistaHistoryData
-                                );
+                                        ShareObjectFinalValue.MarketValuesParsingApiKey,
+                                        ShareObjectFinalValue.WebSiteEncodingType,
+                                        DataTypes.ParsingType.OnVistaHistoryData
+                                    );
+                                }
+                                else if (ShareObjectFinalValue.DailyValuesParsingOptionAsStr == "ApiYahoo")
+                                {
+                                    ParserDailyValues.ParsingValues = new ParsingValues(
+                                        new Uri(Helper.BuildDailyValuesUrl(ShareObjectFinalValue.DailyValuesList.Entries,
+                                        ShareObjectFinalValue.DailyValuesUpdateWebSiteUrl,
+                                        ShareObjectFinalValue.ShareType,
+                                        ShareObjectFinalValue.DailyValuesParsingOption)),
+                                        ShareObjectFinalValue.MarketValuesParsingApiKey,
+                                        ShareObjectFinalValue.WebSiteEncodingType,
+                                        DataTypes.ParsingType.YahooHistoryData
+                                    );
+                                }
+
+                                // Start the asynchronous operation of the Parser for the daily market values
                                 ParserDailyValues.StartParsing();
                             }
                         }
@@ -334,22 +399,81 @@ namespace SharePortfolioManager
                                         .RowIndex].InternetUpdateOption ==
                                 ShareObject.ShareUpdateTypes.MarketPrice)
                             {
-
+                                // Build parsing values the market values update
+                                if (ShareObjectMarketValue.MarketValuesParsingOptionAsStr == "ApiOnVista")
+                                {
+                                    ParserMarketValues.ParsingValues = new ParsingValues(
+                                        new Uri(ShareObjectListMarketValue[
+                                                dgvPortfolioMarketValue
+                                                    .SelectedCells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                                    .RowIndex]
+                                            .MarketValuesUpdateWebSiteUrl),
+                                        ShareObjectListMarketValue[
+                                                dgvPortfolioMarketValue
+                                                    .SelectedCells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                                    .RowIndex]
+                                                    .MarketValuesParsingApiKey,
+                                        ShareObjectListMarketValue[
+                                                dgvPortfolioMarketValue
+                                                    .SelectedCells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                                    .RowIndex]
+                                            .WebSiteEncodingType,
+                                        DataTypes.ParsingType.OnVistaRealTime
+                                    );
+                                }
+                                else if (ShareObjectMarketValue.MarketValuesParsingOptionAsStr == "ApiYahoo")
+                                {
+                                    ParserMarketValues.ParsingValues = new ParsingValues(
+                                        new Uri(ShareObjectListMarketValue[
+                                                dgvPortfolioMarketValue
+                                                    .SelectedCells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                                    .RowIndex]
+                                            .MarketValuesUpdateWebSiteUrl),
+                                        ShareObjectListMarketValue[
+                                                dgvPortfolioMarketValue
+                                                    .SelectedCells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                                    .RowIndex]
+                                                    .MarketValuesParsingApiKey,
+                                        ShareObjectListMarketValue[
+                                                dgvPortfolioMarketValue
+                                                    .SelectedCells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                                    .RowIndex]
+                                            .WebSiteEncodingType,
+                                        DataTypes.ParsingType.YahooRealTime
+                                    );
+                                }
+                                 
                                 // Start the asynchronous operation of the Parser for the market values
-                                ParserMarketValues.ParsingValues = new ParsingValues(
-                                    new Uri(ShareObjectListMarketValue[
-                                            dgvPortfolioMarketValue
-                                                .SelectedCells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
-                                                .RowIndex]
-                                        .MarketValuesUpdateWebSiteUrl),
-                                    ShareObjectListMarketValue[
-                                            dgvPortfolioMarketValue
-                                                .SelectedCells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
-                                                .RowIndex]
-                                        .WebSiteEncodingType,
-                                    DataTypes.ParsingType.OnVistaRealTime
-                                );
                                 ParserMarketValues.StartParsing();
+
+                                // Build parsing values for the market values update
+                                if (ShareObjectMarketValue.DailyValuesParsingOptionAsStr == "ApiOnVista")
+                                {
+                                    ParserDailyValues.ParsingValues = new ParsingValues(
+                                        new Uri(Helper.BuildDailyValuesUrl(ShareObjectMarketValue.DailyValuesList.Entries,
+                                        ShareObjectMarketValue.DailyValuesUpdateWebSiteUrl,
+                                        ShareObjectMarketValue.ShareType,
+                                        ShareObjectMarketValue.DailyValuesParsingOption)),
+                                        ShareObjectMarketValue.MarketValuesParsingApiKey,
+                                        ShareObjectMarketValue.WebSiteEncodingType,
+                                        DataTypes.ParsingType.OnVistaHistoryData
+                                    );
+                                }
+                                else if (ShareObjectMarketValue.DailyValuesParsingOptionAsStr == "ApiYahoo")
+                                {
+                                    ParserDailyValues.ParsingValues = new ParsingValues(
+                                        new Uri(Helper.BuildDailyValuesUrl(ShareObjectMarketValue.DailyValuesList.Entries,
+                                        ShareObjectMarketValue.DailyValuesUpdateWebSiteUrl,
+                                        ShareObjectMarketValue.ShareType,
+                                        ShareObjectMarketValue.DailyValuesParsingOption)),
+                                        ShareObjectMarketValue.MarketValuesParsingApiKey,
+                                        ShareObjectMarketValue.WebSiteEncodingType,
+                                        DataTypes.ParsingType.YahooHistoryData
+                                    );
+                                }
+
+                                // Start the asynchronous operation of the Parser for the daily market values
+                                ParserDailyValues.StartParsing();
                             }
 
                             if (ShareObjectListMarketValue[
@@ -363,42 +487,97 @@ namespace SharePortfolioManager
                                         .RowIndex].InternetUpdateOption ==
                                 ShareObject.ShareUpdateTypes.DailyValues)
                             {
-                                // Start the asynchronous operation of the Parser for the daily market values
-                                ParserDailyValues.ParsingValues = new ParsingValues(
-                                    new Uri(Helper.BuildDailyValuesUrl(
-                                        ShareObjectListMarketValue[
-                                                dgvPortfolioMarketValue
-                                                    .SelectedCells[
-                                                        (int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
-                                                    .RowIndex]
-                                            .DailyValuesList.Entries,
-                                        ShareObjectListMarketValue[
-                                                dgvPortfolioMarketValue
-                                                    .SelectedCells[
-                                                        (int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
-                                                    .RowIndex]
-                                            .DailyValuesUpdateWebSiteUrl,
-                                        ShareObjectListMarketValue[
-                                                dgvPortfolioMarketValue
-                                                    .SelectedCells[
-                                                        (int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
-                                                    .RowIndex]
-                                            .ShareType,
+                                // Build parsing values for the daily values update
+                                if (ShareObjectMarketValue.DailyValuesParsingOptionAsStr == "ApiOnVista")
+                                {
+                                    ParserDailyValues.ParsingValues = new ParsingValues(
+                                        new Uri(Helper.BuildDailyValuesUrl(
+                                            ShareObjectListMarketValue[
+                                                    dgvPortfolioMarketValue
+                                                        .SelectedCells[
+                                                            (int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                                        .RowIndex]
+                                                .DailyValuesList.Entries,
+                                            ShareObjectListMarketValue[
+                                                    dgvPortfolioMarketValue
+                                                        .SelectedCells[
+                                                            (int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                                        .RowIndex]
+                                                .DailyValuesUpdateWebSiteUrl,
+                                            ShareObjectListMarketValue[
+                                                    dgvPortfolioMarketValue
+                                                        .SelectedCells[
+                                                            (int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                                        .RowIndex]
+                                                .ShareType,
+                                            ShareObjectListMarketValue[
+                                                    dgvPortfolioMarketValue
+                                                        .SelectedCells[
+                                                            (int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                                        .RowIndex]
+                                                .DailyValuesParsingOption
+
+                                        )),
                                         ShareObjectListMarketValue[
                                                 dgvPortfolioMarketValue
                                                     .SelectedCells[
                                                         (int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
                                                     .RowIndex]
-                                            .DailyValuesParsingOption
+                                            .DailyValuesParsingApiKey,
+                                        ShareObjectListMarketValue[
+                                                dgvPortfolioMarketValue
+                                                    .SelectedCells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                                    .RowIndex]
+                                            .WebSiteEncodingType,
+                                        DataTypes.ParsingType.OnVistaHistoryData
+                                    );
+                                }
+                                else if (ShareObjectMarketValue.DailyValuesParsingOptionAsStr == "ApiYahoo")
+                                {
+                                    ParserDailyValues.ParsingValues = new ParsingValues(
+                                        new Uri(Helper.BuildDailyValuesUrl(
+                                            ShareObjectListMarketValue[
+                                                    dgvPortfolioMarketValue
+                                                        .SelectedCells[
+                                                            (int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                                        .RowIndex]
+                                                .DailyValuesList.Entries,
+                                            ShareObjectListMarketValue[
+                                                    dgvPortfolioMarketValue
+                                                        .SelectedCells[
+                                                            (int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                                        .RowIndex]
+                                                .DailyValuesUpdateWebSiteUrl,
+                                            ShareObjectListMarketValue[
+                                                    dgvPortfolioMarketValue
+                                                        .SelectedCells[
+                                                            (int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                                        .RowIndex]
+                                                .ShareType,
+                                            ShareObjectListMarketValue[
+                                                    dgvPortfolioMarketValue
+                                                        .SelectedCells[
+                                                            (int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                                        .RowIndex]
+                                                .DailyValuesParsingOption
 
-                                    )),
-                                    ShareObjectListMarketValue[
-                                            dgvPortfolioMarketValue
-                                                .SelectedCells[(int) ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
-                                                .RowIndex]
-                                        .WebSiteEncodingType,
-                                    DataTypes.ParsingType.OnVistaHistoryData
-                                );
+                                        )),
+                                        ShareObjectListMarketValue[
+                                                dgvPortfolioMarketValue
+                                                    .SelectedCells[
+                                                        (int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                                    .RowIndex]
+                                            .DailyValuesParsingApiKey,
+                                        ShareObjectListMarketValue[
+                                                dgvPortfolioMarketValue
+                                                    .SelectedCells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                                    .RowIndex]
+                                            .WebSiteEncodingType,
+                                        DataTypes.ParsingType.YahooHistoryData
+                                    );
+                                }
+
+                                // Start the asynchronous operation of the Parser for the daily market values
                                 ParserDailyValues.StartParsing();
                             }
                         }
@@ -414,20 +593,51 @@ namespace SharePortfolioManager
                                         .RowIndex].InternetUpdateOption ==
                                 ShareObject.ShareUpdateTypes.MarketPrice)
                             {
+                                // Build parsing values for the market values update
+                                if (ShareObjectMarketValue.MarketValuesParsingOptionAsStr == "ApiOnVista")
+                                {
+                                    ParserMarketValues.ParsingValues = new ParsingValues(
+                                        new Uri(ShareObjectListFinalValue[
+                                                dgvPortfolioFinalValue
+                                                    .SelectedCells[(int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                                    .RowIndex]
+                                            .MarketValuesUpdateWebSiteUrl),
+                                        ShareObjectListFinalValue[
+                                                dgvPortfolioFinalValue
+                                                    .SelectedCells[(int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                                    .RowIndex]
+                                            .MarketValuesParsingApiKey,
+                                        ShareObjectListFinalValue[
+                                                dgvPortfolioFinalValue
+                                                    .SelectedCells[(int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                                    .RowIndex]
+                                            .WebSiteEncodingType,
+                                        DataTypes.ParsingType.OnVistaRealTime
+                                    );
+                                }
+                                else if (ShareObjectMarketValue.MarketValuesParsingOptionAsStr == "ApiYahoo")
+                                {
+                                    ParserMarketValues.ParsingValues = new ParsingValues(
+                                        new Uri(ShareObjectListFinalValue[
+                                                dgvPortfolioFinalValue
+                                                    .SelectedCells[(int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                                    .RowIndex]
+                                            .MarketValuesUpdateWebSiteUrl),
+                                        ShareObjectListFinalValue[
+                                                dgvPortfolioFinalValue
+                                                    .SelectedCells[(int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                                    .RowIndex]
+                                            .MarketValuesParsingApiKey,
+                                        ShareObjectListFinalValue[
+                                                dgvPortfolioFinalValue
+                                                    .SelectedCells[(int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                                    .RowIndex]
+                                            .WebSiteEncodingType,
+                                        DataTypes.ParsingType.YahooRealTime
+                                    );
+                                }
+
                                 // Start the asynchronous operation of the Parser for the market values
-                                ParserMarketValues.ParsingValues = new ParsingValues(
-                                    new Uri(ShareObjectListFinalValue[
-                                            dgvPortfolioFinalValue
-                                                .SelectedCells[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
-                                                .RowIndex]
-                                        .MarketValuesUpdateWebSiteUrl),
-                                    ShareObjectListFinalValue[
-                                            dgvPortfolioFinalValue
-                                                .SelectedCells[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
-                                                .RowIndex]
-                                        .WebSiteEncodingType,
-                                    DataTypes.ParsingType.OnVistaRealTime
-                                );
                                 ParserMarketValues.StartParsing();
                             }
 
@@ -441,41 +651,93 @@ namespace SharePortfolioManager
                                         .RowIndex].InternetUpdateOption ==
                                 ShareObject.ShareUpdateTypes.DailyValues)
                             {
+                                // Build parsing values for the market values update
+                                if (ShareObjectMarketValue.DailyValuesParsingOptionAsStr == "ApiOnVista")
+                                {
+                                    ParserDailyValues.ParsingValues = new ParsingValues(
+                                        new Uri(Helper.BuildDailyValuesUrl(
+                                            ShareObjectListFinalValue[
+                                                    dgvPortfolioFinalValue
+                                                        .SelectedCells[
+                                                            (int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                                        .RowIndex]
+                                                .DailyValuesList.Entries,
+                                            ShareObjectListFinalValue[
+                                                    dgvPortfolioFinalValue
+                                                        .SelectedCells[
+                                                            (int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                                        .RowIndex]
+                                                .DailyValuesUpdateWebSiteUrl,
+                                            ShareObjectListFinalValue[
+                                                    dgvPortfolioFinalValue
+                                                        .SelectedCells[
+                                                            (int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                                        .RowIndex]
+                                                .ShareType,
+                                            ShareObjectListFinalValue[
+                                                    dgvPortfolioFinalValue
+                                                        .SelectedCells[
+                                                            (int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                                        .RowIndex]
+                                                .DailyValuesParsingOption
+                                        )),
+                                        ShareObjectListFinalValue[
+                                                dgvPortfolioFinalValue
+                                                    .SelectedCells[(int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                                    .RowIndex]
+                                            .DailyValuesParsingApiKey,
+                                        ShareObjectListFinalValue[
+                                                dgvPortfolioFinalValue
+                                                    .SelectedCells[(int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                                    .RowIndex]
+                                            .WebSiteEncodingType,
+                                        DataTypes.ParsingType.OnVistaHistoryData
+                                    );
+                                }
+                                else if (ShareObjectMarketValue.DailyValuesParsingOptionAsStr == "ApiYahoo")
+                                {
+                                    ParserDailyValues.ParsingValues = new ParsingValues(
+                                        new Uri(Helper.BuildDailyValuesUrl(
+                                            ShareObjectListFinalValue[
+                                                    dgvPortfolioFinalValue
+                                                        .SelectedCells[
+                                                            (int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                                        .RowIndex]
+                                                .DailyValuesList.Entries,
+                                            ShareObjectListFinalValue[
+                                                    dgvPortfolioFinalValue
+                                                        .SelectedCells[
+                                                            (int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                                        .RowIndex]
+                                                .DailyValuesUpdateWebSiteUrl,
+                                            ShareObjectListFinalValue[
+                                                    dgvPortfolioFinalValue
+                                                        .SelectedCells[
+                                                            (int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                                        .RowIndex]
+                                                .ShareType,
+                                            ShareObjectListFinalValue[
+                                                    dgvPortfolioFinalValue
+                                                        .SelectedCells[
+                                                            (int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                                        .RowIndex]
+                                                .DailyValuesParsingOption
+                                        )),
+                                        ShareObjectListFinalValue[
+                                                dgvPortfolioFinalValue
+                                                    .SelectedCells[(int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                                    .RowIndex]
+                                            .DailyValuesParsingApiKey,
+                                        ShareObjectListFinalValue[
+                                                dgvPortfolioFinalValue
+                                                    .SelectedCells[(int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
+                                                    .RowIndex]
+                                            .WebSiteEncodingType,
+                                        DataTypes.ParsingType.YahooHistoryData
+                                    );
+                                }
+
                                 // Start the asynchronous operation of the Parser for the daily market values
-                                ParserDailyValues.ParsingValues = new ParsingValues(
-                                    new Uri(Helper.BuildDailyValuesUrl(
-                                        ShareObjectListFinalValue[
-                                                dgvPortfolioFinalValue
-                                                    .SelectedCells[
-                                                        (int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
-                                                    .RowIndex]
-                                            .DailyValuesList.Entries,
-                                        ShareObjectListFinalValue[
-                                                dgvPortfolioFinalValue
-                                                    .SelectedCells[
-                                                        (int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
-                                                    .RowIndex]
-                                            .DailyValuesUpdateWebSiteUrl,
-                                        ShareObjectListFinalValue[
-                                                dgvPortfolioFinalValue
-                                                    .SelectedCells[
-                                                        (int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
-                                                    .RowIndex]
-                                            .ShareType,
-                                        ShareObjectListFinalValue[
-                                                dgvPortfolioFinalValue
-                                                    .SelectedCells[
-                                                        (int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
-                                                    .RowIndex]
-                                            .DailyValuesParsingOption
-                                    )),
-                                    ShareObjectListFinalValue[
-                                            dgvPortfolioFinalValue
-                                                .SelectedCells[(int) ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
-                                                .RowIndex]
-                                        .WebSiteEncodingType,
-                                    DataTypes.ParsingType.OnVistaHistoryData
-                                );
                                 ParserDailyValues.StartParsing();
                             }
                         }
@@ -558,117 +820,117 @@ namespace SharePortfolioManager
 
                             // Check if a share is selected
                             if (ShareObjectFinalValue != null && ShareObjectMarketValue != null)
-                        {
-                            var ci = new RegionInfo(ShareObjectFinalValue.CultureInfo.LCID);
-
-                            // Check if the parsed value have the right currency
-                            if (e.ParserInfoState.SearchResult.ContainsKey("Currency") &&
-                                e.ParserInfoState.SearchResult["Currency"][0] == ci.ISOCurrencySymbol)
                             {
+                                var ci = new RegionInfo(ShareObjectFinalValue.CultureInfo.LCID);
 
-                                ShareObjectFinalValue.LastUpdateViaInternet = DateTime.Now;
-                                ShareObjectMarketValue.LastUpdateViaInternet = DateTime.Now;
-
-                                if (e.ParserInfoState.SearchResult.ContainsKey("LastDate") &&
-                                    e.ParserInfoState.SearchResult.ContainsKey("LastTime"))
+                                // Check if the parsed value have the right currency
+                                if (e.ParserInfoState.SearchResult.ContainsKey("Currency") &&
+                                    e.ParserInfoState.SearchResult["Currency"][0] == ci.ISOCurrencySymbol)
                                 {
-                                    var dateTime =
-                                        $@"{e.ParserInfoState.SearchResult["LastDate"][0]} {e.ParserInfoState.SearchResult["LastTime"][0]}";
 
-                                    if (DateTime.TryParse(dateTime, out var dtTryParse))
+                                    ShareObjectFinalValue.LastUpdateViaInternet = DateTime.Now;
+                                    ShareObjectMarketValue.LastUpdateViaInternet = DateTime.Now;
+
+                                    if (e.ParserInfoState.SearchResult.ContainsKey("LastDate") &&
+                                        e.ParserInfoState.SearchResult.ContainsKey("LastTime"))
                                     {
-                                        ShareObjectMarketValue.LastUpdateShare = dtTryParse;
-                                        ShareObjectFinalValue.LastUpdateShare = dtTryParse;
+                                        var dateTime =
+                                            $@"{e.ParserInfoState.SearchResult["LastDate"][0]} {e.ParserInfoState.SearchResult["LastTime"][0]}";
+
+                                        if (DateTime.TryParse(dateTime, out var dtTryParse))
+                                        {
+                                            ShareObjectMarketValue.LastUpdateShare = dtTryParse;
+                                            ShareObjectFinalValue.LastUpdateShare = dtTryParse;
+                                        }
+                                        else
+                                        {
+                                            ShareObjectMarketValue.LastUpdateShare =
+                                                DateTime.Parse(dateTime);
+                                            ShareObjectFinalValue.LastUpdateShare =
+                                                DateTime.Parse(dateTime);
+                                        }
+                                    }
+
+                                    if (e.ParserInfoState.SearchResult.ContainsKey("Price"))
+                                    {
+                                        ShareObjectMarketValue.CurPrice =
+                                            Convert.ToDecimal(e.ParserInfoState.SearchResult["Price"][0]);
+                                        ShareObjectFinalValue.CurPrice =
+                                            Convert.ToDecimal(e.ParserInfoState.SearchResult["Price"][0]);
+                                    }
+
+                                    if (e.ParserInfoState.SearchResult.ContainsKey("PriceBefore"))
+                                    {
+                                        ShareObjectMarketValue.PrevPrice =
+                                            Convert.ToDecimal(e.ParserInfoState.SearchResult["PriceBefore"][0]);
+                                        ShareObjectFinalValue.PrevPrice =
+                                            Convert.ToDecimal(e.ParserInfoState.SearchResult["PriceBefore"][0]);
+                                    }
+
+                                    // Save the share values to the XML
+                                    if (ParserMarketValues.ParserErrorCode == DataTypes.ParserErrorCodes.Finished ||
+                                        ParserMarketValues.ParserErrorCode <= DataTypes.ParserErrorCodes.NoError
+                                    )
+                                    {
+                                        if (!ShareObjectFinalValue.SaveShareObject(ShareObjectFinalValue,
+                                            ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio,
+                                            SettingsConfiguration.PortfolioName, out var exception))
+                                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                                LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                                    @"/MainForm/UpdateErrors/MarketValues/SaveFailed_1",
+                                                    SettingsConfiguration.LanguageName) +
+                                                shareName +
+                                                LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                                    @"/MainForm/UpdateErrors/MarketValues/SaveFailed_2",
+                                                    SettingsConfiguration.LanguageName),
+                                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                                                Color.Red, Logger, (int) EStateLevels.Error,
+                                                (int) EComponentLevels.Application, exception);
+                                    }
+
+                                    // Save last displayed DataGridView row
+                                    if (MarketValueOverviewTabSelected)
+                                    {
+                                        if (dgvPortfolioMarketValue.FirstDisplayedCell != null)
+                                            LastFirstDisplayedRowIndex =
+                                                dgvPortfolioMarketValue.FirstDisplayedCell.RowIndex;
                                     }
                                     else
                                     {
-                                        ShareObjectMarketValue.LastUpdateShare =
-                                            DateTime.Parse(dateTime);
-                                        ShareObjectFinalValue.LastUpdateShare =
-                                            DateTime.Parse(dateTime);
+                                        if (dgvPortfolioFinalValue.FirstDisplayedCell != null)
+                                            LastFirstDisplayedRowIndex =
+                                                dgvPortfolioFinalValue.FirstDisplayedCell.RowIndex;
                                     }
-                                }
 
-                                if (e.ParserInfoState.SearchResult.ContainsKey("Price"))
-                                {
-                                    ShareObjectMarketValue.CurPrice =
-                                        Convert.ToDecimal(e.ParserInfoState.SearchResult["Price"][0]);
-                                    ShareObjectFinalValue.CurPrice =
-                                        Convert.ToDecimal(e.ParserInfoState.SearchResult["Price"][0]);
-                                }
+                                    // Update row with the new ShareObject values
+                                    dgvPortfolioFinalValue.Refresh();
+                                    dgvPortfolioMarketValue.Refresh();
 
-                                if (e.ParserInfoState.SearchResult.ContainsKey("PriceBefore"))
-                                {
-                                    ShareObjectMarketValue.PrevPrice =
-                                        Convert.ToDecimal(e.ParserInfoState.SearchResult["PriceBefore"][0]);
-                                    ShareObjectFinalValue.PrevPrice =
-                                        Convert.ToDecimal(e.ParserInfoState.SearchResult["PriceBefore"][0]);
-                                }
+                                    // Refresh the footer
+                                    RefreshFooters();
 
-                                // Save the share values to the XML
-                                if (ParserMarketValues.ParserErrorCode == DataTypes.ParserErrorCodes.Finished ||
-                                    ParserMarketValues.ParserErrorCode <= DataTypes.ParserErrorCodes.NoError
-                                )
-                                {
-                                    if (!ShareObjectFinalValue.SaveShareObject(ShareObjectFinalValue,
-                                        ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio,
-                                        SettingsConfiguration.PortfolioName, out var exception))
-                                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                            LanguageConfiguration.Language.GetLanguageTextByXPath(
-                                                @"/MainForm/UpdateErrors/MarketValues/SaveFailed_1",
-                                                SettingsConfiguration.LanguageName) +
-                                            shareName +
-                                            LanguageConfiguration.Language.GetLanguageTextByXPath(
-                                                @"/MainForm/UpdateErrors/MarketValues/SaveFailed_2",
-                                                SettingsConfiguration.LanguageName),
-                                            LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
-                                            Color.Red, Logger, (int) EStateLevels.Error,
-                                            (int) EComponentLevels.Application, exception);
-                                }
-
-                                // Save last displayed DataGridView row
-                                if (MarketValueOverviewTabSelected)
-                                {
-                                    if (dgvPortfolioMarketValue.FirstDisplayedCell != null)
-                                        LastFirstDisplayedRowIndex =
-                                            dgvPortfolioMarketValue.FirstDisplayedCell.RowIndex;
+                                    // Reset share add flag
+                                    AddFlagMarketValue = false;
+                                    AddFlagFinalValue = false;
                                 }
                                 else
                                 {
-                                    if (dgvPortfolioFinalValue.FirstDisplayedCell != null)
-                                        LastFirstDisplayedRowIndex =
-                                            dgvPortfolioFinalValue.FirstDisplayedCell.RowIndex;
+                                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                        LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                            @"/MainForm/UpdateErrors/MarketValues/CurrencyError_1",
+                                            SettingsConfiguration.LanguageName) +
+                                        e.ParserInfoState.SearchResult["Currency"][0] +
+                                        LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                            @"/MainForm/UpdateErrors/MarketValues/CurrencyError_2",
+                                            SettingsConfiguration.LanguageName) +
+                                        ci.ISOCurrencySymbol +
+                                        LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                            @"/MainForm/UpdateErrors/MarketValues/CurrencyError_3",
+                                            SettingsConfiguration.LanguageName),
+                                        LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                                        Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Parser);
                                 }
-
-                                // Update row with the new ShareObject values
-                                dgvPortfolioFinalValue.Refresh();
-                                dgvPortfolioMarketValue.Refresh();
-
-                                // Refresh the footer
-                                RefreshFooters();
-
-                                // Reset share add flag
-                                AddFlagMarketValue = false;
-                                AddFlagFinalValue = false;
                             }
-                            else
-                            {
-                                Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                    LanguageConfiguration.Language.GetLanguageTextByXPath(
-                                        @"/MainForm/UpdateErrors/MarketValues/CurrencyError_1",
-                                        SettingsConfiguration.LanguageName) +
-                                    e.ParserInfoState.SearchResult["Currency"][0] +
-                                    LanguageConfiguration.Language.GetLanguageTextByXPath(
-                                        @"/MainForm/UpdateErrors/MarketValues/CurrencyError_2",
-                                        SettingsConfiguration.LanguageName) +
-                                    ci.ISOCurrencySymbol +
-                                    LanguageConfiguration.Language.GetLanguageTextByXPath(
-                                        @"/MainForm/UpdateErrors/MarketValues/CurrencyError_3",
-                                        SettingsConfiguration.LanguageName),
-                                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
-                                    Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Parser);
-                            }
-                        }
 
                             if (UpdateAllFlag)
                             {
@@ -935,6 +1197,18 @@ namespace SharePortfolioManager
                                 Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Parser);
                             break;
                         }
+                        case DataTypes.ParserErrorCodes.JsonError:
+                        {
+                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/JsonError_1",
+                                    SettingsConfiguration.LanguageName) +
+                                shareName +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/JsonError_2",
+                                    SettingsConfiguration.LanguageName),
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                                Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Parser);
+                            break;
+                        }
                         case DataTypes.ParserErrorCodes.ParsingFailed:
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
@@ -1072,7 +1346,42 @@ namespace SharePortfolioManager
                             timerStatusMessageClear.Enabled = true;
                     }
 
+                    if (e.ParserInfoState.Exception != null)
+                    {
+                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/UpdateFailed_1",
+                            SettingsConfiguration.LanguageName) +
+                        shareName +
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/MarketValues/UpdateFailed_2",
+                            SettingsConfiguration.LanguageName),
+                        LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                        Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application,
+                        e.ParserInfoState.Exception);
+                    }
+
                     progressBarWebParserMarketValues.Value = e.ParserInfoState.Percentage;
+
+                    // Check if an exception is given
+                    if (e.ParserInfoState.Exception != null)
+                    {
+                        if (e.ParserInfoState.Exception.GetType() == typeof(WebException))
+                        {
+                            Helper.AddStatusMessage(
+                                rchTxtBoxStateMessage,
+                               LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                    @"/GeneralErrors/CaptionParser", 
+                                    SettingsConfiguration.LanguageName) +
+                                    @" HttpStatus: " +
+                                    e.ParserInfoState.HttpStatus.ToString(),
+                                LanguageConfiguration.Language,
+                                SettingsConfiguration.LanguageName,
+                                Color.DarkRed, Logger,
+                                (int)EStateLevels.FatalError,
+                                (int)EComponentLevels.Parser,
+                                e.ParserInfoState.Exception
+                                );
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -1142,32 +1451,32 @@ namespace SharePortfolioManager
 
                             // Check if a share is selected
                             if (ShareObjectFinalValue != null && ShareObjectMarketValue != null)
-                        {
-                            // Only add if the date not exists already
-                            ShareObjectFinalValue.AddNewDailyValues(ParserDailyValues.ParserInfoState
-                                .DailyValuesList);
-
-                            // Save the share values to the XML
-                            if (ParserDailyValues.ParserErrorCode == DataTypes.ParserErrorCodes.Finished ||
-                                ParserDailyValues.ParserErrorCode <= DataTypes.ParserErrorCodes.NoError
-                            )
                             {
+                                // Only add if the date not exists already
+                                ShareObjectFinalValue.AddNewDailyValues(ParserDailyValues.ParserInfoState
+                                    .DailyValuesList);
+
                                 // Save the share values to the XML
-                                if (!ShareObjectFinalValue.SaveShareObject(ShareObjectFinalValue,
-                                    ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio,
-                                    SettingsConfiguration.PortfolioName, out var exception))
-                                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                        LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/SaveFailed_1",
-                                            SettingsConfiguration.LanguageName) +
-                                        shareName +
-                                        LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/SaveFailed_2",
-                                            SettingsConfiguration.LanguageName),
-                                        LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
-                                        Color.Red, Logger, (int)EStateLevels.Error,
-                                        (int)EComponentLevels.Application,
-                                        exception);
+                                if (ParserDailyValues.ParserErrorCode == DataTypes.ParserErrorCodes.Finished ||
+                                    ParserDailyValues.ParserErrorCode <= DataTypes.ParserErrorCodes.NoError
+                                )
+                                {
+                                    // Save the share values to the XML
+                                    if (!ShareObjectFinalValue.SaveShareObject(ShareObjectFinalValue,
+                                        ref _portfolio, ref _readerPortfolio, ref _readerSettingsPortfolio,
+                                        SettingsConfiguration.PortfolioName, out var exception))
+                                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                            LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/SaveFailed_1",
+                                                SettingsConfiguration.LanguageName) +
+                                            shareName +
+                                            LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/SaveFailed_2",
+                                                SettingsConfiguration.LanguageName),
+                                            LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                                            Color.Red, Logger, (int)EStateLevels.Error,
+                                            (int)EComponentLevels.Application,
+                                            exception);
+                                }
                             }
-                        }
 
                             if (UpdateAllFlag)
                             {
@@ -1433,6 +1742,18 @@ namespace SharePortfolioManager
                                 Color.Red, Logger, (int) EStateLevels.Error, (int) EComponentLevels.Parser);
                             break;
                         }
+                        case DataTypes.ParserErrorCodes.JsonError:
+                        {
+                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/JsonError_1",
+                                    SettingsConfiguration.LanguageName) +
+                                shareName +
+                                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/UpdateErrors/DailyValues/JsonError_2",
+                                    SettingsConfiguration.LanguageName),
+                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                                Color.Red, Logger, (int)EStateLevels.Error, (int)EComponentLevels.Parser);
+                            break;
+                        }
                         case DataTypes.ParserErrorCodes.ParsingFailed:
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
@@ -1464,11 +1785,11 @@ namespace SharePortfolioManager
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
                                 LanguageConfiguration.Language.GetLanguageTextByXPath(
-                                    @"/MainForm/UpdateErrors/MarketValues/FileFailed_1",
+                                    @"/MainForm/UpdateErrors/DailyValues/FileFailed_1",
                                     SettingsConfiguration.LanguageName) +
                                 shareName +
                                 LanguageConfiguration.Language.GetLanguageTextByXPath(
-                                    @"/MainForm/UpdateErrors/MarketValues/FileFailed_2",
+                                    @"/MainForm/UpdateErrors/DailyValues/FileFailed_2",
                                     SettingsConfiguration.LanguageName) +
                                 e.ParserInfoState.Exception.Message,
                                 LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
@@ -1480,11 +1801,11 @@ namespace SharePortfolioManager
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
                                 LanguageConfiguration.Language.GetLanguageTextByXPath(
-                                    @"/MainForm/UpdateErrors/MarketValues/JsonFailed_1",
+                                    @"/MainForm/UpdateErrors/DailyValues/JsonFailed_1",
                                     SettingsConfiguration.LanguageName) +
                                 shareName +
                                 LanguageConfiguration.Language.GetLanguageTextByXPath(
-                                    @"/MainForm/UpdateErrors/MarketValues/JsonFailed_2",
+                                    @"/MainForm/UpdateErrors/DailyValues/JsonFailed_2",
                                     SettingsConfiguration.LanguageName) +
                                 e.ParserInfoState.Exception.Message,
                                 LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
@@ -1578,6 +1899,28 @@ namespace SharePortfolioManager
                     }
 
                     progressBarWebParserDailyValues.Value = e.ParserInfoState.Percentage;
+
+                    // Check if an exception is given
+                    if (e.ParserInfoState.Exception != null)
+                    {
+                        if (e.ParserInfoState.Exception.GetType() == typeof(WebException))
+                        {
+                            Helper.AddStatusMessage(
+                                rchTxtBoxStateMessage,
+                               LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                    @"/GeneralErrors/CaptionParser",
+                                    SettingsConfiguration.LanguageName) +
+                                    @" HttpStatus: " +
+                                    e.ParserInfoState.HttpStatus.ToString(),
+                                LanguageConfiguration.Language,
+                                SettingsConfiguration.LanguageName,
+                                Color.DarkRed, Logger,
+                                (int)EStateLevels.FatalError,
+                                (int)EComponentLevels.Parser,
+                                e.ParserInfoState.Exception
+                                );
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {

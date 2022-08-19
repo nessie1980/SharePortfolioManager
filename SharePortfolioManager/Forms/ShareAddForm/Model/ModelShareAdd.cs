@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2022 nessie1980(nessie1980@gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -60,6 +60,7 @@ namespace SharePortfolioManager.ShareAddForm.Model
 
         string Wkn { get; set; }
         string Name { get; set; }
+        string Isin { get; set; }
         string StockMarketLaunchDate { get; set; }
         ShareObject.ShareTypes ShareType { get; set; }
         int DividendPayoutInterval { get; set; }
@@ -67,8 +68,10 @@ namespace SharePortfolioManager.ShareAddForm.Model
         string DetailsWebSite { get; set; }
         string MarketValuesWebSite { get; set; }
         ShareObject.ParsingTypes MarketValuesParsingOption { get; set; }
+        string MarketValuesParsingApiKey { get; set; }
         string DailyValuesWebSite { get; set; }
         ShareObject.ParsingTypes DailyValuesParsingOption { get; set; }
+        string DailyValuesParsingApiKey { get; set; }
         string Date { get; set; }
         string Time { get; set; }
         string DepotNumber { get; set; }
@@ -109,6 +112,7 @@ namespace SharePortfolioManager.ShareAddForm.Model
         #region Fields
 
         private string _wkn;
+        private string _isin;
         private string _name;
         private string _stockMarketLaunchDate;
         private ShareObject.ShareTypes _shareType;
@@ -117,8 +121,10 @@ namespace SharePortfolioManager.ShareAddForm.Model
         private string _detailsWebSite;
         private string _marketValuesWebSite;
         private ShareObject.ParsingTypes _marketValuesParsingOption;
+        private string _marketValuesParsingApiKey;
         private string _dailyValuesWebSite;
         private ShareObject.ParsingTypes _dailyValuesParsingOption;
+        private string _dailyValuesParsingApiKey;
         private string _date;
         private string _time;
         private string _depotNumber;
@@ -187,6 +193,17 @@ namespace SharePortfolioManager.ShareAddForm.Model
                 if (Equals(_wkn, value))
                     return;
                 _wkn = value;
+            }
+        }
+
+        public string Isin
+        {
+            get => _isin;
+            set
+            {
+                if (Equals(_isin, value))
+                    return;
+                _isin = value;
             }
         }
 
@@ -278,6 +295,17 @@ namespace SharePortfolioManager.ShareAddForm.Model
             }
         }
 
+        public string MarketValuesParsingApiKey
+        {
+            get => _marketValuesParsingApiKey;
+            set
+            {
+                if (Equals(_marketValuesParsingApiKey, value))
+                    return;
+                _marketValuesParsingApiKey = value;
+            }
+        }
+
         public string DailyValuesWebSite
         {
             get => _dailyValuesWebSite;
@@ -297,6 +325,17 @@ namespace SharePortfolioManager.ShareAddForm.Model
                 if (Equals(_dailyValuesParsingOption, value))
                     return;
                 _dailyValuesParsingOption = value;
+            }
+        }
+
+        public string DailyValuesParsingApiKey
+        {
+            get => _dailyValuesParsingApiKey;
+            set
+            {
+                if (Equals(_dailyValuesParsingApiKey, value))
+                    return;
+                _dailyValuesParsingApiKey = value;
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2022 nessie1980(nessie1980@gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -1592,7 +1592,7 @@ namespace SharePortfolioManager.SalesForm.View
 
             dateTimePickerDate.Focus();
 
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
 
             // Reset reset running flag
             ResetRunning = false;
@@ -1619,7 +1619,7 @@ namespace SharePortfolioManager.SalesForm.View
         /// <param name="e">EventArgs</param>
         private void OnDatePickerDate_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1649,7 +1649,7 @@ namespace SharePortfolioManager.SalesForm.View
         /// <param name="e">EventArgs</param>
         private void OnDatePickerTime_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1691,7 +1691,7 @@ namespace SharePortfolioManager.SalesForm.View
         /// <param name="e">EventArgs</param>
         private void OnCbxDepotNumber_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1725,7 +1725,7 @@ namespace SharePortfolioManager.SalesForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxOrderNumber_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1755,7 +1755,7 @@ namespace SharePortfolioManager.SalesForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxVolume_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1785,7 +1785,7 @@ namespace SharePortfolioManager.SalesForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxSalePrice_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
 
         }
 
@@ -1816,7 +1816,7 @@ namespace SharePortfolioManager.SalesForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxTaxAtSourceLeave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1846,7 +1846,7 @@ namespace SharePortfolioManager.SalesForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxCapitalGainsTaxLeave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1876,7 +1876,7 @@ namespace SharePortfolioManager.SalesForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxSolidarityTaxLeave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1906,7 +1906,7 @@ namespace SharePortfolioManager.SalesForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxProvision_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1936,7 +1936,7 @@ namespace SharePortfolioManager.SalesForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxBrokerFee_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1966,7 +1966,7 @@ namespace SharePortfolioManager.SalesForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxTraderPlaceFee_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1996,7 +1996,7 @@ namespace SharePortfolioManager.SalesForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxReductionLeave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -2041,7 +2041,7 @@ namespace SharePortfolioManager.SalesForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxDocument_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -2351,7 +2351,7 @@ namespace SharePortfolioManager.SalesForm.View
             toolStripStatusLabelMessageSaleEdit.Text = string.Empty;
             toolStripStatusLabelMessageSaleDocumentParsing.Text = string.Empty;
 
-            DocumentBrowseEventHandler?.Invoke(this, new EventArgs());
+            DocumentBrowseEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion Buttons
@@ -3340,7 +3340,7 @@ namespace SharePortfolioManager.SalesForm.View
                             SelectedDataGridView = (DataGridView)sender;
 
                             // Format the input value
-                            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+                            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
                         }
                         else
                         {
@@ -3758,6 +3758,10 @@ namespace SharePortfolioManager.SalesForm.View
                                 break;
                             }
                             case DataTypes.ParserErrorCodes.NoWebContentLoaded:
+                            {
+                                break;
+                            }
+                            case DataTypes.ParserErrorCodes.JsonError:
                             {
                                 break;
                             }

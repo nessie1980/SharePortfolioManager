@@ -2965,7 +2965,6 @@
             this.tabPgDetailsDividendValues.SelectedIndex = 0;
             this.tabPgDetailsDividendValues.Size = new System.Drawing.Size(1557, 448);
             this.tabPgDetailsDividendValues.TabIndex = 0;
-            this.tabPgDetailsDividendValues.SelectedIndexChanged += new System.EventHandler(this.OnTabCtrlDividend_SelectedIndexChanged);
             // 
             // tabPgDetailsBrokerages
             // 
@@ -3003,6 +3002,7 @@
             this.Name = "FrmShareDetails";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "ShareDetailsForm";
+            this.Load += new System.EventHandler(this.FrmShareDetails_Load);
             this.Shown += new System.EventHandler(this.ShareDetailsForm_Shown);
             this.grpBoxShareDetails.ResumeLayout(false);
             this.tblLayPnlShareDetailsTabControls.ResumeLayout(false);

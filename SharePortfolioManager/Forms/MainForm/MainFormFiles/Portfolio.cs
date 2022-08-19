@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2022 nessie1980(nessie1980@gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -150,9 +150,6 @@ namespace SharePortfolioManager
         private void OnLoadPortfolio_DoWork(object sender,
             DoWorkEventArgs e)
         {
-            // Get the BackgroundWorker that raised this event.
-            var worker = sender as BackgroundWorker;
-
             // Reset report progress values
             ReportProgress = 0.0;
             ReportProgressStep = 100.0;
@@ -161,7 +158,7 @@ namespace SharePortfolioManager
             // to the Result property of the DoWorkEventArgs
             // object. This is will be available to the 
             // RunWorkerCompleted event handler.
-            LoadPortfolio(worker, e);
+            LoadPortfolio();
         }
 
         // This event handler deals with the results of the
@@ -183,390 +180,397 @@ namespace SharePortfolioManager
             }
             else
             {
-                switch (PortfolioLoadState)
-                {
-                    case EStatePortfolioLoad.FileDoesNotExit:
-                    {
-                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            LanguageConfiguration.Language.GetLanguageTextByXPath(
-                                @"/MainForm/PortfolioErrors/FileDoesNotExists_1",
-                                SettingsConfiguration.LanguageName)
-                            + SettingsConfiguration.PortfolioName
-                            + LanguageConfiguration.Language.GetLanguageTextByXPath(
-                                @"/MainForm/PortfolioErrors/FileDoesNotExists_2",
-                                SettingsConfiguration.LanguageName),
-                            LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
-                            Color.DarkRed, Logger, (int)EStateLevels.FatalError,
-                            (int)EComponentLevels.Application);
-
-                        // Enable controls
-                        EnableDisableControlNames.Clear();
-                        EnableDisableControlNames.Add("menuStrip1");
-                        Helper.EnableDisableControls(true, this, EnableDisableControlNames);
-
-                        // Disable controls
-                        EnableDisableControlNames.Clear();
-                        EnableDisableControlNames.Add("saveAsToolStripMenuItem");
-                        Helper.EnableDisableControls(false, menuStrip1, EnableDisableControlNames);
-
-                        // Disable controls
-                        EnableDisableControlNames.Add("grpBoxSharePortfolio");
-                        EnableDisableControlNames.Add("grpBoxShareDetails");
-                        EnableDisableControlNames.Add("grpBoxStatusMessage");
-                        EnableDisableControlNames.Add("grpBoxUpdateState");
-                        EnableDisableControlNames.Add("grpBoxDocumentCapture");
-
-                        EnableDisableControlNames.Add("btnRefreshAll");
-                        EnableDisableControlNames.Add("btnRefresh");
-                        EnableDisableControlNames.Add("btnAdd");
-                        EnableDisableControlNames.Add("btnEdit");
-                        EnableDisableControlNames.Add("btnDelete");
-                        Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
-
-                        SettingsConfiguration.PortfolioName = @"";
-
-                        pgbLoadingPortfolio.Value = pgbLoadingPortfolio.Minimum;
-                    }
-                        break;
-                    case EStatePortfolioLoad.PortfolioXmlError:
-                    {
-                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            LanguageConfiguration.Language.GetLanguageTextByXPath(
-                                @"/MainForm/PortfolioErrors/CouldNotLoadFile_1",
-                                SettingsConfiguration.LanguageName)
-                            + SettingsConfiguration.PortfolioName
-                            + LanguageConfiguration.Language.GetLanguageTextByXPath(
-                                @"/MainForm/PortfolioErrors/CouldNotLoadFile_2",
-                                SettingsConfiguration.LanguageName)
-                            + " " + LanguageConfiguration.Language.GetLanguageTextByXPath(
-                                @"/MainForm/PortfolioErrors/XMLSyntaxFailure_1",
-                                SettingsConfiguration.LanguageName)
-                            + SettingsConfiguration.PortfolioName
-                            + LanguageConfiguration.Language.GetLanguageTextByXPath(
-                                @"/MainForm/PortfolioErrors/XMLSyntaxFailure_2",
-                                SettingsConfiguration.LanguageName),
-                            LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
-                            Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application,
-                            e.Error);
-
-                        // Enable controls
-                        EnableDisableControlNames.Clear();
-                        EnableDisableControlNames.Add("menuStrip1");
-                        Helper.EnableDisableControls(true, this, EnableDisableControlNames);
-
-                        // Disable controls
-                        EnableDisableControlNames.Clear();
-                        EnableDisableControlNames.Add("saveAsToolStripMenuItem");
-                        Helper.EnableDisableControls(false, menuStrip1, EnableDisableControlNames);
-
-                        // Disable controls
-                        EnableDisableControlNames.Clear();
-                        EnableDisableControlNames.Add("grpBoxSharePortfolio");
-                        EnableDisableControlNames.Add("grpBoxShareDetails");
-                        EnableDisableControlNames.Add("grpBoxStatusMessage");
-                        EnableDisableControlNames.Add("grpBoxUpdateState");
-                        EnableDisableControlNames.Add("grpBoxDocumentCapture");
-
-                        EnableDisableControlNames.Add("btnRefreshAll");
-                        EnableDisableControlNames.Add("btnRefresh");
-                        EnableDisableControlNames.Add("btnAdd");
-                        EnableDisableControlNames.Add("btnEdit");
-                        EnableDisableControlNames.Add("btnDelete");
-                        Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
-
-                        SettingsConfiguration.PortfolioName = @"";
-
-                        pgbLoadingPortfolio.Value = pgbLoadingPortfolio.Minimum;
-                    }
-                        break;
-                    case EStatePortfolioLoad.ConfigurationAttributeError:
-                    {
-                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            LanguageConfiguration.Language.GetLanguageTextByXPath(
-                                @"/MainForm/PortfolioErrors/ConfigurationAttributeError_1",
-                                SettingsConfiguration.LanguageName)
-                            + SettingsConfiguration.PortfolioName
-                            + LanguageConfiguration.Language.GetLanguageTextByXPath(
-                                @"/MainForm/PortfolioErrors/ConfigurationAttributeError_2",
-                                SettingsConfiguration.LanguageName),
-                            LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
-                            Color.DarkRed, Logger, (int)EStateLevels.FatalError,
-                            (int)EComponentLevels.Application,
-                            e.Error);
-
-                        // Enable controls
-                        EnableDisableControlNames.Clear();
-                        EnableDisableControlNames.Add("menuStrip1");
-                        Helper.EnableDisableControls(true, this, EnableDisableControlNames);
-
-                        // Disable controls
-                        EnableDisableControlNames.Clear();
-                        EnableDisableControlNames.Add("saveAsToolStripMenuItem");
-                        Helper.EnableDisableControls(false, menuStrip1, EnableDisableControlNames);
-
-                        // Disable controls
-                        EnableDisableControlNames.Clear();
-                        EnableDisableControlNames.Add("grpBoxSharePortfolio");
-                        EnableDisableControlNames.Add("grpBoxShareDetails");
-                        EnableDisableControlNames.Add("grpBoxStatusMessage");
-                        EnableDisableControlNames.Add("grpBoxUpdateState");
-                        EnableDisableControlNames.Add("grpBoxDocumentCapture");
-                        Helper.EnableDisableControls(false, this, EnableDisableControlNames);
-
-                        // Disable controls
-                        EnableDisableControlNames.Clear();
-                        EnableDisableControlNames.Add("btnRefreshAll");
-                        EnableDisableControlNames.Add("btnRefresh");
-                        EnableDisableControlNames.Add("btnAdd");
-                        EnableDisableControlNames.Add("btnEdit");
-                        EnableDisableControlNames.Add("btnDelete");
-                        Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
-
-                        SettingsConfiguration.PortfolioName = @"";
-
-                        pgbLoadingPortfolio.Value = pgbLoadingPortfolio.Minimum;
-                    }
-                        break;
-                    case EStatePortfolioLoad.LoadFailed:
-                    {
-                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            LanguageConfiguration.Language.GetLanguageTextByXPath(
-                                @"/MainForm/PortfolioErrors/CouldNotLoadFile_1",
-                                SettingsConfiguration.LanguageName)
-                            + SettingsConfiguration.PortfolioName
-                            + LanguageConfiguration.Language.GetLanguageTextByXPath(
-                                @"/MainForm/PortfolioErrors/CouldNotLoadFile_2",
-                                SettingsConfiguration.LanguageName),
-                            LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
-                            Color.DarkRed, Logger, (int)EStateLevels.FatalError,
-                            (int)EComponentLevels.Application,
-                            e.Error);
-
-                        // Enable controls
-                        EnableDisableControlNames.Clear();
-                        EnableDisableControlNames.Add("menuStrip1");
-                        Helper.EnableDisableControls(true, this, EnableDisableControlNames);
-
-                        // Disable controls
-                        EnableDisableControlNames.Clear();
-                        EnableDisableControlNames.Add("saveAsToolStripMenuItem");
-                        Helper.EnableDisableControls(false, menuStrip1, EnableDisableControlNames);
-
-                        // Disable controls
-                        EnableDisableControlNames.Clear();
-                        EnableDisableControlNames.Add("grpBoxSharePortfolio");
-                        EnableDisableControlNames.Add("grpBoxShareDetails");
-                        EnableDisableControlNames.Add("grpBoxStatusMessage");
-                        EnableDisableControlNames.Add("grpBoxUpdateState");
-                        EnableDisableControlNames.Add("grpBoxDocumentCapture");
-                        Helper.EnableDisableControls(false, this, EnableDisableControlNames);
-
-                        // Disable controls
-                        EnableDisableControlNames.Clear();
-                        EnableDisableControlNames.Add("btnRefreshAll");
-                        EnableDisableControlNames.Add("btnRefresh");
-                        EnableDisableControlNames.Add("btnAdd");
-                        EnableDisableControlNames.Add("btnEdit");
-                        EnableDisableControlNames.Add("btnDelete");
-                        Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
-
-                        SettingsConfiguration.PortfolioName = @"";
-
-                        pgbLoadingPortfolio.Value = pgbLoadingPortfolio.Minimum;
-                    }
-                        break;
-                    case EStatePortfolioLoad.PortfolioListEmpty:
-                    {
-                        if (_changingPortfolio)
-                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                LanguageConfiguration.Language.GetLanguageTextByXPath(
-                                    @"/MainForm/StatusMessages/ChangingPortfolioSuccessful",
-                                    SettingsConfiguration.LanguageName),
-                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
-                                Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
-
-                        Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                            LanguageConfiguration.Language.GetLanguageTextByXPath(
-                                @"/MainForm/PortfolioErrors/ConfigurationListEmpty",
-                                SettingsConfiguration.LanguageName),
-                            LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
-                            Color.OrangeRed, Logger, (int)EStateLevels.Warning,
-                            (int)EComponentLevels.Application);
-
-                        // Enable controls
-                        EnableDisableControlNames.Clear();
-                        EnableDisableControlNames.Add("menuStrip1");
-
-                        EnableDisableControlNames.Add("grpBoxSharePortfolio");
-                        EnableDisableControlNames.Add("grpBoxShareDetails");
-                        EnableDisableControlNames.Add("grpBoxStatusMessage");
-                        EnableDisableControlNames.Add("grpBoxUpdateState");
-
-                        // Check if PDF converter installed
-                        if (Helper.PdfParserInstalled())
-                            EnableDisableControlNames.Add("grpBoxDocumentCapture");
-
-                        EnableDisableControlNames.Add("btnAdd");
-                        Helper.EnableDisableControls(true, this, EnableDisableControlNames);
-
-                        EnableDisableControlNames.Clear();
-                        EnableDisableControlNames.Add("saveAsToolStripMenuItem");
-                        Helper.EnableDisableControls(true, menuStrip1, EnableDisableControlNames);
-
-                        // Disable controls
-                        EnableDisableControlNames.Clear();
-                        EnableDisableControlNames.Add("btnRefreshAll");
-                        EnableDisableControlNames.Add("btnRefresh");
-                        EnableDisableControlNames.Add("btnEdit");
-                        EnableDisableControlNames.Add("btnDelete");
-                        Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
-
-                        pgbLoadingPortfolio.Value = pgbLoadingPortfolio.Minimum;
-                    }
-                        break;
-                    case EStatePortfolioLoad.LoadSuccessful:
-                    {
-                        // Show the invalid website configurations
-                        ShowInvalidWebSiteConfigurations(RegexSearchFailedList);
-
-                        // Add data to data grid views
-                        AddSharesToDataGridViews();
-                        AddShareFooters();
-
-                        // Enable controls
-                        EnableDisableControlNames.Clear();
-                        EnableDisableControlNames.Add("menuStrip1");
-                        EnableDisableControlNames.Add("newToolStripMenuItem");
-                        EnableDisableControlNames.Add("openToolStripMenuItem");
-                        EnableDisableControlNames.Add("saveAsToolStripMenuItem");
-                        EnableDisableControlNames.Add("settingsToolStripMenuItem");
-                        EnableDisableControlNames.Add("grpBoxSharePortfolio");
-                        EnableDisableControlNames.Add("grpBoxShareDetails");
-                        EnableDisableControlNames.Add("grpBoxStatusMessage");
-                        EnableDisableControlNames.Add("grpBoxUpdateState");
-
-                        // Check if PDF converter installed
-                        if (Helper.PdfParserInstalled())
-                            EnableDisableControlNames.Add("grpBoxDocumentCapture");
-
-                        Helper.EnableDisableControls(true, this, EnableDisableControlNames);
-
-                        EnableDisableControlNames.Clear();
-                        EnableDisableControlNames.Add("btnRefreshAll");
-                        EnableDisableControlNames.Add("btnRefresh");
-                        EnableDisableControlNames.Add("btnAdd");
-                        EnableDisableControlNames.Add("btnEdit");
-                        EnableDisableControlNames.Add("btnDelete");
-                        Helper.EnableDisableControls(true, tblLayPnlShareOverviews, EnableDisableControlNames);
-
-                        // Check if any share set for updating so enable the refresh all button
-                        btnRefreshAll.Enabled = ShareObjectListFinalValue.Count(p =>
-                            p.InternetUpdateOption != ShareObject.ShareUpdateTypes.None &&
-                            p.WebSiteConfigurationFound) >= 1;
-
-                        // Check if any share set for updating so enable the refresh all button
-                        btnRefresh.Enabled = ShareObjectListFinalValue.Count(p =>
-                            p.InternetUpdateOption != ShareObject.ShareUpdateTypes.None &&
-                            p.WebSiteConfigurationFound) >= 1;
-
-                        pgbLoadingPortfolio.Value = pgbLoadingPortfolio.Maximum;
-
-                        if (_changingPortfolio)
-                        {
-                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                LanguageConfiguration.Language.GetLanguageTextByXPath(
-                                    @"/MainForm/StatusMessages/ChangingPortfolioSuccessful",
-                                    SettingsConfiguration.LanguageName),
-                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
-                                Color.Green, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
-                        }
-                        else
-                        {
-                            Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                                LanguageConfiguration.Language.GetLanguageTextByXPath(
-                                    @"/MainForm/StatusMessages/LoadingPortfolioSuccessful",
-                                    SettingsConfiguration.LanguageName),
-                                LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
-                                Color.Green, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
-                        }
-                    }
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-
-                // Reset flag
-                _changingPortfolio = false;
-
-                // Set portfolio filename to the application caption
-                Text = LanguageConfiguration.Language.GetLanguageTextByXPath(@"/Application/Name",
-                           SettingsConfiguration.LanguageName)
-                       + @" " + Helper.GetApplicationVersion();
-                if (SettingsConfiguration.PortfolioName != @"")
-                    Text += @" - (" + SettingsConfiguration.PortfolioName + @")";
-
-                // Set group box caption
-                grpBoxSharePortfolio.Text =
-                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Caption",
-                        SettingsConfiguration.LanguageName) +
-                    @" ( " +
-                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Entries",
-                        SettingsConfiguration.LanguageName) +
-                    @": " +
-                    ShareObjectListFinalValue.Count + @" ) / " +
-                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/LastUpdate",
-                        SettingsConfiguration.LanguageName) +
-                    Helper.GetLastShareUpdate(ShareObjectListFinalValue);
-
-                // Create backup of the portfolio and clean up old backups
-                const string backupPrefix = @"Backup_";
-                var currentDateTime = DateTime.Now.ToString("yyyy'_'MM'_'dd'_'HH'_'mm'_'ss");
-                var path = Path.GetDirectoryName(SettingsConfiguration.PortfolioName);
-                var newFile = path + "\\" + backupPrefix + currentDateTime + ".xml";
-
-                File.Copy(SettingsConfiguration.PortfolioName, newFile);
-
                 try
                 {
-                    if (path != null)
+                    switch (PortfolioLoadState)
                     {
-                        var deleteDone = false;
+                        case EStatePortfolioLoad.FileDoesNotExit:
+                            {
+                                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                    LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                        @"/MainForm/PortfolioErrors/FileDoesNotExists_1",
+                                        SettingsConfiguration.LanguageName)
+                                    + SettingsConfiguration.PortfolioName
+                                    + LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                        @"/MainForm/PortfolioErrors/FileDoesNotExists_2",
+                                        SettingsConfiguration.LanguageName),
+                                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                                    Color.DarkRed, Logger, (int)EStateLevels.FatalError,
+                                    (int)EComponentLevels.Application, e.Error);
 
-                        // Build list of backup files
-                        var fileList = Directory.GetFiles(path, backupPrefix + "*");
+                                // Enable controls
+                                EnableDisableControlNames.Clear();
+                                EnableDisableControlNames.Add("menuStrip1");
+                                Helper.EnableDisableControls(true, this, EnableDisableControlNames);
 
-                        // Delete files
-                        for (var i = fileList.Length - 1; i > 0; i--)
+                                // Disable controls
+                                EnableDisableControlNames.Clear();
+                                EnableDisableControlNames.Add("saveAsToolStripMenuItem");
+                                Helper.EnableDisableControls(false, menuStrip1, EnableDisableControlNames);
+
+                                // Disable controls
+                                EnableDisableControlNames.Add("grpBoxSharePortfolio");
+                                EnableDisableControlNames.Add("grpBoxShareDetails");
+                                EnableDisableControlNames.Add("grpBoxStatusMessage");
+                                EnableDisableControlNames.Add("grpBoxUpdateState");
+                                EnableDisableControlNames.Add("grpBoxDocumentCapture");
+
+                                EnableDisableControlNames.Add("btnRefreshAll");
+                                EnableDisableControlNames.Add("btnRefresh");
+                                EnableDisableControlNames.Add("btnAdd");
+                                EnableDisableControlNames.Add("btnEdit");
+                                EnableDisableControlNames.Add("btnDelete");
+                                Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
+
+                                SettingsConfiguration.PortfolioName = @"";
+
+                                pgbLoadingPortfolio.Value = pgbLoadingPortfolio.Minimum;
+                            }
+                            break;
+                        case EStatePortfolioLoad.PortfolioXmlError:
+                            {
+                                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                    LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                        @"/MainForm/PortfolioErrors/CouldNotLoadFile_1",
+                                        SettingsConfiguration.LanguageName)
+                                    + SettingsConfiguration.PortfolioName
+                                    + LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                        @"/MainForm/PortfolioErrors/CouldNotLoadFile_2",
+                                        SettingsConfiguration.LanguageName)
+                                    + " " + LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                        @"/MainForm/PortfolioErrors/XMLSyntaxFailure_1",
+                                        SettingsConfiguration.LanguageName)
+                                    + SettingsConfiguration.PortfolioName
+                                    + LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                        @"/MainForm/PortfolioErrors/XMLSyntaxFailure_2",
+                                        SettingsConfiguration.LanguageName),
+                                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application,
+                                    e.Error);
+
+                                // Enable controls
+                                EnableDisableControlNames.Clear();
+                                EnableDisableControlNames.Add("menuStrip1");
+                                Helper.EnableDisableControls(true, this, EnableDisableControlNames);
+
+                                // Disable controls
+                                EnableDisableControlNames.Clear();
+                                EnableDisableControlNames.Add("saveAsToolStripMenuItem");
+                                Helper.EnableDisableControls(false, menuStrip1, EnableDisableControlNames);
+
+                                // Disable controls
+                                EnableDisableControlNames.Clear();
+                                EnableDisableControlNames.Add("grpBoxSharePortfolio");
+                                EnableDisableControlNames.Add("grpBoxShareDetails");
+                                EnableDisableControlNames.Add("grpBoxStatusMessage");
+                                EnableDisableControlNames.Add("grpBoxUpdateState");
+                                EnableDisableControlNames.Add("grpBoxDocumentCapture");
+
+                                EnableDisableControlNames.Add("btnRefreshAll");
+                                EnableDisableControlNames.Add("btnRefresh");
+                                EnableDisableControlNames.Add("btnAdd");
+                                EnableDisableControlNames.Add("btnEdit");
+                                EnableDisableControlNames.Add("btnDelete");
+                                Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
+
+                                SettingsConfiguration.PortfolioName = @"";
+
+                                pgbLoadingPortfolio.Value = pgbLoadingPortfolio.Minimum;
+                            }
+                            break;
+                        case EStatePortfolioLoad.ConfigurationAttributeError:
+                            {
+                                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                    LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                        @"/MainForm/PortfolioErrors/ConfigurationAttributeError_1",
+                                        SettingsConfiguration.LanguageName)
+                                    + SettingsConfiguration.PortfolioName
+                                    + LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                        @"/MainForm/PortfolioErrors/ConfigurationAttributeError_2",
+                                        SettingsConfiguration.LanguageName),
+                                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                                    Color.DarkRed, Logger, (int)EStateLevels.FatalError,
+                                    (int)EComponentLevels.Application,
+                                    e.Error);
+
+                                // Enable controls
+                                EnableDisableControlNames.Clear();
+                                EnableDisableControlNames.Add("menuStrip1");
+                                Helper.EnableDisableControls(true, this, EnableDisableControlNames);
+
+                                // Disable controls
+                                EnableDisableControlNames.Clear();
+                                EnableDisableControlNames.Add("saveAsToolStripMenuItem");
+                                Helper.EnableDisableControls(false, menuStrip1, EnableDisableControlNames);
+
+                                // Disable controls
+                                EnableDisableControlNames.Clear();
+                                EnableDisableControlNames.Add("grpBoxSharePortfolio");
+                                EnableDisableControlNames.Add("grpBoxShareDetails");
+                                EnableDisableControlNames.Add("grpBoxStatusMessage");
+                                EnableDisableControlNames.Add("grpBoxUpdateState");
+                                EnableDisableControlNames.Add("grpBoxDocumentCapture");
+                                Helper.EnableDisableControls(false, this, EnableDisableControlNames);
+
+                                // Disable controls
+                                EnableDisableControlNames.Clear();
+                                EnableDisableControlNames.Add("btnRefreshAll");
+                                EnableDisableControlNames.Add("btnRefresh");
+                                EnableDisableControlNames.Add("btnAdd");
+                                EnableDisableControlNames.Add("btnEdit");
+                                EnableDisableControlNames.Add("btnDelete");
+                                Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
+
+                                SettingsConfiguration.PortfolioName = @"";
+
+                                pgbLoadingPortfolio.Value = pgbLoadingPortfolio.Minimum;
+                            }
+                            break;
+                        case EStatePortfolioLoad.LoadFailed:
+                            {
+                                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                    LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                        @"/MainForm/PortfolioErrors/CouldNotLoadFile_1",
+                                        SettingsConfiguration.LanguageName)
+                                    + SettingsConfiguration.PortfolioName
+                                    + LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                        @"/MainForm/PortfolioErrors/CouldNotLoadFile_2",
+                                        SettingsConfiguration.LanguageName),
+                                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                                    Color.DarkRed, Logger, (int)EStateLevels.FatalError,
+                                    (int)EComponentLevels.Application,
+                                    e.Error);
+
+                                // Enable controls
+                                EnableDisableControlNames.Clear();
+                                EnableDisableControlNames.Add("menuStrip1");
+                                Helper.EnableDisableControls(true, this, EnableDisableControlNames);
+
+                                // Disable controls
+                                EnableDisableControlNames.Clear();
+                                EnableDisableControlNames.Add("saveAsToolStripMenuItem");
+                                Helper.EnableDisableControls(false, menuStrip1, EnableDisableControlNames);
+
+                                // Disable controls
+                                EnableDisableControlNames.Clear();
+                                EnableDisableControlNames.Add("grpBoxSharePortfolio");
+                                EnableDisableControlNames.Add("grpBoxShareDetails");
+                                EnableDisableControlNames.Add("grpBoxStatusMessage");
+                                EnableDisableControlNames.Add("grpBoxUpdateState");
+                                EnableDisableControlNames.Add("grpBoxDocumentCapture");
+                                Helper.EnableDisableControls(false, this, EnableDisableControlNames);
+
+                                // Disable controls
+                                EnableDisableControlNames.Clear();
+                                EnableDisableControlNames.Add("btnRefreshAll");
+                                EnableDisableControlNames.Add("btnRefresh");
+                                EnableDisableControlNames.Add("btnAdd");
+                                EnableDisableControlNames.Add("btnEdit");
+                                EnableDisableControlNames.Add("btnDelete");
+                                Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
+
+                                SettingsConfiguration.PortfolioName = @"";
+
+                                pgbLoadingPortfolio.Value = pgbLoadingPortfolio.Minimum;
+                            }
+                            break;
+                        case EStatePortfolioLoad.PortfolioListEmpty:
+                            {
+                                if (_changingPortfolio)
+                                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                        LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                            @"/MainForm/StatusMessages/ChangingPortfolioSuccessful",
+                                            SettingsConfiguration.LanguageName),
+                                        LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                                        Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
+
+                                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                    LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                        @"/MainForm/PortfolioErrors/ConfigurationListEmpty",
+                                        SettingsConfiguration.LanguageName),
+                                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                                    Color.OrangeRed, Logger, (int)EStateLevels.Warning,
+                                    (int)EComponentLevels.Application, e.Error);
+
+                                // Enable controls
+                                EnableDisableControlNames.Clear();
+                                EnableDisableControlNames.Add("menuStrip1");
+
+                                EnableDisableControlNames.Add("grpBoxSharePortfolio");
+                                EnableDisableControlNames.Add("grpBoxShareDetails");
+                                EnableDisableControlNames.Add("grpBoxStatusMessage");
+                                EnableDisableControlNames.Add("grpBoxUpdateState");
+
+                                // Check if PDF converter installed
+                                if (Helper.PdfParserInstalled())
+                                    EnableDisableControlNames.Add("grpBoxDocumentCapture");
+
+                                EnableDisableControlNames.Add("btnAdd");
+                                Helper.EnableDisableControls(true, this, EnableDisableControlNames);
+
+                                EnableDisableControlNames.Clear();
+                                EnableDisableControlNames.Add("saveAsToolStripMenuItem");
+                                Helper.EnableDisableControls(true, menuStrip1, EnableDisableControlNames);
+
+                                // Disable controls
+                                EnableDisableControlNames.Clear();
+                                EnableDisableControlNames.Add("btnRefreshAll");
+                                EnableDisableControlNames.Add("btnRefresh");
+                                EnableDisableControlNames.Add("btnEdit");
+                                EnableDisableControlNames.Add("btnDelete");
+                                Helper.EnableDisableControls(false, tblLayPnlShareOverviews, EnableDisableControlNames);
+
+                                pgbLoadingPortfolio.Value = pgbLoadingPortfolio.Minimum;
+                            }
+                            break;
+                        case EStatePortfolioLoad.LoadSuccessful:
+                            {
+                                // Show the invalid website configurations
+                                ShowInvalidWebSiteConfigurations(RegexSearchFailedList);
+
+                                // Add data to data grid views
+                                AddSharesToDataGridViews();
+                                AddShareFooters();
+
+                                // Enable controls
+                                EnableDisableControlNames.Clear();
+                                EnableDisableControlNames.Add("menuStrip1");
+                                EnableDisableControlNames.Add("newToolStripMenuItem");
+                                EnableDisableControlNames.Add("openToolStripMenuItem");
+                                EnableDisableControlNames.Add("saveAsToolStripMenuItem");
+                                EnableDisableControlNames.Add("settingsToolStripMenuItem");
+                                EnableDisableControlNames.Add("grpBoxSharePortfolio");
+                                EnableDisableControlNames.Add("grpBoxShareDetails");
+                                EnableDisableControlNames.Add("grpBoxStatusMessage");
+                                EnableDisableControlNames.Add("grpBoxUpdateState");
+
+                                // Check if PDF converter installed
+                                if (Helper.PdfParserInstalled())
+                                    EnableDisableControlNames.Add("grpBoxDocumentCapture");
+
+                                Helper.EnableDisableControls(true, this, EnableDisableControlNames);
+
+                                EnableDisableControlNames.Clear();
+                                EnableDisableControlNames.Add("btnRefreshAll");
+                                EnableDisableControlNames.Add("btnRefresh");
+                                EnableDisableControlNames.Add("btnAdd");
+                                EnableDisableControlNames.Add("btnEdit");
+                                EnableDisableControlNames.Add("btnDelete");
+                                Helper.EnableDisableControls(true, tblLayPnlShareOverviews, EnableDisableControlNames);
+
+                                // Check if any share set for updating so enable the refresh all button
+                                btnRefreshAll.Enabled = ShareObjectListFinalValue.Count(p =>
+                                    p.InternetUpdateOption != ShareObject.ShareUpdateTypes.None &&
+                                    p.WebSiteConfigurationFound) >= 1;
+
+                                // Check if any share set for updating so enable the refresh all button
+                                btnRefresh.Enabled = ShareObjectListFinalValue.Count(p =>
+                                    p.InternetUpdateOption != ShareObject.ShareUpdateTypes.None &&
+                                    p.WebSiteConfigurationFound) >= 1;
+
+                                pgbLoadingPortfolio.Value = pgbLoadingPortfolio.Maximum;
+
+                                if (_changingPortfolio)
+                                {
+                                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                        LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                            @"/MainForm/StatusMessages/ChangingPortfolioSuccessful",
+                                            SettingsConfiguration.LanguageName),
+                                        LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                                        Color.Green, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application, e.Error);
+                                }
+                                else
+                                {
+                                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                        LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                            @"/MainForm/StatusMessages/LoadingPortfolioSuccessful",
+                                            SettingsConfiguration.LanguageName),
+                                        LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                                        Color.Green, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application, e.Error);
+                                }
+                            }
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+
+                    // Reset flag
+                    _changingPortfolio = false;
+
+                    // Set portfolio filename to the application caption
+                    Text = LanguageConfiguration.Language.GetLanguageTextByXPath(@"/Application/Name",
+                               SettingsConfiguration.LanguageName)
+                           + @" " + Helper.GetApplicationVersion();
+                    if (SettingsConfiguration.PortfolioName != @"")
+                        Text += @" - (" + SettingsConfiguration.PortfolioName + @")";
+
+                    // Set group box caption
+                    grpBoxSharePortfolio.Text =
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Caption",
+                            SettingsConfiguration.LanguageName) +
+                        @" ( " +
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Entries",
+                            SettingsConfiguration.LanguageName) +
+                        @": " +
+                        ShareObjectListFinalValue.Count + @" ) / " +
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/LastUpdate",
+                            SettingsConfiguration.LanguageName) +
+                        Helper.GetLastShareUpdate(ShareObjectListFinalValue);
+
+                    // Create backup of the portfolio and clean up old backups
+                    if (PortfolioLoadState == EStatePortfolioLoad.LoadSuccessful &&
+                        SettingsConfiguration.PortfolioName != String.Empty)
+                    {
+                        const string backupPrefix = @"Backup_";
+                        var currentDateTime = DateTime.Now.ToString("yyyy'_'MM'_'dd'_'HH'_'mm'_'ss");
+                        var path = Path.GetDirectoryName(SettingsConfiguration.PortfolioName);
+                        var newFile = path + "\\" + backupPrefix + currentDateTime + ".xml";
+
+                        File.Copy(SettingsConfiguration.PortfolioName, newFile);
+
+                        // Clean up backup files
+                        try
                         {
-                            if (i >= fileList.Length - 4) continue;
+                            if (path != null)
+                            {
+                                var deleteDone = false;
 
-                            File.Delete(fileList[i]);
+                                // Build list of backup files
+                                var fileList = Directory.GetFiles(path, backupPrefix + "*");
 
-                            deleteDone = true;
+                                // Delete files
+                                for (var i = fileList.Length - 1; i > 0; i--)
+                                {
+                                    if (i >= fileList.Length - 4) continue;
+
+                                    File.Delete(fileList[i]);
+
+                                    deleteDone = true;
+                                }
+
+                                if (deleteDone)
+                                {
+                                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                                        LanguageConfiguration.Language.GetLanguageTextByXPath(
+                                            @"/MainForm/PortfolioErrors/BackupCleanupDone",
+                                            SettingsConfiguration.LanguageName),
+                                        LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                                        Color.Green, Logger, (int)EStateLevels.Info,
+                                        (int)EComponentLevels.Application);
+                                }
+                            }
                         }
-
-                        if (deleteDone)
+                        catch (Exception ex)
                         {
                             Helper.AddStatusMessage(rchTxtBoxStateMessage,
                                 LanguageConfiguration.Language.GetLanguageTextByXPath(
-                                    @"/MainForm/PortfolioErrors/BackupCleanupDone",
-                                    SettingsConfiguration.LanguageName),
+                                    @"/MainForm/PortfolioErrors/BackupCleanupFailed", SettingsConfiguration.LanguageName),
                                 LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
-                                Color.Green, Logger, (int)EStateLevels.Info,
-                                (int)EComponentLevels.Application);
+                                Color.DarkRed, Logger, (int)EStateLevels.FatalError,
+                                (int)EComponentLevels.Application,
+                                ex);
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
-                        LanguageConfiguration.Language.GetLanguageTextByXPath(
-                            @"/MainForm/PortfolioErrors/BackupCleanupFailed", SettingsConfiguration.LanguageName),
-                        LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
-                        Color.DarkRed, Logger, (int)EStateLevels.FatalError,
-                        (int)EComponentLevels.Application,
-                        ex);
-                }
 
 #if DEBUG_SHARE_PORTFOLIO
                 Console.WriteLine(@"");
@@ -694,8 +698,19 @@ namespace SharePortfolioManager
                     Console.WriteLine(@"");
                 }
 #endif
-                // Hide loading portfolio controls
-                tblLayPnlLoadingPortfolio.Visible = false;
+                    // Hide loading portfolio controls
+                    tblLayPnlLoadingPortfolio.Visible = false;
+                }
+                catch (Exception exception)
+                {
+                    Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                        LanguageConfiguration.Language.GetLanguageTextByXPath(
+                            @"/GeneralErrors/Caption",
+                            SettingsConfiguration.LanguageName),
+                        LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                        Color.DarkRed, Logger, (int)EStateLevels.FatalError,
+                        (int)EComponentLevels.Application, exception);
+                }
             }
         }
 
@@ -807,7 +822,7 @@ namespace SharePortfolioManager
         /// <summary>
         /// This function loads the portfolio from the portfolio file
         /// </summary>
-        private void LoadPortfolio(BackgroundWorker worker, DoWorkEventArgs e)
+        private void LoadPortfolio()
         {
             if (!InitFlag) return;
 
@@ -820,6 +835,17 @@ namespace SharePortfolioManager
                 ShareObjectFinalValue.PortfolioValuesReset();
                 ShareObjectMarketValue.PortfolioValuesReset();
                 PortfolioEmptyFlag = true;
+
+                //Force garbage collection so the object counter of the ShareObject will be reset
+                GC.Collect();
+
+                // Wait for all finalizers to complete before continuing.
+                // Without this call to GC.WaitForPendingFinalizers,
+                // the worker loop below might execute at the same time
+                // as the finalizers.
+                // With this call, the worker loop executes only after
+                // all finalizers have been called.
+                GC.WaitForPendingFinalizers();
 
                 // Check if the portfolio file exists
                 if (!File.Exists(SettingsConfiguration.PortfolioName))
@@ -885,6 +911,7 @@ namespace SharePortfolioManager
                             if (!nodeElement.HasChildNodes ||
                                 nodeElement.ChildNodes.Count != ShareObject.ShareObjectTagCount ||
                                 nodeElement.Attributes?[ShareObject.GeneralWknAttrName] == null ||
+                                nodeElement.Attributes?[ShareObject.GeneralIsinAttrName] == null ||
                                 nodeElement.Attributes?[ShareObject.GeneralNameAttrName] == null ||
                                 nodeElement.Attributes?[ShareObject.GeneralUpdateAttrName] == null
                                 )
@@ -896,6 +923,12 @@ namespace SharePortfolioManager
                                     nodeElement.Attributes[ShareObject.GeneralWknAttrName].InnerText;
                                 ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].Wkn =
                                     nodeElement.Attributes[ShareObject.GeneralWknAttrName].InnerText;
+
+                                // WKN of the share
+                                ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].Isin =
+                                    nodeElement.Attributes[ShareObject.GeneralIsinAttrName].InnerText;
+                                ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].Isin =
+                                    nodeElement.Attributes[ShareObject.GeneralIsinAttrName].InnerText;
 
                                 // Name of the share
                                 ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].Name =
@@ -1019,11 +1052,11 @@ namespace SharePortfolioManager
                                                 ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
                                                     .MarketValuesUpdateWebSiteUrl =
                                                     nodeElement.ChildNodes[i].Attributes[
-                                                        ShareObject.GeneralMarketValuesWebSiteAttrName].InnerText;
+                                                        ShareObject.MarketValuesWebSiteAttrName].InnerText;
                                                 ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
                                                         .MarketValuesUpdateWebSiteUrl =
                                                     nodeElement.ChildNodes[i].Attributes[
-                                                        ShareObject.GeneralMarketValuesWebSiteAttrName].InnerText;
+                                                        ShareObject.MarketValuesWebSiteAttrName].InnerText;
                                             }
                                             else
                                                 bLoadPortfolio = false;
@@ -1032,7 +1065,7 @@ namespace SharePortfolioManager
                                             if (nodeElement.ChildNodes[i].Attributes != null)
                                             {
                                                 if (nodeElement.ChildNodes[i]
-                                                        .Attributes[ShareObject.GeneralParsingMarketValuesAttrName]
+                                                        .Attributes[ShareObject.MarketValuesParsingAttrName]
                                                         .InnerText ==
                                                     ShareObject.ParsingTypes.Regex.ToString())
                                                 {
@@ -1042,17 +1075,43 @@ namespace SharePortfolioManager
                                                         .MarketValuesParsingOption = ShareObject.ParsingTypes.Regex;
                                                 }
                                                 else if (nodeElement.ChildNodes[i]
-                                                        .Attributes[ShareObject.GeneralParsingMarketValuesAttrName]
+                                                        .Attributes[ShareObject.MarketValuesParsingAttrName]
                                                         .InnerText ==
-                                                    ShareObject.ParsingTypes.Api.ToString())
+                                                    ShareObject.ParsingTypes.ApiOnVista.ToString())
                                                 {
                                                     ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
-                                                        .MarketValuesParsingOption = ShareObject.ParsingTypes.Api;
+                                                        .MarketValuesParsingOption = ShareObject.ParsingTypes.ApiOnVista;
                                                     ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
-                                                        .MarketValuesParsingOption = ShareObject.ParsingTypes.Api;
+                                                        .MarketValuesParsingOption = ShareObject.ParsingTypes.ApiOnVista;
+                                                }
+                                                else if (nodeElement.ChildNodes[i]
+                                                        .Attributes[ShareObject.MarketValuesParsingAttrName]
+                                                        .InnerText ==
+                                                    ShareObject.ParsingTypes.ApiYahoo.ToString())
+                                                {
+                                                    ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
+                                                        .MarketValuesParsingOption = ShareObject.ParsingTypes.ApiYahoo;
+                                                    ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                                        .MarketValuesParsingOption = ShareObject.ParsingTypes.ApiYahoo;
                                                 }
                                                 else
                                                     bLoadPortfolio = false;
+                                            }
+                                            else
+                                                bLoadPortfolio = false;
+
+                                            // Read market values website API key
+                                            if (nodeElement.ChildNodes[i].Attributes != null &&
+                                                nodeElement.ChildNodes[i].Attributes[ShareObject.MarketValuesParsingApiKeyAttrName] != null)
+                                            {
+                                                ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                                    .MarketValuesParsingApiKey =
+                                                    nodeElement.ChildNodes[i].Attributes[
+                                                        ShareObject.MarketValuesParsingApiKeyAttrName]?.InnerText;
+                                                ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
+                                                        .MarketValuesParsingApiKey =
+                                                    nodeElement.ChildNodes[i].Attributes[
+                                                        ShareObject.MarketValuesParsingApiKeyAttrName]?.InnerText;
                                             }
                                             else
                                                 bLoadPortfolio = false;
@@ -1079,7 +1138,7 @@ namespace SharePortfolioManager
                                             if (nodeElement.ChildNodes[i].Attributes != null)
                                             {
                                                 if (nodeElement.ChildNodes[i]
-                                                        .Attributes[ShareObject.GeneralParsingDailyValuesAttrName]
+                                                        .Attributes[ShareObject.DailyValuesParsingAttrName]
                                                         .InnerText ==
                                                     ShareObject.ParsingTypes.Regex.ToString())
                                                 {
@@ -1089,14 +1148,24 @@ namespace SharePortfolioManager
                                                         .DailyValuesParsingOption = ShareObject.ParsingTypes.Regex;
                                                 }
                                                 else if (nodeElement.ChildNodes[i]
-                                                        .Attributes[ShareObject.GeneralParsingDailyValuesAttrName]
+                                                        .Attributes[ShareObject.DailyValuesParsingAttrName]
                                                         .InnerText ==
-                                                    ShareObject.ParsingTypes.Api.ToString())
+                                                    ShareObject.ParsingTypes.ApiOnVista.ToString())
                                                 {
                                                     ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
-                                                        .DailyValuesParsingOption = ShareObject.ParsingTypes.Api;
+                                                        .DailyValuesParsingOption = ShareObject.ParsingTypes.ApiOnVista;
                                                     ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
-                                                        .DailyValuesParsingOption = ShareObject.ParsingTypes.Api;
+                                                        .DailyValuesParsingOption = ShareObject.ParsingTypes.ApiOnVista;
+                                                }
+                                                else if (nodeElement.ChildNodes[i]
+                                                        .Attributes[ShareObject.DailyValuesParsingAttrName]
+                                                        .InnerText ==
+                                                    ShareObject.ParsingTypes.ApiYahoo.ToString())
+                                                {
+                                                    ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
+                                                        .DailyValuesParsingOption = ShareObject.ParsingTypes.ApiYahoo;
+                                                    ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                                        .DailyValuesParsingOption = ShareObject.ParsingTypes.ApiYahoo;
                                                 }
                                                 else
                                                     bLoadPortfolio = false;
@@ -1104,6 +1173,21 @@ namespace SharePortfolioManager
                                             else
                                                 bLoadPortfolio = false;
 
+                                            // Read daily values website API key
+                                            if (nodeElement.ChildNodes[i].Attributes != null &&
+                                                nodeElement.ChildNodes[i].Attributes[ShareObject.DailyValuesParsingApiKeyAttrName] != null)
+                                            {
+                                                ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
+                                                    .DailyValuesParsingApiKey =
+                                                    nodeElement.ChildNodes[i].Attributes[
+                                                        ShareObject.DailyValuesParsingApiKeyAttrName]?.InnerText;
+                                                ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
+                                                        .DailyValuesParsingApiKey =
+                                                    nodeElement.ChildNodes[i].Attributes[
+                                                        ShareObject.DailyValuesParsingApiKeyAttrName]?.InnerText;
+                                            }
+                                            else
+                                                bLoadPortfolio = false;
 
                                             foreach (XmlElement nodeList in nodeElement.ChildNodes[i].ChildNodes)
                                             {
@@ -1678,11 +1762,10 @@ namespace SharePortfolioManager
                 ReaderPortfolio?.Close();
 
                 // Send exception to the background worker complete function
-                throw new XmlException(ex.Message);
+                throw new XmlException(ex.Message, ex);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(@"Share: {0}", ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].Name);
                 // Close portfolio reader
                 ReaderPortfolio?.Close();
 
@@ -1694,7 +1777,7 @@ namespace SharePortfolioManager
                 ShareObjectListFinalValue.Clear();
 
                 // Send exception to the background worker complete function
-                throw new Exception(ex.Message);
+                throw new Exception(ex.Message, ex);
             }
         }
 

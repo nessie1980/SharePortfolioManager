@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2022 nessie1980(nessie1980@gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -33,6 +33,7 @@ using System.Linq;
 using System.Windows.Forms;
 using SharePortfolioManager.Classes.Configurations;
 
+// TODO: (thomas:2022-08-19) Correct namespace
 namespace SharePortfolioManager.ShareDetailsForm
 {
     public partial class FrmShareDetails
@@ -582,8 +583,6 @@ namespace SharePortfolioManager.ShareDetailsForm
                 var curItem = ((DataGridView) sender).SelectedRows;
                 // Get Guid of the selected buy item
                 var strGuidBuy = curItem[0].Cells[0].Value.ToString();
-                // Get date and time of the selected brokerage item
-                var strDateTime = curItem[0].Cells[1].Value.ToString();
 
                 // Check if a document is set
                 if (curItem[0].Cells[iColumnCount - 1].Value.ToString() == @"-") return;

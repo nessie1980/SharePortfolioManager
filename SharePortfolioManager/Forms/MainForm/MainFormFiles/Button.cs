@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2022 nessie1980(nessie1980@gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -315,17 +315,17 @@ namespace SharePortfolioManager
             // Check if a share is selected
             if (MarketValueOverviewTabSelected == false &&
                 dgvPortfolioFinalValue.SelectedCells.Count > 0 &&
-                dgvPortfolioFinalValue.SelectedCells[0].Value != null &&
-                dgvPortfolioFinalValue.SelectedCells[0].Value.ToString() != ""
+                dgvPortfolioFinalValue.SelectedCells[(int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex].Value != null &&
+                dgvPortfolioFinalValue.SelectedCells[(int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex].Value.ToString() != ""
             )
-                wkn = dgvPortfolioFinalValue.SelectedCells[0].Value.ToString();
+                wkn = dgvPortfolioFinalValue.SelectedCells[(int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex].Value.ToString();
 
             if (MarketValueOverviewTabSelected &&
                 dgvPortfolioMarketValue.SelectedCells.Count > 0 &&
-                dgvPortfolioMarketValue.SelectedCells[0].Value != null &&
-                dgvPortfolioMarketValue.SelectedCells[0].Value.ToString() != ""
+                dgvPortfolioMarketValue.SelectedCells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex].Value != null &&
+                dgvPortfolioMarketValue.SelectedCells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex].Value.ToString() != ""
             )
-                wkn = dgvPortfolioMarketValue.SelectedCells[0].Value.ToString();
+                wkn = dgvPortfolioMarketValue.SelectedCells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex].Value.ToString();
 
             if (wkn != @"")
             {

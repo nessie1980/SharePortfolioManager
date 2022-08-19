@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2022 nessie1980(nessie1980@gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -880,7 +880,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
 
             txtBoxProvision.Focus();
 
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion Form
@@ -904,7 +904,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
         /// <param name="e">EventArgs</param>
         private void OnDatePickerDate_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -934,7 +934,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
         /// <param name="e">EventArgs</param>
         private void OnDatePickerTime_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -968,7 +968,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxProvision_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -998,7 +998,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxBrokerFee_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1028,7 +1028,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxTraderPlaceFee_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1058,7 +1058,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxReduction_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1088,7 +1088,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
         /// <param name="e">EventArgs</param>
         private void OnTxtBoxDocument_Leave(object sender, EventArgs e)
         {
-            FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+            FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -1249,7 +1249,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
         /// <param name="e">EventArgs</param>
         private void OnBtnBrokerageDocumentBrowse_Click(object sender, EventArgs e)
         {
-            DocumentBrowseEventHandler?.Invoke(this, new EventArgs());
+            DocumentBrowseEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion Buttons
@@ -2189,7 +2189,7 @@ namespace SharePortfolioManager.BrokeragesForm.View
                         SelectedDataGridView = dgvContent;
 
                         // Format the input value
-                        FormatInputValuesEventHandler?.Invoke(this, new EventArgs());
+                        FormatInputValuesEventHandler?.Invoke(this, EventArgs.Empty);
                     }
                     else
                     {

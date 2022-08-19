@@ -1,4 +1,4 @@
-Copyright(c) 2017 - 2021 nessie1980 (nessie1980@gmx.de)
+Copyright(c) 2017 - 2022 nessie1980 (nessie1980@gmx.de)
 
 https://github.com/nessie1980/SharePortfolioManager
 

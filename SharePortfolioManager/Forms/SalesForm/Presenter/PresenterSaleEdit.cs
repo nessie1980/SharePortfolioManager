@@ -1,6 +1,6 @@
 ﻿//MIT License
 //
-//Copyright(c) 2017 - 2021 nessie1980(nessie1980 @gmx.de)
+//Copyright(c) 2017 - 2022 nessie1980(nessie1980@gmx.de)
 //
 //Permission is hereby granted, free of charge, to any person obtaining a copy
 //of this software and associated documentation files (the "Software"), to deal
@@ -646,8 +646,6 @@ namespace SharePortfolioManager.SalesForm.Presenter
                 var bErrorFlag = false;
 
                 _model.ErrorCode = bFlagEdit ? SaleErrorCode.EditSuccessful : SaleErrorCode.AddSuccessful;
-
-                var strDate = _model.Date + " " + _model.Time;
 
                 // Check if a depot number for the buy is given
                 if (_model.DepotNumber == @"" || _model.DepotNumber == @"-")
