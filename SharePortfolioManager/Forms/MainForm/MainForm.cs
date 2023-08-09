@@ -1004,17 +1004,7 @@ namespace SharePortfolioManager
                 progressBarWebParserDailyValues.Value = 0;
 
                 // Set group box caption
-                grpBoxSharePortfolio.Text =
-                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Caption",
-                        SettingsConfiguration.LanguageName) +
-                    @" ( " +
-                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Entries",
-                        SettingsConfiguration.LanguageName) +
-                    @": " +
-                    ShareObjectListFinalValue.Count + @" ) / " +
-                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/LastUpdate",
-                        SettingsConfiguration.LanguageName) +
-                    Helper.GetLastShareUpdate(ShareObjectListFinalValue);
+                Helper.UpdateGroupBoxPortfolioCaption(grpBoxSharePortfolio, ShareObjectListFinalValue);
             }
         }
 

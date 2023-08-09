@@ -43,6 +43,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SharePortfolioManager.Classes.Configurations;
 using SharePortfolioManager.Classes.ShareObjects;
+//using System.Web.UI.WebControls;
 
 namespace SharePortfolioManager.Classes
 {
@@ -535,6 +536,44 @@ namespace SharePortfolioManager.Classes
         }
 
         #endregion Functions for the logging and debugging
+
+        #region Update of a share or all shares are finished
+
+        /// <summary>
+        /// This functions updates the caption of the groupbox of the shareportfolio and plays the finish sound when the update is done
+        /// </summary>
+        /// <param name="grpBoxSharePortfolio">GroupBox with the shares of the portfolio where the caption should be updated</param>
+        /// <param name="ShareObjectList">List with the final share objects list</param>
+        public static void UpdateDone(GroupBox grpBoxSharePortfolio, List<ShareObjectFinalValue> ShareObjectList)
+        {
+            UpdateGroupBoxPortfolioCaption(grpBoxSharePortfolio, ShareObjectList);
+
+            Sound.PlayUpdateFinishedSound();
+        }
+
+        #endregion Update of a share or all shares are finished
+
+        #region Gridview SharePortfolio caption update
+
+        /// <summary>
+        /// This functions updates the caption of the groupbox of the shareportfolio
+        /// </summary>
+        /// <param name="grpBoxSharePortfolio">GroupBox with the shares of the portfolio where the caption should be updated</param>
+        /// <param name="ShareObjectList">List with the final share objects list</param>
+        public static void UpdateGroupBoxPortfolioCaption(GroupBox grpBoxSharePortfolio, List<ShareObjectFinalValue> ShareObjectList)
+        {
+            grpBoxSharePortfolio.Text =
+                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Caption", SettingsConfiguration.LanguageName) +
+                @" ( " +
+                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/Entries", SettingsConfiguration.LanguageName) +
+                @": " +
+                ShareObjectList.Count + @" ) / " +
+                LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/GrpBoxPortfolio/LastUpdate",
+                    SettingsConfiguration.LanguageName) + " " +
+                GetLastShareUpdate(ShareObjectList);
+        }
+
+        #endregion Gridview SharePortfolio caption update
 
         #region Enable or disable controls
 
@@ -1927,6 +1966,12 @@ namespace SharePortfolioManager.Classes
 
         public static string GetLastShareUpdate(List<ShareObjectFinalValue> listShareObjectFinalValues)
         {
+            // Check if no object is in the list so retrun "-"
+            if(listShareObjectFinalValues.Count == 0)
+            {
+                return "-";
+            }   
+            
             DateTime lastUpdateTime = default;
 
             foreach (var listShareObjectFinalValue in listShareObjectFinalValues)
