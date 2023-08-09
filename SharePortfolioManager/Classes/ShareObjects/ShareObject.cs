@@ -986,8 +986,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
         {
             get
             {
-                var value = Helper.FormatDecimal(CurPrice, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
-                value += Environment.NewLine + Helper.FormatDecimal(PrevPrice, Helper.CurrencyTwoLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
+                var value = Helper.FormatDecimal(CurPrice, Helper.CurrencyFiveLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
+                value += Environment.NewLine + Helper.FormatDecimal(PrevPrice, Helper.CurrencyFiveLength, true, Helper.CurrencyNoneFixLength, true, @"", CultureInfo);
                 return value;
             }
         }

@@ -979,7 +979,8 @@ namespace SharePortfolioManager
                                     // Do not start the next share update because the last share has been reached
                                     if (SelectedDataGridViewShareIndex == ShareObject.ObjectCounter - 1 || !openUpdates)
                                     {
-                                        Sound.PlayUpdateFinishedSound();
+                                        // Update caption of the groupbox and play sound
+                                        Helper.UpdateDone(grpBoxSharePortfolio, ShareObjectListFinalValue);
 
                                         // Check which share overview is selected
                                         if (MarketValueOverviewTabSelected)
@@ -1056,7 +1057,8 @@ namespace SharePortfolioManager
                                     )
                                 )
                                 {
-                                    Sound.PlayUpdateFinishedSound();
+                                    // Update caption of the groupbox and play sound
+                                    Helper.UpdateDone(grpBoxSharePortfolio, ShareObjectListFinalValue);
 
                                     timerStatusMessageClear.Enabled = true;
                                 }
@@ -1524,7 +1526,8 @@ namespace SharePortfolioManager
 
                                     if (SelectedDataGridViewShareIndex == ShareObject.ObjectCounter - 1 || !openUpdates)
                                     {
-                                        Sound.PlayUpdateFinishedSound();
+                                        // Update caption of the groupbox and play sound
+                                        Helper.UpdateDone(grpBoxSharePortfolio, ShareObjectListFinalValue);
 
                                         // Check which share overview is selected
                                         if (MarketValueOverviewTabSelected)
@@ -1601,7 +1604,8 @@ namespace SharePortfolioManager
                                     )
                                 )
                                 {
-                                    Sound.PlayUpdateFinishedSound();
+                                    // Update caption of the groupbox and play sound
+                                    Helper.UpdateDone(grpBoxSharePortfolio, ShareObjectListFinalValue);
 
                                     timerStatusMessageClear.Enabled = true;
                                 }
