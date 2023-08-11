@@ -73,11 +73,12 @@ jobs:
       with:
         dotnet-version: 6.0.x
 
+    # Save state
     - name: Save state
-    run: echo "{name}={value}" >> $GITHUB_STATE
+      run: echo "{name}={value}" >> $GITHUB_STATE
 
     - name: Set output
-    run: echo "{name}={value}" >> $GITHUB_OUTPUT
+      run: echo "{name}={value}" >> $GITHUB_OUTPUT
 
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
