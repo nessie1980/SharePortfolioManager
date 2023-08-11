@@ -73,7 +73,7 @@ jobs:
       with:
         dotnet-version: 6.0.x
         
-    # Install JSON text
+    # Install Newtonsoft.Json nuget package
     - name: Install Newtonsoft.Json
       run: dotnet add package Newtonsoft.Json --version 13.0.3
 
