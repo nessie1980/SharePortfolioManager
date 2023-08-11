@@ -72,10 +72,6 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
-        
-    # Install Newtonsoft.Json nuget package
-    - name: Install Newtonsoft.Json
-      run: dotnet add package Newtonsoft.Json --version 13.0.3
 
     # Save state
     - name: Save state
@@ -83,6 +79,10 @@ jobs:
 
     - name: Set output
       run: echo "{name}={value}" >> $GITHUB_OUTPUT
+
+    # Install Newtonsoft.Json nuget package
+    - name: Install Newtonsoft.Json
+      run: dotnet add package Newtonsoft.Json --version 13.0.3
 
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
