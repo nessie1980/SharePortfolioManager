@@ -87,7 +87,7 @@ jobs:
 
     # Install ConsoleTables nuget package
     - name: Install ConsoleTables
-      run: nuget install ConsoleTables -Version 2.5.0
+      run: nuget install ConsoleTables -Version 2.4.1
 
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
