@@ -21,7 +21,7 @@
 //SOFTWARE.
 
 // Define for DEBUGGING
-#define DEBUG_FINAL_SHARE_OBJECT
+//#define DEBUG_FINAL_SHARE_OBJECT
 
 using SharePortfolioManager.Classes.Brokerage;
 using SharePortfolioManager.Classes.Dividend;
@@ -2848,11 +2848,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         public static void PortfolioValuesReset()
         {
-            //_finalValue = decimal.MinValue / 2;
-            //_finalValueWithProfitLoss = decimal.MinValue / 2;
-            //_purchaseValue = decimal.MinValue / 2;
-        
-            // Portfolio values
             _portfolioPurchaseValue = 0;
             _portfolioCompletePurchaseValue = 0;
             _portfolioFinalValue = 0;
