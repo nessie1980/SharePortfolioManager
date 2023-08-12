@@ -1662,9 +1662,11 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 Console.WriteLine(@"");
                 Console.WriteLine(@"AddBuy() / FinalValue");
                 Console.WriteLine(@"strGuid: {0}", strGuid);
-                Console.WriteLine(@"strBank: {0}", strBank);
+                Console.WriteLine(@"strDepotNumber: {0}", strDepotNumber);
+                Console.WriteLine(@"strOrderNumber: {0}", strOrderNumber);
                 Console.WriteLine(@"strDateTime: {0}", strDateTime);
                 Console.WriteLine(@"decVolume: {0}", decVolume);
+                Console.WriteLine(@"decVolumeSold: {0}", decVolumeSold);
                 Console.WriteLine(@"decPrice: {0}", decPrice);
                 if (brokerageObject != null)
                 {
