@@ -21,7 +21,7 @@
 //SOFTWARE.
 
 // Define for DEBUGGING
-#define DEBUG_FINAL_SHARE_OBJECT
+//#define DEBUG_FINAL_SHARE_OBJECT
 
 using SharePortfolioManager.Classes.Brokerage;
 using SharePortfolioManager.Classes.Dividend;
@@ -1662,11 +1662,9 @@ namespace SharePortfolioManager.Classes.ShareObjects
                 Console.WriteLine(@"");
                 Console.WriteLine(@"AddBuy() / FinalValue");
                 Console.WriteLine(@"strGuid: {0}", strGuid);
-                Console.WriteLine(@"strDepotNumber: {0}", strDepotNumber);
-                Console.WriteLine(@"strOrderNumber: {0}", strOrderNumber);
+                Console.WriteLine(@"strBank: {0}", strBank);
                 Console.WriteLine(@"strDateTime: {0}", strDateTime);
                 Console.WriteLine(@"decVolume: {0}", decVolume);
-                Console.WriteLine(@"decVolumeSold: {0}", decVolumeSold);
                 Console.WriteLine(@"decPrice: {0}", decPrice);
                 if (brokerageObject != null)
                 {
@@ -2848,11 +2846,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         public static void PortfolioValuesReset()
         {
-            //_finalValue = decimal.MinValue / 2;
-            //_finalValueWithProfitLoss = decimal.MinValue / 2;
-            //_purchaseValue = decimal.MinValue / 2;
-        
-            // Portfolio values
             _portfolioPurchaseValue = 0;
             _portfolioCompletePurchaseValue = 0;
             _portfolioFinalValue = 0;
