@@ -822,6 +822,8 @@ namespace SharePortfolioManager
                 // Reset share object list
                 ShareObjectListMarketValue.Clear();
                 ShareObjectListFinalValue.Clear();
+                ShareObjectFinalValue.PortfolioValuesReset();
+                ShareObjectMarketValue.PortfolioValuesReset();
                 PortfolioEmptyFlag = true;
 
                 //Force garbage collection so the object counter of the ShareObject will be reset
@@ -834,10 +836,6 @@ namespace SharePortfolioManager
                 // With this call, the worker loop executes only after
                 // all finalizers have been called.
                 GC.WaitForPendingFinalizers();
-
-                // Reset the portfolio values for a new initialization
-                ShareObjectFinalValue.PortfolioValuesReset();
-                ShareObjectMarketValue.PortfolioValuesReset();
 
                 // Check if the portfolio file exists
                 if (!File.Exists(SettingsConfiguration.PortfolioName))
