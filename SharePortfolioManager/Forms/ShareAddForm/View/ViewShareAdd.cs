@@ -153,10 +153,8 @@ namespace SharePortfolioManager.ShareAddForm.View
         string DetailsWebSite { get; set; }
         string MarketValuesWebSite { get; set; }
         ShareObject.ParsingTypes MarketValuesParsingOption { get; set; }
-        string MarketValuesParsingApiKey { get; set; }
         string DailyValuesWebSite { get; set; }
         ShareObject.ParsingTypes DailyValuesParsingOption { get; set; }
-        string DailyValuesParsingApiKey { get; set; }
         CultureInfo CultureInfo { get; }
         int DividendPayoutInterval { get; set; }
         ShareObject.ShareTypes ShareType { get; set; }
@@ -391,17 +389,6 @@ namespace SharePortfolioManager.ShareAddForm.View
             }
         }
 
-        public string MarketValuesParsingApiKey
-        {
-            get => txtBoxMarketWebSiteApiKey.Text;
-            set
-            {
-                if (txtBoxMarketWebSiteApiKey.Text == value)
-                    return;
-                txtBoxMarketWebSiteApiKey.Text = value;
-            }
-        }
-
         public string DailyValuesWebSite
         {
             get => txtBoxDailyValuesWebSite.Text;
@@ -421,17 +408,6 @@ namespace SharePortfolioManager.ShareAddForm.View
                 if ((ShareObject.ParsingTypes)cbxDailyValuesWebSiteParsingType.SelectedIndex == value)
                     return;
                 cbxDailyValuesWebSiteParsingType.SelectedIndex = (int)value;
-            }
-        }
-
-        public string DailyValuesParsingApiKey
-        {
-            get => txtBoxDailyValuesWebSiteApiKey.Text;
-            set
-            {
-                if (txtBoxDailyValuesWebSiteApiKey.Text == value)
-                    return;
-                txtBoxDailyValuesWebSiteApiKey.Text = value;
             }
         }
 
@@ -1373,11 +1349,6 @@ namespace SharePortfolioManager.ShareAddForm.View
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MarketValuesWebSite"));
         }
 
-        private void OnTxtBoxMarketValuesParsingApiKey_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void OnTxtBoxDailyValuesWebSite_TextChanged(object sender, EventArgs e)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DailyValuesWebSite"));
@@ -1386,11 +1357,6 @@ namespace SharePortfolioManager.ShareAddForm.View
         private void OnTxtBoxDailyValuesWebSite_Leave(object sender, EventArgs e)
         {
             txtBoxDailyValuesWebSite.Text = Helper.RegexReplaceStartDateAndInterval(txtBoxDailyValuesWebSite.Text, DailyValuesParsingOption);
-        }
-
-        private void OnTxtBoxDailyValuesParsingApiKey_TextChanged(object sender, EventArgs e)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DailyValuesWebSiteApiKey"));
         }
 
         private void OntTxtBoxOrderNumber_TextChanged(object sender, EventArgs e)
@@ -1582,15 +1548,15 @@ namespace SharePortfolioManager.ShareAddForm.View
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("MarketValuesParsingOption"));
 
-            // Disable text box for the API key if RegEx is selected
-            if(((ComboBox)sender).SelectedIndex == 0)
+            if (SettingsConfiguration.ApiKeysDictionary.ContainsKey(((ComboBox)sender).SelectedItem.ToString()))
             {
-                txtBoxMarketWebSiteApiKey.Enabled = false;
-                txtBoxMarketWebSiteApiKey.Text = string.Empty;
+                lblMarketWebSiteApiKeyValue.Text =
+                    SettingsConfiguration.ApiKeysDictionary[((ComboBox)sender).SelectedItem.ToString()];
+
             }
             else
             {
-                txtBoxMarketWebSiteApiKey.Enabled = true;
+                lblMarketWebSiteApiKeyValue.Text = string.Empty;
             }
         }
 
@@ -1598,15 +1564,19 @@ namespace SharePortfolioManager.ShareAddForm.View
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DailyValuesParsingOption"));
 
-            // Disable text box for the API key if RegEx is selected
-            if (((ComboBox)sender).SelectedIndex == 0)
+            if (SettingsConfiguration.ApiKeysDictionary.ContainsKey(((ComboBox)sender).SelectedItem.ToString()))
             {
-                txtBoxDailyValuesWebSiteApiKey.Enabled = false;
-                txtBoxDailyValuesWebSiteApiKey.Text = string.Empty;
+                lblDailyWebSiteApiKeyValue.Text =
+                    SettingsConfiguration.ApiKeysDictionary[((ComboBox)sender).SelectedItem.ToString()];
+
             }
             else
             {
-                txtBoxDailyValuesWebSiteApiKey.Enabled = true;
+                lblDailyWebSiteApiKeyValue.Text = string.Empty;
+            }
+
+            if (((ComboBox)sender).SelectedIndex != 0)
+            {
                 txtBoxDailyValuesWebSite.Text = Helper.RegexReplaceStartDateAndInterval(txtBoxDailyValuesWebSite.Text, DailyValuesParsingOption);
             }
         }
@@ -2415,10 +2385,10 @@ namespace SharePortfolioManager.ShareAddForm.View
             txtBoxDetailsWebSite.Text = string.Empty;
             txtBoxMarketWebSite.Text = string.Empty;
             cbxMarketWebSiteParsingType.SelectedIndex = 0;
-            txtBoxMarketWebSiteApiKey.Text = string.Empty;
+            lblMarketWebSiteApiKey.Text = string.Empty;
             txtBoxDailyValuesWebSite.Text = string.Empty;
             cbxDailyValuesWebSiteParsingType.SelectedIndex = 0;
-            txtBoxDailyValuesWebSiteApiKey.Text = string.Empty;
+            lblDailyValuesWebSiteApiKey.Text = string.Empty;
             cbxDepotNumber.SelectedIndex = 0;
             txtBoxOrderNumber.Text = string.Empty;
             txtBoxVolume.Text = string.Empty;

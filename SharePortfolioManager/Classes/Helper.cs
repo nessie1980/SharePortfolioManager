@@ -43,7 +43,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SharePortfolioManager.Classes.Configurations;
 using SharePortfolioManager.Classes.ShareObjects;
-//using System.Web.UI.WebControls;
 
 namespace SharePortfolioManager.Classes
 {
@@ -1415,7 +1414,7 @@ namespace SharePortfolioManager.Classes
 
         public static string RegexReplaceStartDateAndInterval(string strWebSite, ShareObject.ParsingTypes parsingType)
         {
-            if (parsingType == ShareObject.ParsingTypes.ApiOnVista)
+            if (parsingType == ShareObject.ParsingTypes.ApiOnvista)
             {
                 // Replace date for example 01.01.1979
                 strWebSite = Regex.Replace(strWebSite,
@@ -1612,7 +1611,7 @@ namespace SharePortfolioManager.Classes
                                 }
                             }
                             break;
-                        case ShareObject.ParsingTypes.ApiOnVista:
+                        case ShareObject.ParsingTypes.ApiOnvista:
                             {
                                 var date = DateTime.Now;
 
@@ -1786,7 +1785,7 @@ namespace SharePortfolioManager.Classes
                             }
                         }
                         break;
-                        case ShareObject.ParsingTypes.ApiOnVista:
+                        case ShareObject.ParsingTypes.ApiOnvista:
                             {
                                 switch (shareType)
                                 {
@@ -1936,6 +1935,9 @@ namespace SharePortfolioManager.Classes
                             }
                     }
                 }
+
+                // Replace possbile "&amp;" with "&"
+                strDailyValuesWebSite = strDailyValuesWebSite.Replace("&amp;", "&");
             }
             catch (Exception ex)
             {
@@ -1984,6 +1986,22 @@ namespace SharePortfolioManager.Classes
         }
 
         #endregion Time function
+
+        #region Get API key
+
+        public static string GetApiKey(Dictionary<string, string> ApiKeysDictionary, ShareObject.ParsingTypes parsingType)
+        {
+            if(ApiKeysDictionary.ContainsKey(parsingType.ToString()))
+            { 
+                return ApiKeysDictionary[parsingType.ToString()];
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
+        #endregion Get API key
 
         #endregion Methods
 

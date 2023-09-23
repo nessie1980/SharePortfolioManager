@@ -76,9 +76,9 @@
             this.cbxMarketValuesParsingOption = new System.Windows.Forms.ComboBox();
             this.cbxDailyValuesParsingOption = new System.Windows.Forms.ComboBox();
             this.lblMarketValuesWebSiteApiKey = new System.Windows.Forms.Label();
-            this.txtBoxMarketValuesWebSiteApiKey = new System.Windows.Forms.TextBox();
             this.lblDailyValuesWebSiteApiKey = new System.Windows.Forms.Label();
-            this.txtBoxDailyValuesWebSiteApiKey = new System.Windows.Forms.TextBox();
+            this.lblMarketValuesWebSiteApiKeyValue = new System.Windows.Forms.Label();
+            this.lblDailyValuesWebSiteApiKeyValue = new System.Windows.Forms.Label();
             this.grpBoxEarningsExpenditure = new System.Windows.Forms.GroupBox();
             this.tblLayPnlEditShareEarningsExpenditure = new System.Windows.Forms.TableLayoutPanel();
             this.lblBrokerageValue = new System.Windows.Forms.Label();
@@ -487,9 +487,9 @@
             this.tblLayPnlEditShareInput.Controls.Add(this.cbxMarketValuesParsingOption, 4, 8);
             this.tblLayPnlEditShareInput.Controls.Add(this.cbxDailyValuesParsingOption, 4, 10);
             this.tblLayPnlEditShareInput.Controls.Add(this.lblMarketValuesWebSiteApiKey, 0, 9);
-            this.tblLayPnlEditShareInput.Controls.Add(this.txtBoxMarketValuesWebSiteApiKey, 1, 9);
             this.tblLayPnlEditShareInput.Controls.Add(this.lblDailyValuesWebSiteApiKey, 0, 11);
-            this.tblLayPnlEditShareInput.Controls.Add(this.txtBoxDailyValuesWebSiteApiKey, 1, 11);
+            this.tblLayPnlEditShareInput.Controls.Add(this.lblMarketValuesWebSiteApiKeyValue, 1, 9);
+            this.tblLayPnlEditShareInput.Controls.Add(this.lblDailyValuesWebSiteApiKeyValue, 1, 11);
             this.tblLayPnlEditShareInput.Dock = System.Windows.Forms.DockStyle.Top;
             this.tblLayPnlEditShareInput.Location = new System.Drawing.Point(3, 18);
             this.tblLayPnlEditShareInput.Name = "tblLayPnlEditShareInput";
@@ -785,6 +785,7 @@
             this.cbxMarketValuesParsingOption.Name = "cbxMarketValuesParsingOption";
             this.cbxMarketValuesParsingOption.Size = new System.Drawing.Size(96, 22);
             this.cbxMarketValuesParsingOption.TabIndex = 54;
+            this.cbxMarketValuesParsingOption.SelectedIndexChanged += new System.EventHandler(this.OnCbxMarketValuesParsingOption_SelectedIndexChanged);
             this.cbxMarketValuesParsingOption.SelectionChangeCommitted += new System.EventHandler(this.OnCbxMarketValuesParsingOption_SelectionChangeCommitted);
             // 
             // cbxDailyValuesParsingOption
@@ -797,6 +798,7 @@
             this.cbxDailyValuesParsingOption.Name = "cbxDailyValuesParsingOption";
             this.cbxDailyValuesParsingOption.Size = new System.Drawing.Size(96, 22);
             this.cbxDailyValuesParsingOption.TabIndex = 55;
+            this.cbxDailyValuesParsingOption.SelectedIndexChanged += new System.EventHandler(this.OnCbxDailyValuesParsingOption_SelectedIndexChanged);
             this.cbxDailyValuesParsingOption.SelectionChangeCommitted += new System.EventHandler(this.OnCbxDailyValuesParsingOption_SelectionChangeCommitted);
             // 
             // lblMarketValuesWebSiteApiKey
@@ -813,19 +815,6 @@
             this.lblMarketValuesWebSiteApiKey.Text = "_lblMarketValuesWebSiteApiKey";
             this.lblMarketValuesWebSiteApiKey.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // txtBoxMarketValuesWebSiteApiKey
-            // 
-            this.txtBoxMarketValuesWebSiteApiKey.BackColor = System.Drawing.Color.White;
-            this.txtBoxMarketValuesWebSiteApiKey.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tblLayPnlEditShareInput.SetColumnSpan(this.txtBoxMarketValuesWebSiteApiKey, 3);
-            this.txtBoxMarketValuesWebSiteApiKey.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtBoxMarketValuesWebSiteApiKey.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxMarketValuesWebSiteApiKey.Location = new System.Drawing.Point(251, 217);
-            this.txtBoxMarketValuesWebSiteApiKey.Margin = new System.Windows.Forms.Padding(1);
-            this.txtBoxMarketValuesWebSiteApiKey.Name = "txtBoxMarketValuesWebSiteApiKey";
-            this.txtBoxMarketValuesWebSiteApiKey.Size = new System.Drawing.Size(390, 22);
-            this.txtBoxMarketValuesWebSiteApiKey.TabIndex = 57;
-            // 
             // lblDailyValuesWebSiteApiKey
             // 
             this.lblDailyValuesWebSiteApiKey.BackColor = System.Drawing.Color.LightGray;
@@ -840,18 +829,34 @@
             this.lblDailyValuesWebSiteApiKey.Text = "_lblDailyValuesWebSiteApiKey";
             this.lblDailyValuesWebSiteApiKey.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // txtBoxDailyValuesWebSiteApiKey
+            // lblMarketValuesWebSiteApiKeyValue
             // 
-            this.txtBoxDailyValuesWebSiteApiKey.BackColor = System.Drawing.Color.White;
-            this.txtBoxDailyValuesWebSiteApiKey.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tblLayPnlEditShareInput.SetColumnSpan(this.txtBoxDailyValuesWebSiteApiKey, 3);
-            this.txtBoxDailyValuesWebSiteApiKey.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtBoxDailyValuesWebSiteApiKey.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBoxDailyValuesWebSiteApiKey.Location = new System.Drawing.Point(251, 265);
-            this.txtBoxDailyValuesWebSiteApiKey.Margin = new System.Windows.Forms.Padding(1);
-            this.txtBoxDailyValuesWebSiteApiKey.Name = "txtBoxDailyValuesWebSiteApiKey";
-            this.txtBoxDailyValuesWebSiteApiKey.Size = new System.Drawing.Size(390, 22);
-            this.txtBoxDailyValuesWebSiteApiKey.TabIndex = 59;
+            this.lblMarketValuesWebSiteApiKeyValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblMarketValuesWebSiteApiKeyValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tblLayPnlEditShareInput.SetColumnSpan(this.lblMarketValuesWebSiteApiKeyValue, 3);
+            this.lblMarketValuesWebSiteApiKeyValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblMarketValuesWebSiteApiKeyValue.Location = new System.Drawing.Point(251, 217);
+            this.lblMarketValuesWebSiteApiKeyValue.Margin = new System.Windows.Forms.Padding(1);
+            this.lblMarketValuesWebSiteApiKeyValue.Name = "lblMarketValuesWebSiteApiKeyValue";
+            this.lblMarketValuesWebSiteApiKeyValue.Size = new System.Drawing.Size(390, 22);
+            this.lblMarketValuesWebSiteApiKeyValue.TabIndex = 60;
+            this.lblMarketValuesWebSiteApiKeyValue.Text = "_lblMarketValuesWebSiteApiKeyValue";
+            this.lblMarketValuesWebSiteApiKeyValue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblDailyValuesWebSiteApiKeyValue
+            // 
+            this.lblDailyValuesWebSiteApiKeyValue.AutoSize = true;
+            this.lblDailyValuesWebSiteApiKeyValue.BackColor = System.Drawing.Color.LightGray;
+            this.lblDailyValuesWebSiteApiKeyValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tblLayPnlEditShareInput.SetColumnSpan(this.lblDailyValuesWebSiteApiKeyValue, 3);
+            this.lblDailyValuesWebSiteApiKeyValue.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblDailyValuesWebSiteApiKeyValue.Location = new System.Drawing.Point(251, 265);
+            this.lblDailyValuesWebSiteApiKeyValue.Margin = new System.Windows.Forms.Padding(1);
+            this.lblDailyValuesWebSiteApiKeyValue.Name = "lblDailyValuesWebSiteApiKeyValue";
+            this.lblDailyValuesWebSiteApiKeyValue.Size = new System.Drawing.Size(390, 22);
+            this.lblDailyValuesWebSiteApiKeyValue.TabIndex = 61;
+            this.lblDailyValuesWebSiteApiKeyValue.Text = "_lblDailyValuesWebSiteApiKeyValue";
+            this.lblDailyValuesWebSiteApiKeyValue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // grpBoxEarningsExpenditure
             // 
@@ -1168,8 +1173,8 @@
         private System.Windows.Forms.ComboBox cbxMarketValuesParsingOption;
         private System.Windows.Forms.ComboBox cbxDailyValuesParsingOption;
         private System.Windows.Forms.Label lblMarketValuesWebSiteApiKey;
-        private System.Windows.Forms.TextBox txtBoxMarketValuesWebSiteApiKey;
         private System.Windows.Forms.Label lblDailyValuesWebSiteApiKey;
-        private System.Windows.Forms.TextBox txtBoxDailyValuesWebSiteApiKey;
+        private System.Windows.Forms.Label lblMarketValuesWebSiteApiKeyValue;
+        private System.Windows.Forms.Label lblDailyValuesWebSiteApiKeyValue;
     }
 }

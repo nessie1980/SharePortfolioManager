@@ -121,20 +121,24 @@ namespace SharePortfolioManager
                                 ShareObject.ShareUpdateTypes.MarketPrice)
                             {
                                 // Build parsing values for the market values update
-                                if (ShareObjectMarketValue.MarketValuesParsingOptionAsStr == "ApiOnVista")
+                                if (ShareObjectMarketValue.MarketValuesParsingOption == ShareObject.ParsingTypes.ApiOnvista)
                                 {
                                     ParserMarketValues.ParsingValues = new ParsingValues(
                                         new Uri(ShareObjectMarketValue.MarketValuesUpdateWebSiteUrl),
-                                        ShareObjectMarketValue.MarketValuesParsingApiKey,
+                                        Helper.GetApiKey(
+                                            SettingsConfiguration.ApiKeysDictionary,
+                                            ShareObjectMarketValue.MarketValuesParsingOption),
                                         ShareObjectMarketValue.WebSiteEncodingType,
                                         DataTypes.ParsingType.OnVistaRealTime
                                     );
                                 }
-                                else if (ShareObjectMarketValue.MarketValuesParsingOptionAsStr == "ApiYahoo")
+                                else if (ShareObjectMarketValue.MarketValuesParsingOption == ShareObject.ParsingTypes.ApiYahoo)
                                 {
                                     ParserMarketValues.ParsingValues = new ParsingValues(
                                         new Uri(ShareObjectMarketValue.MarketValuesUpdateWebSiteUrl),
-                                        ShareObjectMarketValue.MarketValuesParsingApiKey,
+                                        Helper.GetApiKey(
+                                            SettingsConfiguration.ApiKeysDictionary,
+                                            ShareObjectMarketValue.MarketValuesParsingOption),
                                         ShareObjectMarketValue.WebSiteEncodingType,
                                         DataTypes.ParsingType.YahooRealTime
                                     );
@@ -150,26 +154,30 @@ namespace SharePortfolioManager
                                 ShareObject.ShareUpdateTypes.DailyValues)
                             {
                                 // Build parsing values for the daily values update
-                                if (ShareObjectMarketValue.DailyValuesParsingOptionAsStr == "ApiOnVista")
+                                if (ShareObjectMarketValue.DailyValuesParsingOption == ShareObject.ParsingTypes.ApiOnvista)
                                 {
                                     ParserDailyValues.ParsingValues = new ParsingValues(
                                         new Uri(Helper.BuildDailyValuesUrl(ShareObjectMarketValue.DailyValuesList.Entries,
                                         ShareObjectMarketValue.DailyValuesUpdateWebSiteUrl,
                                         ShareObjectMarketValue.ShareType,
                                         ShareObjectMarketValue.DailyValuesParsingOption)),
-                                        ShareObjectMarketValue.MarketValuesParsingApiKey,
+                                        Helper.GetApiKey(
+                                            SettingsConfiguration.ApiKeysDictionary,
+                                            ShareObjectMarketValue.DailyValuesParsingOption),
                                         ShareObjectMarketValue.WebSiteEncodingType,
                                         DataTypes.ParsingType.OnVistaHistoryData
                                     );
                                 }
-                                else if (ShareObjectMarketValue.DailyValuesParsingOptionAsStr == "ApiYahoo")
+                                else if (ShareObjectMarketValue.DailyValuesParsingOption == ShareObject.ParsingTypes.ApiYahoo)
                                 {
                                     ParserDailyValues.ParsingValues = new ParsingValues(
                                         new Uri(Helper.BuildDailyValuesUrl(ShareObjectMarketValue.DailyValuesList.Entries,
                                         ShareObjectMarketValue.DailyValuesUpdateWebSiteUrl,
                                         ShareObjectMarketValue.ShareType,
                                         ShareObjectMarketValue.DailyValuesParsingOption)),
-                                        ShareObjectMarketValue.MarketValuesParsingApiKey,
+                                        Helper.GetApiKey(
+                                            SettingsConfiguration.ApiKeysDictionary,
+                                            ShareObjectMarketValue.DailyValuesParsingOption),
                                         ShareObjectMarketValue.WebSiteEncodingType,
                                         DataTypes.ParsingType.YahooHistoryData
                                     );
@@ -241,20 +249,24 @@ namespace SharePortfolioManager
                                 ShareObject.ShareUpdateTypes.MarketPrice)
                             {
                                 // Build parsing values for the market values update
-                                if (ShareObjectFinalValue.MarketValuesParsingOptionAsStr == "ApiOnVista")
+                                if (ShareObjectFinalValue.MarketValuesParsingOption == ShareObject.ParsingTypes.ApiOnvista)
                                 {
                                     ParserMarketValues.ParsingValues = new ParsingValues(
                                         new Uri(ShareObjectFinalValue.MarketValuesUpdateWebSiteUrl),
-                                        ShareObjectFinalValue.MarketValuesParsingApiKey,
+                                        Helper.GetApiKey(
+                                            SettingsConfiguration.ApiKeysDictionary,
+                                            ShareObjectFinalValue.MarketValuesParsingOption),
                                         ShareObjectFinalValue.WebSiteEncodingType,
                                         DataTypes.ParsingType.OnVistaRealTime
                                     );
                                 }
-                                else if (ShareObjectFinalValue.MarketValuesParsingOptionAsStr == "ApiYahoo")
+                                else if (ShareObjectFinalValue.MarketValuesParsingOption == ShareObject.ParsingTypes.ApiYahoo)
                                 {
                                     ParserMarketValues.ParsingValues = new ParsingValues(
                                         new Uri(ShareObjectFinalValue.MarketValuesUpdateWebSiteUrl),
-                                        ShareObjectFinalValue.MarketValuesParsingApiKey,
+                                        Helper.GetApiKey(
+                                            SettingsConfiguration.ApiKeysDictionary,
+                                            ShareObjectFinalValue.MarketValuesParsingOption),
                                         ShareObjectMarketValue.WebSiteEncodingType,
                                         DataTypes.ParsingType.YahooRealTime
                                     );
@@ -270,26 +282,30 @@ namespace SharePortfolioManager
                                 ShareObject.ShareUpdateTypes.DailyValues)
                             {
                                 // Build parsing values for the daily values update
-                                if (ShareObjectFinalValue.DailyValuesParsingOptionAsStr == "ApiOnVista")
+                                if (ShareObjectFinalValue.DailyValuesParsingOption == ShareObject.ParsingTypes.ApiOnvista)
                                 {
                                     ParserDailyValues.ParsingValues = new ParsingValues(
                                         new Uri(Helper.BuildDailyValuesUrl(ShareObjectFinalValue.DailyValuesList.Entries,
                                         ShareObjectFinalValue.DailyValuesUpdateWebSiteUrl,
                                         ShareObjectFinalValue.ShareType,
                                         ShareObjectFinalValue.DailyValuesParsingOption)),
-                                        ShareObjectFinalValue.MarketValuesParsingApiKey,
+                                        Helper.GetApiKey(
+                                            SettingsConfiguration.ApiKeysDictionary,
+                                            ShareObjectFinalValue.DailyValuesParsingOption),
                                         ShareObjectFinalValue.WebSiteEncodingType,
                                         DataTypes.ParsingType.OnVistaHistoryData
                                     );
                                 }
-                                else if (ShareObjectFinalValue.DailyValuesParsingOptionAsStr == "ApiYahoo")
+                                else if (ShareObjectFinalValue.DailyValuesParsingOption == ShareObject.ParsingTypes.ApiYahoo)
                                 {
                                     ParserDailyValues.ParsingValues = new ParsingValues(
                                         new Uri(Helper.BuildDailyValuesUrl(ShareObjectFinalValue.DailyValuesList.Entries,
                                         ShareObjectFinalValue.DailyValuesUpdateWebSiteUrl,
                                         ShareObjectFinalValue.ShareType,
                                         ShareObjectFinalValue.DailyValuesParsingOption)),
-                                        ShareObjectFinalValue.MarketValuesParsingApiKey,
+                                        Helper.GetApiKey(
+                                            SettingsConfiguration.ApiKeysDictionary,
+                                            ShareObjectFinalValue.DailyValuesParsingOption),
                                         ShareObjectFinalValue.WebSiteEncodingType,
                                         DataTypes.ParsingType.YahooHistoryData
                                     );
@@ -400,7 +416,7 @@ namespace SharePortfolioManager
                                 ShareObject.ShareUpdateTypes.MarketPrice)
                             {
                                 // Build parsing values the market values update
-                                if (ShareObjectMarketValue.MarketValuesParsingOptionAsStr == "ApiOnVista")
+                                if (ShareObjectMarketValue.MarketValuesParsingOption == ShareObject.ParsingTypes.ApiOnvista)
                                 {
                                     ParserMarketValues.ParsingValues = new ParsingValues(
                                         new Uri(ShareObjectListMarketValue[
@@ -408,11 +424,13 @@ namespace SharePortfolioManager
                                                     .SelectedCells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
                                                     .RowIndex]
                                             .MarketValuesUpdateWebSiteUrl),
-                                        ShareObjectListMarketValue[
-                                                dgvPortfolioMarketValue
-                                                    .SelectedCells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
-                                                    .RowIndex]
-                                                    .MarketValuesParsingApiKey,
+                                        Helper.GetApiKey(
+                                            SettingsConfiguration.ApiKeysDictionary,
+                                            ShareObjectListMarketValue[
+                                            dgvPortfolioMarketValue
+                                                .SelectedCells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                                .RowIndex]
+                                                .MarketValuesParsingOption),
                                         ShareObjectListMarketValue[
                                                 dgvPortfolioMarketValue
                                                     .SelectedCells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
@@ -421,7 +439,7 @@ namespace SharePortfolioManager
                                         DataTypes.ParsingType.OnVistaRealTime
                                     );
                                 }
-                                else if (ShareObjectMarketValue.MarketValuesParsingOptionAsStr == "ApiYahoo")
+                                else if (ShareObjectMarketValue.MarketValuesParsingOption == ShareObject.ParsingTypes.ApiYahoo)
                                 {
                                     ParserMarketValues.ParsingValues = new ParsingValues(
                                         new Uri(ShareObjectListMarketValue[
@@ -429,11 +447,13 @@ namespace SharePortfolioManager
                                                     .SelectedCells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
                                                     .RowIndex]
                                             .MarketValuesUpdateWebSiteUrl),
-                                        ShareObjectListMarketValue[
-                                                dgvPortfolioMarketValue
-                                                    .SelectedCells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
-                                                    .RowIndex]
-                                                    .MarketValuesParsingApiKey,
+                                        Helper.GetApiKey(
+                                            SettingsConfiguration.ApiKeysDictionary,
+                                            ShareObjectListMarketValue[
+                                            dgvPortfolioMarketValue
+                                                .SelectedCells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                                .RowIndex]
+                                                .MarketValuesParsingOption),
                                         ShareObjectListMarketValue[
                                                 dgvPortfolioMarketValue
                                                     .SelectedCells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
@@ -447,26 +467,30 @@ namespace SharePortfolioManager
                                 ParserMarketValues.StartParsing();
 
                                 // Build parsing values for the market values update
-                                if (ShareObjectMarketValue.DailyValuesParsingOptionAsStr == "ApiOnVista")
+                                if (ShareObjectMarketValue.DailyValuesParsingOption == ShareObject.ParsingTypes.ApiOnvista)
                                 {
                                     ParserDailyValues.ParsingValues = new ParsingValues(
                                         new Uri(Helper.BuildDailyValuesUrl(ShareObjectMarketValue.DailyValuesList.Entries,
                                         ShareObjectMarketValue.DailyValuesUpdateWebSiteUrl,
                                         ShareObjectMarketValue.ShareType,
                                         ShareObjectMarketValue.DailyValuesParsingOption)),
-                                        ShareObjectMarketValue.MarketValuesParsingApiKey,
+                                        Helper.GetApiKey(
+                                            SettingsConfiguration.ApiKeysDictionary,
+                                            ShareObjectMarketValue.DailyValuesParsingOption),
                                         ShareObjectMarketValue.WebSiteEncodingType,
                                         DataTypes.ParsingType.OnVistaHistoryData
                                     );
                                 }
-                                else if (ShareObjectMarketValue.DailyValuesParsingOptionAsStr == "ApiYahoo")
+                                else if (ShareObjectMarketValue.DailyValuesParsingOption == ShareObject.ParsingTypes.ApiYahoo)
                                 {
                                     ParserDailyValues.ParsingValues = new ParsingValues(
                                         new Uri(Helper.BuildDailyValuesUrl(ShareObjectMarketValue.DailyValuesList.Entries,
                                         ShareObjectMarketValue.DailyValuesUpdateWebSiteUrl,
                                         ShareObjectMarketValue.ShareType,
                                         ShareObjectMarketValue.DailyValuesParsingOption)),
-                                        ShareObjectMarketValue.MarketValuesParsingApiKey,
+                                        Helper.GetApiKey(
+                                            SettingsConfiguration.ApiKeysDictionary,
+                                            ShareObjectMarketValue.DailyValuesParsingOption),
                                         ShareObjectMarketValue.WebSiteEncodingType,
                                         DataTypes.ParsingType.YahooHistoryData
                                     );
@@ -488,7 +512,7 @@ namespace SharePortfolioManager
                                 ShareObject.ShareUpdateTypes.DailyValues)
                             {
                                 // Build parsing values for the daily values update
-                                if (ShareObjectMarketValue.DailyValuesParsingOptionAsStr == "ApiOnVista")
+                                if (ShareObjectMarketValue.DailyValuesParsingOption == ShareObject.ParsingTypes.ApiOnvista)
                                 {
                                     ParserDailyValues.ParsingValues = new ParsingValues(
                                         new Uri(Helper.BuildDailyValuesUrl(
@@ -518,12 +542,14 @@ namespace SharePortfolioManager
                                                 .DailyValuesParsingOption
 
                                         )),
-                                        ShareObjectListMarketValue[
-                                                dgvPortfolioMarketValue
-                                                    .SelectedCells[
-                                                        (int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
-                                                    .RowIndex]
-                                            .DailyValuesParsingApiKey,
+                                        Helper.GetApiKey(
+                                            SettingsConfiguration.ApiKeysDictionary,
+                                            ShareObjectListMarketValue[
+                                                    dgvPortfolioMarketValue
+                                                        .SelectedCells[
+                                                            (int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
+                                                        .RowIndex]
+                                                .DailyValuesParsingOption),
                                         ShareObjectListMarketValue[
                                                 dgvPortfolioMarketValue
                                                     .SelectedCells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
@@ -532,7 +558,7 @@ namespace SharePortfolioManager
                                         DataTypes.ParsingType.OnVistaHistoryData
                                     );
                                 }
-                                else if (ShareObjectMarketValue.DailyValuesParsingOptionAsStr == "ApiYahoo")
+                                else if (ShareObjectMarketValue.DailyValuesParsingOption == ShareObject.ParsingTypes.ApiYahoo)
                                 {
                                     ParserDailyValues.ParsingValues = new ParsingValues(
                                         new Uri(Helper.BuildDailyValuesUrl(
@@ -562,12 +588,14 @@ namespace SharePortfolioManager
                                                 .DailyValuesParsingOption
 
                                         )),
-                                        ShareObjectListMarketValue[
+                                        Helper.GetApiKey(
+                                            SettingsConfiguration.ApiKeysDictionary,
+                                            ShareObjectListMarketValue[
                                                 dgvPortfolioMarketValue
                                                     .SelectedCells[
                                                         (int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
                                                     .RowIndex]
-                                            .DailyValuesParsingApiKey,
+                                                .DailyValuesParsingOption),
                                         ShareObjectListMarketValue[
                                                 dgvPortfolioMarketValue
                                                     .SelectedCells[(int)ColumnIndicesPortfolioMarketValue.EWknColumnIndex]
@@ -594,7 +622,7 @@ namespace SharePortfolioManager
                                 ShareObject.ShareUpdateTypes.MarketPrice)
                             {
                                 // Build parsing values for the market values update
-                                if (ShareObjectMarketValue.MarketValuesParsingOptionAsStr == "ApiOnVista")
+                                if (ShareObjectMarketValue.MarketValuesParsingOption ==  ShareObject.ParsingTypes.ApiOnvista)
                                 {
                                     ParserMarketValues.ParsingValues = new ParsingValues(
                                         new Uri(ShareObjectListFinalValue[
@@ -602,11 +630,13 @@ namespace SharePortfolioManager
                                                     .SelectedCells[(int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
                                                     .RowIndex]
                                             .MarketValuesUpdateWebSiteUrl),
-                                        ShareObjectListFinalValue[
+                                        Helper.GetApiKey(
+                                            SettingsConfiguration.ApiKeysDictionary,
+                                            ShareObjectListFinalValue[
                                                 dgvPortfolioFinalValue
                                                     .SelectedCells[(int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
                                                     .RowIndex]
-                                            .MarketValuesParsingApiKey,
+                                            .MarketValuesParsingOption),
                                         ShareObjectListFinalValue[
                                                 dgvPortfolioFinalValue
                                                     .SelectedCells[(int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
@@ -615,7 +645,7 @@ namespace SharePortfolioManager
                                         DataTypes.ParsingType.OnVistaRealTime
                                     );
                                 }
-                                else if (ShareObjectMarketValue.MarketValuesParsingOptionAsStr == "ApiYahoo")
+                                else if (ShareObjectMarketValue.MarketValuesParsingOption == ShareObject.ParsingTypes.ApiYahoo)
                                 {
                                     ParserMarketValues.ParsingValues = new ParsingValues(
                                         new Uri(ShareObjectListFinalValue[
@@ -623,11 +653,13 @@ namespace SharePortfolioManager
                                                     .SelectedCells[(int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
                                                     .RowIndex]
                                             .MarketValuesUpdateWebSiteUrl),
-                                        ShareObjectListFinalValue[
+                                        Helper.GetApiKey(
+                                            SettingsConfiguration.ApiKeysDictionary,
+                                            ShareObjectListFinalValue[
                                                 dgvPortfolioFinalValue
                                                     .SelectedCells[(int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
                                                     .RowIndex]
-                                            .MarketValuesParsingApiKey,
+                                                .MarketValuesParsingOption),
                                         ShareObjectListFinalValue[
                                                 dgvPortfolioFinalValue
                                                     .SelectedCells[(int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
@@ -652,7 +684,7 @@ namespace SharePortfolioManager
                                 ShareObject.ShareUpdateTypes.DailyValues)
                             {
                                 // Build parsing values for the market values update
-                                if (ShareObjectMarketValue.DailyValuesParsingOptionAsStr == "ApiOnVista")
+                                if (ShareObjectMarketValue.DailyValuesParsingOption == ShareObject.ParsingTypes.ApiOnvista)
                                 {
                                     ParserDailyValues.ParsingValues = new ParsingValues(
                                         new Uri(Helper.BuildDailyValuesUrl(
@@ -681,11 +713,13 @@ namespace SharePortfolioManager
                                                         .RowIndex]
                                                 .DailyValuesParsingOption
                                         )),
-                                        ShareObjectListFinalValue[
+                                        Helper.GetApiKey(
+                                            SettingsConfiguration.ApiKeysDictionary,
+                                            ShareObjectListFinalValue[
                                                 dgvPortfolioFinalValue
                                                     .SelectedCells[(int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
                                                     .RowIndex]
-                                            .DailyValuesParsingApiKey,
+                                            .DailyValuesParsingOption),
                                         ShareObjectListFinalValue[
                                                 dgvPortfolioFinalValue
                                                     .SelectedCells[(int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
@@ -694,7 +728,7 @@ namespace SharePortfolioManager
                                         DataTypes.ParsingType.OnVistaHistoryData
                                     );
                                 }
-                                else if (ShareObjectMarketValue.DailyValuesParsingOptionAsStr == "ApiYahoo")
+                                else if (ShareObjectMarketValue.DailyValuesParsingOption == ShareObject.ParsingTypes.ApiYahoo)
                                 {
                                     ParserDailyValues.ParsingValues = new ParsingValues(
                                         new Uri(Helper.BuildDailyValuesUrl(
@@ -723,11 +757,13 @@ namespace SharePortfolioManager
                                                         .RowIndex]
                                                 .DailyValuesParsingOption
                                         )),
-                                        ShareObjectListFinalValue[
+                                        Helper.GetApiKey(
+                                            SettingsConfiguration.ApiKeysDictionary,
+                                            ShareObjectListFinalValue[
                                                 dgvPortfolioFinalValue
                                                     .SelectedCells[(int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]
                                                     .RowIndex]
-                                            .DailyValuesParsingApiKey,
+                                            .DailyValuesParsingOption),
                                         ShareObjectListFinalValue[
                                                 dgvPortfolioFinalValue
                                                     .SelectedCells[(int)ColumnIndicesPortfolioFinalValue.EWknColumnIndex]

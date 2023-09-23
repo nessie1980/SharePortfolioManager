@@ -147,9 +147,9 @@ namespace SharePortfolioManager
 
                     txtBoxDetailsWebSite.Text = ShareObjectFinalValue.DetailsWebSiteUrl;
                     txtBoxMarketValuesWebSite.Text = ShareObjectFinalValue.MarketValuesUpdateWebSiteUrl;
-                    txtBoxMarketValuesWebSiteApiKey.Text = ShareObjectFinalValue.MarketValuesParsingApiKey;
+                    lblMarketValuesWebSiteApiKeyValue.Text = Helper.GetApiKey(SettingsConfiguration.ApiKeysDictionary, ShareObjectFinalValue.MarketValuesParsingOption);
                     txtBoxDailyValuesWebSite.Text = ShareObjectFinalValue.DailyValuesUpdateWebSiteUrl;
-                    txtBoxDailyValuesWebSiteApiKey.Text = ShareObjectFinalValue.DailyValuesParsingApiKey;
+                    lblDailyValuesWebSiteApiKeyValue.Text = Helper.GetApiKey(SettingsConfiguration.ApiKeysDictionary, ShareObjectFinalValue.DailyValuesParsingOption);
 
                     // Set units
                     lblPurchaseUnit.Text = ShareObjectFinalValue.CurrencyUnit;
@@ -550,7 +550,7 @@ namespace SharePortfolioManager
                     
                     errorFlag = true;
                 }
-                else if ((rdbBoth.Checked || rdbMarketPrice.Checked) && !Helper.UrlChecker(ref decodedUrlMarketValuesWebSite, txtBoxDailyValuesWebSiteApiKey.Text, 10000))
+                else if ((rdbBoth.Checked || rdbMarketPrice.Checked) && !Helper.UrlChecker(ref decodedUrlMarketValuesWebSite, lblDailyValuesWebSiteApiKey.Text, 10000))
                 {
                     txtBoxMarketValuesWebSite.Focus();
                     
@@ -617,7 +617,7 @@ namespace SharePortfolioManager
                     
                     errorFlag = true;
                 }
-                else if ((rdbBoth.Checked || rdbDailyValues.Checked) && !Helper.UrlChecker(ref decodeUrlDailyValuesWebSite, txtBoxDailyValuesWebSiteApiKey.Text, 10000))
+                else if ((rdbBoth.Checked || rdbDailyValues.Checked) && !Helper.UrlChecker(ref decodeUrlDailyValuesWebSite, lblDailyValuesWebSiteApiKeyValue.Text, 10000))
                 {
                     txtBoxDailyValuesWebSite.Focus();
                     
@@ -701,10 +701,8 @@ namespace SharePortfolioManager
 
                 ShareObjectMarketValue.MarketValuesUpdateWebSiteUrl = txtBoxMarketValuesWebSite.Text;
                 ShareObjectMarketValue.MarketValuesParsingOption = (ShareObject.ParsingTypes)cbxMarketValuesParsingOption.SelectedIndex;
-                ShareObjectMarketValue.MarketValuesParsingApiKey = txtBoxMarketValuesWebSiteApiKey.Text;
                 ShareObjectMarketValue.DailyValuesUpdateWebSiteUrl = txtBoxDailyValuesWebSite.Text;
                 ShareObjectMarketValue.DailyValuesParsingOption = (ShareObject.ParsingTypes)cbxDailyValuesParsingOption.SelectedIndex;
-                ShareObjectMarketValue.DailyValuesParsingApiKey = txtBoxDailyValuesWebSiteApiKey.Text;
                 ShareObjectMarketValue.CultureInfo = cultureInfo;
                 ShareObjectMarketValue.ShareType = (ShareObject.ShareTypes)cbxShareType.SelectedIndex;
 
@@ -726,10 +724,8 @@ namespace SharePortfolioManager
 
                 ShareObjectFinalValue.MarketValuesUpdateWebSiteUrl = txtBoxMarketValuesWebSite.Text;
                 ShareObjectFinalValue.MarketValuesParsingOption = (ShareObject.ParsingTypes)cbxMarketValuesParsingOption.SelectedIndex;
-                ShareObjectFinalValue.MarketValuesParsingApiKey = txtBoxMarketValuesWebSiteApiKey.Text;
                 ShareObjectFinalValue.DailyValuesUpdateWebSiteUrl = txtBoxDailyValuesWebSite.Text;
                 ShareObjectFinalValue.DailyValuesParsingOption = (ShareObject.ParsingTypes)cbxDailyValuesParsingOption.SelectedIndex;
-                ShareObjectFinalValue.DailyValuesParsingApiKey = txtBoxDailyValuesWebSiteApiKey.Text;
                 ShareObjectFinalValue.CultureInfo = cultureInfo;
                 ShareObjectFinalValue.DividendPayoutInterval = cbxDividendPayoutInterval.SelectedIndex;
                 ShareObjectFinalValue.ShareType = (ShareObject.ShareTypes)cbxShareType.SelectedIndex;
@@ -849,10 +845,38 @@ namespace SharePortfolioManager
 
         #region ComboBoxes
 
+        private void OnCbxMarketValuesParsingOption_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (SettingsConfiguration.ApiKeysDictionary.ContainsKey(((ComboBox)sender).SelectedItem.ToString()))
+            {
+                lblMarketValuesWebSiteApiKeyValue.Text =
+                    SettingsConfiguration.ApiKeysDictionary[((ComboBox)sender).SelectedItem.ToString()];
+
+            }
+            else
+            {
+                lblMarketValuesWebSiteApiKeyValue.Text = string.Empty;
+            }
+        }
+
         private void OnCbxMarketValuesParsingOption_SelectionChangeCommitted(object sender, EventArgs e)
         {
             txtBoxDailyValuesWebSite.Text = 
                 Helper.RegexReplaceStartDateAndInterval(txtBoxDailyValuesWebSite.Text, (ShareObject.ParsingTypes)cbxDailyValuesParsingOption.SelectedIndex);
+        }
+
+        private void OnCbxDailyValuesParsingOption_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (SettingsConfiguration.ApiKeysDictionary.ContainsKey(((ComboBox)sender).SelectedItem.ToString()))
+            {
+                lblDailyValuesWebSiteApiKeyValue.Text =
+                    SettingsConfiguration.ApiKeysDictionary[((ComboBox)sender).SelectedItem.ToString()];
+
+            }
+            else
+            {
+                lblDailyValuesWebSiteApiKeyValue.Text = string.Empty;
+            }
         }
 
         private void OnCbxDailyValuesParsingOption_SelectionChangeCommitted(object sender, EventArgs e)
@@ -862,6 +886,5 @@ namespace SharePortfolioManager
         }
 
         #endregion Comboboxes
-
     }
 }

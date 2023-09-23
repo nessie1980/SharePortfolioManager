@@ -89,6 +89,10 @@
 					<Open text="Open portfolio" />
 					<Quit text="Quit"/>
 				</File>
+				<API>
+					<Header text="API- Settings" />
+					<Yahoo text="Yahoo Finance" />
+				</API>
 				<Settings>
 					<Header text="Settings" />
 					<Language text="Language" />
@@ -1534,6 +1538,32 @@
 			</Errors>
 		</SoundSettingsForm>
 		
+		<!-- API settings -->
+		<ApiSettingsForm>
+			<Caption text="API key configuration for " />
+
+			<!-- GroupBox for the API key -->
+			<GrpBoxApiKey>
+				<Caption text="API key" />
+
+			</GrpBoxApiKey>
+
+			<!-- Buttons -->
+			<Buttons>
+				<Save text="  Save" />
+				<Cancel text="  Cancel" />
+			</Buttons>
+			
+			<!-- Errors -->
+			<Errors>
+				<ApiSettingsApiKeyLoadFailed text="An exception occurred. The API key could not be loaded!" />
+				<ApiSettingsShowFailed text="An exception occurred. Showing the dialog failed!" />
+				<SaveSettingsFailed text="An exception occurred. Save of the settings failed!" />
+				<SaveSettingsSuccessful text="Save of the settings successful." />
+			</Errors>
+		</ApiSettingsForm>
+
+		
 		<!-- Message box -->
 		<MessageBoxForm>
 			
@@ -1714,6 +1744,10 @@
 					<Open text="Portfolio öffnen" />
 					<Quit text="Beenden"/>
 				</File>
+				<API>
+					<Header text="API- Einstellung" />
+					<Yahoo text="Yahoo Finance" />
+				</API>
 				<Settings>
 					<Header text="Einstellungen" />
 					<Language text="Sprache" />
@@ -3156,6 +3190,31 @@
 				<SaveSettingsSuccessful text="Speichern der Einstellung erfolgreich." />
 			</Errors>
 		</SoundSettingsForm>
+
+		<!-- API settings -->
+		<ApiSettingsForm>
+			<Caption text="API- Schlüssel konfigurieren für " />
+
+			<!-- GroupBox for the API key -->
+			<GrpBoxApiKey>
+				<Caption text="API key" />
+
+			</GrpBoxApiKey>
+
+			<!-- Buttons -->
+			<Buttons>
+				<Save text="  Speichern" />
+				<Cancel text="  Abbrechen" />
+			</Buttons>
+			
+			<!-- Errors -->
+			<Errors>
+				<ApiSettingsApiKeyLoadFailed text="Es trat ein Fehler auf. Der API- Schlüssel konnte nicht geladen werdens!" />
+				<ApiSettingsShowFailed text="Es trat ein Fehler auf. Anzeigen des Dialogs fehlgeschlagen!" />
+				<SaveSettingsFailed text="Es trat ein Fehler auf. Speichern der Einstellungen fehlgeschlagen!" />
+				<SaveSettingsSuccessful text="Speichern der Einstellung erfolgreich." />
+			</Errors>
+		</ApiSettingsForm>
 		
 		<!-- Message box -->
 		<MessageBoxForm>

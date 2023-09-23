@@ -285,6 +285,12 @@
     <Compile Include="Forms\SalesForm\UsedBuyDetailsList\UserBuyDetailsList.Designer.cs">
       <DependentUpon>UserBuyDetailsList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ApiSettingsForm\ApiSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ApiSettingsForm\ApiSettings.Designer.cs">
+      <DependentUpon>ApiSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SoundSettingsForm\SoundSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -351,6 +357,9 @@
     <EmbeddedResource Include="Forms\SalesForm\UsedBuyDetailsList\UserBuyDetailsList.resx">
       <DependentUpon>UserBuyDetailsList.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ApiSettingsForm\ApiSettings.resx">
+      <DependentUpon>ApiSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SoundSettingsForm\SoundSettings.resx">
       <DependentUpon>SoundSettings.cs</DependentUpon>
@@ -475,6 +484,8 @@
     <None Include="Resources\Pic_24\button_add_24.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Pic_24\menu_key_24.png" />
+    <None Include="Resources\Icon\key.ico" />
     <Content Include="Resources\Pic_24\button_clipboard_24.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

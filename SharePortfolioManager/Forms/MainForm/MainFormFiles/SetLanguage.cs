@@ -93,6 +93,11 @@ namespace SharePortfolioManager
                 soundsToolStripMenuItem.Text = LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/Menu/Settings/Sounds",
                     SettingsConfiguration.LanguageName);
 
+                apiKeysToolStripMenuItem.Text =
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/Menu/API/Header", SettingsConfiguration.LanguageName);
+                yahooFinanceToolStripMenuItem.Text =
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/Menu/API/Yahoo", SettingsConfiguration.LanguageName);
+
                 helpToolStripMenuItem.Text =
                     LanguageConfiguration.Language.GetLanguageTextByXPath(@"/MainForm/Menu/Help/Header", SettingsConfiguration.LanguageName);
                 aboutToolStripMenuItem.Text =

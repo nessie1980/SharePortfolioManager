@@ -66,10 +66,8 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
             _view.DetailsWebSite = _model.DetailsWebSite;
             _view.MarketValuesWebSite = _model.MarketValuesWebSite;
             _view.MarketValuesParsingOption = _model.MarketValuesParsingOption;
-            _view.MarketValuesParsingApiKey = _model.MarketValuesParsingApiKey;
             _view.DailyValuesWebSite = _model.DailyValuesWebSite;
             _view.DailyValuesParsingOption = _model.DailyValuesParsingOption;
-            _view.DailyValuesParsingApiKey = _model.DailyValuesParsingApiKey;
             _view.Date = _model.Date;
             _view.Time = _model.Time;
             _view.DepotNumber = _model.DepotNumber;
@@ -126,10 +124,8 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
             _model.DetailsWebSite = _view.DetailsWebSite;
             _model.MarketValuesWebSite = _view.MarketValuesWebSite;
             _model.MarketValuesParsingOption = _view.MarketValuesParsingOption;
-            _model.MarketValuesParsingApiKey = _view.MarketValuesParsingApiKey;
             _model.DailyValuesWebSite = _view.DailyValuesWebSite;
             _model.DailyValuesParsingOption = _view.DailyValuesParsingOption;
-            _model.DailyValuesParsingApiKey = _view.DailyValuesParsingApiKey;
             _model.Date = _view.Date;
             _model.Time = _view.Time;
             _model.DepotNumber = _view.DepotNumber;
@@ -223,10 +219,8 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                         _model.DetailsWebSite,
                         _model.MarketValuesWebSite,
                         _model.MarketValuesParsingOption,
-                        _model.MarketValuesParsingApiKey,
                         _model.DailyValuesWebSite,
                         _model.DailyValuesParsingOption,
-                        _model.DailyValuesParsingApiKey,
                         _model.ImageListPrevDayPerformance,
                         _model.ImageListCompletePerformance,
                         null,
@@ -260,10 +254,8 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                         _model.DetailsWebSite,
                         _model.MarketValuesWebSite,
                         _model.MarketValuesParsingOption,
-                        _model.MarketValuesParsingApiKey,
                         _model.DailyValuesWebSite,
                         _model.DailyValuesParsingOption,
-                        _model.DailyValuesParsingApiKey,
                         _model.ImageListPrevDayPerformance,
                         _model.ImageListCompletePerformance,
                         null,
@@ -304,10 +296,8 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                         _model.DetailsWebSite,
                         _model.MarketValuesWebSite,
                         _model.MarketValuesParsingOption,
-                        _model.MarketValuesParsingApiKey,
                         _model.DailyValuesWebSite,
                         _model.DailyValuesParsingOption,
-                        _model.DailyValuesParsingApiKey,
                         _model.ImageListPrevDayPerformance,
                         _model.ImageListCompletePerformance,
                         null,
@@ -338,10 +328,8 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                         _model.DetailsWebSite,
                         _model.MarketValuesWebSite,
                         _model.MarketValuesParsingOption,
-                        _model.MarketValuesParsingApiKey,
                         _model.DailyValuesWebSite,
                         _model.DailyValuesParsingOption,
-                        _model.DailyValuesParsingApiKey,
                         _model.ImageListPrevDayPerformance,
                         _model.ImageListCompletePerformance,
                         null,
@@ -490,7 +478,7 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
             }
 
             // Check ISIN number input
-            if (_model.Isin == @"")
+            if (_model.Isin == @"" && bErrorFlag == false)
             {
                 _model.ErrorCode = ShareAddErrorCode.IsinEmpty;
                 bErrorFlag = true;
@@ -574,7 +562,15 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                 bErrorFlag = true;
             }
             // Check details website format
-            else if (bErrorFlag == false && !Helper.UrlChecker(ref decodedUrlDetailsWebSite, _model.DailyValuesParsingApiKey, 10000))
+            else if (bErrorFlag == false
+                &&
+                !Helper.UrlChecker(
+                    ref decodedUrlDetailsWebSite,
+                    Helper.GetApiKey(
+                        SettingsConfiguration.ApiKeysDictionary,
+                        _model.DailyValuesParsingOption),
+                        10000)
+                )
             {
                 _model.ErrorCode = ShareAddErrorCode.DetailsWebSiteWrongFormat;
                 bErrorFlag = true;
@@ -615,7 +611,15 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                 bErrorFlag = true;
             }
             // Check market values website format
-            else if (bErrorFlag == false && !Helper.UrlChecker(ref decodedUrlMarketValuesWebSite, _model.MarketValuesParsingApiKey, 10000))
+            else if (bErrorFlag == false
+                &&
+                !Helper.UrlChecker(
+                    ref decodedUrlMarketValuesWebSite,
+                    Helper.GetApiKey(
+                        SettingsConfiguration.ApiKeysDictionary,
+                        _model.MarketValuesParsingOption),
+                    10000)
+                )
             {
                 _model.ErrorCode = ShareAddErrorCode.MarketWebSiteWrongFormat;
                 bErrorFlag = true;
@@ -659,7 +663,15 @@ namespace SharePortfolioManager.ShareAddForm.Presenter
                 bErrorFlag = true;
             }
             // Check daily values website format
-            else if (bErrorFlag == false && !Helper.UrlChecker(ref dummyUrl, _model.DailyValuesParsingApiKey, 10000))
+            else if (bErrorFlag == false
+                &&
+                !Helper.UrlChecker(
+                    ref dummyUrl,
+                    Helper.GetApiKey(
+                        SettingsConfiguration.ApiKeysDictionary,
+                        _model.DailyValuesParsingOption),
+                    10000)
+                )
             {
                 _model.ErrorCode = ShareAddErrorCode.DailyValuesWebSiteWrongFormat;
                 bErrorFlag = true;
