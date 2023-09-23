@@ -439,6 +439,7 @@ namespace SharePortfolioManager
                                 EnableDisableControlNames.Add("openToolStripMenuItem");
                                 EnableDisableControlNames.Add("saveAsToolStripMenuItem");
                                 EnableDisableControlNames.Add("settingsToolStripMenuItem");
+                                EnableDisableControlNames.Add("apiKeysToolStripMenuItem");
                                 EnableDisableControlNames.Add("grpBoxSharePortfolio");
                                 EnableDisableControlNames.Add("grpBoxShareDetails");
                                 EnableDisableControlNames.Add("grpBoxStatusMessage");
@@ -916,7 +917,7 @@ namespace SharePortfolioManager
                                 ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].Wkn =
                                     nodeElement.Attributes[ShareObject.GeneralWknAttrName].InnerText;
 
-                                // WKN of the share
+                                // ISIN of the share
                                 ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1].Isin =
                                     nodeElement.Attributes[ShareObject.GeneralIsinAttrName].InnerText;
                                 ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1].Isin =
@@ -1069,12 +1070,12 @@ namespace SharePortfolioManager
                                                 else if (nodeElement.ChildNodes[i]
                                                         .Attributes[ShareObject.MarketValuesParsingAttrName]
                                                         .InnerText ==
-                                                    ShareObject.ParsingTypes.ApiOnVista.ToString())
+                                                    ShareObject.ParsingTypes.ApiOnvista.ToString())
                                                 {
                                                     ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
-                                                        .MarketValuesParsingOption = ShareObject.ParsingTypes.ApiOnVista;
+                                                        .MarketValuesParsingOption = ShareObject.ParsingTypes.ApiOnvista;
                                                     ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
-                                                        .MarketValuesParsingOption = ShareObject.ParsingTypes.ApiOnVista;
+                                                        .MarketValuesParsingOption = ShareObject.ParsingTypes.ApiOnvista;
                                                 }
                                                 else if (nodeElement.ChildNodes[i]
                                                         .Attributes[ShareObject.MarketValuesParsingAttrName]
@@ -1091,23 +1092,6 @@ namespace SharePortfolioManager
                                             }
                                             else
                                                 bLoadPortfolio = false;
-
-                                            // Read market values website API key
-                                            if (nodeElement.ChildNodes[i].Attributes != null &&
-                                                nodeElement.ChildNodes[i].Attributes[ShareObject.MarketValuesParsingApiKeyAttrName] != null)
-                                            {
-                                                ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
-                                                    .MarketValuesParsingApiKey =
-                                                    nodeElement.ChildNodes[i].Attributes[
-                                                        ShareObject.MarketValuesParsingApiKeyAttrName]?.InnerText;
-                                                ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
-                                                        .MarketValuesParsingApiKey =
-                                                    nodeElement.ChildNodes[i].Attributes[
-                                                        ShareObject.MarketValuesParsingApiKeyAttrName]?.InnerText;
-                                            }
-                                            else
-                                                bLoadPortfolio = false;
-
                                             break;
 
                                         #endregion MarketValues
@@ -1142,12 +1126,12 @@ namespace SharePortfolioManager
                                                 else if (nodeElement.ChildNodes[i]
                                                         .Attributes[ShareObject.DailyValuesParsingAttrName]
                                                         .InnerText ==
-                                                    ShareObject.ParsingTypes.ApiOnVista.ToString())
+                                                    ShareObject.ParsingTypes.ApiOnvista.ToString())
                                                 {
                                                     ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
-                                                        .DailyValuesParsingOption = ShareObject.ParsingTypes.ApiOnVista;
+                                                        .DailyValuesParsingOption = ShareObject.ParsingTypes.ApiOnvista;
                                                     ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
-                                                        .DailyValuesParsingOption = ShareObject.ParsingTypes.ApiOnVista;
+                                                        .DailyValuesParsingOption = ShareObject.ParsingTypes.ApiOnvista;
                                                 }
                                                 else if (nodeElement.ChildNodes[i]
                                                         .Attributes[ShareObject.DailyValuesParsingAttrName]
@@ -1161,22 +1145,6 @@ namespace SharePortfolioManager
                                                 }
                                                 else
                                                     bLoadPortfolio = false;
-                                            }
-                                            else
-                                                bLoadPortfolio = false;
-
-                                            // Read daily values website API key
-                                            if (nodeElement.ChildNodes[i].Attributes != null &&
-                                                nodeElement.ChildNodes[i].Attributes[ShareObject.DailyValuesParsingApiKeyAttrName] != null)
-                                            {
-                                                ShareObjectListFinalValue[ShareObjectListFinalValue.Count - 1]
-                                                    .DailyValuesParsingApiKey =
-                                                    nodeElement.ChildNodes[i].Attributes[
-                                                        ShareObject.DailyValuesParsingApiKeyAttrName]?.InnerText;
-                                                ShareObjectListMarketValue[ShareObjectListMarketValue.Count - 1]
-                                                        .DailyValuesParsingApiKey =
-                                                    nodeElement.ChildNodes[i].Attributes[
-                                                        ShareObject.DailyValuesParsingApiKeyAttrName]?.InnerText;
                                             }
                                             else
                                                 bLoadPortfolio = false;

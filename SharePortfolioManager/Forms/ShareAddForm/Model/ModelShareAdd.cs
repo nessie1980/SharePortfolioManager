@@ -68,10 +68,8 @@ namespace SharePortfolioManager.ShareAddForm.Model
         string DetailsWebSite { get; set; }
         string MarketValuesWebSite { get; set; }
         ShareObject.ParsingTypes MarketValuesParsingOption { get; set; }
-        string MarketValuesParsingApiKey { get; set; }
         string DailyValuesWebSite { get; set; }
         ShareObject.ParsingTypes DailyValuesParsingOption { get; set; }
-        string DailyValuesParsingApiKey { get; set; }
         string Date { get; set; }
         string Time { get; set; }
         string DepotNumber { get; set; }

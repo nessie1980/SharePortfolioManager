@@ -44,6 +44,8 @@ namespace SharePortfolioManager
             this.languageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loggerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.soundsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.apiKeysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.yahooFinanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.grpBoxSharePortfolio = new System.Windows.Forms.GroupBox();
@@ -103,6 +105,7 @@ namespace SharePortfolioManager
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.settingsToolStripMenuItem,
+            this.apiKeysToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -128,7 +131,7 @@ namespace SharePortfolioManager
             this.newToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.menu_file_add2_24;
             this.newToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(131, 30);
             this.newToolStripMenuItem.Text = "New_";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.OnNewToolStripMenuItem_Click);
             // 
@@ -137,7 +140,7 @@ namespace SharePortfolioManager
             this.openToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.menu_folder_open_24;
             this.openToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(131, 30);
             this.openToolStripMenuItem.Text = "Open_";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.OnOpenToolStripMenuItem_Click);
             // 
@@ -146,21 +149,21 @@ namespace SharePortfolioManager
             this.saveAsToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.button_save_as_24;
             this.saveAsToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(131, 30);
             this.saveAsToolStripMenuItem.Text = "SaveAs_";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.OnSaveAsToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(185, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(128, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.button_exit_24;
             this.exitToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(131, 30);
             this.exitToolStripMenuItem.Text = "&Quit_";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.OnExitToolStripMenuItem_Click);
             // 
@@ -177,7 +180,7 @@ namespace SharePortfolioManager
             // languageToolStripMenuItem
             // 
             this.languageToolStripMenuItem.Name = "languageToolStripMenuItem";
-            this.languageToolStripMenuItem.Size = new System.Drawing.Size(145, 30);
+            this.languageToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
             this.languageToolStripMenuItem.Text = "_Language";
             // 
             // loggerToolStripMenuItem
@@ -185,7 +188,7 @@ namespace SharePortfolioManager
             this.loggerToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.menu_eventlog_24;
             this.loggerToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.loggerToolStripMenuItem.Name = "loggerToolStripMenuItem";
-            this.loggerToolStripMenuItem.Size = new System.Drawing.Size(145, 30);
+            this.loggerToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
             this.loggerToolStripMenuItem.Text = "_Logger";
             this.loggerToolStripMenuItem.Click += new System.EventHandler(this.OnLoggerToolStripMenuItem_Click);
             // 
@@ -193,9 +196,25 @@ namespace SharePortfolioManager
             // 
             this.soundsToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.menu_sound_24;
             this.soundsToolStripMenuItem.Name = "soundsToolStripMenuItem";
-            this.soundsToolStripMenuItem.Size = new System.Drawing.Size(145, 30);
+            this.soundsToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
             this.soundsToolStripMenuItem.Text = "_Sound";
             this.soundsToolStripMenuItem.Click += new System.EventHandler(this.OnSoundToolStripMenuItem_Click);
+            // 
+            // apiKeysToolStripMenuItem
+            // 
+            this.apiKeysToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.yahooFinanceToolStripMenuItem});
+            this.apiKeysToolStripMenuItem.Name = "apiKeysToolStripMenuItem";
+            this.apiKeysToolStripMenuItem.Size = new System.Drawing.Size(89, 20);
+            this.apiKeysToolStripMenuItem.Text = "&API- Keys_";
+            // 
+            // yahooFinanceToolStripMenuItem
+            // 
+            this.yahooFinanceToolStripMenuItem.Image = global::SharePortfolioManager.Properties.Resources.menu_key_24;
+            this.yahooFinanceToolStripMenuItem.Name = "yahooFinanceToolStripMenuItem";
+            this.yahooFinanceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.yahooFinanceToolStripMenuItem.Text = "Yahoo Finance_";
+            this.yahooFinanceToolStripMenuItem.Click += new System.EventHandler(this.OnYahooFinanceToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -821,6 +840,8 @@ namespace SharePortfolioManager
         private TableLayoutPanel tblLayPnlLoadingPortfolio;
         private ProgressBar pgbLoadingPortfolio;
         private Label lblLoadingPortfolio;
+        private ToolStripMenuItem apiKeysToolStripMenuItem;
+        private ToolStripMenuItem yahooFinanceToolStripMenuItem;
     }
 }
 

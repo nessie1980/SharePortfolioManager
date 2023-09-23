@@ -32,6 +32,7 @@ namespace SharePortfolioManager
                 EnableDisableControlNames.Add("openToolStripMenuItem");
                 EnableDisableControlNames.Add("saveAsToolStripMenuItem");
                 EnableDisableControlNames.Add("settingsToolStripMenuItem");
+                EnableDisableControlNames.Add("apiKeysToolStripMenuItem");
                 Helper.EnableDisableControls(false, menuStrip1, EnableDisableControlNames);
 
                 // Disable controls

@@ -54,4 +54,8 @@
 		<MarketValuesDebuggingEnable>false</MarketValuesDebuggingEnable>
 		<DailyValuesDebuggingEnable>false</DailyValuesDebuggingEnable>
 	</Parser>
+	<API_Keys>
+		<ApiYahoo></ApiYahoo>
+		<ApiOnvista></ApiOnvista>
+	</API_Keys>
 </Settings>

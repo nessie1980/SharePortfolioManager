@@ -88,7 +88,7 @@ namespace SharePortfolioManager.Classes.ShareObjects
         public enum ParsingTypes
         {
             Regex,
-            ApiOnVista,
+            ApiOnvista,
             ApiYahoo
         }
 
@@ -245,11 +245,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         internal const string MarketValuesParsingAttrName = "Parsing";
 
-        /// <summary>
-        /// Stores the XML attribute name for the API key which is used by parsing of the market values
-        /// </summary>
-        internal const string MarketValuesParsingApiKeyAttrName = "ApiKey";
-
         #endregion MarketValues XML Variables
 
         #region DailyValues XML variables
@@ -263,11 +258,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// Stores the XML attribute name for the flag in which the parsing of the daily values should be done (Regex / API)
         /// </summary>
         internal const string DailyValuesParsingAttrName = "Parsing";
-
-        /// <summary>
-        /// Stores the XML attribute name for the API key which is used by parsing of the daily values
-        /// </summary>
-        internal const string DailyValuesParsingApiKeyAttrName = "ApiKey";
 
         /// <summary>
         /// Stores the tag name prefix of a daily values entry
@@ -841,12 +831,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
         [Browsable(false)]
         public string MarketValuesParsingOptionAsStr => MarketValuesParsingOption.ToString();
 
-        /// <summary>
-        /// API key for the API parsing if necessary for the market values
-        /// </summary>
-        [Browsable(false)]
-        public string MarketValuesParsingApiKey { get; set; }
-
         #endregion Market values
 
         #region Daily values
@@ -868,12 +852,6 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// </summary>
         [Browsable(false)]
         public string DailyValuesParsingOptionAsStr => DailyValuesParsingOption.ToString();
-
-        /// <summary>
-        /// API key for the API parsing if necessary for the daily values
-        /// </summary>
-        [Browsable(false)]
-        public string DailyValuesParsingApiKey { get; set; }
 
         /// <summary>
         /// List of the daily values of the share ( Date / ClosingPrice / OpeningPrice / Top / Bottom / Volume )
@@ -1159,10 +1137,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
         /// <param name="detailsWebSite">Website for the share details</param>
         /// <param name="marketValuesWebSite">Website for the market values update</param>
         /// <param name="marketValuesParsingOption">Parsing option for the market values (e.g Regex / API)</param>
-        /// <param name="marketValuesParsingApiKey">Parsing API key for the market values</param>
         /// <param name="dailyValuesWebSite">WebSite for the daily values update</param>
         /// <param name="dailyValuesParsingOption">Parsing option for the daily values (e.g Regex / API)</param>
-        /// <param name="dailyValuesParsingApiKey">Parsing API key for the daily values</param>
         /// <param name="imageListForDayBeforePerformance">Images for the prev day performance indication</param>
         /// <param name="imageListForCompletePerformance">Images for the complete performance indication</param>
         /// <param name="regexList">RegEx list for the share</param>
@@ -1172,8 +1148,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
             string wkn, string isin, string addDateTime, string stockMarketLaunchDate, string name,
             DateTime lastUpdateInternet, DateTime lastUpdateShare,
             decimal price, string detailsWebSite,
-            string marketValuesWebSite, ParsingTypes marketValuesParsingOption, string marketValuesParsingApiKey,
-            string dailyValuesWebSite, ParsingTypes dailyValuesParsingOption, string dailyValuesParsingApiKey,
+            string marketValuesWebSite, ParsingTypes marketValuesParsingOption,
+            string dailyValuesWebSite, ParsingTypes dailyValuesParsingOption,
             List<Image> imageListForDayBeforePerformance, List<Image> imageListForCompletePerformance,
             Parser.RegExList regexList, CultureInfo cultureInfo,
             ShareTypes shareType)
@@ -1190,10 +1166,8 @@ namespace SharePortfolioManager.Classes.ShareObjects
             DetailsWebSiteUrl = detailsWebSite;
             MarketValuesUpdateWebSiteUrl = marketValuesWebSite;
             MarketValuesParsingOption = marketValuesParsingOption;
-            MarketValuesParsingApiKey = marketValuesParsingApiKey;
             DailyValuesUpdateWebSiteUrl = dailyValuesWebSite;
             DailyValuesParsingOption = dailyValuesParsingOption;
-            DailyValuesParsingApiKey = dailyValuesParsingApiKey;
             ImageListPrevDayPerformance = imageListForDayBeforePerformance;
             ImageListCompleteProfitLossPerformance = imageListForCompletePerformance;
             ImagePrevDayPerformance = ImageListPrevDayPerformance[0];

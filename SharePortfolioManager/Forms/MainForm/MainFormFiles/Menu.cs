@@ -34,6 +34,8 @@ using System.Windows.Forms;
 using System.Xml;
 using SharePortfolioManager.Classes.Configurations;
 using SharePortfolioManager.SoundSettingsForm;
+using SharePortfolioManager.ApiSettingsForm;
+using SharePortfolioManager.Classes.ShareObjects;
 
 namespace SharePortfolioManager
 {
@@ -282,6 +284,38 @@ namespace SharePortfolioManager
                     ex);
             }
         }
+
+
+        /// <summary>
+        /// This function opens the API settings dialog
+        /// </summary>
+        /// <param name="sender">MenuStrip logger</param>
+        /// <param name="e">EventArgs</param>
+        private void OnYahooFinanceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var yahoApiKeySettings = new FrmApiSettings(this, Logger, LanguageConfiguration.Language, SettingsConfiguration.LanguageName, ShareObject.ParsingTypes.ApiYahoo.ToString());
+
+                if (yahoApiKeySettings.ShowDialog() != DialogResult.OK) return;
+
+                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/ApiSettingsForm/Errors/SaveSettingsSuccessful", SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                    Color.Black, Logger, (int)EStateLevels.Info, (int)EComponentLevels.Application);
+            }
+            catch (Exception ex)
+            {
+                Helper.AddStatusMessage(rchTxtBoxStateMessage,
+                    LanguageConfiguration.Language.GetLanguageTextByXPath(@"/ApiSettingsForm/Errors/SaveSettingsFailed", SettingsConfiguration.LanguageName),
+                    LanguageConfiguration.Language, SettingsConfiguration.LanguageName,
+                    Color.DarkRed, Logger, (int)EStateLevels.FatalError, (int)EComponentLevels.Application,
+                    ex);
+            }
+        }
+
+
+
 
         /// <summary>
         /// This function opens the logger settings dialog

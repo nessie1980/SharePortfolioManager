@@ -355,6 +355,12 @@ namespace SharePortfolioManager.Classes.Configurations
 
         #endregion Logger
 
+        #region API keys
+
+        public static Dictionary<string, string> ApiKeysDictionary { internal set; get; } = new Dictionary<string, string>();
+
+        #endregion API keys
+
         #endregion Settings Properties
 
         #region Read settings
@@ -865,6 +871,27 @@ namespace SharePortfolioManager.Classes.Configurations
 
                 #endregion Read parser debugging flag
 
+                #region API keys
+
+                // Read the API keys for the various API´s
+                var nodeApiKeys = XmlDocument.SelectSingleNode("/Settings/API_Keys");
+                if (nodeApiKeys != null)
+                {
+                    for (var index = 0; index < nodeApiKeys.ChildNodes.Count; index++)
+                    {
+                        var key = nodeApiKeys.ChildNodes[index];
+                        ApiKeysDictionary.Add(key.Name, key.InnerText);
+                    }
+                }
+                else
+                {
+                    ApiKeysDictionary.Clear();
+
+                    loadSettings = false;
+                }
+
+                #endregion API keys
+
                 InitFlag = loadSettings;
 
                 ErrorCode = InitFlag ? ESettingsErrorCode.ConfigurationLoadSuccessful : ESettingsErrorCode.ConfigurationLoadFailed;
@@ -1338,6 +1365,29 @@ namespace SharePortfolioManager.Classes.Configurations
                     }
 
                     #endregion Read parser debugging flag
+
+                    #region API keys
+
+                    // Save the API keys for the various APIs
+                    var nodeApiKeys = XmlDocument.SelectSingleNode("/Settings/API_Keys");
+                    if (nodeApiKeys != null)
+                    {
+                        foreach (XmlNode key in nodeApiKeys.ChildNodes)
+                        {
+                            if (ApiKeysDictionary.ContainsKey(key.Name))
+                            {
+                                key.InnerXml = ApiKeysDictionary[key.Name];
+                            }
+                            else
+                            {
+                                saveSettings = false;
+                            }
+                        }
+                    }
+                    else
+                        saveSettings = false;
+
+                    #endregion Logger colors
 
                     // Close reader for saving
                     _xmlReader.Close();
